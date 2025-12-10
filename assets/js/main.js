@@ -335,6 +335,165 @@
   };
 
   // =====================================================
+  // Parallax Controller - Minimal Luxury
+  // =====================================================
+
+  const ParallaxController = {
+    lastScrollY: 0,
+    ticking: false,
+    parallaxElements: [],
+
+    init() {
+      this.parallaxElements = document.querySelectorAll('[data-parallax]');
+
+      if (!this.parallaxElements.length) return;
+
+      window.addEventListener('scroll', () => {
+        this.lastScrollY = window.scrollY;
+        if (!this.ticking) {
+          window.requestAnimationFrame(() => {
+            this.update();
+            this.ticking = false;
+          });
+          this.ticking = true;
+        }
+      });
+
+      // Initial update
+      this.update();
+    },
+
+    update() {
+      this.parallaxElements.forEach(el => {
+        const speed = parseFloat(el.getAttribute('data-parallax')) || 0.3;
+        const offset = this.lastScrollY * speed;
+        el.style.transform = `translateY(${offset}px)`;
+      });
+    }
+  };
+
+  // =====================================================
+  // Text Reveal Controller - Word by Word
+  // =====================================================
+
+  const TextRevealController = {
+    revealElements: [],
+
+    init() {
+      this.revealElements = document.querySelectorAll('[data-text-reveal]');
+
+      if (!this.revealElements.length) return;
+
+      this.revealElements.forEach(el => {
+        this.splitText(el);
+      });
+
+      // Observe text reveal elements
+      if ('IntersectionObserver' in window) {
+        const textObserver = new IntersectionObserver(
+          (entries) => {
+            entries.forEach(entry => {
+              if (entry.isIntersecting) {
+                this.animateText(entry.target);
+                textObserver.unobserve(entry.target);
+              }
+            });
+          },
+          {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+          }
+        );
+
+        this.revealElements.forEach(el => textObserver.observe(el));
+      } else {
+        // Fallback: animate all immediately
+        this.revealElements.forEach(el => this.animateText(el));
+      }
+    },
+
+    splitText(el) {
+      const text = el.innerText;
+      const words = text.split(' ');
+
+      el.innerHTML = words
+        .map(word => `<span class="reveal-word">${word}</span>`)
+        .join(' ');
+    },
+
+    animateText(el) {
+      const words = el.querySelectorAll('.reveal-word');
+      let delay = 0;
+
+      words.forEach(word => {
+        word.style.animationDelay = `${delay}ms`;
+        word.classList.add('animate-reveal-word');
+        delay += 50;
+      });
+    }
+  };
+
+  // =====================================================
+  // Count Up Controller - Stats Animation
+  // =====================================================
+
+  const CountUpController = {
+    statsElements: [],
+
+    init() {
+      this.statsElements = document.querySelectorAll('[data-count]');
+
+      if (!this.statsElements.length) return;
+
+      if ('IntersectionObserver' in window) {
+        const countObserver = new IntersectionObserver(
+          (entries) => {
+            entries.forEach(entry => {
+              if (entry.isIntersecting) {
+                this.countUp(entry.target);
+                countObserver.unobserve(entry.target);
+              }
+            });
+          },
+          {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.3
+          }
+        );
+
+        this.statsElements.forEach(el => countObserver.observe(el));
+      } else {
+        // Fallback: show final values immediately
+        this.statsElements.forEach(el => {
+          el.textContent = el.getAttribute('data-count');
+        });
+      }
+    },
+
+    countUp(el) {
+      const target = parseFloat(el.getAttribute('data-count'));
+      const isPercentage = el.textContent.includes('%');
+      const duration = 2000; // 2 seconds
+      const steps = 60;
+      const increment = target / steps;
+      let current = 0;
+
+      const counter = setInterval(() => {
+        current += increment;
+        if (current >= target) {
+          current = target;
+          clearInterval(counter);
+        }
+        el.textContent = isPercentage
+          ? Math.floor(current) + '%'
+          : Math.floor(current);
+      }, duration / steps);
+    }
+  };
+
+  // =====================================================
   // Image Lazy Loading
   // =====================================================
 
@@ -375,6 +534,9 @@
     PageLoadController.init();
     MenuController.init();
     HeaderController.init();
+    ParallaxController.init();
+    TextRevealController.init();
+    CountUpController.init();
     RevealController.init();
     ActiveLinkController.init();
     FormController.init();
