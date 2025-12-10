@@ -1,6 +1,7 @@
 /**
  * BERKAHN - Main JavaScript
- * Menu, Scroll, and Animation Controllers
+ * Menu, Scroll, Animation, and Page Load Controllers
+ * Updated: Pure Black/White Design System
  */
 
 (function() {
@@ -17,11 +18,56 @@
     sidebar: document.querySelector('.sidebar'),
     overlay: document.querySelector('.overlay'),
     sidebarLinks: document.querySelectorAll('.sidebar-nav a'),
-    revealElements: document.querySelectorAll('.reveal')
+    sidebarNavItems: document.querySelectorAll('.sidebar-nav li'),
+    revealElements: document.querySelectorAll('.reveal'),
+    logo: document.querySelector('.logo'),
+    headerCta: document.querySelector('.header-cta')
   };
 
   // =====================================================
-  // Mobile Menu Controller
+  // Page Load Controller (NEW)
+  // =====================================================
+
+  const PageLoadController = {
+    init() {
+      // Wait for fonts to be ready for smooth text rendering
+      if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(() => this.animatePageLoad());
+      } else {
+        // Fallback for browsers without Font Loading API
+        window.addEventListener('load', () => this.animatePageLoad());
+      }
+    },
+
+    animatePageLoad() {
+      // Add page-loaded class to body for CSS animations
+      document.body.classList.add('page-loaded');
+
+      // Stagger animate header elements
+      const headerElements = [
+        elements.menuToggle,
+        elements.logo,
+        elements.headerCta
+      ].filter(Boolean);
+
+      headerElements.forEach((el, index) => {
+        setTimeout(() => {
+          el.classList.add('animate-in');
+        }, 100 + (index * 100));
+      });
+
+      // Animate hero content if present
+      const heroContent = document.querySelector('.hero-content');
+      if (heroContent) {
+        setTimeout(() => {
+          heroContent.classList.add('animate-in');
+        }, 400);
+      }
+    }
+  };
+
+  // =====================================================
+  // Mobile Menu Controller (ENHANCED)
   // =====================================================
 
   const MenuController = {
@@ -33,7 +79,7 @@
       // Toggle menu on hamburger click
       elements.menuToggle.addEventListener('click', () => this.toggle());
 
-      // Close menu on X button click
+      // Close menu on X button click (if exists)
       if (elements.closeMenu) {
         elements.closeMenu.addEventListener('click', () => this.close());
       }
@@ -73,24 +119,51 @@
 
     open() {
       this.isOpen = true;
+
+      // Add active class to hamburger for X animation
+      elements.menuToggle.classList.add('active');
+      elements.menuToggle.setAttribute('aria-expanded', 'true');
+
+      // Reset menu items opacity for re-animation
+      elements.sidebarNavItems.forEach(item => {
+        item.style.opacity = '0';
+      });
+
       elements.sidebar.classList.add('open');
+
       if (elements.overlay) {
         elements.overlay.classList.add('visible');
       }
+
       document.body.classList.add('menu-open');
 
+      // Trigger stagger animation after sidebar opens
+      setTimeout(() => {
+        elements.sidebarNavItems.forEach(item => {
+          item.style.opacity = '';
+        });
+      }, 50);
+
       // Focus management for accessibility
-      if (elements.closeMenu) {
-        setTimeout(() => elements.closeMenu.focus(), 100);
+      const firstLink = elements.sidebar.querySelector('.sidebar-nav a');
+      if (firstLink) {
+        setTimeout(() => firstLink.focus(), 300);
       }
     },
 
     close() {
       this.isOpen = false;
+
+      // Remove active class from hamburger
+      elements.menuToggle.classList.remove('active');
+      elements.menuToggle.setAttribute('aria-expanded', 'false');
+
       elements.sidebar.classList.remove('open');
+
       if (elements.overlay) {
         elements.overlay.classList.remove('visible');
       }
+
       document.body.classList.remove('menu-open');
 
       // Return focus to menu toggle
@@ -299,6 +372,7 @@
   // =====================================================
 
   function init() {
+    PageLoadController.init();
     MenuController.init();
     HeaderController.init();
     RevealController.init();

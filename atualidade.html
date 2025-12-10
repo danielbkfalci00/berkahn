@@ -9,64 +9,72 @@
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
   <!-- Styles -->
   <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 <body>
+  <!-- Skip Link for Accessibility -->
+  <a href="#main-content" class="skip-link">Pular para o conteúdo</a>
+
   <!-- Header -->
   <header class="header">
     <div class="header-container">
-      <a href="index.html" class="logo">BERKAHN</a>
-      <div class="header-actions">
-        <button class="menu-toggle" aria-label="Abrir menu" aria-expanded="false">
-          <span></span>
-          <span></span>
-          <span></span>
-        </button>
-        <a href="contato.html" class="btn btn-primary header-cta">Fale Conosco</a>
-      </div>
+      <!-- LEFT: Hamburger Menu -->
+      <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menu" aria-expanded="false">
+        <span></span>
+        <span></span>
+      </button>
+
+      <!-- CENTER: Logo -->
+      <a href="/" class="logo">BERKAHN</a>
+
+      <!-- RIGHT: CTA Button -->
+      <a href="contato.html" class="btn btn-primary header-cta">Fale Conosco</a>
     </div>
   </header>
 
   <!-- Sidebar Menu -->
-  <aside class="sidebar" aria-label="Menu de navegação">
-    <button class="close-menu" aria-label="Fechar menu">&times;</button>
-    <nav class="sidebar-nav">
-      <ul>
-        <li><a href="index.html">Home</a></li>
-        <li><a href="empresa.html">Empresa</a></li>
-        <li><a href="servicos.html">Serviços</a></li>
-        <li><a href="lsf.html">O que é LSF</a></li>
-        <li><a href="portfolio.html">Portfólio</a></li>
-        <li><a href="atualidade.html" class="active">Atualidade</a></li>
-        <li><a href="contato.html">Contato</a></li>
-      </ul>
-    </nav>
-    <div class="sidebar-social">
-      <a href="https://instagram.com/berkahn" target="_blank" rel="noopener" aria-label="Instagram">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-          <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-          <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-        </svg>
-      </a>
-      <a href="https://linkedin.com/company/berkahn" target="_blank" rel="noopener" aria-label="LinkedIn">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
-          <rect x="2" y="9" width="4" height="12"></rect>
-          <circle cx="4" cy="4" r="2"></circle>
-        </svg>
-      </a>
+  <aside class="sidebar" id="sidebar" aria-label="Menu de navegação">
+    <div class="sidebar-inner">
+      <nav class="sidebar-nav">
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="empresa.html">Empresa</a></li>
+          <li><a href="servicos.html">Serviços</a></li>
+          <li><a href="lsf.html">O que é LSF</a></li>
+          <li><a href="portfolio.html">Portfólio</a></li>
+          <li><a href="atualidade.html" class="active">Atualidade</a></li>
+          <li><a href="contato.html">Contato</a></li>
+        </ul>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="sidebar-social">
+          <a href="https://instagram.com/berkahn" target="_blank" rel="noopener" aria-label="Instagram">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+            </svg>
+          </a>
+          <a href="https://linkedin.com/company/berkahn" target="_blank" rel="noopener" aria-label="LinkedIn">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+              <rect x="2" y="9" width="4" height="12"></rect>
+              <circle cx="4" cy="4" r="2"></circle>
+            </svg>
+          </a>
+        </div>
+      </div>
     </div>
   </aside>
 
   <!-- Overlay -->
-  <div class="overlay"></div>
+  <div class="overlay" id="overlay"></div>
 
   <!-- Main Content -->
-  <main>
+  <main id="main-content">
     <!-- Hero Banner -->
     <section class="hero-banner">
       <img

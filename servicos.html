@@ -9,7 +9,7 @@
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -18,34 +18,29 @@
   <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 <body>
+  <!-- Skip Link for Accessibility -->
+  <a href="#main-content" class="skip-link">Pular para o conteúdo</a>
+
   <!-- Header -->
   <header class="header">
-    <div class="header-inner">
+    <div class="header-container">
+      <!-- LEFT: Hamburger Menu -->
+      <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menu" aria-expanded="false">
+        <span></span>
+        <span></span>
+      </button>
+
+      <!-- CENTER: Logo -->
       <a href="/" class="logo">BERKAHN</a>
 
-      <div class="header-actions">
-        <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menu">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-          </svg>
-        </button>
-
-        <a href="contato.html" class="btn btn-primary">Fale Conosco</a>
-      </div>
+      <!-- RIGHT: CTA Button -->
+      <a href="contato.html" class="btn btn-primary header-cta">Fale Conosco</a>
     </div>
   </header>
 
   <!-- Sidebar Menu -->
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-inner">
-      <div class="sidebar-header">
-        <button class="close-menu" id="close-menu" aria-label="Fechar menu">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button>
-      </div>
-
       <nav class="sidebar-nav">
         <ul>
           <li><a href="/">Home</a></li>
@@ -79,7 +74,7 @@
   <!-- Overlay -->
   <div class="overlay" id="overlay"></div>
 
-  <main>
+  <main id="main-content">
     <!-- Hero Banner -->
     <section class="hero hero-page">
       <div class="hero-bg">
