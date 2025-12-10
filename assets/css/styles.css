@@ -1456,6 +1456,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .timeline-item {
+  position: relative;
   margin-bottom: var(--space-2xl);
   opacity: 0;
 }
