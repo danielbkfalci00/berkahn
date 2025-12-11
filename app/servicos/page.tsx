@@ -212,9 +212,6 @@ export default function ServicosPage() {
         </div>
       </section>
 
-      {/* Projetos Prontos */}
-      <ProjectsGrid />
-
       {/* Methodology */}
       <section className="py-xl">
         <div className="container">
@@ -240,6 +237,9 @@ export default function ServicosPage() {
           </div>
         </div>
       </section>
+
+      {/* Projetos Prontos */}
+      <ProjectsGrid />
 
       {/* CTA */}
       <CTA />
