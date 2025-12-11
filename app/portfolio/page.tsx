@@ -49,7 +49,7 @@ export default function PortfolioPage() {
       </section>
 
       {/* Projects Grid */}
-      <ProjectsGrid showHeader={false} showCTA={false} />
+      <ProjectsGrid />
 
       {/* CTA */}
       <CTA />
