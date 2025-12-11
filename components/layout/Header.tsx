@@ -1,13 +1,18 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useMenu } from "@/components/providers/MenuProvider";
 import { useHeaderScroll } from "@/hooks/useHeaderScroll";
 import { cn } from "@/lib/utils";
 
 export function Header() {
+  const pathname = usePathname();
   const { isOpen, toggle } = useMenu();
   const { isScrolled } = useHeaderScroll();
+
+  // Mostrar slogan apenas em páginas não-Home e quando no topo
+  const showSlogan = pathname !== "/" && !isScrolled;
 
   return (
     <header
@@ -44,12 +49,21 @@ export function Header() {
           />
         </button>
 
-        {/* CENTER: Logo */}
+        {/* CENTER: Logo + Slogan */}
         <Link
           href="/"
-          className="text-2xl font-heading tracking-wider hover:opacity-70 transition-opacity"
+          className="flex flex-col items-center hover:opacity-70 transition-opacity"
         >
-          BERKAHN
+          <span className="text-2xl font-heading tracking-wider">
+            BERKAHN
+          </span>
+
+          {/* Slogan condicional */}
+          {showSlogan && (
+            <span className="text-[10px] uppercase tracking-[0.2em] text-black-50 font-body mt-0.5 transition-opacity duration-300">
+              Erguendo o amanhã
+            </span>
+          )}
         </Link>
 
         {/* RIGHT: CTA */}
