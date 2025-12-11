@@ -1,0 +1,111 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --font-cormorant: 'Cormorant Garamond', serif;
+    --font-inter: 'Inter', sans-serif;
+  }
+
+  body {
+    @apply font-body text-black bg-white antialiased;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading;
+  }
+}
+
+/* Aceternity Timeline - Minimal Luxury Overrides */
+@layer components {
+  .timeline-component {
+    --timeline-line-color: rgba(0, 0, 0, 0.1);
+    --timeline-dot-color: #000000;
+    --timeline-dot-bg: #ffffff;
+  }
+
+  /* Vertical center line */
+  .timeline-component .timeline-line {
+    width: 1px;
+    background: linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0.1) 0%,
+      rgba(0, 0, 0, 0.3) 50%,
+      rgba(0, 0, 0, 0.1) 100%
+    );
+  }
+
+  /* Milestone dots */
+  .timeline-component .timeline-dot {
+    width: 20px;
+    height: 20px;
+    background: var(--white, #ffffff);
+    border: 3px solid var(--black, #000000);
+    border-radius: 50%;
+    box-shadow: 0 0 0 8px var(--white, #ffffff);
+  }
+
+  /* Timeline year */
+  .timeline-component .timeline-title {
+    font-family: var(--font-cormorant);
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    font-weight: 400;
+    color: rgba(0, 0, 0, 0.7);
+    letter-spacing: -0.02em;
+  }
+
+  /* Content cards */
+  .timeline-component .timeline-content {
+    padding: 2rem;
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.02) 0%, rgba(0, 0, 0, 0) 100%);
+    border-radius: 8px;
+  }
+
+  .timeline-component .timeline-content h3 {
+    font-weight: 500;
+    color: var(--black, #000000);
+  }
+
+  .timeline-component .timeline-content p {
+    color: rgba(0, 0, 0, 0.8);
+    line-height: 1.8;
+  }
+
+  /* Images */
+  .timeline-component img {
+    filter: grayscale(100%);
+    transition: filter 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+  }
+
+  .timeline-component img:hover {
+    filter: grayscale(50%);
+  }
+}
+
+/* Utility classes for typography */
+@layer utilities {
+  .headline-lg {
+    @apply text-5xl md:text-6xl lg:text-7xl font-heading font-light tracking-tight;
+  }
+
+  .headline-md {
+    @apply text-3xl md:text-4xl font-heading font-medium tracking-tight;
+  }
+
+  .headline-sm {
+    @apply text-2xl md:text-3xl font-heading font-medium;
+  }
+
+  .body-lg {
+    @apply text-lg md:text-xl leading-relaxed;
+  }
+
+  .body-md {
+    @apply text-base leading-relaxed;
+  }
+
+  .label-text {
+    @apply text-sm uppercase tracking-widest font-medium;
+  }
+}

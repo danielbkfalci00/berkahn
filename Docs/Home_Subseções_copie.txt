@@ -1,0 +1,166 @@
+### Subseções
+
+- botÃO hamburguer
+    - Empresa
+        
+        ```jsx
+        **BERKAHN**
+        
+        **construtora percursora em construçao eficente**
+        
+        **atuante no mercado brasileiro**
+        
+        ## **Nossa construtora nasce a partir de anos de experiência em projetos, gerenciamento e execução de obras, aliando o domínio de sistemas em steel frame, estruturas de concreto e aço laminado. Reunimos conhecimento em soluções modernas de engenharia, planejamento e construção de casas residenciais, sempre com foco em qualidade, desempenho e responsabilidade técnica. A BERKAHN Construção Inteligente surge como uma empresa jovem, porém construída sobre bases sólidas, resultado da união das experiências de seus fundadores — profissionais que, após anos vivenciando a engenharia e a execução de obras residenciais e corporativas, decidiram transformar a forma como se constrói no Brasil.**
+        
+        **Foram anos observando de perto as limitações dos métodos tradicionais, introduzindo processos mais eficientes e tecnologias mais leves, rápidas e sustentáveis, lidando com desperdícios, retrabalhos, atrasos e custos imprevisíveis que se repetem obra após obra, e percebendo que construir bem exige mais do que empilhar materiais: exige método, precisão e propósito. Dessa inquietação, e da vontade real de fazer diferente, nasceu a BERKAHN — uma construtora criada para elevar o padrão da construção, entregando obras mais inteligentes, eficientes e humanas.**
+        
+        **Somos, com orgulho, uma empresa brasileira com visão contemporânea: integrar sistemas como steel frame, estruturas otimizadas e processos industriais para oferecer mais qualidade, velocidade e sustentabilidade. A BERKAHN nasce com um propósito claro: proporcionar aos clientes uma experiência de construção transparente, precisa e moderna, contribuindo para criar espaços que melhoram a vida das pessoas e o ambiente ao nosso redor.**
+        
+        ## O que nos move
+        
+        Na BERKAHN, acreditamos que construir é muito mais do que erguer estruturas. É criar lugares onde histórias começam, onde rotinas ganham forma e onde o futuro encontra um espaço para existir. O que nos move é a convicção de que cada obra pode — e deve — ser melhor do que a anterior.
+        
+        Somos movidos pela busca constante de eficiência, precisão e responsabilidade. Pela vontade de transformar um setor ainda marcado pelo improviso, desperdício e pouca previsibilidade. Somos impulsionados pela certeza de que a construção pode ser mais inteligente, mais sustentável e mais humana.
+        
+        O que nos move é ver ideias se tornarem realidade com método e técnica.
+        É entregar obras que respeitam o tempo do cliente, o ambiente e a qualidade que prometemos.
+        É construir com propósito — e não apenas com materiais.
+        ```
+        
+        [(Pagina) Empresa](https://www.notion.so/Pagina-Empresa-2bc020829cf980738846ec5f90e0f670?pvs=21)
+        
+    - Serviços
+    - O LSF
+        
+        ```jsx
+        ### **O que é o Light Steel Frame (LSF)?**
+        
+        O **Light Steel Frame** é um sistema construtivo industrializado formado por perfis de aço galvanizado de alta precisão. Esses perfis, organizados em painéis estruturais, compõem paredes, lajes e coberturas de forma leve, resistente e extremamente eficiente.
+        
+        Diferente da construção úmida tradicional, o LSF é um sistema **a seco**, sem desperdícios e com desempenho controlado desde o projeto até a execução.
+        
+        ---
+        
+        ### **Como funcionam as paredes no LSF?**
+        
+        As paredes no LSF são verdadeiros **sistemas multicamadas**, projetados para unir conforto, estanqueidade e acabamento premium:
+        
+        - **Perfis de aço galvanizado leve**
+            
+            Formam o esqueleto resistente da parede, garantindo estabilidade, alinhamento e durabilidade.
+            
+        - **Placas de gesso acartonado (interior)**
+            
+            Entregam superfícies planas, elegantes e prontas para pintura. O gesso permite embutir instalações com facilidade e melhora o conforto acústico.
+            
+        - **Placas cimentícias (exterior)**
+            
+            Altamente resistentes à umidade, ao impacto e às intempéries. São a base ideal para revestimentos texturizados, cerâmicos ou fachadas ventiladas.
+            
+        - **Camada interna de isolação**
+            
+            Onde são instalados mantas térmicas e acústicas, elevando drasticamente o desempenho da residência.
+            
+        - **Espaço técnico integrado**
+            
+            Passagens para hidráulica, elétrica, dados e climatização ocorrem dentro das paredes sem cortes, sem improvisos e sem sujeira.
+            
+        
+        O resultado é uma parede **leve, rígida, confortável, técnica e durável**, com desempenho superior à alvenaria tradicional.
+        
+        ---
+        
+        ### **Estrutural ou apenas vedação? O LSF pode ser ambos.**
+        
+        O LSF pode atuar de duas maneiras:
+        
+        - **LSF estrutural**
+            
+            O aço leve assume toda a função estrutural da construção, levando cargas até as fundações. Ideal para casas e edificações de baixo e médio porte.
+            
+        - **LSF como vedação**
+            
+            Pode ser usado apenas para formar paredes externas e internas, integrado a uma estrutura principal de **aço laminado** ou **concreto armado**. Nesse caso, o LSF entrega leveza, isolamento, velocidade e precisão.
+            
+        
+        ---
+        
+        ### **Por que escolher o LSF?**
+        
+        - Obra limpa, rápida e previsível
+        - Conforto térmico e acústico superior
+        - Precisão milimétrica
+        - Redução de patologias
+        - Alta durabilidade
+        - Menor carga sobre fundações
+        - Integração total com arquitetura moderna
+        
+        ---
+        
+        ### **A Berkahn e o LSF**
+        
+        Na **Berkahn**, projetamos e executamos construções em Light Steel Frame com rigor técnico e acabamento impecável. Cada residência é pensada como um sistema completo, combinando engenharia, estética e desempenho para entregar uma experiência de moradia superior.
+        ```
+        
+        [Light Steel Frame](https://www.notion.so/Light-Steel-Frame-2c3020829cf980ba8ed6f5e408f206e3?pvs=21)
+        
+    - Portfólio
+        
+        [Soluções](https://www.notion.so/Solu-es-2bc020829cf9804f95bee8ad92f342c5?pvs=21)
+        
+    - Atualidade
+        - Prensa
+            
+            (Página): Vários conteúdos sobre construção industrializada.
+            
+        - 
+
+### botão Contato
+
+Retirar “Orcamento gratis” e colocar “contato”.
+
+Em contato, o site ira direcionar o usuário ate a seguinte pagina:https://sincoengenharia.com.br/contato/
+
+## 1. PAGINA INICIAL - PARTE 01
+
+**Foto de fundo inicial:**
+
+![building-100595_1280.jpg](attachment:cd9e2893-e695-44bd-a8a3-f2280a28303e:building-100595_1280.jpg)
+
+### Frase menor: Erguendo o amanhã
+
+### Frase maior: #WELOVESTEELFRAME
+
+## 2. PAGINA INICIAL - PARTE 02
+
+### Frase menor esquerda:
+
+expertise em consturcao em light steel frame
+
+### Frase maior esquerda:
+
+casas inovdadoras em light steel frame - engineerd by berkahn
+
+### Frase média direita:
+
+**Berkahn** é referência em tecnologia e construção em light steel frame. Criar soluções para residências de alta performance, confortáveis e duráveis é o compromisso da nossa equipe especializada. 
+
+Da concepção inteligente à execução precisa, a **Berkahn** fornece tudo o que é necessário para realizar projetos residenciais modernos, eficientes e alinhados fielmente ao design original. Nossa missão é transformar ideias em casas que combinam leveza estrutural, engenharia avançada e excelência construtiva.
+
+## 3. PAGINA INICIAL - PARTE 03
+
+(2 imagens)
+
+## 4. PAGINA INICIAL - PARTE 04
+
+### Frase maior esquerda:
+
+casas inovdadoras em light steel frame - engineerd by berkahn
+
+### Texto direita:
+
+O Light Steel Frame (LSF) é um sistema versátil que permite executar paredes, pilares e lajes com precisão milimétrica, usando perfis de aço galvanizado e camadas técnicas de gesso acartonado e placas cimentícias para entregar conforto, desempenho e acabamento superior.
+
+No centro dessa versatilidade está a Berkahn, que domina o LSF tanto como sistema completo quanto integrado a outros métodos construtivos. O LSF pode atuar isoladamente ou funcionar como vedação combinada com estruturas de aço laminado ou concreto armado, ampliando possibilidades arquitetônicas e garantindo eficiência em qualquer solução adotada.
+
+**Saiba mais —> levar para a subpágina light steel frame**
