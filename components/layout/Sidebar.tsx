@@ -3,12 +3,12 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { useMenuController } from "@/hooks/useMenuController";
+import { useMenu } from "@/components/providers/MenuProvider";
 import { NAV_LINKS } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
 export function Sidebar() {
-  const { isOpen, close } = useMenuController();
+  const { isOpen, close } = useMenu();
   const pathname = usePathname();
 
   return (

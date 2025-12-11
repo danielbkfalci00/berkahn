@@ -1,12 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { useMenuController } from "@/hooks/useMenuController";
+import { useMenu } from "@/components/providers/MenuProvider";
 import { useHeaderScroll } from "@/hooks/useHeaderScroll";
 import { cn } from "@/lib/utils";
 
 export function Header() {
-  const { isOpen, toggle } = useMenuController();
+  const { isOpen, toggle } = useMenu();
   const { isScrolled } = useHeaderScroll();
 
   return (
