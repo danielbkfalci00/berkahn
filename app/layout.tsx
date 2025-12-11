@@ -1,9 +1,6 @@
-"use client";
-
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Inter } from "next/font/google";
-import { Header } from "@/components/layout/Header";
-import { Sidebar } from "@/components/layout/Sidebar";
+import { ClientLayout } from "@/components/layout/ClientLayout";
 import { Footer } from "@/components/layout/Footer";
 import "./globals.css";
 
@@ -49,9 +46,7 @@ export default function RootLayout({
   return (
     <html lang="pt-BR" className={`${cormorant.variable} ${inter.variable}`}>
       <body>
-        <Header />
-        <Sidebar />
-        <main className="pt-20">{children}</main>
+        <ClientLayout>{children}</ClientLayout>
         <Footer />
       </body>
     </html>
