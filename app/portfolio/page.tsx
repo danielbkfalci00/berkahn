@@ -119,7 +119,7 @@ function PortfolioGrid({ scrollToRef }: { scrollToRef: React.RefObject<HTMLDivEl
                 key={project.id}
                 project={project}
                 index={index}
-                variant={index === 0 && activeCategory === "all" ? "featured" : "default"}
+                variant="default"
               />
             ))}
           </motion.div>

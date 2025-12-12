@@ -276,8 +276,8 @@ Móvel e transportável, permite mudar de lugar sempre que necessário. Constru�
     description: `Showroom automotivo de alto padrão com estrutura em Steel Frame que permitiu vãos livres de até 20 metros sem pilares intermediários. O projeto combina funcionalidade comercial com arquitetura impressionante.
 
 A construção foi finalizada em tempo recorde, permitindo inauguração antes do prazo previsto e economia significativa para o cliente.`,
-    heroImage: 'https://images.unsplash.com/photo-1567449303078-57ad995bd329?auto=format&fit=crop&w=2400&q=80',
-    cardImage: 'https://images.unsplash.com/photo-1567449303078-57ad995bd329?auto=format&fit=crop&w=800&q=80',
+    heroImage: 'https://images.unsplash.com/photo-1562911791-c7a97b729ec5?auto=format&fit=crop&w=2400&q=80',
+    cardImage: 'https://images.unsplash.com/photo-1562911791-c7a97b729ec5?auto=format&fit=crop&w=800&q=80',
     area: {
       builtArea: 800.00,
       minLotWidth: 30.0,
