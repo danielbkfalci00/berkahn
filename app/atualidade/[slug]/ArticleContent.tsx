@@ -16,11 +16,11 @@ import {
 } from "lucide-react";
 
 import { RichArticle } from "@/types/article";
-import { TableOfContents } from "@/components/article/TableOfContents";
 import { ReadingProgress } from "@/components/article/ReadingProgress";
 import { StatsGrid } from "@/components/article/StatHighlight";
 import { DataTable } from "@/components/article/DataTable";
 import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
+import { RelatedArticlesCarousel } from "@/components/article/RelatedArticlesCarousel";
 import {
   Accordion,
   AccordionContent,
@@ -154,12 +154,9 @@ export function ArticleContent({ article }: ArticleContentProps) {
       {/* Main Content */}
       <div className="py-lg lg:py-xl">
         <div className="max-w-7xl mx-auto px-6 lg:px-16">
-          <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-12 lg:gap-16">
-            {/* Sidebar - Table of Contents */}
-            <TableOfContents sections={article.sections} />
-
+          <div className="grid grid-cols-1">
             {/* Article Content */}
-            <article className="max-w-3xl">
+            <article className="max-w-4xl mx-auto">
               {/* Sections */}
               {article.sections.map((section, index) => (
                 <section
@@ -331,27 +328,11 @@ export function ArticleContent({ article }: ArticleContentProps) {
                 </section>
               ))}
 
-              {/* Related Articles (placeholder) */}
-              <RevealOnScroll>
-                <div className="mt-16 pt-12 border-t border-black-10">
-                  <p className="label-text text-black-50 mb-6">Continue Lendo</p>
-                  <Link
-                    href="/atualidade"
-                    className="group flex items-center justify-between p-6 bg-black-5 rounded-lg hover:bg-black-10 transition-colors"
-                  >
-                    <div className="flex items-center gap-4">
-                      <FileText className="w-8 h-8 text-black-50" />
-                      <div>
-                        <p className="font-medium">Mais artigos sobre Steel Frame</p>
-                        <p className="text-sm text-black-60">
-                          Explore nosso conteúdo completo sobre construção industrializada
-                        </p>
-                      </div>
-                    </div>
-                    <ChevronRight className="w-5 h-5 text-black-50 group-hover:translate-x-1 transition-transform" />
-                  </Link>
-                </div>
-              </RevealOnScroll>
+              {/* Related Articles Carousel */}
+              <RelatedArticlesCarousel
+                currentSlug={article.slug}
+                currentCategory={article.category}
+              />
             </article>
           </div>
         </div>
