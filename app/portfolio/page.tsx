@@ -1,106 +1,16 @@
 "use client";
 
 import { useState, useRef } from "react";
-import Image from "next/image";
-import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { PROJECTS } from "@/data/projects";
-import { ProjectCategory } from "@/types/project";
+import { ProjectCategory, SEGMENTS } from "@/types/project";
 import { ProjectCardPremium } from "@/components/project/ProjectCardPremium";
 import { CategoryFilterMinimal } from "@/components/portfolio/CategoryFilter";
+import { PortfolioHeroCinematic } from "@/components/portfolio/PortfolioHeroCinematic";
+import { SegmentShowcase } from "@/components/portfolio/SegmentShowcase";
 import { StatsCounter } from "@/components/sections/StatsCounter";
 import { CTA } from "@/components/sections/CTA";
-import { CharReveal, LineReveal } from "@/components/animations/TextReveal";
-import { ArrowDown } from "lucide-react";
-
-// Hero Section with Parallax
-function PortfolioHero() {
-  const ref = useRef<HTMLElement>(null);
-  const { scrollY } = useScroll();
-
-  const backgroundY = useTransform(scrollY, [0, 1000], [0, -300]);
-  const contentY = useTransform(scrollY, [0, 500], [0, 100]);
-  const opacity = useTransform(scrollY, [0, 400], [1, 0]);
-
-  return (
-    <section
-      ref={ref}
-      className="relative h-screen min-h-[700px] flex items-center justify-center overflow-hidden"
-    >
-      {/* Background Image with Parallax */}
-      <motion.div
-        className="absolute inset-0 z-0"
-        style={{ y: backgroundY, top: "-20%", bottom: "-20%", height: "140%" }}
-      >
-        <Image
-          src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2400&q=80"
-          alt="Arquitetura moderna em Steel Frame"
-          fill
-          className="object-cover"
-          priority
-          sizes="100vw"
-          quality={90}
-        />
-      </motion.div>
-
-      {/* Gradient Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/80 z-10" />
-
-      {/* Content */}
-      <motion.div
-        className="relative z-20 text-center px-6 container max-w-4xl"
-        style={{ y: contentY, opacity }}
-      >
-        {/* Label */}
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2, ease: [0.19, 1, 0.22, 1] }}
-          className="label-text text-white/80 mb-6"
-        >
-          NOSSOS PROJETOS
-        </motion.p>
-
-        {/* Title with character reveal */}
-        <h1 className="headline-lg text-white mb-8">
-          <CharReveal text="Portfólio" delay={0.4} />
-        </h1>
-
-        {/* Subtitle */}
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.8, ease: [0.19, 1, 0.22, 1] }}
-          className="text-xl md:text-2xl text-white/70 font-heading font-light max-w-2xl mx-auto"
-        >
-          Cada projeto é uma expressão única de design, tecnologia e excelência construtiva
-        </motion.p>
-      </motion.div>
-
-      {/* Scroll Indicator */}
-      <motion.div
-        className="absolute bottom-12 left-1/2 -translate-x-1/2 z-20"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.2 }}
-        style={{ opacity }}
-      >
-        <motion.div
-          className="flex flex-col items-center gap-3 cursor-pointer"
-          animate={{ y: [0, 8, 0] }}
-          transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-          onClick={() =>
-            window.scrollTo({ top: window.innerHeight, behavior: "smooth" })
-          }
-        >
-          <span className="text-white/60 text-xs uppercase tracking-widest">
-            Explorar
-          </span>
-          <ArrowDown className="w-5 h-5 text-white/60" />
-        </motion.div>
-      </motion.div>
-    </section>
-  );
-}
+import { LineReveal } from "@/components/animations/TextReveal";
 
 // Manifesto/Statement Section
 function PortfolioManifesto() {
@@ -132,8 +42,8 @@ function PortfolioManifesto() {
   );
 }
 
-// Projects Grid Section
-function PortfolioGrid() {
+// Projects Grid Section with scroll anchor
+function PortfolioGrid({ scrollToRef }: { scrollToRef: React.RefObject<HTMLDivElement> }) {
   const [activeCategory, setActiveCategory] = useState<ProjectCategory | "all">(
     "all"
   );
@@ -143,8 +53,16 @@ function PortfolioGrid() {
       ? PROJECTS
       : PROJECTS.filter((p) => p.category === activeCategory);
 
+  // Get count for each category
+  const getCategoryCount = (category: ProjectCategory | "all") => {
+    if (category === "all") return PROJECTS.length;
+    return PROJECTS.filter((p) => p.category === category).length;
+  };
+
   return (
-    <section className="py-2xl bg-black-5">
+    <section className="py-2xl bg-black-5 scroll-mt-20 relative">
+      {/* Scroll anchor */}
+      <div ref={scrollToRef} className="absolute top-0" />
       <div className="container">
         {/* Section Header */}
         <motion.div
@@ -154,11 +72,11 @@ function PortfolioGrid() {
           transition={{ duration: 0.8, ease: [0.19, 1, 0.22, 1] }}
           className="text-center mb-12"
         >
-          <p className="label-text mb-4">PROJETOS PRONTOS</p>
-          <h2 className="headline-md mb-6">Escolha Seu Projeto</h2>
+          <p className="label-text text-black-50 mb-4">TODOS OS PROJETOS</p>
+          <h2 className="headline-md mb-6">Explore Nosso Portfolio</h2>
           <p className="body-lg text-black-70 max-w-2xl mx-auto">
-            Projetos exclusivos em Light Steel Frame, desenvolvidos para
-            diferentes estilos de vida e necessidades.
+            Projetos exclusivos em Light Steel Frame para residencias,
+            comercios, industrias e corporacoes.
           </p>
         </motion.div>
 
@@ -174,6 +92,16 @@ function PortfolioGrid() {
             activeCategory={activeCategory}
             onCategoryChange={setActiveCategory}
           />
+
+          {/* Project count indicator */}
+          <motion.p
+            key={activeCategory}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="text-center text-black-50 text-sm mt-4"
+          >
+            {getCategoryCount(activeCategory)} projeto{getCategoryCount(activeCategory) !== 1 ? 's' : ''} encontrado{getCategoryCount(activeCategory) !== 1 ? 's' : ''}
+          </motion.p>
         </motion.div>
 
         {/* Projects Grid */}
@@ -184,7 +112,7 @@ function PortfolioGrid() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8"
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8"
           >
             {filteredProjects.map((project, index) => (
               <ProjectCardPremium
@@ -219,7 +147,7 @@ function PortfolioGrid() {
           className="mt-16 text-center"
         >
           <p className="body-md text-black-70">
-            Não encontrou o que procura?{" "}
+            Nao encontrou o que procura?{" "}
             <a
               href="/contato"
               className="text-black font-medium hover:underline underline-offset-4 transition-all"
@@ -238,23 +166,23 @@ function PortfolioProcess() {
   const steps = [
     {
       number: "01",
-      title: "Escolha",
-      description: "Selecione o projeto que mais combina com seu estilo de vida",
+      title: "Projeto",
+      description: "Consultoria e planejamento personalizado para suas necessidades",
     },
     {
       number: "02",
-      title: "Personalização",
-      description: "Adapte acabamentos e detalhes às suas preferências",
+      title: "Fabricacao",
+      description: "Perfis cortados com precisao em nossa unidade industrial",
     },
     {
       number: "03",
-      title: "Produção",
-      description: "Fabricamos com precisão industrial em nossa unidade",
+      title: "Montagem",
+      description: "Estrutura levantada em tempo recorde no seu terreno",
     },
     {
       number: "04",
       title: "Entrega",
-      description: "Montagem rápida e eficiente no seu terreno",
+      description: "Obra finalizada e pronta para uso",
     },
   ];
 
@@ -268,8 +196,8 @@ function PortfolioProcess() {
           transition={{ duration: 0.8, ease: [0.19, 1, 0.22, 1] }}
           className="text-center mb-16"
         >
-          <p className="label-text mb-4">COMO FUNCIONA</p>
-          <h2 className="headline-md">Do projeto à realidade</h2>
+          <p className="label-text text-black-50 mb-4">COMO FUNCIONA</p>
+          <h2 className="headline-md">Do projeto a realidade</h2>
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -303,13 +231,36 @@ function PortfolioProcess() {
 
 // Main Page Component
 export default function PortfolioPage() {
+  const gridRef = useRef<HTMLDivElement>(null);
+
+  const handleSegmentClick = (segmentId: string) => {
+    // Scroll to grid section
+    if (gridRef.current) {
+      gridRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   return (
     <main>
-      <PortfolioHero />
+      {/* 1. Hero Cinematico com Parallax */}
+      <PortfolioHeroCinematic />
+
+      {/* 2. Manifesto */}
       <PortfolioManifesto />
-      <PortfolioGrid />
+
+      {/* 3. Showcase dos 4 Segmentos */}
+      <SegmentShowcase onSegmentClick={handleSegmentClick} />
+
+      {/* 4. Grid de Projetos com Filtro */}
+      <PortfolioGrid scrollToRef={gridRef} />
+
+      {/* 5. Processo Construtivo */}
       <PortfolioProcess />
+
+      {/* 6. Stats Counter */}
       <StatsCounter />
+
+      {/* 7. CTA Final */}
       <CTA />
     </main>
   );

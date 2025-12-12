@@ -46,7 +46,29 @@ export interface ProjectSpecification {
   description?: string;
 }
 
-export type ProjectCategory = 'chale' | 'tiny-house' | 'casa-campo' | 'casa-praia';
+// Segmentos principais
+export type ProjectSegment = 'residencial' | 'comercial' | 'industrial' | 'corporativo';
+
+// Subcategorias por segmento
+export type ResidentialType = 'casa' | 'chale' | 'tiny-house' | 'sobrado';
+export type CommercialType = 'loja' | 'showroom' | 'restaurante';
+export type IndustrialType = 'galpao' | 'deposito' | 'fabrica';
+export type CorporateType = 'franquia' | 'escritorio' | 'clinica';
+
+export type ProjectSubtype = ResidentialType | CommercialType | IndustrialType | CorporateType;
+
+// Manter compatibilidade com código existente
+export type ProjectCategory = ProjectSegment;
+
+export interface ProjectSegmentInfo {
+  id: ProjectSegment;
+  name: string;
+  namePlural: string;
+  description: string;
+  icon?: string;
+  projectCount: number;
+  image: string;
+}
 
 export interface ProjectCategoryInfo {
   id: ProjectCategory;
@@ -60,7 +82,8 @@ export interface Project {
   id: string;
   slug: string;
   name: string;                       // Ex: "Tiny House Fiano"
-  category: ProjectCategory;
+  category: ProjectCategory;          // Segmento: residencial, comercial, industrial, corporativo
+  subtype?: ProjectSubtype;           // Subcategoria específica
   tagline: string;                    // Frase curta para o card
   description: string;                // Descrição completa (pode ter múltiplos parágrafos)
   heroImage: string;
@@ -74,18 +97,76 @@ export interface Project {
   highlights: string[];               // Lista de diferenciais
   constructionTime?: string;          // Ex: "45 dias"
   warranty?: string;                  // Ex: "5 anos"
+  location?: string;                  // Ex: "São Paulo, SP"
+  year?: number;                      // Ano de conclusão
+  client?: string;                    // Nome do cliente (opcional)
 }
 
 // Funções utilitárias de tipo
 export function getCategoryLabel(category: ProjectCategory): string {
   const labels: Record<ProjectCategory, string> = {
-    'chale': 'Chalé',
-    'tiny-house': 'Tiny House',
-    'casa-campo': 'Casa de Campo',
-    'casa-praia': 'Casa de Praia',
+    'residencial': 'Residencial',
+    'comercial': 'Comercial',
+    'industrial': 'Industrial',
+    'corporativo': 'Corporativo',
   };
   return labels[category];
 }
+
+export function getSubtypeLabel(subtype: ProjectSubtype): string {
+  const labels: Record<ProjectSubtype, string> = {
+    'casa': 'Casa',
+    'chale': 'Chalé',
+    'tiny-house': 'Tiny House',
+    'sobrado': 'Sobrado',
+    'loja': 'Loja',
+    'showroom': 'Showroom',
+    'restaurante': 'Restaurante',
+    'galpao': 'Galpão',
+    'deposito': 'Depósito',
+    'fabrica': 'Fábrica',
+    'franquia': 'Franquia',
+    'escritorio': 'Escritório',
+    'clinica': 'Clínica',
+  };
+  return labels[subtype];
+}
+
+// Dados dos segmentos para showcase
+export const SEGMENTS: ProjectSegmentInfo[] = [
+  {
+    id: 'residencial',
+    name: 'Residencial',
+    namePlural: 'Residenciais',
+    description: 'Casas, chalés e moradias personalizadas',
+    projectCount: 85,
+    image: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=80',
+  },
+  {
+    id: 'comercial',
+    name: 'Comercial',
+    namePlural: 'Comerciais',
+    description: 'Lojas, showrooms e espaços de varejo',
+    projectCount: 35,
+    image: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=800&q=80',
+  },
+  {
+    id: 'industrial',
+    name: 'Industrial',
+    namePlural: 'Industriais',
+    description: 'Galpões, fábricas e centros de distribuição',
+    projectCount: 20,
+    image: '/images/comercial_steel_frame.webp',
+  },
+  {
+    id: 'corporativo',
+    name: 'Corporativo',
+    namePlural: 'Corporativos',
+    description: 'Franquias, escritórios e clínicas',
+    projectCount: 15,
+    image: '/images/mac_steel_frame.webp',
+  },
+];
 
 export function formatArea(area: number): string {
   return `${area.toFixed(2).replace('.', ',')} m²`;
