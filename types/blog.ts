@@ -10,4 +10,28 @@ export interface BlogPost {
   date: string;
   readTime: string;
   tags?: string[];
+  featured?: boolean;
 }
+
+export type BlogCategory =
+  | "Todos"
+  | "Tecnologia"
+  | "Guia"
+  | "Educação"
+  | "Análise"
+  | "Meio Ambiente"
+  | "Mercado"
+  | "Segurança"
+  | "Case";
+
+export const BLOG_CATEGORIES: BlogCategory[] = [
+  "Todos",
+  "Tecnologia",
+  "Guia",
+  "Educação",
+  "Análise",
+  "Meio Ambiente",
+  "Mercado",
+  "Segurança",
+  "Case",
+];
