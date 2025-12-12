@@ -47,7 +47,8 @@ export interface ProjectSpecification {
 }
 
 // Segmentos principais
-export type ProjectSegment = 'residencial' | 'comercial' | 'industrial' | 'corporativo';
+// TEMPORÁRIO: 'corporativo' ocultado até disponibilização de projetos
+export type ProjectSegment = 'residencial' | 'comercial' | 'industrial'; // | 'corporativo'
 
 // Subcategorias por segmento
 export type ResidentialType = 'casa' | 'chale' | 'tiny-house' | 'sobrado';
@@ -108,7 +109,7 @@ export function getCategoryLabel(category: ProjectCategory): string {
     'residencial': 'Residencial',
     'comercial': 'Comercial',
     'industrial': 'Industrial',
-    'corporativo': 'Corporativo',
+    // 'corporativo': 'Corporativo', // TEMPORÁRIO: Ocultado
   };
   return labels[category];
 }
@@ -158,14 +159,15 @@ export const SEGMENTS: ProjectSegmentInfo[] = [
     projectCount: 20,
     image: '/images/comercial_steel_frame.webp',
   },
-  {
-    id: 'corporativo',
-    name: 'Corporativo',
-    namePlural: 'Corporativos',
-    description: 'Franquias, escritórios e clínicas',
-    projectCount: 15,
-    image: '/images/mac_steel_frame.webp',
-  },
+  // TEMPORÁRIO: Segmento corporativo ocultado até disponibilização de projetos
+  // {
+  //   id: 'corporativo',
+  //   name: 'Corporativo',
+  //   namePlural: 'Corporativos',
+  //   description: 'Franquias, escritórios e clínicas',
+  //   projectCount: 15,
+  //   image: '/images/mac_steel_frame.webp',
+  // },
 ];
 
 export function formatArea(area: number): string {

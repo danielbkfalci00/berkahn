@@ -83,7 +83,7 @@ export function PortfolioHeroCinematic() {
         <div className="mt-8 max-w-2xl">
           <LineReveal
             lines={[
-              "Do sonho residencial ao projeto corporativo.",
+              "Do sonho residencial ao empreendimento industrial.",
               "Cada estrutura conta uma história única.",
             ]}
             className="text-white/80 body-lg"
