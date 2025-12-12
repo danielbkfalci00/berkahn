@@ -60,7 +60,7 @@ export function ConstructionTimeline() {
                   >
                     {/* Phase Number Circle (Timeline Dot) */}
                     <div className="absolute left-8 md:left-1/2 -translate-x-1/2 w-16 h-16 rounded-full bg-black flex items-center justify-center z-10 border-4 border-white shadow-luxury-lg">
-                      <span className="text-white font-heading text-xl font-medium">
+                      <span className="text-white font-heading text-2xl font-bold">
                         {phase.phase}
                       </span>
                     </div>
