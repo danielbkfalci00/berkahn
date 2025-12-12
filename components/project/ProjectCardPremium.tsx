@@ -197,8 +197,8 @@ export function ProjectCardPremium({
             }}
             transition={{ duration: 0.3 }}
           >
-            <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-luxury-md group-hover:shadow-luxury-lg transition-shadow">
-              <ArrowRight className="w-5 h-5 text-black transition-transform duration-300 group-hover:translate-x-0.5" />
+            <div className="w-9 h-9 bg-white rounded-full flex items-center justify-center shadow-luxury-md group-hover:shadow-luxury-lg transition-shadow">
+              <ArrowRight className="w-4 h-4 text-black transition-transform duration-300 group-hover:translate-x-0.5" />
             </div>
           </motion.div>
 
