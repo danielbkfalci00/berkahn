@@ -6,7 +6,6 @@ export const NAV_LINKS = [
   { label: "LSF", href: "/lsf" },
   { label: "Portfólio", href: "/portfolio" },
   { label: "Atualidade", href: "/atualidade" },
-  { label: "Contato", href: "/contato" },
 ] as const;
 
 // Footer Contact Data (icons will be added in Footer component)

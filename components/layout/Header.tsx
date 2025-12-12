@@ -66,8 +66,13 @@ export function Header() {
           )}
         </Link>
 
-        {/* RIGHT: CTA - Temporariamente removido */}
-        <div className="justify-self-end" />
+        {/* RIGHT: CTA */}
+        <Link
+          href="/contato"
+          className="justify-self-end px-6 py-2 bg-black text-white text-sm uppercase tracking-wider hover:bg-black-90 transition-colors duration-300"
+        >
+          Fale Conosco
+        </Link>
       </div>
     </header>
   );

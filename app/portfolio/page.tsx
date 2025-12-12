@@ -147,7 +147,13 @@ function PortfolioGrid({ scrollToRef }: { scrollToRef: React.RefObject<HTMLDivEl
           className="mt-16 text-center"
         >
           <p className="body-md text-black-70">
-            Nao encontrou o que procura? Fale conosco para um projeto personalizado
+            Nao encontrou o que procura?{" "}
+            <a
+              href="/contato"
+              className="text-black font-medium hover:underline underline-offset-4 transition-all"
+            >
+              Fale conosco para um projeto personalizado
+            </a>
           </p>
         </motion.div>
       </div>
