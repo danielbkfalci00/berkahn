@@ -42,7 +42,7 @@ export function ParallaxHero({
       {/* Background Image Layer (slowest parallax) */}
       <motion.div
         className="absolute inset-0 z-0"
-        style={{ y: yBackground }}
+        style={{ y: yBackground, top: "-20%", bottom: "-20%", height: "140%" }}
       >
         <Image
           src={backgroundImage}

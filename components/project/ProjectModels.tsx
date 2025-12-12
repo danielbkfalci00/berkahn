@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { Project } from "@/types/project";
 import { getSpecificationName } from "@/data/projects";
 import {
@@ -12,7 +13,8 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
-import { Check, X, Star } from "lucide-react";
+import { Check, Minus, Star } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface ProjectModelsProps {
   project: Project;
@@ -54,17 +56,17 @@ export function ProjectModels({ project }: ProjectModelsProps) {
                     key={model.id}
                     className={`text-center min-w-[100px] ${
                       model.id === mostCompleteModelId
-                        ? "bg-black text-white"
-                        : ""
+                        ? "bg-gradient-to-b from-black to-black/90 text-white"
+                        : "bg-black-5/30"
                     }`}
                   >
                     <div className="space-y-1">
                       {model.id === mostCompleteModelId && (
                         <Badge
                           variant="secondary"
-                          className="bg-white/20 text-white text-[10px] mb-1"
+                          className="bg-white text-black text-[10px] mb-1 font-semibold"
                         >
-                          <Star className="w-3 h-3 mr-1" />
+                          <Star className="w-3 h-3 mr-1 fill-current" />
                           Recomendado
                         </Badge>
                       )}
@@ -85,15 +87,14 @@ export function ProjectModels({ project }: ProjectModelsProps) {
             <TableBody>
               {Object.entries(specsByCategory).map(
                 ([category, specs], categoryIndex) => (
-                  <>
+                  <React.Fragment key={`category-${category}`}>
                     {/* Category Header */}
                     <TableRow
-                      key={`cat-${category}`}
-                      className="bg-black-5 hover:bg-black-5"
+                      className="bg-black-5/50 hover:bg-black-5/50"
                     >
                       <TableCell
                         colSpan={models.length + 1}
-                        className="font-semibold text-sm uppercase tracking-wider text-black-70 py-3"
+                        className="font-semibold text-xs uppercase tracking-[0.15em] text-black-50 py-3 border-l-2 border-black/20"
                       >
                         {category}
                       </TableCell>
@@ -103,7 +104,11 @@ export function ProjectModels({ project }: ProjectModelsProps) {
                     {specs.map((spec, specIndex) => (
                       <TableRow
                         key={spec.id}
-                        className="border-black/5 hover:bg-black-5/50 transition-colors"
+                        className={cn(
+                          "border-black/5 transition-all duration-200",
+                          specIndex % 2 === 0 ? "bg-white" : "bg-black-5/20",
+                          "hover:bg-black-5/40 hover:shadow-luxury-sm"
+                        )}
                       >
                         <TableCell className="font-medium text-sm text-black-70">
                           {spec.name}
@@ -125,13 +130,15 @@ export function ProjectModels({ project }: ProjectModelsProps) {
                             >
                               {included ? (
                                 <div className="flex justify-center">
-                                  <div className="w-6 h-6 bg-black rounded-full flex items-center justify-center">
-                                    <Check className="w-4 h-4 text-white" />
+                                  <div className="w-6 h-6 bg-emerald-500 rounded-full flex items-center justify-center shadow-sm">
+                                    <Check className="w-4 h-4 text-white" strokeWidth={3} />
                                   </div>
                                 </div>
                               ) : (
                                 <div className="flex justify-center">
-                                  <X className="w-5 h-5 text-black/20" />
+                                  <div className="w-6 h-6 border border-black/10 rounded-full flex items-center justify-center">
+                                    <Minus className="w-3 h-3 text-black/30" />
+                                  </div>
                                 </div>
                               )}
                             </TableCell>
@@ -139,7 +146,7 @@ export function ProjectModels({ project }: ProjectModelsProps) {
                         })}
                       </TableRow>
                     ))}
-                  </>
+                  </React.Fragment>
                 )
               )}
             </TableBody>
@@ -150,13 +157,15 @@ export function ProjectModels({ project }: ProjectModelsProps) {
       {/* Legend */}
       <div className="mt-8 flex flex-wrap gap-6 justify-center text-sm text-black-70">
         <div className="flex items-center gap-2">
-          <div className="w-6 h-6 bg-black rounded-full flex items-center justify-center">
-            <Check className="w-4 h-4 text-white" />
+          <div className="w-6 h-6 bg-emerald-500 rounded-full flex items-center justify-center shadow-sm">
+            <Check className="w-4 h-4 text-white" strokeWidth={3} />
           </div>
           <span>Incluso no modelo</span>
         </div>
         <div className="flex items-center gap-2">
-          <X className="w-5 h-5 text-black/20" />
+          <div className="w-6 h-6 border border-black/10 rounded-full flex items-center justify-center">
+            <Minus className="w-3 h-3 text-black/30" />
+          </div>
           <span>Não incluso</span>
         </div>
       </div>

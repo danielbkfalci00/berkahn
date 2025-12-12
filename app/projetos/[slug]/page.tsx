@@ -8,7 +8,9 @@ import { ProjectGallery } from "@/components/project/ProjectGallery";
 import { ProjectFloorPlans } from "@/components/project/ProjectFloorPlans";
 import { ProjectModels } from "@/components/project/ProjectModels";
 import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
-import { getProjectBySlug, getAllProjectSlugs, getCategoryInfo } from "@/data/projects";
+import { getProjectBySlug, getAllProjectSlugs, getCategoryInfo, getProjectsByCategory } from "@/data/projects";
+import Link from "next/link";
+import Image from "next/image";
 import { getCategoryLabel } from "@/types/project";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -17,6 +19,13 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 import { Clock, Shield, CheckCircle2, Zap, Leaf, Timer, ThumbsUp, Award, Wrench } from "lucide-react";
 
 interface Props {
@@ -174,10 +183,10 @@ export default async function ProjectPage({ params }: Props) {
                       value={`item-${index}`}
                       className="bg-white rounded-lg shadow-luxury-sm border-0 overflow-hidden"
                     >
-                      <AccordionTrigger className="px-6 py-4 text-left hover:no-underline hover:bg-black-5/50 transition-colors [&[data-state=open]]:bg-black-5/30">
+                      <AccordionTrigger className="group px-6 py-4 text-left hover:no-underline transition-all duration-300 [&[data-state=open]]:bg-black-5/30">
                         <div className="flex items-center gap-4">
-                          <div className="w-10 h-10 bg-black rounded-full flex items-center justify-center flex-shrink-0">
-                            <IconComponent className="w-5 h-5 text-white" />
+                          <div className="w-10 h-10 border-2 border-black rounded-full flex items-center justify-center flex-shrink-0 group-hover:border-black-70 group-hover:shadow-luxury-sm transition-all duration-300">
+                            <IconComponent className="w-5 h-5 text-black" />
                           </div>
                           <span className="font-medium text-left pr-4">{highlight}</span>
                         </div>
@@ -247,7 +256,88 @@ export default async function ProjectPage({ params }: Props) {
         </section>
       )}
 
-      {/* 8. CTA */}
+      {/* 8. Projetos Relacionados - Carousel Premium */}
+      {(() => {
+        const relatedProjects = getProjectsByCategory(project.category)
+          .filter(p => p.id !== project.id)
+          .slice(0, 6);
+
+        if (relatedProjects.length === 0) return null;
+
+        return (
+          <section className="py-xl bg-black-5">
+            <div className="container">
+              <RevealOnScroll>
+                <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-12">
+                  <div className="text-center md:text-left">
+                    <p className="label-text mb-4">Explore Mais</p>
+                    <h2 className="headline-md">Projetos Relacionados</h2>
+                  </div>
+                  <p className="hidden md:block text-sm text-black-50 mt-4 md:mt-0">
+                    Arraste ou use as setas para navegar
+                  </p>
+                </div>
+              </RevealOnScroll>
+
+              <RevealOnScroll delay={0.1}>
+                <Carousel
+                  opts={{
+                    align: "start",
+                    loop: true,
+                  }}
+                  className="w-full"
+                >
+                  <CarouselContent className="-ml-4">
+                    {relatedProjects.map((relatedProject) => (
+                      <CarouselItem
+                        key={relatedProject.id}
+                        className="pl-4 basis-full md:basis-1/2 lg:basis-1/3"
+                      >
+                        <Link
+                          href={`/projetos/${relatedProject.slug}`}
+                          className="group block bg-white rounded-xl overflow-hidden shadow-luxury-sm hover:shadow-luxury-lg border border-transparent hover:border-black/10 transition-all duration-500 hover:-translate-y-1"
+                        >
+                          <div className="relative aspect-[4/3] overflow-hidden">
+                            <Image
+                              src={relatedProject.cardImage}
+                              alt={relatedProject.name}
+                              fill
+                              className="object-cover group-hover:scale-105 transition-transform duration-700"
+                            />
+                          </div>
+                          <div className="p-6">
+                            <p className="text-xs uppercase tracking-wider text-black-50 mb-2">
+                              {getCategoryLabel(relatedProject.category)}
+                            </p>
+                            <h3 className="font-medium text-lg mb-2 group-hover:text-black-70 transition-colors">
+                              {relatedProject.name}
+                            </h3>
+                            <p className="text-sm text-black-50 line-clamp-2">
+                              {relatedProject.tagline}
+                            </p>
+                          </div>
+                        </Link>
+                      </CarouselItem>
+                    ))}
+                  </CarouselContent>
+
+                  {/* Navegação Premium */}
+                  <div className="flex items-center justify-center gap-4 mt-8">
+                    <CarouselPrevious
+                      className="static translate-y-0 w-12 h-12 rounded-full bg-white border-black/10 hover:bg-black hover:text-white hover:border-black shadow-luxury-sm hover:shadow-luxury-md transition-all duration-300"
+                    />
+                    <CarouselNext
+                      className="static translate-y-0 w-12 h-12 rounded-full bg-white border-black/10 hover:bg-black hover:text-white hover:border-black shadow-luxury-sm hover:shadow-luxury-md transition-all duration-300"
+                    />
+                  </div>
+                </Carousel>
+              </RevealOnScroll>
+            </div>
+          </section>
+        );
+      })()}
+
+      {/* 9. CTA */}
       <CTA />
     </main>
   );

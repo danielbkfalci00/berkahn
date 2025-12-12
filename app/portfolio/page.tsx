@@ -27,12 +27,15 @@ function PortfolioHero() {
       className="relative h-screen min-h-[700px] flex items-center justify-center overflow-hidden"
     >
       {/* Background Image with Parallax */}
-      <motion.div className="absolute inset-0 z-0" style={{ y: backgroundY }}>
+      <motion.div
+        className="absolute inset-0 z-0"
+        style={{ y: backgroundY, top: "-20%", bottom: "-20%", height: "140%" }}
+      >
         <Image
           src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2400&q=80"
           alt="Arquitetura moderna em Steel Frame"
           fill
-          className="object-cover scale-110"
+          className="object-cover"
           priority
           sizes="100vw"
           quality={90}

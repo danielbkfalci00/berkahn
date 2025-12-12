@@ -7,6 +7,7 @@ import {
   Dialog,
   DialogContent,
   DialogTitle,
+  DialogClose,
 } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import { X, ZoomIn, ChevronLeft, ChevronRight, Grid3X3 } from "lucide-react";
@@ -71,6 +72,8 @@ export function ProjectGallery({ images, projectName }: ProjectGalleryProps) {
     <div
       className={cn(
         "relative cursor-pointer group overflow-hidden rounded-lg h-full",
+        "border border-transparent hover:border-black/20",
+        "transition-all duration-300 hover:-translate-y-1 hover:shadow-luxury-md",
         !isMain && "aspect-[4/3]"
       )}
       onClick={() => openLightbox(index)}
@@ -87,10 +90,10 @@ export function ProjectGallery({ images, projectName }: ProjectGalleryProps) {
         priority={isMain}
       />
 
-      {/* Overlay com zoom icon */}
-      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors duration-300 flex items-center justify-center">
+      {/* Zoom icon - sem overlay preto */}
+      <div className="absolute inset-0 flex items-center justify-center">
         <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-          <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-lg">
+          <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-luxury-md">
             <ZoomIn className="w-5 h-5 text-black" />
           </div>
         </div>
@@ -164,23 +167,25 @@ export function ProjectGallery({ images, projectName }: ProjectGalleryProps) {
       {/* Lightbox Dialog */}
       <Dialog open={selectedIndex !== null} onOpenChange={closeLightbox}>
         <DialogContent
-          className="max-w-[95vw] max-h-[95vh] p-0 border-0 bg-black/95"
+          className="max-w-[95vw] max-h-[95vh] p-0 border-0 bg-black/95 overflow-hidden"
           onKeyDown={handleKeyDown}
+          hideCloseButton
         >
           <VisuallyHidden>
             <DialogTitle>{projectName} - Galeria</DialogTitle>
           </VisuallyHidden>
 
           {selectedIndex !== null && (
-            <div className="relative w-full h-[85vh] flex flex-col items-center justify-center">
-              {/* Close button */}
-              <button
-                onClick={closeLightbox}
-                className="absolute top-4 right-4 z-50 w-10 h-10 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center transition-colors"
-                aria-label="Fechar"
-              >
-                <X className="w-5 h-5 text-white" />
-              </button>
+            <div className="relative w-full h-[85vh] flex flex-col items-center justify-center pt-12">
+              {/* Close button - Usando DialogClose nativo */}
+              <DialogClose asChild>
+                <button
+                  className="absolute top-4 right-4 z-[60] w-12 h-12 bg-white/20 hover:bg-white/40 rounded-full flex items-center justify-center transition-colors backdrop-blur-sm border border-white/20"
+                  aria-label="Fechar"
+                >
+                  <X className="w-6 h-6 text-white" />
+                </button>
+              </DialogClose>
 
               {/* Navigation - Previous */}
               <button
@@ -192,7 +197,7 @@ export function ProjectGallery({ images, projectName }: ProjectGalleryProps) {
               </button>
 
               {/* Image Container */}
-              <div className="relative w-full h-[60vh] md:h-[65vh]">
+              <div className="relative w-full h-[50vh] md:h-[60vh] lg:h-[65vh]">
                 <Image
                   src={images[selectedIndex].src}
                   alt={images[selectedIndex].alt}
