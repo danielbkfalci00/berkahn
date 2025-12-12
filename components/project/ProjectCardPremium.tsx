@@ -107,10 +107,10 @@ export function ProjectCardPremium({
           />
 
           {/* Top badges */}
-          <div className="absolute top-4 md:top-6 left-4 md:left-6 right-4 md:right-6 z-10 flex justify-between items-start">
+          <div className="absolute top-3 md:top-4 left-3 md:left-4 right-3 md:right-4 z-10 flex justify-between items-start">
             <Badge
               variant="secondary"
-              className="bg-white/95 text-black hover:bg-white px-3 py-1.5 text-xs uppercase tracking-wider font-medium backdrop-blur-sm"
+              className="bg-white/90 text-black hover:bg-white px-2 py-0.5 text-[10px] uppercase tracking-wide font-medium backdrop-blur-sm"
             >
               {getCategoryLabel(project.category)}
             </Badge>
@@ -119,9 +119,9 @@ export function ProjectCardPremium({
               initial={{ opacity: 0, x: 10 }}
               animate={{ opacity: isHovered ? 1 : 0, x: isHovered ? 0 : 10 }}
               transition={{ duration: 0.3 }}
-              className="flex items-center gap-1.5 bg-black/90 text-white px-3 py-1.5 text-sm font-medium backdrop-blur-sm"
+              className="flex items-center gap-1 bg-black/80 text-white px-2 py-0.5 text-[11px] font-medium backdrop-blur-sm"
             >
-              <Maximize2 className="w-3.5 h-3.5" />
+              <Maximize2 className="w-3 h-3" />
               {formatArea(project.area.builtArea)}
             </motion.div>
           </div>
@@ -247,18 +247,18 @@ export function ProjectCardSimple({ project, index = 0 }: { project: Project; in
 
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-500" />
 
-          <div className="absolute top-4 left-4 z-10">
+          <div className="absolute top-3 left-3 z-10">
             <Badge
               variant="secondary"
-              className="bg-white/90 text-black hover:bg-white px-3 py-1 text-xs uppercase tracking-wider font-medium"
+              className="bg-white/90 text-black hover:bg-white px-2 py-0.5 text-[10px] uppercase tracking-wide font-medium"
             >
               {getCategoryLabel(project.category)}
             </Badge>
           </div>
 
-          <div className="absolute top-4 right-4 z-10">
-            <div className="flex items-center gap-1.5 bg-black/80 text-white px-3 py-1.5 text-sm font-medium">
-              <Maximize2 className="w-3.5 h-3.5" />
+          <div className="absolute top-3 right-3 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <div className="flex items-center gap-1 bg-black/80 text-white px-2 py-0.5 text-[11px] font-medium">
+              <Maximize2 className="w-3 h-3" />
               {formatArea(project.area.builtArea)}
             </div>
           </div>
