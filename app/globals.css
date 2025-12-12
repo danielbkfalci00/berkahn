@@ -4,8 +4,7 @@
 
 @layer base {
   :root {
-    --font-cormorant: 'Cormorant Garamond', serif;
-    --font-inter: 'Inter', sans-serif;
+    --font-manrope: 'Manrope', sans-serif;
   }
 
   body {
@@ -48,9 +47,9 @@
 
   /* Timeline year */
   .timeline-component .timeline-title {
-    font-family: var(--font-cormorant);
+    font-family: var(--font-manrope);
     font-size: clamp(1.75rem, 4vw, 2.5rem);
-    font-weight: 400;
+    font-weight: 600;
     color: rgba(0, 0, 0, 0.7);
     letter-spacing: -0.02em;
   }
@@ -86,15 +85,15 @@
 /* Utility classes for typography */
 @layer utilities {
   .headline-lg {
-    @apply text-5xl md:text-6xl lg:text-7xl font-heading font-light tracking-tight;
+    @apply text-5xl md:text-6xl lg:text-7xl font-heading font-extrabold tracking-tighter;
   }
 
   .headline-md {
-    @apply text-3xl md:text-4xl font-heading font-medium tracking-tight;
+    @apply text-3xl md:text-4xl font-heading font-bold tracking-tight;
   }
 
   .headline-sm {
-    @apply text-2xl md:text-3xl font-heading font-medium;
+    @apply text-2xl md:text-3xl font-heading font-semibold tracking-tight;
   }
 
   .body-lg {

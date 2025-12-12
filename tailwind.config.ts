@@ -41,11 +41,11 @@ const config: Config = {
   		},
   		fontFamily: {
   			heading: [
-  				'var(--font-cormorant)',
-  				'serif'
+  				'var(--font-manrope)',
+  				'sans-serif'
   			],
   			body: [
-  				'var(--font-inter)',
+  				'var(--font-manrope)',
   				'sans-serif'
   			]
   		},
