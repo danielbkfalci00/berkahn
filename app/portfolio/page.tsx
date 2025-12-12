@@ -59,7 +59,7 @@ function PortfolioHero() {
 
         {/* Title with character reveal */}
         <h1 className="headline-lg text-white mb-8">
-          <CharReveal text="Portf\u00f3lio" delay={0.4} />
+          <CharReveal text="Portfólio" delay={0.4} />
         </h1>
 
         {/* Subtitle */}
@@ -69,7 +69,7 @@ function PortfolioHero() {
           transition={{ duration: 1, delay: 0.8, ease: [0.19, 1, 0.22, 1] }}
           className="text-xl md:text-2xl text-white/70 font-heading font-light max-w-2xl mx-auto"
         >
-          Cada projeto \u00e9 uma express\u00e3o \u00fanica de design, tecnologia e excel\u00eancia construtiva
+          Cada projeto é uma expressão única de design, tecnologia e excelência construtiva
         </motion.p>
       </motion.div>
 
@@ -107,8 +107,8 @@ function PortfolioManifesto() {
         <div className="text-center">
           <LineReveal
             lines={[
-              "Construir \u00e9 mais do que erguer paredes.",
-              "\u00c9 materializar sonhos com precis\u00e3o,",
+              "Construir é mais do que erguer paredes.",
+              "É materializar sonhos com precisão,",
               "tecnologia e respeito ao tempo de cada cliente.",
             ]}
             className="font-heading text-3xl md:text-4xl lg:text-5xl text-black leading-tight"
@@ -216,7 +216,7 @@ function PortfolioGrid() {
           className="mt-16 text-center"
         >
           <p className="body-md text-black-70">
-            N\u00e3o encontrou o que procura?{" "}
+            Não encontrou o que procura?{" "}
             <a
               href="/contato"
               className="text-black font-medium hover:underline underline-offset-4 transition-all"
@@ -240,18 +240,18 @@ function PortfolioProcess() {
     },
     {
       number: "02",
-      title: "Personaliza\u00e7\u00e3o",
-      description: "Adapte acabamentos e detalhes \u00e0s suas prefer\u00eancias",
+      title: "Personalização",
+      description: "Adapte acabamentos e detalhes às suas preferências",
     },
     {
       number: "03",
-      title: "Produ\u00e7\u00e3o",
-      description: "Fabricamos com precis\u00e3o industrial em nossa unidade",
+      title: "Produção",
+      description: "Fabricamos com precisão industrial em nossa unidade",
     },
     {
       number: "04",
       title: "Entrega",
-      description: "Montagem r\u00e1pida e eficiente no seu terreno",
+      description: "Montagem rápida e eficiente no seu terreno",
     },
   ];
 
@@ -266,7 +266,7 @@ function PortfolioProcess() {
           className="text-center mb-16"
         >
           <p className="label-text mb-4">COMO FUNCIONA</p>
-          <h2 className="headline-md">Do projeto \u00e0 realidade</h2>
+          <h2 className="headline-md">Do projeto à realidade</h2>
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">

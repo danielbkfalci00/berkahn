@@ -17,9 +17,9 @@ interface StatsCounterProps {
 
 const defaultStats: Stat[] = [
   { value: 50, suffix: "+", label: "Projetos Entregues" },
-  { value: 5000, suffix: "+", label: "m\u00b2 Constru\u00eddos" },
-  { value: 10, suffix: "+", label: "Anos de Experi\u00eancia" },
-  { value: 100, suffix: "%", label: "Satisfa\u00e7\u00e3o" },
+  { value: 5000, suffix: "+", label: "m² Construídos" },
+  { value: 10, suffix: "+", label: "Anos de Experiência" },
+  { value: 100, suffix: "%", label: "Satisfação" },
 ];
 
 function CountUp({
