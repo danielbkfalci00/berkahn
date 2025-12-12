@@ -7,6 +7,7 @@ import { ProjectFeatures } from "@/components/project/ProjectFeatures";
 import { ProjectGallery } from "@/components/project/ProjectGallery";
 import { ProjectFloorPlans } from "@/components/project/ProjectFloorPlans";
 import { ProjectModels } from "@/components/project/ProjectModels";
+import { ProjectTechnicalTable } from "@/components/project/ProjectTechnicalTable";
 import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
 import { getProjectBySlug, getAllProjectSlugs, getCategoryInfo, getProjectsByCategory } from "@/data/projects";
 import Link from "next/link";
@@ -219,7 +220,26 @@ export default async function ProjectPage({ params }: Props) {
         </div>
       </section>
 
-      {/* 6. Plantas Baixas */}
+      {/* 6. Especificações Técnicas */}
+      {project.specifications && project.specifications.length > 0 && (
+        <section className="py-xl bg-black-5">
+          <div className="container">
+            <RevealOnScroll>
+              <div className="text-center mb-12">
+                <p className="label-text mb-4">DETALHES TÉCNICOS</p>
+                <h2 className="headline-md">Especificações do Projeto</h2>
+                <p className="body-md text-black-70 mt-4 max-w-2xl mx-auto">
+                  Conheça em detalhes os materiais e sistemas construtivos utilizados neste projeto.
+                </p>
+              </div>
+            </RevealOnScroll>
+
+            <ProjectTechnicalTable specifications={project.specifications} />
+          </div>
+        </section>
+      )}
+
+      {/* 7. Plantas Baixas */}
       {project.floorPlans.length > 0 && (
         <section className="py-xl bg-black-5">
           <div className="container max-w-5xl">
@@ -235,7 +255,7 @@ export default async function ProjectPage({ params }: Props) {
         </section>
       )}
 
-      {/* 7. Tabela de Modelos */}
+      {/* 8. Tabela de Modelos */}
       {project.models.length > 0 && (
         <section className="py-2xl">
           <div className="container">
@@ -256,7 +276,7 @@ export default async function ProjectPage({ params }: Props) {
         </section>
       )}
 
-      {/* 8. Projetos Relacionados - Carousel Premium */}
+      {/* 9. Projetos Relacionados - Carousel Premium */}
       {(() => {
         const relatedProjects = getProjectsByCategory(project.category)
           .filter(p => p.id !== project.id)
@@ -337,7 +357,7 @@ export default async function ProjectPage({ params }: Props) {
         );
       })()}
 
-      {/* 9. CTA */}
+      {/* 10. CTA */}
       <CTA />
     </main>
   );
