@@ -57,7 +57,7 @@ export function PortfolioHeroCinematic() {
       {/* Content */}
       <motion.div
         style={{ opacity: contentOpacity, y: contentY }}
-        className="relative z-10 h-full flex flex-col items-start justify-between px-6 pt-32 pb-16"
+        className="relative z-10 h-full flex flex-col items-start justify-between px-6 pt-32 pb-32"
       >
         {/* Top Content - Label, Title, Subtitle */}
         <div className="hero-content-left">

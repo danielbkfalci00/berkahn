@@ -21,6 +21,10 @@ import { StatsGrid } from "@/components/article/StatHighlight";
 import { DataTable } from "@/components/article/DataTable";
 import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
 import { RelatedArticlesCarousel } from "@/components/article/RelatedArticlesCarousel";
+import { ChartSection } from "@/components/article/ChartSection";
+import { ComparisonTabs } from "@/components/article/ComparisonTabs";
+import { DecisionGuideSection } from "@/components/article/DecisionGuideSection";
+import { FinancingCalculator } from "@/components/article/FinancingCalculator";
 import {
   Accordion,
   AccordionContent,
@@ -29,6 +33,13 @@ import {
 } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 import { CTA } from "@/components/sections/CTA";
 
 interface ArticleContentProps {
@@ -187,6 +198,110 @@ export function ArticleContent({ article }: ArticleContentProps) {
                     </div>
                   )}
 
+                  {/* Insert Charts after tempo-construcao */}
+                  {section.id === "tempo-construcao" && article.charts && (
+                    <div className="mt-12 space-y-8">
+                      {article.charts
+                        .filter(chart => chart.id.includes('timeline'))
+                        .map(chart => (
+                          <ChartSection key={chart.id} chart={chart} />
+                        ))}
+                    </div>
+                  )}
+
+                  {/* Insert Tab Comparisons and Charts after custo-total */}
+                  {section.id === "custo-total" && article.tabComparisons && (
+                    <div className="mt-12">
+                      {article.tabComparisons
+                        .filter(comp => comp.id.includes('cost'))
+                        .map(comp => (
+                          <ComparisonTabs key={comp.id} comparison={comp} />
+                        ))}
+                    </div>
+                  )}
+
+                  {section.id === "custo-total" && article.charts && (
+                    <div className="mt-12">
+                      {article.charts
+                        .filter(chart => chart.id.includes('cost'))
+                        .map(chart => (
+                          <ChartSection key={chart.id} chart={chart} />
+                        ))}
+                    </div>
+                  )}
+
+                  {/* Insert Charts after sustentabilidade */}
+                  {section.id === "sustentabilidade" && article.charts && (
+                    <div className="mt-12">
+                      {article.charts
+                        .filter(chart => chart.type === 'radar' || chart.id.includes('sustainability'))
+                        .map(chart => (
+                          <ChartSection key={chart.id} chart={chart} />
+                        ))}
+                    </div>
+                  )}
+
+                  {/* Insert Charts after desempenho-termico */}
+                  {section.id === "desempenho-termico" && article.charts && (
+                    <div className="mt-12">
+                      {article.charts
+                        .filter(chart => chart.id.includes('thermal') || chart.id.includes('desempenho'))
+                        .map(chart => (
+                          <ChartSection key={chart.id} chart={chart} />
+                        ))}
+                    </div>
+                  )}
+
+                  {/* Insert Charts after aceitacao-mercado */}
+                  {section.id === "aceitacao-mercado" && article.charts && (
+                    <div className="mt-12">
+                      {article.charts
+                        .filter(chart => chart.type === 'pie' || chart.id.includes('market'))
+                        .map(chart => (
+                          <ChartSection key={chart.id} chart={chart} />
+                        ))}
+                    </div>
+                  )}
+
+                  {/* Insert Decision Guide after guia-decisao */}
+                  {section.id === "guia-decisao" && article.decisionGuide && (
+                    <div className="mt-8">
+                      <DecisionGuideSection guide={article.decisionGuide} />
+                    </div>
+                  )}
+
+                  {/* Insert Financing Calculator after custos-comparativo */}
+                  {section.id === "custos-comparativo" && (
+                    <div className="mt-12">
+                      <RevealOnScroll>
+                        <p className="label-text text-black-50 mb-6">
+                          Simule seu Financiamento
+                        </p>
+                        <FinancingCalculator />
+                      </RevealOnScroll>
+                    </div>
+                  )}
+
+                  {/* Insert Tab Comparisons after opcoes-2026 */}
+                  {section.id === "opcoes-2026" && article.tabComparisons && (
+                    <div className="mt-12">
+                      {article.tabComparisons.map((comparison) => (
+                        <ComparisonTabs key={comparison.id} comparison={comparison} />
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Insert Charts after mercado-perspectivas */}
+                  {section.id === "mercado-perspectivas" && article.charts && (
+                    <div className="mt-12 space-y-12">
+                      {article.charts.map((chart) => (
+                        <RevealOnScroll key={chart.id}>
+                          <ChartSection chart={chart} />
+                        </RevealOnScroll>
+                      ))}
+                    </div>
+                  )}
+
                   {/* Insert Tables after costs section */}
                   {section.id === "custos" && article.tables && (
                     <div className="mt-12 space-y-12">
@@ -321,6 +436,75 @@ export function ArticleContent({ article }: ArticleContentProps) {
                               </Card>
                             </motion.div>
                           ))}
+                        </div>
+                      </RevealOnScroll>
+                    </div>
+                  )}
+
+                  {/* Gallery Carousel - Insert after arquitetura section */}
+                  {section.id === "arquitetura" && article.gallery && (
+                    <div className="mt-12">
+                      <RevealOnScroll>
+                        <p className="label-text text-black-50 mb-6 uppercase tracking-wider">
+                          {article.gallery.title || "Projetos"}
+                        </p>
+                        <Carousel opts={{ align: "start", loop: true }}>
+                          <CarouselContent>
+                            {article.gallery.images.map((img, i) => (
+                              <CarouselItem key={i} className="basis-full md:basis-1/2 lg:basis-1/3">
+                                <div className="relative aspect-[4/3] rounded-lg overflow-hidden group">
+                                  <Image
+                                    src={img.url}
+                                    alt={img.alt}
+                                    fill
+                                    className="object-cover transition-transform duration-700 group-hover:scale-105"
+                                  />
+                                  {img.caption && (
+                                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/70 to-transparent text-white p-6">
+                                      <p className="text-sm font-medium">{img.caption}</p>
+                                    </div>
+                                  )}
+                                </div>
+                              </CarouselItem>
+                            ))}
+                          </CarouselContent>
+                          <div className="flex gap-2 mt-6 justify-end">
+                            <CarouselPrevious className="static translate-y-0" />
+                            <CarouselNext className="static translate-y-0" />
+                          </div>
+                        </Carousel>
+                      </RevealOnScroll>
+                    </div>
+                  )}
+
+                  {/* Checklist Cards - Insert after guia-pratico section */}
+                  {section.id === "guia-pratico" && article.checklist && (
+                    <div className="mt-12">
+                      <RevealOnScroll>
+                        <div className="bg-black-5 rounded-lg p-8 md:p-10">
+                          <h3 className="headline-sm mb-8">{article.checklist.title}</h3>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            {article.checklist.items.map((item, i) => (
+                              <motion.div
+                                key={i}
+                                className="flex items-start gap-3 bg-white p-5 rounded-lg shadow-sm hover:shadow-md transition-shadow"
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{
+                                  delay: i * 0.08,
+                                  duration: 0.5,
+                                  ease: [0.19, 1, 0.22, 1]
+                                }}
+                              >
+                                <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                                <div>
+                                  <p className="font-semibold text-black mb-1">{item.label}</p>
+                                  <p className="text-sm text-black-60 leading-relaxed">{item.description}</p>
+                                </div>
+                              </motion.div>
+                            ))}
+                          </div>
                         </div>
                       </RevealOnScroll>
                     </div>

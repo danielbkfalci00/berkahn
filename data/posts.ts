@@ -14,7 +14,6 @@ export const blogPosts: BlogPost[] = [
     date: "2024-12-01",
     readTime: "8 min",
     tags: ["steel frame", "inovação", "sustentabilidade", "tecnologia"],
-    featured: true,
   },
   {
     id: "2",
@@ -141,6 +140,20 @@ export const blogPosts: BlogPost[] = [
     date: "2024-09-20",
     readTime: "9 min",
     tags: ["financiamento", "investimento", "planejamento"],
+  },
+  {
+    id: "11",
+    slug: "guia-definitivo-steel-frame-brasil",
+    title: "Steel Frame: o guia definitivo para construir mais rápido, sustentável e com qualidade no Brasil",
+    excerpt:
+      "Guia completo sobre Steel Frame 2025: custos regionais, normas ABNT NBR 16970, processo construtivo, sustentabilidade, financiamento. Tudo para construir ou comprar.",
+    image: "/images/lsf-hero-structure.png",
+    category: "Guia",
+    author: "Equipe Berkahn",
+    date: "2025-01-15",
+    readTime: "20 min",
+    tags: ["steel frame", "guia", "NBR 16970", "sustentabilidade", "custos"],
+    featured: true,
   },
 ];
 

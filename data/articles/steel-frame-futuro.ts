@@ -279,6 +279,9 @@ export const getArticleBySlug = (slug: string): RichArticle | undefined => {
   if (slug === "financiamento-steel-frame-2026") {
     return financiamentoSteelFrameArticle;
   }
+  if (slug === "guia-definitivo-steel-frame-brasil") {
+    return guiaDefinitivoSteelFrameArticle;
+  }
   return undefined;
 };
 

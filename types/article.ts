@@ -24,6 +24,8 @@ export interface RichArticle {
   charts?: ChartData[];
   tabComparisons?: TabComparison[];
   decisionGuide?: DecisionGuide;
+  gallery?: ArticleGallery;
+  checklist?: ArticleChecklist;
 
   // SEO
   metaTitle?: string;
@@ -110,5 +112,26 @@ export interface DecisionGuide {
     label: string;
     recommendation: 'lsf' | 'alvenaria' | 'neutral';
     explanation: string;
+  }[];
+}
+
+// Gallery structure for image carousels
+export interface ArticleGallery {
+  id: string;
+  title?: string;
+  images: {
+    url: string;
+    alt: string;
+    caption?: string;
+  }[];
+}
+
+// Checklist structure for verification items
+export interface ArticleChecklist {
+  id: string;
+  title: string;
+  items: {
+    label: string;
+    description: string;
   }[];
 }

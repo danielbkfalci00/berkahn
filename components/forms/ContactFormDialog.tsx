@@ -182,7 +182,7 @@ export function ContactFormDialog({ children }: ContactFormDialogProps) {
                     placeholder="Seu nome"
                     required
                     disabled={status === "loading"}
-                    className="h-12 text-base border-black-10 focus:border-black transition-colors"
+                    className="h-12 text-base bg-white border border-black-20 placeholder:text-black-40 focus:border-black-50 focus:ring-1 focus:ring-black-10 transition-all duration-300"
                   />
                   <AnimatePresence>
                     {errors.name && (
@@ -222,7 +222,7 @@ export function ContactFormDialog({ children }: ContactFormDialogProps) {
                     placeholder="seu@email.com"
                     required
                     disabled={status === "loading"}
-                    className="h-12 text-base border-black-10 focus:border-black transition-colors"
+                    className="h-12 text-base bg-white border border-black-20 placeholder:text-black-40 focus:border-black-50 focus:ring-1 focus:ring-black-10 transition-all duration-300"
                   />
                   <AnimatePresence>
                     {errors.email && (
@@ -264,7 +264,7 @@ export function ContactFormDialog({ children }: ContactFormDialogProps) {
                     }
                     placeholder="(00) 00000-0000"
                     disabled={status === "loading"}
-                    className="h-12 text-base border-black-10 focus:border-black transition-colors"
+                    className="h-12 text-base bg-white border border-black-20 placeholder:text-black-40 focus:border-black-50 focus:ring-1 focus:ring-black-10 transition-all duration-300"
                   />
                 </motion.div>
 
@@ -292,7 +292,7 @@ export function ContactFormDialog({ children }: ContactFormDialogProps) {
                     rows={4}
                     required
                     disabled={status === "loading"}
-                    className="text-base border-black-10 focus:border-black transition-colors resize-none"
+                    className="text-base bg-white border border-black-20 placeholder:text-black-40 focus:border-black-50 focus:ring-1 focus:ring-black-10 transition-all duration-300 resize-none"
                   />
                   <AnimatePresence>
                     {errors.message && (

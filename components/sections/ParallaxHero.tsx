@@ -104,21 +104,6 @@ export function ParallaxHero({
             >
               {title}
             </motion.h1>
-
-            {subtitle && (
-              <motion.p
-                className="text-xl md:text-2xl text-white max-w-2xl font-heading font-light hero-text-shadow"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{
-                  duration: 1,
-                  delay: 0.6,
-                  ease: [0.19, 1, 0.22, 1],
-                }}
-              >
-                {subtitle}
-              </motion.p>
-            )}
           </motion.div>
         </div>
       </div>
