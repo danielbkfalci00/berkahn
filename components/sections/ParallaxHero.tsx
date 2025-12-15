@@ -68,21 +68,6 @@ export function ParallaxHero({
             ease: [0.19, 1, 0.22, 1], // ease-expo
           }}
         >
-          {subtitle && (
-            <motion.p
-              className="label-text text-white mb-4"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{
-                duration: 0.8,
-                delay: 0.3,
-                ease: [0.19, 1, 0.22, 1],
-              }}
-            >
-              {subtitle}
-            </motion.p>
-          )}
-
           <motion.h1
             className="headline-lg text-white mb-6"
             initial={{ opacity: 0, y: 20 }}
