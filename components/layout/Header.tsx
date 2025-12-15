@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useMenu } from "@/components/providers/MenuProvider";
 import { useHeaderScroll } from "@/hooks/useHeaderScroll";
 import { cn } from "@/lib/utils";
+import { ContactFormDialog } from "@/components/forms/ContactFormDialog";
 
 export function Header() {
   const pathname = usePathname();
@@ -67,12 +68,11 @@ export function Header() {
         </Link>
 
         {/* RIGHT: CTA */}
-        <Link
-          href="/contato"
-          className="justify-self-end px-6 py-2 bg-black text-white text-sm uppercase tracking-wider hover:bg-black-90 transition-colors duration-300"
-        >
-          Fale Conosco
-        </Link>
+        <ContactFormDialog>
+          <button className="justify-self-end px-6 py-2 bg-black text-white text-sm uppercase tracking-wider hover:bg-black-90 transition-colors duration-300">
+            Fale Conosco
+          </button>
+        </ContactFormDialog>
       </div>
     </header>
   );

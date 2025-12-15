@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
+import { ContactFormDialog } from "@/components/forms/ContactFormDialog";
 
 export function CTA() {
   return (
@@ -16,26 +17,25 @@ export function CTA() {
               construir a casa dos seus sonhos com tecnologia, precisão e
               excelência.
             </p>
-            <Link
-              href="/contato"
-              className="inline-flex items-center gap-2 px-8 py-4 bg-black text-white uppercase tracking-wider text-sm font-medium hover:bg-black-90 transition-colors duration-300"
-            >
-              Fale Conosco
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth="2"
-                stroke="currentColor"
-                className="w-4 h-4"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
-                />
-              </svg>
-            </Link>
+            <ContactFormDialog>
+              <button className="inline-flex items-center gap-2 px-8 py-4 bg-black text-white uppercase tracking-wider text-sm font-medium hover:bg-black-90 transition-colors duration-300">
+                Fale Conosco
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth="2"
+                  stroke="currentColor"
+                  className="w-4 h-4"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
+                  />
+                </svg>
+              </button>
+            </ContactFormDialog>
           </RevealOnScroll>
         </div>
       </div>
