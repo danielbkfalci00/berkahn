@@ -2,7 +2,7 @@ import Image from "next/image";
 import { CTA } from "@/components/sections/CTA";
 import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
 import { ParallaxHero } from "@/components/sections/ParallaxHero";
-import { LSFDiagram } from "@/components/lsf/LSFDiagram";
+import { WallLayersTabs } from "@/components/lsf/WallLayersTabs";
 import { BenefitsGrid } from "@/components/sections/BenefitsGrid";
 import { TechnicalSpecs } from "@/components/lsf/TechnicalSpecs";
 import { ComparisonTable } from "@/components/lsf/ComparisonTable";
@@ -20,8 +20,8 @@ export default function LSFPage() {
       {/* 1. Hero Parallax */}
       <ParallaxHero
         title="Light Steel Frame"
-        subtitle="Construção Industrializada de Alta Performance"
-        backgroundImage="https://images.unsplash.com/photo-1504307651254-35680f356dfd?ixlib=rb-4.0.3&auto=format&fit=crop&w=2400&q=80"
+        subtitle="sistema construtivo industrializado de alta performance"
+        backgroundImage="/images/lsf-hero-structure.jpg"
         height="100vh"
       />
 
@@ -32,13 +32,18 @@ export default function LSFPage() {
             <RevealOnScroll>
               <div>
                 <p className="label-text mb-4">SISTEMA CONSTRUTIVO INDUSTRIALIZADO</p>
-                <h2 className="headline-lg mb-6">O Futuro da Construção Já Chegou</h2>
-                <p className="body-md text-black-70 mb-4">
-                  O Light Steel Frame (LSF) representa a evolução da construção civil, combinando a resistência do aço com a leveza e precisão da construção industrializada. Com origem na América do Norte e Europa, o sistema chegou ao Brasil trazendo consigo padrões internacionais de qualidade, velocidade e sustentabilidade.
-                </p>
-                <p className="body-md text-black-70">
-                  Na BERKAHN, dominamos esta tecnologia e a adaptamos à realidade brasileira, garantindo construções que superam os métodos tradicionais em todos os aspectos: tempo, custo, qualidade e impacto ambiental.
-                </p>
+
+                <div className="space-y-4">
+                  <p className="body-lg text-black-70">
+                    O Light Steel Frame (LSF) é um sistema construtivo industrializado a seco caracterizado pela utilização de uma estrutura primária formada por perfis leves de aço galvanizado (aço estrutural de conformação a frio).
+                  </p>
+                  <p className="body-lg text-black-70">
+                    Este sistema é a vanguarda da construção racionalizada, garantindo alta precisão geométrica, controle de qualidade e redução drástica de resíduos no canteiro de obras.
+                  </p>
+                  <p className="body-lg text-black-70">
+                    Os perfis de aço compõem o esqueleto estrutural em painéis modulares, suportando lajes, paredes e coberturas em edificações de pequeno e médio porte.
+                  </p>
+                </div>
               </div>
             </RevealOnScroll>
 
@@ -57,7 +62,43 @@ export default function LSFPage() {
         </div>
       </section>
 
-      {/* 3. LSF Diagram - FEATURE HERO */}
+      {/* 3. Composição do Sistema - NOVA SEÇÃO */}
+      <section className="py-xl bg-white">
+        <div className="container">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            {/* Coluna 1: IMAGEM (esquerda) */}
+            <RevealOnScroll>
+              <div className="relative h-[400px] lg:h-[500px] rounded-lg overflow-hidden shadow-luxury-lg">
+                <Image
+                  src="/images/lsf-wall-layers-diagram.jpg"
+                  alt="Diagrama técnico das camadas de parede LSF"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                />
+              </div>
+            </RevealOnScroll>
+
+            {/* Coluna 2: TEXTO (direita) */}
+            <RevealOnScroll delay={0.2}>
+              <div>
+                <h2 className="headline-md mb-4">a composição do sistema</h2>
+                <h3 className="text-xl font-medium mb-6 text-black-70">
+                  Paredes de Múltiplas Camadas (Multilayer Walls)
+                </h3>
+                <p className="body-lg text-black-70 leading-relaxed">
+                  A superioridade do LSF reside na sua configuração de paredes, que
+                  operam como sistemas multicamadas projetados para performance superior
+                  em estanqueidade, isolamento e acabamento, superando o desempenho da
+                  alvenaria convencional.
+                </p>
+              </div>
+            </RevealOnScroll>
+          </div>
+        </div>
+      </section>
+
+      {/* 4. LSF Diagram - FEATURE HERO */}
       <section className="py-2xl bg-black-5">
         <div className="container">
           <RevealOnScroll>
@@ -69,7 +110,7 @@ export default function LSFPage() {
             </p>
           </RevealOnScroll>
 
-          <LSFDiagram />
+          <WallLayersTabs />
         </div>
       </section>
 

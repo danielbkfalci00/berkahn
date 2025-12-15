@@ -308,9 +308,9 @@ export const COMPARISON_DATA: ComparisonItem[] = [
     winner: "lsf",
   },
   {
-    category: "Prec\u0098is\u00e3o Dimensional",
-    lsf: "\u00b1 1-2mm",
-    traditional: "\u00b1 10-20mm",
+    category: "Precisão Dimensional",
+    lsf: "± 1-2mm",
+    traditional: "± 10-20mm",
     winner: "lsf",
   },
   {
