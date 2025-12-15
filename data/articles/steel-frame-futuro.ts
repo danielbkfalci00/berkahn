@@ -1,4 +1,8 @@
 import { RichArticle } from "@/types/article";
+import { steelFrameVsAlvenariaArticle } from "./steel-frame-vs-alvenaria";
+import { cincoVantagensSteelFrameArticle } from "./5-vantagens-steel-frame";
+import { guiaDefinitivoSteelFrameArticle } from "./guia-definitivo-steel-frame";
+import { financiamentoSteelFrameArticle } from "./financiamento-steel-frame";
 
 export const steelFrameFuturoArticle: RichArticle = {
   slug: "steel-frame-futuro-construcao",
@@ -262,8 +266,23 @@ export const getArticleBySlug = (slug: string): RichArticle | undefined => {
   if (slug === "steel-frame-futuro-construcao") {
     return steelFrameFuturoArticle;
   }
+  if (slug === "5-vantagens-decisivas-light-steel-frame") {
+    return cincoVantagensSteelFrameArticle;
+  }
+  if (slug === "steel-frame-vs-alvenaria") {
+    return steelFrameVsAlvenariaArticle;
+  }
+  if (slug === "financiamento-steel-frame-2026") {
+    return financiamentoSteelFrameArticle;
+  }
   return undefined;
 };
 
 // List all available rich articles
-export const richArticles: RichArticle[] = [steelFrameFuturoArticle];
+export const richArticles: RichArticle[] = [
+  steelFrameFuturoArticle,
+  cincoVantagensSteelFrameArticle,
+  steelFrameVsAlvenariaArticle,
+  financiamentoSteelFrameArticle,
+  guiaDefinitivoSteelFrameArticle,
+];
