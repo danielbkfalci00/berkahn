@@ -117,7 +117,7 @@ export default function ServicosPage() {
       <HeroPage
         title="Serviços"
         subtitle="O que fazemos"
-        imageSrc="/images/servicos-hero.jpg"
+        imageSrc="/images/servicos-hero.png"
         imageAlt="Serviços Berkahn"
       />
 
@@ -136,13 +136,13 @@ export default function ServicosPage() {
           </RevealOnScroll>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-            {/* Image 1: Canteiro de obras - Fundações */}
+            {/* Image 1: Hero/Estrutura LSF */}
             <RevealOnScroll delay={0}>
               <div className="group overflow-hidden rounded-lg shadow-luxury-sm hover:shadow-luxury-md transition-all duration-500">
                 <div className="aspect-[4/3] overflow-hidden">
                   <Image
-                    src="/images/servicos-foundations.jpg"
-                    alt="Canteiro de obras em Steel Frame - fase de fundações"
+                    src="/images/servicos-hero.png"
+                    alt="Estrutura de Light Steel Frame"
                     width={600}
                     height={450}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
@@ -151,12 +151,12 @@ export default function ServicosPage() {
               </div>
             </RevealOnScroll>
 
-            {/* Image 2: Estrutura LSF */}
+            {/* Image 2: Estrutura LSF em Construção */}
             <RevealOnScroll delay={0.1}>
               <div className="group overflow-hidden rounded-lg shadow-luxury-sm hover:shadow-luxury-md transition-all duration-500">
                 <div className="aspect-[4/3] overflow-hidden">
                   <Image
-                    src="/images/servicos-structure.jpg"
+                    src="/images/servicos-structure.png"
                     alt="Estrutura de Light Steel Frame em montagem"
                     width={600}
                     height={450}
@@ -171,7 +171,7 @@ export default function ServicosPage() {
               <div className="group overflow-hidden rounded-lg shadow-luxury-sm hover:shadow-luxury-md transition-all duration-500">
                 <div className="aspect-[4/3] overflow-hidden">
                   <Image
-                    src="/images/servicos-finished.jpg"
+                    src="/images/servicos-finished.png"
                     alt="Casa moderna finalizada em Steel Frame"
                     width={600}
                     height={450}
