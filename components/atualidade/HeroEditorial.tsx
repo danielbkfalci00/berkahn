@@ -32,7 +32,7 @@ export function HeroEditorial({
   return (
     <section
       ref={containerRef}
-      className="relative h-[70vh] min-h-[500px] max-h-[800px] flex items-center justify-center overflow-hidden"
+      className="relative h-[70vh] min-h-[500px] max-h-[800px] flex items-start justify-start pt-24 md:pt-32 overflow-hidden"
     >
       {/* Background Image with Parallax */}
       <motion.div
@@ -50,105 +50,63 @@ export function HeroEditorial({
         />
       </motion.div>
 
-      {/* Dynamic Overlay */}
-      <motion.div
-        className="absolute inset-0 z-10 bg-gradient-to-b from-black/30 via-black/50 to-black/70"
-        style={{ opacity: overlayOpacity }}
-      />
-
-      {/* Decorative Lines */}
+      {/* Decorative Lines - Left Side */}
       <div className="absolute inset-0 z-15 pointer-events-none">
         {/* Vertical line left */}
         <motion.div
           initial={{ scaleY: 0 }}
           animate={{ scaleY: 1 }}
           transition={{ duration: 1.2, delay: 0.5, ease: [0.19, 1, 0.22, 1] }}
-          className="absolute left-8 md:left-16 top-0 bottom-0 w-px bg-white/20 origin-top"
+          className="absolute left-8 md:left-16 top-0 bottom-0 w-px bg-white/30 origin-top"
         />
-        {/* Vertical line right */}
-        <motion.div
-          initial={{ scaleY: 0 }}
-          animate={{ scaleY: 1 }}
-          transition={{ duration: 1.2, delay: 0.6, ease: [0.19, 1, 0.22, 1] }}
-          className="absolute right-8 md:right-16 top-0 bottom-0 w-px bg-white/20 origin-top"
-        />
-        {/* Horizontal line */}
+        {/* Horizontal line left */}
         <motion.div
           initial={{ scaleX: 0 }}
           animate={{ scaleX: 1 }}
           transition={{ duration: 1.5, delay: 0.8, ease: [0.19, 1, 0.22, 1] }}
-          className="absolute left-8 md:left-16 right-8 md:right-16 bottom-24 h-px bg-white/10 origin-left"
+          className="absolute left-8 md:left-16 top-24 md:top-32 w-24 h-px bg-white/40 origin-left"
         />
       </div>
 
       {/* Content */}
       <motion.div
-        className="relative z-20 text-center px-6 max-w-4xl"
+        className="relative z-20 text-left"
         style={{ y: contentY }}
       >
-        {/* Label */}
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="text-white/60 text-xs uppercase tracking-[0.3em] mb-6 font-body"
-        >
-          Blog & Notícias
-        </motion.p>
-
-        {/* Title with Character Reveal */}
-        <h1 className="headline-lg text-white mb-6">
-          <CharReveal text={title} delay={0.4} className="justify-center" />
-        </h1>
-
-        {/* Subtitle */}
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 1.2 }}
-          className="text-white/80 text-lg md:text-xl font-light tracking-wide"
-        >
-          {subtitle}
-        </motion.p>
-
-        {/* Decorative Element */}
-        <motion.div
-          initial={{ width: 0 }}
-          animate={{ width: 80 }}
-          transition={{ duration: 1, delay: 1.5, ease: [0.19, 1, 0.22, 1] }}
-          className="h-px bg-white/40 mx-auto mt-8"
-        />
-      </motion.div>
-
-      {/* Scroll Indicator */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 2 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20"
-      >
-        <motion.div
-          animate={{ y: [0, 8, 0] }}
-          transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-          className="flex flex-col items-center gap-2"
-        >
-          <span className="text-white/50 text-[10px] uppercase tracking-[0.2em]">
-            Scroll
-          </span>
-          <svg
-            className="w-5 h-5 text-white/50"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
+        <div className="hero-content-left">
+          {/* Label */}
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="hero-label text-white mb-6 hero-text-shadow"
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={1.5}
-              d="M19 14l-7 7m0 0l-7-7m7 7V3"
-            />
-          </svg>
-        </motion.div>
+            Blog & Notícias
+          </motion.p>
+
+          {/* Title with Character Reveal */}
+          <h1 className="headline-lg text-white mb-6 hero-text-shadow-strong">
+            <CharReveal text={title} delay={0.4} className="justify-start" />
+          </h1>
+
+          {/* Subtitle */}
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 1.2 }}
+            className="text-white text-lg md:text-xl font-light tracking-wide max-w-2xl hero-text-shadow"
+          >
+            {subtitle}
+          </motion.p>
+
+          {/* Decorative Element */}
+          <motion.div
+            initial={{ width: 0 }}
+            animate={{ width: 80 }}
+            transition={{ duration: 1, delay: 1.5, ease: [0.19, 1, 0.22, 1] }}
+            className="h-px bg-white/40 mt-8"
+          />
+        </div>
       </motion.div>
     </section>
   );

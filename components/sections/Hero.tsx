@@ -5,7 +5,7 @@ import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
 
 export function Hero() {
   return (
-    <section className="relative h-screen min-h-[600px] flex items-center justify-center overflow-hidden">
+    <section className="relative h-screen min-h-[600px] flex items-start justify-start pt-32 md:pt-40 overflow-hidden">
       {/* Background Image */}
       <div className="absolute inset-0 z-0">
         <Image
@@ -18,25 +18,22 @@ export function Hero() {
         />
       </div>
 
-      {/* Overlay */}
-      <div className="absolute inset-0 bg-black-70 z-10" />
-
       {/* Content */}
-      <div className="relative z-20 text-center px-6">
-        <RevealOnScroll delay={0.2}>
-          <p className="label-text text-white mb-4">Erguendo o amanhã</p>
-        </RevealOnScroll>
-        <RevealOnScroll delay={0.4}>
-          <h1 className="text-5xl md:text-6xl lg:text-7xl font-heading font-light tracking-tight text-white">
-            #WELOVESTEELFRAME
-          </h1>
-        </RevealOnScroll>
-      </div>
+      <div className="relative z-20 text-left">
+        <div className="hero-content-left">
+          {/* Decorative Line */}
+          <RevealOnScroll delay={0.1}>
+            <div className="hero-decorative-line w-24 mb-8" />
+          </RevealOnScroll>
 
-      {/* Scroll indicator */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20">
-        <div className="w-6 h-10 border-2 border-white-30 rounded-full flex justify-center pt-2">
-          <div className="w-1 h-2 bg-white-50 rounded-full animate-bounce"></div>
+          <RevealOnScroll delay={0.2}>
+            <p className="hero-label text-white mb-6 hero-text-shadow">Erguendo o amanhã</p>
+          </RevealOnScroll>
+          <RevealOnScroll delay={0.4}>
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-heading font-light tracking-tight text-white hero-text-shadow-strong">
+              #WELOVESTEELFRAME
+            </h1>
+          </RevealOnScroll>
         </div>
       </div>
     </section>

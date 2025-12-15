@@ -107,4 +107,59 @@
   .label-text {
     @apply text-sm uppercase tracking-widest font-medium;
   }
+
+  /* Hero text shadows for legibility */
+  .hero-text-shadow {
+    text-shadow:
+      0 2px 8px rgba(0, 0, 0, 0.3),
+      0 4px 16px rgba(0, 0, 0, 0.2);
+  }
+
+  .hero-text-shadow-strong {
+    text-shadow:
+      0 2px 12px rgba(0, 0, 0, 0.5),
+      0 4px 24px rgba(0, 0, 0, 0.3);
+  }
+
+  /* Container texto à esquerda */
+  .hero-content-left {
+    max-width: 800px;
+    margin-left: 0;
+    padding-left: clamp(1.5rem, 5vw, 6rem);
+    padding-right: 2rem;
+  }
+
+  @media (max-width: 768px) {
+    .hero-content-left {
+      max-width: 100%;
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+    }
+  }
+
+  /* Linhas decorativas */
+  .hero-decorative-line {
+    position: absolute;
+    background: linear-gradient(90deg,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.6) 50%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    height: 1px;
+    animation: line-fade-in 1.2s ease-out;
+  }
+
+  @keyframes line-fade-in {
+    from { opacity: 0; width: 0; }
+    to { opacity: 1; width: 100%; }
+  }
+
+  /* Labels pequenos */
+  .hero-label {
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 500;
+    opacity: 0.9;
+  }
 }
