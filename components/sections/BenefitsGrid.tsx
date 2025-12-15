@@ -87,10 +87,10 @@ export function BenefitsGrid() {
           </h2>
         </RevealOnScroll>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 items-stretch">
           {BENEFITS.map((benefit, index) => (
-            <RevealOnScroll key={benefit.title} delay={index * 0.1}>
-              <div className="bg-white p-8 rounded-lg shadow-luxury-md hover:shadow-luxury-xl transition-shadow duration-300 text-center group">
+            <RevealOnScroll key={benefit.title} delay={index * 0.1} className="h-full">
+              <div className="bg-white p-8 rounded-lg shadow-luxury-md hover:shadow-luxury-xl transition-shadow duration-300 text-center group h-full flex flex-col">
                 {/* Icon */}
                 <div className="flex justify-center text-black group-hover:scale-110 transition-transform duration-300">
                   {icons[benefit.icon as keyof typeof icons]}
@@ -109,7 +109,7 @@ export function BenefitsGrid() {
                 <h3 className="headline-sm mb-3">{benefit.title}</h3>
 
                 {/* Description */}
-                <p className="body-md text-black-70 leading-relaxed">
+                <p className="body-md text-black-70 leading-relaxed flex-grow">
                   {benefit.description}
                 </p>
 
