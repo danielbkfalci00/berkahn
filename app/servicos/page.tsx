@@ -136,13 +136,13 @@ export default function ServicosPage() {
           </RevealOnScroll>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-            {/* Image 1: Hero/Estrutura LSF */}
+            {/* Image 1: Canteiro de obras - Fundações */}
             <RevealOnScroll delay={0}>
               <div className="group overflow-hidden rounded-lg shadow-luxury-sm hover:shadow-luxury-md transition-all duration-500">
                 <div className="aspect-[4/3] overflow-hidden">
                   <Image
-                    src="/images/servicos-hero.png"
-                    alt="Estrutura de Light Steel Frame"
+                    src="/images/servicos-foundations.png"
+                    alt="Canteiro de obras em Steel Frame - fase de fundações"
                     width={600}
                     height={450}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
