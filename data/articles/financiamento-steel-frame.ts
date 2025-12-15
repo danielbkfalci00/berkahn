@@ -8,7 +8,7 @@ export const financiamentoSteelFrameArticle: RichArticle = {
   author: "Equipe Berkahn",
   publishDate: "2025-01-15",
   readTime: 18,
-  heroImage: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=2400&q=80",
+  heroImage: "/images/servicos-hero.png",
   excerpt: "Guia completo sobre como financiar sua construção em Steel Frame em 2026. Descubra todas as opções de crédito disponíveis, documentação necessária e o processo passo a passo para realizar seu projeto.",
 
   metaTitle: "Como Financiar Steel Frame 2026: Guia Completo | Berkahn",
