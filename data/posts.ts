@@ -8,7 +8,7 @@ export const blogPosts: BlogPost[] = [
     excerpt:
       "Entenda por que o Light Steel Frame está revolucionando o mercado da construção civil com tecnologia de ponta, velocidade de execução e sustentabilidade. Uma análise profunda sobre a transformação do setor.",
     image:
-      "https://images.unsplash.com/photo-1504307651254-35680f356dfd?ixlib=rb-4.0.3&auto=format&fit=crop&w=2400&q=80",
+      "https://images.unsplash.com/photo-1503594384566-461fe158e797?ixlib=rb-4.0.3&auto=format&fit=crop&w=2400&q=80",
     category: "Tecnologia",
     author: "Equipe Berkahn",
     date: "2024-12-01",
