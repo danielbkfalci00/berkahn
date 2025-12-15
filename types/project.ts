@@ -51,7 +51,7 @@ export interface ProjectSpecification {
 export type ProjectSegment = 'residencial' | 'comercial' | 'industrial'; // | 'corporativo'
 
 // Subcategorias por segmento
-export type ResidentialType = 'casa' | 'chale' | 'tiny-house' | 'sobrado';
+export type ResidentialType = 'casa' | 'chale' | 'tiny-house' | 'sobrado' | 'loft';
 export type CommercialType = 'loja' | 'showroom' | 'restaurante';
 export type IndustrialType = 'galpao' | 'deposito' | 'fabrica';
 export type CorporateType = 'franquia' | 'escritorio' | 'clinica';
@@ -120,6 +120,7 @@ export function getSubtypeLabel(subtype: ProjectSubtype): string {
     'chale': 'Chalé',
     'tiny-house': 'Tiny House',
     'sobrado': 'Sobrado',
+    'loft': 'Loft',
     'loja': 'Loja',
     'showroom': 'Showroom',
     'restaurante': 'Restaurante',

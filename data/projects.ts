@@ -70,6 +70,155 @@ export const MODEL_SPECIFICATIONS: ProjectSpecification[] = [
 
 export const PROJECTS: Project[] = [
   // ============================================
+  // PROJETOS PRONTOS - RESIDENCIAIS (3 ATIVOS)
+  // ============================================
+
+  // Casa de Campo Moderna
+  {
+    id: 'res-casa-campo-01',
+    slug: 'casa-campo-moderna',
+    name: 'Casa de Campo Moderna',
+    category: 'residencial',
+    subtype: 'casa',
+    tagline: 'Integração com a natureza em design contemporâneo',
+    description: `Casa de campo com arquitetura moderna e materiais naturais. Grandes janelas de vidro integram os ambientes internos com a paisagem externa. Deck em madeira proporciona área de convivência ao ar livre.
+
+O projeto combina conforto térmico, eficiência energética e design atemporal, ideal para quem busca qualidade de vida em meio à natureza.`,
+    heroImage: '/images/casa-campo-moderna.png',
+    cardImage: '/images/casa-campo-moderna.png',
+    area: {
+      builtArea: 150.00,
+      minLotWidth: 15.0,
+      minLotLength: 20.0,
+      buildWidth: 12.0,
+      buildLength: 12.5,
+    },
+    features: {
+      bedrooms: 3,
+      bathrooms: 2,
+      suites: 1,
+      kitchens: 1,
+      livingRooms: 1,
+      diningRooms: 1,
+      laundries: 1,
+      garages: 2,
+    },
+    gallery: [
+      { src: '/images/casa-campo-moderna.png', alt: 'Fachada Casa de Campo', type: 'exterior' },
+    ],
+    floorPlans: [],
+    models: [],
+    specifications: [],
+    highlights: [
+      'Integração com natureza',
+      'Grandes janelas de vidro',
+      'Deck em madeira natural',
+      'Design contemporâneo',
+    ],
+    constructionTime: '90-120 dias',
+    warranty: '5 anos',
+  },
+
+  // Loft Urbano Moderno
+  {
+    id: 'res-loft-01',
+    slug: 'loft-urbano-moderno',
+    name: 'Loft Urbano Moderno',
+    category: 'residencial',
+    subtype: 'loft',
+    tagline: 'Conceito aberto com estilo minimalista',
+    description: `Loft com conceito aberto e design minimalista. Pé-direito alto e iluminação natural abundante criam sensação de amplitude. Ideal para profissionais modernos que valorizam funcionalidade e estética.
+
+A estrutura em steel frame permite flexibilidade de layout e instalação rápida.`,
+    heroImage: '/images/loft-urbano.png',
+    cardImage: '/images/loft-urbano.png',
+    area: {
+      builtArea: 80.00,
+      minLotWidth: 10.0,
+      minLotLength: 12.0,
+      buildWidth: 8.0,
+      buildLength: 10.0,
+    },
+    features: {
+      bedrooms: 1,
+      bathrooms: 1,
+      suites: 1,
+      kitchens: 1,
+      livingRooms: 1,
+      diningRooms: 0,
+      laundries: 0,
+      garages: 1,
+    },
+    gallery: [
+      { src: '/images/loft-urbano.png', alt: 'Loft Urbano', type: 'exterior' },
+    ],
+    floorPlans: [],
+    models: [],
+    specifications: [],
+    highlights: [
+      'Conceito aberto',
+      'Pé-direito alto',
+      'Design minimalista',
+      'Iluminação natural',
+    ],
+    constructionTime: '60-75 dias',
+    warranty: '5 anos',
+  },
+
+  // Chalé Rústico
+  {
+    id: 'res-chale-rustico-01',
+    slug: 'chale-rustico-montanha',
+    name: 'Chalé Rústico',
+    category: 'residencial',
+    subtype: 'chale',
+    tagline: 'Refúgio acolhedor em estilo tradicional',
+    description: `Chalé em estilo rústico com telhado em A característico. Combina charme tradicional com conforto moderno. Deck frontal com vista panorâmica para relaxamento e convívio familiar.
+
+Perfeito para refúgio de montanha ou casa de campo, oferecendo aconchego em todas as estações.`,
+    heroImage: '/images/chale-rustico.png',
+    cardImage: '/images/chale-rustico.png',
+    area: {
+      builtArea: 95.00,
+      minLotWidth: 12.0,
+      minLotLength: 15.0,
+      buildWidth: 10.0,
+      buildLength: 9.5,
+    },
+    features: {
+      bedrooms: 2,
+      bathrooms: 2,
+      suites: 1,
+      kitchens: 1,
+      livingRooms: 1,
+      diningRooms: 1,
+      laundries: 0,
+      garages: 1,
+    },
+    gallery: [
+      { src: '/images/chale-rustico.png', alt: 'Chalé Rústico', type: 'exterior' },
+    ],
+    floorPlans: [],
+    models: [],
+    specifications: [],
+    highlights: [
+      'Telhado em A tradicional',
+      'Deck frontal amplo',
+      'Estilo rústico acolhedor',
+      'Vista panorâmica',
+    ],
+    constructionTime: '75-90 dias',
+    warranty: '5 anos',
+  },
+
+  // ============================================
+  // PROJETOS TEMPORARIAMENTE OCULTADOS
+  // ============================================
+  // Os projetos abaixo foram comentados para simplificar a seção "Projetos Prontos"
+  // Para reativar: descomentar os projetos desejados
+
+  /*
+  // ============================================
   // RESIDENCIAL
   // ============================================
 
@@ -694,6 +843,7 @@ A construção em tempo recorde permitiu início das operações 40% antes do pr
   //   location: 'Moema, SP',
   //   year: 2023,
   // },
+  */
 ];
 
 // ============================================
