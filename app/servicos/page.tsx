@@ -189,10 +189,9 @@ export default function ServicosPage() {
         <div className="container max-w-4xl">
           <RevealOnScroll>
             <div className="text-center">
-              <p className="label-text mb-4">Construções em Steel Frame</p>
-              <h2 className="headline-lg mb-6">
-                Soluções completas para seu projeto
-              </h2>
+              <h1 className="headline-lg mb-6">
+                Construções em Steel Frame
+              </h1>
               <p className="body-lg text-black-70">
                 Da concepção à entrega, oferecemos serviços integrados de
                 construção em Light Steel Frame para diferentes segmentos,
