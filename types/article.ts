@@ -21,6 +21,9 @@ export interface RichArticle {
   myths?: Myth[];
   stats?: Stat[];
   norms?: Norm[];
+  charts?: ChartData[];
+  tabComparisons?: TabComparison[];
+  decisionGuide?: DecisionGuide;
 
   // SEO
   metaTitle?: string;
@@ -69,4 +72,43 @@ export interface Norm {
   title: string;
   description: string;
   year?: string;
+}
+
+// Chart data structure for interactive visualizations
+export interface ChartData {
+  id: string;
+  type: 'bar' | 'line' | 'radar' | 'pie';
+  title?: string;
+  data: any[];
+  config?: {
+    xAxisKey?: string;
+    dataKeys?: string[];
+    colors?: string[];
+  };
+}
+
+// Tab comparison structure for side-by-side comparisons
+export interface TabComparison {
+  id: string;
+  title: string;
+  tabs: {
+    label: string;
+    value: string;
+    content: {
+      stats?: Stat[];
+      description?: string;
+      table?: ArticleTable;
+      items?: string[];
+    };
+  }[];
+}
+
+// Decision guide structure for interactive recommendations
+export interface DecisionGuide {
+  question: string;
+  options: {
+    label: string;
+    recommendation: 'lsf' | 'alvenaria' | 'neutral';
+    explanation: string;
+  }[];
 }
