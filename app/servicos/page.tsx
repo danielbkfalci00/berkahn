@@ -113,15 +113,78 @@ const methodology = [
 export default function ServicosPage() {
   return (
     <main>
-      {/* Hero */}
+      {/* 1. Hero */}
       <HeroPage
         title="Serviços"
         subtitle="O que fazemos"
-        imageSrc="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?ixlib=rb-4.0.3&auto=format&fit=crop&w=2400&q=80"
+        imageSrc="/images/servicos-hero.jpg"
         imageAlt="Serviços Berkahn"
       />
 
-      {/* Introduction */}
+      {/* 2. Soluções Completas - Grid de Imagens */}
+      <section className="py-xl bg-white">
+        <div className="container">
+          <RevealOnScroll>
+            <div className="text-center mb-12">
+              <h2 className="headline-md mb-6">Soluções completas para seu projeto</h2>
+              <p className="body-lg text-black-70 max-w-3xl mx-auto">
+                Atuante em todas as fases do seu projeto. Acompanhamos a jornada da
+                construção da concepção dos projetos à entrega da obra, sempre com foco
+                na qualidade, prazo, e excelência técnica.
+              </p>
+            </div>
+          </RevealOnScroll>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+            {/* Image 1: Canteiro de obras - Fundações */}
+            <RevealOnScroll delay={0}>
+              <div className="group overflow-hidden rounded-lg shadow-luxury-sm hover:shadow-luxury-md transition-all duration-500">
+                <div className="aspect-[4/3] overflow-hidden">
+                  <Image
+                    src="/images/servicos-foundations.jpg"
+                    alt="Canteiro de obras em Steel Frame - fase de fundações"
+                    width={600}
+                    height={450}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                  />
+                </div>
+              </div>
+            </RevealOnScroll>
+
+            {/* Image 2: Estrutura LSF */}
+            <RevealOnScroll delay={0.1}>
+              <div className="group overflow-hidden rounded-lg shadow-luxury-sm hover:shadow-luxury-md transition-all duration-500">
+                <div className="aspect-[4/3] overflow-hidden">
+                  <Image
+                    src="/images/servicos-structure.jpg"
+                    alt="Estrutura de Light Steel Frame em montagem"
+                    width={600}
+                    height={450}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                  />
+                </div>
+              </div>
+            </RevealOnScroll>
+
+            {/* Image 3: Casa Finalizada */}
+            <RevealOnScroll delay={0.2}>
+              <div className="group overflow-hidden rounded-lg shadow-luxury-sm hover:shadow-luxury-md transition-all duration-500">
+                <div className="aspect-[4/3] overflow-hidden">
+                  <Image
+                    src="/images/servicos-finished.jpg"
+                    alt="Casa moderna finalizada em Steel Frame"
+                    width={600}
+                    height={450}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                  />
+                </div>
+              </div>
+            </RevealOnScroll>
+          </div>
+        </div>
+      </section>
+
+      {/* 3. Introduction */}
       <section className="py-xl">
         <div className="container max-w-4xl">
           <RevealOnScroll>
@@ -140,7 +203,7 @@ export default function ServicosPage() {
         </div>
       </section>
 
-      {/* Services Grid */}
+      {/* 4. Services Grid */}
       <section className="py-xl bg-black-5">
         <div className="container">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -212,7 +275,7 @@ export default function ServicosPage() {
         </div>
       </section>
 
-      {/* Methodology */}
+      {/* 5. Methodology */}
       <section className="py-xl">
         <div className="container">
           <RevealOnScroll>
@@ -238,10 +301,10 @@ export default function ServicosPage() {
         </div>
       </section>
 
-      {/* Projetos Prontos */}
+      {/* 6. Projetos Prontos */}
       <ProjectsGrid />
 
-      {/* CTA */}
+      {/* 7. CTA */}
       <CTA />
     </main>
   );
