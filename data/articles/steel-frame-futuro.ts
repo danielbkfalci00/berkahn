@@ -3,6 +3,7 @@ import { steelFrameVsAlvenariaArticle } from "./steel-frame-vs-alvenaria";
 import { cincoVantagensSteelFrameArticle } from "./5-vantagens-steel-frame";
 import { guiaDefinitivoSteelFrameArticle } from "./guia-definitivo-steel-frame";
 import { financiamentoSteelFrameArticle } from "./financiamento-steel-frame";
+import { steelFrameProcessoArticle } from "./steel-frame-processo";
 
 export const steelFrameFuturoArticle: RichArticle = {
   slug: "steel-frame-futuro-construcao",
@@ -266,6 +267,9 @@ export const getArticleBySlug = (slug: string): RichArticle | undefined => {
   if (slug === "steel-frame-futuro-construcao") {
     return steelFrameFuturoArticle;
   }
+  if (slug === "passo-passo-construcao-steel-frame") {
+    return steelFrameProcessoArticle;
+  }
   if (slug === "5-vantagens-decisivas-light-steel-frame") {
     return cincoVantagensSteelFrameArticle;
   }
@@ -281,6 +285,7 @@ export const getArticleBySlug = (slug: string): RichArticle | undefined => {
 // List all available rich articles
 export const richArticles: RichArticle[] = [
   steelFrameFuturoArticle,
+  steelFrameProcessoArticle,
   cincoVantagensSteelFrameArticle,
   steelFrameVsAlvenariaArticle,
   financiamentoSteelFrameArticle,
