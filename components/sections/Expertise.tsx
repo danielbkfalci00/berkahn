@@ -9,31 +9,22 @@ export function Expertise() {
           {/* Left Column */}
           <RevealOnScroll>
             <p className="label-text mb-4">
-              Expertise em construção em Light Steel Frame
+              NOSSA EXPERTISE
             </p>
             <h2 className="headline-lg">
-              Casas inovadoras em
+              Especialistas em Steel Frame.
               <br />
-              Light Steel Frame —
-              <br />
-              <span className="text-black-50">engineered by Berkahn</span>
+              Versáteis em construção.
             </h2>
           </RevealOnScroll>
 
           {/* Right Column */}
           <RevealOnScroll delay={0.2}>
             <p className="body-lg mb-6">
-              <strong className="text-black font-medium">Berkahn</strong> é
-              referência em tecnologia e construção em Light Steel Frame. Criar
-              soluções para residências de alta performance, confortáveis e
-              duráveis é o compromisso da nossa equipe especializada.
+              A <strong className="text-black font-medium">Berkahn</strong> é referência em Light Steel Frame no Brasil. Priorizamos esta tecnologia por sua eficiência, precisão e sustentabilidade — mas nossa expertise vai além. Dominamos múltiplos sistemas construtivos para entregar sempre a melhor solução.
             </p>
             <p className="body-md mb-8 text-black-70">
-              Da concepção inteligente à execução precisa, a Berkahn fornece
-              tudo o que é necessário para realizar projetos residenciais
-              modernos, eficientes e alinhados fielmente ao design original.
-              Nossa missão é transformar ideias em casas que combinam leveza
-              estrutural, engenharia avançada e excelência construtiva.
+              Residências, edifícios comerciais ou projetos industriais: cada desafio recebe nossa engenharia de precisão e compromisso com excelência. Do conceito à entrega, construímos com tecnologia avançada e atenção aos detalhes.
             </p>
             <Link
               href="/empresa"

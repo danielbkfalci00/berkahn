@@ -20,26 +20,17 @@ export function LSFIntro() {
 
           {/* Right Column - Content */}
           <RevealOnScroll delay={0.2}>
-            <p className="label-text mb-4">Sistema construtivo industrializado</p>
+            <p className="label-text mb-4">SISTEMA CONSTRUTIVO INDUSTRIALIZADO</p>
             <h2 className="headline-lg mb-6">
-              Casas inovadoras em
+              Light Steel Frame:
               <br />
-              Light Steel Frame
+              Precisão para qualquer projeto
             </h2>
             <p className="body-md mb-6 text-black-70">
-              O Light Steel Frame (LSF) é um sistema versátil que permite
-              executar paredes, pilares e lajes com precisão milimétrica, usando
-              perfis de aço galvanizado e camadas técnicas de gesso acartonado e
-              placas cimentícias para entregar conforto, desempenho e acabamento
-              superior.
+              O Light Steel Frame (LSF) é um sistema versátil de alta performance. Utilizamos perfis de aço galvanizado, gesso acartonado e placas cimentícias para criar estruturas precisas e duráveis — residenciais, comerciais ou industriais.
             </p>
             <p className="body-md mb-8 text-black-70">
-              No centro dessa versatilidade está a Berkahn, que domina o LSF
-              tanto como sistema completo quanto integrado a outros métodos
-              construtivos. O LSF pode atuar isoladamente ou funcionar como
-              vedação combinada com estruturas de aço laminado ou concreto
-              armado, ampliando possibilidades arquitetônicas e garantindo
-              eficiência em qualquer solução adotada.
+              A Berkahn domina o LSF tanto como sistema completo quanto integrado a outras estruturas. Podemos atuar com LSF puro ou combiná-lo com concreto armado e aço laminado, ampliando possibilidades arquitetônicas sem comprometer eficiência.
             </p>
             <Link
               href="/lsf"

@@ -8,14 +8,12 @@ export function CTA() {
       <div className="container">
         <div className="text-center max-w-3xl mx-auto">
           <RevealOnScroll>
-            <p className="label-text mb-4">Pronto para construir?</p>
+            <p className="label-text mb-4">PRONTO PARA CONSTRUIR?</p>
             <h2 className="headline-lg mb-6">
               Transforme seu projeto em realidade com a Berkahn
             </h2>
             <p className="body-md mb-8 text-black-70">
-              Entre em contato conosco e descubra como podemos ajudar a
-              construir a casa dos seus sonhos com tecnologia, precisão e
-              excelência.
+              Entre em contato e descubra como nossa expertise em Steel Frame e construção de alto desempenho pode materializar sua visão. Residencial, comercial ou industrial — estamos prontos.
             </p>
             <ContactFormDialog>
               <button className="inline-flex items-center gap-2 px-8 py-4 bg-black text-white uppercase tracking-wider text-sm font-medium hover:bg-black-90 transition-colors duration-300">

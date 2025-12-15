@@ -10,19 +10,19 @@ export function Gallery() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Link href="/portfolio" className="overflow-hidden block group">
               <Image
-                src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
-                alt="Projeto Steel Frame Berkahn"
-                width={1200}
-                height={800}
+                src="/images/home-gallery-1.jpg"
+                alt="Residência em Light Steel Frame - Projeto Berkahn"
+                width={2048}
+                height={1152}
                 className="w-full h-64 lg:h-80 object-cover group-hover:scale-105 transition-transform duration-500"
               />
             </Link>
             <Link href="/portfolio" className="overflow-hidden block group">
               <Image
-                src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
-                alt="Interior Casa Steel Frame"
-                width={1200}
-                height={800}
+                src="/images/home-gallery-2.jpg"
+                alt="Edifício Comercial em Steel Frame - Projeto Berkahn"
+                width={2048}
+                height={1152}
                 className="w-full h-64 lg:h-80 object-cover group-hover:scale-105 transition-transform duration-500"
               />
             </Link>

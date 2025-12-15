@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
+import { CharReveal, TextReveal } from "@/components/animations/TextReveal";
 
 export function Hero() {
   return (
@@ -9,8 +10,8 @@ export function Hero() {
       {/* Background Image */}
       <div className="absolute inset-0 z-0">
         <Image
-          src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?ixlib=rb-4.0.3&auto=format&fit=crop&w=2400&q=80"
-          alt="Construção em Steel Frame"
+          src="/images/home-hero.jpg"
+          alt="Estrutura Steel Frame Berkahn"
           fill
           className="object-cover"
           priority
@@ -26,14 +27,27 @@ export function Hero() {
             <div className="hero-decorative-line w-24 mb-8" />
           </RevealOnScroll>
 
+          {/* Label */}
           <RevealOnScroll delay={0.2}>
-            <p className="hero-label text-white mb-6 hero-text-shadow">Erguendo o amanhã</p>
+            <p className="hero-label text-white/70 mb-6 hero-text-shadow uppercase tracking-widest">
+              Construção Inteligente
+            </p>
           </RevealOnScroll>
-          <RevealOnScroll delay={0.4}>
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-heading font-light tracking-tight text-white hero-text-shadow-strong">
-              #WELOVESTEELFRAME
-            </h1>
-          </RevealOnScroll>
+
+          {/* Headline - CharReveal */}
+          <CharReveal
+            text="Líderes em Steel Frame. Mestres em construir."
+            className="text-5xl md:text-6xl lg:text-7xl font-heading font-extrabold tracking-tighter text-white hero-text-shadow-strong mb-8"
+            delay={0.3}
+          />
+
+          {/* Subheadline - TextReveal */}
+          <TextReveal
+            text="Escolhemos a melhor tecnologia para cada projeto. Residencial ou comercial, simples ou complexo — entregamos excelência."
+            className="text-lg md:text-xl font-body text-white/90 hero-text-shadow max-w-2xl leading-relaxed"
+            delay={0.6}
+            as="p"
+          />
         </div>
       </div>
     </section>
