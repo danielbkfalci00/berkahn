@@ -13,8 +13,8 @@ export function ProjectsGrid({ id }: ProjectsGridProps = {}) {
         {/* Header */}
         <RevealOnScroll>
           <div className="text-center mb-12">
-            <p className="label-text mb-4">Projetos Prontos para Construir</p>
-            <h2 className="headline-lg mb-6">Escolha Seu Projeto</h2>
+            <h1 className="headline-lg mb-4">Projetos Prontos para Construir</h1>
+            <h3 className="headline-sm mb-6">Escolha Seu Projeto</h3>
             <p className="body-lg text-black-70 max-w-3xl mx-auto">
               Oferecemos projetos prontos em Light Steel Frame para diferentes
               estilos de vida. Do compacto ao espaçoso, cada projeto foi pensado

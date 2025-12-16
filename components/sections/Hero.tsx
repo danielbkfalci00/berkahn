@@ -32,7 +32,7 @@ export function Hero() {
             {/* Slide 1: Estrutura em Construção */}
             <CarouselItem className="basis-full min-w-0 h-full">
               <Image
-                src="https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?ixlib=rb-4.0.3&auto=format&fit=crop&w=2400&q=80"
+                src="/images/hero/hero-1-estrutura-construcao.jpg"
                 alt="Estrutura Steel Frame em construção"
                 fill
                 className="object-cover"
@@ -44,7 +44,7 @@ export function Hero() {
             {/* Slide 2: Detalhes Estruturais */}
             <CarouselItem className="basis-full min-w-0 h-full">
               <Image
-                src="https://images.unsplash.com/photo-1503387837-b154d5074bd2?ixlib=rb-4.0.3&auto=format&fit=crop&w=2400&q=80"
+                src="/images/hero/hero-2-detalhes-estruturais.jpg"
                 alt="Detalhes de conexões estruturais precisas"
                 fill
                 className="object-cover"
@@ -55,7 +55,7 @@ export function Hero() {
             {/* Slide 3: Estrutura Metálica Limpa */}
             <CarouselItem className="basis-full min-w-0 h-full">
               <Image
-                src="https://images.unsplash.com/photo-1587293852726-70cdb56c2866?ixlib=rb-4.0.3&auto=format&fit=crop&w=2400&q=80"
+                src="/images/hero/hero-3-estrutura-metalica.jpg"
                 alt="Perfis estruturais organizados"
                 fill
                 className="object-cover"
@@ -66,7 +66,7 @@ export function Hero() {
             {/* Slide 4: Fachada Finalizada */}
             <CarouselItem className="basis-full min-w-0 h-full">
               <Image
-                src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=2400&q=80"
+                src="/images/hero/hero-4-fachada-finalizada.jpg"
                 alt="Arquitetura moderna finalizada"
                 fill
                 className="object-cover"
@@ -77,7 +77,7 @@ export function Hero() {
             {/* Slide 5: Casa Completa */}
             <CarouselItem className="basis-full min-w-0 h-full">
               <Image
-                src="https://images.unsplash.com/photo-1600585154526-990dced4db0d?ixlib=rb-4.0.3&auto=format&fit=crop&w=2400&q=80"
+                src="/images/hero/hero-5-casa-completa.jpg"
                 alt="Projeto residencial completo"
                 fill
                 className="object-cover"
