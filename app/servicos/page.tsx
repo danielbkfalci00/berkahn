@@ -188,7 +188,7 @@ export default function ServicosPage() {
       </section>
 
       {/* 4. Services Grid */}
-      <section className="py-xl bg-black-5">
+      <section id="execucao" className="py-xl bg-black-5">
         <div className="container">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {services.map((service, index) => (
@@ -286,7 +286,7 @@ export default function ServicosPage() {
       </section>
 
       {/* 6. Projetos Prontos */}
-      <ProjectsGrid />
+      <ProjectsGrid id="projetos" />
 
       {/* 7. CTA */}
       <CTA />

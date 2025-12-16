@@ -33,6 +33,18 @@
   h1, h2, h3, h4, h5, h6 {
     @apply font-heading;
   }
+
+  /* Smooth scroll global */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Respeitar preferência de movimento reduzido */
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
 }
 
 /* Aceternity Timeline - Minimal Luxury Overrides */

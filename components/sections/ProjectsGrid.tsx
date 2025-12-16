@@ -2,9 +2,13 @@ import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
 import { ProjectCard } from "@/components/project/ProjectCard";
 import { PROJECTS } from "@/data/projects";
 
-export function ProjectsGrid() {
+interface ProjectsGridProps {
+  id?: string;
+}
+
+export function ProjectsGrid({ id }: ProjectsGridProps = {}) {
   return (
-    <section className="py-xl">
+    <section id={id} className="py-xl">
       <div className="container">
         {/* Header */}
         <RevealOnScroll>

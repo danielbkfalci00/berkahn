@@ -1,8 +1,29 @@
+// Navigation Types
+export interface NavLinkChild {
+  label: string;
+  href: string;
+}
+
+export interface NavLinkItem {
+  label: string;
+  href: string;
+  children?: NavLinkChild[];
+}
+
+export type NavLinks = readonly NavLinkItem[];
+
 // Navigation Links
-export const NAV_LINKS = [
+export const NAV_LINKS: NavLinks = [
   { label: "Home", href: "/" },
   { label: "Empresa", href: "/empresa" },
-  { label: "Serviços", href: "/servicos" },
+  {
+    label: "Serviços",
+    href: "/servicos",
+    children: [
+      { label: "Execução de Obras", href: "/servicos#execucao" },
+      { label: "Projetos Prontos", href: "/servicos#projetos" },
+    ],
+  },
   { label: "LSF", href: "/lsf" },
   { label: "Portfólio", href: "/portfolio" },
   { label: "Atualidade", href: "/atualidade" },
