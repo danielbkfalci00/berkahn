@@ -112,7 +112,7 @@ export function Hero() {
 
           {/* Subheadline - TextReveal */}
           <TextReveal
-            text="Escolhemos a melhor tecnologia para cada projeto. Residencial ou comercial, simples ou complexo — entregamos excelência."
+            text="Escolhemos a melhor tecnologia para cada projeto. Residencial ou comercial, simples ou complexo."
             className="text-lg md:text-xl font-body text-white/90 hero-text-shadow max-w-2xl leading-relaxed"
             delay={0.6}
             as="p"
