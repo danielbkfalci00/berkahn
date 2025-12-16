@@ -2,9 +2,9 @@ import { CountUp } from "@/components/animations/CountUp";
 import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
 
 const STATS = [
-  { value: 25, suffix: "+", label: "Anos de experiência" },
-  { value: 500, suffix: "+", label: "Projetos concluídos" },
-  { value: 50, suffix: "+", label: "Profissionais especializados" },
+  { value: 20, suffix: "+", label: "Anos de experiência" },
+  { value: 23, suffix: "", label: "Projetos gerenciados" },
+  { value: 85, suffix: " mil m²", label: "Construção gerenciada" },
   { value: 100, suffix: "%", label: "Satisfação dos clientes" },
 ];
 
