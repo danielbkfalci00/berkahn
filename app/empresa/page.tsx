@@ -52,7 +52,7 @@ export default function EmpresaPage() {
       </section>
 
       {/* Introduction - Imagem Full Width */}
-      <section className="relative h-[60vh] min-h-[500px]">
+      <section className="relative h-[75vh] min-h-[600px]">
         <Image
           src="/images/empresa/primeira-imagem.png"
           alt="Berkahn - Construção em Steel Frame"
