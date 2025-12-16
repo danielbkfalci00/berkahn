@@ -2,6 +2,7 @@ export interface ExecutionPhase {
   id: string;
   number: number;
   title: string;
+  shortTitle: string; // Título curto para tabs mobile
   description: string;
   summary?: string; // Resumo curto (1-2 linhas)
   keyPoints?: string[]; // Principais atividades (3-5 bullets)
@@ -20,6 +21,7 @@ export const EXECUTION_PHASES: ExecutionPhase[] = [
     id: 'pre-obra',
     number: 1,
     title: 'Pré Obra',
+    shortTitle: 'Pré Obra',
     description: 'A etapa de pré-obra é onde o empreendimento é estruturado técnica e financeiramente. Nessa fase, realizamos o entendimento das necessidades do cliente, a análise crítica dos projetos, a definição do escopo, o orçamento detalhado e o planejamento da obra. O objetivo é eliminar incertezas, reduzir riscos e garantir previsibilidade de custo, prazo e qualidade antes do início da execução.',
     summary: 'Estruturação técnica e financeira do empreendimento antes do início da construção.',
     keyPoints: [
@@ -46,6 +48,7 @@ export const EXECUTION_PHASES: ExecutionPhase[] = [
     id: 'terraplanagem',
     number: 2,
     title: 'Terraplanagem, Fundação e Superestrutura',
+    shortTitle: 'Estrutura',
     description: 'Nesta fase, iniciamos a implantação física da obra, com a organização do canteiro, os serviços de terraplanagem e a execução das fundações e da superestrutura. Todo o trabalho é conduzido com rigor técnico, controle de qualidade e acompanhamento constante, garantindo a estabilidade, a segurança e a durabilidade da edificação.',
     summary: 'Implantação física do empreendimento com preparação do terreno, fundações e estrutura principal.',
     keyPoints: [
@@ -72,6 +75,7 @@ export const EXECUTION_PHASES: ExecutionPhase[] = [
     id: 'estrutura-vedacao',
     number: 3,
     title: 'Estrutura, Vedação e Instalações',
+    shortTitle: 'Instalações',
     description: 'Com a estrutura concluída, avançamos para a execução das vedações, fachadas, coberturas e sistemas prediais. Nessa etapa, realizamos as instalações elétricas, hidráulicas, sanitárias, de gás e climatização, sempre com atenção à compatibilização dos projetos e à qualidade da execução, assegurando desempenho, conforto e eficiência ao empreendimento.',
     summary: 'Fechamento da edificação com vedações, cobertura e execução completa de sistemas prediais.',
     keyPoints: [
@@ -98,6 +102,7 @@ export const EXECUTION_PHASES: ExecutionPhase[] = [
     id: 'acabamentos',
     number: 4,
     title: 'Acabamentos',
+    shortTitle: 'Acabamentos',
     description: 'A fase de acabamentos é onde a obra ganha vida e personalidade. Realizamos os revestimentos internos e externos, pinturas, instalação de louças, metais, esquadrias e demais elementos de finalização. Cada detalhe é executado com precisão e cuidado, garantindo um resultado final impecável, que atende às expectativas de qualidade, estética e funcionalidade do cliente.',
     summary: 'Finalização da obra com revestimentos, pinturas e instalação de todos os elementos de acabamento.',
     keyPoints: [

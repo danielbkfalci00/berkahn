@@ -193,4 +193,13 @@
     font-weight: 500;
     opacity: 0.9;
   }
+
+  /* Typography utilities - Body text */
+  .body-sm {
+    @apply text-sm leading-relaxed;
+  }
+
+  .body-xs {
+    @apply text-xs leading-relaxed;
+  }
 }

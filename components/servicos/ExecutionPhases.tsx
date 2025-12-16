@@ -12,56 +12,55 @@ import {
   CarouselPrevious,
 } from '@/components/ui/carousel';
 import { Badge } from '@/components/ui/badge';
-import { Clock, Check } from 'lucide-react';
+import { Check } from 'lucide-react';
 import Image from 'next/image';
 
 export function ExecutionPhases() {
   const [activeTab, setActiveTab] = useState(EXECUTION_PHASES[0].id);
 
   return (
-    <section className="py-xl lg:py-2xl bg-white">
+    <section className="py-lg md:py-xl lg:py-2xl bg-white">
       <div className="container px-4 sm:px-6 lg:px-8">
-        {/* Header */}
+        {/* Header - Mais compacto */}
         <RevealOnScroll>
-          <h2 className="headline-lg lg:headline-xl text-center mb-3 lg:mb-4">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-extrabold tracking-tighter text-center mb-3">
             EXECUÇÃO DE OBRAS
           </h2>
-          <p className="body-sm lg:body-md text-center text-black-70 max-w-3xl mx-auto uppercase tracking-wide leading-relaxed mb-12 lg:mb-16">
-            ATUANTE EM TODAS AS FASES DO SEU PROJETO. ACOMPANHAMOS A JORNADA DA
-            CONSTRUÇÃO DA CONCEPÇÃO DOS PROJETOS À ENTREGA DA OBRA, SEMPRE COM
-            FOCO NA QUALIDADE, PRAZO, E EXCELÊNCIA TÉCNICA
+          <p className="text-xs md:text-sm text-center text-black-50 max-w-2xl mx-auto uppercase tracking-wider leading-relaxed mb-8 md:mb-12 lg:mb-16">
+            Da concepção à entrega, com foco em qualidade, prazo e excelência técnica
           </p>
         </RevealOnScroll>
 
         {/* Tabs */}
-        <Tabs
-          value={activeTab}
-          onValueChange={setActiveTab}
-          className="w-full"
-        >
-          {/* Tabs List */}
-          <TabsList className="grid w-full grid-cols-2 lg:grid-cols-4 gap-2 lg:gap-3 bg-transparent mb-8 lg:mb-12">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          {/* Tabs List - 4 colunas desde md */}
+          <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 gap-1.5 md:gap-2 lg:gap-3 bg-transparent mb-6 md:mb-10 lg:mb-12">
             {EXECUTION_PHASES.map((phase) => (
               <TabsTrigger
                 key={phase.id}
                 value={phase.id}
                 className="
-                  flex flex-col lg:flex-row items-center gap-2 lg:gap-3
-                  py-3 lg:py-4 px-3 lg:px-4
+                  flex flex-col items-center gap-1.5 md:gap-2
+                  py-2.5 md:py-3 lg:py-4 px-2 md:px-3 lg:px-4
                   text-sm font-medium transition-all
-                  border-2 border-black-10 rounded-lg
+                  border border-black-10 rounded-lg
                   hover:border-black-30 hover:bg-black-5
-                  data-[state=active]:border-black data-[state=active]:bg-black-5
+                  data-[state=active]:border-black data-[state=active]:bg-black
+                  data-[state=active]:text-white
                 "
               >
-                {/* Badge sempre visível, tamanho responsivo */}
-                <Badge className="text-base lg:text-lg px-3 py-1 lg:px-4 lg:py-2 shrink-0">
+                {/* Badge compacto */}
+                <Badge
+                  variant="outline"
+                  className="text-[10px] md:text-xs lg:text-sm px-1.5 py-0 md:px-2 md:py-0.5 border-current"
+                >
                   {phase.number}
                 </Badge>
 
-                {/* Título - wrapping controlado */}
-                <span className="text-xs lg:text-sm text-center lg:text-left leading-tight">
-                  {phase.title}
+                {/* Titulo - shortTitle em mobile */}
+                <span className="text-[10px] md:text-[11px] lg:text-xs text-center leading-snug">
+                  <span className="md:hidden">{phase.shortTitle}</span>
+                  <span className="hidden md:inline">{phase.title}</span>
                 </span>
               </TabsTrigger>
             ))}
@@ -69,48 +68,38 @@ export function ExecutionPhases() {
 
           {/* Tabs Content */}
           {EXECUTION_PHASES.map((phase) => (
-            <TabsContent
-              key={phase.id}
-              value={phase.id}
-              className="focus-visible:outline-none mt-8 lg:mt-12"
-            >
-              <div className="grid grid-cols-1 lg:grid-cols-[1.5fr_1fr] gap-8 lg:gap-12 items-start">
+            <TabsContent key={phase.id} value={phase.id} className="focus-visible:outline-none mt-0">
+              <div className="grid grid-cols-1 md:grid-cols-[1fr_1fr] lg:grid-cols-[1.4fr_1fr] gap-6 md:gap-8 lg:gap-12 items-start">
 
-                {/* LEFT: Text Content (60% no desktop) */}
-                <div className="space-y-6 lg:space-y-8">
+                {/* LEFT: Text Content */}
+                <div className="space-y-6 lg:space-y-8 order-2 md:order-1">
 
-                  {/* Header com Badge + Título */}
-                  <div className="flex items-start gap-4">
-                    <Badge
-                      variant="outline"
-                      className="text-xl px-4 py-2 shrink-0"
-                    >
-                      {phase.number}
-                    </Badge>
-                    <div>
-                      <h3 className="headline-md mb-2">{phase.title}</h3>
-                      {phase.summary && (
-                        <p className="body-md text-black-70 leading-relaxed">
-                          {phase.summary}
-                        </p>
-                      )}
-                    </div>
+                  {/* Header - Sem badge duplicado */}
+                  <div>
+                    <p className="text-[10px] md:text-xs uppercase tracking-widest text-black-50 mb-2">
+                      Etapa {phase.number}
+                    </p>
+                    <h3 className="text-xl md:text-2xl lg:text-3xl font-heading font-bold tracking-tight mb-3">
+                      {phase.title}
+                    </h3>
+                    {phase.summary && (
+                      <p className="text-sm md:text-base text-black-70 leading-relaxed">
+                        {phase.summary}
+                      </p>
+                    )}
                   </div>
 
-                  {/* Divider */}
-                  <div className="border-t border-black-10" />
-
-                  {/* Key Points (Bullet List) */}
+                  {/* Key Points - Simplificado */}
                   {phase.keyPoints && phase.keyPoints.length > 0 && (
-                    <div>
-                      <h4 className="text-sm font-semibold uppercase tracking-wide text-black-50 mb-4">
+                    <div className="pt-6 border-t border-black-10">
+                      <h4 className="text-[10px] md:text-xs font-semibold uppercase tracking-widest text-black-50 mb-4">
                         Principais Atividades
                       </h4>
-                      <ul className="space-y-3">
+                      <ul className="space-y-2.5">
                         {phase.keyPoints.map((point, idx) => (
-                          <li key={idx} className="flex items-start gap-3">
-                            <div className="shrink-0 w-1.5 h-1.5 rounded-full bg-black mt-2" />
-                            <span className="body-md text-black-70 leading-relaxed">
+                          <li key={idx} className="flex items-start gap-2.5">
+                            <span className="text-black-30 shrink-0">—</span>
+                            <span className="text-sm text-black-70 leading-relaxed">
                               {point}
                             </span>
                           </li>
@@ -119,17 +108,17 @@ export function ExecutionPhases() {
                     </div>
                   )}
 
-                  {/* Deliverables */}
+                  {/* Deliverables - Minimalista */}
                   {phase.deliverables && phase.deliverables.length > 0 && (
-                    <div className="bg-black-5 rounded-lg p-6 border border-black-10">
-                      <h4 className="text-sm font-semibold uppercase tracking-wide text-black-50 mb-4">
+                    <div className="pt-6 border-t border-black-10">
+                      <h4 className="text-[10px] md:text-xs font-semibold uppercase tracking-widest text-black-50 mb-4">
                         Entregáveis
                       </h4>
                       <ul className="space-y-2">
                         {phase.deliverables.map((item, idx) => (
-                          <li key={idx} className="flex items-center gap-3">
-                            <Check className="w-5 h-5 text-black shrink-0" />
-                            <span className="body-sm text-black-70">
+                          <li key={idx} className="flex items-center gap-2.5">
+                            <Check className="w-4 h-4 text-black shrink-0" />
+                            <span className="text-sm text-black-70">
                               {item}
                             </span>
                           </li>
@@ -138,17 +127,14 @@ export function ExecutionPhases() {
                     </div>
                   )}
 
-                  {/* Duration */}
-                  <div className="flex items-center gap-2 text-black-50">
-                    <Clock className="w-5 h-5" />
-                    <span className="body-sm">
-                      Duração estimada: {phase.duration}
-                    </span>
-                  </div>
+                  {/* Duration - Simplificado */}
+                  <p className="text-xs text-black-50 pt-4">
+                    Duração estimada: {phase.duration}
+                  </p>
                 </div>
 
-                {/* RIGHT: Image Carousel (40% no desktop) */}
-                <div className="w-full lg:sticky lg:top-24">
+                {/* RIGHT: Image Carousel */}
+                <div className="w-full order-1 md:order-2 md:sticky md:top-24">
                   <Carousel className="w-full" opts={{ loop: true }}>
                     <CarouselContent>
                       {[
@@ -156,26 +142,26 @@ export function ExecutionPhases() {
                         { src: phase.images.secondary, alt: phase.images.secondaryAlt }
                       ].map((img, idx) => (
                         <CarouselItem key={idx}>
-                          <div className="aspect-[4/3] relative overflow-hidden rounded-lg shadow-luxury-md">
+                          <div className="aspect-[16/10] md:aspect-[4/3] relative overflow-hidden rounded-lg">
                             <Image
                               src={img.src}
                               alt={img.alt}
                               fill
                               className="object-cover"
-                              sizes="(max-width: 768px) 100vw, 40vw"
+                              sizes="(max-width: 768px) 100vw, 50vw"
                             />
                           </div>
                         </CarouselItem>
                       ))}
                     </CarouselContent>
 
-                    {/* Navigation - melhorado para mobile */}
-                    <div className="flex items-center justify-between mt-4">
-                      <CarouselPrevious className="static translate-x-0 translate-y-0" />
-                      <p className="text-xs text-black-50 text-center flex-1 mx-4">
-                        2 imagens • Use as setas para navegar
-                      </p>
-                      <CarouselNext className="static translate-x-0 translate-y-0" />
+                    {/* Navigation - Minimal */}
+                    <div className="flex items-center justify-center gap-4 mt-4">
+                      <CarouselPrevious className="static translate-x-0 translate-y-0 h-8 w-8" />
+                      <span className="text-xs text-black-50">
+                        1 / 2
+                      </span>
+                      <CarouselNext className="static translate-x-0 translate-y-0 h-8 w-8" />
                     </div>
                   </Carousel>
                 </div>
