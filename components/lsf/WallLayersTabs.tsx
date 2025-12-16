@@ -7,7 +7,7 @@ import { LSF_LAYERS } from "@/lib/lsf-data";
 
 export function WallLayersTabs() {
   return (
-    <Tabs defaultValue="layer-4" className="w-full">
+    <Tabs defaultValue="layer-1" className="w-full">
       {/* Tab Triggers - Horizontal List */}
       <TabsList className="grid w-full grid-cols-7 h-auto p-1 bg-black-5">
         {LSF_LAYERS.map((layer) => (
