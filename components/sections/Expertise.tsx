@@ -12,9 +12,9 @@ export function Expertise() {
               NOSSA EXPERTISE
             </p>
             <h2 className="headline-lg">
-              Especialistas em Steel Frame.
+              Líderes em Steel Frame.
               <br />
-              Versáteis em construção.
+              Mestres em construir.
             </h2>
           </RevealOnScroll>
 
