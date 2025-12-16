@@ -5,6 +5,25 @@
 @layer base {
   :root {
     --font-manrope: 'Manrope', sans-serif;
+
+    /* Shadcn UI Variables - Design System Preto/Branco */
+    --background: 0 0% 100%;          /* Branco puro #FFFFFF */
+    --foreground: 0 0% 0%;            /* Preto puro #000000 */
+
+    --primary: 0 0% 0%;               /* Preto para botões primários */
+    --primary-foreground: 0 0% 100%;  /* Branco para texto em botões */
+
+    --muted: 0 0% 95%;                /* Cinza muito claro para backgrounds */
+    --muted-foreground: 0 0% 50%;     /* Cinza médio para texto secundário */
+
+    --border: 0 0% 90%;               /* Cinza claro para bordas (equivale a black-10) */
+    --input: 0 0% 90%;                /* Mesma cor de border para inputs */
+    --ring: 0 0% 0%;                  /* Preto para focus rings */
+
+    --card: 0 0% 100%;                /* Branco para cards */
+    --card-foreground: 0 0% 0%;       /* Preto para texto em cards */
+
+    --radius: 0.5rem;                 /* 8px - border radius padrão */
   }
 
   body {

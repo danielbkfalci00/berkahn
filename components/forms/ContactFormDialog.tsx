@@ -81,7 +81,7 @@ export function ContactFormDialog({ children }: ContactFormDialogProps) {
   return (
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className="w-[calc(100%-2rem)] sm:max-w-[400px] p-0 overflow-hidden rounded-none sm:rounded-lg">
+      <DialogContent className="w-[calc(100%-2rem)] max-w-[calc(100%-2rem)] sm:max-w-[480px] p-0 overflow-hidden rounded-none sm:rounded-lg bg-white">
         <AnimatePresence mode="wait">
           {status === "success" ? (
             <motion.div
@@ -115,7 +115,7 @@ export function ContactFormDialog({ children }: ContactFormDialogProps) {
                 <h3 className="text-lg font-heading font-semibold mb-2 tracking-tight">
                   Mensagem Enviada!
                 </h3>
-                <p className="text-sm text-black-50 mb-6 leading-relaxed">
+                <p className="text-sm text-black-70 mb-6 leading-relaxed">
                   Obrigado pelo contato. Nossa equipe retornará em breve.
                 </p>
 
@@ -136,14 +136,14 @@ export function ContactFormDialog({ children }: ContactFormDialogProps) {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3 }}
-              className="p-5 sm:p-6"
+              className="p-6 sm:p-8"
             >
               {/* Header */}
               <DialogHeader className="mb-5">
                 <DialogTitle className="text-lg font-heading font-semibold tracking-tight">
                   Fale Conosco
                 </DialogTitle>
-                <DialogDescription className="text-xs text-black-50 mt-1">
+                <DialogDescription className="text-xs text-black-70 mt-1">
                   Retornaremos em até 24 horas.
                 </DialogDescription>
               </DialogHeader>
@@ -154,7 +154,7 @@ export function ContactFormDialog({ children }: ContactFormDialogProps) {
                 <div className="space-y-1.5">
                   <Label
                     htmlFor="name"
-                    className="text-xs text-black-50 font-medium"
+                    className="text-xs text-black-70 font-medium"
                   >
                     Nome
                   </Label>
@@ -187,7 +187,7 @@ export function ContactFormDialog({ children }: ContactFormDialogProps) {
                 <div className="space-y-1.5">
                   <Label
                     htmlFor="email"
-                    className="text-xs text-black-50 font-medium"
+                    className="text-xs text-black-70 font-medium"
                   >
                     Email
                   </Label>
@@ -221,7 +221,7 @@ export function ContactFormDialog({ children }: ContactFormDialogProps) {
                 <div className="space-y-1.5">
                   <Label
                     htmlFor="phone"
-                    className="text-xs text-black-50 font-medium"
+                    className="text-xs text-black-70 font-medium"
                   >
                     Telefone <span className="text-[10px] text-black-30">(Opcional)</span>
                   </Label>
@@ -242,7 +242,7 @@ export function ContactFormDialog({ children }: ContactFormDialogProps) {
                 <div className="space-y-1.5">
                   <Label
                     htmlFor="message"
-                    className="text-xs text-black-50 font-medium"
+                    className="text-xs text-black-70 font-medium"
                   >
                     Mensagem
                   </Label>
