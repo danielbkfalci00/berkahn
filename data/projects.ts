@@ -213,27 +213,19 @@ Projetado para acomodar confortavelmente uma família de 3 a 4 pessoas, oferece 
     models: [],
     specifications: [
       {
+        id: 'fundacao-radier',
         category: 'Fundação',
-        items: [
-          { label: 'Sistema', value: 'Radier' },
-          { label: 'Tipo', value: 'Laje de concreto armado sobre solo' },
-        ]
+        name: 'Radier - Laje de concreto armado sobre solo',
       },
       {
+        id: 'estrutura-lsf',
         category: 'Estrutura',
-        items: [
-          { label: 'Sistema Construtivo', value: 'Light Steel Frame (LSF)' },
-          { label: 'Perfis', value: 'Aço galvanizado formado a frio' },
-          { label: 'Característica', value: 'Estrutura leve e resistente' },
-        ]
+        name: 'Light Steel Frame (LSF) - Perfis de aço galvanizado formado a frio',
       },
       {
+        id: 'vedacao-cimenticcia',
         category: 'Vedação',
-        items: [
-          { label: 'Fechamento Externo', value: 'Placa cimentícia' },
-          { label: 'Laje Seca', value: 'Placa cimentísia' },
-          { label: 'Revestimento Interno', value: 'Drywall' },
-        ]
+        name: 'Placa cimentícia externa + Drywall interno + Laje seca cimentícia',
       },
     ],
     highlights: [
