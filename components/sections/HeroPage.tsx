@@ -9,7 +9,7 @@ interface HeroPageProps {
 
 export function HeroPage({ title, subtitle, imageSrc, imageAlt }: HeroPageProps) {
   return (
-    <section className="relative h-[50vh] min-h-[400px] flex items-start justify-start pt-20 md:pt-24 overflow-hidden">
+    <section className="relative h-screen min-h-[600px] flex items-start justify-start pt-32 md:pt-40 overflow-hidden">
       {/* Background Image */}
       <div className="absolute inset-0 z-0">
         <Image
