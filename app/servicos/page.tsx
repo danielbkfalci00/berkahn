@@ -1,5 +1,6 @@
+"use client";
+
 // Serviços Berkahn - Atualizado em 11/12/2025
-import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { HeroPage } from "@/components/sections/HeroPage";
@@ -7,20 +8,8 @@ import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
 import { CTA } from "@/components/sections/CTA";
 import { ProjectsGrid } from "@/components/sections/ProjectsGrid";
 import { ExecutionPhases } from "@/components/servicos/ExecutionPhases";
+import { ContactFormDialog } from "@/components/forms/ContactFormDialog";
 import { Home, Building2, Factory, CheckIcon } from "lucide-react";
-
-export const metadata: Metadata = {
-  title: "Serviços | Berkahn Steel Frame",
-  description:
-    "Conheça os serviços da Berkahn: construção residencial, comercial, industrial e reformas em Light Steel Frame com excelência e tecnologia.",
-  keywords: [
-    "construção steel frame",
-    "construção residencial",
-    "construção comercial",
-    "construção industrial",
-    "light steel frame",
-  ],
-};
 
 // Dados dos serviços
 const services = [
@@ -172,26 +161,25 @@ export default function ServicosPage() {
                     </ul>
 
                     {/* Link */}
-                    <Link
-                      href="/contato"
-                      className="inline-flex items-center gap-2 text-black font-medium hover:gap-4 transition-all duration-300"
-                    >
-                      Solicitar orçamento
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth="2"
-                        stroke="currentColor"
-                        className="w-5 h-5"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
-                        />
-                      </svg>
-                    </Link>
+                    <ContactFormDialog>
+                      <button className="inline-flex items-center gap-2 text-black font-medium hover:gap-4 transition-all duration-300 cursor-pointer">
+                        Solicitar orçamento
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          strokeWidth="2"
+                          stroke="currentColor"
+                          className="w-5 h-5"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
+                          />
+                        </svg>
+                      </button>
+                    </ContactFormDialog>
                   </div>
                 </div>
               </RevealOnScroll>
