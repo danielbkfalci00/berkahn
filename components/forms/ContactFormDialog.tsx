@@ -66,10 +66,36 @@ export function ContactFormDialog({ children }: ContactFormDialogProps) {
     setStatus("loading");
     setErrors({});
 
-    // Mock API call - 2 second delay
-    setTimeout(() => {
-      setStatus("success");
-    }, 2000);
+    try {
+      const response = await fetch(
+        'https://script.google.com/macros/s/AKfycbx7CBwOaj7Vn1HtXlAy-OLINEmxuVXgSYMIsUmqzYp6JJbjv_lENeTI56IP3Z8sVwuJ/exec',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'text/plain',
+          },
+          body: JSON.stringify({
+            name: formData.name,
+            email: formData.email,
+            phone: formData.phone,
+            message: formData.message,
+          }),
+        }
+      );
+
+      const result = await response.json();
+
+      if (result.success) {
+        setStatus("success");
+      } else {
+        setStatus("error");
+        setErrors({ submit: result.message || "Erro ao enviar mensagem" });
+      }
+    } catch (error) {
+      console.error("Erro ao enviar formulário:", error);
+      setStatus("error");
+      setErrors({ submit: "Erro de conexão. Tente novamente." });
+    }
   };
 
   const resetForm = () => {
@@ -289,6 +315,20 @@ export function ContactFormDialog({ children }: ContactFormDialogProps) {
                     )}
                   </Button>
                 </div>
+
+                {/* Error Message */}
+                <AnimatePresence>
+                  {status === "error" && errors.submit && (
+                    <motion.p
+                      initial={{ opacity: 0, y: -5 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -5 }}
+                      className="text-xs text-red-600 text-center"
+                    >
+                      {errors.submit}
+                    </motion.p>
+                  )}
+                </AnimatePresence>
 
                 {/* Privacy Note */}
                 <p className="text-[10px] text-black-30 text-center mt-4">

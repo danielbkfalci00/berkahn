@@ -68,17 +68,14 @@ export function ExecutionPhases() {
 
           {/* Tabs Content */}
           {EXECUTION_PHASES.map((phase) => (
-            <TabsContent key={phase.id} value={phase.id} className="focus-visible:outline-none mt-0">
+            <TabsContent key={phase.id} value={phase.id} className="focus-visible:outline-none mt-8 md:mt-10 lg:mt-12">
               <div className="grid grid-cols-1 md:grid-cols-[1fr_1fr] lg:grid-cols-[1.4fr_1fr] gap-6 md:gap-8 lg:gap-12 items-start">
 
                 {/* LEFT: Text Content */}
                 <div className="space-y-6 lg:space-y-8 order-2 md:order-1">
 
-                  {/* Header - Sem badge duplicado */}
+                  {/* Header */}
                   <div>
-                    <p className="text-[10px] md:text-xs uppercase tracking-widest text-black-50 mb-2">
-                      Etapa {phase.number}
-                    </p>
                     <h3 className="text-xl md:text-2xl lg:text-3xl font-heading font-bold tracking-tight mb-3">
                       {phase.title}
                     </h3>
@@ -134,7 +131,7 @@ export function ExecutionPhases() {
                 </div>
 
                 {/* RIGHT: Image Carousel */}
-                <div className="w-full order-1 md:order-2 md:sticky md:top-24">
+                <div className="w-full order-1 md:order-2 mb-8 md:mb-0 md:sticky md:top-24">
                   <Carousel className="w-full" opts={{ loop: true }}>
                     <CarouselContent>
                       {[
