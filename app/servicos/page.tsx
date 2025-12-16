@@ -6,7 +6,7 @@ import { HeroPage } from "@/components/sections/HeroPage";
 import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
 import { CTA } from "@/components/sections/CTA";
 import { ProjectsGrid } from "@/components/sections/ProjectsGrid";
-import { Home, Building2, Factory, Wrench, CheckIcon } from "lucide-react";
+import { Home, Building2, Factory, CheckIcon } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Serviços | Berkahn Steel Frame",
@@ -17,7 +17,6 @@ export const metadata: Metadata = {
     "construção residencial",
     "construção comercial",
     "construção industrial",
-    "reformas steel frame",
     "light steel frame",
   ],
 };
@@ -65,20 +64,6 @@ const services = [
     image:
       "https://images.unsplash.com/photo-1565793298595-6a879b1d9492?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
     icon: Factory,
-  },
-  {
-    id: "reformas",
-    title: "Reformas",
-    description:
-      "Ampliações e reformas em steel frame com mínimo impacto e máxima eficiência. Transforme espaços existentes com rapidez e qualidade superior.",
-    items: [
-      "Ampliações residenciais",
-      "Retrofit de edificações",
-      "Coberturas e mezaninos",
-    ],
-    image:
-      "https://images.unsplash.com/photo-1581858726788-75bc0f6a952d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
-    icon: Wrench,
   },
 ];
 

@@ -69,7 +69,7 @@ export function Header() {
         </Link>
 
         {/* RIGHT: CTA - Hidden on mobile, visible on desktop */}
-        <div className="hidden md:flex">
+        <div className="hidden md:flex justify-self-end">
           <ContactFormDialog>
             <Button
               variant="default"

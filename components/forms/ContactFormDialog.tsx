@@ -81,7 +81,7 @@ export function ContactFormDialog({ children }: ContactFormDialogProps) {
   return (
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className="w-[calc(100%-2rem)] max-w-[calc(100%-2rem)] sm:max-w-[480px] p-0 overflow-hidden rounded-none sm:rounded-lg bg-white">
+      <DialogContent className="w-[calc(100%-2rem)] sm:max-w-[360px] p-0 overflow-hidden rounded-none sm:rounded-lg bg-white">
         <AnimatePresence mode="wait">
           {status === "success" ? (
             <motion.div
