@@ -88,16 +88,16 @@ export const blogPosts: BlogPost[] = [
   {
     id: "7",
     slug: "certificacoes-steel-frame",
-    title: "Certificações e Normas Técnicas em Steel Frame",
+    title: "Certificações e normas técnicas em Steel Frame: o guia definitivo para construir com segurança no Brasil",
     excerpt:
-      "Conheça as principais certificações e normas técnicas que garantem qualidade e segurança em construções em steel frame no Brasil.",
+      "Guia completo de normas, certificações PBQP-H, LEED, AQUA-HQE e financiamento Caixa para Steel Frame. NBR 16970, requisitos técnicos e valorização imobiliária.",
     image:
-      "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
     category: "Segurança",
-    author: "Berkahn",
-    date: "2024-10-15",
-    readTime: "6 min",
-    tags: ["certificações", "normas", "qualidade"],
+    author: "Equipe Técnica Berkahn",
+    date: "2025-01-18",
+    readTime: "18 min",
+    tags: ["certificações", "normas", "NBR 16970", "PBQP-H", "LEED", "financiamento"],
   },
   {
     id: "8",

@@ -4,6 +4,7 @@ import { cincoVantagensSteelFrameArticle } from "./5-vantagens-steel-frame";
 import { guiaDefinitivoSteelFrameArticle } from "./guia-definitivo-steel-frame";
 import { financiamentoSteelFrameArticle } from "./financiamento-steel-frame";
 import { steelFrameProcessoArticle } from "./steel-frame-processo";
+import { sustentabilidadeSteelFrameArticle } from "./sustentabilidade-steel-frame";
 
 export const steelFrameFuturoArticle: RichArticle = {
   slug: "steel-frame-futuro-construcao",
@@ -282,6 +283,9 @@ export const getArticleBySlug = (slug: string): RichArticle | undefined => {
   if (slug === "guia-definitivo-steel-frame-brasil") {
     return guiaDefinitivoSteelFrameArticle;
   }
+  if (slug === "sustentabilidade-construcao-industrializada") {
+    return sustentabilidadeSteelFrameArticle;
+  }
   return undefined;
 };
 
@@ -293,4 +297,5 @@ export const richArticles: RichArticle[] = [
   steelFrameVsAlvenariaArticle,
   financiamentoSteelFrameArticle,
   guiaDefinitivoSteelFrameArticle,
+  sustentabilidadeSteelFrameArticle,
 ];

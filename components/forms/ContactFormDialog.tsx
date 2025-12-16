@@ -81,7 +81,7 @@ export function ContactFormDialog({ children }: ContactFormDialogProps) {
   return (
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className="sm:max-w-[520px] p-0 overflow-hidden">
+      <DialogContent className="w-[calc(100%-2rem)] sm:max-w-[400px] p-0 overflow-hidden rounded-none sm:rounded-lg">
         <AnimatePresence mode="wait">
           {status === "success" ? (
             <motion.div
@@ -90,7 +90,7 @@ export function ContactFormDialog({ children }: ContactFormDialogProps) {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.4, ease: [0.19, 1, 0.22, 1] }}
-              className="p-12 text-center"
+              className="p-6 sm:p-8 text-center"
             >
               {/* Success Icon */}
               <motion.div
@@ -101,9 +101,9 @@ export function ContactFormDialog({ children }: ContactFormDialogProps) {
                   duration: 0.5,
                   ease: [0.34, 1.56, 0.64, 1],
                 }}
-                className="w-20 h-20 mx-auto mb-8 rounded-full bg-black flex items-center justify-center"
+                className="w-12 h-12 mx-auto mb-4 rounded-full bg-black flex items-center justify-center"
               >
-                <Check className="w-10 h-10 text-white" strokeWidth={2.5} />
+                <Check className="w-5 h-5 text-white" strokeWidth={2} />
               </motion.div>
 
               {/* Success Message */}
@@ -112,21 +112,18 @@ export function ContactFormDialog({ children }: ContactFormDialogProps) {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3, duration: 0.5 }}
               >
-                <h3 className="text-2xl font-heading font-bold mb-3 tracking-tight">
+                <h3 className="text-lg font-heading font-semibold mb-2 tracking-tight">
                   Mensagem Enviada!
                 </h3>
-                <p className="text-base text-black-70 mb-8 max-w-sm mx-auto leading-relaxed">
+                <p className="text-sm text-black-50 mb-6 leading-relaxed">
                   Obrigado pelo contato. Nossa equipe retornará em breve.
                 </p>
-
-                {/* Divider */}
-                <div className="w-16 h-px bg-black-10 mx-auto mb-8" />
 
                 {/* Action Button */}
                 <Button
                   onClick={resetForm}
                   variant="outline"
-                  className="uppercase tracking-wider text-xs font-medium"
+                  className="text-xs uppercase tracking-wider font-medium h-9"
                 >
                   Enviar Nova Mensagem
                 </Button>
@@ -139,39 +136,27 @@ export function ContactFormDialog({ children }: ContactFormDialogProps) {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3 }}
-              className="p-8"
+              className="p-5 sm:p-6"
             >
               {/* Header */}
-              <DialogHeader className="mb-8">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-full bg-black-5 flex items-center justify-center">
-                    <Mail className="w-5 h-5 text-black" strokeWidth={2} />
-                  </div>
-                  <div className="w-px h-8 bg-black-10" />
-                  <DialogTitle className="text-2xl font-heading font-bold tracking-tight">
-                    Fale Conosco
-                  </DialogTitle>
-                </div>
-                <DialogDescription className="text-sm text-black-70 leading-relaxed">
-                  Preencha o formulário abaixo. Retornaremos seu contato em até 24 horas.
+              <DialogHeader className="mb-5">
+                <DialogTitle className="text-lg font-heading font-semibold tracking-tight">
+                  Fale Conosco
+                </DialogTitle>
+                <DialogDescription className="text-xs text-black-50 mt-1">
+                  Retornaremos em até 24 horas.
                 </DialogDescription>
               </DialogHeader>
 
               {/* Form */}
-              <form onSubmit={handleSubmit} className="space-y-6">
+              <form onSubmit={handleSubmit} className="space-y-4">
                 {/* Name Field */}
-                <motion.div
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.1, duration: 0.4 }}
-                  className="space-y-2"
-                >
+                <div className="space-y-1.5">
                   <Label
                     htmlFor="name"
-                    className="text-xs uppercase tracking-wider text-black-70 font-medium flex items-center gap-2"
+                    className="text-xs text-black-50 font-medium"
                   >
-                    <User className="w-3.5 h-3.5" strokeWidth={2} />
-                    Nome Completo
+                    Nome
                   </Label>
                   <Input
                     id="name"
@@ -182,7 +167,7 @@ export function ContactFormDialog({ children }: ContactFormDialogProps) {
                     placeholder="Seu nome"
                     required
                     disabled={status === "loading"}
-                    className="h-12 text-base bg-white border border-black-20 placeholder:text-black-40 focus:border-black-50 focus:ring-1 focus:ring-black-10 transition-all duration-300"
+                    className="h-10 text-sm bg-white border border-black-10 placeholder:text-black-30 focus:border-black-30 focus:ring-0 transition-colors"
                   />
                   <AnimatePresence>
                     {errors.name && (
@@ -196,20 +181,14 @@ export function ContactFormDialog({ children }: ContactFormDialogProps) {
                       </motion.p>
                     )}
                   </AnimatePresence>
-                </motion.div>
+                </div>
 
                 {/* Email Field */}
-                <motion.div
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.15, duration: 0.4 }}
-                  className="space-y-2"
-                >
+                <div className="space-y-1.5">
                   <Label
                     htmlFor="email"
-                    className="text-xs uppercase tracking-wider text-black-70 font-medium flex items-center gap-2"
+                    className="text-xs text-black-50 font-medium"
                   >
-                    <Mail className="w-3.5 h-3.5" strokeWidth={2} />
                     Email
                   </Label>
                   <Input
@@ -222,7 +201,7 @@ export function ContactFormDialog({ children }: ContactFormDialogProps) {
                     placeholder="seu@email.com"
                     required
                     disabled={status === "loading"}
-                    className="h-12 text-base bg-white border border-black-20 placeholder:text-black-40 focus:border-black-50 focus:ring-1 focus:ring-black-10 transition-all duration-300"
+                    className="h-10 text-sm bg-white border border-black-10 placeholder:text-black-30 focus:border-black-30 focus:ring-0 transition-colors"
                   />
                   <AnimatePresence>
                     {errors.email && (
@@ -236,24 +215,15 @@ export function ContactFormDialog({ children }: ContactFormDialogProps) {
                       </motion.p>
                     )}
                   </AnimatePresence>
-                </motion.div>
+                </div>
 
                 {/* Phone Field (Optional) */}
-                <motion.div
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.2, duration: 0.4 }}
-                  className="space-y-2"
-                >
+                <div className="space-y-1.5">
                   <Label
                     htmlFor="phone"
-                    className="text-xs uppercase tracking-wider text-black-70 font-medium flex items-center gap-2"
+                    className="text-xs text-black-50 font-medium"
                   >
-                    <Phone className="w-3.5 h-3.5" strokeWidth={2} />
-                    Telefone
-                    <span className="text-[10px] text-black-50 normal-case tracking-normal">
-                      (Opcional)
-                    </span>
+                    Telefone <span className="text-[10px] text-black-30">(Opcional)</span>
                   </Label>
                   <Input
                     id="phone"
@@ -264,22 +234,16 @@ export function ContactFormDialog({ children }: ContactFormDialogProps) {
                     }
                     placeholder="(00) 00000-0000"
                     disabled={status === "loading"}
-                    className="h-12 text-base bg-white border border-black-20 placeholder:text-black-40 focus:border-black-50 focus:ring-1 focus:ring-black-10 transition-all duration-300"
+                    className="h-10 text-sm bg-white border border-black-10 placeholder:text-black-30 focus:border-black-30 focus:ring-0 transition-colors"
                   />
-                </motion.div>
+                </div>
 
                 {/* Message Field */}
-                <motion.div
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.25, duration: 0.4 }}
-                  className="space-y-2"
-                >
+                <div className="space-y-1.5">
                   <Label
                     htmlFor="message"
-                    className="text-xs uppercase tracking-wider text-black-70 font-medium flex items-center gap-2"
+                    className="text-xs text-black-50 font-medium"
                   >
-                    <MessageSquare className="w-3.5 h-3.5" strokeWidth={2} />
                     Mensagem
                   </Label>
                   <Textarea
@@ -289,10 +253,10 @@ export function ContactFormDialog({ children }: ContactFormDialogProps) {
                       setFormData({ ...formData, message: e.target.value })
                     }
                     placeholder="Conte-nos sobre seu projeto..."
-                    rows={4}
+                    rows={3}
                     required
                     disabled={status === "loading"}
-                    className="text-base bg-white border border-black-20 placeholder:text-black-40 focus:border-black-50 focus:ring-1 focus:ring-black-10 transition-all duration-300 resize-none"
+                    className="text-sm bg-white border border-black-10 placeholder:text-black-30 focus:border-black-30 focus:ring-0 transition-colors resize-none min-h-[80px]"
                   />
                   <AnimatePresence>
                     {errors.message && (
@@ -306,20 +270,13 @@ export function ContactFormDialog({ children }: ContactFormDialogProps) {
                       </motion.p>
                     )}
                   </AnimatePresence>
-                </motion.div>
-
-                {/* Divider */}
-                <div className="w-full h-px bg-black-10" />
+                </div>
 
                 {/* Submit Button */}
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.3, duration: 0.4 }}
-                >
+                <div>
                   <Button
                     type="submit"
-                    className="w-full h-14 bg-black text-white hover:bg-black-90 transition-colors text-sm uppercase tracking-wider font-medium"
+                    className="w-full h-10 bg-black text-white hover:bg-black-90 transition-colors text-xs uppercase tracking-wider font-medium"
                     disabled={status === "loading"}
                   >
                     {status === "loading" ? (
@@ -331,17 +288,12 @@ export function ContactFormDialog({ children }: ContactFormDialogProps) {
                       "Enviar Mensagem"
                     )}
                   </Button>
-                </motion.div>
+                </div>
 
                 {/* Privacy Note */}
-                <motion.p
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.4, duration: 0.4 }}
-                  className="text-xs text-black-50 text-center leading-relaxed"
-                >
-                  Seus dados estão protegidos e serão utilizados apenas para responder seu contato.
-                </motion.p>
+                <p className="text-[10px] text-black-30 text-center mt-4">
+                  Seus dados estão protegidos.
+                </p>
               </form>
             </motion.div>
           )}

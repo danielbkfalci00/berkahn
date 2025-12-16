@@ -1,4 +1,5 @@
 import { RichArticle } from "@/types/article";
+import { certificacoesArticle } from "./certificacoes-steel-frame";
 
 export const steelFrameVsAlvenariaArticle: RichArticle = {
   slug: "steel-frame-vs-alvenaria",
@@ -351,7 +352,10 @@ export const steelFrameVsAlvenariaArticle: RichArticle = {
 };
 
 // Export array for getArticleBySlug
-export const richArticles: RichArticle[] = [steelFrameVsAlvenariaArticle];
+export const richArticles: RichArticle[] = [
+  steelFrameVsAlvenariaArticle,
+  certificacoesArticle
+];
 
 export const getArticleBySlug = (slug: string): RichArticle | undefined => {
   return richArticles.find(article => article.slug === slug);

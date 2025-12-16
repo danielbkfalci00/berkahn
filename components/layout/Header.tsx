@@ -69,7 +69,7 @@ export function Header() {
 
         {/* RIGHT: CTA */}
         <ContactFormDialog>
-          <button className="justify-self-end px-6 py-2 bg-black text-white text-sm uppercase tracking-wider hover:bg-black-90 transition-colors duration-300">
+          <button className="justify-self-end px-5 py-2 bg-white text-black border border-black-10 text-xs uppercase tracking-wider hover:bg-black-5 transition-colors duration-300">
             Fale Conosco
           </button>
         </ContactFormDialog>
