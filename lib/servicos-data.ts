@@ -3,6 +3,9 @@ export interface ExecutionPhase {
   number: number;
   title: string;
   description: string;
+  summary?: string; // Resumo curto (1-2 linhas)
+  keyPoints?: string[]; // Principais atividades (3-5 bullets)
+  deliverables?: string[]; // Entregáveis da fase (2-4 items)
   duration: string;
   images: {
     primary: string;
@@ -18,6 +21,19 @@ export const EXECUTION_PHASES: ExecutionPhase[] = [
     number: 1,
     title: 'Pré Obra',
     description: 'A etapa de pré-obra é onde o empreendimento é estruturado técnica e financeiramente. Nessa fase, realizamos o entendimento das necessidades do cliente, a análise crítica dos projetos, a definição do escopo, o orçamento detalhado e o planejamento da obra. O objetivo é eliminar incertezas, reduzir riscos e garantir previsibilidade de custo, prazo e qualidade antes do início da execução.',
+    summary: 'Estruturação técnica e financeira do empreendimento antes do início da construção.',
+    keyPoints: [
+      'Análise crítica de projetos arquitetônicos e complementares',
+      'Orçamento detalhado com especificações técnicas e quantitativos',
+      'Planejamento de cronograma executivo e definição de marcos',
+      'Estudo de viabilidade técnica e aprovações necessárias',
+      'Compatibilização de projetos e identificação de interferências'
+    ],
+    deliverables: [
+      'Cronograma executivo detalhado da obra',
+      'Orçamento consolidado e memorial descritivo',
+      'Plano de gestão de qualidade e segurança'
+    ],
     duration: '2-3 semanas',
     images: {
       primary: 'https://images.unsplash.com/photo-1503594384566-461fe158e797?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
@@ -31,6 +47,19 @@ export const EXECUTION_PHASES: ExecutionPhase[] = [
     number: 2,
     title: 'Terraplanagem, Fundação e Superestrutura',
     description: 'Nesta fase, iniciamos a implantação física da obra, com a organização do canteiro, os serviços de terraplanagem e a execução das fundações e da superestrutura. Todo o trabalho é conduzido com rigor técnico, controle de qualidade e acompanhamento constante, garantindo a estabilidade, a segurança e a durabilidade da edificação.',
+    summary: 'Implantação física do empreendimento com preparação do terreno, fundações e estrutura principal.',
+    keyPoints: [
+      'Implantação e organização do canteiro de obras',
+      'Serviços de terraplanagem, corte e aterro controlado',
+      'Execução de fundações profundas ou rasas conforme projeto',
+      'Montagem da superestrutura em steel frame ou concreto',
+      'Controle topográfico e ensaios de qualidade'
+    ],
+    deliverables: [
+      'Estrutura principal completa e nivelada',
+      'Relatórios de ensaios de fundação e concreto',
+      'Verificação de prumo, nível e esquadro'
+    ],
     duration: '4-6 semanas',
     images: {
       primary: 'https://images.unsplash.com/photo-1486325212027-8081e485255e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
@@ -44,6 +73,19 @@ export const EXECUTION_PHASES: ExecutionPhase[] = [
     number: 3,
     title: 'Estrutura, Vedação e Instalações',
     description: 'Com a estrutura concluída, avançamos para a execução das vedações, fachadas, coberturas e sistemas prediais. Nessa etapa, realizamos as instalações elétricas, hidráulicas, sanitárias, de gás e climatização, sempre com atenção à compatibilização dos projetos e à qualidade da execução, assegurando desempenho, conforto e eficiência ao empreendimento.',
+    summary: 'Fechamento da edificação com vedações, cobertura e execução completa de sistemas prediais.',
+    keyPoints: [
+      'Montagem de paredes de vedação em steel frame ou alvenaria',
+      'Execução de fachadas, esquadrias e sistemas de cobertura',
+      'Instalações elétricas: quadros, distribuição e automação',
+      'Instalações hidrossanitárias e sistemas de drenagem',
+      'Climatização, gás, SPDA e demais sistemas complementares'
+    ],
+    deliverables: [
+      'Edificação completamente fechada e protegida',
+      'Sistemas elétricos e hidráulicos testados',
+      'As-built de instalações prediais'
+    ],
     duration: '6-8 semanas',
     images: {
       primary: 'https://images.unsplash.com/photo-1450101499163-c8848c66ca85?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
@@ -57,6 +99,19 @@ export const EXECUTION_PHASES: ExecutionPhase[] = [
     number: 4,
     title: 'Acabamentos',
     description: 'A fase de acabamentos é onde a obra ganha vida e personalidade. Realizamos os revestimentos internos e externos, pinturas, instalação de louças, metais, esquadrias e demais elementos de finalização. Cada detalhe é executado com precisão e cuidado, garantindo um resultado final impecável, que atende às expectativas de qualidade, estética e funcionalidade do cliente.',
+    summary: 'Finalização da obra com revestimentos, pinturas e instalação de todos os elementos de acabamento.',
+    keyPoints: [
+      'Revestimentos cerâmicos, porcelanatos e pedras naturais',
+      'Pinturas internas e externas com especificações técnicas',
+      'Instalação de louças sanitárias, metais e acessórios',
+      'Colocação de pisos laminados, vinílicos e carpetes',
+      'Limpeza final, ajustes e entrega técnica'
+    ],
+    deliverables: [
+      'Obra 100% finalizada e pronta para uso',
+      'Manual do proprietário e documentação técnica',
+      'Termo de entrega e garantias'
+    ],
     duration: '3-4 semanas',
     images: {
       primary: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
