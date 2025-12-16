@@ -26,7 +26,7 @@ export function ExecutionPhases() {
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-extrabold tracking-tighter text-center mb-3">
             EXECUÇÃO DE OBRAS
           </h2>
-          <p className="text-xs md:text-sm text-center text-black-50 max-w-2xl mx-auto uppercase tracking-wider leading-relaxed mb-8 md:mb-12 lg:mb-16">
+          <p className="text-xs md:text-sm text-center text-black-50 max-w-2xl mx-auto uppercase tracking-wider leading-relaxed mb-6 md:mb-8 lg:mb-10">
             Da concepção à entrega, com foco em qualidade, prazo e excelência técnica
           </p>
         </RevealOnScroll>
@@ -34,7 +34,7 @@ export function ExecutionPhases() {
         {/* Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           {/* Tabs List - 4 colunas desde md */}
-          <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 gap-1.5 md:gap-2 lg:gap-3 bg-transparent mb-6 md:mb-10 lg:mb-12">
+          <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 gap-1.5 md:gap-2 lg:gap-3 bg-transparent mb-6 md:mb-8 lg:mb-10">
             {EXECUTION_PHASES.map((phase) => (
               <TabsTrigger
                 key={phase.id}
@@ -68,7 +68,7 @@ export function ExecutionPhases() {
 
           {/* Tabs Content */}
           {EXECUTION_PHASES.map((phase) => (
-            <TabsContent key={phase.id} value={phase.id} className="focus-visible:outline-none mt-8 md:mt-10 lg:mt-12">
+            <TabsContent key={phase.id} value={phase.id} className="focus-visible:outline-none">
               <div className="grid grid-cols-1 md:grid-cols-[1fr_1fr] lg:grid-cols-[1.4fr_1fr] gap-6 md:gap-8 lg:gap-12 items-start">
 
                 {/* LEFT: Text Content */}
