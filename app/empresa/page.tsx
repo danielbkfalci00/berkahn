@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { Stats } from "@/components/sections/Stats";
 import { BerkahnTimeline } from "@/components/timeline/BerkahnTimeline";
+import { Founders } from "@/components/sections/Founders";
 import { CTA } from "@/components/sections/CTA";
 
 export const metadata = {
@@ -84,8 +85,11 @@ export default function EmpresaPage() {
         </div>
       </section>
 
-      {/* Timeline */}
-      <BerkahnTimeline />
+      {/* Timeline - COMENTADO */}
+      {/* <BerkahnTimeline /> */}
+
+      {/* Founders - NOVO */}
+      <Founders />
 
       {/* Values */}
       <section className="py-xl bg-black-5">
