@@ -38,8 +38,8 @@ export const EXECUTION_PHASES: ExecutionPhase[] = [
     ],
     duration: '2-3 semanas',
     images: {
-      primary: '/images/Services/Execução-de-obras/Pre-obra/pre-obra-1.jpg',
-      secondary: '/images/Services/Execução-de-obras/Pre-obra/pre-obra-2.jpg',
+      primary: '/images/Services/Execução-de-obras/Pre-obra/pre-obra-1.webp',
+      secondary: '/images/Services/Execução-de-obras/Pre-obra/pre-obra-2.webp',
       primaryAlt: 'Planejamento e análise de projetos de construção',
       secondaryAlt: 'Reunião de equipe para orçamento e definição de escopo'
     }
@@ -65,8 +65,8 @@ export const EXECUTION_PHASES: ExecutionPhase[] = [
     ],
     duration: '4-6 semanas',
     images: {
-      primary: '/images/Services/Execução-de-obras/Terraplanagem/terraplanagem_1.JPG',
-      secondary: '/images/Services/Execução-de-obras/Terraplanagem/terraplanagem_2.png',
+      primary: '/images/Services/Execução-de-obras/Terraplanagem/terraplanagem_1.webp',
+      secondary: '/images/Services/Execução-de-obras/Terraplanagem/terraplanagem_2.webp',
       primaryAlt: 'Terraplanagem e preparação do terreno para construção',
       secondaryAlt: 'Execução de fundações e estrutura de concreto'
     }
@@ -92,7 +92,7 @@ export const EXECUTION_PHASES: ExecutionPhase[] = [
     ],
     duration: '6-8 semanas',
     images: {
-      primary: '/images/Services/Execução-de-obras/Estrutura/estrutura-1.jpg',
+      primary: '/images/Services/Execução-de-obras/Estrutura/estrutura-1.webp',
       secondary: '/images/Services/Execução-de-obras/Estrutura/estrutura-2.webp',
       primaryAlt: 'Montagem de estrutura em steel frame e vedações',
       secondaryAlt: 'Instalação de sistemas prediais elétricos e hidráulicos'
@@ -119,8 +119,8 @@ export const EXECUTION_PHASES: ExecutionPhase[] = [
     ],
     duration: '3-4 semanas',
     images: {
-      primary: '/images/Services/Execução-de-obras/Acabamentos/acabamentos_1.jpg',
-      secondary: '/images/Services/Execução-de-obras/Acabamentos/acabamentos_2.jpg',
+      primary: '/images/Services/Execução-de-obras/Acabamentos/acabamentos_1.webp',
+      secondary: '/images/Services/Execução-de-obras/Acabamentos/acabamentos_2.webp',
       primaryAlt: 'Aplicação de revestimentos e acabamentos finais',
       secondaryAlt: 'Obra finalizada com detalhes de acabamento'
     }

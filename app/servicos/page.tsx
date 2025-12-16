@@ -37,7 +37,7 @@ const services = [
       "Lojas e showrooms",
       "Centros médicos e clínicas",
     ],
-    image: "/images/Services/comercial.jpeg",
+    image: "/images/Services/comercial.webp",
     icon: Building2,
   },
   {
@@ -50,7 +50,7 @@ const services = [
       "Centros de distribuição",
       "Estruturas modulares",
     ],
-    image: "/images/Services/industrial.jpg",
+    image: "/images/Services/industrial.webp",
     icon: Factory,
   },
 ];
