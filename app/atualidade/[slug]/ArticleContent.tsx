@@ -25,6 +25,10 @@ import { ChartSection } from "@/components/article/ChartSection";
 import { ComparisonTabs } from "@/components/article/ComparisonTabs";
 import { DecisionGuideSection } from "@/components/article/DecisionGuideSection";
 import { FinancingCalculator } from "@/components/article/FinancingCalculator";
+import { MythBuster } from "@/components/article/MythBuster";
+import { MarketGrowthChart } from "@/components/article/MarketGrowthChart";
+import { ViabilityMatrix } from "@/components/article/ViabilityMatrix";
+import { CaseStudyCard } from "@/components/article/CaseStudyCard";
 import {
   Accordion,
   AccordionContent,
@@ -195,6 +199,82 @@ export function ArticleContent({ article }: ArticleContentProps) {
                         </p>
                         <StatsGrid stats={article.stats} />
                       </RevealOnScroll>
+                    </div>
+                  )}
+
+                  {/* Insert Market Growth Charts after contexto-mercado */}
+                  {section.id === "contexto-mercado" && article.charts && (
+                    <div className="mt-12">
+                      <MarketGrowthChart
+                        charts={article.charts.filter(c =>
+                          c.id.includes('adoption') || c.id.includes('3d-printing') || c.id.includes('market-growth')
+                        )}
+                      />
+                    </div>
+                  )}
+
+                  {/* Insert Tables after analise-financeira */}
+                  {section.id === "analise-financeira" && article.tables && (
+                    <div className="mt-12 space-y-8">
+                      <p className="label-text text-black-50 mb-6">
+                        Análise de Custos
+                      </p>
+                      {article.tables.map((table) => (
+                        <RevealOnScroll key={table.id}>
+                          <DataTable table={table} />
+                        </RevealOnScroll>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Insert Tab Comparisons and Viability Matrix after analise-financeira */}
+                  {section.id === "analise-financeira" && article.tabComparisons && (
+                    <div className="mt-12">
+                      <p className="label-text text-black-50 mb-6">
+                        Avaliador de Viabilidade
+                      </p>
+                      <ViabilityMatrix scenarios={article.tabComparisons} />
+                    </div>
+                  )}
+
+                  {/* Insert Tech Adoption Charts after tendencias-tecnologicas */}
+                  {section.id === "tendencias-tecnologicas" && article.charts && (
+                    <div className="mt-12 space-y-8">
+                      <RevealOnScroll>
+                        {article.charts
+                          .filter(c => c.id.includes('tech-adoption') || c.id.includes('3d-printing'))
+                          .map(chart => (
+                            <ChartSection key={chart.id} chart={chart} />
+                          ))}
+                      </RevealOnScroll>
+                    </div>
+                  )}
+
+                  {/* Insert Case Study Cards after casos-estudo */}
+                  {section.id === "casos-estudo" && article.gallery && (
+                    <div className="mt-12">
+                      <p className="label-text text-black-50 mb-8">
+                        Galeria de Projetos
+                      </p>
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {article.gallery.images.map((img, idx) => (
+                          <CaseStudyCard
+                            key={idx}
+                            title={img.caption || img.alt}
+                            image={img.url}
+                            alt={img.alt}
+                            description={img.alt}
+                            delay={idx * 0.1}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Insert MythBuster after mitos-realidade */}
+                  {section.id === "mitos-realidade" && article.myths && (
+                    <div className="mt-12">
+                      <MythBuster myths={article.myths} variant="accordion" />
                     </div>
                   )}
 
