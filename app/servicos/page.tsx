@@ -285,10 +285,72 @@ export default function ServicosPage() {
         </div>
       </section>
 
-      {/* 6. Projetos Prontos */}
+      {/* 6. Por Que Escolher a Berkahn */}
+      <section id="diferencial" className="py-24 bg-white">
+        <div className="container mx-auto px-6 max-w-7xl">
+          <RevealOnScroll>
+            <p className="label-text text-black-50 text-center mb-4">
+              DIFERENCIAL BERKAHN
+            </p>
+            <h2 className="headline-lg text-center mb-16">
+              Por Que Escolher a Berkahn
+            </h2>
+          </RevealOnScroll>
+
+          {/* Stats Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+            {[
+              { value: "150+", label: "Projetos Concluídos" },
+              { value: "95%", label: "Satisfação dos Clientes" },
+              { value: "70%", label: "Redução no Tempo de Obra" },
+            ].map((stat, i) => (
+              <RevealOnScroll key={i} delay={i * 0.1}>
+                <div className="text-center">
+                  <p className="text-5xl font-heading font-bold mb-2">{stat.value}</p>
+                  <p className="text-black-70">{stat.label}</p>
+                </div>
+              </RevealOnScroll>
+            ))}
+          </div>
+
+          {/* Diferenciais */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {[
+              {
+                title: "Certificações Técnicas",
+                desc: "Seguimos rigorosamente as normas NBR 16970 e NBR 15575",
+              },
+              {
+                title: "Equipe Especializada",
+                desc: "Profissionais capacitados e com experiência em Steel Frame",
+              },
+              {
+                title: "Prazos Garantidos",
+                desc: "Cronograma definido e cumprido com rigor e transparência",
+              },
+              {
+                title: "Suporte Completo",
+                desc: "Acompanhamento em todas as etapas, do projeto à entrega",
+              },
+            ].map((item, i) => (
+              <RevealOnScroll key={i} delay={i * 0.1}>
+                <div className="flex items-start gap-4">
+                  <CheckIcon className="w-6 h-6 text-black mt-1 flex-shrink-0" />
+                  <div>
+                    <h3 className="text-xl font-heading font-bold mb-2">{item.title}</h3>
+                    <p className="text-black-70">{item.desc}</p>
+                  </div>
+                </div>
+              </RevealOnScroll>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 7. Projetos Prontos */}
       <ProjectsGrid id="projetos" />
 
-      {/* 7. CTA */}
+      {/* 8. CTA */}
       <CTA />
     </main>
   );

@@ -8,7 +8,6 @@ import { useMenu } from "@/components/providers/MenuProvider";
 import { NAV_LINKS, NavLinkItem, NavLinkChild } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import { ContactFormDialog } from "@/components/forms/ContactFormDialog";
-import { ChevronDown } from "lucide-react";
 import {
   Accordion,
   AccordionContent,
@@ -86,9 +85,7 @@ function NavItemWithChildren({ link, isActive, close, pathname }: NavItemWithChi
         </Link>
 
         {/* Chevron - expande/colapsa accordion */}
-        <AccordionTrigger className="py-3 px-4 hover:bg-black-5 transition-colors duration-300 [&[data-state=open]>svg]:rotate-180">
-          <ChevronDown className="h-5 w-5 text-black-50 transition-transform duration-300" />
-        </AccordionTrigger>
+        <AccordionTrigger className="py-3 px-4 hover:bg-black-5 transition-colors duration-300 [&[data-state=open]>svg]:rotate-180 [&>svg]:h-5 [&>svg]:w-5 [&>svg]:text-black-50" />
       </div>
 
       {/* Sub-links */}

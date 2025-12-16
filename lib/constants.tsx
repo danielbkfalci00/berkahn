@@ -21,6 +21,7 @@ export const NAV_LINKS: NavLinks = [
     href: "/servicos",
     children: [
       { label: "Execução de Obras", href: "/servicos#execucao" },
+      { label: "Por Que Nos Escolher", href: "/servicos#diferencial" },
       { label: "Projetos Prontos", href: "/servicos#projetos" },
     ],
   },
