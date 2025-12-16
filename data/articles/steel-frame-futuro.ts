@@ -5,6 +5,9 @@ import { guiaDefinitivoSteelFrameArticle } from "./guia-definitivo-steel-frame";
 import { financiamentoSteelFrameArticle } from "./financiamento-steel-frame";
 import { steelFrameProcessoArticle } from "./steel-frame-processo";
 import { sustentabilidadeSteelFrameArticle } from "./sustentabilidade-steel-frame";
+import { tendenciasModular2025 } from "./tendencias-construcao-modular-2025";
+import { certificacoesArticle } from "./certificacoes-steel-frame";
+import { isolamentoTermicoAcusticoArticle } from "./isolamento-termico-acustico-steel-frame";
 
 export const steelFrameFuturoArticle: RichArticle = {
   slug: "steel-frame-futuro-construcao",
@@ -286,6 +289,15 @@ export const getArticleBySlug = (slug: string): RichArticle | undefined => {
   if (slug === "sustentabilidade-construcao-industrializada") {
     return sustentabilidadeSteelFrameArticle;
   }
+  if (slug === "tendencias-construcao-modular-2025") {
+    return tendenciasModular2025;
+  }
+  if (slug === "certificacoes-steel-frame") {
+    return certificacoesArticle;
+  }
+  if (slug === "isolamento-termico-acustico-steel-frame") {
+    return isolamentoTermicoAcusticoArticle;
+  }
   return undefined;
 };
 
@@ -298,4 +310,7 @@ export const richArticles: RichArticle[] = [
   financiamentoSteelFrameArticle,
   guiaDefinitivoSteelFrameArticle,
   sustentabilidadeSteelFrameArticle,
+  tendenciasModular2025,
+  certificacoesArticle,
+  isolamentoTermicoAcusticoArticle,
 ];

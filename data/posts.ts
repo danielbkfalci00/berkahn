@@ -17,7 +17,7 @@ export const blogPosts: BlogPost[] = [
   },
   {
     id: "2",
-    slug: "5-vantagens-light-steel-frame",
+    slug: "5-vantagens-decisivas-light-steel-frame",
     title: "5 Vantagens Definitivas do Light Steel Frame",
     excerpt:
       "Descubra as principais vantagens da construção em steel frame: redução de custos, prazos mais curtos e máxima flexibilidade arquitetônica.",
@@ -31,7 +31,7 @@ export const blogPosts: BlogPost[] = [
   },
   {
     id: "3",
-    slug: "como-funciona-construcao-steel-frame",
+    slug: "passo-passo-construcao-steel-frame",
     title: "Passo a Passo: Como Funciona a Construção em Steel Frame",
     excerpt:
       "Conheça o processo completo da construção em Light Steel Frame, desde o projeto inicial até a entrega da obra finalizada.",
@@ -45,7 +45,7 @@ export const blogPosts: BlogPost[] = [
   },
   {
     id: "4",
-    slug: "steel-frame-vs-alvenaria-comparativo",
+    slug: "steel-frame-vs-alvenaria",
     title: "Steel Frame vs Alvenaria: O Comparativo Definitivo",
     excerpt:
       "Análise detalhada entre steel frame e alvenaria: custos, tempo de execução, durabilidade e impacto ambiental comparados.",
@@ -98,20 +98,6 @@ export const blogPosts: BlogPost[] = [
     date: "2025-01-18",
     readTime: "18 min",
     tags: ["certificações", "normas", "NBR 16970", "PBQP-H", "LEED", "financiamento"],
-  },
-  {
-    id: "8",
-    slug: "case-berkahn-residencial-moderno",
-    title: "Case: Residencial Contemporâneo em Steel Frame",
-    excerpt:
-      "Conheça o projeto de residencial contemporâneo desenvolvido pela Berkahn utilizando tecnologia de ponta em steel frame.",
-    image:
-      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
-    category: "Case",
-    author: "Berkahn",
-    date: "2024-10-05",
-    readTime: "4 min",
-    tags: ["case", "projeto", "residencial"],
   },
   {
     id: "9",
