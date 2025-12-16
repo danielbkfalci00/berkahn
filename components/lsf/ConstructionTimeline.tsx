@@ -82,7 +82,7 @@ export function ConstructionTimeline() {
                       >
                         <div className="inline-block mb-3">
                           <span className="label-text bg-black-5 px-4 py-2 rounded-full">
-                            FASE {phase.phase}
+                            {phase.phase}
                           </span>
                         </div>
 
