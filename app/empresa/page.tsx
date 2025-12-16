@@ -57,7 +57,7 @@ export default function EmpresaPage() {
           src="/images/empresa/primeira-imagem.png"
           alt="Berkahn - Construção em Steel Frame"
           fill
-          className="object-cover"
+          className="object-cover object-bottom"
           sizes="100vw"
           priority
         />
