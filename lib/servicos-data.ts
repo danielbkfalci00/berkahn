@@ -38,8 +38,8 @@ export const EXECUTION_PHASES: ExecutionPhase[] = [
     ],
     duration: '2-3 semanas',
     images: {
-      primary: 'https://images.unsplash.com/photo-1503594384566-461fe158e797?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
-      secondary: 'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
+      primary: '/images/Services/Execução-de-obras/Pre-obra/pre-obra-1.jpg',
+      secondary: '/images/Services/Execução-de-obras/Pre-obra/pre-obra-2.jpg',
       primaryAlt: 'Planejamento e análise de projetos de construção',
       secondaryAlt: 'Reunião de equipe para orçamento e definição de escopo'
     }
@@ -65,8 +65,8 @@ export const EXECUTION_PHASES: ExecutionPhase[] = [
     ],
     duration: '4-6 semanas',
     images: {
-      primary: 'https://images.unsplash.com/photo-1486325212027-8081e485255e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
-      secondary: 'https://images.unsplash.com/photo-1518005020951-eccb494ad742?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
+      primary: '/images/Services/Execução-de-obras/Terraplanagem/terraplanagem_1.JPG',
+      secondary: '/images/Services/Execução-de-obras/Terraplanagem/terraplanagem_2.png',
       primaryAlt: 'Terraplanagem e preparação do terreno para construção',
       secondaryAlt: 'Execução de fundações e estrutura de concreto'
     }
@@ -92,8 +92,8 @@ export const EXECUTION_PHASES: ExecutionPhase[] = [
     ],
     duration: '6-8 semanas',
     images: {
-      primary: 'https://images.unsplash.com/photo-1450101499163-c8848c66ca85?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
-      secondary: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
+      primary: '/images/Services/Execução-de-obras/Estrutura/estrutura-1.jpg',
+      secondary: '/images/Services/Execução-de-obras/Estrutura/estrutura-2.webp',
       primaryAlt: 'Montagem de estrutura em steel frame e vedações',
       secondaryAlt: 'Instalação de sistemas prediais elétricos e hidráulicos'
     }
@@ -119,8 +119,8 @@ export const EXECUTION_PHASES: ExecutionPhase[] = [
     ],
     duration: '3-4 semanas',
     images: {
-      primary: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
-      secondary: 'https://images.unsplash.com/photo-1464146072230-91cabc968266?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
+      primary: '/images/Services/Execução-de-obras/Acabamentos/acabamentos_1.jpg',
+      secondary: '/images/Services/Execução-de-obras/Acabamentos/acabamentos_2.jpg',
       primaryAlt: 'Aplicação de revestimentos e acabamentos finais',
       secondaryAlt: 'Obra finalizada com detalhes de acabamento'
     }

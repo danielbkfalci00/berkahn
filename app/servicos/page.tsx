@@ -37,8 +37,7 @@ const services = [
       "Lojas e showrooms",
       "Centros médicos e clínicas",
     ],
-    image:
-      "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+    image: "/images/Services/comercial.jpeg",
     icon: Building2,
   },
   {
@@ -51,8 +50,7 @@ const services = [
       "Centros de distribuição",
       "Estruturas modulares",
     ],
-    image:
-      "https://images.unsplash.com/photo-1565793298595-6a879b1d9492?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+    image: "/images/Services/industrial.jpg",
     icon: Factory,
   },
 ];
