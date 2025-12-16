@@ -1,5 +1,6 @@
 "use client";
 
+import { useRef } from "react";
 import Image from "next/image";
 import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
 import { CharReveal, TextReveal } from "@/components/animations/TextReveal";
@@ -11,6 +12,10 @@ import {
 import Autoplay from "embla-carousel-autoplay";
 
 export function Hero() {
+  const autoplayPlugin = useRef(
+    Autoplay({ delay: 5000, stopOnInteraction: false })
+  );
+
   return (
     <section className="relative h-screen min-h-[600px] flex items-start justify-start pt-32 md:pt-40 overflow-hidden">
       {/* Background Carousel */}
@@ -20,12 +25,7 @@ export function Hero() {
             loop: true,
             duration: 30,
           }}
-          plugins={[
-            Autoplay({
-              delay: 5000,
-              stopOnInteraction: false,
-            }),
-          ]}
+          plugins={[autoplayPlugin.current]}
           className="h-full w-full"
         >
           <CarouselContent className="h-full">
