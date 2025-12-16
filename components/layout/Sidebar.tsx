@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useMenu } from "@/components/providers/MenuProvider";
 import { NAV_LINKS } from "@/lib/constants";
 import { cn } from "@/lib/utils";
+import { ContactFormDialog } from "@/components/forms/ContactFormDialog";
 
 export function Sidebar() {
   const { isOpen, close } = useMenu();
@@ -81,6 +82,24 @@ export function Sidebar() {
                   })}
                 </ul>
               </nav>
+
+              {/* CTA Button - Mobile Only */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{
+                  delay: 0.1 + NAV_LINKS.length * 0.05,
+                  duration: 0.3,
+                  ease: [0.19, 1, 0.22, 1],
+                }}
+                className="mt-8 px-4"
+              >
+                <ContactFormDialog>
+                  <button className="w-full py-3 bg-black text-white text-sm uppercase tracking-wider hover:bg-black-90 transition-colors duration-300 border border-black">
+                    Fale Conosco
+                  </button>
+                </ContactFormDialog>
+              </motion.div>
 
               {/* Footer */}
               <div className="pt-8 border-t border-black-10">

@@ -67,12 +67,14 @@ export function Header() {
           )}
         </Link>
 
-        {/* RIGHT: CTA */}
-        <ContactFormDialog>
-          <button className="justify-self-end px-5 py-2 bg-white text-black border border-black-10 text-xs uppercase tracking-wider hover:bg-black-5 transition-colors duration-300">
-            Fale Conosco
-          </button>
-        </ContactFormDialog>
+        {/* RIGHT: CTA - Hidden on mobile, visible on desktop */}
+        <div className="hidden md:flex">
+          <ContactFormDialog>
+            <button className="justify-self-end px-5 py-2 bg-white text-black border border-black-10 text-xs uppercase tracking-wider hover:bg-black-5 transition-colors duration-300">
+              Fale Conosco
+            </button>
+          </ContactFormDialog>
+        </div>
       </div>
     </header>
   );
