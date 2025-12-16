@@ -6,6 +6,7 @@ import { HeroPage } from "@/components/sections/HeroPage";
 import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
 import { CTA } from "@/components/sections/CTA";
 import { ProjectsGrid } from "@/components/sections/ProjectsGrid";
+import { ExecutionPhases } from "@/components/servicos/ExecutionPhases";
 import { Home, Building2, Factory, CheckIcon } from "lucide-react";
 
 export const metadata: Metadata = {
@@ -106,68 +107,8 @@ export default function ServicosPage() {
         imageAlt="Serviços Berkahn"
       />
 
-      {/* 2. Soluções Completas - Grid de Imagens */}
-      <section className="py-xl bg-white">
-        <div className="container">
-          <RevealOnScroll>
-            <div className="text-center mb-12">
-              <h2 className="headline-md mb-6">Soluções completas para seu projeto</h2>
-              <p className="body-lg text-black-70 max-w-3xl mx-auto">
-                Atuante em todas as fases do seu projeto. Acompanhamos a jornada da
-                construção da concepção dos projetos à entrega da obra, sempre com foco
-                na qualidade, prazo, e excelência técnica.
-              </p>
-            </div>
-          </RevealOnScroll>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-            {/* Image 1: Canteiro de obras - Fundações */}
-            <RevealOnScroll delay={0}>
-              <div className="group overflow-hidden rounded-lg shadow-luxury-sm hover:shadow-luxury-md transition-all duration-500">
-                <div className="aspect-[4/3] overflow-hidden">
-                  <Image
-                    src="/images/servicos-foundations.png"
-                    alt="Canteiro de obras em Steel Frame - fase de fundações"
-                    width={600}
-                    height={450}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                  />
-                </div>
-              </div>
-            </RevealOnScroll>
-
-            {/* Image 2: Estrutura LSF em Construção */}
-            <RevealOnScroll delay={0.1}>
-              <div className="group overflow-hidden rounded-lg shadow-luxury-sm hover:shadow-luxury-md transition-all duration-500">
-                <div className="aspect-[4/3] overflow-hidden">
-                  <Image
-                    src="/images/servicos-structure.png"
-                    alt="Estrutura de Light Steel Frame em montagem"
-                    width={600}
-                    height={450}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                  />
-                </div>
-              </div>
-            </RevealOnScroll>
-
-            {/* Image 3: Casa Finalizada */}
-            <RevealOnScroll delay={0.2}>
-              <div className="group overflow-hidden rounded-lg shadow-luxury-sm hover:shadow-luxury-md transition-all duration-500">
-                <div className="aspect-[4/3] overflow-hidden">
-                  <Image
-                    src="/images/servicos-finished.png"
-                    alt="Casa moderna finalizada em Steel Frame"
-                    width={600}
-                    height={450}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                  />
-                </div>
-              </div>
-            </RevealOnScroll>
-          </div>
-        </div>
-      </section>
+      {/* 2. Execução de Obras - Tabs + Carousel */}
+      <ExecutionPhases />
 
       {/* 3. Introduction */}
       <section className="py-xl">
