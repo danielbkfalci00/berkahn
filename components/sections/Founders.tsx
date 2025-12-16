@@ -5,7 +5,7 @@ import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
 import { Card, CardContent } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, Linkedin } from "lucide-react";
 
 interface TimelineEvent {
   year: string;
@@ -20,6 +20,7 @@ interface Founder {
   role: string;
   bio: string;
   image: string;
+  linkedin?: string;
   timeline: TimelineEvent[];
 }
 
@@ -29,6 +30,7 @@ const FOUNDERS: Founder[] = [
     role: "Co-Fundador",
     bio: "Engenheiro civil com sólida experiência em planejamento, gerenciamento e execução de obras. Atuou em projetos residenciais, comerciais e logísticos, com participação direta na coordenação de empreendimentos de alto padrão em São Paulo.",
     image: "/images/founders/daniel-falci.png",
+    linkedin: "https://www.linkedin.com/in/danielbkfalci/",
     timeline: [
       {
         year: "2024",
@@ -83,6 +85,7 @@ const FOUNDERS: Founder[] = [
     role: "Co-Fundador",
     bio: "Formado em Engenharia de Produção pelo Centro Universitário FEI, mais de 7 anos de experiência em Melhoria de Processos e atualmente trabalha com Consultoria de Processos implementando o Lean Construction em obras civis.",
     image: "/images/founders/matheus-bertevello.jpg",
+    linkedin: "https://www.linkedin.com/in/matheus-bertevello/",
     timeline: [
       {
         year: "2024",
@@ -239,6 +242,20 @@ export function Founders() {
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 400px"
                     className="object-cover object-top grayscale group-hover:grayscale-0 transition-all duration-500"
                   />
+
+                  {/* LinkedIn Badge - aparece no hover do card */}
+                  {founder.linkedin && (
+                    <a
+                      href={founder.linkedin}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="absolute top-4 right-4 w-10 h-10 bg-black text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 hover:scale-110 hover:shadow-luxury-md z-10"
+                      aria-label={`LinkedIn de ${founder.name}`}
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <Linkedin className="w-5 h-5" />
+                    </a>
+                  )}
                 </div>
 
                 {/* Conteúdo */}
@@ -275,10 +292,23 @@ export function Founders() {
                               className="object-cover object-top"
                             />
                           </div>
-                          <div>
-                            <DialogTitle className="text-3xl font-light text-black tracking-tight mb-2">
-                              {founder.name}
-                            </DialogTitle>
+                          <div className="flex-1">
+                            <div className="flex items-center justify-between gap-4">
+                              <DialogTitle className="text-3xl font-light text-black tracking-tight mb-2">
+                                {founder.name}
+                              </DialogTitle>
+                              {founder.linkedin && (
+                                <a
+                                  href={founder.linkedin}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="w-12 h-12 bg-black text-white rounded-full flex items-center justify-center hover:scale-110 hover:shadow-luxury-lg transition-all duration-300 flex-shrink-0"
+                                  aria-label={`Perfil do LinkedIn de ${founder.name}`}
+                                >
+                                  <Linkedin className="w-6 h-6" />
+                                </a>
+                              )}
+                            </div>
                             <p className="text-sm text-black-50 uppercase tracking-wider font-medium">
                               {founder.role}
                             </p>
