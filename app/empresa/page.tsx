@@ -54,11 +54,12 @@ export default function EmpresaPage() {
       {/* Introduction - Imagem Full Width */}
       <section className="relative h-[60vh] min-h-[500px]">
         <Image
-          src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?ixlib=rb-4.0.3&auto=format&fit=crop&w=2400&q=80"
+          src="/images/empresa/primeira-imagem.png"
           alt="Berkahn - Construção em Steel Frame"
           fill
           className="object-cover"
           sizes="100vw"
+          priority
         />
       </section>
 
