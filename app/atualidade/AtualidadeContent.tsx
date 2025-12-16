@@ -35,7 +35,7 @@ export function AtualidadeContent() {
       <HeroEditorial
         title="ATUALIDADES"
         subtitle="Insights & Tendências em Steel Frame"
-        imageSrc="https://images.unsplash.com/photo-1531834611357-87f523cb56c1?ixlib=rb-4.0.3&auto=format&fit=crop&w=2400&q=80"
+        imageSrc="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?ixlib=rb-4.0.3&auto=format&fit=crop&w=2400&q=80"
       />
 
       {/* Featured Article */}

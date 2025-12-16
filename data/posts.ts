@@ -36,7 +36,7 @@ export const blogPosts: BlogPost[] = [
     excerpt:
       "Conheça o processo completo da construção em Light Steel Frame, desde o projeto inicial até a entrega da obra finalizada.",
     image:
-      "https://images.unsplash.com/photo-1503387838067-dab8fce807b0?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1486325212027-8081e485255e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
     category: "Educação",
     author: "Berkahn",
     date: "2024-11-18",
@@ -50,7 +50,7 @@ export const blogPosts: BlogPost[] = [
     excerpt:
       "Análise detalhada entre steel frame e alvenaria: custos, tempo de execução, durabilidade e impacto ambiental comparados.",
     image:
-      "https://images.unsplash.com/photo-1504917595217-3404ee9c6e68?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1503594384566-461fe158e797?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
     category: "Análise",
     author: "Berkahn",
     date: "2024-11-10",
