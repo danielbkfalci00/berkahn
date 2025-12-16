@@ -237,7 +237,7 @@ export function Founders() {
                     alt={`${founder.name} - ${founder.role}`}
                     fill
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 400px"
-                    className="object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
+                    className="object-cover object-top grayscale group-hover:grayscale-0 transition-all duration-500"
                   />
                 </div>
 
@@ -272,7 +272,7 @@ export function Founders() {
                               alt={founder.name}
                               fill
                               sizes="96px"
-                              className="object-cover"
+                              className="object-cover object-top"
                             />
                           </div>
                           <div>
