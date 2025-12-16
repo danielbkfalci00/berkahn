@@ -292,7 +292,7 @@ export function Founders() {
                               className="object-cover object-top"
                             />
                           </div>
-                          <div className="flex-1">
+                          <div className="flex-1 pr-14">
                             <div className="flex items-center justify-between gap-4">
                               <DialogTitle className="text-3xl font-light text-black tracking-tight mb-2">
                                 {founder.name}
@@ -328,7 +328,7 @@ export function Founders() {
                               {event.year}
                             </div>
 
-                            <div className="pt-1">
+                            <div className="pt-10">
                               <h4 className="text-xl font-medium text-black mb-1">
                                 {event.role}
                               </h4>
