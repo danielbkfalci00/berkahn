@@ -9,7 +9,7 @@ export const isolamentoTermicoAcusticoArticle: RichArticle = {
   author: "Equipe Técnica Berkahn",
   publishDate: "2025-01-15",
   readTime: 22,
-  heroImage: "/images/lsf-wall-layers-diagram.png",
+  heroImage: "/images/Lsf/lsf-wall-layers-diagram.webp",
   excerpt: "Descubra como o Steel Frame oferece desempenho térmico e acústico até 4 vezes superior à alvenaria, com economia de 30% na conta de energia e conformidade total com as normas brasileiras NBR 15575, NBR 15220 e NBR 16970.",
 
   metaTitle: "Isolamento Térmico e Acústico Steel Frame: Guia Completo 2025 | Berkahn",

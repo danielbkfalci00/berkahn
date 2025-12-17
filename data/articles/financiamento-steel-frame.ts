@@ -352,12 +352,12 @@ export const financiamentoSteelFrameArticle: RichArticle = {
     title: "Projetos em Steel Frame",
     images: [
       {
-        url: "/images/home-gallery-1.png",
+        url: "/images/Home/home-gallery-1.webp",
         alt: "Projeto residencial em Steel Frame",
         caption: "Casa moderna construída com Steel Frame"
       },
       {
-        url: "/images/home-gallery-2.png",
+        url: "/images/Home/home-gallery-2.webp",
         alt: "Detalhe construtivo de obra em Steel Frame",
         caption: "Detalhe da estrutura e acabamento"
       }

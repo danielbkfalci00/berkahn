@@ -256,17 +256,17 @@ export const guiaDefinitivoSteelFrameArticle: RichArticle = {
         caption: "Projeto contemporâneo - São Paulo/SP"
       },
       {
-        url: "/images/casa-campo-moderna.png",
+        url: "/images/Services/Projetos prontos/casa_campo/casa-campo-moderna.webp",
         alt: "Casa de campo moderna em LSF",
         caption: "Residência rural sustentável - Interior SP"
       },
       {
-        url: "/images/chale-rustico.png",
+        url: "/images/Services/Projetos prontos/chale/chale-rustico.webp",
         alt: "Chalé com acabamento rústico",
         caption: "Arquitetura tradicional com tecnologia moderna"
       },
       {
-        url: "/images/lsf-hero-structure.png",
+        url: "/images/Lsf/lsf-hero-structure.webp",
         alt: "Canteiro de obra Steel Frame",
         caption: "Montagem estrutural - velocidade e precisão"
       },
