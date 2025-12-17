@@ -150,12 +150,13 @@ export default function ServicosPage() {
           <RevealOnScroll>
             <div className="text-center">
               <h1 className="headline-lg mb-6">
-                Construções em Steel Frame
+                Soluções Completas em Construção
               </h1>
               <p className="body-lg text-black-70">
                 Da concepção à entrega, oferecemos serviços integrados de
-                construção em Light Steel Frame para diferentes segmentos,
-                sempre com foco em qualidade, prazo e excelência técnica.
+                construção civil para diferentes segmentos. Especializados em
+                métodos construtivos tradicionais e inovadores como Light Steel
+                Frame, sempre com foco em qualidade, prazo e excelência técnica.
               </p>
             </div>
           </RevealOnScroll>
