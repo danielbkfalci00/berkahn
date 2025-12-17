@@ -34,7 +34,7 @@ export function ExecutionPhases() {
         {/* Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           {/* Tabs List - 4 colunas desde md */}
-          <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 gap-1.5 md:gap-2 lg:gap-3 bg-transparent mb-6 md:mb-8 lg:mb-10">
+          <TabsList className="relative z-10 grid w-full grid-cols-2 md:grid-cols-4 gap-1.5 md:gap-2 lg:gap-3 bg-transparent mb-6 md:mb-8 lg:mb-10">
             {EXECUTION_PHASES.map((phase) => (
               <TabsTrigger
                 key={phase.id}
@@ -57,10 +57,10 @@ export function ExecutionPhases() {
                   {phase.number}
                 </Badge>
 
-                {/* Titulo - shortTitle em mobile */}
+                {/* Titulo - shortTitle em mobile, title em desktop */}
                 <span className="text-[10px] md:text-[11px] lg:text-xs text-center leading-snug">
-                  <span className="md:hidden">{phase.shortTitle}</span>
-                  <span className="hidden md:inline">{phase.title}</span>
+                  <span className="block md:hidden">{phase.shortTitle}</span>
+                  <span className="hidden md:block">{phase.title}</span>
                 </span>
               </TabsTrigger>
             ))}
@@ -131,7 +131,7 @@ export function ExecutionPhases() {
                 </div>
 
                 {/* RIGHT: Image Carousel */}
-                <div className="w-full order-1 md:order-2 mb-8 md:mb-0 md:sticky md:top-24">
+                <div className="w-full order-2 mb-8 md:mb-0">
                   <Carousel className="w-full" opts={{ loop: true }}>
                     <CarouselContent>
                       {[
