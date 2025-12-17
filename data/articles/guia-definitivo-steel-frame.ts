@@ -251,7 +251,7 @@ export const guiaDefinitivoSteelFrameArticle: RichArticle = {
     title: "Projetos Brasileiros em Steel Frame",
     images: [
       {
-        url: "/images/loft-urbano.png",
+        url: "/images/Services/Projetos prontos/loft/loft-urbano.webp",
         alt: "Loft urbano contemporâneo em Steel Frame",
         caption: "Projeto contemporâneo - São Paulo/SP"
       },
