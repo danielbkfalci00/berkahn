@@ -49,7 +49,7 @@ export default function LSFPage() {
             <RevealOnScroll delay={0.2}>
               <div className="relative h-[500px]">
                 <Image
-                  src="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?ixlib=rb-4.0.3&auto=format&fit=crop&w=2400&q=80"
+                  src="/images/Lsf/lsf-1.webp"
                   alt="Estrutura Light Steel Frame"
                   fill
                   className="object-cover"
