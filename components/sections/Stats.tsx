@@ -5,7 +5,7 @@ const STATS = [
   { value: 20, suffix: "+", label: "Anos de experiência" },
   { value: 23, suffix: "", label: "Projetos gerenciados" },
   { value: 85, suffix: " mil m²", label: "Construção gerenciada" },
-  { value: 100, suffix: "%", label: "Satisfação dos clientes" },
+  { value: 95, suffix: "%", label: "Satisfação dos clientes" },
 ];
 
 export function Stats() {

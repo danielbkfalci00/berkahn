@@ -1,5 +1,6 @@
 import Image from "next/image";
-import { Stats } from "@/components/sections/Stats";
+import { CountUp } from "@/components/animations/CountUp";
+import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
 import { BerkahnTimeline } from "@/components/timeline/BerkahnTimeline";
 import { Founders } from "@/components/sections/Founders";
 import { CTA } from "@/components/sections/CTA";
@@ -13,10 +14,69 @@ export const metadata = {
 export default function EmpresaPage() {
   return (
     <>
-      {/* Hero - Apenas Texto */}
-      <section className="py-2xl">
+      {/* Hero com Imagem e Stats Overlay */}
+      <section className="relative h-screen min-h-[600px] flex items-start justify-start pt-32 md:pt-40 overflow-hidden">
+        {/* Background Image */}
+        <div className="absolute inset-0 z-0">
+          <Image
+            src="/images/empresa/primeira-imagem.png"
+            alt="Berkahn - Construção em Steel Frame"
+            fill
+            className="object-cover"
+            priority
+            sizes="100vw"
+          />
+
+          {/* Gradient Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
+        </div>
+
+        {/* Hero Content - Título no topo */}
+        <div className="relative z-20 text-left">
+          <div className="hero-content-left">
+            {/* Decorative Line */}
+            <div className="hero-decorative-line w-24 mb-8" />
+
+            {/* Label */}
+            <p className="hero-label text-white mb-4 hero-text-shadow">SOBRE NÓS</p>
+
+            {/* Título */}
+            <h1 className="headline-lg text-white hero-text-shadow-strong">Nossa História</h1>
+          </div>
+        </div>
+
+        {/* Stats Overlay - Bottom */}
+        <div className="absolute bottom-0 left-0 right-0 z-20 pb-12 lg:pb-16">
+          <div className="container">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
+              {[
+                { value: 20, suffix: "+", label: "Anos de experiência" },
+                { value: 23, suffix: "", label: "Projetos gerenciados" },
+                { value: 85, suffix: " mil m²", label: "Construção gerenciada" },
+                { value: 95, suffix: "%", label: "Satisfação dos clientes" },
+              ].map((stat, index) => (
+                <RevealOnScroll key={stat.label} delay={index * 0.1}>
+                  <div className="text-center">
+                    <CountUp
+                      end={stat.value}
+                      suffix={stat.suffix}
+                      className="text-4xl lg:text-5xl font-heading font-light mb-2 text-white"
+                    />
+                    <p className="label-text text-white/70">{stat.label}</p>
+                  </div>
+                </RevealOnScroll>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Story */}
+      <section className="py-xl">
         <div className="container max-w-4xl">
-          <h1 className="headline-lg text-center mb-12">Nossa História</h1>
+          <h2 className="headline-md mb-8 text-center">Nossa Jornada</h2>
+
+          {/* Texto da antiga hero */}
           <div className="space-y-6">
             <p className="body-lg text-black-70">
               Nossa construtora nasce da união de anos de experiência em projetos,
@@ -48,35 +108,11 @@ export default function EmpresaPage() {
               humanas que resultem numa nova concepção de excelência na construção civil.
             </p>
           </div>
-        </div>
-      </section>
 
-      {/* Introduction - Imagem Full Width */}
-      <section className="relative h-[75vh] min-h-[600px]">
-        <Image
-          src="/images/empresa/segunda-imagem.png"
-          alt="Berkahn - Construção em Steel Frame"
-          fill
-          className="object-cover object-bottom"
-          sizes="100vw"
-          priority
-        />
-      </section>
+          {/* Separador */}
+          <div className="mt-12 mb-8 border-t border-black-10"></div>
 
-      {/* Stats */}
-      <Stats />
-
-      {/* Story */}
-      <section className="py-xl">
-        <div className="container max-w-4xl">
-          <h2 className="headline-md mb-6 text-center">Nossa Jornada</h2>
-          <p className="body-md text-black-70 mb-6">
-            Nossa fundação foi motivada pela experiência dos fundadores no mercado
-            brasileiro de construção. Ao observar os desafios recorrentes — desperdícios,
-            prazos estendidos e falta de previsibilidade —, decidimos criar uma empresa
-            que operasse de forma diferente, introduzindo o Light Steel Frame e processos
-            industrializados como pilares de eficiência e qualidade.
-          </p>
+          {/* Texto adicional sobre hoje */}
           <p className="body-md text-black-70">
             Hoje, com uma equipe de profissionais altamente especializados e um portfólio
             crescente de projetos, continuamos comprometidos em transformar a forma como
