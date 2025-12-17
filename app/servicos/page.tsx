@@ -137,7 +137,7 @@ export default function ServicosPage() {
       <HeroPage
         title="Serviços"
         subtitle="O que fazemos"
-        imageSrc="/images/servicos-hero.png"
+        imageSrc="/images/empresa/primeira-imagem.png"
         imageAlt="Serviços Berkahn"
       />
 
@@ -170,13 +170,13 @@ export default function ServicosPage() {
               <RevealOnScroll key={service.id} delay={index * 0.1}>
                 <div className="bg-white overflow-hidden shadow-luxury-sm hover:shadow-luxury-md transition-shadow duration-300">
                   {/* Image */}
-                  <div className="aspect-video overflow-hidden">
+                  <div className="aspect-video overflow-hidden bg-black-5">
                     <Image
                       src={service.image}
                       alt={`Construção ${service.title}`}
                       width={600}
                       height={338}
-                      className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                      className="w-full h-full object-contain hover:scale-105 transition-transform duration-500"
                     />
                   </div>
 
