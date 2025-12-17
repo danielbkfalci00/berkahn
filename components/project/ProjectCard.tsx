@@ -17,7 +17,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
       className="group block overflow-hidden bg-white shadow-luxury-sm hover:shadow-luxury-lg transition-all duration-500"
     >
       {/* Image Container */}
-      <div className="relative aspect-[4/3] overflow-hidden">
+      <div className="relative aspect-[16/9] overflow-hidden">
         <Image
           src={project.cardImage}
           alt={project.name}

@@ -288,14 +288,9 @@ export default async function ProjectPage({ params }: Props) {
           <section className="py-xl bg-black-5">
             <div className="container">
               <RevealOnScroll>
-                <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-12">
-                  <div className="text-center md:text-left">
-                    <p className="label-text mb-4">Explore Mais</p>
-                    <h2 className="headline-md">Projetos Relacionados</h2>
-                  </div>
-                  <p className="hidden md:block text-sm text-black-50 mt-4 md:mt-0">
-                    Arraste ou use as setas para navegar
-                  </p>
+                <div className="text-center md:text-left mb-12">
+                  <p className="label-text mb-4">Explore Mais</p>
+                  <h2 className="headline-md">Projetos Relacionados</h2>
                 </div>
               </RevealOnScroll>
 
