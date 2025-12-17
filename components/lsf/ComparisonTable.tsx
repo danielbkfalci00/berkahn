@@ -11,13 +11,13 @@ export function ComparisonTable() {
         <thead className="bg-black text-white">
           <tr>
             <th className="py-6 px-6 text-left font-heading text-lg">
-              Caracter\u00edstica
+              Característica
             </th>
             <th className="py-6 px-6 text-center font-heading text-lg">
               Light Steel Frame
             </th>
             <th className="py-6 px-6 text-center font-heading text-lg">
-              Constru\u00e7\u00e3o Tradicional
+              Construção Tradicional
             </th>
           </tr>
         </thead>
@@ -120,7 +120,7 @@ export function ComparisonTable() {
               d="M4.5 12.75l6 6 9-13.5"
             />
           </svg>
-          indica vantagem competitiva no crit\u00e9rio
+          indica vantagem competitiva no critério
         </p>
       </div>
     </div>
