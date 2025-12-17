@@ -34,7 +34,7 @@ export function ExecutionPhases() {
         {/* Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           {/* Tabs List - 4 colunas desde md */}
-          <TabsList className="relative z-10 grid w-full grid-cols-2 md:grid-cols-4 gap-1.5 md:gap-2 lg:gap-3 bg-transparent mb-16 md:mb-8 lg:mb-10">
+          <TabsList className="relative z-10 grid w-full grid-cols-2 md:grid-cols-4 gap-1.5 md:gap-2 lg:gap-3 bg-transparent mb-24 md:mb-8 lg:mb-10">
             {EXECUTION_PHASES.map((phase) => (
               <TabsTrigger
                 key={phase.id}
@@ -68,7 +68,7 @@ export function ExecutionPhases() {
 
           {/* Tabs Content */}
           {EXECUTION_PHASES.map((phase) => (
-            <TabsContent key={phase.id} value={phase.id} className="focus-visible:outline-none mt-4 md:mt-0">
+            <TabsContent key={phase.id} value={phase.id} className="focus-visible:outline-none mt-8 md:mt-0">
               <div className="grid grid-cols-1 md:grid-cols-[1fr_1fr] lg:grid-cols-[1.4fr_1fr] gap-6 md:gap-8 lg:gap-12 items-start">
 
                 {/* LEFT: Text Content */}
