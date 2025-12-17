@@ -28,7 +28,7 @@ const services = [
       "Casas de campo e chalés",
     ],
     image:
-      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+      "/images/Services/Projetos prontos/casa_campo/casa-campo-moderna.webp",
     icon: Home,
   },
   {
