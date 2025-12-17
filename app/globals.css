@@ -195,6 +195,33 @@
     opacity: 0.9;
   }
 
+  /* Hero headline line break control */
+  .hero-headline-line {
+    /* Desktop: força linha única por frase */
+    white-space: nowrap;
+    /* Nunca adiciona hífens automáticos */
+    -webkit-hyphens: none;
+    -moz-hyphens: none;
+    hyphens: none;
+    /* Quebra normal entre palavras (não no meio) */
+    word-break: normal;
+    /* Fallback: se overflow, quebra palavra inteira */
+    overflow-wrap: break-word;
+  }
+
+  @media (max-width: 768px) {
+    .hero-headline-line {
+      /* Mobile: permite quebra em múltiplas linhas */
+      white-space: normal;
+      /* MAS mantém proteção contra quebra no meio de palavras */
+      -webkit-hyphens: none;
+      -moz-hyphens: none;
+      hyphens: none;
+      word-break: normal;
+      overflow-wrap: break-word;
+    }
+  }
+
   /* Typography utilities - Body text */
   .body-sm {
     @apply text-sm leading-relaxed;

@@ -100,12 +100,12 @@ export function Hero() {
           <div className="mb-8">
             <CharReveal
               text="Líderes em Steel Frame."
-              className="text-5xl md:text-6xl lg:text-7xl font-heading font-extrabold tracking-tighter text-white hero-text-shadow-strong"
+              className="hero-headline-line text-5xl md:text-6xl lg:text-7xl font-heading font-extrabold tracking-tighter text-white hero-text-shadow-strong"
               delay={0.2}
             />
             <CharReveal
               text="Mestres em construir."
-              className="text-5xl md:text-6xl lg:text-7xl font-heading font-extrabold tracking-tighter text-white hero-text-shadow-strong"
+              className="hero-headline-line text-5xl md:text-6xl lg:text-7xl font-heading font-extrabold tracking-tighter text-white hero-text-shadow-strong"
               delay={0.4}
             />
           </div>
