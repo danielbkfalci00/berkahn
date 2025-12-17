@@ -10,7 +10,7 @@ export function LSFIntro() {
           {/* Left Column - Image */}
           <RevealOnScroll>
             <Image
-              src="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
+              src="/images/Home/hero-3.webp"
               alt="Estrutura Light Steel Frame"
               width={1200}
               height={900}
