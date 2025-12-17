@@ -50,7 +50,7 @@ const services = [
       "Centros de distribuição",
       "Estruturas modulares",
     ],
-    image: "/images/Services/industrial.webp",
+    image: "/images/Services/industrial.jpg",
     icon: Factory,
   },
 ];
