@@ -8,13 +8,8 @@ export function Expertise() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
           {/* Left Column */}
           <RevealOnScroll>
-            <p className="label-text mb-4">
-              NOSSA EXPERTISE
-            </p>
             <h2 className="headline-lg">
-              Líderes em Steel Frame.
-              <br />
-              Mestres em construir.
+              NOSSA EXPERTISE
             </h2>
           </RevealOnScroll>
 

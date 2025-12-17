@@ -96,23 +96,23 @@ export function Hero() {
             <div className="hero-decorative-line w-24 mb-8" />
           </RevealOnScroll>
 
-          {/* Label */}
-          <RevealOnScroll delay={0.2}>
-            <p className="hero-label text-white/70 mb-6 hero-text-shadow uppercase tracking-widest">
-              Construção Inteligente
-            </p>
-          </RevealOnScroll>
-
-          {/* Headline - CharReveal */}
-          <CharReveal
-            text="Erguendo o amanhã"
-            className="text-5xl md:text-6xl lg:text-7xl font-heading font-extrabold tracking-tighter text-white hero-text-shadow-strong mb-8"
-            delay={0.3}
-          />
+          {/* Headline - Two lines */}
+          <div className="mb-8">
+            <CharReveal
+              text="Líderes em Steel Frame."
+              className="text-5xl md:text-6xl lg:text-7xl font-heading font-extrabold tracking-tighter text-white hero-text-shadow-strong"
+              delay={0.2}
+            />
+            <CharReveal
+              text="Mestres em construir."
+              className="text-5xl md:text-6xl lg:text-7xl font-heading font-extrabold tracking-tighter text-white hero-text-shadow-strong"
+              delay={0.4}
+            />
+          </div>
 
           {/* Subheadline - TextReveal */}
           <TextReveal
-            text="Escolhemos a melhor tecnologia para cada projeto. Residencial ou comercial, simples ou complexo."
+            text="Construímos com a melhor tecnologia para cada projeto. Residencial ou comercial, simples ou complexo."
             className="text-lg md:text-xl font-body text-white/90 hero-text-shadow max-w-2xl leading-relaxed"
             delay={0.6}
             as="p"
