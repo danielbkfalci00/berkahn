@@ -34,8 +34,7 @@ export const blogPosts: BlogPost[] = [
     title: "Passo a Passo: Como Funciona a Construção em Steel Frame",
     excerpt:
       "Conheça o processo completo da construção em Light Steel Frame, desde o projeto inicial até a entrega da obra finalizada.",
-    image:
-      "https://images.unsplash.com/photo-1503387838067-dab8fce807b0?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+    image: "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?ixlib=rb-4.0.3&auto=format&fit=crop&w=2400&q=80",
     category: "Educação",
     author: "Berkahn",
     date: "2024-11-18",
