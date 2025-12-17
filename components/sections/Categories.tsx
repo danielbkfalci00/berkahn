@@ -77,13 +77,13 @@ export function Categories() {
                     {category.description}
                   </p>
 
-                  {/* TODO: Descomentar para mostrar botão Portfólio */}
-                  {/* <Link
-                    href={category.href}
-                    className="inline-block px-8 py-3 border border-white/80 text-sm uppercase tracking-widest font-medium transition-all duration-300 hover:bg-white hover:text-black mt-8"
+                  {/* Botão Saiba Mais */}
+                  <Link
+                    href="/servicos"
+                    className="inline-block px-8 py-3 bg-white text-black text-sm uppercase tracking-widest font-medium transition-all duration-300 hover:bg-black hover:text-white hover:border hover:border-white mt-8"
                   >
-                    Portfólio
-                  </Link> */}
+                    Saiba Mais
+                  </Link>
                 </div>
               </div>
             </RevealOnScroll>
