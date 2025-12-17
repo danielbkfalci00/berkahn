@@ -84,8 +84,8 @@ export const PROJECTS: Project[] = [
     description: `Casa de campo com arquitetura moderna e materiais naturais. Grandes janelas de vidro integram os ambientes internos com a paisagem externa. Deck em madeira proporciona área de convivência ao ar livre.
 
 O projeto combina conforto térmico, eficiência energética e design atemporal, ideal para quem busca qualidade de vida em meio à natureza.`,
-    heroImage: '/images/Services/Projetos prontos/casa_campo/casa-campo-moderna.png',
-    cardImage: '/images/Services/Projetos prontos/casa_campo/casa-campo-moderna.png',
+    heroImage: '/images/Services/Projetos prontos/casa_campo/casa-campo-moderna.webp',
+    cardImage: '/images/Services/Projetos prontos/casa_campo/casa-campo-moderna.webp',
     area: {
       builtArea: 150.00,
       minLotWidth: 15.0,
@@ -104,8 +104,8 @@ O projeto combina conforto térmico, eficiência energética e design atemporal,
       garages: 2,
     },
     gallery: [
-      { src: '/images/Services/Projetos prontos/casa_campo/casa-campo-moderna.png', alt: 'Casa de Campo Moderna - Vista frontal', type: 'exterior' },
-      { src: '/images/Services/Projetos prontos/casa_campo/casa-campo-moderna (2).png', alt: 'Casa de Campo Moderna - Vista lateral', type: 'exterior' },
+      { src: '/images/Services/Projetos prontos/casa_campo/casa-campo-moderna.webp', alt: 'Casa de Campo Moderna - Vista frontal', type: 'exterior' },
+      { src: '/images/Services/Projetos prontos/casa_campo/casa-campo-moderna-2.webp', alt: 'Casa de Campo Moderna - Vista lateral', type: 'exterior' },
     ],
     floorPlans: [],
     models: [],
@@ -131,8 +131,8 @@ O projeto combina conforto térmico, eficiência energética e design atemporal,
     description: `Loft com conceito aberto e design minimalista. Pé-direito alto e iluminação natural abundante criam sensação de amplitude. Ideal para profissionais modernos que valorizam funcionalidade e estética.
 
 A estrutura em steel frame permite flexibilidade de layout e instalação rápida.`,
-    heroImage: '/images/Services/Projetos prontos/loft/loft-urbano.png',
-    cardImage: '/images/Services/Projetos prontos/loft/loft-urbano.png',
+    heroImage: '/images/Services/Projetos prontos/loft/loft-urbano.webp',
+    cardImage: '/images/Services/Projetos prontos/loft/loft-urbano.webp',
     area: {
       builtArea: 37.00,
       minLotWidth: 9.0,
@@ -151,7 +151,7 @@ A estrutura em steel frame permite flexibilidade de layout e instalação rápid
       garages: 1,
     },
     gallery: [
-      { src: '/images/Services/Projetos prontos/loft/loft-urbano.png', alt: 'Loft Urbano Moderno - Fachada', type: 'exterior' },
+      { src: '/images/Services/Projetos prontos/loft/loft-urbano.webp', alt: 'Loft Urbano Moderno - Fachada', type: 'exterior' },
       { src: '/images/Services/Projetos prontos/loft/loft-urbano_1.webp', alt: 'Loft Urbano - Detalhe 1', type: 'interior' },
       { src: '/images/Services/Projetos prontos/loft/loft-urbano_2.webp', alt: 'Loft Urbano - Detalhe 2', type: 'interior' },
       { src: '/images/Services/Projetos prontos/loft/loft-urbano_3.webp', alt: 'Loft Urbano - Detalhe 3', type: 'interior' },
@@ -183,8 +183,8 @@ A estrutura em steel frame permite flexibilidade de layout e instalação rápid
     description: `Chalé moderno que combina o aconchego da madeira com a tecnologia do Steel Frame. Ideal para regiões serranas e climas frios, este chalé inclui deck frontal, pé-direito duplo, amplo mezanino e janelas grandes para iluminação natural, além de espaço para lavadora/secadora.
 
 Projetado para acomodar confortavelmente uma família de 3 a 4 pessoas, oferece o equilíbrio perfeito entre rusticidade e eficiência construtiva moderna.`,
-    heroImage: '/images/Services/Projetos prontos/chalé/chale-rustico.webp',
-    cardImage: '/images/Services/Projetos prontos/chalé/chale-rustico.webp',
+    heroImage: '/images/Services/Projetos prontos/chale/chale-rustico.webp',
+    cardImage: '/images/Services/Projetos prontos/chale/chale-rustico.webp',
     area: {
       builtArea: 106.00,
       minLotWidth: 13.5,
@@ -203,11 +203,11 @@ Projetado para acomodar confortavelmente uma família de 3 a 4 pessoas, oferece 
       garages: 0,
     },
     gallery: [
-      { src: '/images/Services/Projetos prontos/chalé/chale-rustico.webp', alt: 'Chalé Rústico - Fachada', type: 'exterior' },
-      { src: '/images/Services/Projetos prontos/chalé/chale_interior_1.webp', alt: 'Chalé Rústico - Interior 1', type: 'interior' },
-      { src: '/images/Services/Projetos prontos/chalé/chale_interior_2.webp', alt: 'Chalé Rústico - Interior 2', type: 'interior' },
-      { src: '/images/Services/Projetos prontos/chalé/chale_interior_3.webp', alt: 'Chalé Rústico - Interior 3', type: 'interior' },
-      { src: '/images/Services/Projetos prontos/chalé/chale_interior_4.webp', alt: 'Chalé Rústico - Interior 4', type: 'interior' },
+      { src: '/images/Services/Projetos prontos/chale/chale-rustico.webp', alt: 'Chalé Rústico - Fachada', type: 'exterior' },
+      { src: '/images/Services/Projetos prontos/chale/chale_interior_1.webp', alt: 'Chalé Rústico - Interior 1', type: 'interior' },
+      { src: '/images/Services/Projetos prontos/chale/chale_interior_2.webp', alt: 'Chalé Rústico - Interior 2', type: 'interior' },
+      { src: '/images/Services/Projetos prontos/chale/chale_interior_3.webp', alt: 'Chalé Rústico - Interior 3', type: 'interior' },
+      { src: '/images/Services/Projetos prontos/chale/chale_interior_4.webp', alt: 'Chalé Rústico - Interior 4', type: 'interior' },
     ],
     floorPlans: [],
     models: [],
