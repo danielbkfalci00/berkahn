@@ -34,7 +34,7 @@ export function ExecutionPhases() {
         {/* Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           {/* Tabs List - 4 colunas desde md */}
-          <TabsList className="relative z-10 grid w-full grid-cols-2 md:grid-cols-4 gap-1.5 md:gap-2 lg:gap-3 bg-transparent mb-6 md:mb-8 lg:mb-10">
+          <TabsList className="relative z-10 grid w-full grid-cols-2 md:grid-cols-4 gap-1.5 md:gap-2 lg:gap-3 bg-transparent mb-16 md:mb-8 lg:mb-10">
             {EXECUTION_PHASES.map((phase) => (
               <TabsTrigger
                 key={phase.id}
@@ -68,23 +68,18 @@ export function ExecutionPhases() {
 
           {/* Tabs Content */}
           {EXECUTION_PHASES.map((phase) => (
-            <TabsContent key={phase.id} value={phase.id} className="focus-visible:outline-none">
+            <TabsContent key={phase.id} value={phase.id} className="focus-visible:outline-none mt-4 md:mt-0">
               <div className="grid grid-cols-1 md:grid-cols-[1fr_1fr] lg:grid-cols-[1.4fr_1fr] gap-6 md:gap-8 lg:gap-12 items-start">
 
                 {/* LEFT: Text Content */}
                 <div className="space-y-6 lg:space-y-8 order-2 md:order-1">
 
-                  {/* Header */}
-                  <div>
-                    <h3 className="text-xl md:text-2xl lg:text-3xl font-heading font-bold tracking-tight mb-3">
-                      {phase.title}
-                    </h3>
-                    {phase.summary && (
-                      <p className="text-sm md:text-base text-black-70 leading-relaxed">
-                        {phase.summary}
-                      </p>
-                    )}
-                  </div>
+                  {/* Summary - sem título redundante (já está no tab) */}
+                  {phase.summary && (
+                    <p className="text-base md:text-lg text-black-70 leading-relaxed">
+                      {phase.summary}
+                    </p>
+                  )}
 
                   {/* Key Points - Simplificado */}
                   {phase.keyPoints && phase.keyPoints.length > 0 && (
@@ -131,7 +126,7 @@ export function ExecutionPhases() {
                 </div>
 
                 {/* RIGHT: Image Carousel */}
-                <div className="w-full order-2 mb-8 md:mb-0">
+                <div className="w-full order-2 mb-8 md:mb-0 md:pt-4">
                   <Carousel className="w-full" opts={{ loop: true }}>
                     <CarouselContent>
                       {[
