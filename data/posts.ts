@@ -21,8 +21,7 @@ export const blogPosts: BlogPost[] = [
     title: "5 Vantagens Definitivas do Light Steel Frame",
     excerpt:
       "Descubra as principais vantagens da construção em steel frame: redução de custos, prazos mais curtos e máxima flexibilidade arquitetônica.",
-    image:
-      "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+    image: "/images/lsf-hero-structure.png",
     category: "Guia",
     author: "Berkahn",
     date: "2024-11-25",
@@ -36,7 +35,7 @@ export const blogPosts: BlogPost[] = [
     excerpt:
       "Conheça o processo completo da construção em Light Steel Frame, desde o projeto inicial até a entrega da obra finalizada.",
     image:
-      "https://images.unsplash.com/photo-1486325212027-8081e485255e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1503387838067-dab8fce807b0?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
     category: "Educação",
     author: "Berkahn",
     date: "2024-11-18",
@@ -50,7 +49,7 @@ export const blogPosts: BlogPost[] = [
     excerpt:
       "Análise detalhada entre steel frame e alvenaria: custos, tempo de execução, durabilidade e impacto ambiental comparados.",
     image:
-      "https://images.unsplash.com/photo-1503594384566-461fe158e797?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1503387762-592deb58ef4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=2400&q=80",
     category: "Análise",
     author: "Berkahn",
     date: "2024-11-10",
@@ -64,7 +63,7 @@ export const blogPosts: BlogPost[] = [
     excerpt:
       "Entenda como o steel frame contribui para uma construção mais sustentável, reduzindo desperdícios e minimizando o impacto ambiental.",
     image:
-      "https://images.unsplash.com/photo-1518005020951-eccb494ad742?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1497366811353-6870744d04b2?ixlib=rb-4.0.3&auto=format&fit=crop&w=2400&q=80",
     category: "Meio Ambiente",
     author: "Berkahn",
     date: "2024-11-01",
