@@ -12,8 +12,8 @@ export function LSFIntro() {
             <Image
               src="/images/Home/hero-3.webp"
               alt="Estrutura Light Steel Frame"
-              width={1200}
-              height={900}
+              width={1920}
+              height={1080}
               className="w-full h-auto object-cover"
             />
           </RevealOnScroll>
