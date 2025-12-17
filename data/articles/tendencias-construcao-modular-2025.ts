@@ -2,33 +2,33 @@ import { RichArticle } from "@/types/article";
 
 export const tendenciasModular2025: RichArticle = {
   slug: "tendencias-construcao-modular-2025",
-  title: "Tendências da Construção Modular 2025",
+  title: "Tendências da Construção Industrializada 2025",
   subtitle: "Como a industrialização está transformando o mercado brasileiro de edificações",
   category: "Mercado",
   author: "Equipe Berkahn",
   publishDate: "2025-01-15",
   readTime: 18,
   heroImage: "https://images.unsplash.com/photo-1486325212027-8081e485255e?ixlib=rb-4.0.3&auto=format&fit=crop&w=2400&q=80",
-  excerpt: "A construção modular deixou de ser tendência e tornou-se realidade estratégica. Com mercado de US$ 3,25 bilhões no Brasil e projeção de US$ 4,26 bilhões até 2029, confira as tendências, custos reais e oportunidades para 2025.",
+  excerpt: "A construção industrializada deixou de ser tendência e tornou-se realidade estratégica. Com mercado de US$ 3,25 bilhões no Brasil e projeção de US$ 4,26 bilhões até 2029, confira as tendências, custos reais e oportunidades para 2025.",
 
   // 10 seções principais
   sections: [
     {
       id: "introducao",
-      title: "O Momento da Construção Modular no Brasil",
-      content: `A construção modular deixou de ser tendência e tornou-se realidade estratégica para quem busca construir mais rápido, com menor custo e maior previsibilidade. Em 2025, o Brasil atravessa um ponto de inflexão: com um déficit habitacional de 6 milhões de moradias e carência de 30 mil profissionais qualificados na construção civil, métodos industrializados ganham protagonismo como solução viável tanto para incorporadoras quanto para famílias que desejam construir sua casa própria.
+      title: "O Momento da Construção Industrializada no Brasil",
+      content: `A construção industrializada deixou de ser tendência e tornou-se realidade estratégica para quem busca construir mais rápido, com menor custo e maior previsibilidade. Em 2025, o Brasil atravessa um ponto de inflexão: com um déficit habitacional de 6 milhões de moradias e carência de 30 mil profissionais qualificados na construção civil, métodos industrializados ganham protagonismo como solução viável tanto para incorporadoras quanto para famílias que desejam construir sua casa própria.
 
 O mercado brasileiro de edificações pré-fabricadas já movimenta US$ 3,25 bilhões e deve atingir US$ 4,26 bilhões até 2029, com crescimento anual de 5,54% — números que refletem uma transformação estrutural no setor.
 
-Este artigo apresenta um panorama completo das tendências, custos, vantagens e desafios da construção modular para 2025, oferecendo informações práticas para engenheiros, construtores e pessoas físicas que avaliam essa alternativa.`,
+Este artigo apresenta um panorama completo das tendências, custos, vantagens e desafios da construção industrializada para 2025, oferecendo informações práticas para engenheiros, construtores e pessoas físicas que avaliam essa alternativa.`,
       level: 2,
     },
     {
       id: "contexto-mercado",
-      title: "O que Está Impulsionando a Revolução Modular no Brasil",
+      title: "O que Está Impulsionando a Revolução da Construção Industrializada no Brasil",
       content: `O cenário atual combina pressões econômicas e demandas por sustentabilidade que favorecem métodos industrializados. A construção civil tradicional enfrenta gargalos históricos: desperdício de materiais que chega a 40% em obras convencionais, atrasos recorrentes e dificuldade crescente para encontrar mão de obra qualificada.
 
-A construção modular responde a essas dores com processos controlados em fábrica, onde o desperdício cai para menos de 5% e o tempo de obra reduz entre 30% e 67%.
+A construção industrializada responde a essas dores com processos controlados em fábrica, onde o desperdício cai para menos de 5% e o tempo de obra reduz entre 30% e 67%.
 
 O programa Minha Casa Minha Vida representa um catalisador importante: responsável por 48,44% dos lançamentos imobiliários em 2024, o programa demanda escala e velocidade que métodos tradicionais não conseguem entregar de forma competitiva. Empresas como Tecverde e Inovahouse já entregam casas populares com sistemas industrializados, demonstrando viabilidade econômica no segmento de habitação social.
 
@@ -42,7 +42,7 @@ O mercado global reforça essa tendência. Avaliado em US$ 91-111 bilhões em 20
 
 O Decreto 11.888/2024 estabelece a adoção obrigatória do BIM (Building Information Modeling) em obras públicas federais, com implementação gradual até 2027. Atualmente, apenas 20,6% das construtoras brasileiras utilizam a tecnologia, mas a expectativa é de 35% de crescimento na adoção em 2025 para grandes projetos.
 
-A integração BIM + construção modular potencializa resultados: estudos da McKinsey indicam que essa combinação pode aumentar a produtividade em 5 a 10 vezes nos canteiros. O BIM permite simulação precisa da montagem modular, detecção antecipada de conflitos entre sistemas e planejamento logístico otimizado — eliminando retrabalhos que consomem tempo e orçamento.
+A integração BIM + construção industrializada potencializa resultados: estudos da McKinsey indicam que essa combinação pode aumentar a produtividade em 5 a 10 vezes nos canteiros. O BIM permite simulação precisa da montagem modular, detecção antecipada de conflitos entre sistemas e planejamento logístico otimizado — eliminando retrabalhos que consomem tempo e orçamento.
 
 <strong>Light Steel Frame consolida liderança no Brasil</strong>
 
@@ -65,10 +65,10 @@ A impressão 3D em construção movimenta US$ 2,25 bilhões globalmente em 2025,
     },
     {
       id: "analise-financeira",
-      title: "Análise Financeira Detalhada: Quando Modular Compensa",
-      content: `Os números mostram que a construção modular compete diretamente com métodos tradicionais — e frequentemente vence em custo-benefício.
+      title: "Análise Financeira Detalhada: Quando a Construção Industrializada Compensa",
+      content: `Os números mostram que a construção industrializada compete diretamente com métodos tradicionais — e frequentemente vence em custo-benefício.
 
-A composição de custos SINAPI (agosto 2025) revela que materiais representam 55% do total (R$ 1.019,25/m²) e mão de obra 45% (R$ 753,95/m²). A construção modular ataca ambas as frentes: compras em volume reduzem custo de materiais em 5-10%, enquanto menor tempo de obra diminui gastos com mão de obra em 16-25%.
+A composição de custos SINAPI (agosto 2025) revela que materiais representam 55% do total (R$ 1.019,25/m²) e mão de obra 45% (R$ 753,95/m²). A construção industrializada ataca ambas as frentes: compras em volume reduzem custo de materiais em 5-10%, enquanto menor tempo de obra diminui gastos com mão de obra em 16-25%.
 
 <strong>O impacto real no orçamento total</strong>
 
@@ -85,7 +85,7 @@ O desperdício de materiais merece destaque: enquanto obras tradicionais desperd
 
 <strong>Análise de viabilidade por tipo de projeto</strong>
 
-A construção modular não é solução universal. Sua viabilidade varia conforme características específicas do projeto.
+A construção industrializada não é solução universal. Sua viabilidade varia conforme características específicas do projeto.
 
 <strong>Alta viabilidade:</strong> Empreendimentos com múltiplas unidades similares (escala), Projetos com prazos apertados (hospitais, escolas, emergências), Locais remotos onde logística de múltiplos fornecedores é complexa, Construções que exigem orçamento fechado e previsível, Hotéis e student housing, onde retorno rápido é crítico.
 
@@ -93,21 +93,21 @@ A construção modular não é solução universal. Sua viabilidade varia confor
 
 <strong>Viabilidade mais baixa:</strong> Projetos muito pequenos (custos de transporte pesam), Designs altamente customizados com formas não-retangulares, Terrenos de difícil acesso para veículos pesados.
 
-O financiamento permanece desafio no Brasil. Bancos tradicionalmente aceitam o imóvel como garantia durante a construção — modelo que não se aplica bem à construção modular, onde boa parte do valor está na fábrica antes da montagem. Essa barreira tende a diminuir conforme o mercado amadurece e normas técnicas se consolidam.`,
+O financiamento permanece desafio no Brasil. Bancos tradicionalmente aceitam o imóvel como garantia durante a construção — modelo que não se aplica bem à construção industrializada, onde boa parte do valor está na fábrica antes da montagem. Essa barreira tende a diminuir conforme o mercado amadurece e normas técnicas se consolidam.`,
       level: 2,
     },
     {
       id: "casos-estudo",
       title: "Casos de Sucesso que Comprovam a Viabilidade",
-      content: `<strong>Edifício Level: primeiro prédio modular multiandar da América Latina</strong>
+      content: `<strong>Edifício Level: primeiro prédio industrializado multiandar da América Latina</strong>
 
-Construído pela Brasil ao Cubo em Tubarão (SC), o Edifício Level demonstrou que construção modular funciona em escala vertical. Com 8 andares, 56 módulos e 3.300 m², o prédio comercial foi erguido em 100 dias — sendo apenas 20 dias para montagem e acoplamento dos módulos. A obra consumiu 500 toneladas de aço Gerdau e recebeu o Prêmio Abrainc de Produtividade 2021.
+Construído pela Brasil ao Cubo em Tubarão (SC), o Edifício Level demonstrou que construção industrializada funciona em escala vertical. Com 8 andares, 56 módulos e 3.300 m², o prédio comercial foi erguido em 100 dias — sendo apenas 20 dias para montagem e acoplamento dos módulos. A obra consumiu 500 toneladas de aço Gerdau e recebeu o Prêmio Abrainc de Produtividade 2021.
 
-O projeto incorpora sustentabilidade: painéis fotovoltaicos, captação de água pluvial e ventilação cruzada natural. A pintura intumescente garante proteção contra incêndio — demonstrando que construção modular atende rigorosos requisitos técnicos.
+O projeto incorpora sustentabilidade: painéis fotovoltaicos, captação de água pluvial e ventilação cruzada natural. A pintura intumescente garante proteção contra incêndio — demonstrando que construção industrializada atende rigorosos requisitos técnicos.
 
 <strong>Hospitais COVID-19: resposta em 33 dias</strong>
 
-Durante a pandemia, Brasil ao Cubo e Tecverde entregaram cinco complexos hospitalares totalizando 333 leitos em 115 dias. Um centro de tratamento em São Paulo de 1.350 m² ficou pronto em apenas 33-40 dias — velocidade impossível com métodos convencionais. Esses projetos demonstraram a capacidade de resposta rápida a emergências que a construção modular proporciona.
+Durante a pandemia, Brasil ao Cubo e Tecverde entregaram cinco complexos hospitalares totalizando 333 leitos em 115 dias. Um centro de tratamento em São Paulo de 1.350 m² ficou pronto em apenas 33-40 dias — velocidade impossível com métodos convencionais. Esses projetos demonstraram a capacidade de resposta rápida a emergências que a construção industrializada proporciona.
 
 <strong>SteelCorp no Rio Grande do Sul: conforto térmico comprovado</strong>
 
@@ -117,7 +117,7 @@ Casas entregues pelo Grupo SteelCorp ao governo gaúcho registraram temperatura 
     {
       id: "perspectivas-2025",
       title: "O que Esperar de 2025: Eventos e Marcos Regulatórios",
-      content: `O calendário setorial reforça a consolidação do mercado. A Expo Construção Offsite 2025 acontece de 3 a 6 de junho no Anhembi, São Paulo — maior feira de construção modular da América Latina, com mais de 200 marcas e expectativa de R$ 750 milhões em negócios. O BIM Fórum Conference Brasil em maio e o Rio Construção Summit em setembro completam os principais eventos.
+      content: `O calendário setorial reforça a consolidação do mercado. A Expo Construção Offsite 2025 acontece de 3 a 6 de junho no Anhembi, São Paulo — maior feira de construção industrializada da América Latina, com mais de 200 marcas e expectativa de R$ 750 milhões em negócios. O BIM Fórum Conference Brasil em maio e o Rio Construção Summit em setembro completam os principais eventos.
 
 No âmbito regulatório, a Nova Estratégia BIM BR (2025-2027) estrutura três eixos: capacitação da administração pública, formação profissional e fomento à pesquisa e inovação. O programa Construa Brasil do governo federal atua em desburocratização, digitalização e industrialização — criando ambiente favorável para métodos construtivos modernos.
 
@@ -127,19 +127,19 @@ A ABCIC (Associação Brasileira da Construção Industrializada de Concreto) re
     {
       id: "mitos-realidade",
       title: "Mitos versus Realidade: O Que Você Precisa Saber",
-      content: `A construção modular carrega preconceitos que não correspondem à realidade técnica. Entenda os principais mitos e suas realidades comprovadas através de dados e cases de sucesso.`,
+      content: `A construção industrializada carrega preconceitos que não correspondem à realidade técnica. Entenda os principais mitos e suas realidades comprovadas através de dados e cases de sucesso.`,
       level: 2,
     },
     {
       id: "guia-pratico",
       title: "Guia Prático: Do Projeto à Entrega",
-      content: `O processo de construção modular segue uma sequência bem definida onde algumas etapas podem ocorrer em paralelo, reduzindo drasticamente o tempo total. Aqui estão as 6 etapas principais:`,
+      content: `O processo de construção industrializada segue uma sequência bem definida onde algumas etapas podem ocorrer em paralelo, reduzindo drasticamente o tempo total. Aqui estão as 6 etapas principais:`,
       level: 2,
     },
     {
       id: "selecao-fornecedor",
       title: "Critérios para Escolher um Fornecedor Confiável",
-      content: `A qualidade da construção modular depende diretamente do fabricante escolhido. Avalie criteriosamente os fornecedores antes de fazer sua escolha.
+      content: `A qualidade da construção industrializada depende diretamente do fabricante escolhido. Avalie criteriosamente os fornecedores antes de fazer sua escolha.
 
 Principais critérios:
 - Histórico comprovado: visite obras entregues, converse com clientes anteriores
@@ -154,12 +154,12 @@ Principais players no Brasil incluem Brasil ao Cubo (volumétrico metálico), Te
     },
     {
       id: "conclusao",
-      title: "Conclusão: Construção Modular Como Decisão Estratégica",
-      content: `A construção modular em 2025 oferece proposta de valor clara: redução de 30-50% no tempo, economia de 10-30% nos custos e drasticamente menos desperdício. Para incorporadoras, significa giro mais rápido de capital e maior previsibilidade. Para famílias, representa a possibilidade de sair do aluguel meses antes e com orçamento controlado.
+      title: "Conclusão: Construção Industrializada Como Decisão Estratégica",
+      content: `A construção industrializada em 2025 oferece proposta de valor clara: redução de 30-50% no tempo, economia de 10-30% nos custos e drasticamente menos desperdício. Para incorporadoras, significa giro mais rápido de capital e maior previsibilidade. Para famílias, representa a possibilidade de sair do aluguel meses antes e com orçamento controlado.
 
 O mercado brasileiro está em fase de aceleração. Com penetração atual de apenas 8-10% contra 30-90% na Europa, o potencial de crescimento é substancial. A combinação de déficit habitacional crônico, escassez de mão de obra qualificada e pressões por sustentabilidade cria ambiente favorável para métodos industrializados.
 
-O momento exige avaliação criteriosa. Construção modular não é solução para todos os casos — mas para projetos com perfil adequado, representa vantagem competitiva significativa. Em um setor historicamente resistente a mudanças, quem dominar métodos industrializados estará posicionado para liderar a próxima década da construção civil brasileira.`,
+O momento exige avaliação criteriosa. Construção industrializada não é solução para todos os casos — mas para projetos com perfil adequado, representa vantagem competitiva significativa. Em um setor historicamente resistente a mudanças, quem dominar métodos industrializados estará posicionado para liderar a próxima década da construção civil brasileira.`,
       level: 2,
     },
   ],
@@ -338,11 +338,11 @@ O momento exige avaliação criteriosa. Construção modular não é solução p
   // Myths para desmistificar (5 mitos)
   myths: [
     {
-      myth: "Construção modular é barata e de baixa qualidade",
-      truth: "Modular oferece melhor custo-benefício, não apenas custo baixo. A qualidade é superior devido ao controle de fábrica e uso de tecnologia BIM. Exemplos como o Edifício Level (8 andares) provam viabilidade em alto padrão.",
+      myth: "Construção industrializada é barata e de baixa qualidade",
+      truth: "A construção industrializada oferece melhor custo-benefício, não apenas custo baixo. A qualidade é superior devido ao controle de fábrica e uso de tecnologia BIM. Exemplos como o Edifício Level (8 andares) provam viabilidade em alto padrão.",
     },
     {
-      myth: "Todas as casas modulares são iguais",
+      myth: "Todas as casas industrializadas são iguais",
       truth: "A customização é TOTAL no projeto. O que é padronizado é o PROCESSO industrial, não o design. Cada projeto pode ter arquitetura única, desde que respeitadas dimensões de transporte (3,5m largura).",
     },
     {
@@ -350,7 +350,7 @@ O momento exige avaliação criteriosa. Construção modular não é solução p
       truth: "Estruturas em LSF suportam até 200 km/h de vento e são aprovadas em zonas sísmicas globalmente. No Brasil, atendem NBR 15253 e NBR 14762 com margem de segurança superior à alvenaria.",
     },
     {
-      myth: "Bancos não financiam construção modular",
+      myth: "Bancos não financiam construção industrializada",
       truth: "LIMITAÇÃO REAL mas em mudança. Caixa e Banco do Brasil já aceitam LSF para MCMV. A barreira está na garantia de fábrica (não há habite-se parcial). Solução: construtoras fazem bridge loan até entrega.",
     },
     {
@@ -595,8 +595,8 @@ O momento exige avaliação criteriosa. Construção modular não é solução p
   },
 
   // SEO Metadata
-  metaTitle: "Tendências da Construção Modular 2025 | Análise Completa do Mercado Brasileiro",
-  metaDescription: "Análise profunda das tendências da construção modular no Brasil em 2025: BIM, Light Steel Frame, CLT, custos reais, casos de sucesso e guia prático de implementação para construtoras e famílias.",
+  metaTitle: "Tendências da Construção Industrializada 2025 | Análise Completa do Mercado Brasileiro",
+  metaDescription: "Análise profunda das tendências da construção industrializada no Brasil em 2025: BIM, Light Steel Frame, CLT, custos reais, casos de sucesso e guia prático de implementação para construtoras e famílias.",
   keywords: [
     "construção modular",
     "Light Steel Frame",

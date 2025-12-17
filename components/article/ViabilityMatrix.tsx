@@ -182,7 +182,7 @@ export function ViabilityMatrix({ scenarios }: ViabilityMatrixProps) {
         {/* Additional Context */}
         <div className="bg-black-5 rounded-lg p-6 border border-black-10">
           <p className="body-sm text-black-70">
-            <strong>💡 Dica:</strong> A viabilidade de construção modular depende de fatores como
+            <strong>💡 Dica:</strong> A viabilidade de construção industrializada depende de fatores como
             escala do projeto, prazo disponível, orçamento, localização e complexidade do design.
             Consulte fornecedores especializados para análise personalizada do seu projeto.
           </p>

@@ -71,9 +71,9 @@ export const blogPosts: BlogPost[] = [
   {
     id: "6",
     slug: "tendencias-construcao-modular-2025",
-    title: "Tendências em Construção Modular para 2025",
+    title: "Tendências em Construção Industrializada para 2025",
     excerpt:
-      "Conheça as principais tendências e inovações em construção modular que estão transformando o setor da construção civil.",
+      "Conheça as principais tendências e inovações em construção industrializada que estão transformando o setor da construção civil.",
     image:
       "https://images.unsplash.com/photo-1486325212027-8081e485255e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
     category: "Mercado",
