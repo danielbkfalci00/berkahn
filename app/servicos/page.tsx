@@ -94,7 +94,7 @@ export default function ServicosPage() {
       <HeroPage
         title="Serviços"
         subtitle="O que fazemos"
-        imageSrc="/images/empresa/primeira-imagem.png"
+        imageSrc="/images/Services/hero-servicos.webp"
         imageAlt="Serviços Berkahn"
       />
 
