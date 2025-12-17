@@ -148,7 +148,7 @@ export function ExecutionPhases() {
         <div className="hidden md:block">
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
             {/* Tabs List - 4 colunas */}
-            <TabsList className="relative z-10 grid w-full grid-cols-4 gap-2 lg:gap-3 bg-transparent mb-8 lg:mb-10">
+            <TabsList className="relative z-10 grid w-full grid-cols-4 gap-2 lg:gap-3 bg-transparent mb-12 lg:mb-16">
               {EXECUTION_PHASES.map((phase) => (
                 <TabsTrigger
                   key={phase.id}
@@ -236,7 +236,7 @@ export function ExecutionPhases() {
                   </div>
 
                   {/* RIGHT: Image Carousel */}
-                  <div className="w-full pt-4">
+                  <div className="w-full">
                     <Carousel className="w-full" opts={{ loop: true }}>
                       <CarouselContent>
                         {[
@@ -244,7 +244,7 @@ export function ExecutionPhases() {
                           { src: phase.images.secondary, alt: phase.images.secondaryAlt }
                         ].map((img, idx) => (
                           <CarouselItem key={idx}>
-                            <div className="aspect-[4/3] relative overflow-hidden rounded-lg">
+                            <div className="aspect-[4/5] relative overflow-hidden rounded-lg">
                               <Image
                                 src={img.src}
                                 alt={img.alt}
