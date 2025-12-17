@@ -87,49 +87,6 @@ const methodology = [
   },
 ];
 
-// Stats com categorias
-const stats = [
-  {
-    value: "150+",
-    label: "Projetos Concluídos",
-    category: "PROJETOS"
-  },
-  {
-    value: "95%",
-    label: "Satisfação dos Clientes",
-    category: "SATISFAÇÃO"
-  },
-  {
-    value: "70%",
-    label: "Redução no Tempo de Obra",
-    category: "TEMPO"
-  },
-];
-
-// Diferenciais
-const diferenciais = [
-  {
-    category: "CERTIFICAÇÃO",
-    title: "Certificações Técnicas",
-    desc: "Seguimos rigorosamente as normas NBR 16970 (Steel Frame) e NBR 15575 (Desempenho de Edificações). Garantia de qualidade certificada e conformidade técnica em cada projeto.",
-  },
-  {
-    category: "EQUIPE",
-    title: "Equipe Especializada",
-    desc: "Profissionais capacitados com vasta experiência em Steel Frame. Equipe técnica treinada em processos industrializados e construção sustentável de alta performance.",
-  },
-  {
-    category: "PROCESSO",
-    title: "Prazos Garantidos",
-    desc: "Cronograma definido e cumprido com rigor e transparência. Sistema industrializado que reduz o tempo de obra em até 70% comparado à construção convencional.",
-  },
-  {
-    category: "SUPORTE",
-    title: "Suporte Completo",
-    desc: "Acompanhamento em todas as etapas, do projeto arquitetônico à entrega final. Consultoria técnica especializada e assistência durante todo o ciclo de vida da edificação.",
-  },
-];
-
 export default function ServicosPage() {
   return (
     <main>
@@ -260,84 +217,7 @@ export default function ServicosPage() {
         </div>
       </section>
 
-      {/* 6. Por Que Escolher a Berkahn */}
-      <section id="diferencial" className="py-24 bg-white">
-        <div className="container mx-auto px-6 max-w-7xl">
-          <RevealOnScroll>
-            <p className="label-text text-black-50 text-center mb-4">
-              DIFERENCIAL BERKAHN
-            </p>
-            <h2 className="headline-lg text-center mb-16">
-              Por Que Escolher a Berkahn
-            </h2>
-          </RevealOnScroll>
-
-          {/* Stats Cards - 3 colunas */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-            {stats.map((stat, i) => (
-              <RevealOnScroll key={i} delay={i * 0.1}>
-                <Card className="text-center border-black-10 hover:shadow-luxury-md transition-shadow duration-300">
-                  <CardContent className="pt-8 pb-8">
-                    <Badge
-                      variant="outline"
-                      className="mb-4 text-[10px] tracking-widest border-black-20"
-                    >
-                      {stat.category}
-                    </Badge>
-                    <p className="text-5xl font-heading font-bold mb-3 text-black">
-                      {stat.value}
-                    </p>
-                    <p className="text-sm text-black-70 leading-relaxed">
-                      {stat.label}
-                    </p>
-                  </CardContent>
-                </Card>
-              </RevealOnScroll>
-            ))}
-          </div>
-
-          {/* Separator */}
-          <Separator className="my-16 bg-black-10" />
-
-          {/* Diferenciais com Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {diferenciais.map((item, i) => (
-              <RevealOnScroll key={i} delay={i * 0.1}>
-                <Card className="h-full shadow-luxury-sm hover:shadow-luxury-lg transition-all duration-300 border-black-10 group">
-                  <CardContent className="p-8">
-                    {/* Badge + Título */}
-                    <div className="space-y-4 mb-6">
-                      <Badge
-                        variant="outline"
-                        className="text-xs tracking-wider border-black-20"
-                      >
-                        {item.category}
-                      </Badge>
-                      <h3 className="headline-sm leading-tight">{item.title}</h3>
-                    </div>
-
-                    {/* Separator */}
-                    <Separator className="mb-6 bg-black-10" />
-
-                    {/* Descrição */}
-                    <p className="body-md text-black-70 leading-relaxed mb-6">
-                      {item.desc}
-                    </p>
-
-                    {/* CheckIcon Refinado */}
-                    <div className="flex items-center gap-2 text-black-50 group-hover:text-black transition-colors">
-                      <CheckIcon className="w-5 h-5" />
-                      <span className="text-sm font-medium tracking-wide">VERIFICADO</span>
-                    </div>
-                  </CardContent>
-                </Card>
-              </RevealOnScroll>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* 7. Projetos Prontos */}
+      {/* 6. Projetos Prontos */}
       <ProjectsGrid id="projetos" />
 
       {/* 8. CTA */}
