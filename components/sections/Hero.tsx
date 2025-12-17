@@ -55,17 +55,6 @@ export function Hero() {
             {/* Slide 3 */}
             <CarouselItem className="basis-full min-w-0 h-full">
               <Image
-                src="/images/hero/hero-home-3.webp"
-                alt="Perfis estruturais organizados"
-                fill
-                className="object-cover"
-                sizes="100vw"
-              />
-            </CarouselItem>
-
-            {/* Slide 4 */}
-            <CarouselItem className="basis-full min-w-0 h-full">
-              <Image
                 src="/images/hero/hero-home-4.webp"
                 alt="Arquitetura moderna finalizada"
                 fill
@@ -74,7 +63,7 @@ export function Hero() {
               />
             </CarouselItem>
 
-            {/* Slide 5 */}
+            {/* Slide 4 */}
             <CarouselItem className="basis-full min-w-0 h-full">
               <Image
                 src="/images/hero/hero-home-5.webp"
