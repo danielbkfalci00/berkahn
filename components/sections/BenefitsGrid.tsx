@@ -1,5 +1,3 @@
-"use client";
-
 import { CountUp } from "@/components/animations/CountUp";
 import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
 import { BENEFITS } from "@/lib/lsf-data";
