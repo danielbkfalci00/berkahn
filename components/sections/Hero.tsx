@@ -29,10 +29,10 @@ export function Hero() {
           className="h-full w-full"
         >
           <CarouselContent className="h-full">
-            {/* Slide 1: Estrutura em Construção */}
+            {/* Slide 1 */}
             <CarouselItem className="basis-full min-w-0 h-full">
               <Image
-                src="/images/hero/hero-1-estrutura-construcao.jpg"
+                src="/images/hero/hero-home-1.webp"
                 alt="Estrutura Steel Frame em construção"
                 fill
                 className="object-cover"
@@ -41,10 +41,10 @@ export function Hero() {
               />
             </CarouselItem>
 
-            {/* Slide 2: Detalhes Estruturais */}
+            {/* Slide 2 */}
             <CarouselItem className="basis-full min-w-0 h-full">
               <Image
-                src="/images/hero/hero-2-detalhes-estruturais.jpg"
+                src="/images/hero/hero-home-2.webp"
                 alt="Detalhes de conexões estruturais precisas"
                 fill
                 className="object-cover"
@@ -52,10 +52,10 @@ export function Hero() {
               />
             </CarouselItem>
 
-            {/* Slide 3: Estrutura Metálica Limpa */}
+            {/* Slide 3 */}
             <CarouselItem className="basis-full min-w-0 h-full">
               <Image
-                src="/images/hero/hero-3-estrutura-metalica.jpg"
+                src="/images/hero/hero-home-3.webp"
                 alt="Perfis estruturais organizados"
                 fill
                 className="object-cover"
@@ -63,10 +63,10 @@ export function Hero() {
               />
             </CarouselItem>
 
-            {/* Slide 4: Fachada Finalizada */}
+            {/* Slide 4 */}
             <CarouselItem className="basis-full min-w-0 h-full">
               <Image
-                src="/images/hero/hero-4-fachada-finalizada.jpg"
+                src="/images/hero/hero-home-4.webp"
                 alt="Arquitetura moderna finalizada"
                 fill
                 className="object-cover"
@@ -74,10 +74,10 @@ export function Hero() {
               />
             </CarouselItem>
 
-            {/* Slide 5: Casa Completa */}
+            {/* Slide 5 */}
             <CarouselItem className="basis-full min-w-0 h-full">
               <Image
-                src="/images/hero/hero-5-casa-completa.jpg"
+                src="/images/hero/hero-home-5.webp"
                 alt="Projeto residencial completo"
                 fill
                 className="object-cover"
