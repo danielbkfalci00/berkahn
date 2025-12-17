@@ -8,7 +8,7 @@ export const cincoVantagensSteelFrameArticle: RichArticle = {
   author: "Equipe Berkahn",
   publishDate: "2025-01-15",
   readTime: 20,
-  heroImage: "/images/lsf-hero-structure.png",
+  heroImage: "/images/Lsf/lsf-hero-structure.webp",
   excerpt: "O Light Steel Frame está conquistando o mercado brasileiro com uma proposta irrecusável: construir em até 70% menos tempo, com menos de 1% de desperdício e durabilidade que pode ultrapassar 300 anos. Enquanto representa apenas 3% das construções nacionais, o sistema já movimenta um setor que cresceu 27,7% em 2023.",
 
   metaTitle: "As 5 Vantagens Decisivas do Light Steel Frame | Berkahn",

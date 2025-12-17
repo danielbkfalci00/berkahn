@@ -8,7 +8,7 @@ export const guiaDefinitivoSteelFrameArticle: RichArticle = {
   author: "Equipe Berkahn",
   publishDate: "2025-01-15",
   readTime: 20,
-  heroImage: "/images/lsf-hero-structure.png",
+  heroImage: "/images/Lsf/lsf-hero-structure.webp",
   excerpt: "O Steel Frame deixou de ser novidade e já representa a principal alternativa industrializada à alvenaria tradicional no país. Com crescimento de 60% nos últimos cinco anos, entrega casas em até 60% do tempo com 90% menos consumo de água e desperdício praticamente zero.",
   metaTitle: "Steel Frame: Guia Definitivo 2025 | Construção Rápida e Sustentável",
   metaDescription: "Guia completo Steel Frame 2025: custos regionais, normas ABNT NBR 16970, processo construtivo, sustentabilidade, financiamento. Tudo para construir ou comprar.",

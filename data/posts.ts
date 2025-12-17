@@ -133,7 +133,7 @@ export const blogPosts: BlogPost[] = [
     title: "Steel Frame: o guia definitivo para construir mais rápido, sustentável e com qualidade no Brasil",
     excerpt:
       "Guia completo sobre Steel Frame 2025: custos regionais, normas ABNT NBR 16970, processo construtivo, sustentabilidade, financiamento. Tudo para construir ou comprar.",
-    image: "/images/lsf-hero-structure.png",
+    image: "/images/Lsf/lsf-hero-structure.webp",
     category: "Guia",
     author: "Equipe Berkahn",
     date: "2025-01-15",
