@@ -69,7 +69,7 @@ export default function LSFPage() {
             <RevealOnScroll>
               <div className="relative h-[400px] lg:h-[500px] rounded-lg overflow-hidden shadow-luxury-lg bg-white">
                 <Image
-                  src="/images/Lsf/lsf-wall-layers-diagram.png"
+                  src="/images/Lsf/lsf-wall-layers-diagram.webp"
                   alt="Diagrama técnico das camadas de parede LSF"
                   fill
                   className="object-contain p-4"

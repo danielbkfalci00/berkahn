@@ -358,8 +358,7 @@ export const CONSTRUCTION_TIMELINE: TimelinePhase[] = [
     title: "Funda\u00e7\u00e3o e Prepara\u00e7\u00e3o",
     description:
       "Prepara\u00e7\u00e3o do terreno, marca\u00e7\u00e3o, escava\u00e7\u00e3o e execu\u00e7\u00e3o da funda\u00e7\u00e3o (radier ou sapata corrida). Sistema LSF permite funda\u00e7\u00f5es mais leves e econ\u00f4micas devido ao baixo peso estrutural.",
-    imageUrl:
-      "https://images.unsplash.com/photo-1504307651254-35680f356dfd?ixlib=rb-4.0.3&auto=format&fit=crop&w=2400&q=80",
+    imageUrl: "/images/Lsf/lsf-fase-1.webp",
     duration: "5-10 dias",
     highlights: [
       "Prepara\u00e7\u00e3o e nivelamento do terreno",
@@ -375,8 +374,7 @@ export const CONSTRUCTION_TIMELINE: TimelinePhase[] = [
     title: "Montagem da Estrutura",
     description:
       "Montagem dos perfis de a\u00e7o galvanizado: instala\u00e7\u00e3o de guias, montantes, vergas, contravergas e estrutura de cobertura. Processo r\u00e1pido e preciso com uso de parafusos auto-atarraxantes.",
-    imageUrl:
-      "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?ixlib=rb-4.0.3&auto=format&fit=crop&w=2400&q=80",
+    imageUrl: "/images/Lsf/lsf-fase-2.webp",
     duration: "10-15 dias",
     highlights: [
       "Fixa\u00e7\u00e3o das guias inferiores",
@@ -392,8 +390,7 @@ export const CONSTRUCTION_TIMELINE: TimelinePhase[] = [
     title: "Fechamento e Isolamento",
     description:
       "Instala\u00e7\u00e3o de placas OSB estruturais, barreiras hidr\u00f3fugas, isolamento t\u00e9rmico/ac\u00fastico com l\u00e3 mineral, e barreiras de vapor. Esta fase cria o envelope eficiente da edifica\u00e7\u00e3o.",
-    imageUrl:
-      "https://images.unsplash.com/photo-1572981762384-5a1c1a7c8f60?ixlib=rb-4.0.3&auto=format&fit=crop&w=2400&q=80",
+    imageUrl: "/images/Lsf/lsf-fase-3.webp",
     duration: "10-15 dias",
     highlights: [
       "Fixa\u00e7\u00e3o de placas OSB estruturais externas",
@@ -409,8 +406,7 @@ export const CONSTRUCTION_TIMELINE: TimelinePhase[] = [
     title: "Instala\u00e7\u00f5es Prediais",
     description:
       "Execu\u00e7\u00e3o de instala\u00e7\u00f5es el\u00e9tricas, hidrossanit\u00e1rias, HVAC e automa\u00e7\u00e3o. Sistema LSF facilita passagem de tubula\u00e7\u00f5es e fios atrav\u00e9s dos perfis met\u00e1licos com aberturas pr\u00e9-existentes.",
-    imageUrl:
-      "https://images.unsplash.com/photo-1621905251918-48416bd8575a?ixlib=rb-4.0.3&auto=format&fit=crop&w=2400&q=80",
+    imageUrl: "/images/Lsf/lsf-fase-4.webp",
     duration: "10-20 dias",
     highlights: [
       "Instala\u00e7\u00e3o el\u00e9trica (cabos, eletrodutos, caixas)",
