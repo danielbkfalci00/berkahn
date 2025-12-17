@@ -20,7 +20,7 @@ export default function LSFPage() {
       {/* 1. Hero Parallax */}
       <ParallaxHero
         title="Light Steel Frame"
-        backgroundImage="/images/lsf-hero-structure.png"
+        backgroundImage="/images/Lsf/lsf-hero-structure.png"
         height="100vh"
       />
 
@@ -69,7 +69,7 @@ export default function LSFPage() {
             <RevealOnScroll>
               <div className="relative h-[400px] lg:h-[500px] rounded-lg overflow-hidden shadow-luxury-lg bg-white">
                 <Image
-                  src="/images/lsf-wall-layers-diagram.png"
+                  src="/images/Lsf/lsf-wall-layers-diagram.png"
                   alt="Diagrama técnico das camadas de parede LSF"
                   fill
                   className="object-contain p-4"
