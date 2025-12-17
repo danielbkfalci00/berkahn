@@ -5,26 +5,12 @@ const nextConfig: NextConfig = {
   images: {
     unoptimized: true, // Required for static export
   },
-  async redirects() {
-    return [
-      // SEO redirects para slugs antigos (301 permanent redirects)
-      {
-        source: "/atualidade/5-vantagens-light-steel-frame",
-        destination: "/atualidade/5-vantagens-decisivas-light-steel-frame",
-        permanent: true,
-      },
-      {
-        source: "/atualidade/como-funciona-construcao-steel-frame",
-        destination: "/atualidade/passo-passo-construcao-steel-frame",
-        permanent: true,
-      },
-      {
-        source: "/atualidade/steel-frame-vs-alvenaria-comparativo",
-        destination: "/atualidade/steel-frame-vs-alvenaria",
-        permanent: true,
-      },
-    ];
-  },
+  reactStrictMode: true,
+  // Note: redirects() don't work with output:"export"
+  // Configure redirects in hosting platform (Vercel/Netlify) instead:
+  // - /atualidade/5-vantagens-light-steel-frame → /atualidade/5-vantagens-decisivas-light-steel-frame
+  // - /atualidade/como-funciona-construcao-steel-frame → /atualidade/passo-passo-construcao-steel-frame
+  // - /atualidade/steel-frame-vs-alvenaria-comparativo → /atualidade/steel-frame-vs-alvenaria
 };
 
 export default nextConfig;
