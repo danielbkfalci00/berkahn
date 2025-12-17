@@ -73,17 +73,17 @@ export function Categories() {
                   <div className="w-12 h-[1px] bg-white/60 mb-6" />
 
                   {/* Description */}
-                  <p className="text-sm md:text-base text-white/90 leading-relaxed max-w-xs mb-8">
+                  <p className="text-sm md:text-base text-white/90 leading-relaxed max-w-xs">
                     {category.description}
                   </p>
 
-                  {/* Button */}
-                  <Link
+                  {/* TODO: Descomentar para mostrar botão Portfólio */}
+                  {/* <Link
                     href={category.href}
-                    className="inline-block px-8 py-3 border border-white/80 text-sm uppercase tracking-widest font-medium transition-all duration-300 hover:bg-white hover:text-black"
+                    className="inline-block px-8 py-3 border border-white/80 text-sm uppercase tracking-widest font-medium transition-all duration-300 hover:bg-white hover:text-black mt-8"
                   >
                     Portfólio
-                  </Link>
+                  </Link> */}
                 </div>
               </div>
             </RevealOnScroll>
