@@ -20,6 +20,9 @@ export function HeroPage({ title, subtitle, imageSrc, imageAlt }: HeroPageProps)
           priority
           sizes="100vw"
         />
+
+        {/* Scrim Gradient Overlay para garantir legibilidade */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
       </div>
 
       {/* Content */}
