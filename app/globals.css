@@ -148,8 +148,9 @@
 
   .hero-text-shadow-strong {
     text-shadow:
-      0 2px 12px rgba(0, 0, 0, 0.5),
-      0 4px 24px rgba(0, 0, 0, 0.3);
+      0 1px 2px rgba(0, 0, 0, 0.8),    /* Camada 1: Definição imediata */
+      0 2px 12px rgba(0, 0, 0, 0.6),   /* Camada 2: Profundidade */
+      0 4px 24px rgba(0, 0, 0, 0.4);   /* Camada 3: Halo difuso */
   }
 
   /* Container texto à esquerda */
@@ -201,5 +202,34 @@
 
   .body-xs {
     @apply text-xs leading-relaxed;
+  }
+
+  /* Luxury shadows - Minimal profundidade */
+  .shadow-luxury-sm {
+    box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.03),
+                0 1px 2px -1px rgba(0, 0, 0, 0.02);
+  }
+
+  .shadow-luxury-md {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05),
+                0 2px 4px -1px rgba(0, 0, 0, 0.03);
+  }
+
+  .shadow-luxury-lg {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.07),
+                0 4px 6px -2px rgba(0, 0, 0, 0.04);
+  }
+
+  /* Border opacity utilities */
+  .border-black-10 {
+    border-color: rgba(0, 0, 0, 0.1);
+  }
+
+  .border-black-20 {
+    border-color: rgba(0, 0, 0, 0.2);
+  }
+
+  .border-black-30 {
+    border-color: rgba(0, 0, 0, 0.3);
   }
 }
