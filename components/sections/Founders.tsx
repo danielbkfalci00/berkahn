@@ -29,7 +29,7 @@ const FOUNDERS: Founder[] = [
     name: "Daniel Falci",
     role: "Co-Fundador",
     bio: "Engenheiro civil com sólida experiência em planejamento, gerenciamento e execução de obras. Atuou em projetos residenciais, comerciais e logísticos, com participação direta na coordenação de empreendimentos de alto padrão em São Paulo.",
-    image: "/images/founders/daniel-falci.png",
+    image: "/images/founders/daniel-falci.webp",
     linkedin: "https://www.linkedin.com/in/danielbkfalci/",
     timeline: [
       {
@@ -84,7 +84,7 @@ const FOUNDERS: Founder[] = [
     name: "Matheus Bertevello",
     role: "Co-Fundador",
     bio: "Formado em Engenharia de Produção pelo Centro Universitário FEI, mais de 7 anos de experiência em Melhoria de Processos e atualmente trabalha com Consultoria de Processos implementando o Lean Construction em obras civis.",
-    image: "/images/founders/matheus-bertevello.jpg",
+    image: "/images/founders/matheus-bertevello.webp",
     linkedin: "https://www.linkedin.com/in/matheus-bertevello/",
     timeline: [
       {
@@ -139,7 +139,7 @@ const FOUNDERS: Founder[] = [
     name: "Gabriel Vidal",
     role: "Co-Fundador",
     bio: "Engenheiro civil formado pelo Centro Universitário de Brasília, MBA em gerenciamento de projetos (IBMEC) e gerenciamento de empreendimentos na construção civil (Mackenzie), 6 anos de experiência com licitações e gestão de contratos de prestação de serviços públicos e privados e 4 anos de experiência com orçamentos, viabilidades e desenvolvimento de empreendimentos imobiliários.",
-    image: "/images/founders/gabriel-vidal.png",
+    image: "/images/founders/gabriel-vidal.webp",
     timeline: [
       {
         year: "2024",

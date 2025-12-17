@@ -20,7 +20,7 @@ export default function LSFPage() {
       {/* 1. Hero Parallax */}
       <ParallaxHero
         title="Light Steel Frame"
-        backgroundImage="/images/Lsf/lsf-hero-structure.png"
+        backgroundImage="/images/Lsf/lsf-hero-structure.webp"
         height="100vh"
       />
 

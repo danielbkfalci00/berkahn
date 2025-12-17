@@ -66,7 +66,7 @@ export default function EmpresaPage() {
         {/* Background Image */}
         <div className="absolute inset-0 z-0">
           <Image
-            src="/images/empresa/primeira-imagem.png"
+            src="/images/empresa/primeira-imagem.webp"
             alt="Berkahn - Construção em Steel Frame"
             fill
             className="object-cover"
