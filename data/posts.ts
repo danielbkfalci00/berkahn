@@ -21,7 +21,7 @@ export const blogPosts: BlogPost[] = [
     title: "5 Vantagens Definitivas do Light Steel Frame",
     excerpt:
       "Descubra as principais vantagens da construção em steel frame: redução de custos, prazos mais curtos e máxima flexibilidade arquitetônica.",
-    image: "/images/lsf-hero-structure.png",
+    image: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?ixlib=rb-4.0.3&auto=format&fit=crop&w=2400&q=80",
     category: "Guia",
     author: "Berkahn",
     date: "2024-11-25",
@@ -48,8 +48,7 @@ export const blogPosts: BlogPost[] = [
     title: "Steel Frame vs Alvenaria: O Comparativo Definitivo",
     excerpt:
       "Análise detalhada entre steel frame e alvenaria: custos, tempo de execução, durabilidade e impacto ambiental comparados.",
-    image:
-      "https://images.unsplash.com/photo-1503387762-592deb58ef4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=2400&q=80",
+    image: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?ixlib=rb-4.0.3&auto=format&fit=crop&w=2400&q=80",
     category: "Análise",
     author: "Berkahn",
     date: "2024-11-10",
