@@ -95,6 +95,7 @@ export default async function ProjectPage({ params }: Props) {
         subtitle={getCategoryLabel(project.category)}
         imageSrc={project.heroImage}
         imageAlt={project.name}
+        contentPosition="center"
       />
 
       {/* 2. Galeria Bento - NOVA POSIÇÃO (logo após hero) */}

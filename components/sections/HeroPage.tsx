@@ -5,11 +5,14 @@ interface HeroPageProps {
   subtitle?: string;
   imageSrc: string;
   imageAlt: string;
+  contentPosition?: 'top' | 'center';
 }
 
-export function HeroPage({ title, subtitle, imageSrc, imageAlt }: HeroPageProps) {
+export function HeroPage({ title, subtitle, imageSrc, imageAlt, contentPosition = 'top' }: HeroPageProps) {
+  const paddingClass = contentPosition === 'center' ? 'pt-40 md:pt-48' : 'pt-32 md:pt-40';
+
   return (
-    <section className="relative h-screen min-h-[600px] flex items-start justify-start pt-32 md:pt-40 overflow-hidden">
+    <section className={`relative h-screen min-h-[600px] flex items-start justify-start ${paddingClass} overflow-hidden`}>
       {/* Background Image */}
       <div className="absolute inset-0 z-0">
         <Image
