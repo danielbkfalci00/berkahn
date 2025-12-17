@@ -131,8 +131,8 @@ O projeto combina conforto térmico, eficiência energética e design atemporal,
     description: `Loft com conceito aberto e design minimalista. Pé-direito alto e iluminação natural abundante criam sensação de amplitude. Ideal para profissionais modernos que valorizam funcionalidade e estética.
 
 A estrutura em steel frame permite flexibilidade de layout e instalação rápida.`,
-    heroImage: '/images/Services/Projetos prontos/loft/loft-urbano.webp',
-    cardImage: '/images/Services/Projetos prontos/loft/loft-urbano.webp',
+    heroImage: '/images/Services/Projetos prontos/loft/loft-urbano.png',
+    cardImage: '/images/Services/Projetos prontos/loft/loft-urbano.png',
     area: {
       builtArea: 37.00,
       minLotWidth: 9.0,
@@ -151,7 +151,7 @@ A estrutura em steel frame permite flexibilidade de layout e instalação rápid
       garages: 1,
     },
     gallery: [
-      { src: '/images/Services/Projetos prontos/loft/loft-urbano.webp', alt: 'Loft Urbano Moderno - Fachada', type: 'exterior' },
+      { src: '/images/Services/Projetos prontos/loft/loft-urbano.png', alt: 'Loft Urbano Moderno - Fachada', type: 'exterior' },
       { src: '/images/Services/Projetos prontos/loft/loft-urbano_1.webp', alt: 'Loft Urbano - Detalhe 1', type: 'interior' },
       { src: '/images/Services/Projetos prontos/loft/loft-urbano_2.webp', alt: 'Loft Urbano - Detalhe 2', type: 'interior' },
       { src: '/images/Services/Projetos prontos/loft/loft-urbano_3.webp', alt: 'Loft Urbano - Detalhe 3', type: 'interior' },
