@@ -10,7 +10,7 @@ export function Gallery() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Link href="/portfolio" className="overflow-hidden block group">
               <Image
-                src="/images/home-gallery-1.png"
+                src="/images/Home/home-gallery-1.webp"
                 alt="Residência em Light Steel Frame - Projeto Berkahn"
                 width={2048}
                 height={1152}
@@ -19,7 +19,7 @@ export function Gallery() {
             </Link>
             <Link href="/portfolio" className="overflow-hidden block group">
               <Image
-                src="/images/home-gallery-2.png"
+                src="/images/Home/home-gallery-2.webp"
                 alt="Edifício Comercial em Steel Frame - Projeto Berkahn"
                 width={2048}
                 height={1152}
