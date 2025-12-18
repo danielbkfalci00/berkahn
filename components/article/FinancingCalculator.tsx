@@ -97,9 +97,9 @@ export function FinancingCalculator({ className = "" }: FinancingCalculatorProps
           </p>
         </CardHeader>
 
-        <CardContent className="p-6 md:p-8">
+        <CardContent className="p-4 md:p-6 lg:p-8">
           {/* Inputs */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-8">
             {/* Valor do Imóvel */}
             <div className="space-y-2">
               <Label htmlFor="property-value" className="flex items-center gap-2 text-sm font-medium">
@@ -198,7 +198,7 @@ export function FinancingCalculator({ className = "" }: FinancingCalculatorProps
               Resultados da Simulação
             </p>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {/* Parcela Mensal */}
               <div className="bg-black-5 rounded-lg p-4 border border-black-10">
                 <p className="text-xs text-black-50 mb-1 uppercase tracking-wide">

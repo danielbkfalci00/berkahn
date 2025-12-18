@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import { motion, useInView } from "framer-motion";
 import {
   BarChart, Bar, LineChart, Line, RadarChart, Radar,
@@ -19,10 +19,24 @@ export function ChartSection({ chart, className = "" }: ChartSectionProps) {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-50px" });
 
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   const renderChart = () => {
     const commonProps = {
       data: chart.data,
-      margin: { top: 20, right: 30, left: 20, bottom: 20 }
+      margin: {
+        top: 20,
+        right: isMobile ? 10 : 30,
+        left: isMobile ? 0 : 20,
+        bottom: 20
+      }
     };
 
     switch (chart.type) {
@@ -164,7 +178,7 @@ export function ChartSection({ chart, className = "" }: ChartSectionProps) {
   return (
     <motion.div
       ref={ref}
-      className={`bg-white rounded-lg shadow-luxury-md p-6 md:p-8 ${className}`}
+      className={`bg-white rounded-lg shadow-luxury-md p-4 md:p-6 lg:p-8 ${className}`}
       initial={{ opacity: 0, y: 40 }}
       animate={isInView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.8, ease: [0.19, 1, 0.22, 1] }}
@@ -172,9 +186,11 @@ export function ChartSection({ chart, className = "" }: ChartSectionProps) {
       {chart.title && (
         <h3 className="headline-sm mb-6 text-center">{chart.title}</h3>
       )}
-      <ResponsiveContainer width="100%" height={400}>
-        {renderChart()}
-      </ResponsiveContainer>
+      <div className="h-[300px] md:h-[400px]">
+        <ResponsiveContainer width="100%" height="100%">
+          {renderChart()}
+        </ResponsiveContainer>
+      </div>
     </motion.div>
   );
 }

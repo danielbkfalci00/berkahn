@@ -55,13 +55,13 @@ export function ViabilityMatrix({ scenarios }: ViabilityMatrixProps) {
     <RevealOnScroll>
       <div className="space-y-8">
         {/* Scenario Selector */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3">
           {scenarios.map((scenario) => (
             <motion.button
               key={scenario.id}
               onClick={() => setSelectedScenario(scenario.id)}
               whileHover={{ translateY: -2 }}
-              className={`px-4 py-3 rounded-lg font-medium transition-all ${
+              className={`px-3 py-2.5 md:px-4 md:py-3 text-sm md:text-base rounded-lg font-medium transition-all ${
                 selectedScenario === scenario.id
                   ? `${getBorderColor(scenario.id)} bg-white border-2 shadow-md`
                   : "bg-black-5 border border-black-10 hover:bg-black-10"
@@ -108,7 +108,7 @@ export function ViabilityMatrix({ scenarios }: ViabilityMatrixProps) {
 
           {/* Stats Grid */}
           {current.tabs?.[0]?.content?.stats && (
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8 pt-6 border-t border-black-10">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8 pt-6 border-t border-black-10">
               {current.tabs[0].content.stats.map((stat, idx) => (
                 <motion.div
                   key={idx}

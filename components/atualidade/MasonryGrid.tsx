@@ -34,7 +34,7 @@ export function MasonryGrid({ posts, variant = "masonry" }: MasonryGridProps) {
         </RevealOnScroll>
 
         {/* Masonry Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 auto-rows-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-8 auto-rows-auto">
           {posts.map((post, index) => (
             <ArticleCard
               key={post.id}
@@ -79,7 +79,7 @@ function MinimalGrid({ posts }: { posts: BlogPost[] }) {
         </RevealOnScroll>
 
         {/* Simple Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8 lg:gap-12">
           {posts.map((post, index) => (
             <ArticleCardMinimal key={post.id} post={post} index={index} />
           ))}
@@ -102,7 +102,7 @@ export function BentoGrid({ posts }: { posts: BlogPost[] }) {
         </RevealOnScroll>
 
         {/* Bento Layout */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-6">
           {/* Large card - spans 2 cols and 2 rows */}
           <div className="md:col-span-2 md:row-span-2">
             <ArticleCard post={posts[0]} size="large" index={0} />
@@ -144,7 +144,7 @@ export function ArticleRow({ posts, title = "Relacionados" }: { posts: BlogPost[
       {/* Horizontal Scroll Container */}
       <div className="relative">
         <motion.div
-          className="flex gap-6 px-6 lg:px-[calc((100vw-1280px)/2+24px)] overflow-x-auto scrollbar-hide pb-4"
+          className="flex gap-4 md:gap-6 px-4 md:px-6 lg:px-[calc((100vw-1280px)/2+24px)] overflow-x-auto scrollbar-hide pb-4"
           drag="x"
           dragConstraints={{ right: 0, left: -((posts.length - 3) * 340) }}
         >

@@ -28,7 +28,7 @@ export function DataTable({ table, className = "" }: DataTableProps) {
             {table.headers.map((header, index) => (
               <th
                 key={index}
-                className={`py-5 px-6 font-heading text-base font-medium ${
+                className={`py-3 px-3 md:px-4 lg:px-6 font-heading text-sm md:text-base font-medium ${
                   index === 0 ? "text-left" : "text-center"
                 }`}
               >
@@ -55,7 +55,7 @@ export function DataTable({ table, className = "" }: DataTableProps) {
               {row.map((cell, cellIndex) => (
                 <td
                   key={cellIndex}
-                  className={`py-4 px-6 ${
+                  className={`py-3 px-3 md:px-4 lg:px-6 text-sm md:text-base ${
                     cellIndex === 0
                       ? "font-medium text-black"
                       : "text-center text-black-80"
@@ -108,7 +108,7 @@ export function CompactTable({ headers, rows, className = "" }: CompactTableProp
             {headers.map((header, index) => (
               <th
                 key={index}
-                className={`py-3 px-4 font-medium text-black-80 ${
+                className={`py-2 px-2 md:px-3 lg:px-4 text-xs md:text-sm font-medium text-black-80 ${
                   index === 0 ? "text-left" : "text-center"
                 }`}
               >
@@ -126,7 +126,7 @@ export function CompactTable({ headers, rows, className = "" }: CompactTableProp
               {row.map((cell, cellIndex) => (
                 <td
                   key={cellIndex}
-                  className={`py-3 px-4 ${
+                  className={`py-2 px-2 md:px-3 lg:px-4 text-xs md:text-sm ${
                     cellIndex === 0 ? "font-medium" : "text-center text-black-70"
                   }`}
                 >

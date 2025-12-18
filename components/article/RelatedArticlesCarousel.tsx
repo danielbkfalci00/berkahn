@@ -65,7 +65,7 @@ export function RelatedArticlesCarousel({
           }}
           className="w-full"
         >
-          <CarouselContent className="-ml-4">
+          <CarouselContent className="-ml-2 md:-ml-4">
             {relatedArticles.map((post, index) => (
               <CarouselItem
                 key={post.id}
