@@ -36,8 +36,7 @@ export function ParallaxHero({
   return (
     <section
       ref={ref}
-      className="relative flex items-start justify-start pt-32 md:pt-40 overflow-hidden"
-      style={{ height, minHeight: "600px" }}
+      className="relative h-[70vh] md:h-screen min-h-[500px] md:min-h-[600px] flex items-start justify-start pt-32 md:pt-40 overflow-hidden"
     >
       {/* Background Image Layer (slowest parallax) */}
       <motion.div

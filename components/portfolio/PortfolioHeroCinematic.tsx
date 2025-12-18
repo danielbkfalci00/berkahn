@@ -36,7 +36,7 @@ export function PortfolioHeroCinematic() {
   return (
     <section
       ref={containerRef}
-      className="relative h-screen min-h-[700px] w-full overflow-hidden"
+      className="relative h-[70vh] md:h-screen min-h-[550px] md:min-h-[700px] w-full overflow-hidden"
     >
       {/* Parallax Background Image */}
       <motion.div

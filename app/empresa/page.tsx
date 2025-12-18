@@ -62,7 +62,7 @@ export default function EmpresaPage() {
   return (
     <>
       {/* Hero com Imagem e Stats Overlay */}
-      <section className="relative h-screen min-h-[600px] flex items-start justify-start pt-32 md:pt-40 overflow-hidden">
+      <section className="relative h-[85vh] md:h-screen min-h-[550px] md:min-h-[600px] flex items-start justify-start pt-24 md:pt-32 lg:pt-40 overflow-hidden">
         {/* Background Image */}
         <div className="absolute inset-0 z-0">
           <Image
@@ -93,13 +93,13 @@ export default function EmpresaPage() {
         </div>
 
         {/* Stats Overlay - Bottom */}
-        <div className="absolute bottom-0 left-0 right-0 z-20 pb-12 lg:pb-16">
+        <div className="absolute bottom-0 left-0 right-0 z-20 pb-6 md:pb-12 lg:pb-16">
           <div className="container">
             {/* Label contextual */}
-            <p className="label-text text-white/50 text-center mb-6 tracking-widest">
+            <p className="label-text text-white/50 text-center mb-3 md:mb-6 tracking-widest">
               TRAJETÓRIA DOS NOSSOS FUNDADORES
             </p>
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8 lg:gap-12">
               {[
                 { value: 20, suffix: "+", label: "Anos de experiência combinada" },
                 { value: 23, suffix: "+", label: "Projetos" },
@@ -111,9 +111,9 @@ export default function EmpresaPage() {
                     <CountUp
                       end={stat.value}
                       suffix={stat.suffix}
-                      className="text-4xl lg:text-5xl font-heading font-light mb-2 text-white"
+                      className="text-3xl md:text-4xl lg:text-5xl font-heading font-light mb-1 md:mb-2 text-white"
                     />
-                    <p className="label-text text-white/70">{stat.label}</p>
+                    <p className="label-text text-white/70 text-xs md:text-sm">{stat.label}</p>
                   </div>
                 </RevealOnScroll>
               ))}

@@ -20,7 +20,7 @@ export function HeroPage({
   const paddingClass = contentPosition === 'center' ? 'pt-40 md:pt-48' : 'pt-32 md:pt-40';
 
   return (
-    <section className={`relative h-screen min-h-[600px] flex items-start justify-start ${paddingClass} overflow-hidden`}>
+    <section className={`relative h-[70vh] md:h-screen min-h-[500px] md:min-h-[600px] flex items-start justify-start ${paddingClass} overflow-hidden`}>
       {/* Background Image */}
       <div className="absolute inset-0 z-0">
         <Image
