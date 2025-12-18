@@ -52,7 +52,7 @@ export type ProjectSegment = 'residencial' | 'comercial' | 'industrial'; // | 'c
 
 // Subcategorias por segmento
 export type ResidentialType = 'casa' | 'chale' | 'tiny-house' | 'sobrado' | 'loft';
-export type CommercialType = 'loja' | 'showroom' | 'restaurante';
+export type CommercialType = 'loja' | 'showroom' | 'restaurante' | 'hotel';
 export type IndustrialType = 'galpao' | 'deposito' | 'fabrica';
 export type CorporateType = 'franquia' | 'escritorio' | 'clinica';
 
@@ -124,6 +124,7 @@ export function getSubtypeLabel(subtype: ProjectSubtype): string {
     'loja': 'Loja',
     'showroom': 'Showroom',
     'restaurante': 'Restaurante',
+    'hotel': 'Hotel',
     'galpao': 'Galpão',
     'deposito': 'Depósito',
     'fabrica': 'Fábrica',

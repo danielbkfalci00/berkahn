@@ -4,26 +4,26 @@ import { SlideProject } from "./SlideProject";
 
 const projectData = {
   number: "02",
-  title: "Loft Urbano",
-  location: "São Paulo - SP",
+  title: "Vila Serrana Boutique",
+  location: "Canela - RS",
   year: "2023",
-  area: "180 m²",
-  system: "Steel Frame + Concreto",
+  area: "55 m²/unidade",
+  system: "Steel Frame 100%",
   description:
-    "Espaço contemporâneo no coração da cidade, projetado para profissionais que valorizam design e funcionalidade. A integração de Steel Frame com elementos de concreto aparente cria uma estética industrial sofisticada.",
+    "Empreendimento hoteleiro boutique em Canela, com mini chalés em steel frame que demonstram a versatilidade do sistema em projetos comerciais de alto padrão. Acabamento premium em madeira, pé-direito duplo com vigas aparentes e integração perfeita com a natureza da serra gaúcha.",
   features: [
-    "Pé-direito duplo de 5,8 metros",
-    "Mezanino com estrutura em aço aparente",
-    "Iluminação natural zenital",
-    "Terraço privativo com jardim vertical",
+    "Acabamento hoteleiro premium",
+    "Revestimento em madeira natural",
+    "Pé-direito duplo com vigas aparentes",
+    "Varanda integrada à paisagem",
+    "Isolamento termo-acústico superior",
+    "Construção rápida (60 dias)",
   ],
   images: [
-    "/images/Services/Projetos prontos/loft/loft-urbano.webp",
-    "/images/Services/Projetos prontos/loft/loft-urbano_1.webp",
-    "/images/Services/Projetos prontos/loft/loft-urbano_2.webp",
-    "/images/Services/Projetos prontos/loft/loft-urbano_3.webp",
-    "/images/Services/Projetos prontos/loft/loft-urbano_4.webp",
-    "/images/Services/Projetos prontos/loft/loft-urbano_5.webp",
+    "/images/Services/Projetos prontos/vila-serrana/vila-serrana-exterior-completo.webp",
+    "/images/Services/Projetos prontos/vila-serrana/vila-serrana-fachada-detalhe.webp",
+    "/images/Services/Projetos prontos/vila-serrana/vila-serrana-interior-suite.webp",
+    "/images/Services/Projetos prontos/vila-serrana/vila-serrana-construcao.webp",
   ],
 };
 
