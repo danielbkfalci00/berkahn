@@ -65,9 +65,9 @@ export default function LSFPage() {
       <section className="py-xl bg-white">
         <div className="container">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            {/* Coluna 1: IMAGEM (esquerda) */}
-            <RevealOnScroll>
-              <div className="relative h-[600px] lg:h-[800px] overflow-hidden">
+            {/* Coluna 1: IMAGEM (esquerda no desktop, segunda no mobile) */}
+            <RevealOnScroll className="order-2 lg:order-1">
+              <div className="relative h-[800px] lg:h-[1000px] overflow-hidden">
                 <Image
                   src="/images/Lsf/lsf-wall-layers-diagram.webp"
                   alt="Diagrama técnico das camadas de parede LSF"
@@ -78,10 +78,10 @@ export default function LSFPage() {
               </div>
             </RevealOnScroll>
 
-            {/* Coluna 2: TEXTO (direita) */}
-            <RevealOnScroll delay={0.2}>
+            {/* Coluna 2: TEXTO (direita no desktop, primeira no mobile) */}
+            <RevealOnScroll delay={0.2} className="order-1 lg:order-2">
               <div>
-                <h2 className="headline-md mb-4">a composição do sistema</h2>
+                <h2 className="headline-md mb-4">A Composição do Sistema</h2>
                 <h3 className="text-xl font-medium mb-6 text-black-70">
                   Paredes de Múltiplas Camadas (Multilayer Walls)
                 </h3>
