@@ -20,14 +20,14 @@ const projectData = {
     "Telhado colonial em cerâmica (influência mediterrânea)",
   ],
   images: [
-    "/images/Apresentação/Casa Laranjeiras/casa-laranjeiras-entrada-principal.webp",
-    "/images/Apresentação/Casa Laranjeiras/casa-laranjeiras-piscina.webp",
-    "/images/Apresentação/Casa Laranjeiras/casa-laranjeiras-living.webp",
-    "/images/Apresentação/Casa Laranjeiras/casa-laranjeiras-jantar.webp",
-    "/images/Apresentação/Casa Laranjeiras/casa-laranjeiras-lateral-piscina.webp",
-    "/images/Apresentação/Casa Laranjeiras/casa-laranjeiras-pergola.webp",
-    "/images/Apresentação/Casa Laranjeiras/casa-laranjeiras-fachada-lateral.webp",
-    "/images/Apresentação/Casa Laranjeiras/casa-laranjeiras-fachada-frontal.webp",
+    "/images/apresentacao/casa-laranjeiras/casa-laranjeiras-entrada-principal.webp",
+    "/images/apresentacao/casa-laranjeiras/casa-laranjeiras-piscina.webp",
+    "/images/apresentacao/casa-laranjeiras/casa-laranjeiras-living.webp",
+    "/images/apresentacao/casa-laranjeiras/casa-laranjeiras-jantar.webp",
+    "/images/apresentacao/casa-laranjeiras/casa-laranjeiras-lateral-piscina.webp",
+    "/images/apresentacao/casa-laranjeiras/casa-laranjeiras-pergola.webp",
+    "/images/apresentacao/casa-laranjeiras/casa-laranjeiras-fachada-lateral.webp",
+    "/images/apresentacao/casa-laranjeiras/casa-laranjeiras-fachada-frontal.webp",
   ],
 };
 
