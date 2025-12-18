@@ -27,8 +27,7 @@ const services = [
       "Condomínios residenciais",
       "Casas de campo e chalés",
     ],
-    image:
-      "/images/Services/Projetos prontos/casa_campo/casa-campo-moderna.webp",
+    image: "/images/Services/residencial.webp",
     icon: Home,
   },
   {

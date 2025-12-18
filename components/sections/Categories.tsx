@@ -7,8 +7,7 @@ const categories = [
     title: "RESIDENCIAL",
     description:
       "Projetos residenciais que traduzem qualidade técnica, acabamento de alto nível e soluções integradas para elevar cada ambiente.",
-    image:
-      "/images/Services/Projetos prontos/casa_campo/casa-campo-moderna.webp",
+    image: "/images/Services/residencial.webp",
     href: "/servicos#residencial",
   },
   {
