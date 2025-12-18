@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { PresentationLayout } from "@/components/presentation/PresentationLayout";
 import { SlideCover } from "@/components/presentation/slides/SlideCover";
+import { SlideAbout } from "@/components/presentation/slides/SlideAbout";
 import { SlideFounders } from "@/components/presentation/slides/SlideFounders";
 import { SlidePortfolio } from "@/components/presentation/slides/SlidePortfolio";
 import { SlideMethodology } from "@/components/presentation/slides/SlideMethodology";
@@ -19,16 +20,19 @@ export default function ApresentacaoExecutivaPage() {
       {/* Slide 1: Capa */}
       <SlideCover />
 
-      {/* Slide 2: Fundadores */}
+      {/* Slide 2: Quem Somos */}
+      <SlideAbout />
+
+      {/* Slide 3: Fundadores */}
       <SlideFounders />
 
-      {/* Slide 3: Números + Portfolio */}
+      {/* Slide 4: Números + Portfolio */}
       <SlidePortfolio />
 
-      {/* Slide 4: Metodologia */}
+      {/* Slide 5: Metodologia */}
       <SlideMethodology />
 
-      {/* Slide 5: Contato */}
+      {/* Slide 6: Contato */}
       <SlideContact />
     </PresentationLayout>
   );
