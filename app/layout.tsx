@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Manrope } from "next/font/google";
 import { ClientLayout } from "@/components/layout/ClientLayout";
-import { Footer } from "@/components/layout/Footer";
+import { ConditionalFooter } from "@/components/layout/ConditionalFooter";
 import "./globals.css";
 
 const manrope = Manrope({
@@ -41,7 +41,7 @@ export default function RootLayout({
     <html lang="pt-BR" className={manrope.variable}>
       <body>
         <ClientLayout>{children}</ClientLayout>
-        <Footer />
+        <ConditionalFooter />
       </body>
     </html>
   );
