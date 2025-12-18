@@ -17,7 +17,7 @@ const steps = [
   {
     number: "02",
     title: "Projeto",
-    description: "Desenvolvemos o projeto completo com precisão técnica e design",
+    description: "Gerenciamos o desenvolvimento de todos os projetos necessários para viabilizar a execução da obra",
     icon: PenTool,
   },
   {
@@ -74,12 +74,9 @@ export function SlideMethodology() {
           <p className="text-xs sm:text-sm uppercase tracking-[0.3em] text-black/50 mb-4">
             Como Trabalhamos
           </p>
-          <h2 className="font-heading text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6">
+          <h2 className="font-heading text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight">
             Do Conceito à<br className="hidden sm:block" /> Entrega das Chaves
           </h2>
-          <p className="text-base sm:text-lg text-black/60 font-light max-w-2xl mx-auto leading-relaxed">
-            Gerenciamos o desenvolvimento de todos os projetos necessários para viabilizar a execução da obra
-          </p>
         </RevealOnScroll>
 
         {/* Steps */}
