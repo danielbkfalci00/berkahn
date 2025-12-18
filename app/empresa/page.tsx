@@ -15,22 +15,22 @@ export const metadata = {
     "Construtora moderna com expertise em Steel Frame e sistemas integrados. Conheça a BERKAHN e nossa abordagem inovadora na construção civil.",
 };
 
-// Stats com categorias
+// Stats com categorias - foco em compromissos e entregas
 const stats = [
-  {
-    value: "150+",
-    label: "Projetos Concluídos",
-    category: "PROJETOS"
-  },
-  {
-    value: "95%",
-    label: "Satisfação dos Clientes",
-    category: "SATISFAÇÃO"
-  },
   {
     value: "70%",
     label: "Redução no Tempo de Obra",
-    category: "TEMPO"
+    category: "EFICIÊNCIA"
+  },
+  {
+    value: "95%",
+    label: "Satisfação em Projetos Anteriores",
+    category: "QUALIDADE"
+  },
+  {
+    value: "100%",
+    label: "Compromisso com Prazos",
+    category: "CONFIANÇA"
   },
 ];
 
@@ -95,12 +95,16 @@ export default function EmpresaPage() {
         {/* Stats Overlay - Bottom */}
         <div className="absolute bottom-0 left-0 right-0 z-20 pb-12 lg:pb-16">
           <div className="container">
+            {/* Label contextual */}
+            <p className="label-text text-white/50 text-center mb-6 tracking-widest">
+              TRAJETÓRIA DOS NOSSOS FUNDADORES
+            </p>
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
               {[
-                { value: 20, suffix: "+", label: "Anos de experiência" },
-                { value: 23, suffix: "", label: "Projetos gerenciados" },
-                { value: 85, suffix: " mil m²", label: "Construção gerenciada" },
-                { value: 95, suffix: "%", label: "Satisfação dos clientes" },
+                { value: 20, suffix: "+", label: "Anos de experiência combinada" },
+                { value: 23, suffix: "", label: "Projetos no currículo" },
+                { value: 85, suffix: " mil m²", label: "Área construída no histórico" },
+                { value: 95, suffix: "%", label: "Satisfação em projetos anteriores" },
               ].map((stat, index) => (
                 <RevealOnScroll key={stat.label} delay={index * 0.1}>
                   <div className="text-center">
@@ -131,6 +135,12 @@ export default function EmpresaPage() {
               modernas de engenharia, com ênfase no Steel Frame, e nosso diferencial
               está na capacidade de integrar este sistema leve e eficiente com outras
               estruturas, incluindo concreto e aço laminado, para otimizar cada projeto.
+            </p>
+            <p className="body-lg text-black-70">
+              Juntos, nossos fundadores acumulam mais de duas décadas atuando em
+              projetos residenciais e corporativos, tendo gerenciado mais de 85 mil
+              metros quadrados de construção ao longo de suas carreiras. Essa bagagem
+              técnica e gerencial é o alicerce sobre o qual a Berkahn foi construída.
             </p>
             <p className="body-lg text-black-70">
               A BERKAHN surge como uma empresa jovem, porém construída sobre bases
@@ -177,10 +187,10 @@ export default function EmpresaPage() {
         <div className="container mx-auto px-6 max-w-7xl">
           <RevealOnScroll>
             <p className="label-text text-black-50 text-center mb-4">
-              DIFERENCIAL BERKAHN
+              NOSSO COMPROMISSO
             </p>
             <h2 className="headline-lg text-center mb-16">
-              Por Que Escolher a Berkahn
+              O Que Entregamos
             </h2>
           </RevealOnScroll>
 
