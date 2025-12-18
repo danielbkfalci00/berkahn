@@ -20,10 +20,10 @@ const projectData = {
     "Construção rápida (60 dias)",
   ],
   images: [
-    "/images/services/projetos-prontos/vila-serrana/vila-serrana-exterior-completo.webp",
-    "/images/services/projetos-prontos/vila-serrana/vila-serrana-fachada-detalhe.webp",
-    "/images/services/projetos-prontos/vila-serrana/vila-serrana-interior-suite.webp",
-    "/images/services/projetos-prontos/vila-serrana/vila-serrana-construcao.webp",
+    "/images/Services/projetos-prontos/vila-serrana/vila-serrana-exterior-completo.webp",
+    "/images/Services/projetos-prontos/vila-serrana/vila-serrana-fachada-detalhe.webp",
+    "/images/Services/projetos-prontos/vila-serrana/vila-serrana-interior-suite.webp",
+    "/images/Services/projetos-prontos/vila-serrana/vila-serrana-construcao.webp",
   ],
 };
 
