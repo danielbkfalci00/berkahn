@@ -9,10 +9,10 @@ import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
 import { CountUp } from "@/components/animations/CountUp";
 
 const stats = [
-  { value: 20, suffix: "+", label: "Anos de Experiência" },
-  { value: 23, suffix: "", label: "Projetos no Currículo" },
-  { value: 85, suffix: "k", label: "m² Construídos" },
-  { value: 95, suffix: "%", label: "Satisfação" },
+  { value: 20, suffix: "+", label: "Anos de experiência combinada" },
+  { value: 23, suffix: "+", label: "Projetos" },
+  { value: 85, suffix: "+ mil m²", label: "Área construída" },
+  { value: 100, suffix: "%", label: "Satisfação" },
 ];
 
 const projects = [
@@ -62,7 +62,7 @@ export function SlidePortfolio() {
         {/* Header */}
         <RevealOnScroll className="text-center mb-12 lg:mb-16">
           <p className="text-xs sm:text-sm uppercase tracking-[0.3em] text-white/50 mb-4">
-            Nossa Trajetória
+            Trajetória dos Nossos Fundadores
           </p>
           <h2 className="font-heading text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-white">
             Números que<br className="hidden sm:block" /> Falam por Si
