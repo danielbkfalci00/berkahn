@@ -96,6 +96,7 @@ export default function ServicosPage() {
         subtitle="O que fazemos"
         imageSrc="/images/Services/hero-servicos.webp"
         imageAlt="Serviços Berkahn"
+        imagePosition="object-right md:object-center"
       />
 
       {/* 2. Execução de Obras - Tabs + Carousel */}

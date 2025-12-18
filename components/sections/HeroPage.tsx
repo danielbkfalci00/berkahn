@@ -6,9 +6,17 @@ interface HeroPageProps {
   imageSrc: string;
   imageAlt: string;
   contentPosition?: 'top' | 'center';
+  imagePosition?: string; // Tailwind object-position classes
 }
 
-export function HeroPage({ title, subtitle, imageSrc, imageAlt, contentPosition = 'top' }: HeroPageProps) {
+export function HeroPage({
+  title,
+  subtitle,
+  imageSrc,
+  imageAlt,
+  contentPosition = 'top',
+  imagePosition = 'object-center'
+}: HeroPageProps) {
   const paddingClass = contentPosition === 'center' ? 'pt-40 md:pt-48' : 'pt-32 md:pt-40';
 
   return (
@@ -19,7 +27,7 @@ export function HeroPage({ title, subtitle, imageSrc, imageAlt, contentPosition 
           src={imageSrc}
           alt={imageAlt}
           fill
-          className="object-cover"
+          className={`object-cover ${imagePosition}`}
           priority
           sizes="100vw"
         />
