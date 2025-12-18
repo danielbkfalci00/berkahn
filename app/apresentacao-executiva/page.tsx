@@ -8,6 +8,7 @@ import { SlideProject1 } from "@/components/presentation/slides/SlideProject1";
 import { SlideProject2 } from "@/components/presentation/slides/SlideProject2";
 import { SlideProject3 } from "@/components/presentation/slides/SlideProject3";
 import { SlideMethodology } from "@/components/presentation/slides/SlideMethodology";
+import { SlidePartners } from "@/components/presentation/slides/SlidePartners";
 import { SlideContact } from "@/components/presentation/slides/SlideContact";
 
 export const metadata: Metadata = {
@@ -44,7 +45,10 @@ export default function ApresentacaoExecutivaPage() {
       {/* Slide 8: Metodologia */}
       <SlideMethodology />
 
-      {/* Slide 9: Contato */}
+      {/* Slide 9: Marcas Parceiras (dark) */}
+      <SlidePartners />
+
+      {/* Slide 10: Contato */}
       <SlideContact />
     </PresentationLayout>
   );
