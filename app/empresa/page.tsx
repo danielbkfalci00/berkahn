@@ -18,13 +18,13 @@ export const metadata = {
 // Stats com categorias - foco em compromissos e entregas
 const stats = [
   {
-    value: "70%",
+    value: "60%",
     label: "Redução no Tempo de Obra",
     category: "EFICIÊNCIA"
   },
   {
-    value: "95%",
-    label: "Satisfação em Projetos Anteriores",
+    value: "100%",
+    label: "Satisfação",
     category: "QUALIDADE"
   },
   {
@@ -49,7 +49,7 @@ const diferenciais = [
   {
     category: "PROCESSO",
     title: "Prazos Garantidos",
-    desc: "Cronograma definido e cumprido com rigor e transparência. Sistema industrializado que reduz o tempo de obra em até 70% comparado à construção convencional.",
+    desc: "Cronograma definido e cumprido com rigor e transparência. Sistema industrializado que reduz o tempo de obra em até 60% comparado à construção convencional.",
   },
   {
     category: "SUPORTE",
@@ -104,7 +104,7 @@ export default function EmpresaPage() {
                 { value: 20, suffix: "+", label: "Anos de experiência combinada" },
                 { value: 23, suffix: "", label: "Projetos no currículo" },
                 { value: 85, suffix: " mil m²", label: "Área construída no histórico" },
-                { value: 95, suffix: "%", label: "Satisfação em projetos anteriores" },
+                { value: 100, suffix: "%", label: "Satisfação" },
               ].map((stat, index) => (
                 <RevealOnScroll key={stat.label} delay={index * 0.1}>
                   <div className="text-center">
@@ -182,6 +182,9 @@ export default function EmpresaPage() {
       {/* Timeline - COMENTADO */}
       {/* <BerkahnTimeline /> */}
 
+      {/* Founders */}
+      <Founders />
+
       {/* Por Que Escolher a Berkahn */}
       <section id="diferencial" className="py-24 bg-white">
         <div className="container mx-auto px-6 max-w-7xl">
@@ -258,9 +261,6 @@ export default function EmpresaPage() {
           </div>
         </div>
       </section>
-
-      {/* Founders - NOVO */}
-      <Founders />
 
       {/* Values */}
       <section className="py-xl bg-black-5">
