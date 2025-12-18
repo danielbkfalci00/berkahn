@@ -49,7 +49,7 @@ export function FounderCard({
       <p className="text-xs sm:text-sm uppercase tracking-[0.2em] text-black/50 mb-4">
         {role}
       </p>
-      <p className="text-sm sm:text-base text-black/70 leading-relaxed max-w-xs line-clamp-4">
+      <p className="text-sm sm:text-base text-black/70 leading-relaxed max-w-xs">
         {bio}
       </p>
 

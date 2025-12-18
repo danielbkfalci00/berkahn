@@ -65,13 +65,13 @@ export function SlidePartners() {
                   key={index}
                   className="pl-4 md:pl-8 basis-1/2 md:basis-1/3 lg:basis-1/4"
                 >
-                  <div className="flex items-center justify-center h-32 lg:h-40 p-6 border border-white/10 bg-white/[0.02] hover:bg-white/[0.05] transition-all duration-500 group">
+                  <div className="flex items-center justify-center h-40 lg:h-52 p-4">
                     <div className="relative w-full h-full">
                       <Image
                         src={partner.logo}
                         alt={`Logo ${partner.name}`}
                         fill
-                        className="object-contain grayscale group-hover:grayscale-0 transition-all duration-700"
+                        className="object-contain transition-all duration-500 hover:scale-105"
                         sizes="(max-width: 768px) 50vw, 25vw"
                       />
                     </div>
