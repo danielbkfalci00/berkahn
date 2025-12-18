@@ -18,7 +18,7 @@ export const metadata = {
 // Stats com categorias - foco em compromissos e entregas
 const stats = [
   {
-    value: "60%",
+    value: "40%",
     label: "Redução no Tempo de Obra",
     category: "EFICIÊNCIA"
   },
@@ -49,7 +49,7 @@ const diferenciais = [
   {
     category: "PROCESSO",
     title: "Prazos Garantidos",
-    desc: "Cronograma definido e cumprido com rigor e transparência. Sistema industrializado que reduz o tempo de obra em até 60% comparado à construção convencional.",
+    desc: "Cronograma definido e cumprido com rigor e transparência. Sistema industrializado que reduz o tempo de obra em até 40% comparado à construção convencional.",
   },
   {
     category: "SUPORTE",
@@ -102,8 +102,8 @@ export default function EmpresaPage() {
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
               {[
                 { value: 20, suffix: "+", label: "Anos de experiência combinada" },
-                { value: 23, suffix: "", label: "Projetos no currículo" },
-                { value: 85, suffix: " mil m²", label: "Área construída no histórico" },
+                { value: 23, suffix: "+", label: "Projetos" },
+                { value: 85, suffix: "+ mil m²", label: "Área construída" },
                 { value: 100, suffix: "%", label: "Satisfação" },
               ].map((stat, index) => (
                 <RevealOnScroll key={stat.label} delay={index * 0.1}>
