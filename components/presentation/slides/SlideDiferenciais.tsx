@@ -211,6 +211,15 @@ export function SlideDiferenciais() {
           ))}
         </motion.div>
 
+        {/* Mão de Obra Especializada */}
+        <RevealOnScroll className="mt-16 lg:mt-20 text-center">
+          <p className="text-lg text-white/70 max-w-2xl mx-auto leading-relaxed">
+            Contamos com <strong className="text-white font-semibold">mão de obra 100% especializada</strong>,
+            com equipe certificada por empresa internacional (SICLA), garantindo execução de excelência
+            em todos os projetos.
+          </p>
+        </RevealOnScroll>
+
         {/* Decorative Separator */}
         <RevealOnScroll delay={0.4} className="mt-16">
           <div className="flex items-center justify-center gap-4">

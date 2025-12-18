@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { motion } from "framer-motion";
+import { Linkedin } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface FounderCardProps {
@@ -9,6 +10,7 @@ interface FounderCardProps {
   role: string;
   bio: string;
   image: string;
+  linkedin?: string;
   className?: string;
 }
 
@@ -17,6 +19,7 @@ export function FounderCard({
   role,
   bio,
   image,
+  linkedin,
   className
 }: FounderCardProps) {
   return (
@@ -34,11 +37,9 @@ export function FounderCard({
           src={image}
           alt={`${name} - ${role}`}
           fill
-          className="object-cover grayscale hover:grayscale-0 transition-all duration-700 ease-out"
+          className="object-cover transition-transform duration-700 ease-out hover:scale-105"
           sizes="(max-width: 768px) 200px, 300px"
         />
-        {/* Subtle overlay */}
-        <div className="absolute inset-0 bg-black/10 hover:bg-transparent transition-colors duration-500" />
       </div>
 
       {/* Info */}
@@ -51,6 +52,19 @@ export function FounderCard({
       <p className="text-sm sm:text-base text-black/70 leading-relaxed max-w-xs line-clamp-4">
         {bio}
       </p>
+
+      {/* LinkedIn Link */}
+      {linkedin && (
+        <a
+          href={linkedin}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-4 inline-flex items-center gap-2 text-black/60 hover:text-black transition-colors"
+          aria-label={`LinkedIn de ${name}`}
+        >
+          <Linkedin className="w-5 h-5" />
+        </a>
+      )}
     </motion.div>
   );
 }

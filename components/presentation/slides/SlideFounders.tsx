@@ -13,18 +13,21 @@ const founders = [
     role: "Co-Fundador",
     bio: "Engenheiro civil com sólida experiência em planejamento, gerenciamento e execução de obras. Atuou em projetos residenciais, comerciais e logísticos de alto padrão em São Paulo.",
     image: "/images/founders/daniel-falci.webp",
+    linkedin: "https://www.linkedin.com/in/danielbkfalci/",
   },
   {
     name: "Matheus Bertevello",
     role: "Co-Fundador",
-    bio: "Engenheiro de Produção pelo FEI com mais de 7 anos de experiência em melhoria de processos. Especialista em Lean Construction e otimização de obras civis.",
+    bio: "Engenheiro de Produção pela FEI com mais de 7 anos de experiência em melhoria de processos. Especialista em Lean Construction e melhorias em obras civis.",
     image: "/images/founders/matheus-bertevello.webp",
+    linkedin: "https://www.linkedin.com/in/matheus-bertevello/",
   },
   {
     name: "Gabriel Vidal",
     role: "Co-Fundador",
     bio: "Engenheiro civil formado pelo UniCEUB, MBA em gerenciamento de projetos (IBMEC) e de empreendimentos na construção civil (Mackenzie). Especialista em orçamentos e viabilidades.",
     image: "/images/founders/gabriel-vidal.webp",
+    linkedin: undefined,
   },
 ];
 
@@ -71,6 +74,7 @@ export function SlideFounders() {
               role={founder.role}
               bio={founder.bio}
               image={founder.image}
+              linkedin={founder.linkedin}
             />
           ))}
         </motion.div>

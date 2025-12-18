@@ -53,7 +53,7 @@ const FOUNDERS: Founder[] = [
           "Coordenação de empreendimentos de alto padrão",
           "Gestão de cronogramas e orçamentos complexos",
           "Liderança de equipes multidisciplinares",
-          "Otimização de processos construtivos"
+          "Melhorias em processos construtivos"
         ]
       },
       {
@@ -75,7 +75,7 @@ const FOUNDERS: Founder[] = [
         achievements: [
           "Especialização em gerenciamento de obras",
           "Estágios em construtoras de médio e grande porte",
-          "TCC sobre otimização de processos construtivos"
+          "TCC sobre melhorias em processos construtivos"
         ]
       }
     ]
@@ -91,10 +91,10 @@ const FOUNDERS: Founder[] = [
         year: "2024",
         role: "Co-Fundador",
         company: "BERKAHN",
-        description: "Fundação da BERKAHN trazendo expertise em Lean Construction e otimização de processos para revolucionar a construção civil.",
+        description: "Fundação da BERKAHN trazendo expertise em Lean Construction e melhorias em processos para revolucionar a construção civil.",
         achievements: [
           "Implementação de metodologia Lean Construction",
-          "Otimização de fluxos de trabalho e redução de desperdícios",
+          "Melhorias em fluxos de trabalho e redução de desperdícios",
           "Consultoria de processos para obras civis",
           "Desenvolvimento de sistema de gestão proprietário"
         ]
