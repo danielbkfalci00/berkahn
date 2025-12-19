@@ -1,11 +1,11 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useInView } from "framer-motion";
-import { useRef } from "react";
 import { SlideSection } from "../ui/SlideSection";
 import { FounderCard } from "../ui/FounderCard";
 import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
+import { containerVariants } from "@/lib/animation-variants";
+import { useInViewAnimation } from "@/hooks/useInViewAnimation";
 
 const founders = [
   {
@@ -31,20 +31,8 @@ const founders = [
   },
 ];
 
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.2,
-      delayChildren: 0.3,
-    },
-  },
-};
-
 export function SlideFounders() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-20% 0px" });
+  const { ref, isInView } = useInViewAnimation({ margin: "-20% 0px" });
 
   return (
     <SlideSection className="py-20 lg:py-32">

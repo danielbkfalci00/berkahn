@@ -1,12 +1,13 @@
 "use client";
 
-import { useRef } from "react";
 import Image from "next/image";
-import { motion, useInView } from "framer-motion";
+import { motion } from "framer-motion";
 import { SlideSection } from "../ui/SlideSection";
 import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
 import { CountUp } from "@/components/animations/CountUp";
 import { BENEFITS, COMPARISON_DATA } from "@/lib/lsf-data";
+import { containerVariants, itemVariants } from "@/lib/animation-variants";
+import { useInViewAnimation } from "@/hooks/useInViewAnimation";
 import { cn } from "@/lib/utils";
 import { Zap, Leaf, Gauge, Shield, Check } from "lucide-react";
 
@@ -21,31 +22,9 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
 // Selecionar 6 critérios mais impactantes para o comparativo
 const selectedComparisons = COMPARISON_DATA.slice(0, 6);
 
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.15,
-      delayChildren: 0.2,
-    },
-  },
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.6, ease: [0.19, 1, 0.22, 1] },
-  },
-};
-
 export function SlideDiferenciais() {
-  const statsRef = useRef(null);
-  const comparisonRef = useRef(null);
-  const statsInView = useInView(statsRef, { once: true, margin: "-20% 0px" });
-  const comparisonInView = useInView(comparisonRef, { once: true, margin: "-10% 0px" });
+  const { ref: statsRef, isInView: statsInView } = useInViewAnimation({ margin: "-20% 0px" });
+  const { ref: comparisonRef, isInView: comparisonInView } = useInViewAnimation({ margin: "-10% 0px" });
 
   return (
     <SlideSection dark className="py-16 lg:py-24">

@@ -1,10 +1,10 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useInView } from "framer-motion";
-import { useRef } from "react";
 import { SlideSection } from "../ui/SlideSection";
 import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
+import { containerVariants, itemVariants, lineVariants } from "@/lib/animation-variants";
+import { useInViewAnimation } from "@/hooks/useInViewAnimation";
 import { MessageSquare, PenTool, HardHat, CheckCircle2 } from "lucide-react";
 
 const steps = [
@@ -34,37 +34,8 @@ const steps = [
   },
 ];
 
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.2,
-      delayChildren: 0.3,
-    },
-  },
-};
-
-const stepVariants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.6, ease: [0.19, 1, 0.22, 1] },
-  },
-};
-
-const lineVariants = {
-  hidden: { scaleX: 0 },
-  visible: {
-    scaleX: 1,
-    transition: { duration: 1.2, ease: [0.19, 1, 0.22, 1], delay: 0.5 },
-  },
-};
-
 export function SlideMethodology() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-20% 0px" });
+  const { ref, isInView } = useInViewAnimation({ margin: "-20% 0px" });
 
   return (
     <SlideSection className="py-20 lg:py-32">
@@ -100,7 +71,7 @@ export function SlideMethodology() {
               return (
                 <motion.div
                   key={step.number}
-                  variants={stepVariants}
+                  variants={itemVariants}
                   className="relative text-center lg:text-left"
                 >
                   {/* Number & Icon */}
