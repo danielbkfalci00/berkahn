@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useInView } from "framer-motion";
+import { motion, useInView, useReducedMotion } from "framer-motion";
 import { useRef } from "react";
 
 interface TextRevealProps {
@@ -42,6 +42,16 @@ export function TextReveal({
 }: TextRevealProps) {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-10% 0px" });
+  const prefersReducedMotion = useReducedMotion();
+
+  // Respect user's reduced motion preference
+  if (prefersReducedMotion) {
+    return (
+      <div className={className}>
+        <Component className="inline">{text}</Component>
+      </div>
+    );
+  }
 
   const words = text.split(" ");
 
@@ -102,6 +112,12 @@ const charVariants = {
 export function CharReveal({ text, className = "", delay = 0 }: CharRevealProps) {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-10% 0px" });
+  const prefersReducedMotion = useReducedMotion();
+
+  // Respect user's reduced motion preference
+  if (prefersReducedMotion) {
+    return <span className={`inline-block ${className}`}>{text}</span>;
+  }
 
   return (
     <motion.span
@@ -165,6 +181,20 @@ export function LineReveal({
 }: LineRevealProps) {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-10% 0px" });
+  const prefersReducedMotion = useReducedMotion();
+
+  // Respect user's reduced motion preference
+  if (prefersReducedMotion) {
+    return (
+      <div className={className}>
+        {lines.map((line, index) => (
+          <div key={index} className={lineClassName}>
+            <span className="block">{line}</span>
+          </div>
+        ))}
+      </div>
+    );
+  }
 
   return (
     <motion.div
