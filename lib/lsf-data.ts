@@ -161,7 +161,7 @@ export const BENEFITS: Benefit[] = [
     title: "Durabilidade",
     stat: 150,
     suffix: "+",
-    description: "Anos de garantia",
+    description: "Anos de garantia de durabilidade da estrutura",
     details:
       "A\u00e7o galvanizado ASTM A653 com revestimento Z275 garante prote\u00e7\u00e3o contra corros\u00e3o por d\u00e9cadas. Sistema multicamadas protege estrutura de umidade e intempéries. Vida \u00fatil projetada de 100+ anos com manuten\u00e7\u00e3o adequada, comparável ou superior \u00e0 constru\u00e7\u00e3o tradicional. Estrutura n\u00e3o apodrece, n\u00e3o \u00e9 atacada por cupins ou outros insetos.",
   },
