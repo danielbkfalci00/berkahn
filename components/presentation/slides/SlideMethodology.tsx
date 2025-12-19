@@ -74,17 +74,10 @@ export function SlideMethodology() {
                   variants={itemVariants}
                   className="relative text-center lg:text-left"
                 >
-                  {/* Number & Icon */}
+                  {/* Icon */}
                   <div className="flex flex-col items-center lg:items-start mb-6">
-                    <div className="relative">
-                      <span className="font-heading text-5xl sm:text-6xl lg:text-7xl font-extrabold text-black/5">
-                        {step.number}
-                      </span>
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <div className="w-12 h-12 rounded-full bg-black flex items-center justify-center">
-                          <Icon className="w-5 h-5 text-white" strokeWidth={1.5} />
-                        </div>
-                      </div>
+                    <div className="w-12 h-12 rounded-full bg-black flex items-center justify-center">
+                      <Icon className="w-5 h-5 text-white" strokeWidth={1.5} />
                     </div>
                   </div>
 
