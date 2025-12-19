@@ -28,7 +28,6 @@ const founders: {
     bio: "Engenheiro de Produção pela FEI com mais de 7 anos de experiência em melhoria de processos. Especialista em Lean Construction e melhorias em obras civis.",
     image: "/images/founders/matheus-bertevello.webp",
     linkedin: "https://www.linkedin.com/in/matheus-bertevello/",
-    imagePosition: "bottom",
   },
   {
     name: "Gabriel Vidal",

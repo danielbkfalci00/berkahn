@@ -12,7 +12,7 @@ interface FounderCardProps {
   image: string;
   linkedin?: string;
   className?: string;
-  imagePosition?: "top" | "center" | "bottom";
+  imagePosition?: "top" | "center" | "bottom" | string;
 }
 
 export function FounderCard({
@@ -44,6 +44,11 @@ export function FounderCard({
             imagePosition === "top" && "object-top",
             imagePosition === "bottom" && "object-bottom"
           )}
+          style={
+            imagePosition !== "top" && imagePosition !== "bottom" && imagePosition !== "center"
+              ? { objectPosition: imagePosition }
+              : undefined
+          }
           sizes="(max-width: 768px) 200px, 300px"
         />
       </div>
