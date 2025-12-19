@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef } from "react";
 
@@ -16,6 +16,14 @@ export function RevealOnScroll({ children, delay = 0, className }: RevealProps) 
     once: true,
     margin: "0px 0px -10% 0px",
   });
+
+  // Respect user's reduced motion preference for accessibility
+  const prefersReducedMotion = useReducedMotion();
+
+  // If user prefers reduced motion, show content immediately without animation
+  if (prefersReducedMotion) {
+    return <div className={className}>{children}</div>;
+  }
 
   return (
     <motion.div

@@ -186,6 +186,23 @@
     to { opacity: 1; width: 100%; }
   }
 
+  /* Scroll indicator bounce animation - CPU efficient CSS */
+  @keyframes bounce-slow {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(10px); }
+  }
+
+  .animate-bounce-slow {
+    animation: bounce-slow 1.5s ease-in-out infinite;
+  }
+
+  /* Respect reduced motion preference */
+  @media (prefers-reduced-motion: reduce) {
+    .animate-bounce-slow {
+      animation: none;
+    }
+  }
+
   /* Labels pequenos */
   .hero-label {
     font-size: 0.75rem;

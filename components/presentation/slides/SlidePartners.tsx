@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import Image from "next/image";
 import { SlideSection } from "../ui/SlideSection";
 import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
@@ -27,13 +27,34 @@ const partners = [
 ];
 
 export function SlidePartners() {
+  const containerRef = useRef<HTMLDivElement>(null);
   const plugin = useRef(
     Autoplay({ delay: 3000, stopOnInteraction: false })
   );
 
+  // Pause autoplay when off-viewport to save CPU resources
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          plugin.current.play();
+        } else {
+          plugin.current.stop();
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    observer.observe(container);
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <SlideSection dark className="py-20 lg:py-32">
-      <div className="container max-w-6xl mx-auto">
+      <div ref={containerRef} className="container max-w-6xl mx-auto">
         {/* Header */}
         <RevealOnScroll className="text-center mb-12 lg:mb-16">
           <p className="text-xs sm:text-sm uppercase tracking-[0.3em] text-white/40 mb-4">

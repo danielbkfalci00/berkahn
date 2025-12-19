@@ -50,9 +50,16 @@ export function SlideProject({
     setCount(api.scrollSnapList().length);
     setCurrent(api.selectedScrollSnap() + 1);
 
-    api.on("select", () => {
+    const handleSelect = () => {
       setCurrent(api.selectedScrollSnap() + 1);
-    });
+    };
+
+    api.on("select", handleSelect);
+
+    // Cleanup to prevent memory leaks
+    return () => {
+      api.off("select", handleSelect);
+    };
   }, [api]);
 
   const scrollPrev = useCallback(() => {

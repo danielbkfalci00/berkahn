@@ -55,21 +55,17 @@ export function SlideCover() {
         />
       </div>
 
-      {/* Scroll Indicator */}
+      {/* Scroll Indicator - CSS animation instead of Framer Motion for better CPU efficiency */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.5, duration: 0.8 }}
         className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10"
       >
-        <motion.div
-          animate={{ y: [0, 10, 0] }}
-          transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
-          className="flex flex-col items-center gap-2 text-white/50"
-        >
+        <div className="flex flex-col items-center gap-2 text-white/50 animate-bounce-slow">
           <span className="text-xs uppercase tracking-widest">Scroll</span>
           <ChevronDown className="w-5 h-5" />
-        </motion.div>
+        </div>
       </motion.div>
     </SlideSection>
   );
