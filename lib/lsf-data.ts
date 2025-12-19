@@ -1,4 +1,4 @@
-// Dados completos para a página /lsf - Light Steel Frame
+﻿// Dados completos para a página /lsf - Light Steel Frame
 
 export interface LSFLayer {
   id: number;
@@ -134,7 +134,7 @@ export const BENEFITS: Benefit[] = [
     title: "Velocidade",
     stat: 50,
     suffix: "%",
-    description: "Mais r\u00e1pido que constru\u00e7\u00e3o tradicional",
+    description: "Velocidade de construção superior",
     details:
       "Sistema construtivo a seco elimina tempo de cura de concreto e argamassas. Componentes pr\u00e9-fabricados e padronizados permitem montagem r\u00e1pida com m\u00e3o de obra especializada. Uma resid\u00eancia de 150m\u00b2 pode ser conclu\u00edda em 3-4 meses, contra 8-12 meses da constru\u00e7\u00e3o convencional.",
   },

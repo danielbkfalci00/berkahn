@@ -50,7 +50,7 @@ export function SlideDiferenciais() {
           variants={containerVariants}
           initial="hidden"
           animate={statsInView ? "visible" : "hidden"}
-          className="grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 mb-16 lg:mb-20"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 mb-16 lg:mb-20 max-w-7xl mx-auto"
         >
           {BENEFITS.map((benefit) => {
             const Icon = iconMap[benefit.icon];
@@ -58,12 +58,12 @@ export function SlideDiferenciais() {
               <motion.div
                 key={benefit.title}
                 variants={itemVariants}
-                className="text-center p-6 border border-white/10 bg-white/[0.02] hover:bg-white/[0.05] transition-colors"
+                className="text-center p-4 sm:p-6 border border-white/10 bg-white/[0.02] hover:bg-white/[0.05] transition-colors rounded-sm"
               >
                 {/* Icon */}
                 {Icon && (
                   <div className="flex justify-center mb-4">
-                    <Icon className="w-8 h-8 text-white/40" />
+                    <Icon className="w-6 h-6 sm:w-8 sm:h-8 text-white/40" />
                   </div>
                 )}
 
@@ -72,17 +72,17 @@ export function SlideDiferenciais() {
                   <CountUp
                     end={benefit.stat}
                     suffix={benefit.suffix}
-                    className="font-heading text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight"
+                    className="font-heading text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-white tracking-tight"
                   />
                 </div>
 
                 {/* Label */}
-                <p className="text-xs sm:text-sm uppercase tracking-[0.15em] text-white/50 mt-2">
+                <p className="text-[10px] sm:text-xs md:text-sm uppercase tracking-[0.12em] sm:tracking-[0.15em] text-white/50 mt-2 px-1">
                   {benefit.description.split(" ").slice(0, 3).join(" ")}
                 </p>
 
                 {/* Title */}
-                <p className="text-sm text-white/70 mt-1 font-medium">
+                <p className="text-xs sm:text-sm text-white/70 mt-1 font-medium">
                   {benefit.title}
                 </p>
               </motion.div>
