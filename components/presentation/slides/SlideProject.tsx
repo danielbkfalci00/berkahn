@@ -13,6 +13,10 @@ import {
 } from "@/components/ui/carousel";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
+// Shimmer placeholder for loading state (tiny base64 gray gradient)
+const shimmerPlaceholder =
+  "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImciIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPjxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiMyMjIiLz48c3RvcCBvZmZzZXQ9IjUwJSIgc3RvcC1jb2xvcj0iIzMzMyIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzIyMiIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZykiLz48L3N2Zz4=";
+
 export interface ProjectSlideProps {
   number: string;
   title: string;
@@ -84,6 +88,7 @@ export function SlideProject({
             opts={{ loop: true }}
             setApi={setApi}
             className="h-full"
+            aria-label={`Galeria de imagens: ${title}`}
           >
             <CarouselContent className="h-full -ml-0">
               {images.map((img, i) => (
@@ -91,11 +96,13 @@ export function SlideProject({
                   <div className="relative h-full w-full">
                     <Image
                       src={img}
-                      alt={`${title} - Imagem ${i + 1}`}
+                      alt={`${title} - Imagem ${i + 1} de ${images.length}`}
                       fill
                       className="object-cover"
                       sizes="(max-width: 1024px) 100vw, 50vw"
                       priority={i === 0}
+                      placeholder="blur"
+                      blurDataURL={shimmerPlaceholder}
                     />
                     {/* Subtle Gradient Overlay */}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent lg:bg-gradient-to-r lg:from-transparent lg:via-transparent lg:to-black/10" />
@@ -135,7 +142,12 @@ export function SlideProject({
               </div>
 
               {/* Slide Counter */}
-              <div className="text-white/70 text-sm font-light tracking-wider backdrop-blur-sm px-3 py-1 border border-white/20">
+              <div
+                className="text-white/70 text-sm font-light tracking-wider backdrop-blur-sm px-3 py-1 border border-white/20"
+                aria-live="polite"
+                aria-atomic="true"
+              >
+                <span className="sr-only">Imagem </span>
                 <span className="font-medium text-white">{current}</span>
                 <span className="mx-2">/</span>
                 <span>{count}</span>

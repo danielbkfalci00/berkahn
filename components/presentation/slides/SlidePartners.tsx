@@ -7,6 +7,10 @@ import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
 import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
 
+// Light shimmer placeholder for logos on dark background
+const shimmerPlaceholder =
+  "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMjIyIi8+PC9zdmc+";
+
 const partners = [
   {
     name: "Brand 01",
@@ -79,6 +83,7 @@ export function SlidePartners() {
             }}
             plugins={[plugin.current]}
             className="w-full"
+            aria-label="Carrossel de marcas parceiras"
           >
             <CarouselContent className="-ml-4 md:-ml-8">
               {partners.map((partner, index) => (
@@ -94,6 +99,8 @@ export function SlidePartners() {
                         fill
                         className="object-contain transition-all duration-500 hover:scale-105"
                         sizes="(max-width: 768px) 50vw, 25vw"
+                        placeholder="blur"
+                        blurDataURL={shimmerPlaceholder}
                       />
                     </div>
                   </div>
