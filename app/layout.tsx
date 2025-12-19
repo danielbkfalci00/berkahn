@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Manrope } from "next/font/google";
+import Script from "next/script";
 import { ClientLayout } from "@/components/layout/ClientLayout";
 import { ConditionalFooter } from "@/components/layout/ConditionalFooter";
 import "./globals.css";
@@ -42,6 +43,20 @@ export default function RootLayout({
       <body>
         <ClientLayout>{children}</ClientLayout>
         <ConditionalFooter />
+
+        {/* Google Analytics */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-RBQJ1D6JHW"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-RBQJ1D6JHW');
+          `}
+        </Script>
       </body>
     </html>
   );
