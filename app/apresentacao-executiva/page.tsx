@@ -1,15 +1,38 @@
 import type { Metadata } from "next";
+import dynamic from "next/dynamic";
 import { PresentationLayout } from "@/components/presentation/PresentationLayout";
+
+// Slide inicial (above-the-fold) - carrega eager
 import { SlideCover } from "@/components/presentation/slides/SlideCover";
-import { SlideAbout } from "@/components/presentation/slides/SlideAbout";
-import { SlideDiferenciais } from "@/components/presentation/slides/SlideDiferenciais";
-import { SlideFounders } from "@/components/presentation/slides/SlideFounders";
-import { SlideProject1 } from "@/components/presentation/slides/SlideProject1";
-import { SlideProject2 } from "@/components/presentation/slides/SlideProject2";
-import { SlideProject3 } from "@/components/presentation/slides/SlideProject3";
-import { SlideMethodology } from "@/components/presentation/slides/SlideMethodology";
-import { SlidePartners } from "@/components/presentation/slides/SlidePartners";
-import { SlideContact } from "@/components/presentation/slides/SlideContact";
+
+// Demais slides - carregam lazy para code-splitting
+const SlideAbout = dynamic(() =>
+  import("@/components/presentation/slides/SlideAbout").then((m) => m.SlideAbout)
+);
+const SlideDiferenciais = dynamic(() =>
+  import("@/components/presentation/slides/SlideDiferenciais").then((m) => m.SlideDiferenciais)
+);
+const SlideFounders = dynamic(() =>
+  import("@/components/presentation/slides/SlideFounders").then((m) => m.SlideFounders)
+);
+const SlideProject1 = dynamic(() =>
+  import("@/components/presentation/slides/SlideProject1").then((m) => m.SlideProject1)
+);
+const SlideProject2 = dynamic(() =>
+  import("@/components/presentation/slides/SlideProject2").then((m) => m.SlideProject2)
+);
+const SlideProject3 = dynamic(() =>
+  import("@/components/presentation/slides/SlideProject3").then((m) => m.SlideProject3)
+);
+const SlideMethodology = dynamic(() =>
+  import("@/components/presentation/slides/SlideMethodology").then((m) => m.SlideMethodology)
+);
+const SlidePartners = dynamic(() =>
+  import("@/components/presentation/slides/SlidePartners").then((m) => m.SlidePartners)
+);
+const SlideContact = dynamic(() =>
+  import("@/components/presentation/slides/SlideContact").then((m) => m.SlideContact)
+);
 
 export const metadata: Metadata = {
   title: "Apresentação Executiva | BERKAHN - Soluções em Steel Frame",
