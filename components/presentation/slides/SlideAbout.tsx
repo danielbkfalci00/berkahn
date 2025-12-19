@@ -7,8 +7,8 @@ const paragraphs = [
   {
     text: (
       <>
-        Reunindo mais de <strong>duas décadas de experiência</strong> em projetos
-        residenciais e corporativos, nos orgulhamos de ser reconhecidos como uma
+        Contando com mais de <strong>duas décadas de experiência</strong> em projetos
+        residenciais, corporativos e de infraestrutura, nos orgulhamos de ser reconhecidos como uma
         empresa <strong>comprometida com a excelência</strong> em cada detalhe.
       </>
     ),
@@ -27,7 +27,7 @@ const paragraphs = [
       <>
         Atuamos desde a elaboração de{" "}
         <strong>estudos de viabilidade e gerenciamento de projetos</strong> até a{" "}
-        <strong>execução completa de obras</strong> em Steel Frame, sistema que nos
+        <strong>execução completa de obras</strong> em Light Steel Frame (LSF), sistema que nos
         permite entregar com mais qualidade, velocidade e sustentabilidade.
       </>
     ),

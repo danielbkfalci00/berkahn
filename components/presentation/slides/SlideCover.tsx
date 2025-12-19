@@ -43,7 +43,7 @@ export function SlideCover() {
           transition={{ delay: 0.8, duration: 0.8, ease: [0.19, 1, 0.22, 1] }}
           className="text-sm sm:text-base md:text-lg uppercase tracking-[0.3em] text-white/70 font-light"
         >
-          Pioneiros em Light Steel Frame. Mestres em construir.
+          Especialistas em Light Steel Frame. Mestres em construir.
         </motion.p>
 
         {/* Decorative Line */}
