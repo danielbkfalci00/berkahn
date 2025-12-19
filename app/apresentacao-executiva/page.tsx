@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import dynamic from "next/dynamic";
 import { PresentationLayout } from "@/components/presentation/PresentationLayout";
+import { presentationProjects } from "@/lib/presentation-data";
 
 // Slide inicial (above-the-fold) - carrega eager
 import { SlideCover } from "@/components/presentation/slides/SlideCover";
@@ -15,14 +16,8 @@ const SlideDiferenciais = dynamic(() =>
 const SlideFounders = dynamic(() =>
   import("@/components/presentation/slides/SlideFounders").then((m) => m.SlideFounders)
 );
-const SlideProject1 = dynamic(() =>
-  import("@/components/presentation/slides/SlideProject1").then((m) => m.SlideProject1)
-);
-const SlideProject2 = dynamic(() =>
-  import("@/components/presentation/slides/SlideProject2").then((m) => m.SlideProject2)
-);
-const SlideProject3 = dynamic(() =>
-  import("@/components/presentation/slides/SlideProject3").then((m) => m.SlideProject3)
+const SlideProject = dynamic(() =>
+  import("@/components/presentation/slides/SlideProject").then((m) => m.SlideProject)
 );
 const SlideMethodology = dynamic(() =>
   import("@/components/presentation/slides/SlideMethodology").then((m) => m.SlideMethodology)
@@ -56,14 +51,10 @@ export default function ApresentacaoExecutivaPage() {
       {/* Slide 4: Fundadores */}
       <SlideFounders />
 
-      {/* Slide 5: Projeto 1 - Casa de Campo (dark) */}
-      <SlideProject1 />
-
-      {/* Slide 6: Projeto 2 - Loft Urbano (light, reversed) */}
-      <SlideProject2 />
-
-      {/* Slide 7: Projeto 3 - Chalé Rústico (dark) */}
-      <SlideProject3 />
+      {/* Slides 5-7: Projetos (dados centralizados em lib/presentation-data.ts) */}
+      {presentationProjects.map((project) => (
+        <SlideProject key={project.number} {...project} />
+      ))}
 
       {/* Slide 8: Metodologia */}
       <SlideMethodology />
