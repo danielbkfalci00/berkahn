@@ -12,6 +12,7 @@ interface FounderCardProps {
   image: string;
   linkedin?: string;
   className?: string;
+  imagePosition?: "top" | "center" | "bottom";
 }
 
 export function FounderCard({
@@ -20,7 +21,8 @@ export function FounderCard({
   bio,
   image,
   linkedin,
-  className
+  className,
+  imagePosition = "center"
 }: FounderCardProps) {
   return (
     <motion.div
@@ -37,7 +39,11 @@ export function FounderCard({
           src={image}
           alt={`${name} - ${role}`}
           fill
-          className="object-cover transition-transform duration-700 ease-out hover:scale-105"
+          className={cn(
+            "object-cover transition-transform duration-700 ease-out hover:scale-105",
+            imagePosition === "top" && "object-top",
+            imagePosition === "bottom" && "object-bottom"
+          )}
           sizes="(max-width: 768px) 200px, 300px"
         />
       </div>

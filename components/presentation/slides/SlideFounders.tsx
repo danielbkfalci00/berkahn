@@ -7,7 +7,14 @@ import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
 import { containerVariants } from "@/lib/animation-variants";
 import { useInViewAnimation } from "@/hooks/useInViewAnimation";
 
-const founders = [
+const founders: {
+  name: string;
+  role: string;
+  bio: string;
+  image: string;
+  linkedin?: string;
+  imagePosition?: "top" | "center" | "bottom";
+}[] = [
   {
     name: "Daniel Falci",
     role: "Co-Fundador",
@@ -21,6 +28,7 @@ const founders = [
     bio: "Engenheiro de Produção pela FEI com mais de 7 anos de experiência em melhoria de processos. Especialista em Lean Construction e melhorias em obras civis.",
     image: "/images/founders/matheus-bertevello.webp",
     linkedin: "https://www.linkedin.com/in/matheus-bertevello/",
+    imagePosition: "top",
   },
   {
     name: "Gabriel Vidal",
@@ -63,6 +71,7 @@ export function SlideFounders() {
               bio={founder.bio}
               image={founder.image}
               linkedin={founder.linkedin}
+              imagePosition={founder.imagePosition}
             />
           ))}
         </motion.div>
