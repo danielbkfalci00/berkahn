@@ -12,6 +12,7 @@ const contactInfo = {
   phone: "+55 (11) 96641-5742",
   phoneRaw: "5511966415742",
   website: "https://berkahn.com.br",
+  cnpj: "39.455.932/0001-64",
 };
 
 export function SlideContact() {
@@ -80,6 +81,13 @@ export function SlideContact() {
         <RevealOnScroll delay={1}>
           <p className="font-heading text-2xl sm:text-3xl font-bold tracking-[0.3em] text-white/30">
             BERKAHN
+          </p>
+        </RevealOnScroll>
+
+        {/* CNPJ */}
+        <RevealOnScroll delay={1.1}>
+          <p className="text-white/40 text-xs sm:text-sm mt-4">
+            CNPJ: {contactInfo.cnpj}
           </p>
         </RevealOnScroll>
       </div>
