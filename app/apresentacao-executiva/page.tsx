@@ -22,6 +22,9 @@ const SlideProject = dynamic(() =>
 const SlideMethodology = dynamic(() =>
   import("@/components/presentation/slides/SlideMethodology").then((m) => m.SlideMethodology)
 );
+const SlideGallery = dynamic(() =>
+  import("@/components/presentation/slides/SlideGallery").then((m) => m.SlideGallery)
+);
 const SlidePartners = dynamic(() =>
   import("@/components/presentation/slides/SlidePartners").then((m) => m.SlidePartners)
 );
@@ -59,10 +62,13 @@ export default function ApresentacaoExecutivaPage() {
         <SlideProject key={project.number} {...project} />
       ))}
 
-      {/* Slide 9: Marcas Parceiras (dark) */}
+      {/* Slide 9: Galeria de Projetos (dark) */}
+      <SlideGallery />
+
+      {/* Slide 10: Marcas Parceiras (dark) */}
       <SlidePartners />
 
-      {/* Slide 10: Contato */}
+      {/* Slide 11: Contato */}
       <SlideContact />
     </PresentationLayout>
   );
