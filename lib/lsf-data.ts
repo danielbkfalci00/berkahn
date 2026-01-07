@@ -165,6 +165,42 @@ export const BENEFITS: Benefit[] = [
     details:
       "A\u00e7o galvanizado ASTM A653 com revestimento Z275 garante prote\u00e7\u00e3o contra corros\u00e3o por d\u00e9cadas. Sistema multicamadas protege estrutura de umidade e intempéries. Vida \u00fatil projetada de 100+ anos com manuten\u00e7\u00e3o adequada, comparável ou superior \u00e0 constru\u00e7\u00e3o tradicional. Estrutura n\u00e3o apodrece, n\u00e3o \u00e9 atacada por cupins ou outros insetos.",
   },
+  {
+    icon: "acoustic",
+    title: "Superior em isolamento",
+    stat: 68,
+    suffix: "%",
+    description: "Isolamento acústico superior",
+    details:
+      "Sistema com lã de rocha proporciona redução de até 10dB, 68% superior às paredes convencionais. Desempenho acústico igual ou superior à alvenaria com menor espessura.",
+  },
+  {
+    icon: "area",
+    title: "Ganho de área útil",
+    stat: 5,
+    suffix: "%",
+    description: "Mais área útil interna",
+    details:
+      "Paredes mais finas que a alvenaria tradicional proporcionam ganho de 4-5% de área útil. Ideal para apartamentos e escritórios onde cada metro quadrado conta.",
+  },
+  {
+    icon: "precision",
+    title: "Precisão no orçamento",
+    stat: 95,
+    suffix: "%",
+    description: "Planejamento e precisão",
+    details:
+      "Sistema industrializado permite orçamento preciso desde o início. Pré-fabricação elimina surpresas e custos extras comuns na construção tradicional.",
+  },
+  {
+    icon: "weight",
+    title: "Mais leve que alvenaria",
+    stat: 4,
+    suffix: "x",
+    description: "Estrutura mais leve",
+    details:
+      "Peso médio de 250kg/m² contra 1000kg/m² da alvenaria. Reduz custos com fundação e permite construção em terrenos com menor capacidade de carga.",
+  },
 ];
 
 // Especifica\u00e7\u00f5es T\u00e9cnicas Detalhadas

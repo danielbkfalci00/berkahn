@@ -45,19 +45,19 @@ export default function ApresentacaoExecutivaPage() {
       {/* Slide 2: Quem Somos */}
       <SlideAbout />
 
-      {/* Slide 3: Diferenciais - Light Steel Frame (dark) */}
+      {/* Slide 3: Como Trabalhamos */}
+      <SlideMethodology />
+
+      {/* Slide 4: Diferenciais - Light Steel Frame (dark) */}
       <SlideDiferenciais />
 
-      {/* Slide 4: Fundadores */}
+      {/* Slide 5: Fundadores */}
       <SlideFounders />
 
-      {/* Slides 5-7: Projetos (dados centralizados em lib/presentation-data.ts) */}
+      {/* Slides 6-8: Projetos (dados centralizados em lib/presentation-data.ts) */}
       {presentationProjects.map((project) => (
         <SlideProject key={project.number} {...project} />
       ))}
-
-      {/* Slide 8: Metodologia */}
-      <SlideMethodology />
 
       {/* Slide 9: Marcas Parceiras (dark) */}
       <SlidePartners />

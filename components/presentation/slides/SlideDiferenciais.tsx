@@ -9,7 +9,7 @@ import { BENEFITS, COMPARISON_DATA } from "@/lib/lsf-data";
 import { containerVariants, itemVariants } from "@/lib/animation-variants";
 import { useInViewAnimation } from "@/hooks/useInViewAnimation";
 import { cn } from "@/lib/utils";
-import { Zap, Leaf, Gauge, Shield, Check } from "lucide-react";
+import { Zap, Leaf, Gauge, Shield, Check, Volume2, Maximize2, Target, Feather } from "lucide-react";
 
 // Mapear icons aos benefícios
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
@@ -17,6 +17,10 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   sustainability: Leaf,
   energy: Gauge,
   durability: Shield,
+  acoustic: Volume2,
+  area: Maximize2,
+  precision: Target,
+  weight: Feather,
 };
 
 // Selecionar 6 critérios mais impactantes para o comparativo
@@ -90,6 +94,14 @@ export function SlideDiferenciais() {
           })}
         </motion.div>
 
+        {/* Mão de Obra Especializada */}
+        <RevealOnScroll className="mt-12 lg:mt-16 text-center">
+          <p className="text-lg text-white/70 max-w-2xl mx-auto leading-relaxed">
+            Contamos com <strong className="text-white font-semibold">mão de obra 100% especializada e certificada por empresa internacional (Sicla)</strong>,
+            garantindo execução de excelência em todos os projetos.
+          </p>
+        </RevealOnScroll>
+
         {/* Imagem de Impacto */}
         <RevealOnScroll className="mb-16 lg:mb-20">
           <div className="relative h-[40vh] lg:h-[50vh] w-full overflow-hidden">
@@ -160,7 +172,7 @@ export function SlideDiferenciais() {
                   </div>
                   <p
                     className={cn(
-                      "text-lg font-semibold",
+                      "text-lg font-semibold whitespace-nowrap",
                       item.winner === "lsf" ? "text-emerald-400" : "text-white/80"
                     )}
                   >
@@ -178,7 +190,7 @@ export function SlideDiferenciais() {
                   </div>
                   <p
                     className={cn(
-                      "text-lg font-semibold",
+                      "text-lg font-semibold whitespace-nowrap",
                       item.winner === "traditional" ? "text-emerald-400" : "text-white/50"
                     )}
                   >
@@ -189,14 +201,6 @@ export function SlideDiferenciais() {
             </motion.div>
           ))}
         </motion.div>
-
-        {/* Mão de Obra Especializada */}
-        <RevealOnScroll className="mt-16 lg:mt-20 text-center">
-          <p className="text-lg text-white/70 max-w-2xl mx-auto leading-relaxed">
-            Contamos com <strong className="text-white font-semibold">mão de obra 100% especializada e certificada por empresa internacional (Sicla)</strong>,
-            garantindo execução de excelência em todos os projetos.
-          </p>
-        </RevealOnScroll>
 
         {/* Decorative Separator */}
         <RevealOnScroll delay={0.4} className="mt-16">

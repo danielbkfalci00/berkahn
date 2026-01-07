@@ -70,7 +70,7 @@ export const presentationProjects: (ProjectSlideProps & {
     location: "Curitiba - PR",
     year: "2021",
     area: "399 m²",
-    system: "Light Steel Frame",
+    system: "Light Steel Frame + Concreto",
     description:
       "Residência contemporânea que integra arquitetura minimalista com a natureza. Volumes brancos puros com detalhes em madeira natural, telhado colonial em cerâmica e árvore preservada atravessando a estrutura. Ampla área de lazer com piscina, jardins tropicais e integração perfeita entre ambientes internos e externos.",
     features: [
