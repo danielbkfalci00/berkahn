@@ -9,7 +9,7 @@ import { BENEFITS, COMPARISON_DATA } from "@/lib/lsf-data";
 import { containerVariants, itemVariants } from "@/lib/animation-variants";
 import { useInViewAnimation } from "@/hooks/useInViewAnimation";
 import { cn } from "@/lib/utils";
-import { Zap, Leaf, Gauge, Shield, Check, Volume2, Maximize2, Target, Feather } from "lucide-react";
+import { Zap, Leaf, Gauge, Shield, Check, Volume2, Maximize2, Target, Scale } from "lucide-react";
 
 // Mapear icons aos benefícios
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
@@ -20,7 +20,7 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   acoustic: Volume2,
   area: Maximize2,
   precision: Target,
-  weight: Feather,
+  weight: Scale,
 };
 
 // Selecionar 6 critérios mais impactantes para o comparativo
@@ -95,8 +95,8 @@ export function SlideDiferenciais() {
         </motion.div>
 
         {/* Mão de Obra Especializada */}
-        <RevealOnScroll className="mt-12 lg:mt-16 mb-10 lg:mb-14 text-center">
-          <p className="text-lg text-white/70 max-w-2xl mx-auto leading-relaxed">
+        <RevealOnScroll className="mt-6 lg:mt-8 mb-10 lg:mb-14 text-center">
+          <p className="text-xl sm:text-2xl text-white/70 max-w-2xl mx-auto leading-relaxed">
             Contamos com <strong className="text-white font-semibold">mão de obra 100% especializada e certificada por empresa internacional (Sicla)</strong>,
             garantindo execução de excelência em todos os projetos.
           </p>

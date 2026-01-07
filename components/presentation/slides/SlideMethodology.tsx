@@ -38,7 +38,7 @@ export function SlideMethodology() {
   const { ref, isInView } = useInViewAnimation({ margin: "-20% 0px" });
 
   return (
-    <SlideSection className="py-20 lg:py-32">
+    <SlideSection className="pt-10 pb-20 lg:pt-14 lg:pb-32">
       <div className="container max-w-7xl mx-auto">
         {/* Header */}
         <RevealOnScroll className="text-center mb-16 lg:mb-24">

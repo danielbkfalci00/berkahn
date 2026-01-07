@@ -46,7 +46,7 @@ const paragraphs = [
 
 export function SlideAbout() {
   return (
-    <SlideSection className="py-20 lg:py-32">
+    <SlideSection className="pt-20 pb-10 lg:pt-32 lg:pb-14">
       <div className="container max-w-3xl mx-auto px-6">
         {/* Label */}
         <RevealOnScroll className="text-center mb-12 lg:mb-16">

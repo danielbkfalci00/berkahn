@@ -35,6 +35,7 @@ export function SlideGallery() {
             grayscale={false}
             overlayBlurColor="#0a0a0a"
             imageBorderRadius="16px"
+            padFactor={0.10}
           />
         </div>
 

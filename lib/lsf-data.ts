@@ -127,7 +127,7 @@ export const LSF_LAYERS: LSFLayer[] = [
   },
 ];
 
-// Benef\u00edcios do LSF com dados estat\u00edsticos
+// Benefícios do LSF com dados estatísticos
 export const BENEFITS: Benefit[] = [
   {
     icon: "speed",
@@ -136,38 +136,29 @@ export const BENEFITS: Benefit[] = [
     suffix: "%",
     description: "Velocidade de construção superior",
     details:
-      "Sistema construtivo a seco elimina tempo de cura de concreto e argamassas. Componentes pr\u00e9-fabricados e padronizados permitem montagem r\u00e1pida com m\u00e3o de obra especializada. Uma resid\u00eancia de 150m\u00b2 pode ser conclu\u00edda em 3-4 meses, contra 8-12 meses da constru\u00e7\u00e3o convencional.",
+      "Sistema construtivo a seco elimina tempo de cura de concreto e argamassas. Componentes pré-fabricados e padronizados permitem montagem rápida com mão de obra especializada. Uma residência de 150m² pode ser concluída em 3-4 meses, contra 8-12 meses da construção convencional.",
   },
   {
     icon: "sustainability",
     title: "Sustentabilidade",
     stat: 80,
     suffix: "%",
-    description: "Redu\u00e7\u00e3o de desperd\u00edcio de materiais",
+    description: "Redução de desperdício de materiais",
     details:
-      "Pr\u00e9-fabrica\u00e7\u00e3o industrial com cortes precisos minimiza desperd\u00edcio. Gera\u00e7\u00e3o m\u00ednima de entulho no canteiro. Materiais reci\u00e1veis (a\u00e7o, gesso, OSB) podem ser reaproveitados. Redu\u00e7\u00e3o de 60% no consumo de \u00e1gua durante a constru\u00e7\u00e3o comparado ao m\u00e9todo tradicional.",
+      "Pré-fabricação industrial com cortes precisos minimiza desperdício. Geração mínima de entulho no canteiro. Materiais reciáveis (aço, gesso, OSB) podem ser reaproveitados. Redução de 60% no consumo de água durante a construção comparado ao método tradicional.",
   },
   {
     icon: "energy",
-    title: "Efici\u00eancia Energ\u00e9tica",
+    title: "Eficiência Energética",
     stat: 40,
     suffix: "%",
-    description: "Economia em climatiza\u00e7\u00e3o",
+    description: "Economia em climatização",
     details:
-      "Isolamento t\u00e9rmico cont\u00ed nuo de 90mm (l\u00e3 mineral) nas paredes externas cria envelope t\u00e9rmico superior. Redu\u00e7\u00e3o de pontes t\u00e9rmicas atrav\u00e9s de t\u00e9cnicas construtivas adequadas. Classifica\u00e7\u00e3o energ\u00e9tica A no PBE Edifica (Procel), resultando em economia de at\u00e9 40% em gastos com ar-condicionado e aquecimento.",
-  },
-  {
-    icon: "durability",
-    title: "Durabilidade da estrutura",
-    stat: 150,
-    suffix: "+",
-    description: "Anos de garantia",
-    details:
-      "A\u00e7o galvanizado ASTM A653 com revestimento Z275 garante prote\u00e7\u00e3o contra corros\u00e3o por d\u00e9cadas. Sistema multicamadas protege estrutura de umidade e intempéries. Vida \u00fatil projetada de 100+ anos com manuten\u00e7\u00e3o adequada, comparável ou superior \u00e0 constru\u00e7\u00e3o tradicional. Estrutura n\u00e3o apodrece, n\u00e3o \u00e9 atacada por cupins ou outros insetos.",
+      "Isolamento térmico contínuo de 90mm (lã mineral) nas paredes externas cria envelope térmico superior. Redução de pontes térmicas através de técnicas construtivas adequadas. Classificação energética A no PBE Edifica (Procel), resultando em economia de até 40% em gastos com ar-condicionado e aquecimento.",
   },
   {
     icon: "acoustic",
-    title: "Superior em isolamento",
+    title: "Isolamento Acústico",
     stat: 68,
     suffix: "%",
     description: "Isolamento acústico superior",
@@ -176,12 +167,21 @@ export const BENEFITS: Benefit[] = [
   },
   {
     icon: "area",
-    title: "Ganho de área útil",
+    title: "Maximização de área útil",
     stat: 5,
     suffix: "%",
     description: "Mais área útil interna",
     details:
       "Paredes mais finas que a alvenaria tradicional proporcionam ganho de 4-5% de área útil. Ideal para apartamentos e escritórios onde cada metro quadrado conta.",
+  },
+  {
+    icon: "weight",
+    title: "Estrutura mais leve",
+    stat: 4,
+    suffix: "x",
+    description: "Mais leve que alvenaria",
+    details:
+      "Peso médio de 250kg/m² contra 1000kg/m² da alvenaria. Reduz custos com fundação e permite construção em terrenos com menor capacidade de carga.",
   },
   {
     icon: "precision",
@@ -193,13 +193,13 @@ export const BENEFITS: Benefit[] = [
       "Sistema industrializado permite orçamento preciso desde o início. Pré-fabricação elimina surpresas e custos extras comuns na construção tradicional.",
   },
   {
-    icon: "weight",
-    title: "Mais leve que alvenaria",
-    stat: 4,
-    suffix: "x",
-    description: "Estrutura mais leve",
+    icon: "durability",
+    title: "Durabilidade da estrutura",
+    stat: 150,
+    suffix: "+",
+    description: "Anos de garantia",
     details:
-      "Peso médio de 250kg/m² contra 1000kg/m² da alvenaria. Reduz custos com fundação e permite construção em terrenos com menor capacidade de carga.",
+      "Aço galvanizado ASTM A653 com revestimento Z275 garante proteção contra corrosão por décadas. Sistema multicamadas protege estrutura de umidade e intempéries. Vida útil projetada de 100+ anos com manutenção adequada, comparável ou superior à construção tradicional. Estrutura não apodrece, não é atacada por cupins ou outros insetos.",
   },
 ];
 

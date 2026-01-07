@@ -17,7 +17,7 @@ const contactInfo = {
 
 export function SlideContact() {
   return (
-    <SlideSection dark className="py-20 lg:py-32">
+    <SlideSection dark className="pt-12 pb-20 lg:pt-16 lg:pb-32">
       <div className="container max-w-4xl mx-auto text-center">
         {/* Main Message */}
         <RevealOnScroll className="mb-8">

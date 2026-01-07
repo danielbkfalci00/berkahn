@@ -57,7 +57,7 @@ export function SlidePartners() {
   }, []);
 
   return (
-    <SlideSection dark className="py-20 lg:py-32">
+    <SlideSection dark className="pt-20 pb-12 lg:pt-32 lg:pb-16">
       <div ref={containerRef} className="container max-w-6xl mx-auto">
         {/* Header */}
         <RevealOnScroll className="text-center mb-12 lg:mb-16">
