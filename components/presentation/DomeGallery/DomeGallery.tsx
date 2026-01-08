@@ -168,8 +168,11 @@ export function DomeGallery({
   const unlockScroll = useCallback(() => {
     if (!scrollLockedRef.current) return;
     if (rootRef.current?.getAttribute("data-enlarging") === "true") return;
-    scrollLockedRef.current = false;
-    document.body.classList.remove("dg-scroll-lock");
+    // Delay para evitar conflitos de timing no mobile
+    setTimeout(() => {
+      scrollLockedRef.current = false;
+      document.body.classList.remove("dg-scroll-lock");
+    }, 50);
   }, []);
 
   const items = useMemo(() => buildItems(images, segments), [images, segments]);
