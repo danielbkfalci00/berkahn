@@ -190,7 +190,7 @@ export function SlideDiferenciais() {
                   </div>
                   <p
                     className={cn(
-                      "text-sm sm:text-lg font-semibold",
+                      "text-sm sm:text-lg font-semibold whitespace-nowrap",
                       item.winner === "traditional" ? "text-emerald-400" : "text-white/50"
                     )}
                   >
