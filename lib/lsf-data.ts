@@ -176,7 +176,7 @@ export const BENEFITS: Benefit[] = [
   },
   {
     icon: "weight",
-    title: "Estrutura mais leve",
+    title: "Estrutura Leve",
     stat: 4,
     suffix: "x",
     description: "Mais leve que alvenaria",

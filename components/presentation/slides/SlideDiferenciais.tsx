@@ -82,7 +82,7 @@ export function SlideDiferenciais() {
 
                 {/* Label */}
                 <p className="text-[10px] sm:text-xs md:text-sm uppercase tracking-[0.12em] sm:tracking-[0.15em] text-white/50 mt-2 px-1">
-                  {benefit.description.split(" ").slice(0, 3).join(" ")}
+                  {benefit.description.split(" ").slice(0, 4).join(" ")}
                 </p>
 
                 {/* Title */}
@@ -172,7 +172,7 @@ export function SlideDiferenciais() {
                   </div>
                   <p
                     className={cn(
-                      "text-lg font-semibold whitespace-nowrap",
+                      "text-sm sm:text-lg font-semibold",
                       item.winner === "lsf" ? "text-emerald-400" : "text-white/80"
                     )}
                   >
@@ -190,7 +190,7 @@ export function SlideDiferenciais() {
                   </div>
                   <p
                     className={cn(
-                      "text-lg font-semibold whitespace-nowrap",
+                      "text-sm sm:text-lg font-semibold",
                       item.winner === "traditional" ? "text-emerald-400" : "text-white/50"
                     )}
                   >
