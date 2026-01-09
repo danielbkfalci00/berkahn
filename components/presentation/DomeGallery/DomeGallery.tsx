@@ -158,6 +158,10 @@ export function DomeGallery({
   const lastDragEndAt = useRef(0);
   const scrollLockedRef = useRef(false);
   const lockedRadiusRef = useRef<number | null>(null);
+  const axisRef = useRef<'x' | 'y' | null>(null);
+
+  // Threshold em pixels para determinar eixo do gesto
+  const AXIS_THRESHOLD = 10;
 
   const lockScroll = useCallback(() => {
     if (scrollLockedRef.current) return;
@@ -304,6 +308,7 @@ export function DomeGallery({
         const evt = event as PointerEvent;
         draggingRef.current = true;
         movedRef.current = false;
+        axisRef.current = null; // Reset axis lock no início do gesto
         startRotRef.current = { ...rotationRef.current };
         startPosRef.current = { x: evt.clientX, y: evt.clientY };
       },
@@ -319,6 +324,24 @@ export function DomeGallery({
         const evt = event as PointerEvent;
         const dxTotal = evt.clientX - startPosRef.current.x;
         const dyTotal = evt.clientY - startPosRef.current.y;
+
+        // Determinar eixo no primeiro movimento significativo
+        if (axisRef.current === null) {
+          const absX = Math.abs(dxTotal);
+          const absY = Math.abs(dyTotal);
+          if (absX > AXIS_THRESHOLD || absY > AXIS_THRESHOLD) {
+            axisRef.current = absX > absY ? 'x' : 'y';
+          }
+        }
+
+        // Se o eixo é vertical, liberar para scroll nativo
+        if (axisRef.current === 'y') {
+          if (last) {
+            draggingRef.current = false;
+            movedRef.current = false;
+          }
+          return;
+        }
 
         if (!movedRef.current) {
           const dist2 = dxTotal * dxTotal + dyTotal * dyTotal;
