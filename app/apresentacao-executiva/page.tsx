@@ -16,6 +16,9 @@ const SlideDiferenciais = dynamic(() =>
 const SlideFounders = dynamic(() =>
   import("@/components/presentation/slides/SlideFounders").then((m) => m.SlideFounders)
 );
+const SlideProjectsIntro = dynamic(() =>
+  import("@/components/presentation/slides/SlideProjectsIntro").then((m) => m.SlideProjectsIntro)
+);
 const SlideProject = dynamic(() =>
   import("@/components/presentation/slides/SlideProject").then((m) => m.SlideProject)
 );
@@ -57,7 +60,10 @@ export default function ApresentacaoExecutivaPage() {
       {/* Slide 5: Fundadores */}
       <SlideFounders />
 
-      {/* Slides 6-8: Projetos (dados centralizados em lib/presentation-data.ts) */}
+      {/* Slide 6: Introdução Projetos */}
+      <SlideProjectsIntro />
+
+      {/* Slides 7-9: Projetos (dados centralizados em lib/presentation-data.ts) */}
       {presentationProjects.map((project) => (
         <SlideProject key={project.number} {...project} />
       ))}

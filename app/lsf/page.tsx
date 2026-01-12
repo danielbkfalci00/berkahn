@@ -62,7 +62,7 @@ export default function LSFPage() {
       </section>
 
       {/* 3. Composição do Sistema - NOVA SEÇÃO */}
-      <section className="py-md bg-white">
+      <section className="pt-0 pb-md bg-white">
         <div className="container">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             {/* Coluna 1: IMAGEM (esquerda no desktop, segunda no mobile) */}

@@ -104,10 +104,10 @@ export function BenefitsGrid() {
                 </div>
 
                 {/* Title */}
-                <h3 className="headline-sm mb-3">{benefit.title}</h3>
+                <h3 className="headline-sm mb-3 min-h-[3.5rem] flex items-center justify-center">{benefit.title}</h3>
 
                 {/* Description */}
-                <p className="body-md text-black-70 leading-relaxed flex-grow">
+                <p className="body-md text-black-70 leading-relaxed min-h-[3rem]">
                   {benefit.description}
                 </p>
 

@@ -217,8 +217,9 @@ export default function ServicosPage() {
         </div>
       </section>
 
-      {/* 6. Projetos Prontos */}
+      {/* TODO: REVELAR - Projetos Prontos (escondido temporariamente)
       <ProjectsGrid id="projetos" />
+      */}
 
       {/* 8. CTA */}
       <CTA />
