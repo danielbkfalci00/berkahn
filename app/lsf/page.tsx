@@ -25,7 +25,7 @@ export default function LSFPage() {
       />
 
       {/* 2. Introduction */}
-      <section className="py-xl">
+      <section className="pt-xl pb-lg">
         <div className="container">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
             <RevealOnScroll>
@@ -67,7 +67,7 @@ export default function LSFPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             {/* Coluna 1: IMAGEM (esquerda no desktop, segunda no mobile) */}
             <RevealOnScroll className="order-2 lg:order-1">
-              <div className="relative h-[800px] lg:h-[1000px] overflow-hidden">
+              <div className="relative h-[500px] lg:h-[650px] overflow-hidden">
                 <Image
                   src="/images/Lsf/lsf-wall-layers-diagram.webp"
                   alt="Diagrama técnico das camadas de parede LSF"
@@ -98,7 +98,7 @@ export default function LSFPage() {
       </section>
 
       {/* 4. LSF Diagram - FEATURE HERO */}
-      <section className="py-2xl bg-black-5">
+      <section className="pt-lg pb-2xl bg-black-5">
         <div className="container">
           <RevealOnScroll>
             <h2 className="headline-md text-center mb-12">
