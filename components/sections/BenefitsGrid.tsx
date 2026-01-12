@@ -148,31 +148,34 @@ export function BenefitsGrid() {
           {BENEFITS.map((benefit, index) => (
             <RevealOnScroll key={benefit.title} delay={index * 0.1} className="h-full">
               <div className="bg-white p-8 rounded-lg shadow-luxury-md hover:shadow-luxury-xl transition-shadow duration-300 text-center group h-full flex flex-col">
-                {/* Icon */}
-                <div className="flex justify-center text-black group-hover:scale-110 transition-transform duration-300">
-                  {icons[benefit.icon as keyof typeof icons]}
+                {/* Content wrapper - expands to fill space */}
+                <div className="flex-grow flex flex-col">
+                  {/* Icon */}
+                  <div className="flex justify-center text-black group-hover:scale-110 transition-transform duration-300">
+                    {icons[benefit.icon as keyof typeof icons]}
+                  </div>
+
+                  {/* Stat with CountUp */}
+                  <div className="mb-4">
+                    <CountUp
+                      end={benefit.stat}
+                      suffix={benefit.suffix}
+                      className="text-4xl md:text-5xl font-heading font-light"
+                    />
+                  </div>
+
+                  {/* Title */}
+                  <h3 className="headline-sm mb-3">{benefit.title}</h3>
+
+                  {/* Description */}
+                  <p className="body-md text-black-70 leading-relaxed">
+                    {benefit.description}
+                  </p>
                 </div>
 
-                {/* Stat with CountUp */}
-                <div className="mb-4">
-                  <CountUp
-                    end={benefit.stat}
-                    suffix={benefit.suffix}
-                    className="text-4xl md:text-5xl font-heading font-light"
-                  />
-                </div>
-
-                {/* Title */}
-                <h3 className="headline-sm mb-3 min-h-[3.5rem] flex items-center justify-center">{benefit.title}</h3>
-
-                {/* Description */}
-                <p className="body-md text-black-70 leading-relaxed min-h-[3rem]">
-                  {benefit.description}
-                </p>
-
-                {/* Divider */}
-                <div className="mt-auto pt-6 border-t border-black-10">
-                  <p className="text-sm text-black-50">{benefit.details}</p>
+                {/* Divider - always at same position */}
+                <div className="pt-6 border-t border-black-10">
+                  <p className="text-sm text-black-50 min-h-[8rem]">{benefit.details}</p>
                 </div>
               </div>
             </RevealOnScroll>
