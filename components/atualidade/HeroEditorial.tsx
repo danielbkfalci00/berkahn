@@ -50,6 +50,13 @@ export function HeroEditorial({
         />
       </motion.div>
 
+      {/* Gradient Overlay Dinâmico para legibilidade */}
+      <motion.div
+        className="absolute inset-0 z-5 bg-gradient-to-t from-black/40 via-black/20 to-transparent"
+        style={{ opacity: overlayOpacity }}
+        aria-hidden="true"
+      />
+
       {/* Decorative Lines - Left Side */}
       <div className="absolute inset-0 z-15 pointer-events-none">
         {/* Vertical line left */}

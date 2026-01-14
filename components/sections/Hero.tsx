@@ -75,6 +75,12 @@ export function Hero() {
             </CarouselItem>
           </CarouselContent>
         </Carousel>
+
+        {/* Gradient Overlay para legibilidade */}
+        <div
+          className="absolute inset-0 bg-gradient-to-t from-black/40 via-black/20 to-transparent"
+          aria-hidden="true"
+        />
       </div>
 
       {/* Content */}
