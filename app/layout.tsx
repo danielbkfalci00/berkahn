@@ -13,23 +13,41 @@ const manrope = Manrope({
 });
 
 export const metadata: Metadata = {
-  title: "Berkahn Steel Frame | Construção em Aço de Qualidade",
+  title: "Construtora Berkahn | Construção de Alto Padrão",
   description:
-    "Especialistas em Light Steel Frame. 25 anos de experiência, 500 projetos concluídos. Erguendo o amanhã com construção em aço de qualidade.",
+    "Erguendo o amanhã. Construtora especializada em projetos de alto padrão.",
   keywords: [
+    "construtora",
+    "construção",
+    "alto padrão",
     "steel frame",
     "light steel frame",
-    "construção",
-    "aço",
     "berkahn",
     "são paulo",
   ],
   authors: [{ name: "Berkahn" }],
+  metadataBase: new URL("https://www.berkahn.com.br"),
   openGraph: {
-    title: "Berkahn Steel Frame",
-    description: "Erguendo o amanhã com construção em aço de qualidade.",
+    title: "Construtora Berkahn | Construção de Alto Padrão",
+    description: "Erguendo o amanhã. Construtora especializada em projetos de alto padrão.",
+    siteName: "Construtora Berkahn",
+    url: "https://www.berkahn.com.br",
     type: "website",
     locale: "pt_BR",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Construtora Berkahn - Construção de Alto Padrão",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Construtora Berkahn | Construção de Alto Padrão",
+    description: "Erguendo o amanhã. Construtora especializada em projetos de alto padrão.",
+    images: ["/og-image.png"],
   },
 };
 
