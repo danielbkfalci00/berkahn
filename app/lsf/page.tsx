@@ -6,7 +6,6 @@ import { WallLayersTabs } from "@/components/lsf/WallLayersTabs";
 import { BenefitsGrid } from "@/components/sections/BenefitsGrid";
 import { TechnicalSpecs } from "@/components/lsf/TechnicalSpecs";
 import { ComparisonTable } from "@/components/lsf/ComparisonTable";
-import { ConstructionTimeline } from "@/components/lsf/ConstructionTimeline";
 
 export const metadata = {
   title: "Light Steel Frame | Berkahn Steel Frame",
@@ -142,10 +141,7 @@ export default function LSFPage() {
         </div>
       </section>
 
-      {/* 7. Construction Timeline */}
-      <ConstructionTimeline />
-
-      {/* 8. Project Gallery */}
+      {/* 7. Project Gallery */}
       <section className="py-xl">
         <div className="container">
           <RevealOnScroll>
@@ -237,7 +233,7 @@ export default function LSFPage() {
         </div>
       </section>
 
-      {/* 9. CTA */}
+      {/* 8. CTA */}
       <CTA />
     </>
   );

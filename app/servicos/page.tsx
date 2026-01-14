@@ -11,6 +11,7 @@ import { ExecutionPhases } from "@/components/servicos/ExecutionPhases";
 import { ContactFormDialog } from "@/components/forms/ContactFormDialog";
 import { Home, Building2, Factory, CheckIcon } from "lucide-react";
 import { StatsGrid } from "@/components/article/StatHighlight";
+import { ConstructionTimeline } from "@/components/lsf/ConstructionTimeline";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
@@ -216,6 +217,9 @@ export default function ServicosPage() {
           </div>
         </div>
       </section>
+
+      {/* 6. Processo Construtivo LSF */}
+      <ConstructionTimeline />
 
       {/* TODO: REVELAR - Projetos Prontos (escondido temporariamente)
       <ProjectsGrid id="projetos" />
