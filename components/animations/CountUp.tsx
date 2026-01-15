@@ -5,6 +5,7 @@ import { useInView } from "framer-motion";
 
 interface CountUpProps {
   end: number;
+  prefix?: string;
   suffix?: string;
   className?: string;
   duration?: number;
@@ -12,6 +13,7 @@ interface CountUpProps {
 
 export function CountUp({
   end,
+  prefix = "",
   suffix = "",
   className,
   duration = 2000,
@@ -46,6 +48,7 @@ export function CountUp({
 
   return (
     <p ref={ref} className={className}>
+      {prefix}
       {count}
       {suffix}
     </p>

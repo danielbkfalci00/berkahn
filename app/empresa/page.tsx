@@ -101,15 +101,16 @@ export default function EmpresaPage() {
             </p>
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8 lg:gap-12">
               {[
-                { value: 20, suffix: "+", label: "Anos de experiência combinada" },
-                { value: 23, suffix: "+", label: "Projetos" },
-                { value: 85, suffix: "+ mil m²", label: "Área construída" },
+                { value: 20, prefix: "+", label: "Anos de experiência combinada" },
+                { value: 23, prefix: "+", label: "Projetos" },
+                { value: 85, prefix: "+", suffix: " mil m²", label: "Área construída" },
                 { value: 100, suffix: "%", label: "Satisfação" },
               ].map((stat, index) => (
                 <RevealOnScroll key={stat.label} delay={index * 0.1}>
                   <div className="text-center">
                     <CountUp
                       end={stat.value}
+                      prefix={stat.prefix}
                       suffix={stat.suffix}
                       className="text-3xl md:text-4xl lg:text-5xl font-heading font-light mb-1 md:mb-2 text-white"
                     />

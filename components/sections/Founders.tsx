@@ -100,37 +100,37 @@ const FOUNDERS: Founder[] = [
         ]
       },
       {
-        year: "2017-2024",
+        year: "2023 - Atual",
         role: "Consultor de Processos",
         company: "Consultoria Lean Construction",
         description: "Especialista em implementação de Lean Construction em obras civis, com foco em melhoria contínua e eliminação de desperdícios.",
         achievements: [
-          "7+ anos de experiência em melhoria de processos",
-          "Implementação de Lean Construction em 50+ obras",
-          "Redução média de 30% em desperdícios",
-          "Treinamento de 200+ profissionais em Lean"
+          "Palestrante do ENEGEP (2025) sobre o cenário do Lean Construction no Brasil",
+          "Implementação de Lean Construction em +10 obras",
+          "Treinamento de +60 profissionais em Lean"
         ]
       },
       {
-        year: "2015-2017",
-        role: "Engenheiro de Processos",
-        company: "Indústria de Construção",
-        description: "Atuação em mapeamento e otimização de processos produtivos na construção civil.",
+        year: "2022-2023",
+        role: "Aprendiz de Engenheiro de Processos",
+        company: "Indústria",
+        description: "Atuação em mapeamento e otimização de processos produtivos na indústria.",
         achievements: [
-          "Mapeamento de processos construtivos",
-          "Implementação de indicadores de performance (KPIs)",
-          "Redução de retrabalho em 25%"
+          "Aprendizado de diversas ferramentas de Melhoria Contínua",
+          "Aplicação do Lean Manufacturing",
+          "Treinamento Yellow Belt para +100 profissionais"
         ]
       },
       {
-        year: "2011-2015",
+        year: "2019-2023",
         role: "Graduação em Engenharia de Produção",
         company: "Centro Universitário FEI",
         description: "Formação com ênfase em gestão de processos, qualidade e melhoria contínua.",
         achievements: [
-          "Especialização em Lean Manufacturing",
-          "TCC sobre aplicação de Lean na construção civil",
-          "Estágios em consultoria de processos"
+          "Certificação Black Belt Lean Six Sigma",
+          "Mais de 2 anos atuando na Empresa Júnior na área de Projetos",
+          "Fundou a primeira revista universitária da Faculdade",
+          "Estagiou na área de Melhoria Contínua"
         ]
       }
     ]

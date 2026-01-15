@@ -15,7 +15,7 @@ const manrope = Manrope({
 export const metadata: Metadata = {
   title: "Construtora Berkahn | Construção de Alto Padrão",
   description:
-    "Erguendo o amanhã. Construtora especializada em projetos de alto padrão.",
+    "Erguendo o amanhã. Construtora especializada em projetos de Steel Frame.",
   keywords: [
     "construtora",
     "construção",
@@ -29,14 +29,14 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://www.berkahn.com.br"),
   openGraph: {
     title: "Construtora Berkahn | Construção de Alto Padrão",
-    description: "Erguendo o amanhã. Construtora especializada em projetos de alto padrão.",
+    description: "Erguendo o amanhã. Construtora especializada em projetos de Steel Frame.",
     siteName: "Construtora Berkahn",
     url: "https://www.berkahn.com.br",
     type: "website",
     locale: "pt_BR",
     images: [
       {
-        url: "/og-image.png",
+        url: "/images/Compartilhamento/og-image.webp",
         width: 1200,
         height: 630,
         alt: "Construtora Berkahn - Construção de Alto Padrão",
@@ -46,8 +46,8 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Construtora Berkahn | Construção de Alto Padrão",
-    description: "Erguendo o amanhã. Construtora especializada em projetos de alto padrão.",
-    images: ["/og-image.png"],
+    description: "Erguendo o amanhã. Construtora especializada em projetos de Steel Frame.",
+    images: ["/images/Compartilhamento/og-image.webp"],
   },
 };
 
