@@ -33,9 +33,14 @@ export function LoginForm() {
         return;
       }
 
-      // Check if environment variables are set
-      if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
-        setError("Configuração do servidor incompleta. Verifique as variáveis de ambiente.");
+      // Check if environment variables are set with robust validation
+      const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+      const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+
+      if (!supabaseUrl || !supabaseKey ||
+          supabaseUrl === 'undefined' || supabaseKey === 'undefined' ||
+          !supabaseUrl.startsWith('https://')) {
+        setError(`Configuração incompleta. URL: ${supabaseUrl?.substring(0, 20) || 'vazio'}`);
         setIsLoading(false);
         return;
       }
