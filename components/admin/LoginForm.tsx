@@ -6,15 +6,17 @@ import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Loader2, AlertCircle } from "lucide-react";
+import { Loader2, AlertCircle, Lock } from "lucide-react";
+
+const ACCESS_CODE = "Berkahn2025@";
+const ADMIN_EMAIL = "admin@berkahn.com.br";
 
 export function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirectTo = searchParams.get("redirectTo") || "/admin";
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [code, setCode] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -24,19 +26,22 @@ export function LoginForm() {
     setIsLoading(true);
 
     try {
-      const supabase = createClient();
+      // Validate access code
+      if (code !== ACCESS_CODE) {
+        setError("Código de acesso inválido");
+        setIsLoading(false);
+        return;
+      }
 
+      // Sign in with Supabase using fixed admin credentials
+      const supabase = createClient();
       const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
+        email: ADMIN_EMAIL,
+        password: ACCESS_CODE,
       });
 
       if (error) {
-        if (error.message === "Invalid login credentials") {
-          setError("Email ou senha incorretos");
-        } else {
-          setError(error.message);
-        }
+        setError("Erro ao autenticar. Tente novamente.");
         return;
       }
 
@@ -60,42 +65,32 @@ export function LoginForm() {
         )}
 
         <div className="space-y-2">
-          <Label htmlFor="email">Email</Label>
+          <Label htmlFor="code" className="flex items-center gap-2">
+            <Lock className="h-4 w-4" />
+            Código de Acesso
+          </Label>
           <Input
-            id="email"
-            type="email"
-            placeholder="seu@email.com"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            disabled={isLoading}
-            className="h-11"
-          />
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="password">Senha</Label>
-          <Input
-            id="password"
+            id="code"
             type="password"
-            placeholder="••••••••"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Digite o código de acesso"
+            value={code}
+            onChange={(e) => setCode(e.target.value)}
             required
             disabled={isLoading}
-            className="h-11"
+            className="h-12 text-center text-lg tracking-wider"
+            autoComplete="off"
           />
         </div>
 
         <Button
           type="submit"
-          className="w-full h-11 bg-neutral-900 hover:bg-neutral-800"
+          className="w-full h-12 bg-white text-neutral-900 border-2 border-neutral-900 hover:bg-neutral-100 font-medium"
           disabled={isLoading}
         >
           {isLoading ? (
             <>
               <Loader2 className="h-4 w-4 animate-spin mr-2" />
-              Entrando...
+              Verificando...
             </>
           ) : (
             "Entrar"
