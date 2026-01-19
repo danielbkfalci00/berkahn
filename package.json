@@ -5,6 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "build:static": "BUILD_MODE=static next build",
+    "build:admin": "BUILD_MODE=full next build",
     "start": "next start",
     "lint": "next lint"
   },
@@ -19,6 +21,8 @@
     "@radix-ui/react-tabs": "^1.1.13",
     "@radix-ui/react-tooltip": "^1.2.8",
     "@radix-ui/react-visually-hidden": "^1.2.4",
+    "@supabase/ssr": "^0.8.0",
+    "@supabase/supabase-js": "^2.90.1",
     "@use-gesture/react": "^10.3.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.0",
@@ -40,6 +44,7 @@
     "autoprefixer": "^10.4.0",
     "eslint": "^8.55.0",
     "eslint-config-next": "^15.0.0",
+    "pg": "^8.17.1",
     "postcss": "^8.4.0",
     "sharp": "^0.34.5",
     "tailwindcss": "^3.4.0",

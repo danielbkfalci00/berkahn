@@ -8,10 +8,11 @@ import { Sidebar } from "@/components/layout/Sidebar";
 export function ClientLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
 
-  // Rotas que não devem ter header/sidebar (ex: apresentações)
+  // Rotas que não devem ter header/sidebar (ex: apresentações, admin)
   const isFullscreenRoute = pathname?.startsWith("/apresentacao");
+  const isAdminRoute = pathname?.startsWith("/admin");
 
-  if (isFullscreenRoute) {
+  if (isFullscreenRoute || isAdminRoute) {
     return <main>{children}</main>;
   }
 

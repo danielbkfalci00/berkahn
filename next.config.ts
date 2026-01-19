@@ -1,7 +1,15 @@
 import type { NextConfig } from "next";
 
+// Build mode:
+// - "static" (default): Site público estático para berkahn.com.br
+// - "full": Inclui admin com rotas dinâmicas para admin.berkahn.com.br
+const BUILD_MODE = process.env.BUILD_MODE || "full";
+
 const nextConfig: NextConfig = {
-  output: "export",
+  // Static export only for public site build
+  ...(BUILD_MODE === "static" && {
+    output: "export",
+  }),
   images: {
     unoptimized: true, // Required for static export
   },
