@@ -33,6 +33,13 @@ export function LoginForm() {
         return;
       }
 
+      // Check if environment variables are set
+      if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+        setError("Configuração do servidor incompleta. Verifique as variáveis de ambiente.");
+        setIsLoading(false);
+        return;
+      }
+
       // Sign in with Supabase using fixed admin credentials
       const supabase = createClient();
       const { error } = await supabase.auth.signInWithPassword({
@@ -41,7 +48,8 @@ export function LoginForm() {
       });
 
       if (error) {
-        setError("Erro ao autenticar. Tente novamente.");
+        console.error("Auth error:", error.message);
+        setError(`Erro: ${error.message}`);
         return;
       }
 
