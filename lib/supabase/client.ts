@@ -32,14 +32,21 @@ function debugFetch(input: RequestInfo | URL, init?: RequestInit): Promise<Respo
 }
 
 export function createClient() {
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  // IMPORTANTE: Limpar whitespace e newlines das env vars
+  // A key pode ter \n se foi copiada incorretamente no Vercel
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim().replace(/[\r\n]/g, '')
+  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.trim().replace(/[\r\n]/g, '')
 
   // Debug: mostrar valores no console para diagnóstico
   if (typeof window !== 'undefined') {
     console.log('Supabase URL:', supabaseUrl?.substring(0, 30) + '...')
     console.log('Supabase Key exists:', !!supabaseKey && supabaseKey.length > 10)
     console.log('Supabase Key length:', supabaseKey?.length)
+    // Verificar se tinha newline
+    const originalKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+    if (originalKey && originalKey.includes('\n')) {
+      console.warn('WARNING: Supabase key contained newline character - this was cleaned')
+    }
   }
 
   // Validação robusta - verifica se são URLs/keys válidas
