@@ -1,20 +1,17 @@
 "use client";
 
+import React, { useEffect, useRef, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import { CountUp } from "@/components/animations/CountUp";
 import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { BENEFITS } from "@/lib/lsf-data";
+import { useOutsideClick } from "@/hooks/use-outside-click";
+import { BENEFITS, Benefit } from "@/lib/lsf-data";
 
 // Selecionar os 4 principais benefícios
 const MAIN_BENEFITS = BENEFITS.slice(0, 4);
 
-// SVG Icons (minimal, luxury style) - mesmos do BenefitsGrid
-const icons = {
+// SVG Icons (minimal, luxury style)
+const icons: Record<string, React.ReactNode> = {
   speed: (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -22,7 +19,7 @@ const icons = {
       viewBox="0 0 24 24"
       strokeWidth={1.5}
       stroke="currentColor"
-      className="w-8 h-8"
+      className="w-10 h-10"
     >
       <path
         strokeLinecap="round"
@@ -38,7 +35,7 @@ const icons = {
       viewBox="0 0 24 24"
       strokeWidth={1.5}
       stroke="currentColor"
-      className="w-8 h-8"
+      className="w-10 h-10"
     >
       <path
         strokeLinecap="round"
@@ -54,12 +51,12 @@ const icons = {
       viewBox="0 0 24 24"
       strokeWidth={1.5}
       stroke="currentColor"
-      className="w-8 h-8"
+      className="w-10 h-10"
     >
       <path
         strokeLinecap="round"
         strokeLinejoin="round"
-        d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z"
+        d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z"
       />
     </svg>
   ),
@@ -70,7 +67,7 @@ const icons = {
       viewBox="0 0 24 24"
       strokeWidth={1.5}
       stroke="currentColor"
-      className="w-8 h-8"
+      className="w-10 h-10"
     >
       <path
         strokeLinecap="round"
@@ -82,6 +79,28 @@ const icons = {
 };
 
 export function BenefitsGridCompact() {
+  const [active, setActive] = useState<Benefit | null>(null);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function onKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        setActive(null);
+      }
+    }
+
+    if (active) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [active]);
+
+  useOutsideClick(ref, () => setActive(null));
+
   return (
     <section className="py-xl bg-black-5">
       <div className="container">
@@ -94,53 +113,106 @@ export function BenefitsGridCompact() {
           </h2>
         </RevealOnScroll>
 
-        <TooltipProvider delayDuration={100}>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-            {MAIN_BENEFITS.map((benefit, index) => (
-              <RevealOnScroll key={benefit.title} delay={index * 0.1}>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <div className="bg-white p-6 md:p-8 rounded-lg shadow-luxury-sm hover:shadow-luxury-lg transition-all duration-300 text-center cursor-pointer group">
-                      {/* Icon */}
-                      <div className="flex justify-center text-black group-hover:scale-110 transition-transform duration-300 mb-4">
-                        {icons[benefit.icon as keyof typeof icons]}
-                      </div>
+        {/* Overlay quando card está expandido */}
+        <AnimatePresence>
+          {active && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-black/50 h-full w-full z-10"
+            />
+          )}
+        </AnimatePresence>
 
-                      {/* Stat with CountUp */}
-                      <div className="mb-2">
-                        <CountUp
-                          end={benefit.stat}
-                          suffix={benefit.suffix}
-                          className="text-3xl md:text-4xl font-heading font-light"
-                        />
-                      </div>
+        {/* Card Expandido */}
+        <AnimatePresence>
+          {active && (
+            <div className="fixed inset-0 grid place-items-center z-[100] p-4">
+              <motion.div
+                ref={ref}
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                transition={{ duration: 0.2 }}
+                className="w-full max-w-lg bg-white rounded-2xl overflow-hidden shadow-luxury-xl"
+              >
+                {/* Header com ícone e número */}
+                <div className="bg-black p-8 text-white text-center">
+                  <div className="flex justify-center mb-4 text-white">
+                    {icons[active.icon]}
+                  </div>
+                  <span className="text-5xl md:text-6xl font-heading font-light">
+                    {active.stat}{active.suffix}
+                  </span>
+                  <h3 className="text-xl font-medium mt-2">
+                    {active.title}
+                  </h3>
+                </div>
 
-                      {/* Title */}
-                      <h3 className="text-sm md:text-base font-medium text-black">
-                        {benefit.title}
-                      </h3>
+                {/* Conteúdo */}
+                <div className="p-6 md:p-8">
+                  <p className="text-lg font-medium text-black mb-4">
+                    {active.description}
+                  </p>
 
-                      {/* Hint para hover */}
-                      <p className="text-xs text-black-30 mt-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                        Toque para detalhes
-                      </p>
-                    </div>
-                  </TooltipTrigger>
+                  <div className="text-black-70 leading-relaxed">
+                    <p>{active.details}</p>
+                  </div>
 
-                  <TooltipContent
-                    side="bottom"
-                    className="max-w-xs p-4 bg-black text-white border-none"
+                  {/* Botão fechar */}
+                  <button
+                    onClick={() => setActive(null)}
+                    className="mt-6 w-full py-3 bg-black text-white rounded-lg font-medium hover:bg-black-90 transition-colors"
                   >
-                    <p className="font-medium mb-2">{benefit.description}</p>
-                    <p className="text-sm text-white/80 leading-relaxed">
-                      {benefit.details}
-                    </p>
-                  </TooltipContent>
-                </Tooltip>
-              </RevealOnScroll>
-            ))}
-          </div>
-        </TooltipProvider>
+                    Fechar
+                  </button>
+                </div>
+              </motion.div>
+            </div>
+          )}
+        </AnimatePresence>
+
+        {/* Grid de Cards */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+          {MAIN_BENEFITS.map((benefit, index) => (
+            <RevealOnScroll key={benefit.title} delay={index * 0.1}>
+              <div
+                onClick={() => setActive(benefit)}
+                className="bg-white p-6 md:p-8 rounded-xl shadow-luxury-sm hover:shadow-luxury-lg transition-all duration-300 text-center cursor-pointer group"
+              >
+                {/* Icon */}
+                <div className="flex justify-center text-black group-hover:scale-110 transition-transform duration-300 mb-4">
+                  {icons[benefit.icon]}
+                </div>
+
+                {/* Stat */}
+                <div className="mb-2">
+                  <CountUp
+                    end={benefit.stat}
+                    suffix={benefit.suffix}
+                    className="text-3xl md:text-4xl font-heading font-light"
+                  />
+                </div>
+
+                {/* Title */}
+                <h3 className="text-sm md:text-base font-medium text-black">
+                  {benefit.title}
+                </h3>
+
+                {/* Description */}
+                <p className="text-xs text-black-50 mt-2 line-clamp-1">
+                  {benefit.description}
+                </p>
+
+                {/* Hint */}
+                <p className="text-xs text-black-30 mt-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                  Clique para detalhes
+                </p>
+              </div>
+            </RevealOnScroll>
+          ))}
+        </div>
       </div>
     </section>
   );

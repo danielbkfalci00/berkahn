@@ -17,6 +17,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from '@/components/ui/carousel';
+import Autoplay from 'embla-carousel-autoplay';
 import { Badge } from '@/components/ui/badge';
 import { Check } from 'lucide-react';
 import Image from 'next/image';
@@ -106,7 +107,17 @@ export function ExecutionPhases() {
 
                     {/* Image Carousel */}
                     <div className="pt-4">
-                      <Carousel className="w-full" opts={{ loop: true }}>
+                      <Carousel
+                        className="w-full"
+                        opts={{ loop: true }}
+                        plugins={[
+                          Autoplay({
+                            delay: 5000,
+                            stopOnInteraction: false,
+                            stopOnMouseEnter: true,
+                          })
+                        ]}
+                      >
                         <CarouselContent>
                           {[
                             { src: phase.images.primary, alt: phase.images.primaryAlt },
@@ -237,7 +248,17 @@ export function ExecutionPhases() {
 
                   {/* RIGHT: Image Carousel */}
                   <div className="w-full">
-                    <Carousel className="w-full" opts={{ loop: true }}>
+                    <Carousel
+                      className="w-full"
+                      opts={{ loop: true }}
+                      plugins={[
+                        Autoplay({
+                          delay: 5000,
+                          stopOnInteraction: false,
+                          stopOnMouseEnter: true,
+                        })
+                      ]}
+                    >
                       <CarouselContent>
                         {[
                           { src: phase.images.primary, alt: phase.images.primaryAlt },
