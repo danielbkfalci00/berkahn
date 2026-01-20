@@ -40,7 +40,6 @@ export const FOOTER_CONTACT = [
 
 // Footer Social Data
 export const FOOTER_SOCIAL = [
-  { label: "LinkedIn", href: "https://linkedin.com/company/berkahn", type: "linkedin" },
-  { label: "Instagram", href: "https://instagram.com/berkahn", type: "instagram" },
-  { label: "Facebook", href: "https://facebook.com/berkahn", type: "facebook" },
+  { label: "LinkedIn", href: "https://www.linkedin.com/company/construtora-berkahn/?viewAsMember=true", type: "linkedin" },
+  { label: "Instagram", href: "https://www.instagram.com/berkahn.co/", type: "instagram" },
 ] as const;

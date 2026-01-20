@@ -3,6 +3,7 @@ import { Categories } from "@/components/sections/Categories";
 import { Expertise } from "@/components/sections/Expertise";
 import { Gallery } from "@/components/sections/Gallery";
 import { LSFIntro } from "@/components/sections/LSFIntro";
+import { BenefitsGridCompact } from "@/components/sections/BenefitsGridCompact";
 import { CTA } from "@/components/sections/CTA";
 
 export default function Home() {
@@ -13,6 +14,7 @@ export default function Home() {
       <Expertise />
       <Gallery />
       <LSFIntro />
+      <BenefitsGridCompact />
       <CTA />
     </>
   );

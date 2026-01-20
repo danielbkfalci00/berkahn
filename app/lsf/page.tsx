@@ -96,7 +96,10 @@ export default function LSFPage() {
         </div>
       </section>
 
-      {/* 4. LSF Diagram - FEATURE HERO */}
+      {/* 4. Benefits Grid - Vantagens */}
+      <BenefitsGrid />
+
+      {/* 5. LSF Diagram - Sistema de 7 Camadas */}
       <section className="pt-lg pb-2xl bg-black-5">
         <div className="container">
           <RevealOnScroll>
@@ -112,10 +115,7 @@ export default function LSFPage() {
         </div>
       </section>
 
-      {/* 4. Benefits Grid */}
-      <BenefitsGrid />
-
-      {/* 5. Technical Specs */}
+      {/* 6. Technical Specs */}
       <section className="py-xl bg-black-5">
         <div className="container max-w-4xl">
           <RevealOnScroll>

@@ -183,6 +183,36 @@ export default function EmpresaPage() {
       {/* Timeline - COMENTADO */}
       {/* <BerkahnTimeline /> */}
 
+      {/* Values - Nossos Valores */}
+      <section className="py-xl bg-black-5">
+        <div className="container">
+          <h2 className="headline-md mb-12 text-center">Nossos Valores</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
+            <div className="text-center">
+              <h3 className="headline-sm mb-4">Excelência</h3>
+              <p className="body-md text-black-70">
+                Compromisso inabalável com qualidade e precisão em cada
+                detalhe dos nossos projetos.
+              </p>
+            </div>
+            <div className="text-center">
+              <h3 className="headline-sm mb-4">Inovação</h3>
+              <p className="body-md text-black-70">
+                Buscamos constantemente novas tecnologias e métodos para
+                entregar soluções cada vez mais eficientes.
+              </p>
+            </div>
+            <div className="text-center">
+              <h3 className="headline-sm mb-4">Sustentabilidade</h3>
+              <p className="body-md text-black-70">
+                Construímos com responsabilidade ambiental, minimizando
+                resíduos e otimizando recursos.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Founders */}
       <Founders />
 
@@ -259,36 +289,6 @@ export default function EmpresaPage() {
                 </Card>
               </RevealOnScroll>
             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Values */}
-      <section className="py-xl bg-black-5">
-        <div className="container">
-          <h2 className="headline-md mb-12 text-center">Nossos Valores</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
-            <div className="text-center">
-              <h3 className="headline-sm mb-4">Excelência</h3>
-              <p className="body-md text-black-70">
-                Compromisso inabalável com qualidade e precisão em cada
-                detalhe dos nossos projetos.
-              </p>
-            </div>
-            <div className="text-center">
-              <h3 className="headline-sm mb-4">Inovação</h3>
-              <p className="body-md text-black-70">
-                Buscamos constantemente novas tecnologias e métodos para
-                entregar soluções cada vez mais eficientes.
-              </p>
-            </div>
-            <div className="text-center">
-              <h3 className="headline-sm mb-4">Sustentabilidade</h3>
-              <p className="body-md text-black-70">
-                Construímos com responsabilidade ambiental, minimizando
-                resíduos e otimizando recursos.
-              </p>
-            </div>
           </div>
         </div>
       </section>
