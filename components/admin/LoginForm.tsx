@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Loader2, AlertCircle, Lock } from "lucide-react";
 
 const ACCESS_CODE = "Berkahn2025@";
-const ADMIN_EMAIL = "admin@berkahn.com.br";
+const ADMIN_EMAIL = "contato.berkahn@gmail.com";
 
 export function LoginForm() {
   const router = useRouter();
