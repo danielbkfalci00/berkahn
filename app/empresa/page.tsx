@@ -44,7 +44,7 @@ const diferenciais = [
   {
     category: "EQUIPE",
     title: "Equipe Especializada",
-    desc: "Profissionais capacitados com vasta experiência em Steel Frame. Equipe técnica treinada em processos industrializados e construção sustentável de alta performance.",
+    desc: "Profissionais capacitados por empresa internacional com vasta experiência em Steel Frame. Equipe técnica treinada em processos industrializados e construção sustentável de alta performance.",
   },
   {
     category: "PROCESSO",

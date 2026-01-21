@@ -3,7 +3,6 @@ import { CTA } from "@/components/sections/CTA";
 import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
 import { ParallaxHero } from "@/components/sections/ParallaxHero";
 import { WallLayersTabs } from "@/components/lsf/WallLayersTabs";
-import { BenefitsGrid } from "@/components/sections/BenefitsGrid";
 import { TechnicalSpecs } from "@/components/lsf/TechnicalSpecs";
 import { ComparisonTable } from "@/components/lsf/ComparisonTable";
 
@@ -96,15 +95,13 @@ export default function LSFPage() {
         </div>
       </section>
 
-      {/* 4. Benefits Grid - Vantagens */}
-      <BenefitsGrid />
 
       {/* 5. LSF Diagram - Sistema de 7 Camadas */}
       <section className="pt-lg pb-2xl bg-black-5">
         <div className="container">
           <RevealOnScroll>
             <h2 className="headline-md text-center mb-12">
-              Sistema de 7 Camadas
+              Sistema de 6 Camadas
             </h2>
             <p className="body-md text-black-70 text-center max-w-3xl mx-auto mb-16">
               O Light Steel Frame utiliza um sistema multicamadas que garante isolamento térmico e acústico superior, proteção contra intempéries e durabilidade estrutural.

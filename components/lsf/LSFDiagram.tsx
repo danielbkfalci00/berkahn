@@ -6,18 +6,18 @@ import { LSF_LAYERS } from "@/lib/lsf-data";
 import { Badge } from "@/components/ui/badge";
 
 export function LSFDiagram() {
-  const [selectedLayer, setSelectedLayer] = useState<number>(4); // Default: Estrutura Steel Frame
+  const [selectedLayer, setSelectedLayer] = useState<number>(3); // Default: Manta Hidrófuga (centro das 6 camadas)
 
   const selected = LSF_LAYERS.find((layer) => layer.id === selectedLayer);
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
-      {/* Left: Visual Diagram (7 layers stacked) */}
+      {/* Left: Visual Diagram (6 layers stacked) */}
       <div className="order-2 lg:order-1">
         <div className="bg-white rounded-lg shadow-luxury-lg p-8">
           <p className="label-text mb-6 text-center">SISTEMA MULTICAMADAS</p>
 
-          {/* Diagram: 7 layers stacked */}
+          {/* Diagram: 6 layers stacked */}
           <div className="space-y-2">
             {LSF_LAYERS.map((layer, index) => (
               <motion.button
@@ -45,7 +45,7 @@ export function LSFDiagram() {
                   className="p-4 flex items-center justify-between"
                   style={{
                     backgroundColor: layer.color,
-                    height: `${60 + (7 - layer.id) * 10}px`, // Layers get thicker towards center
+                    height: `${60 + (6 - layer.id) * 10}px`, // Layers get thicker towards center
                   }}
                 >
                   <div className="flex items-center gap-3">
@@ -140,7 +140,7 @@ export function LSFDiagram() {
                 <div className="flex items-center justify-between text-sm">
                   <button
                     onClick={() =>
-                      setSelectedLayer(selected.id > 1 ? selected.id - 1 : 7)
+                      setSelectedLayer(selected.id > 1 ? selected.id - 1 : 6)
                     }
                     className="text-black-70 hover:text-black transition-colors flex items-center gap-2"
                   >
@@ -163,7 +163,7 @@ export function LSFDiagram() {
 
                   <button
                     onClick={() =>
-                      setSelectedLayer(selected.id < 7 ? selected.id + 1 : 1)
+                      setSelectedLayer(selected.id < 6 ? selected.id + 1 : 1)
                     }
                     className="text-black-70 hover:text-black transition-colors flex items-center gap-2"
                   >

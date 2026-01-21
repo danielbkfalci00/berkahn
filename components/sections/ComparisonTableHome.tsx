@@ -179,7 +179,7 @@ export function ComparisonTableHome() {
           <div className="flex justify-center py-4 border-t border-black-10 bg-white rounded-b-lg -mt-1">
             <button
               onClick={() => setIsExpanded(!isExpanded)}
-              className="inline-flex items-center gap-2 text-black-50 hover:text-black transition-colors duration-300 text-sm font-medium"
+              className="inline-flex items-center gap-2 text-black hover:text-black-70 transition-colors duration-300 text-sm font-medium"
             >
               {isExpanded ? "Ver menos" : "Ver comparação completa"}
               <motion.div

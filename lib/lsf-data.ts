@@ -9,6 +9,7 @@ export interface LSFLayer {
   material: string;
   function: string;
   color: string;
+  image: string;
 }
 
 export interface Benefit {
@@ -46,84 +47,79 @@ export interface TimelinePhase {
   highlights: string[];
 }
 
-// 7 Camadas do LSF (de fora para dentro)
+// 6 Camadas do LSF (de fora para dentro)
 export const LSF_LAYERS: LSFLayer[] = [
   {
     id: 1,
-    name: "Placa Cimentícia Externa",
-    description: "Proteção contra intempéries e base para acabamento externo.",
+    name: "Base Coat",
+    description: "Acabamento externo texturizado para proteção e estética.",
     fullDescription:
-      "A placa ciment\u00edcia externa \u00e9 a primeira linha de defesa contra elementos externos. Fabricada com cimento Portland refor\u00e7ado com fibras sint\u00e9ticas, oferece excel\u00eancia resist\u00eancia \u00e0 umidade, impactos e varia\u00e7\u00f5es t\u00e9rmicas. Serve como base ideal para aplica\u00e7\u00e3o de texturas, pinturas, cer\u00e2micas ou revestimentos de fachada, garantindo durabilidade e est\u00e9tica superior.",
-    thickness: "10mm",
-    material: "Cimento Portland + Fibras Sint\u00e9ticas",
-    function: "Prote\u00e7\u00e3o mec\u00e2nica e base para acabamento",
+      "Camada de acabamento final externa aplicada sobre a placa cimentícia. Proporciona textura estética e proteção adicional contra intempéries e radiação UV. Pode receber pintura ou textura decorativa, permitindo diversos estilos arquitetônicos. Sua aplicação uniforme garante um acabamento profissional e durável.",
+    thickness: "3-5mm",
+    material: "Argamassa Texturizada",
+    function: "Acabamento estético e proteção UV",
     color: "#1a1a1a",
+    image: "/images/Lsf/Layers/base-coat.webp",
   },
   {
     id: 2,
-    name: "Barreira Hidr\u00f3fuga (Membrana)",
-    description: "Membrana impermea\u0301vel que protege contra infiltra\u00e7\u00f5es de a\u0301gua.",
+    name: "Placa Cimentícia",
+    description: "Primeira barreira física contra elementos externos.",
     fullDescription:
-      "Membrana de alta densidade aplicada sobre o OSB estrutural, criando uma barreira imperme\u00e1vel que impede a penetra\u00e7\u00e3o de \u00e1gua da chuva e umidade externa, enquanto permite a passagem de vapor de \u00e1gua do interior para o exterior (respirabilidade). Essencial para prevenir danos estruturais e prolifera\u00e7\u00e3o de fungos e mofos.",
-    thickness: "0.2mm",
-    material: "Polietileno de Alta Densidade",
-    function: "Impermeabiliza\u00e7\u00e3o com respirabilidade",
+      "Placa fabricada com cimento Portland reforçado com fibras sintéticas, oferecendo excelente resistência à umidade, impactos e variações térmicas. Serve como base robusta para aplicação do Base Coat, garantindo proteção mecânica e suporte estrutural para o sistema de fachada.",
+    thickness: "10-12mm",
+    material: "Cimento + Fibras Sintéticas",
+    function: "Proteção mecânica e suporte para acabamento",
     color: "#333333",
+    image: "/images/Lsf/Layers/placa-cimenticia.webp",
   },
   {
     id: 3,
-    name: "Placa OSB Estrutural",
-    description: "Refor\u00e7o estrutural e contraventamento da parede.",
+    name: "Manta Hidrófuga",
+    description: "Barreira impermeável com respirabilidade controlada.",
     fullDescription:
-      "Oriented Strand Board (OSB) de alta resist\u00eancia mec\u00e2nica, fornece rigidez estrutural ao sistema LSF, funcionando como contraventamento que distribui cargas laterais (vento, sismos) uniformemente pela estrutura. Suas fibras orientadas em camadas cruzadas garantem estabilidade dimensional e resist\u00eancia superior a tra\u00e7\u00f5es e compress\u00f5es.",
-    thickness: "11.1mm",
-    material: "OSB/3 - Oriented Strand Board",
-    function: "Contraventamento e rigidez estrutural",
+      "Membrana de polietileno de alta densidade que impede a penetração de água da chuva e umidade externa, enquanto permite a passagem de vapor de água do interior para o exterior (respirabilidade). Essencial para prevenir danos estruturais, condensação intersticial e proliferação de fungos e mofos.",
+    thickness: "0.2mm",
+    material: "Polietileno de Alta Densidade",
+    function: "Impermeabilização com respirabilidade",
     color: "#4d4d4d",
+    image: "/images/Lsf/Layers/manta-hidrofuga.webp",
   },
   {
     id: 4,
-    name: "Estrutura Steel Frame",
-    description: "Perfis de a\u00e7o galvanizado que formam a estrutura portante.",
+    name: "Lã de Vidro",
+    description: "Isolamento térmico e acústico de alta performance.",
     fullDescription:
-      "Esqueleto estrutural composto por perfis de a\u00e7o galvanizado a quente (ASTM A653), conformados a frio em perfis tipo U e C. Os montantes verticais espa\u00e7ados a cada 400mm ou 600mm suportam cargas verticais e horizontais, enquanto guias superiores e inferiores distribuem essas cargas para as funda\u00e7\u00f5es. O a\u00e7o galvanizado garante prote\u00e7\u00e3o contra corros\u00e3o por d\u00e9cadas.",
-    thickness: "90mm",
-    material: "A\u00e7o Galvanizado ASTM A653 (0.95-1.25mm)",
-    function: "Estrutura portante principal",
+      "Manta de lã de vidro de alta densidade instalada entre os montantes metálicos, preenchendo completamente os vazios estruturais. Proporciona isolamento térmico que reduz em até 40% o consumo energético com climatização, além de excelente atenuação acústica (Rw 45-50 dB), criando ambientes internos confortáveis e silenciosos.",
+    thickness: "50-100mm",
+    material: "Lã de Vidro (densidade 20-40 kg/m³)",
+    function: "Conforto térmico e acústico",
     color: "#666666",
+    image: "/images/Lsf/Layers/la-de-vidro.webp",
   },
   {
     id: 5,
-    name: "Isolamento T\u00e9rmico/Ac\u00fastico",
-    description: "L\u00e3 mineral para conforto te\u0301rmico e ac\u00fa\u0301stico superior.",
+    name: "Perfis de Steel Frame",
+    description: "Esqueleto estrutural em aço galvanizado.",
     fullDescription:
-      "Manta de l\u00e3 de vidro ou l\u00e3 de rocha de alta densidade instalada entre os montantes met\u00e1licos, preenchendo completamente os vazios estruturais. Proporciona isolamento t\u00e9rmico que reduz em at\u00e9 40% o consumo energ\u00e9tico com climatiza\u00e7\u00e3o, al\u00e9m de excelente atenua\u00e7\u00e3o ac\u00fastica (Rw 45-50 dB), criando ambientes internos confort\u00e1veis e silenciosos.",
-    thickness: "90mm",
-    material: "L\u00e3 de Vidro ou L\u00e3 de Rocha (densidade 48-60 kg/m\u00b3)",
-    function: "Isolamento t\u00e9rmico e ac\u00fastico",
+      "Estrutura portante composta por perfis de aço galvanizado a quente (ASTM A653), conformados a frio em perfis tipo U e C. Os montantes verticais espaçados a cada 400mm ou 600mm suportam cargas verticais e horizontais, enquanto guias superiores e inferiores distribuem essas cargas para as fundações. O aço galvanizado garante proteção contra corrosão por décadas.",
+    thickness: "90-150mm",
+    material: "Aço Galvanizado ASTM A653",
+    function: "Estrutura portante principal",
     color: "#808080",
+    image: "/images/Lsf/Layers/perfis-steel-frame.webp",
   },
   {
     id: 6,
-    name: "Barreira de Vapor",
-    description: "Membrana que controla a migra\u00e7\u00e3o de vapor do interior.",
+    name: "Placa de Gesso",
+    description: "Acabamento interno liso e uniforme.",
     fullDescription:
-      "Pel\u00edcula de polietileno instalada na face interna da parede, ap\u00f3s o isolamento t\u00e9rmico, que controla o fluxo de vapor de \u00e1gua do interior aquecido para o exterior mais frio. Previne condensa\u00e7\u00e3o intersticial que poderia degradar o isolamento e favorecer o crescimento de mofo, mantendo a efici\u00eancia energ\u00e9tica e a qualidade do ar interno.",
-    thickness: "0.15mm",
-    material: "Polietileno (barreira de vapor)",
-    function: "Controle de migra\u00e7\u00e3o de vapor e umidade",
-    color: "#999999",
-  },
-  {
-    id: 7,
-    name: "Placa de Gesso Interna",
-    description: "Acabamento interno com excel\u00eancia de acabamento.",
-    fullDescription:
-      "Placa de gesso acartonado (drywall) que proporciona superf\u00edcie lisa e uniforme para acabamento final interno. Permite aplica\u00e7\u00e3o direta de pintura, papel de parede ou texturas. Dispon\u00edvel em vers\u00f5es standard, resistente \u00e0 umidade (RU - \u00e1reas molhadas) e resistente ao fogo (RF - seguran\u00e7a passiva contra inc\u00eandio). Sua instala\u00e7\u00e3o r\u00e1pida e acabamento de qualidade reduzem tempo de obra.",
+      "Placa de gesso acartonado (drywall) que proporciona superfície lisa e uniforme para acabamento final interno. Permite aplicação direta de pintura, papel de parede ou texturas. Disponível em versões standard (ST), resistente à umidade (RU - áreas molhadas) e resistente ao fogo (RF - segurança passiva contra incêndio).",
     thickness: "12.5mm",
     material: "Gesso Acartonado (Drywall)",
-    function: "Acabamento interno e prote\u00e7\u00e3o ao fogo",
+    function: "Acabamento interno e proteção passiva",
     color: "#b3b3b3",
+    image: "/images/Lsf/Layers/placa-de-gesso.webp",
   },
 ];
 
@@ -145,7 +141,7 @@ export const BENEFITS: Benefit[] = [
     suffix: "%",
     description: "Redução de desperdício de materiais",
     details:
-      "Pré-fabricação industrial com cortes precisos minimiza desperdício. Geração mínima de entulho no canteiro. Materiais reciáveis (aço, gesso, OSB) podem ser reaproveitados. Redução de 60% no consumo de água durante a construção comparado ao método tradicional.",
+      "Pré-fabricação industrial com cortes precisos minimiza desperdício. Geração mínima de entulho no canteiro. Materiais recicláveis (aço, gesso, OSB) podem ser reaproveitados. Redução de 60% no consumo de água durante a construção comparado ao método tradicional.",
   },
   {
     icon: "energy",
