@@ -230,7 +230,7 @@ export function Sidebar() {
               {/* Footer */}
               <div className="pt-8 border-t border-black-10">
                 <p className="text-sm text-black-50">
-                  © 2025 Berkahn. Todos os direitos reservados.
+                  © 2026 Berkahn. Todos os direitos reservados.
                 </p>
               </div>
             </div>

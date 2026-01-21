@@ -165,7 +165,7 @@ export function Footer() {
         {/* Bottom */}
         <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mt-12 pt-8 border-t border-white-10">
           <p className="text-white-50 text-sm">
-            © 2025 Berkahn. Todos os direitos reservados.
+            © 2026 Berkahn. Todos os direitos reservados.
           </p>
           <div className="flex gap-4">
             {FOOTER_SOCIAL.map((item) => (
