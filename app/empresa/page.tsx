@@ -7,7 +7,7 @@ import { CTA } from "@/components/sections/CTA";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { CheckIcon } from "lucide-react";
+import { CheckIcon, Award, Lightbulb, Leaf } from "lucide-react";
 
 export const metadata = {
   title: "Empresa | Berkahn Steel Frame",
@@ -189,6 +189,9 @@ export default function EmpresaPage() {
           <h2 className="headline-md mb-12 text-center">Nossos Valores</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
             <div className="text-center">
+              <div className="w-14 h-14 mx-auto mb-4 bg-white rounded-full flex items-center justify-center shadow-luxury-sm">
+                <Award className="w-6 h-6 text-black" />
+              </div>
               <h3 className="headline-sm mb-4">Excelência</h3>
               <p className="body-md text-black-70">
                 Compromisso inabalável com qualidade e precisão em cada
@@ -196,6 +199,9 @@ export default function EmpresaPage() {
               </p>
             </div>
             <div className="text-center">
+              <div className="w-14 h-14 mx-auto mb-4 bg-white rounded-full flex items-center justify-center shadow-luxury-sm">
+                <Lightbulb className="w-6 h-6 text-black" />
+              </div>
               <h3 className="headline-sm mb-4">Inovação</h3>
               <p className="body-md text-black-70">
                 Buscamos constantemente novas tecnologias e métodos para
@@ -203,6 +209,9 @@ export default function EmpresaPage() {
               </p>
             </div>
             <div className="text-center">
+              <div className="w-14 h-14 mx-auto mb-4 bg-white rounded-full flex items-center justify-center shadow-luxury-sm">
+                <Leaf className="w-6 h-6 text-black" />
+              </div>
               <h3 className="headline-sm mb-4">Sustentabilidade</h3>
               <p className="body-md text-black-70">
                 Construímos com responsabilidade ambiental, minimizando

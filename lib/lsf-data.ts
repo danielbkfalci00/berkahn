@@ -517,3 +517,8 @@ export const GALLERY_IMAGES = [
     category: "Fachada",
   },
 ];
+
+// Comparação LSF vs. Construção Tradicional (versão resumida para Home - 7 itens)
+export const COMPARISON_DATA_HOME: ComparisonItem[] = COMPARISON_DATA.filter(
+  item => !["Isolamento Térmico", "Flexibilidade de Projeto", "Facilidade de Ampliação"].includes(item.category)
+);
