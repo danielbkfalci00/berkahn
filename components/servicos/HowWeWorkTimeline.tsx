@@ -6,6 +6,12 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
 import { HOW_WE_WORK_TIMELINE } from "@/lib/servicos-data";
 import { CheckIcon } from "lucide-react";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+} from "@/components/ui/carousel";
+import Autoplay from "embla-carousel-autoplay";
 
 export function HowWeWorkTimeline() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -113,7 +119,7 @@ export function HowWeWorkTimeline() {
                       </motion.div>
                     </div>
 
-                    {/* Image (alternates right/left on desktop) */}
+                    {/* Image Carousel (alternates right/left on desktop) */}
                     <div
                       className={`pl-20 md:pl-0 ${
                         isEven
@@ -130,18 +136,39 @@ export function HowWeWorkTimeline() {
                           delay: 0.2,
                           ease: [0.19, 1, 0.22, 1],
                         }}
-                        className="relative h-[300px] md:h-[400px] rounded-lg overflow-hidden shadow-luxury-lg group"
+                        className="relative h-[300px] md:h-[400px] rounded-lg overflow-hidden shadow-luxury-lg"
                       >
-                        <Image
-                          src={step.imageUrl}
-                          alt={step.title}
-                          fill
-                          className="object-cover group-hover:scale-105 transition-transform duration-500"
-                          sizes="(max-width: 768px) 100vw, 50vw"
-                        />
-
-                        {/* Overlay gradient */}
-                        <div className="absolute inset-0 bg-gradient-to-t from-black-90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                        <Carousel
+                          plugins={[
+                            Autoplay({
+                              delay: 5000,
+                              stopOnInteraction: false,
+                            }),
+                          ]}
+                          opts={{ loop: true }}
+                          className="w-full h-full"
+                        >
+                          <CarouselContent className="h-full -ml-0">
+                            {step.images.map((imageUrl, imgIndex) => (
+                              <CarouselItem
+                                key={imgIndex}
+                                className="h-full pl-0"
+                              >
+                                <div className="relative w-full h-[300px] md:h-[400px] group">
+                                  <Image
+                                    src={imageUrl}
+                                    alt={`${step.title} - Imagem ${imgIndex + 1}`}
+                                    fill
+                                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                                    sizes="(max-width: 768px) 100vw, 50vw"
+                                  />
+                                  {/* Overlay gradient */}
+                                  <div className="absolute inset-0 bg-gradient-to-t from-black-90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                                </div>
+                              </CarouselItem>
+                            ))}
+                          </CarouselContent>
+                        </Carousel>
                       </motion.div>
                     </div>
                   </div>

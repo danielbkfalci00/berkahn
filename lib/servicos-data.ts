@@ -132,17 +132,21 @@ export interface HowWeWorkStep {
   step: number;
   title: string;
   description: string;
-  imageUrl: string;
+  images: string[]; // Array com 2 imagens para carousel
   highlights: string[];
 }
 
 // Timeline "Como Trabalhamos" - 4 Passos da Metodologia Berkahn
+// TODO: Substituir imagens duplicadas pelos caminhos reais das 8 novas fotos
 export const HOW_WE_WORK_TIMELINE: HowWeWorkStep[] = [
   {
     step: 1,
     title: "Consulta Inicial",
     description: "Reunião para entender suas necessidades, objetivos e expectativas. Analisamos o terreno, discutimos ideias e apresentamos as melhores soluções em Steel Frame para seu projeto.",
-    imageUrl: "/images/Lsf/lsf-fase-1.webp",
+    images: [
+      "/images/Lsf/lsf-fase-1.webp",
+      "/images/Lsf/lsf-fase-1.webp" // Placeholder - substituir pela segunda imagem
+    ],
     highlights: [
       "Entendimento das necessidades do cliente",
       "Análise preliminar do terreno",
@@ -155,7 +159,10 @@ export const HOW_WE_WORK_TIMELINE: HowWeWorkStep[] = [
     step: 2,
     title: "Desenvolvimento do Projeto",
     description: "Elaboração completa do projeto arquitetônico, estrutural e complementares. Utilizamos softwares BIM para precisão milimétrica e otimização de materiais.",
-    imageUrl: "/images/Lsf/lsf-fase-2.webp",
+    images: [
+      "/images/Lsf/lsf-fase-2.webp",
+      "/images/Lsf/lsf-fase-2.webp" // Placeholder - substituir pela segunda imagem
+    ],
     highlights: [
       "Projeto arquitetônico personalizado",
       "Projeto estrutural em Steel Frame",
@@ -168,7 +175,10 @@ export const HOW_WE_WORK_TIMELINE: HowWeWorkStep[] = [
     step: 3,
     title: "Execução da Obra",
     description: "Construção com qualidade, acompanhamento constante e prazo definido. Sistema industrializado que garante até 50% de redução no tempo de obra comparado à construção convencional.",
-    imageUrl: "/images/Lsf/lsf-fase-3.webp",
+    images: [
+      "/images/Lsf/lsf-fase-3.webp",
+      "/images/Lsf/lsf-fase-3.webp" // Placeholder - substituir pela segunda imagem
+    ],
     highlights: [
       "Fundação e preparação do terreno",
       "Montagem da estrutura metálica",
@@ -181,7 +191,10 @@ export const HOW_WE_WORK_TIMELINE: HowWeWorkStep[] = [
     step: 4,
     title: "Entrega e Garantia",
     description: "Entregamos sua obra pronta para uso, com manual de manutenção, garantias e suporte técnico. Acompanhamento pós-obra para sua total satisfação.",
-    imageUrl: "/images/Lsf/lsf-fase-4.webp",
+    images: [
+      "/images/Lsf/lsf-fase-4.webp",
+      "/images/Lsf/lsf-fase-4.webp" // Placeholder - substituir pela segunda imagem
+    ],
     highlights: [
       "Vistoria final completa",
       "Manual do proprietário",
