@@ -92,10 +92,10 @@ export const EXECUTION_PHASES: ExecutionPhase[] = [
     ],
     duration: '6-8 semanas',
     images: {
-      primary: '/images/Services/Execução-de-obras/Estrutura/estrutura-1.webp',
-      secondary: '/images/Services/Execução-de-obras/Estrutura/estrutura-2.webp',
-      primaryAlt: 'Montagem de estrutura em steel frame e vedações',
-      secondaryAlt: 'Instalação de sistemas prediais elétricos e hidráulicos'
+      primary: '/images/Services/Execução-de-obras/Estrutura/estrutura-2.webp',
+      secondary: '/images/Services/Execução-de-obras/Estrutura/estrutura-1.webp',
+      primaryAlt: 'Instalação de sistemas prediais elétricos e hidráulicos',
+      secondaryAlt: 'Montagem de estrutura em steel frame e vedações'
     }
   },
   {

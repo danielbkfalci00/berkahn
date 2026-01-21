@@ -41,12 +41,12 @@ export const presentationProjects: (ProjectSlideProps & {
   {
     number: "02",
     title: "Vila Serrana Boutique",
-    location: "Canela - RS",
+    location: "San Martin de los Andes, Argentina",
     year: "2023",
     area: "55 m²/unidade",
     system: "Steel Frame 100%",
     description:
-      "Empreendimento hoteleiro boutique em Canela, com mini chalés em steel frame que demonstram a versatilidade do sistema em projetos comerciais de alto padrão. Acabamento premium em madeira, pé-direito duplo com vigas aparentes e integração perfeita com a natureza da serra gaúcha.",
+      "Empreendimento hoteleiro boutique em San Martin de los Andes, com mini chalés em steel frame que demonstram a versatilidade do sistema em projetos comerciais de alto padrão. Acabamento premium em madeira, pé-direito duplo com vigas aparentes e integração perfeita com a paisagem da Patagônia Argentina.",
     features: [
       "Acabamento hoteleiro premium",
       "Revestimento em madeira natural",
