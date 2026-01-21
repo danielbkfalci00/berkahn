@@ -202,31 +202,60 @@ export const BENEFITS: Benefit[] = [
 // Especifica\u00e7\u00f5es T\u00e9cnicas Detalhadas
 export const TECHNICAL_SPECS: SpecCategory[] = [
   {
+    category: "Fundações",
+    specs: [
+      {
+        label: "Tipo Recomendado",
+        value: "Radier, Sapata Corrida ou Baldrame",
+      },
+      {
+        label: "Redução de Concreto",
+        value: "Até 60% vs. alvenaria convencional",
+      },
+      {
+        label: "Peso Próprio da Estrutura",
+        value: "60-100 kg/m² (vs. 1200 kg/m² alvenaria)",
+      },
+      {
+        label: "Tempo de Cura",
+        value: "7-14 dias (radier)",
+      },
+      {
+        label: "Cargas Concentradas",
+        value: "Distribuídas uniformemente",
+      },
+      {
+        label: "Adaptação a Terrenos",
+        value: "Flexível (irregulares, íngremes)",
+      },
+    ],
+  },
+  {
     category: "Estrutura",
     specs: [
       {
         label: "Material dos Perfis",
-        value: "A\u00e7o Galvanizado ASTM A653 Gr33 (Z275)",
+        value: "Aço Galvanizado ASTM A653 Gr33 (Z275)",
       },
       {
         label: "Espessura dos Perfis",
         value: "0.95mm (Light) | 1.25mm (Heavy)",
       },
       {
-        label: "Espa\u00e7amento Montantes",
+        label: "Espaçamento Montantes",
         value: "400mm ou 600mm (c/c)",
       },
       {
         label: "Capacidade de Carga",
-        value: "At\u00e9 300 kg/m\u00b2 (sobrecarga)",
+        value: "Até 300 kg/m² (sobrecarga)",
       },
       {
-        label: "Resist\u00eancia a Vento",
-        value: "At\u00e9 60 m/s (216 km/h)",
+        label: "Resistência a Vento",
+        value: "Até 60 m/s (216 km/h)",
       },
       {
-        label: "M\u00f3dulo de Elasticidade",
-        value: "200 GPa (a\u00e7o)",
+        label: "Módulo de Elasticidade",
+        value: "200 GPa (aço)",
       },
     ],
   },
@@ -235,7 +264,7 @@ export const TECHNICAL_SPECS: SpecCategory[] = [
     specs: [
       {
         label: "Material Isolante",
-        value: "L\u00e3 de Vidro ou L\u00e3 de Rocha",
+        value: "Lã de Vidro ou Lã de Rocha",
       },
       {
         label: "Espessura do Isolamento",
@@ -243,18 +272,18 @@ export const TECHNICAL_SPECS: SpecCategory[] = [
       },
       {
         label: "Densidade",
-        value: "48-60 kg/m\u00b3",
+        value: "48-60 kg/m³",
       },
       {
-        label: "Condutividade T\u00e9rmica (\u03bb)",
-        value: "0.035 - 0.045 W/(m\u00b7K)",
+        label: "Condutividade Térmica (λ)",
+        value: "0.035 - 0.045 W/(m·K)",
       },
       {
-        label: "Resist\u00eancia T\u00e9rmica (R)",
-        value: "2.0 - 2.6 m\u00b2\u00b7K/W",
+        label: "Resistência Térmica (R)",
+        value: "2.0 - 2.6 m²·K/W",
       },
       {
-        label: "Atenua\u00e7\u00e3o Ac\u00fastica (Rw)",
+        label: "Atenuação Acústica (Rw)",
         value: "45-50 dB",
       },
     ],
@@ -264,14 +293,14 @@ export const TECHNICAL_SPECS: SpecCategory[] = [
     specs: [
       {
         label: "Placa Externa",
-        value: "Ciment\u00edcia 10mm ou OSB 11.1mm",
+        value: "Cimentícia 10mm ou OSB 11.1mm",
       },
       {
         label: "Placa Interna",
         value: "Gesso Acartonado 12.5mm (ST, RU ou RF)",
       },
       {
-        label: "Barreira Hidr\u00f3fuga",
+        label: "Barreira Hidrófuga",
         value: "Membrana PEAD 0.2mm",
       },
       {
@@ -280,7 +309,7 @@ export const TECHNICAL_SPECS: SpecCategory[] = [
       },
       {
         label: "Acabamento Externo",
-        value: "Pintura, Textura, Cer\u00e2mica ou Siding",
+        value: "Pintura, Textura, Cerâmica ou Siding",
       },
       {
         label: "Acabamento Interno",
@@ -289,31 +318,31 @@ export const TECHNICAL_SPECS: SpecCategory[] = [
     ],
   },
   {
-    category: "Funda\u00e7\u00f5es",
+    category: "Acabamentos",
     specs: [
       {
-        label: "Tipo Recomendado",
-        value: "Radier, Sapata Corrida ou Baldrame",
+        label: "Pintura Interna",
+        value: "Látex PVA ou Acrílico sobre massa corrida",
       },
       {
-        label: "Redu\u00e7\u00e3o de Concreto",
-        value: "At\u00e9 60% vs. alvenaria convencional",
+        label: "Pintura Externa",
+        value: "Acrílico premium com primer selador",
       },
       {
-        label: "Peso Pr\u00f3prio da Estrutura",
-        value: "60-100 kg/m\u00b2 (vs. 1200 kg/m\u00b2 alvenaria)",
+        label: "Pisos",
+        value: "Porcelanato, Vinílico ou Laminado",
       },
       {
-        label: "Tempo de Cura",
-        value: "7-14 dias (radier)",
+        label: "Forros",
+        value: "Gesso acartonado ou Drywall",
       },
       {
-        label: "Cargas Concentradas",
-        value: "Distribu\u00eddas uniformemente",
+        label: "Esquadrias",
+        value: "Alumínio, PVC ou Madeira",
       },
       {
-        label: "Adapta\u00e7\u00e3o a Terrenos",
-        value: "Flex\u00edvel (irregulares, \u00edngremes)",
+        label: "Instalações",
+        value: "Embutidas nos painéis (elétrica e hidráulica)",
       },
     ],
   },
