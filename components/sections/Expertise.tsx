@@ -16,7 +16,7 @@ export function Expertise() {
           {/* Right Column */}
           <RevealOnScroll delay={0.2}>
             <p className="body-lg mb-6">
-              A <strong className="text-black font-medium">Berkahn</strong> é pioneira em Light Steel Frame no Brasil. Priorizamos esta tecnologia por sua eficiência, precisão e sustentabilidade — mas nossa expertise vai além. Dominamos múltiplos sistemas construtivos para entregar sempre a melhor solução.
+              A <strong className="text-black font-medium">Berkahn</strong> é especialista em Light Steel Frame no Brasil. Priorizamos esta tecnologia por sua eficiência, precisão e sustentabilidade — mas nossa expertise vai além. Dominamos múltiplos sistemas construtivos para entregar sempre a melhor solução.
             </p>
             <p className="body-md mb-8 text-black-70">
               Residências, edifícios comerciais ou projetos industriais: cada desafio recebe nossa engenharia de precisão e compromisso com excelência. Do conceito à entrega, construímos com tecnologia avançada e atenção aos detalhes.
