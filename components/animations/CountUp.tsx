@@ -20,7 +20,10 @@ export function CountUp({
 }: CountUpProps) {
   const [count, setCount] = useState(0);
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true });
+  const isInView = useInView(ref, {
+    once: true,
+    margin: "0px 0px -100px 0px"  // Só ativa quando elemento está 100px dentro da viewport
+  });
 
   useEffect(() => {
     if (!isInView) return;

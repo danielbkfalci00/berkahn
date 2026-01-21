@@ -7,8 +7,8 @@ import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
 import { useOutsideClick } from "@/hooks/use-outside-click";
 import { BENEFITS, Benefit } from "@/lib/lsf-data";
 
-// Selecionar os 4 principais benefícios
-const MAIN_BENEFITS = BENEFITS.slice(0, 4);
+// Usar todos os benefícios
+const MAIN_BENEFITS = BENEFITS;
 
 // SVG Icons (minimal, luxury style)
 const icons: Record<string, React.ReactNode> = {
@@ -76,6 +76,70 @@ const icons: Record<string, React.ReactNode> = {
       />
     </svg>
   ),
+  area: (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      strokeWidth={1.5}
+      stroke="currentColor"
+      className="w-10 h-10"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15"
+      />
+    </svg>
+  ),
+  weight: (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      strokeWidth={1.5}
+      stroke="currentColor"
+      className="w-10 h-10"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M12 3v17.25m0 0c-1.472 0-2.882.265-4.185.75M12 20.25c1.472 0 2.882.265 4.185.75M18.75 4.97A48.416 48.416 0 0012 4.5c-2.291 0-4.545.16-6.75.47m13.5 0c1.01.143 2.01.317 3 .52m-3-.52l2.62 10.726c.122.499-.106 1.028-.589 1.202a5.988 5.988 0 01-2.031.352 5.988 5.988 0 01-2.031-.352c-.483-.174-.711-.703-.59-1.202L18.75 4.971zm-16.5.52c.99-.203 1.99-.377 3-.52m0 0l2.62 10.726c.122.499-.106 1.028-.589 1.202a5.989 5.989 0 01-2.031.352 5.989 5.989 0 01-2.031-.352c-.483-.174-.711-.703-.59-1.202L5.25 4.971z"
+      />
+    </svg>
+  ),
+  precision: (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      strokeWidth={1.5}
+      stroke="currentColor"
+      className="w-10 h-10"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25zM6.75 12h.008v.008H6.75V12zm0 3h.008v.008H6.75V15zm0 3h.008v.008H6.75V18z"
+      />
+    </svg>
+  ),
+  durability: (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      strokeWidth={1.5}
+      stroke="currentColor"
+      className="w-10 h-10"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"
+      />
+    </svg>
+  ),
 };
 
 export function BenefitsGridCompact() {
@@ -135,14 +199,14 @@ export function BenefitsGridCompact() {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.95 }}
                 transition={{ duration: 0.2 }}
-                className="w-full max-w-lg bg-white rounded-2xl overflow-hidden shadow-luxury-xl"
+                className="w-full max-w-md bg-white rounded-2xl overflow-hidden shadow-luxury-xl"
               >
                 {/* Header com ícone e número */}
-                <div className="bg-black p-8 text-white text-center">
+                <div className="bg-black p-6 text-white text-center">
                   <div className="flex justify-center mb-4 text-white">
                     {icons[active.icon]}
                   </div>
-                  <span className="text-5xl md:text-6xl font-heading font-light">
+                  <span className="text-4xl md:text-5xl font-heading font-light">
                     {active.stat}{active.suffix}
                   </span>
                   <h3 className="text-xl font-medium mt-2">
@@ -151,7 +215,7 @@ export function BenefitsGridCompact() {
                 </div>
 
                 {/* Conteúdo */}
-                <div className="p-6 md:p-8">
+                <div className="p-5 md:p-6">
                   <p className="text-lg font-medium text-black mb-4">
                     {active.description}
                   </p>
@@ -179,8 +243,26 @@ export function BenefitsGridCompact() {
             <RevealOnScroll key={benefit.title} delay={index * 0.1}>
               <div
                 onClick={() => setActive(benefit)}
-                className="bg-white p-6 md:p-8 rounded-xl shadow-luxury-sm hover:shadow-luxury-lg transition-all duration-300 text-center cursor-pointer group"
+                className="relative bg-white p-6 md:p-8 rounded-xl shadow-luxury-sm hover:shadow-luxury-lg transition-all duration-300 text-center cursor-pointer group"
               >
+                {/* Indicador de expandir (always-on) */}
+                <div className="absolute top-2 right-2 opacity-30 group-hover:opacity-60 transition-opacity duration-300">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="w-4 h-4 text-black"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15"
+                    />
+                  </svg>
+                </div>
+
                 {/* Icon */}
                 <div className="flex justify-center text-black group-hover:scale-110 transition-transform duration-300 mb-4">
                   {icons[benefit.icon]}
@@ -206,8 +288,8 @@ export function BenefitsGridCompact() {
                 </p>
 
                 {/* Hint */}
-                <p className="text-xs text-black-30 mt-3 opacity-0 group-hover:opacity-100 transition-opacity">
-                  Clique para detalhes
+                <p className="text-xs text-black-30 mt-3 opacity-40 group-hover:opacity-100 transition-opacity duration-300">
+                  Ver detalhes
                 </p>
               </div>
             </RevealOnScroll>
