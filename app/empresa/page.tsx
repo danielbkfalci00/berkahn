@@ -18,7 +18,7 @@ export const metadata = {
 // Stats com categorias - foco em compromissos e entregas
 const stats = [
   {
-    value: "40%",
+    value: "50%",
     label: "Redução no Tempo de Obra",
     category: "EFICIÊNCIA"
   },
@@ -49,7 +49,7 @@ const diferenciais = [
   {
     category: "PROCESSO",
     title: "Prazos Garantidos",
-    desc: "Cronograma definido e cumprido com rigor e transparência. Sistema industrializado que reduz o tempo de obra em até 40% comparado à construção convencional.",
+    desc: "Cronograma definido e cumprido com rigor e transparência. Sistema industrializado que reduz o tempo de obra em até 50% comparado à construção convencional.",
   },
   {
     category: "SUPORTE",
