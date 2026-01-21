@@ -11,7 +11,7 @@ import { ExecutionPhases } from "@/components/servicos/ExecutionPhases";
 import { ContactFormDialog } from "@/components/forms/ContactFormDialog";
 import { Home, Building2, Factory, CheckIcon } from "lucide-react";
 import { StatsGrid } from "@/components/article/StatHighlight";
-import { ConstructionTimeline } from "@/components/lsf/ConstructionTimeline";
+import { HowWeWorkTimeline } from "@/components/servicos/HowWeWorkTimeline";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
@@ -59,34 +59,6 @@ const services = [
   },
 ];
 
-// Dados da metodologia
-const methodology = [
-  {
-    step: 1,
-    title: "Consulta",
-    description:
-      "Entendemos suas necessidades e apresentamos as melhores soluções.",
-  },
-  {
-    step: 2,
-    title: "Projeto",
-    description:
-      "Desenvolvemos o projeto completo com precisão técnica e design.",
-  },
-  {
-    step: 3,
-    title: "Execução",
-    description:
-      "Construímos com qualidade, acompanhamento constante e prazo definido.",
-  },
-  {
-    step: 4,
-    title: "Entrega",
-    description:
-      "Entregamos sua obra pronta para uso, com garantia e suporte.",
-  },
-];
-
 export default function ServicosPage() {
   return (
     <main>
@@ -99,10 +71,13 @@ export default function ServicosPage() {
         imagePosition="object-[70%_center] md:object-center"
       />
 
-      {/* 2. Execução de Obras - Tabs + Carousel */}
+      {/* 2. Como Trabalhamos - Nova Timeline Visual */}
+      <HowWeWorkTimeline />
+
+      {/* 3. Execução de Obras - Tabs + Carousel */}
       <ExecutionPhases />
 
-      {/* 3. Introduction */}
+      {/* 4. Soluções Completas em Construção */}
       <section className="py-xl">
         <div className="container max-w-4xl">
           <RevealOnScroll>
@@ -121,7 +96,7 @@ export default function ServicosPage() {
         </div>
       </section>
 
-      {/* 4. Services Grid */}
+      {/* 5. Services Grid (Residencial, Comercial, Industrial) */}
       <section id="execucao" className="py-xl bg-black-5">
         <div className="container">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -192,40 +167,11 @@ export default function ServicosPage() {
         </div>
       </section>
 
-      {/* 5. Methodology */}
-      <section className="py-xl">
-        <div className="container">
-          <RevealOnScroll>
-            <div className="text-center mb-16">
-              <p className="label-text mb-4">Nossa metodologia</p>
-              <h2 className="headline-lg">Como trabalhamos</h2>
-            </div>
-          </RevealOnScroll>
-
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
-            {methodology.map((item, index) => (
-              <RevealOnScroll key={item.step} delay={index * 0.1}>
-                <div className="text-center">
-                  <div className="w-16 h-16 bg-black-5 text-black rounded-full flex items-center justify-center mx-auto mb-6 text-2xl font-bold font-heading">
-                    {item.step}
-                  </div>
-                  <h3 className="font-semibold mb-3">{item.title}</h3>
-                  <p className="body-md text-black-70">{item.description}</p>
-                </div>
-              </RevealOnScroll>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* 6. Processo Construtivo LSF */}
-      <ConstructionTimeline />
-
       {/* TODO: REVELAR - Projetos Prontos (escondido temporariamente)
       <ProjectsGrid id="projetos" />
       */}
 
-      {/* 8. CTA */}
+      {/* 6. CTA */}
       <CTA />
     </main>
   );

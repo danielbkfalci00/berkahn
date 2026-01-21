@@ -126,3 +126,68 @@ export const EXECUTION_PHASES: ExecutionPhase[] = [
     }
   }
 ];
+
+// Interface para a timeline "Como Trabalhamos"
+export interface HowWeWorkStep {
+  step: number;
+  title: string;
+  description: string;
+  imageUrl: string;
+  highlights: string[];
+}
+
+// Timeline "Como Trabalhamos" - 4 Passos da Metodologia Berkahn
+export const HOW_WE_WORK_TIMELINE: HowWeWorkStep[] = [
+  {
+    step: 1,
+    title: "Consulta Inicial",
+    description: "Reunião para entender suas necessidades, objetivos e expectativas. Analisamos o terreno, discutimos ideias e apresentamos as melhores soluções em Steel Frame para seu projeto.",
+    imageUrl: "/images/Lsf/lsf-fase-1.webp",
+    highlights: [
+      "Entendimento das necessidades do cliente",
+      "Análise preliminar do terreno",
+      "Apresentação do sistema Steel Frame",
+      "Estudo de viabilidade técnica",
+      "Alinhamento de expectativas e prazos"
+    ]
+  },
+  {
+    step: 2,
+    title: "Desenvolvimento do Projeto",
+    description: "Elaboração completa do projeto arquitetônico, estrutural e complementares. Utilizamos softwares BIM para precisão milimétrica e otimização de materiais.",
+    imageUrl: "/images/Lsf/lsf-fase-2.webp",
+    highlights: [
+      "Projeto arquitetônico personalizado",
+      "Projeto estrutural em Steel Frame",
+      "Projetos complementares (elétrico, hidráulico)",
+      "Modelagem BIM 3D",
+      "Orçamento detalhado e cronograma"
+    ]
+  },
+  {
+    step: 3,
+    title: "Execução da Obra",
+    description: "Construção com qualidade, acompanhamento constante e prazo definido. Sistema industrializado que garante até 50% de redução no tempo de obra comparado à construção convencional.",
+    imageUrl: "/images/Lsf/lsf-fase-3.webp",
+    highlights: [
+      "Fundação e preparação do terreno",
+      "Montagem da estrutura metálica",
+      "Fechamento e isolamento térmico",
+      "Instalações elétricas e hidráulicas",
+      "Acompanhamento constante do cliente"
+    ]
+  },
+  {
+    step: 4,
+    title: "Entrega e Garantia",
+    description: "Entregamos sua obra pronta para uso, com manual de manutenção, garantias e suporte técnico. Acompanhamento pós-obra para sua total satisfação.",
+    imageUrl: "/images/Lsf/lsf-fase-4.webp",
+    highlights: [
+      "Vistoria final completa",
+      "Manual do proprietário",
+      "Garantia estrutural de 5 anos",
+      "Suporte técnico pós-entrega",
+      "Assistência para manutenção preventiva"
+    ]
+  }
+];
