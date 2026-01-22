@@ -28,7 +28,7 @@ const FOUNDERS: Founder[] = [
   {
     name: "Daniel Falci",
     role: "Co-Fundador",
-    bio: "Engenheiro civil com sólida experiência em planejamento, gerenciamento e execução de obras. Atuou em projetos residenciais, comerciais e logísticos, com participação direta na coordenação de empreendimentos de alto padrão em São Paulo.",
+    bio: "Engenheiro civil, pós-graduado em Gerenciamento de Empreendimentos da Construção Civil. Atuou em projetos residenciais, comerciais e logísticos, com participação direta na coordenação de obras de alto padrão em São Paulo. Especialista em gerenciamento de projetos de construção, cuja experiência inclui desde o reconhecimento da demanda e planejamento inicial com elaboração de estudos preliminares, cronogramas macro e termos de referência até o acompanhamento da execução, gerenciamento de contratos e validação das entregas.",
     image: "/images/founders/daniel-falci.webp",
     linkedin: "https://www.linkedin.com/in/danielbkfalci/",
     timeline: [
