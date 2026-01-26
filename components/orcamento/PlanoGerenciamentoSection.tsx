@@ -46,7 +46,7 @@ const phaseStyles = {
   },
   4: {
     card: "border-2 border-black bg-black shadow-luxury-xl",
-    icon: "w-18 h-18 border-2 border-white bg-black text-white",
+    icon: "w-20 h-20 border-2 border-white bg-black text-white",
     title: "text-xl font-bold text-white",
     textColor: "text-white/90",
   },
