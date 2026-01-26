@@ -4,7 +4,7 @@ import { SlideSection } from "../ui/SlideSection";
 import { DomeGallery } from "../DomeGallery";
 
 // Gerar array de imagens da galeria
-const galleryImages = Array.from({ length: 35 }, (_, i) => ({
+const galleryImages = Array.from({ length: 41 }, (_, i) => ({
   src: `/images/galeria/projeto-${String(i + 1).padStart(2, "0")}.webp`,
   alt: `Projeto BERKAHN ${i + 1}`,
 }));

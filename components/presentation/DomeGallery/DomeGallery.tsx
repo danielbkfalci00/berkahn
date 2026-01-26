@@ -368,7 +368,8 @@ export function DomeGallery({
       drag: {
         axis: 'x',
         filterTaps: true,
-        threshold: 10
+        threshold: 25,
+        preventDefault: false
       }
     }
   );
