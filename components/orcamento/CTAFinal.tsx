@@ -67,50 +67,6 @@ export function CTAFinal({
       </motion.div>
 
       <div className="relative container max-w-6xl py-xl">
-        {/* Urgency Banner */}
-        <RevealOnScroll delay={0.1}>
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            className="bg-gradient-to-r from-white/10 via-white/5 to-transparent border border-white/20 rounded-2xl p-6 lg:p-8 mb-12"
-          >
-            <div className="flex flex-col lg:flex-row items-center justify-between gap-6">
-              <div className="flex items-center gap-4">
-                <div className="w-14 h-14 rounded-full bg-white/15 border border-white/20 flex items-center justify-center">
-                  <Clock className="w-6 h-6 text-white/70" />
-                </div>
-                <div>
-                  <p className="text-white font-semibold">
-                    Proposta válida até {validoAte}
-                  </p>
-                  <p className="text-white/50 text-sm">
-                    Aceitamos apenas 4 projetos simultaneamente
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-center gap-3">
-                <div className="flex -space-x-2">
-                  {[1, 2, 3].map((i) => (
-                    <div
-                      key={i}
-                      className="w-10 h-10 rounded-full bg-white/15 border-2 border-white/20 flex items-center justify-center"
-                    >
-                      <CheckCircle2 className="w-5 h-5 text-white/70" />
-                    </div>
-                  ))}
-                  <div className="w-10 h-10 rounded-full bg-white/10 border-2 border-white/20 flex items-center justify-center">
-                    <span className="text-xs font-bold text-white">+1</span>
-                  </div>
-                </div>
-                <span className="text-sm text-white/60">
-                  3 de 4 vagas preenchidas
-                </span>
-              </div>
-            </div>
-          </motion.div>
-        </RevealOnScroll>
-
         {/* Informações de Contato (sem botões - proposta comercial) */}
         <RevealOnScroll delay={0.4}>
           <div className="mb-16">

@@ -267,57 +267,6 @@ export function DiferenciaisLSF({
             </RevealOnScroll>
           </div>
         </div>
-
-        {/* Technical Specs Banner */}
-        <RevealOnScroll delay={0.4}>
-          <div className="mt-16 pt-12 border-t border-white/10">
-            <div className="bg-gradient-to-r from-white/10 via-white/5 to-transparent border border-white/20 rounded-2xl p-8">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-                <div>
-                  <h3 className="text-xl font-bold text-white mb-3">
-                    Certificação ABNT NBR 16970
-                  </h3>
-                  <p className="text-white/60 leading-relaxed">
-                    O Light Steel Frame é um sistema construtivo industrializado
-                    que utiliza perfis de aço galvanizado, oferecendo{" "}
-                    <strong className="text-white">precisão milimétrica</strong>,{" "}
-                    <strong className="text-white">
-                      mínimo desperdício de materiais
-                    </strong>{" "}
-                    e{" "}
-                    <strong className="text-white">
-                      excelente desempenho termoacústico
-                    </strong>
-                    .
-                  </p>
-                </div>
-                <div className="grid grid-cols-3 gap-4">
-                  <div className="text-center">
-                    <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center mx-auto mb-3">
-                      <span className="text-lg font-bold text-white">+10</span>
-                    </div>
-                    <p className="text-sm text-white font-medium">Anos</p>
-                    <p className="text-xs text-white/50">Garantia</p>
-                  </div>
-                  <div className="text-center">
-                    <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center mx-auto mb-3">
-                      <span className="text-lg font-bold text-white">+99%</span>
-                    </div>
-                    <p className="text-sm text-white font-medium">Precisão</p>
-                    <p className="text-xs text-white/50">Orçamentária</p>
-                  </div>
-                  <div className="text-center">
-                    <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center mx-auto mb-3">
-                      <span className="text-lg font-bold text-white">3%</span>
-                    </div>
-                    <p className="text-sm text-white font-medium">Desperdício</p>
-                    <p className="text-xs text-white/50">Máximo</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </RevealOnScroll>
       </div>
     </section>
   );

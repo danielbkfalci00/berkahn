@@ -104,10 +104,10 @@ function AnimatedBarChart({
   const tradWidth = (tradValue / maxValue) * 100;
 
   const corClasses: Record<string, string> = {
-    dark: "bg-black/70",
+    dark: "bg-white/80",
     light: "bg-white/70",
-    neutral: "bg-black/50",
-    accent: "bg-black/40",
+    neutral: "bg-white/60",
+    accent: "bg-white/50",
   };
 
   return (
