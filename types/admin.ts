@@ -2,6 +2,19 @@
 // TIPOS DO SISTEMA ADMIN BERKAHN
 // ============================================
 
+import type {
+  ArticleTable,
+  ProcessStep,
+  Myth,
+  Stat,
+  Norm,
+  ChartData,
+  TabComparison,
+  DecisionGuide,
+  ArticleGallery,
+  ArticleChecklist,
+} from './article';
+
 // ============================================
 // BASE TYPES
 // ============================================
@@ -21,11 +34,25 @@ export interface BaseEntity extends DatabaseTimestamps {
 
 export type PostStatus = 'draft' | 'scheduled' | 'published' | 'archived';
 
+// Rich components structure for posts
+export interface PostComponents {
+  stats?: Stat[];
+  tables?: ArticleTable[];
+  charts?: ChartData[];
+  myths?: Myth[];
+  norms?: Norm[];
+  process?: ProcessStep[];
+  tabComparisons?: TabComparison[];
+  decisionGuide?: DecisionGuide;
+  gallery?: ArticleGallery;
+  checklist?: ArticleChecklist;
+}
+
 export interface Post extends BaseEntity {
   title: string;
   slug: string;
   excerpt: string;
-  content: string; // MDX content
+  content: string; // Markdown content
   cover_image: string | null;
   category: string;
   tags: string[];
@@ -37,6 +64,7 @@ export interface Post extends BaseEntity {
   featured: boolean;
   meta_title: string | null;
   meta_description: string | null;
+  components: PostComponents; // Rich components (stats, tables, charts, etc.)
 }
 
 export interface PostInsert {
@@ -55,6 +83,7 @@ export interface PostInsert {
   featured?: boolean;
   meta_title?: string | null;
   meta_description?: string | null;
+  components?: PostComponents; // Rich components (optional)
 }
 
 export interface PostUpdate extends Partial<PostInsert> {

@@ -4,6 +4,42 @@ import { createClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
 import type { Post, PostInsert, PostUpdate } from '@/types/admin'
 
+// Webhook helper for N8N integration
+async function triggerPublishWebhook(post: Post): Promise<void> {
+  const webhookUrl = process.env.N8N_WEBHOOK_URL
+
+  if (!webhookUrl) {
+    console.log('N8N_WEBHOOK_URL not configured, skipping webhook')
+    return
+  }
+
+  try {
+    await fetch(webhookUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        event: 'post_published',
+        post: {
+          id: post.id,
+          title: post.title,
+          slug: post.slug,
+          excerpt: post.excerpt,
+          cover_image: post.cover_image,
+          category: post.category,
+          author: post.author,
+          published_at: post.published_at,
+          url: `https://berkahn.com.br/atualidade/${post.slug}`,
+        },
+        timestamp: new Date().toISOString(),
+      }),
+    })
+    console.log('N8N webhook triggered for post:', post.title)
+  } catch (err) {
+    console.error('Failed to trigger N8N webhook:', err)
+    // Don't throw - webhook failure shouldn't block post publication
+  }
+}
+
 export async function createPost(data: PostInsert): Promise<{ data: Post | null; error: string | null }> {
   const supabase = await createClient()
 
@@ -39,6 +75,15 @@ export async function createPost(data: PostInsert): Promise<{ data: Post | null;
 export async function updatePost(id: string, data: PostUpdate): Promise<{ data: Post | null; error: string | null }> {
   const supabase = await createClient()
 
+  // Get previous status to detect publish action
+  const { data: previousPost } = await supabase
+    .from('posts')
+    .select('status')
+    .eq('id', id)
+    .single()
+
+  const previousStatus = previousPost?.status
+
   const { data: post, error } = await supabase
     .from('posts')
     .update(data)
@@ -63,6 +108,11 @@ export async function updatePost(id: string, data: PostUpdate): Promise<{ data: 
       entity_id: post.id,
       entity_name: post.title,
     })
+  }
+
+  // Trigger N8N webhook if post was just published
+  if (post && data.status === 'published' && previousStatus !== 'published') {
+    await triggerPublishWebhook(post as Post)
   }
 
   revalidatePath('/admin/posts')
