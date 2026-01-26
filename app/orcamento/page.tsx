@@ -1,5 +1,6 @@
 "use client";
 
+import { OrcamentoHeader } from "@/components/orcamento/OrcamentoHeader";
 import { OrcamentoHero } from "@/components/orcamento/OrcamentoHero";
 import { AboutInstitucional } from "@/components/orcamento/AboutInstitucional";
 import { AboutBigNumbers } from "@/components/orcamento/AboutBigNumbers";
@@ -36,6 +37,12 @@ export default function OrcamentoPage() {
 
   return (
     <main className="relative">
+      {/* Header Fixo */}
+      <OrcamentoHeader
+        projeto={PROJETO_TEMPLATE}
+        numeroOrcamento={numeroOrcamento}
+      />
+
       {/* Seção 1: Hero/Capa Premium */}
       <OrcamentoHero
         projeto={PROJETO_TEMPLATE}
