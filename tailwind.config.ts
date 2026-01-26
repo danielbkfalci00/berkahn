@@ -37,7 +37,8 @@ const config: Config = {
   				'70': 'rgba(255, 255, 255, 0.7)',
   				'90': 'rgba(255, 255, 255, 0.9)',
   				DEFAULT: '#FFFFFF'
-  			}
+  			},
+  			'off-white': '#F4F2EC'
   		},
   		fontFamily: {
   			heading: [
