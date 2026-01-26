@@ -28,7 +28,7 @@ const FOUNDERS: Founder[] = [
   {
     name: "Daniel Falci",
     role: "Co-Fundador",
-    bio: "Engenheiro civil, pós-graduado em Gerenciamento de Empreendimentos da Construção Civil. Atuou em projetos residenciais, comerciais e logísticos, com participação direta na coordenação de obras de alto padrão em São Paulo. Especialista em gerenciamento de projetos de construção, cuja experiência inclui desde o reconhecimento da demanda e planejamento inicial com elaboração de estudos preliminares, cronogramas macro e termos de referência até o acompanhamento da execução, gerenciamento de contratos e validação das entregas.",
+    bio: "Engenheiro civil com sólida experiência em planejamento, gerenciamento e execução de obras. Atuou em projetos residenciais, comerciais e logísticos de alto padrão em São Paulo.",
     image: "/images/founders/daniel-falci.webp",
     linkedin: "https://www.linkedin.com/in/danielbkfalci/",
   },
@@ -90,7 +90,7 @@ const FOUNDERS: Founder[] = [
   {
     name: "Gabriel Vidal",
     role: "Co-Fundador",
-    bio: "Engenheiro civil formado pelo Centro Universitário de Brasília, MBA em gerenciamento de projetos (IBMEC) e gerenciamento de empreendimentos na construção civil (Mackenzie), 6 anos de experiência com licitações e gestão de contratos de prestação de serviços públicos e privados e 4 anos de experiência com orçamentos, viabilidades e desenvolvimento de empreendimentos imobiliários.",
+    bio: "Engenheiro civil formado pelo UniCEUB, MBA em gerenciamento de projetos (IBMEC) e de empreendimentos na construção civil (Mackenzie). Especialista em orçamentos e viabilidades.",
     image: "/images/founders/gabriel-vidal.webp",
   }
 ];
