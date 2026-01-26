@@ -68,11 +68,11 @@ export default function ApresentacaoExecutivaPage() {
         <SlideProject key={project.number} {...project} />
       ))}
 
-      {/* Slide 9: Galeria de Projetos (dark) */}
-      <SlideGallery />
-
-      {/* Slide 10: Marcas Parceiras (dark) */}
+      {/* Slide 9: Marcas Parceiras (dark) */}
       <SlidePartners />
+
+      {/* Slide 10: Galeria de Projetos (dark) */}
+      <SlideGallery />
 
       {/* Slide 11: Contato */}
       <SlideContact />
