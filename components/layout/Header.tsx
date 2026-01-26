@@ -8,7 +8,17 @@ import { cn } from "@/lib/utils";
 import { ContactFormDialog } from "@/components/forms/ContactFormDialog";
 import { Button } from "@/components/ui/button";
 
-export function Header() {
+interface HeaderProps {
+  variant?: 'default' | 'orcamento';
+  projectName?: string;
+  onDownloadPDF?: () => void;
+}
+
+export function Header({
+  variant = 'default',
+  projectName,
+  onDownloadPDF
+}: HeaderProps = {}) {
   const pathname = usePathname();
   const { isOpen, toggle } = useMenu();
   const { isScrolled } = useHeaderScroll();
@@ -24,32 +34,44 @@ export function Header() {
       )}
     >
       <div className="grid grid-cols-[1fr_auto_1fr] items-center py-5 px-6 max-w-[1440px] mx-auto">
-        {/* LEFT: Hamburger */}
-        <button
-          onClick={toggle}
-          className="justify-self-start w-11 h-11 flex flex-col justify-center items-center gap-1.5 hover:opacity-70 transition-opacity"
-          aria-label="Menu"
-          aria-expanded={isOpen}
-        >
-          <span
-            className={cn(
-              "w-7 h-0.5 bg-black transition-all duration-300 ease-expo",
-              isOpen && "rotate-45 translate-y-2"
+        {/* LEFT: Hamburger or Project Name */}
+        {variant === 'default' ? (
+          <button
+            onClick={toggle}
+            className="justify-self-start w-11 h-11 flex flex-col justify-center items-center gap-1.5 hover:opacity-70 transition-opacity"
+            aria-label="Menu"
+            aria-expanded={isOpen}
+          >
+            <span
+              className={cn(
+                "w-7 h-0.5 bg-black transition-all duration-300 ease-expo",
+                isOpen && "rotate-45 translate-y-2"
+              )}
+            />
+            <span
+              className={cn(
+                "w-7 h-0.5 bg-black transition-all duration-300 ease-expo",
+                isOpen && "opacity-0"
+              )}
+            />
+            <span
+              className={cn(
+                "w-7 h-0.5 bg-black transition-all duration-300 ease-expo",
+                isOpen && "-rotate-45 -translate-y-2"
+              )}
+            />
+          </button>
+        ) : (
+          <div className="flex items-center gap-1 md:gap-2 text-xs md:text-sm font-medium max-w-[180px] md:max-w-none">
+            <span className="text-black">Berkahn</span>
+            {projectName && (
+              <>
+                <span className="text-black-50">&</span>
+                <span className="text-black-70 truncate">{projectName}</span>
+              </>
             )}
-          />
-          <span
-            className={cn(
-              "w-7 h-0.5 bg-black transition-all duration-300 ease-expo",
-              isOpen && "opacity-0"
-            )}
-          />
-          <span
-            className={cn(
-              "w-7 h-0.5 bg-black transition-all duration-300 ease-expo",
-              isOpen && "-rotate-45 -translate-y-2"
-            )}
-          />
-        </button>
+          </div>
+        )}
 
         {/* CENTER: Logo + Slogan */}
         <Link
@@ -70,15 +92,26 @@ export function Header() {
 
         {/* RIGHT: CTA - Hidden on mobile, visible on desktop */}
         <div className="hidden md:flex justify-self-end">
-          <ContactFormDialog>
+          {variant === 'default' ? (
+            <ContactFormDialog>
+              <Button
+                variant="default"
+                size="sm"
+                className="justify-self-end bg-black text-white hover:bg-black-90 transition-colors text-xs uppercase tracking-wider font-medium"
+              >
+                Fale Conosco
+              </Button>
+            </ContactFormDialog>
+          ) : (
             <Button
               variant="default"
               size="sm"
+              onClick={onDownloadPDF}
               className="justify-self-end bg-black text-white hover:bg-black-90 transition-colors text-xs uppercase tracking-wider font-medium"
             >
-              Fale Conosco
+              Baixar PDF
             </Button>
-          </ContactFormDialog>
+          )}
         </div>
       </div>
     </header>
