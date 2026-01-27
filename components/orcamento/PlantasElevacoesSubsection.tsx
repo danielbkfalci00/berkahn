@@ -8,6 +8,7 @@ import { useState } from "react";
 
 interface PlantasElevacoesSubsectionProps {
   data: ChaleProjeto;
+  isNested?: boolean; // Quando true, renderiza dentro de ProjetosConsideradosSection
 }
 
 /**
@@ -16,7 +17,7 @@ interface PlantasElevacoesSubsectionProps {
  * Background: Black #000000
  * Apresentação: Frames brancos com labels técnicos
  */
-export function PlantasElevacoesSubsection({ data }: PlantasElevacoesSubsectionProps) {
+export function PlantasElevacoesSubsection({ data, isNested }: PlantasElevacoesSubsectionProps) {
   const [expandedImage, setExpandedImage] = useState<{
     src: string;
     label: string;
@@ -44,18 +45,17 @@ export function PlantasElevacoesSubsection({ data }: PlantasElevacoesSubsectionP
           viewport={{ once: true }}
           className="mb-lg space-y-2"
         >
-          {/* Breadcrumb contextual - colors inverted for black background */}
-          <p className="text-[10px] uppercase tracking-[0.3em] text-white/50 font-mono">
-            Premissas Adotadas → Subseção 03
-          </p>
+          {/* Breadcrumb contextual - only when nested, colors inverted for black background */}
+          {isNested && (
+            <p className="text-[10px] uppercase tracking-[0.3em] text-white/50 font-mono">
+              Premissas Adotadas → Projetos Considerados → Plantas & Elevações
+            </p>
+          )}
 
           {/* Título da subseção */}
-          <div className="flex items-center gap-sm">
-            <SectionMarker number="03" className="bg-white text-black border-white" />
-            <h3 className="text-xl font-bold tracking-tight text-white">
-              PLANTAS & ELEVAÇÕES TÉCNICAS
-            </h3>
-          </div>
+          <h3 className="text-xl font-bold tracking-tight text-white uppercase">
+            PLANTAS & ELEVAÇÕES TÉCNICAS
+          </h3>
         </motion.div>
 
         {/* Plants section */}

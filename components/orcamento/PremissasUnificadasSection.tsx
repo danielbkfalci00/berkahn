@@ -2,31 +2,27 @@
 
 import { motion } from "framer-motion";
 import { MetodologiaSubsection } from "./MetodologiaSubsection";
-import { ProjetoChaleSubsection } from "./ProjetoChaleSubsection";
-import { PlantasElevacoesSubsection } from "./PlantasElevacoesSubsection";
-import { MaterialsTableSubsection } from "./MaterialsTableSubsection";
-import {
-  CHALE_PROJETO,
-  METODOLOGIA_LSF,
-  MATERIAIS_ANALITICOS,
-} from "@/lib/orcamento-data";
+import { ProjetosConsideradosSection } from "./ProjetosConsideradosSection";
+import { METODOLOGIA_LSF } from "@/lib/orcamento-data";
 
 /**
  * Seção Premissas Adotadas para Orçamento (UNIFICADA)
  *
- * Consolida:
- * - ESCOPO DA PROPOSTA → MetodologiaSubsection
- * - Projeto Chalé → ProjetoChaleSubsection
- * - Plantas & Elevações → PlantasElevacoesSubsection
- * - Materiais → MaterialsTableSubsection
+ * Hierarquia:
+ * 1. METODOLOGIA CONSTRUTIVA (A-D)
+ *    - Letras A, B, C, D com imagem técnica e descrições
+ *
+ * 2. PROJETOS CONSIDERADOS NA PROPOSTA (Letra E - nível hierárquico)
+ *    ├── Projeto Chalé
+ *    ├── Plantas & Elevações Técnicas
+ *    └── Descrição Analítica de Materiais
  *
  * Design: Exposição Arquitetônica
- * - Cada subsecção tem visual único com backgrounds alternados
- * - Background progression: Off-White → White → Black → Off-White
- * - Cria ritmo visual e distinção clara entre seções
+ * - Background progression: Off-White → Bege → White → Black → Off-White
+ * - Cria ritmo visual e hierarquia clara de conteúdos
  *
  * Estilo: Premium, minimalista, moderno, alto padrão
- * - Paleta monocromática (preto, branco, off-white)
+ * - Paleta monocromática (preto, branco, off-white, bege)
  * - Tipografia e espaçamento do design system existente
  * - Animações scroll-reveal com Framer Motion
  *
@@ -81,17 +77,11 @@ export function PremissasUnificadasSection() {
         </motion.div>
       </div>
 
-      {/* Subsecção 1: Metodologia Construtiva (Off-White) */}
+      {/* Seção 1: Metodologia Construtiva (Off-White) */}
       <MetodologiaSubsection data={METODOLOGIA_LSF} />
 
-      {/* Subsecção 2: Projeto Chalé (White) */}
-      <ProjetoChaleSubsection data={CHALE_PROJETO} />
-
-      {/* Subsecção 3: Plantas & Elevações (Black) */}
-      <PlantasElevacoesSubsection data={CHALE_PROJETO} />
-
-      {/* Subsecção 4: Descrição Analítica de Materiais (Off-White) */}
-      <MaterialsTableSubsection data={MATERIAIS_ANALITICOS} />
+      {/* Seção 2: Projetos Considerados na Proposta (Letter E hierarchy) */}
+      <ProjetosConsideradosSection />
     </section>
   );
 }

@@ -6,6 +6,7 @@ import type { MaterialAnalise } from "@/types/orcamento";
 
 interface MaterialsTableSubsectionProps {
   data: MaterialAnalise[];
+  isNested?: boolean; // Quando true, renderiza dentro de ProjetosConsideradosSection
 }
 
 /**
@@ -14,7 +15,7 @@ interface MaterialsTableSubsectionProps {
  * Background: Off-White #F4F2EC
  * Apresentação: Marcadores circulares (A-E) com especificações detalhadas
  */
-export function MaterialsTableSubsection({ data }: MaterialsTableSubsectionProps) {
+export function MaterialsTableSubsection({ data, isNested }: MaterialsTableSubsectionProps) {
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -49,18 +50,17 @@ export function MaterialsTableSubsection({ data }: MaterialsTableSubsectionProps
           viewport={{ once: true }}
           className="mb-lg space-y-2"
         >
-          {/* Breadcrumb contextual */}
-          <p className="text-[10px] uppercase tracking-[0.3em] text-black/50 font-mono">
-            Premissas Adotadas → Subseção 04
-          </p>
+          {/* Breadcrumb contextual - only when nested */}
+          {isNested && (
+            <p className="text-[10px] uppercase tracking-[0.3em] text-black/50 font-mono">
+              Premissas Adotadas → Projetos Considerados → Descrição Analítica
+            </p>
+          )}
 
           {/* Título da subseção */}
-          <div className="flex items-center gap-sm">
-            <SectionMarker number="04" />
-            <h3 className="text-xl font-bold tracking-tight text-black">
-              DESCRIÇÃO ANALÍTICA DE MATERIAIS
-            </h3>
-          </div>
+          <h3 className="text-xl font-bold tracking-tight text-black uppercase">
+            DESCRIÇÃO ANALÍTICA DE MATERIAIS
+          </h3>
         </motion.div>
 
         {/* Table */}

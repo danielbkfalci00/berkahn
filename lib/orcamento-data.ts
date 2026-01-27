@@ -359,27 +359,11 @@ export const CONDICOES_PAGAMENTO: CondicaoPagamento[] = [
 // ============================================
 
 export const CREDENCIAIS_BERKAHN: CredenciaisBerkahn = {
-  anosExperiencia: 20,
-  projetosEntregues: 23,
-  m2Construidos: 85000,
-  satisfacaoClientes: 95,
-  certificacoes: [
-    {
-      sigla: "ABNT NBR 16970",
-      titulo: "Steel Frame - Sistemas construtivos",
-      descricao: "Norma tecnica brasileira para construcao em Light Steel Frame",
-    },
-    {
-      sigla: "ISO 9001",
-      titulo: "Gestao da Qualidade",
-      descricao: "Sistema de gestao da qualidade certificado",
-    },
-    {
-      sigla: "PBQP-H",
-      titulo: "Nivel A",
-      descricao: "Programa Brasileiro de Qualidade e Produtividade do Habitat",
-    },
-  ],
+  anosExperiencia: 20, // Combinados dos fundadores
+  projetosEntregues: 0, // Honestidade: empresa nascente
+  m2Construidos: 0,
+  satisfacaoClientes: 0,
+  certificacoes: [], // Sem certificações ainda
 };
 
 // ============================================
@@ -388,39 +372,29 @@ export const CREDENCIAIS_BERKAHN: CredenciaisBerkahn = {
 
 export const COMPANY_STORY: CompanyStory = {
   founding: {
-    year: 2004,
-    motivation: "Trazer precisão internacional para construção brasileira",
+    year: 2026,
+    motivation: "Unir duas décadas de aprendizado em construção para criar algo diferente",
     firstProject: {
-      name: "Casa Alphaville",
-      image: "/images/galeria/projeto-01.webp",
-      insight: "Descobrimos que transparência > surpresas",
+      name: "Chalé Johny",
+      image: "/images/orcamento/chale-prototipo-1.webp",
+      insight: "Seu projeto é onde essa história começa",
     },
   },
 
   timeline: [
     {
-      year: 2004,
-      milestone: "Primeiro projeto Steel Frame",
-      image: "/images/galeria/projeto-01.webp",
-    },
-    {
-      year: 2010,
-      milestone: "Certificação ABNT NBR 16970",
-      image: "/images/galeria/projeto-05.webp",
+      year: 2006,
+      milestone: "Primeiro contato com Steel Frame",
+      image: "/images/orcamento/chale-prototipo-2.webp",
     },
     {
       year: 2015,
-      milestone: "10º projeto entregue",
-      image: "/images/galeria/projeto-08.webp",
+      milestone: "Especialização em métodos construtivos",
+      image: "/images/orcamento/chale-prototipo-3.webp",
     },
     {
-      year: 2020,
-      milestone: "ISO 9001 conquistada",
-      image: "/images/galeria/projeto-15.webp",
-    },
-    {
-      year: 2024,
-      milestone: "Seu projeto começa aqui",
+      year: 2026,
+      milestone: "Nasce a Berkahn",
       isHighlight: true,
     },
   ],
@@ -430,12 +404,11 @@ export const COMPANY_STORY: CompanyStory = {
       title: "Previsibilidade",
       subtitle: "A maior surpresa é não ter surpresas",
       description:
-        "Em 23 projetos, zero atrasos estruturais. Porque Steel Frame não depende de clima, cura de concreto, ou 'vamos ver como fica'. Seu cronograma não é uma estimativa. É um compromisso.",
+        "Steel Frame não depende de clima, cura de concreto, ou 'vamos ver como fica'. Seu cronograma não é uma estimativa. É um compromisso.",
       proof: {
-        type: "project",
-        name: "Vila Alphaville",
-        quote: "Entregue 2 meses antes do previsto",
-        image: "/images/galeria/projeto-01.webp",
+        type: "metric",
+        value: "99%",
+        label: "de precisão orçamentária no método Steel Frame",
       },
     },
     {
@@ -444,21 +417,20 @@ export const COMPANY_STORY: CompanyStory = {
       description:
         "Orçamento fechado antes de começar. Sem 'custos extras' no meio do caminho. Cada item detalhado, cada etapa documentada.",
       proof: {
-        type: "testimonial",
-        name: "Maria Silva",
-        quote: "Não teve uma conta a mais do que o combinado",
-        image: "/images/galeria/projeto-05.webp",
+        type: "metric",
+        value: "100%",
+        label: "dos itens especificados em contrato",
       },
     },
     {
       title: "Parceria",
-      subtitle: "Não somos apenas construtores",
+      subtitle: "Construímos juntos",
       description:
-        "Estamos com você da aprovação do projeto à entrega das chaves. Fotos diárias, reuniões semanais, WhatsApp direto com o engenheiro.",
+        "Estamos com você da aprovação do projeto à entrega das chaves. Fotos diárias, reuniões semanais, comunicação direta com quem executa.",
       proof: {
         type: "metric",
-        value: "95%",
-        label: "dos clientes nos indicam para amigos",
+        value: "20",
+        label: "anos de experiência combinada",
       },
     },
   ],
@@ -466,74 +438,14 @@ export const COMPANY_STORY: CompanyStory = {
   statsWithContext: [
     {
       value: 20,
-      suffix: " anos",
-      label: "DE APRENDIZADO",
-      context: "420 lições aprendidas (média de 21 por projeto)",
-      visualization: "timeline",
-    },
-    {
-      value: 85,
-      suffix: "K",
-      label: "METROS QUADRADOS",
-      context: "O equivalente a 42 casas do tamanho médio",
-      visualization: "grid-of-houses",
-    },
-    {
-      value: 23,
       suffix: "",
-      label: "PROJETOS ÚNICOS",
-      context:
-        "De chalés em Campos do Jordão a residências em condomínios fechados",
-      visualization: "project-gallery",
-    },
-    {
-      value: 95,
-      suffix: "%",
-      label: "SATISFAÇÃO",
-      context: {
-        type: "testimonial",
-        name: "João Costa",
-        project: "Casa Alphaville",
-        quote: "Superou nossas expectativas em prazo e acabamento",
-        image: "/images/galeria/projeto-08.webp",
-      },
-      visualization: "quote-card",
+      label: "ANOS DE APRENDIZADO COMBINADOS",
+      context: "Duas décadas de experiência em construção que agora trabalham para você",
+      visualization: "timeline",
     },
   ],
 
-  certificationsExplained: [
-    {
-      sigla: "ABNT NBR 16970",
-      benefits: [
-        "Estrutura projetada para durar 100+ anos",
-        "Resistência a ventos de 180 km/h",
-        "Testada em laboratórios credenciados",
-        "Garantia técnica de 10 anos",
-      ],
-      whyItMatters:
-        "Não é só um papel. É a tranquilidade de saber que está seguro.",
-    },
-    {
-      sigla: "ISO 9001",
-      benefits: [
-        "Processos auditados externamente",
-        "Rastreabilidade de cada material",
-        "Protocolos de segurança rigorosos",
-        "Melhoria contínua documentada",
-      ],
-      whyItMatters: "Você não precisa confiar cegamente. Temos comprovação.",
-    },
-    {
-      sigla: "PBQP-H Nível A",
-      benefits: [
-        "Qualificação pelo governo federal",
-        "Elegível para financiamento facilitado",
-        "Padrões de habitação sustentável",
-        "Auditoria anual obrigatória",
-      ],
-      whyItMatters: "Seu banco vai aprovar o financiamento mais rápido.",
-    },
-  ],
+  certificationsExplained: [],
 };
 
 // ============================================
@@ -541,10 +453,7 @@ export const COMPANY_STORY: CompanyStory = {
 // ============================================
 
 export const STATS_CREDIBILIDADE: StatItem[] = [
-  { value: 20, suffix: "+", label: "Anos de experiencia" },
-  { value: 23, suffix: "", label: "Projetos entregues" },
-  { value: 85, suffix: " mil m2", label: "Construcao gerenciada" },
-  { value: 95, suffix: "%", label: "Satisfacao dos clientes" },
+  { value: 20, suffix: "+", label: "Anos de aprendizado combinados" },
 ];
 
 // ============================================
@@ -776,11 +685,6 @@ export const METODOLOGIA_LSF: MetodologiaConstrutivaPremissas = {
       letra: "D",
       titulo: "Fechamento da cobertura",
       descricao: "Telha sanduíche",
-    },
-    {
-      letra: "E",
-      titulo: "Projeto Considerados na Proposta",
-      descricao: "Projeto preliminar de Arquitetura, CHALÉ (01)\nMetragem Total da casa: 44 m²\n(Imagens do Chalé)\nPlantas",
     },
   ],
 };

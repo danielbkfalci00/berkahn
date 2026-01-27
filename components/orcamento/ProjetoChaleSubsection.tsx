@@ -7,6 +7,7 @@ import type { ChaleProjeto } from "@/types/orcamento";
 
 interface ProjetoChaleSubsectionProps {
   data: ChaleProjeto;
+  isNested?: boolean; // Quando true, renderiza dentro de ProjetosConsideradosSection
 }
 
 /**
@@ -23,7 +24,7 @@ interface ProjetoChaleSubsectionProps {
  * │                 4 (wide)           │
  * └────────────────────────────────────┘
  */
-export function ProjetoChaleSubsection({ data }: ProjetoChaleSubsectionProps) {
+export function ProjetoChaleSubsection({ data, isNested }: ProjetoChaleSubsectionProps) {
   const totalArea = data.comodos.reduce((sum, c) => sum + c.area, 0);
 
   const containerVariants = {
@@ -61,18 +62,17 @@ export function ProjetoChaleSubsection({ data }: ProjetoChaleSubsectionProps) {
           viewport={{ once: true }}
           className="mb-lg space-y-2"
         >
-          {/* Breadcrumb contextual */}
-          <p className="text-[10px] uppercase tracking-[0.3em] text-black/50 font-mono">
-            Premissas Adotadas → Subseção 02
-          </p>
+          {/* Breadcrumb contextual - only when nested */}
+          {isNested && (
+            <p className="text-[10px] uppercase tracking-[0.3em] text-black/50 font-mono">
+              Premissas Adotadas → Projetos Considerados → Projeto Chalé
+            </p>
+          )}
 
           {/* Título da subseção */}
-          <div className="flex items-center gap-sm">
-            <SectionMarker number="02" />
-            <h3 className="text-xl font-bold tracking-tight text-black">
-              PROJETO: {data.titulo}
-            </h3>
-          </div>
+          <h3 className="text-xl font-bold tracking-tight text-black uppercase">
+            PROJETO: {data.titulo}
+          </h3>
         </motion.div>
 
         {/* Asymmetric photo grid - 4 images */}

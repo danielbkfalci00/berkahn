@@ -50,18 +50,10 @@ export function MetodologiaSubsection({ data }: MetodologiaSubsectionProps) {
           viewport={{ once: true }}
           className="mb-lg space-y-2"
         >
-          {/* Breadcrumb contextual */}
-          <p className="text-[10px] uppercase tracking-[0.3em] text-black/50 font-mono">
-            Premissas Adotadas → Subseção 01
-          </p>
-
           {/* Título da subseção */}
-          <div className="flex items-center gap-sm">
-            <SectionMarker number="01" />
-            <h3 className="text-xl font-bold tracking-tight text-black">
-              METODOLOGIA CONSTRUTIVA
-            </h3>
-          </div>
+          <h3 className="text-xl font-bold tracking-tight text-black uppercase">
+            METODOLOGIA CONSTRUTIVA
+          </h3>
         </motion.div>
 
         {/* Main content - horizontal split layout */}
