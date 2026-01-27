@@ -11,9 +11,17 @@ interface ProjetoChaleSubsectionProps {
 
 /**
  * Subsecção: Projeto Chalé
- * Layout: Galeria assimétrica com 2 fotos + card flutuante
+ * Layout: Grid assimétrico com 4 fotos + card flutuante
  * Background: White #FFFFFF
- * Apresentação: Luxo e elegância com offset layout
+ *
+ * Layout visual:
+ * ┌─────────────────────┬──────────────┐
+ * │                     │      2       │
+ * │         1           ├──────────────┤
+ * │    (grande)         │      3       │
+ * ├─────────────────────┴──────────────┤
+ * │                 4 (wide)           │
+ * └────────────────────────────────────┘
  */
 export function ProjetoChaleSubsection({ data }: ProjetoChaleSubsectionProps) {
   const totalArea = data.comodos.reduce((sum, c) => sum + c.area, 0);
@@ -23,83 +31,138 @@ export function ProjetoChaleSubsection({ data }: ProjetoChaleSubsectionProps) {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.2,
+        staggerChildren: 0.15,
         delayChildren: 0.1,
       },
     },
   };
 
   const imageVariants = {
-    hidden: { opacity: 0, y: 30 },
+    hidden: { opacity: 0, y: 20, scale: 0.98 },
     visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.7, ease: [0.19, 1, 0.22, 1] },
+      scale: 1,
+      transition: { duration: 0.6, ease: [0.19, 1, 0.22, 1] },
     },
   };
+
+  // Ensure we have at least 4 images
+  const images = data.imagens.prototipo;
 
   return (
     <section className="relative py-xl bg-white">
       <div className="container px-4 sm:px-6 lg:px-8">
-        {/* Header with section marker */}
+        {/* Header with section marker and breadcrumb */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
           viewport={{ once: true }}
-          className="mb-lg flex items-center gap-sm"
+          className="mb-lg space-y-2"
         >
-          <SectionMarker number="02" />
-          <h2 className="text-xl font-bold tracking-tight text-black">
-            PROJETO: {data.titulo}
-          </h2>
+          {/* Breadcrumb contextual */}
+          <p className="text-[10px] uppercase tracking-[0.3em] text-black/50 font-mono">
+            Premissas Adotadas → Subseção 02
+          </p>
+
+          {/* Título da subseção */}
+          <div className="flex items-center gap-sm">
+            <SectionMarker number="02" />
+            <h3 className="text-xl font-bold tracking-tight text-black">
+              PROJETO: {data.titulo}
+            </h3>
+          </div>
         </motion.div>
 
-        {/* Asymmetric photo gallery */}
+        {/* Asymmetric photo grid - 4 images */}
         <motion.div
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          className="relative min-h-[600px]"
+          className="relative"
         >
-          {/* First image - Large, left-aligned */}
-          <motion.div
-            variants={imageVariants}
-            className="relative h-[400px] w-full max-w-[600px]"
-          >
-            <Image
-              src={data.imagens.prototipo[0]}
-              alt={`${data.titulo} - Protótipo 1`}
-              fill
-              className="object-cover shadow-luxury-lg"
-              sizes="(max-width: 640px) 100vw, 600px"
-              quality={90}
-            />
-          </motion.div>
+          {/* Grid Layout */}
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-5">
+            {/* Image 1 - Large, spans 2 rows on desktop */}
+            {images[0] && (
+              <motion.div
+                variants={imageVariants}
+                className="col-span-2 lg:col-span-2 lg:row-span-2 relative aspect-[4/3] lg:aspect-auto lg:h-full overflow-hidden rounded-lg group"
+              >
+                <Image
+                  src={images[0]}
+                  alt={`${data.titulo} - Vista 1`}
+                  fill
+                  className="object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+                  sizes="(max-width: 768px) 100vw, 66vw"
+                  quality={90}
+                  priority
+                />
+              </motion.div>
+            )}
 
-          {/* Second image - Smaller, offset */}
-          <motion.div
-            variants={imageVariants}
-            className="relative -mt-20 h-[500px] w-full max-w-[400px] ml-auto md:-mt-32"
-          >
-            <Image
-              src={data.imagens.prototipo[1]}
-              alt={`${data.titulo} - Protótipo 2`}
-              fill
-              className="object-cover shadow-luxury-lg"
-              sizes="(max-width: 640px) 100vw, 400px"
-              quality={90}
-            />
-          </motion.div>
+            {/* Image 2 - Small, top-right */}
+            {images[1] && (
+              <motion.div
+                variants={imageVariants}
+                className="col-span-1 relative aspect-[4/3] overflow-hidden rounded-lg group"
+              >
+                <Image
+                  src={images[1]}
+                  alt={`${data.titulo} - Vista 2`}
+                  fill
+                  className="object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+                  sizes="(max-width: 768px) 50vw, 33vw"
+                  quality={90}
+                />
+              </motion.div>
+            )}
+
+            {/* Image 3 - Small, bottom-right */}
+            {images[2] && (
+              <motion.div
+                variants={imageVariants}
+                className="col-span-1 relative aspect-[4/3] overflow-hidden rounded-lg group"
+              >
+                <Image
+                  src={images[2]}
+                  alt={`${data.titulo} - Vista 3`}
+                  fill
+                  className="object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+                  sizes="(max-width: 768px) 50vw, 33vw"
+                  quality={90}
+                />
+              </motion.div>
+            )}
+
+            {/* Image 4 - Wide, spans full width */}
+            {images[3] && (
+              <motion.div
+                variants={imageVariants}
+                className="col-span-2 lg:col-span-3 relative aspect-[21/9] overflow-hidden rounded-lg group"
+              >
+                <Image
+                  src={images[3]}
+                  alt={`${data.titulo} - Vista 4`}
+                  fill
+                  className="object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+                  sizes="100vw"
+                  quality={90}
+                />
+              </motion.div>
+            )}
+          </div>
 
           {/* Floating info card */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.4, duration: 0.6, ease: [0.19, 1, 0.22, 1] }}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5, duration: 0.6, ease: [0.19, 1, 0.22, 1] }}
             viewport={{ once: true }}
-            className="absolute right-0 md:right-12 top-1/2 -translate-y-1/2 md:translate-y-0 md:top-auto md:bottom-12 bg-[#F4F2EC] px-8 py-6 shadow-luxury-md z-10 max-w-xs"
+            className="mt-8 lg:absolute lg:mt-0 lg:right-8 lg:bottom-8 lg:-translate-y-0
+                       bg-[#F4F2EC] px-8 py-6 shadow-luxury-md max-w-xs mx-auto lg:mx-0"
           >
             <p className="font-mono text-xs tracking-widest uppercase text-black-70">
               {data.titulo}

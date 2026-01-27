@@ -36,18 +36,26 @@ export function PlantasElevacoesSubsection({ data }: PlantasElevacoesSubsectionP
   return (
     <section className="relative py-xl bg-black">
       <div className="container px-4 sm:px-6 lg:px-8">
-        {/* Header with section marker */}
+        {/* Header with section marker and breadcrumb */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
           viewport={{ once: true }}
-          className="mb-lg flex items-center gap-sm"
+          className="mb-lg space-y-2"
         >
-          <SectionMarker number="03" className="bg-white text-black border-white" />
-          <h2 className="text-xl font-bold tracking-tight text-white">
-            PLANTAS & ELEVAÇÕES TÉCNICAS
-          </h2>
+          {/* Breadcrumb contextual - colors inverted for black background */}
+          <p className="text-[10px] uppercase tracking-[0.3em] text-white/50 font-mono">
+            Premissas Adotadas → Subseção 03
+          </p>
+
+          {/* Título da subseção */}
+          <div className="flex items-center gap-sm">
+            <SectionMarker number="03" className="bg-white text-black border-white" />
+            <h3 className="text-xl font-bold tracking-tight text-white">
+              PLANTAS & ELEVAÇÕES TÉCNICAS
+            </h3>
+          </div>
         </motion.div>
 
         {/* Plants section */}
@@ -58,10 +66,10 @@ export function PlantasElevacoesSubsection({ data }: PlantasElevacoesSubsectionP
           viewport={{ once: true }}
           className="mb-xl"
         >
-          <p className="text-sm uppercase tracking-widest text-white-70 mb-lg font-mono">
+          <p className="text-sm uppercase tracking-widest text-white-70 mb-6 font-mono">
             Plantas Baixas
           </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-12 lg:gap-16">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 lg:gap-8">
             {data.imagens.plantasBaixas.map((planta) => (
               <DrawingFrame
                 key={planta.label}
@@ -83,10 +91,10 @@ export function PlantasElevacoesSubsection({ data }: PlantasElevacoesSubsectionP
           whileInView="visible"
           viewport={{ once: true }}
         >
-          <p className="text-sm uppercase tracking-widest text-white-70 mb-lg font-mono">
+          <p className="text-sm uppercase tracking-widest text-white-70 mb-6 font-mono">
             Elevações
           </p>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 lg:gap-12">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 lg:gap-8">
             {data.imagens.elevacoes.map((elevacao) => (
               <DrawingFrame
                 key={elevacao.label}

@@ -252,7 +252,7 @@ export function PostEditor({ post }: PostEditorProps) {
 
       // Chamar server action apropriada
       const result = post
-        ? await updatePost(post.id, dataToSave)
+        ? await updatePost(post.id, { ...dataToSave, id: post.id })
         : await createPost(dataToSave);
 
       if (result.error) {
