@@ -41,18 +41,26 @@ export function MaterialsTableSubsection({ data }: MaterialsTableSubsectionProps
       <div className="absolute left-0 top-0 h-px w-full bg-black-10" />
 
       <div className="container px-4 sm:px-6 lg:px-8">
-        {/* Header with section marker */}
+        {/* Header with section marker and breadcrumb */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
           viewport={{ once: true }}
-          className="mb-lg flex items-center gap-sm"
+          className="mb-lg space-y-2"
         >
-          <SectionMarker number="04" />
-          <h2 className="text-xl font-bold tracking-tight text-black">
-            DESCRIÇÃO ANALÍTICA DE MATERIAIS
-          </h2>
+          {/* Breadcrumb contextual */}
+          <p className="text-[10px] uppercase tracking-[0.3em] text-black/50 font-mono">
+            Premissas Adotadas → Subseção 04
+          </p>
+
+          {/* Título da subseção */}
+          <div className="flex items-center gap-sm">
+            <SectionMarker number="04" />
+            <h3 className="text-xl font-bold tracking-tight text-black">
+              DESCRIÇÃO ANALÍTICA DE MATERIAIS
+            </h3>
+          </div>
         </motion.div>
 
         {/* Table */}
