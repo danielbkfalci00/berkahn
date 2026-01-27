@@ -38,22 +38,18 @@ export const PROJETO_TEMPLATE: OrcamentoProjeto = {
   titulo: "Chalé Johny",
   tipo: "residencial",
   subtipo: "chale",
-  metragem: 69,
+  metragem: 44,
   localizacao: "Grande São Roque - SP",
   imagemRender: "/images/orcamento/hero-chale-retangulo.webp",
 
   // Projeto Preliminar com metragens
   projetoPreliminar: {
-    metragemTotal: 69,
-    areaUtil: 65,
+    metragemTotal: 44,
+    areaUtil: 43,
     metragemComodos: [
-      { nome: "Sala de Estar", area: 18, categoria: "social" },
-      { nome: "Cozinha Integrada", area: 12, categoria: "social" },
-      { nome: "Quarto 1 (Suíte)", area: 14, categoria: "intimo" },
-      { nome: "Quarto 2", area: 11, categoria: "intimo" },
-      { nome: "Banheiro Social", area: 5, categoria: "servico" },
-      { nome: "Área de Serviço", area: 4, categoria: "servico" },
-      { nome: "Circulação", area: 5, categoria: "circulacao" },
+      { nome: "Quarto", area: 10, categoria: "intimo" },
+      { nome: "Banheiro", area: 6, categoria: "servico" },
+      { nome: "Sala", area: 27, categoria: "social" },
     ],
     observacoes: "Metragens aproximadas conforme projeto preliminar",
   },
@@ -160,7 +156,7 @@ export const PACOTES_TEMPLATE: PacoteInvestimento[] = [
     descricao:
       "Fornecimento completo de materiais certificados para construção em Steel Frame",
     valorM2: 2200,
-    valorTotal: 151800, // 69m² × R$ 2.200
+    valorTotal: 96800, // 44m² × R$ 2.200
     itens: [
       "Perfis Steel Frame certificados ABNT NBR 15253",
       "Placas Aquapanel (cimentícia) para vedação externa",
@@ -193,7 +189,7 @@ export const PACOTES_TEMPLATE: PacoteInvestimento[] = [
     descricao:
       "Material completo + treinamento técnico presencial + 3 dias de acompanhamento técnico no início da obra",
     valorM2: 2900,
-    valorTotal: 200100, // 69m² × R$ 2.900
+    valorTotal: 127600, // 44m² × R$ 2.900
     itens: [
       "Perfis Steel Frame certificados ABNT NBR 15253",
       "Placas Aquapanel (cimentícia) para vedação externa",
@@ -229,7 +225,7 @@ export const PACOTES_TEMPLATE: PacoteInvestimento[] = [
     descricao:
       "Solução completa: material certificado + acompanhamento técnico Berkahn durante toda obra + treinamento personalizado pela equipe Berkahn",
     valorM2: 3500,
-    valorTotal: 241500, // 69m² × R$ 3.500
+    valorTotal: 154000, // 44m² × R$ 3.500
     itens: [
       "Perfis Steel Frame certificados ABNT NBR 15253",
       "Placas Aquapanel (cimentícia) para vedação externa",
