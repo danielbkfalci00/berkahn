@@ -279,3 +279,96 @@
     border-color: rgba(0, 0, 0, 0.3);
   }
 }
+
+/* ============================================
+   PDF MODE - Estilos para geração de PDF
+   ============================================ */
+
+.pdf-mode {
+  /* Desabilita todas as animações e transições */
+  * {
+    animation: none !important;
+    animation-delay: 0s !important;
+    animation-duration: 0s !important;
+    transition: none !important;
+  }
+
+  /* Força estado final de elementos animados do Framer Motion */
+  [style*="opacity"] {
+    opacity: 1 !important;
+  }
+
+  [style*="transform"] {
+    transform: none !important;
+  }
+
+  /* Remove elementos fixos de navegação */
+  .fixed {
+    position: relative !important;
+  }
+
+  /* Remove sticky positioning */
+  .sticky {
+    position: relative !important;
+  }
+}
+
+/* Controle de quebras de página para PDF */
+.pdf-mode section {
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+/* Classe para forçar quebra após elemento */
+.pdf-page-break-after {
+  page-break-after: always;
+  break-after: page;
+}
+
+/* Layout de grid para carousels no modo PDF (força desktop) */
+.pdf-mode .carousel-container,
+.pdf-mode [class*="carousel"] {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: 1.5rem !important;
+}
+
+/* Esconde controles de carousel no PDF */
+.pdf-mode [class*="CarouselPrevious"],
+.pdf-mode [class*="CarouselNext"],
+.pdf-mode .carousel-indicators {
+  display: none !important;
+}
+
+/* Força visibilidade de todos os slides */
+.pdf-mode [class*="CarouselItem"] {
+  flex: 0 0 100% !important;
+  display: block !important;
+}
+
+/* Garante que imagens carregam */
+.pdf-mode img {
+  opacity: 1 !important;
+}
+
+/* Print media queries */
+@media print {
+  @page {
+    size: A4;
+    margin: 0;
+  }
+
+  body {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+
+  /* Garante backgrounds escuros no print */
+  .bg-black,
+  [class*="bg-black"] {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    background-color: #000000 !important;
+  }
+}

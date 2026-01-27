@@ -1,25 +1,16 @@
-"use client";
-
-import { useState } from "react";
-import { OrcamentoHeader } from "@/components/orcamento/OrcamentoHeader";
 import { OrcamentoHero } from "@/components/orcamento/OrcamentoHero";
-import { OrcamentoSideNav } from "@/components/orcamento/OrcamentoSideNav";
-// Seção Sobre - Storytelling com propósito
 import { SobreSection } from "@/components/orcamento/SobreSection";
+import { PremissasUnificadasSection } from "@/components/orcamento/PremissasUnificadasSection";
 import { PacotesInvestimento } from "@/components/orcamento/PacotesInvestimento";
+import { PaymentConditions } from "@/components/orcamento/PaymentConditions";
+import { PlanoGerenciamentoSection } from "@/components/orcamento/PlanoGerenciamentoSection";
 import { InfograficoLSF } from "@/components/orcamento/InfograficoLSF";
 import { DiferenciaisLSF } from "@/components/orcamento/DiferenciaisLSF";
 import { CTAFinal } from "@/components/orcamento/CTAFinal";
-// Novos componentes para Chalé Johny
-import { PremissasUnificadasSection } from "@/components/orcamento/PremissasUnificadasSection";
-import { PlanoGerenciamentoSection } from "@/components/orcamento/PlanoGerenciamentoSection";
-import { PaymentConditions } from "@/components/orcamento/PaymentConditions";
 
 import {
   PROJETO_TEMPLATE,
   PACOTES_TEMPLATE,
-  PREMISSAS_TEMPLATE,
-  COMPANY_STORY,
   COMPARATIVO_ORCAMENTO,
   BENEFICIOS_LSF_STATS,
   CONTATOS,
@@ -28,33 +19,36 @@ import {
   calcularDataValidade,
 } from "@/lib/orcamento-data";
 
-export default function OrcamentoPage() {
+interface PDFPageProps {
+  searchParams: Promise<{ pacote?: string }>;
+}
+
+/**
+ * Página otimizada para geração de PDF via Puppeteer
+ *
+ * Esta página:
+ * - Reutiliza TODOS os componentes existentes da página de orçamento
+ * - Remove header fixo e navegação lateral (não necessários no PDF)
+ * - Aplica classe "pdf-mode" para desabilitar animações e forçar layout estático
+ * - Recebe pacote selecionado via query parameter
+ *
+ * Não é uma página para acesso direto - é renderizada pelo Puppeteer para gerar PDF
+ */
+export default async function OrcamentoPDFPage({ searchParams }: PDFPageProps) {
+  const params = await searchParams;
+  const pacoteSelecionadoId = params.pacote || "material-acompanhamento-berkahn";
+
   const numeroOrcamento = gerarNumeroOrcamento();
-  const dataValidade = calcularDataValidade(20); // Validade de 20 dias
+  const dataValidade = calcularDataValidade(20);
 
-  // Estado para seleção interativa de pacote
-  const [pacoteSelecionadoId, setPacoteSelecionadoId] = useState<string>(
-    PACOTES_TEMPLATE.find(p => p.destaque)?.id || PACOTES_TEMPLATE[0].id
-  );
-
-  // Calcula valor dinâmico baseado no pacote selecionado
+  // Encontra o pacote selecionado para calcular valor dinâmico
   const pacoteSelecionado = PACOTES_TEMPLATE.find(p => p.id === pacoteSelecionadoId) || PACOTES_TEMPLATE[0];
   const valorTotal = pacoteSelecionado.valorTotal;
 
   return (
-    <main className="relative">
-      {/* Navegação lateral fixa - Blueprint Style */}
-      <OrcamentoSideNav />
-
-      {/* Header Fixo */}
-      <OrcamentoHeader
-        projeto={PROJETO_TEMPLATE}
-        numeroOrcamento={numeroOrcamento}
-        pacoteSelecionadoId={pacoteSelecionadoId}
-      />
-
+    <main className="pdf-mode">
       {/* Seção 1: Hero/Capa Premium */}
-      <section id="hero">
+      <section id="hero" className="pdf-page-break-after">
         <OrcamentoHero
           projeto={PROJETO_TEMPLATE}
           numeroOrcamento={numeroOrcamento}
@@ -62,7 +56,7 @@ export default function OrcamentoPage() {
         />
       </section>
 
-      {/* Seção 2: Sobre a Berkahn - Storytelling com propósito */}
+      {/* Seção 2: Sobre a Berkahn */}
       <SobreSection />
 
       {/* Transição Visual */}
@@ -76,22 +70,22 @@ export default function OrcamentoPage() {
         </div>
       </div>
 
-      {/* Seção 4-7: Premissas Adotadas para Orçamento (Unificada) */}
+      {/* Seção 3: Premissas Adotadas para Orçamento */}
       <section id="premissas">
         <PremissasUnificadasSection />
       </section>
 
-      {/* Seção 7: Proposta de Investimento (CORE) - 2 Pacotes */}
+      {/* Seção 4: Proposta de Investimento */}
       <section id="investimento">
         <PacotesInvestimento
           pacotes={PACOTES_TEMPLATE}
           metragemProjeto={PROJETO_TEMPLATE.metragem}
-          onPacoteSelecionado={setPacoteSelecionadoId}
           pacoteSelecionadoId={pacoteSelecionadoId}
+          isPDFMode={true}
         />
       </section>
 
-      {/* Seção 8: Condições de Pagamento */}
+      {/* Seção 5: Condições de Pagamento */}
       <section id="pagamento">
         <PaymentConditions
           condicoes={CONDICOES_PAGAMENTO}
@@ -99,23 +93,23 @@ export default function OrcamentoPage() {
         />
       </section>
 
-      {/* Seção 9: Plano de Gerenciamento Berkahn */}
+      {/* Seção 6: Plano de Gerenciamento */}
       <section id="plano">
         {PROJETO_TEMPLATE.planoGerenciamento && (
           <PlanoGerenciamentoSection plano={PROJETO_TEMPLATE.planoGerenciamento} />
         )}
       </section>
 
-      {/* Seção 10: Infográficos LSF Animados */}
+      {/* Seção 7: Infográficos LSF */}
       <InfograficoLSF />
 
-      {/* Seção 12: Diferenciais Steel Frame com Comparativo */}
+      {/* Seção 8: Diferenciais Steel Frame */}
       <DiferenciaisLSF
         comparativo={COMPARATIVO_ORCAMENTO}
         beneficios={BENEFICIOS_LSF_STATS}
       />
 
-      {/* Seção 13: CTA Final Premium */}
+      {/* Seção 9: CTA Final / Contato */}
       <section id="contato">
         <CTAFinal
           projeto={PROJETO_TEMPLATE}

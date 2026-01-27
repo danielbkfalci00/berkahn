@@ -18,6 +18,8 @@ interface PacotesInvestimentoProps {
   metragemProjeto: number;
   onPacoteSelecionado?: (id: string) => void;
   pacoteSelecionadoId?: string;
+  /** Quando true, força layout de grid estático (sem carousel) para geração de PDF */
+  isPDFMode?: boolean;
 }
 
 export function PacotesInvestimento({
@@ -25,6 +27,7 @@ export function PacotesInvestimento({
   metragemProjeto,
   onPacoteSelecionado,
   pacoteSelecionadoId,
+  isPDFMode = false,
 }: PacotesInvestimentoProps) {
 
   return (
@@ -53,9 +56,11 @@ export function PacotesInvestimento({
         </RevealOnScroll>
 
         {/* Desktop: Grid de Cards - Adaptável para 2 ou 3 pacotes */}
+        {/* Em modo PDF, sempre usa grid (nunca carousel) */}
         <div
           className={cn(
-            "hidden lg:grid gap-6 xl:gap-8 items-start",
+            "gap-6 xl:gap-8 items-start",
+            isPDFMode ? "grid" : "hidden lg:grid",
             pacotes.length === 2
               ? "lg:grid-cols-2 max-w-5xl mx-auto"
               : "lg:grid-cols-3"
@@ -74,7 +79,8 @@ export function PacotesInvestimento({
         </div>
 
         {/* Mobile/Tablet: Carousel com snap scroll */}
-        <div className="lg:hidden">
+        {/* Escondido em modo PDF */}
+        <div className={cn("lg:hidden", isPDFMode && "hidden")}>
           <Carousel
             opts={{
               align: "center",

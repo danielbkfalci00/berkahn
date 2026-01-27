@@ -1,14 +1,13 @@
 "use client";
 
 import Image from "next/image";
-import { Download } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { PDFDownloadButton } from "./PDFDownloadButton";
 import type { OrcamentoProjeto } from "@/types/orcamento";
 
 interface OrcamentoHeaderProps {
   projeto: OrcamentoProjeto;
   numeroOrcamento?: string;
-  onDownloadPDF?: () => void;
+  pacoteSelecionadoId?: string;
 }
 
 /**
@@ -25,19 +24,11 @@ interface OrcamentoHeaderProps {
  */
 export function OrcamentoHeader({
   projeto,
-  numeroOrcamento,
-  onDownloadPDF,
+  numeroOrcamento = "BRK-2026-0042",
+  pacoteSelecionadoId = "material-acompanhamento-berkahn",
 }: OrcamentoHeaderProps) {
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
-  };
-
-  const handleDownload = () => {
-    if (onDownloadPDF) {
-      onDownloadPDF();
-    } else {
-      window.print();
-    }
   };
 
   return (
@@ -70,16 +61,13 @@ export function OrcamentoHeader({
 
           {/* Right: PDF Button */}
           <div className="flex-shrink-0">
-            <Button
-              onClick={handleDownload}
+            <PDFDownloadButton
+              pacoteSelecionadoId={pacoteSelecionadoId}
+              numeroOrcamento={numeroOrcamento}
               variant="outline"
               size="sm"
-              className="gap-2 text-xs sm:text-sm"
-              aria-label="Download do PDF do orçamento"
-            >
-              <Download className="w-4 h-4 flex-shrink-0" />
-              <span className="hidden sm:inline">BAIXAR PDF</span>
-            </Button>
+              className="text-xs sm:text-sm"
+            />
           </div>
         </div>
       </div>
