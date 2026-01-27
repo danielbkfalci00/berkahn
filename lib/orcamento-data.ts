@@ -601,8 +601,8 @@ export const METODOLOGIA_LSF: MetodologiaConstrutivaPremissas = {
   itens: [
     {
       letra: "A",
-      titulo: "Metodologia construtiva",
-      descricao: "Estruturação e vedação em LSF",
+      titulo: "Superestrutura e vedação do projeto",
+      descricao: "Light Steel Frame",
     },
     {
       letra: "B",
@@ -611,8 +611,18 @@ export const METODOLOGIA_LSF: MetodologiaConstrutivaPremissas = {
     },
     {
       letra: "C",
+      titulo: "Emplacamento Interno",
+      descricao: "Isolamento térmico (Lã de vidro) + Placa de Gesso",
+    },
+    {
+      letra: "D",
       titulo: "Fechamento da cobertura",
       descricao: "Telha sanduíche",
+    },
+    {
+      letra: "E",
+      titulo: "Projeto Considerados na Proposta",
+      descricao: "Projeto preliminar de Arquitetura, CHALÉ (01)\nMetragem Total da casa: 44 m²\n(Imagens do Chalé)\nPlantas",
     },
   ],
 };

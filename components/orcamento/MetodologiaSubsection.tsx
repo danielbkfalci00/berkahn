@@ -52,7 +52,7 @@ export function MetodologiaSubsection({ data }: MetodologiaSubsectionProps) {
         >
           <SectionMarker number="01" />
           <h2 className="text-xl font-bold tracking-tight text-black">
-            METODOLOGIA CONSTRUTIVA
+            PREMISSAS ADOTADAS PARA O ORÇAMENTO
           </h2>
         </motion.div>
 
