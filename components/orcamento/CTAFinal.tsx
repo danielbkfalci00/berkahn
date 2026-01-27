@@ -189,13 +189,10 @@ export function CTAFinal({
                 <span>{contatos.endereco}</span>
               </div>
 
-              {/* Número do orçamento */}
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 rounded-full">
-                <span className="text-xs uppercase tracking-widest text-white/40">
+              {/* Número de revisão */}
+              <div className="inline-flex items-center px-4 py-2 bg-white/5 border border-white/10 rounded-full">
+                <span className="text-xs uppercase tracking-widest text-white/60 font-medium">
                   Revisão 01
-                </span>
-                <span className="text-sm font-medium text-white">
-                  #{numeroOrcamento}
                 </span>
               </div>
             </div>
