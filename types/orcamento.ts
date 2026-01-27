@@ -301,3 +301,68 @@ export interface MaterialAnalise {
   categoria: string;
   especificacao: string;
 }
+
+// ============================================
+// COMPANY STORY - Storytelling Humanizado
+// ============================================
+
+export interface TimelineMilestone {
+  year: number;
+  milestone: string;
+  image?: string;
+  isHighlight?: boolean;
+}
+
+export interface InsightProof {
+  type: 'project' | 'testimonial' | 'metric';
+  name?: string;
+  quote?: string;
+  image?: string;
+  value?: string;
+  label?: string;
+}
+
+export interface Insight {
+  title: string;
+  subtitle: string;
+  description: string;
+  proof: InsightProof;
+}
+
+export interface TestimonialContext {
+  type: string;
+  name?: string;
+  project?: string;
+  quote?: string;
+  image?: string;
+}
+
+export interface StatWithContext {
+  value: number;
+  suffix: string;
+  label: string;
+  context: string | TestimonialContext;
+  visualization: 'timeline' | 'grid-of-houses' | 'project-gallery' | 'quote-card';
+}
+
+export interface CertificationExplained {
+  sigla: string;
+  benefits: string[];
+  whyItMatters: string;
+}
+
+export interface CompanyStory {
+  founding: {
+    year: number;
+    motivation: string;
+    firstProject: {
+      name: string;
+      image: string;
+      insight: string;
+    };
+  };
+  timeline: TimelineMilestone[];
+  insights: Insight[];
+  statsWithContext: StatWithContext[];
+  certificationsExplained: CertificationExplained[];
+}

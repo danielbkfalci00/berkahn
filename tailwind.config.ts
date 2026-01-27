@@ -48,6 +48,14 @@ const config: Config = {
   			body: [
   				'var(--font-manrope)',
   				'sans-serif'
+  			],
+  			handwritten: [
+  				'var(--font-caveat)',
+  				'cursive'
+  			],
+  			serif: [
+  				'Georgia',
+  				'serif'
   			]
   		},
   		spacing: {

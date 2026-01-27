@@ -22,6 +22,8 @@ import type {
   ChaleProjeto,
   MetodologiaConstrutivaPremissas,
   MaterialAnalise,
+  // Company Story - Storytelling Humanizado
+  CompanyStory,
 } from "@/types/orcamento";
 
 // Reutiliza dados de comparativo do LSF
@@ -376,6 +378,160 @@ export const CREDENCIAIS_BERKAHN: CredenciaisBerkahn = {
       sigla: "PBQP-H",
       titulo: "Nivel A",
       descricao: "Programa Brasileiro de Qualidade e Produtividade do Habitat",
+    },
+  ],
+};
+
+// ============================================
+// COMPANY STORY - Storytelling Humanizado
+// ============================================
+
+export const COMPANY_STORY: CompanyStory = {
+  founding: {
+    year: 2004,
+    motivation: "Trazer precisão internacional para construção brasileira",
+    firstProject: {
+      name: "Casa Alphaville",
+      image: "/images/galeria/projeto-01.webp",
+      insight: "Descobrimos que transparência > surpresas",
+    },
+  },
+
+  timeline: [
+    {
+      year: 2004,
+      milestone: "Primeiro projeto Steel Frame",
+      image: "/images/galeria/projeto-01.webp",
+    },
+    {
+      year: 2010,
+      milestone: "Certificação ABNT NBR 16970",
+      image: "/images/galeria/projeto-05.webp",
+    },
+    {
+      year: 2015,
+      milestone: "10º projeto entregue",
+      image: "/images/galeria/projeto-08.webp",
+    },
+    {
+      year: 2020,
+      milestone: "ISO 9001 conquistada",
+      image: "/images/galeria/projeto-15.webp",
+    },
+    {
+      year: 2024,
+      milestone: "Seu projeto começa aqui",
+      isHighlight: true,
+    },
+  ],
+
+  insights: [
+    {
+      title: "Previsibilidade",
+      subtitle: "A maior surpresa é não ter surpresas",
+      description:
+        "Em 23 projetos, zero atrasos estruturais. Porque Steel Frame não depende de clima, cura de concreto, ou 'vamos ver como fica'. Seu cronograma não é uma estimativa. É um compromisso.",
+      proof: {
+        type: "project",
+        name: "Vila Alphaville",
+        quote: "Entregue 2 meses antes do previsto",
+        image: "/images/galeria/projeto-01.webp",
+      },
+    },
+    {
+      title: "Transparência",
+      subtitle: "Você sabe exatamente o que está pagando",
+      description:
+        "Orçamento fechado antes de começar. Sem 'custos extras' no meio do caminho. Cada item detalhado, cada etapa documentada.",
+      proof: {
+        type: "testimonial",
+        name: "Maria Silva",
+        quote: "Não teve uma conta a mais do que o combinado",
+        image: "/images/galeria/projeto-05.webp",
+      },
+    },
+    {
+      title: "Parceria",
+      subtitle: "Não somos apenas construtores",
+      description:
+        "Estamos com você da aprovação do projeto à entrega das chaves. Fotos diárias, reuniões semanais, WhatsApp direto com o engenheiro.",
+      proof: {
+        type: "metric",
+        value: "95%",
+        label: "dos clientes nos indicam para amigos",
+      },
+    },
+  ],
+
+  statsWithContext: [
+    {
+      value: 20,
+      suffix: " anos",
+      label: "DE APRENDIZADO",
+      context: "420 lições aprendidas (média de 21 por projeto)",
+      visualization: "timeline",
+    },
+    {
+      value: 85,
+      suffix: "K",
+      label: "METROS QUADRADOS",
+      context: "O equivalente a 42 casas do tamanho médio",
+      visualization: "grid-of-houses",
+    },
+    {
+      value: 23,
+      suffix: "",
+      label: "PROJETOS ÚNICOS",
+      context:
+        "De chalés em Campos do Jordão a residências em condomínios fechados",
+      visualization: "project-gallery",
+    },
+    {
+      value: 95,
+      suffix: "%",
+      label: "SATISFAÇÃO",
+      context: {
+        type: "testimonial",
+        name: "João Costa",
+        project: "Casa Alphaville",
+        quote: "Superou nossas expectativas em prazo e acabamento",
+        image: "/images/galeria/projeto-08.webp",
+      },
+      visualization: "quote-card",
+    },
+  ],
+
+  certificationsExplained: [
+    {
+      sigla: "ABNT NBR 16970",
+      benefits: [
+        "Estrutura projetada para durar 100+ anos",
+        "Resistência a ventos de 180 km/h",
+        "Testada em laboratórios credenciados",
+        "Garantia técnica de 10 anos",
+      ],
+      whyItMatters:
+        "Não é só um papel. É a tranquilidade de saber que está seguro.",
+    },
+    {
+      sigla: "ISO 9001",
+      benefits: [
+        "Processos auditados externamente",
+        "Rastreabilidade de cada material",
+        "Protocolos de segurança rigorosos",
+        "Melhoria contínua documentada",
+      ],
+      whyItMatters: "Você não precisa confiar cegamente. Temos comprovação.",
+    },
+    {
+      sigla: "PBQP-H Nível A",
+      benefits: [
+        "Qualificação pelo governo federal",
+        "Elegível para financiamento facilitado",
+        "Padrões de habitação sustentável",
+        "Auditoria anual obrigatória",
+      ],
+      whyItMatters: "Seu banco vai aprovar o financiamento mais rápido.",
     },
   ],
 };

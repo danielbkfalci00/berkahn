@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Manrope } from "next/font/google";
+import { Manrope, Caveat } from "next/font/google";
 import Script from "next/script";
 import { ClientLayout } from "@/components/layout/ClientLayout";
 import { ConditionalFooter } from "@/components/layout/ConditionalFooter";
@@ -9,6 +9,13 @@ const manrope = Manrope({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700", "800"],
   variable: "--font-manrope",
+  display: "swap",
+});
+
+const caveat = Caveat({
+  subsets: ["latin"],
+  weight: ["400", "700"],
+  variable: "--font-caveat",
   display: "swap",
 });
 
@@ -57,7 +64,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-BR" className={manrope.variable}>
+    <html lang="pt-BR" className={`${manrope.variable} ${caveat.variable}`}>
       <body>
         <ClientLayout>{children}</ClientLayout>
         <ConditionalFooter />

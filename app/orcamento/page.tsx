@@ -3,8 +3,10 @@
 import { useState } from "react";
 import { OrcamentoHeader } from "@/components/orcamento/OrcamentoHeader";
 import { OrcamentoHero } from "@/components/orcamento/OrcamentoHero";
-import { AboutInstitucional } from "@/components/orcamento/AboutInstitucional";
-import { AboutBigNumbers } from "@/components/orcamento/AboutBigNumbers";
+// Seções de Storytelling Humanizado (substituem AboutInstitucional e AboutBigNumbers)
+import { CompanyStorySection } from "@/components/orcamento/CompanyStorySection";
+import { InsightsNarrativeSection } from "@/components/orcamento/InsightsNarrativeSection";
+import { CertificationsExplained } from "@/components/orcamento/CertificationsExplained";
 import { PacotesInvestimento } from "@/components/orcamento/PacotesInvestimento";
 import { InfograficoLSF } from "@/components/orcamento/InfograficoLSF";
 import { DiferenciaisLSF } from "@/components/orcamento/DiferenciaisLSF";
@@ -18,8 +20,7 @@ import {
   PROJETO_TEMPLATE,
   PACOTES_TEMPLATE,
   PREMISSAS_TEMPLATE,
-  CREDENCIAIS_BERKAHN,
-  STATS_CREDIBILIDADE,
+  COMPANY_STORY,
   COMPARATIVO_ORCAMENTO,
   BENEFICIOS_LSF_STATS,
   CONTATOS,
@@ -56,8 +57,16 @@ export default function OrcamentoPage() {
         validoAte={dataValidade}
       />
 
-      {/* Seção 2: Sobre Nós - Institucional */}
-      <AboutInstitucional />
+      {/* Seção 2: Company Story - Storytelling Humanizado */}
+      <CompanyStorySection story={COMPANY_STORY} />
+
+      {/* Seção 3: Insights Narrativos - O que aprendemos */}
+      <InsightsNarrativeSection story={COMPANY_STORY} />
+
+      {/* Seção 3.5: Certificações Explicadas */}
+      <CertificationsExplained
+        certifications={COMPANY_STORY.certificationsExplained}
+      />
 
       {/* Transição Visual */}
       <div className="relative h-24 bg-white">
@@ -69,9 +78,6 @@ export default function OrcamentoPage() {
           </div>
         </div>
       </div>
-
-      {/* Seção 3: Sobre Nós - Big Numbers */}
-      <AboutBigNumbers />
 
       {/* Seção 4-7: Premissas Adotadas para Orçamento (Unificada) */}
       <PremissasUnificadasSection />
