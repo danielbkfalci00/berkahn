@@ -54,7 +54,7 @@ export function PaymentConditions({
                 <RevealOnScroll delay={0.1}>
                   <motion.div
                     whileHover={{ y: -4 }}
-                    className="bg-white rounded-xl p-6 border border-black/10 hover:border-black/20 transition-all duration-300 shadow-sm hover:shadow-md text-center"
+                    className="h-full flex flex-col bg-white rounded-xl p-6 border border-black/10 hover:border-black/20 transition-all duration-300 shadow-sm hover:shadow-md text-center"
                   >
                     <div className="w-12 h-12 rounded-full bg-black text-white flex items-center justify-center mx-auto mb-4 shadow-lg">
                       <span className="text-lg font-bold">1</span>
@@ -65,7 +65,7 @@ export function PaymentConditions({
                     <p className="text-3xl font-bold text-black mb-2">
                       {condicaoPrincipal.estruturaPagamento.sinal.percentual}%
                     </p>
-                    <p className="text-sm text-black/60">
+                    <p className="text-sm text-black/60 flex-1">
                       {condicaoPrincipal.estruturaPagamento.sinal.descricao}
                     </p>
                   </motion.div>
@@ -77,7 +77,7 @@ export function PaymentConditions({
                 <RevealOnScroll key={parcela.numero} delay={0.15 + index * 0.05}>
                   <motion.div
                     whileHover={{ y: -4 }}
-                    className="bg-white rounded-xl p-6 border border-black/10 hover:border-black/20 transition-all duration-300 shadow-sm hover:shadow-md text-center"
+                    className="h-full flex flex-col bg-white rounded-xl p-6 border border-black/10 hover:border-black/20 transition-all duration-300 shadow-sm hover:shadow-md text-center"
                   >
                     <div className="w-12 h-12 rounded-full bg-black/10 text-black flex items-center justify-center mx-auto mb-4">
                       <span className="text-lg font-bold">{parcela.numero + 1}</span>
