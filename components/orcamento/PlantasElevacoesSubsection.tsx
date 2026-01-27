@@ -61,7 +61,7 @@ export function PlantasElevacoesSubsection({ data }: PlantasElevacoesSubsectionP
           <p className="text-sm uppercase tracking-widest text-white-70 mb-lg font-mono">
             Plantas Baixas
           </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-lg sm:gap-xl">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-12 lg:gap-16">
             {data.imagens.plantasBaixas.map((planta) => (
               <DrawingFrame
                 key={planta.label}
@@ -86,7 +86,7 @@ export function PlantasElevacoesSubsection({ data }: PlantasElevacoesSubsectionP
           <p className="text-sm uppercase tracking-widest text-white-70 mb-lg font-mono">
             Elevações
           </p>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-lg sm:gap-lg">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 lg:gap-12">
             {data.imagens.elevacoes.map((elevacao) => (
               <DrawingFrame
                 key={elevacao.label}
@@ -107,13 +107,13 @@ export function PlantasElevacoesSubsection({ data }: PlantasElevacoesSubsectionP
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setExpandedImage(null)}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-80 p-4"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 p-4"
           >
           <motion.div
             initial={{ scale: 0.9 }}
             animate={{ scale: 1 }}
             exit={{ scale: 0.9 }}
-            className="relative max-h-[90vh] max-w-[90vw] bg-black border-2 border-white p-4"
+            className="relative max-h-[85vh] max-w-[85vw]"
             onClick={(e) => e.stopPropagation()}
           >
             <button
@@ -139,7 +139,7 @@ export function PlantasElevacoesSubsection({ data }: PlantasElevacoesSubsectionP
             <img
               src={expandedImage.src}
               alt={expandedImage.label}
-              className="max-h-[80vh] max-w-[80vw] w-auto h-auto object-contain"
+              className="max-h-[85vh] max-w-[85vw] w-auto h-auto object-contain drop-shadow-2xl"
             />
 
             <p className="mt-4 text-center font-mono text-sm tracking-wider uppercase text-white">
