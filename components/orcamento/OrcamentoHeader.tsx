@@ -66,11 +66,6 @@ export function OrcamentoHeader({
             <h1 className="text-sm sm:text-base lg:text-lg font-semibold tracking-tight text-black truncate">
               Berkahn & {projeto.titulo}
             </h1>
-            {numeroOrcamento && (
-              <p className="hidden sm:block text-xs text-black-70 mt-0.5">
-                {numeroOrcamento}
-              </p>
-            )}
           </button>
 
           {/* Right: PDF Button */}
