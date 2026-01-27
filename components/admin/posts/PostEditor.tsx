@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Card } from "@/components/ui/card";
@@ -28,11 +28,14 @@ import {
   Quote,
   X,
   Loader2,
+  Upload,
   Calendar,
 } from "lucide-react";
 import type { Post, PostInsert, PostStatus } from "@/types/admin";
 import { BLOG_CATEGORIES } from "@/types/blog";
 import { cn } from "@/lib/utils";
+import { uploadCoverImage } from "@/app/admin/posts/upload-actions";
+import { useToast } from "@/hooks/use-toast";
 
 interface PostEditorProps {
   post?: Post;
@@ -55,6 +58,8 @@ const defaultPost: PostInsert = {
 export function PostEditor({ post }: PostEditorProps) {
   const router = useRouter();
   const isEditing = !!post;
+  const { toast } = useToast();
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [formData, setFormData] = useState<PostInsert>(
     post
@@ -75,6 +80,8 @@ export function PostEditor({ post }: PostEditorProps) {
         }
       : defaultPost
   );
+
+  const [isUploading, setIsUploading] = useState(false);
 
   const [tagInput, setTagInput] = useState("");
   const [isSaving, setIsSaving] = useState(false);
@@ -164,6 +171,71 @@ export function PostEditor({ post }: PostEditorProps) {
         start + before.length + selectedText.length
       );
     }, 0);
+  };
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      toast({
+        title: "Erro",
+        description: "Por favor, selecione um arquivo de imagem válido",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Validate file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      toast({
+        title: "Erro",
+        description: "A imagem deve ter no máximo 5MB",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsUploading(true);
+
+    try {
+      const uploadFormData = new FormData();
+      uploadFormData.append('file', file);
+      uploadFormData.append('postSlug', formData.slug || 'new-post');
+
+      const result = await uploadCoverImage(uploadFormData);
+
+      if (result.error) {
+        toast({
+          title: "Erro no upload",
+          description: result.error,
+          variant: "destructive",
+        });
+        return;
+      }
+
+      if (result.url) {
+        setFormData((prev) => ({ ...prev, cover_image: result.url }));
+        toast({
+          title: "Sucesso",
+          description: "Imagem enviada com sucesso!",
+        });
+      }
+    } catch (error) {
+      console.error('Upload error:', error);
+      toast({
+        title: "Erro",
+        description: "Falha ao enviar imagem",
+        variant: "destructive",
+      });
+    } finally {
+      setIsUploading(false);
+      // Reset file input
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    }
   };
 
   const handleSave = async (publish: boolean = false) => {
@@ -552,16 +624,34 @@ export function PostEditor({ post }: PostEditorProps) {
                 </Button>
               </div>
             ) : (
-              <button
-                className="w-full h-32 border-2 border-dashed border-neutral-200 rounded-lg flex flex-col items-center justify-center text-neutral-400 hover:border-neutral-400 hover:text-neutral-600 transition-colors"
-                onClick={() => {
-                  // TODO: Implement image upload
-                  console.log("Upload image");
-                }}
-              >
-                <ImageIcon className="h-8 w-8 mb-2" />
-                <span className="text-sm">Clique para upload</span>
-              </button>
+              <>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={handleImageUpload}
+                />
+                <button
+                  type="button"
+                  disabled={isUploading}
+                  className="w-full h-32 border-2 border-dashed border-neutral-200 rounded-lg flex flex-col items-center justify-center text-neutral-400 hover:border-neutral-400 hover:text-neutral-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  onClick={() => fileInputRef.current?.click()}
+                >
+                  {isUploading ? (
+                    <>
+                      <Loader2 className="h-8 w-8 mb-2 animate-spin" />
+                      <span className="text-sm">Enviando...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Upload className="h-8 w-8 mb-2" />
+                      <span className="text-sm">Clique para upload</span>
+                      <span className="text-xs text-neutral-400 mt-1">PNG, JPG ou WebP até 5MB</span>
+                    </>
+                  )}
+                </button>
+              </>
             )}
           </Card>
 
