@@ -149,7 +149,8 @@ export interface PremissasProposta {
 export interface ParcelaPagamento {
   numero: number;
   percentual: number;
-  vinculoEtapa: string;
+  vinculoEtapa?: string;
+  descricao?: string;
   prazo?: string;
 }
 

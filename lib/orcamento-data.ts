@@ -313,39 +313,32 @@ export const PREMISSAS_TEMPLATE: PremissasProposta = {
 
 export const CONDICOES_PAGAMENTO: CondicaoPagamento[] = [
   {
-    id: "medicoes",
-    titulo: "Pagamento por Medições",
+    id: "parcelado",
+    titulo: "Pagamento Parcelado",
     destaque: true,
-    descricao: "Sinal de 50% + saldo de 50% conforme medições mensais",
+    descricao: "Sinal de 33,3% + 2 parcelas de 33,3%",
     tipoFaturamento: "direto",
     estruturaPagamento: {
       sinal: {
-        percentual: 50,
-        descricao: "Na aprovação do projeto executivo",
+        percentual: 33.3,
+        descricao: "Na aprovação do contrato",
       },
       parcelas: [
         {
           numero: 1,
-          percentual: 25,
-          vinculoEtapa: "Medição 1: Estrutura LSF + Vedação Externa concluídas",
-          prazo: "30 dias após início",
+          percentual: 33.3,
+          descricao: "1ª Parcela",
         },
         {
           numero: 2,
-          percentual: 25,
-          vinculoEtapa: "Medição 2: Vedação Interna + Cobertura concluídas",
-          prazo: "60 dias após início",
+          percentual: 33.3,
+          descricao: "2ª Parcela",
         },
-      ],
-      observacoes: [
-        "Faturamento direto via nota fiscal",
-        "Medições mediante vistoria técnica conjunta",
       ],
     },
     observacoesPagamento: [
-      "Forma de pagamento: Faturamento direto com envio de nota fiscal",
-      "Prazo de pagamento: 5 dias úteis após emissão da NF",
-      "Medições realizadas mediante vistoria técnica conjunta",
+      "Forma de pagamento: Faturamento direto via nota fiscal",
+      "Prazo de pagamento: 10 dias úteis após emissão da NF",
     ],
   },
 ];

@@ -4,23 +4,18 @@ import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
 import { motion } from "framer-motion";
 import {
   CreditCard,
-  FileText,
   AlertCircle,
   CheckCircle2,
-  ArrowRight,
 } from "lucide-react";
 import type { CondicaoPagamento } from "@/types/orcamento";
-import { formatarValor } from "@/lib/orcamento-data";
-import { cn } from "@/lib/utils";
 
 interface PaymentConditionsProps {
   condicoes: CondicaoPagamento[];
-  valorTotal: number;
+  valorTotal?: number;
 }
 
 export function PaymentConditions({
   condicoes,
-  valorTotal,
 }: PaymentConditionsProps) {
   const condicaoPrincipal = condicoes.find((c) => c.destaque) || condicoes[0];
 
@@ -51,153 +46,52 @@ export function PaymentConditions({
         </RevealOnScroll>
 
         {condicaoPrincipal.estruturaPagamento && (
-          <div className="space-y-4">
-            {/* Valor Total */}
-            <RevealOnScroll delay={0.05}>
-              <motion.div
-                whileHover={{ scale: 1.01 }}
-                className="bg-black text-white rounded-xl p-6 lg:p-8 text-center"
-              >
-                <p className="text-sm text-white/60 mb-2">Valor Total do Pacote Selecionado</p>
-                <p className="text-4xl lg:text-5xl font-bold">
-                  {formatarValor(valorTotal)}
-                </p>
-              </motion.div>
-            </RevealOnScroll>
-
-            {/* Estrutura de Pagamento */}
-            <div className="grid md:grid-cols-2 gap-4">
+          <div className="space-y-6">
+            {/* Estrutura de Pagamento - 3 Cards */}
+            <div className="grid md:grid-cols-3 gap-4">
               {/* Sinal */}
               {condicaoPrincipal.estruturaPagamento.sinal && (
                 <RevealOnScroll delay={0.1}>
                   <motion.div
                     whileHover={{ y: -4 }}
-                    className="bg-white rounded-xl p-6 border border-black/10 hover:border-black/20 transition-all duration-300 shadow-sm hover:shadow-md"
+                    className="bg-white rounded-xl p-6 border border-black/10 hover:border-black/20 transition-all duration-300 shadow-sm hover:shadow-md text-center"
                   >
-                    <div className="flex items-start gap-4">
-                      <div className="w-14 h-14 rounded-full bg-black text-white flex items-center justify-center flex-shrink-0 shadow-lg">
-                        <span className="text-xl font-bold">1</span>
-                      </div>
-                      <div className="flex-1">
-                        <div className="flex items-center justify-between mb-2">
-                          <h3 className="text-lg font-semibold text-black">
-                            Sinal
-                          </h3>
-                          <span className="text-sm font-medium text-black/80 bg-black/5 px-2 py-1 rounded">
-                            {condicaoPrincipal.estruturaPagamento.sinal.percentual}%
-                          </span>
-                        </div>
-                        <p className="text-sm text-black/60 mb-3">
-                          {condicaoPrincipal.estruturaPagamento.sinal.descricao}
-                        </p>
-                        <p className="text-2xl font-bold text-black/80">
-                          {formatarValor(
-                            valorTotal *
-                              (condicaoPrincipal.estruturaPagamento.sinal.percentual / 100)
-                          )}
-                        </p>
-                      </div>
+                    <div className="w-12 h-12 rounded-full bg-black text-white flex items-center justify-center mx-auto mb-4 shadow-lg">
+                      <span className="text-lg font-bold">1</span>
                     </div>
+                    <h3 className="text-lg font-semibold text-black mb-2">
+                      Sinal
+                    </h3>
+                    <p className="text-3xl font-bold text-black mb-2">
+                      {condicaoPrincipal.estruturaPagamento.sinal.percentual}%
+                    </p>
+                    <p className="text-sm text-black/60">
+                      {condicaoPrincipal.estruturaPagamento.sinal.descricao}
+                    </p>
                   </motion.div>
                 </RevealOnScroll>
               )}
 
-              {/* Saldo */}
-              <RevealOnScroll delay={0.15}>
-                <motion.div
-                  whileHover={{ y: -4 }}
-                  className="bg-white rounded-xl p-6 border border-black/10 hover:border-black/20 transition-all duration-300 shadow-sm hover:shadow-md"
-                >
-                  <div className="flex items-start gap-4">
-                    <div className="w-14 h-14 rounded-full bg-black/10 text-black flex items-center justify-center flex-shrink-0">
-                      <FileText className="w-6 h-6" />
+              {/* Parcelas */}
+              {condicaoPrincipal.estruturaPagamento.parcelas?.map((parcela, index) => (
+                <RevealOnScroll key={parcela.numero} delay={0.15 + index * 0.05}>
+                  <motion.div
+                    whileHover={{ y: -4 }}
+                    className="bg-white rounded-xl p-6 border border-black/10 hover:border-black/20 transition-all duration-300 shadow-sm hover:shadow-md text-center"
+                  >
+                    <div className="w-12 h-12 rounded-full bg-black/10 text-black flex items-center justify-center mx-auto mb-4">
+                      <span className="text-lg font-bold">{parcela.numero + 1}</span>
                     </div>
-                    <div className="flex-1">
-                      <div className="flex items-center justify-between mb-2">
-                        <h3 className="text-lg font-semibold text-black">
-                          Saldo por Medições
-                        </h3>
-                        <span className="text-sm font-medium text-black/60 bg-black/5 px-2 py-1 rounded">
-                          {condicaoPrincipal.estruturaPagamento.parcelas?.reduce(
-                            (sum, p) => sum + p.percentual,
-                            0
-                          ) || 0}%
-                        </span>
-                      </div>
-                      <p className="text-sm text-black/60 mb-3">
-                        Pagamento conforme conclusão das etapas
-                      </p>
-                      <p className="text-2xl font-bold text-black">
-                        {formatarValor(
-                          valorTotal *
-                            ((condicaoPrincipal.estruturaPagamento.parcelas?.reduce(
-                              (sum, p) => sum + p.percentual,
-                              0
-                            ) || 0) / 100)
-                        )}
-                      </p>
-                    </div>
-                  </div>
-                </motion.div>
-              </RevealOnScroll>
-            </div>
-
-            {/* Parcelas/Medições Detalhadas */}
-            {condicaoPrincipal.estruturaPagamento.parcelas &&
-              condicaoPrincipal.estruturaPagamento.parcelas.length > 0 && (
-                <RevealOnScroll delay={0.2}>
-                  <div className="bg-white rounded-xl border border-black/10 overflow-hidden">
-                    <div className="bg-black/[0.02] px-6 py-4 border-b border-black/5">
-                      <h4 className="text-sm font-semibold text-black uppercase tracking-wider">
-                        Cronograma de Medições
-                      </h4>
-                    </div>
-                    <div className="divide-y divide-black/5">
-                      {condicaoPrincipal.estruturaPagamento.parcelas.map(
-                        (parcela, index) => (
-                          <motion.div
-                            key={parcela.numero}
-                            initial={{ opacity: 0, x: -20 }}
-                            whileInView={{ opacity: 1, x: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ delay: index * 0.1 }}
-                            className="p-6 hover:bg-black/[0.01] transition-colors"
-                          >
-                            <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-                              <div className="flex items-center gap-3 flex-1">
-                                <div className="w-10 h-10 rounded-full bg-black/5 text-black/80 flex items-center justify-center font-bold text-sm">
-                                  M{parcela.numero}
-                                </div>
-                                <div className="flex-1">
-                                  <p className="font-medium text-black">
-                                    {parcela.vinculoEtapa}
-                                  </p>
-                                  {parcela.prazo && (
-                                    <p className="text-sm text-black/50">
-                                      {parcela.prazo}
-                                    </p>
-                                  )}
-                                </div>
-                              </div>
-                              <div className="flex items-center gap-4 sm:text-right">
-                                <span className="text-sm text-black/50">
-                                  {parcela.percentual}%
-                                </span>
-                                <ArrowRight className="w-4 h-4 text-black/30 hidden sm:block" />
-                                <span className="text-lg font-bold text-black/80">
-                                  {formatarValor(
-                                    valorTotal * (parcela.percentual / 100)
-                                  )}
-                                </span>
-                              </div>
-                            </div>
-                          </motion.div>
-                        )
-                      )}
-                    </div>
-                  </div>
+                    <h3 className="text-lg font-semibold text-black mb-2">
+                      {parcela.descricao || `${parcela.numero}ª Parcela`}
+                    </h3>
+                    <p className="text-3xl font-bold text-black mb-2">
+                      {parcela.percentual}%
+                    </p>
+                  </motion.div>
                 </RevealOnScroll>
-              )}
+              ))}
+            </div>
 
             {/* Informações de Pagamento */}
             {condicaoPrincipal.observacoesPagamento &&
