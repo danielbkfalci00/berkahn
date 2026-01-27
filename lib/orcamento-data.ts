@@ -181,7 +181,7 @@ export const PACOTES_TEMPLATE: PacoteInvestimento[] = [
     ],
     cronograma: "Entrega em 30 dias úteis",
     garantia: "5 anos materiais certificados",
-    imagemRepresentativa: "/images/Lsf/lsf-hero-structure.webp",
+    imagemRepresentativa: "/images/Services/projetos-prontos/Chalé/chale_interior_1.webp",
     progressoCompletude: 30,
   },
 
