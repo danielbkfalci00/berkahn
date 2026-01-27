@@ -36,6 +36,7 @@ import { BLOG_CATEGORIES } from "@/types/blog";
 import { cn } from "@/lib/utils";
 import { uploadCoverImage } from "@/app/admin/posts/upload-actions";
 import { useToast } from "@/hooks/use-toast";
+import { createPost, updatePost } from "@/app/admin/posts/actions";
 
 interface PostEditorProps {
   post?: Post;
@@ -249,19 +250,37 @@ export function PostEditor({ post }: PostEditorProps) {
         published_at: publish ? new Date().toISOString() : null,
       };
 
-      // TODO: Implement Supabase save
-      console.log("Saving post:", dataToSave);
+      // Chamar server action apropriada
+      const result = post
+        ? await updatePost(post.id, dataToSave)
+        : await createPost(dataToSave);
 
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      if (result.error) {
+        toast({
+          title: "Erro ao salvar",
+          description: result.error,
+          variant: "destructive",
+        });
+        return;
+      }
+
+      // Feedback de sucesso
+      toast({
+        title: publish ? "Post publicado!" : "Post salvo",
+        description: publish
+          ? "O post foi publicado com sucesso e está visível no site."
+          : "As alterações foram salvas como rascunho.",
+      });
 
       setHasUnsavedChanges(false);
-
-      if (publish) {
-        router.push("/admin/posts");
-      }
+      router.push("/admin/posts");
     } catch (error) {
       console.error("Error saving post:", error);
+      toast({
+        title: "Erro",
+        description: "Ocorreu um erro ao salvar o post. Tente novamente.",
+        variant: "destructive",
+      });
     } finally {
       saveMethod(false);
     }

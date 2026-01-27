@@ -23,9 +23,11 @@ import {
   MoreHorizontal,
   Star,
   ExternalLink,
+  Loader2,
 } from "lucide-react";
 import type { Post, PostStatus } from "@/types/admin";
 import { cn } from "@/lib/utils";
+import { toggleFeatured } from "@/app/admin/posts/actions";
 
 interface PostsTableProps {
   posts: Post[];
@@ -54,6 +56,27 @@ export function PostsTable({ posts }: PostsTableProps) {
   const router = useRouter();
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<PostStatus | "all">("all");
+  const [togglingFeatured, setTogglingFeatured] = useState<string | null>(null);
+
+  const handleToggleFeatured = async (post: Post) => {
+    setTogglingFeatured(post.id);
+
+    try {
+      const result = await toggleFeatured(post.id, !post.featured);
+
+      if (result.error) {
+        alert(`Erro ao atualizar destaque: ${result.error}`);
+        return;
+      }
+
+      router.refresh();
+    } catch (error) {
+      console.error('Error toggling featured:', error);
+      alert('Erro ao atualizar destaque');
+    } finally {
+      setTogglingFeatured(null);
+    }
+  };
 
   const filteredPosts = posts.filter((post) => {
     const matchesSearch =
@@ -133,9 +156,23 @@ export function PostsTable({ posts }: PostsTableProps) {
             filteredPosts.map((post) => (
               <TableRow key={post.id} className="group">
                 <TableCell>
-                  {post.featured && (
-                    <Star className="h-4 w-4 text-amber-500 fill-amber-500" />
-                  )}
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleToggleFeatured(post);
+                    }}
+                    disabled={togglingFeatured === post.id}
+                    className="p-1 hover:bg-neutral-100 rounded transition-colors disabled:opacity-50"
+                    title={post.featured ? "Remover destaque" : "Marcar como destaque"}
+                  >
+                    {togglingFeatured === post.id ? (
+                      <Loader2 className="h-4 w-4 animate-spin text-neutral-400" />
+                    ) : post.featured ? (
+                      <Star className="h-4 w-4 text-amber-500 fill-amber-500" />
+                    ) : (
+                      <Star className="h-4 w-4 text-neutral-300 hover:text-amber-500 transition-colors" />
+                    )}
+                  </button>
                 </TableCell>
                 <TableCell>
                   <div className="max-w-md">

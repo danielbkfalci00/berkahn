@@ -23,6 +23,27 @@ export const metadata: Metadata = {
   },
 };
 
-export default function AtualidadePage() {
-  return <AtualidadeContent />;
+import { createClient } from "@/lib/supabase/server";
+import type { Post } from "@/types/admin";
+
+export default async function AtualidadePage() {
+  const supabase = await createClient();
+
+  // Buscar posts publicados do Supabase
+  let supabasePosts: Post[] = [];
+  try {
+    const { data, error } = await supabase
+      .from('posts')
+      .select('*')
+      .eq('status', 'published')
+      .order('published_at', { ascending: false });
+
+    if (!error && data) {
+      supabasePosts = data as Post[];
+    }
+  } catch (err) {
+    console.error('Error fetching posts:', err);
+  }
+
+  return <AtualidadeContent supabasePosts={supabasePosts} />;
 }

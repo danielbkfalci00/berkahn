@@ -159,8 +159,19 @@ export async function deletePost(id: string): Promise<{ error: string | null }> 
   return { error: null }
 }
 
-export async function toggleFeatured(id: string, featured: boolean): Promise<{ error: string | null }> {
+export async function toggleFeatured(
+  id: string,
+  featured: boolean
+): Promise<{ error: string | null }> {
   const supabase = await createClient()
+
+  // Se marcando como destaque, desmarcar todos os outros primeiro
+  if (featured) {
+    await supabase
+      .from('posts')
+      .update({ featured: false })
+      .neq('id', id)
+  }
 
   const { error } = await supabase
     .from('posts')
@@ -172,7 +183,27 @@ export async function toggleFeatured(id: string, featured: boolean): Promise<{ e
     return { error: error.message }
   }
 
+  // Log de atividade
+  const { data: { user } } = await supabase.auth.getUser()
+  const { data: post } = await supabase
+    .from('posts')
+    .select('title')
+    .eq('id', id)
+    .single()
+
+  if (user && post) {
+    await supabase.from('activity_logs').insert({
+      user_id: user.id,
+      user_name: user.email || 'Admin',
+      action: featured ? 'Post marcado como destaque' : 'Post removido do destaque',
+      entity_type: 'post',
+      entity_id: id,
+      entity_name: post.title,
+    })
+  }
+
   revalidatePath('/admin/posts')
+  revalidatePath('/atualidade')
   return { error: null }
 }
 
