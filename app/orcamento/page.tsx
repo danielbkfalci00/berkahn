@@ -3,10 +3,8 @@
 import { useState } from "react";
 import { OrcamentoHeader } from "@/components/orcamento/OrcamentoHeader";
 import { OrcamentoHero } from "@/components/orcamento/OrcamentoHero";
-// Seções de Storytelling Humanizado (substituem AboutInstitucional e AboutBigNumbers)
-import { CompanyStorySection } from "@/components/orcamento/CompanyStorySection";
-import { InsightsNarrativeSection } from "@/components/orcamento/InsightsNarrativeSection";
-import { CertificationsExplained } from "@/components/orcamento/CertificationsExplained";
+// Seção Sobre - Storytelling com propósito
+import { SobreSection } from "@/components/orcamento/SobreSection";
 import { PacotesInvestimento } from "@/components/orcamento/PacotesInvestimento";
 import { InfograficoLSF } from "@/components/orcamento/InfograficoLSF";
 import { DiferenciaisLSF } from "@/components/orcamento/DiferenciaisLSF";
@@ -57,16 +55,8 @@ export default function OrcamentoPage() {
         validoAte={dataValidade}
       />
 
-      {/* Seção 2: Company Story - Storytelling Humanizado */}
-      <CompanyStorySection story={COMPANY_STORY} />
-
-      {/* Seção 3: Insights Narrativos - O que aprendemos */}
-      <InsightsNarrativeSection story={COMPANY_STORY} />
-
-      {/* Seção 3.5: Certificações Explicadas */}
-      <CertificationsExplained
-        certifications={COMPANY_STORY.certificationsExplained}
-      />
+      {/* Seção 2: Sobre a Berkahn - Storytelling com propósito */}
+      <SobreSection />
 
       {/* Transição Visual */}
       <div className="relative h-24 bg-white">
