@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { motion } from "framer-motion";
 import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
 import {
@@ -17,15 +16,16 @@ import { cn } from "@/lib/utils";
 interface PacotesInvestimentoProps {
   pacotes: PacoteInvestimento[];
   metragemProjeto: number;
+  onPacoteSelecionado?: (id: string) => void;
+  pacoteSelecionadoId?: string;
 }
 
 export function PacotesInvestimento({
   pacotes,
   metragemProjeto,
+  onPacoteSelecionado,
+  pacoteSelecionadoId,
 }: PacotesInvestimentoProps) {
-  const [pacoteSelecionado, setPacoteSelecionado] = useState<string | null>(
-    null
-  );
 
   return (
     <section className="py-xl bg-gradient-to-b from-white via-white to-black/[0.02]">
@@ -67,6 +67,8 @@ export function PacotesInvestimento({
               pacote={pacote}
               metragem={metragemProjeto}
               index={index}
+              onSelect={() => onPacoteSelecionado?.(pacote.id)}
+              isSelected={pacoteSelecionadoId === pacote.id}
             />
           ))}
         </div>
@@ -91,6 +93,8 @@ export function PacotesInvestimento({
                     pacote={pacote}
                     metragem={metragemProjeto}
                     index={index}
+                    onSelect={() => onPacoteSelecionado?.(pacote.id)}
+                    isSelected={pacoteSelecionadoId === pacote.id}
                   />
                 </CarouselItem>
               ))}

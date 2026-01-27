@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { OrcamentoHeader } from "@/components/orcamento/OrcamentoHeader";
 import { OrcamentoHero } from "@/components/orcamento/OrcamentoHero";
 import { AboutInstitucional } from "@/components/orcamento/AboutInstitucional";
@@ -31,9 +32,14 @@ export default function OrcamentoPage() {
   const numeroOrcamento = gerarNumeroOrcamento();
   const dataValidade = calcularDataValidade(20); // Validade de 20 dias
 
-  // Pega o pacote mais popular (destaque) para condições de pagamento
-  const pacoteDestaque = PACOTES_TEMPLATE.find(p => p.destaque) || PACOTES_TEMPLATE[PACOTES_TEMPLATE.length - 1];
-  const valorPacoteDestaque = pacoteDestaque?.valorTotal || 0;
+  // Estado para seleção interativa de pacote
+  const [pacoteSelecionadoId, setPacoteSelecionadoId] = useState<string>(
+    PACOTES_TEMPLATE.find(p => p.destaque)?.id || PACOTES_TEMPLATE[0].id
+  );
+
+  // Calcula valor dinâmico baseado no pacote selecionado
+  const pacoteSelecionado = PACOTES_TEMPLATE.find(p => p.id === pacoteSelecionadoId) || PACOTES_TEMPLATE[0];
+  const valorTotal = pacoteSelecionado.valorTotal;
 
   return (
     <main className="relative">
@@ -74,12 +80,14 @@ export default function OrcamentoPage() {
       <PacotesInvestimento
         pacotes={PACOTES_TEMPLATE}
         metragemProjeto={PROJETO_TEMPLATE.metragem}
+        onPacoteSelecionado={setPacoteSelecionadoId}
+        pacoteSelecionadoId={pacoteSelecionadoId}
       />
 
       {/* Seção 8: Condições de Pagamento */}
       <PaymentConditions
         condicoes={CONDICOES_PAGAMENTO}
-        valorTotal={valorPacoteDestaque}
+        valorTotal={valorTotal}
       />
 
       {/* Seção 9: Plano de Gerenciamento Berkahn */}

@@ -13,9 +13,17 @@ interface PacoteCardProps {
   pacote: PacoteInvestimento;
   metragem: number;
   index: number;
+  onSelect?: () => void;
+  isSelected?: boolean;
 }
 
-export function PacoteCard({ pacote, metragem, index }: PacoteCardProps) {
+export function PacoteCard({
+  pacote,
+  metragem,
+  index,
+  onSelect,
+  isSelected = false,
+}: PacoteCardProps) {
   const cardRef = useRef<HTMLDivElement>(null);
   const [isHovered, setIsHovered] = useState(false);
 
@@ -70,8 +78,10 @@ export function PacoteCard({ pacote, metragem, index }: PacoteCardProps) {
       }}
       className={cn(
         "group relative flex flex-col h-full overflow-hidden rounded-xl transition-all duration-500",
-        isDestaque
-          ? "bg-white border-2 border-black shadow-luxury-lg hover:shadow-luxury-xl scale-[1.02] z-10"
+        isSelected
+          ? "bg-white border-2 border-black shadow-luxury-xl scale-[1.02] z-10"
+          : isDestaque
+          ? "bg-white border-2 border-black/50 shadow-luxury-lg hover:shadow-luxury-xl scale-[1.01] z-10"
           : "bg-white border border-black/10 hover:border-black/20",
         "hover:scale-[1.02]"
       )}
@@ -200,18 +210,28 @@ export function PacoteCard({ pacote, metragem, index }: PacoteCardProps) {
         )}
       </div>
 
-      {/* Label Informativo (sem botão - proposta comercial) */}
+      {/* Botão de Seleção Interativo */}
       <div className="p-6 lg:p-8 pt-0">
-        <div
+        <motion.button
+          onClick={onSelect}
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
           className={cn(
-            "w-full h-14 flex items-center justify-center text-base font-semibold rounded-lg",
-            isDestaque
-              ? "bg-black text-white"
-              : "bg-black/5 text-black/60 border border-black/10"
+            "w-full h-14 flex items-center justify-center gap-2 text-base font-semibold rounded-lg transition-colors",
+            isSelected
+              ? "bg-black text-white cursor-default"
+              : "bg-black/5 text-black/60 border border-black/10 hover:bg-black/10 hover:border-black/20"
           )}
         >
-          {isDestaque ? "Proposta Recomendada" : "Investimento Disponível"}
-        </div>
+          {isSelected ? (
+            <>
+              <Check className="w-5 h-5" />
+              Pacote Selecionado
+            </>
+          ) : (
+            "Selecionar Pacote"
+          )}
+        </motion.button>
       </div>
 
       {/* Shine effect on hover - only for destaque card */}

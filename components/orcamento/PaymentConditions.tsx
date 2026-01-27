@@ -118,14 +118,23 @@ export function PaymentConditions({
                           Saldo por Medições
                         </h3>
                         <span className="text-sm font-medium text-black/60 bg-black/5 px-2 py-1 rounded">
-                          50%
+                          {condicaoPrincipal.estruturaPagamento.parcelas?.reduce(
+                            (sum, p) => sum + p.percentual,
+                            0
+                          ) || 0}%
                         </span>
                       </div>
                       <p className="text-sm text-black/60 mb-3">
                         Pagamento conforme conclusão das etapas
                       </p>
                       <p className="text-2xl font-bold text-black">
-                        {formatarValor(valorTotal * 0.5)}
+                        {formatarValor(
+                          valorTotal *
+                            ((condicaoPrincipal.estruturaPagamento.parcelas?.reduce(
+                              (sum, p) => sum + p.percentual,
+                              0
+                            ) || 0) / 100)
+                        )}
                       </p>
                     </div>
                   </div>
