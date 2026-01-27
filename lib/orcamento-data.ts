@@ -156,7 +156,7 @@ export const PACOTES_TEMPLATE: PacoteInvestimento[] = [
     descricao:
       "Fornecimento completo de materiais certificados para construção em Steel Frame",
     valorM2: 2200,
-    valorTotal: 90685.48,
+    valorTotal: 94807.55,
     itens: [
       "Perfis Steel Frame certificados ABNT NBR 15253",
       "Placas Aquapanel (cimentícia) para vedação externa",
@@ -189,7 +189,7 @@ export const PACOTES_TEMPLATE: PacoteInvestimento[] = [
     descricao:
       "Material completo + treinamento técnico presencial + 3 dias de acompanhamento técnico no início da obra",
     valorM2: 2900,
-    valorTotal: 92524.68,
+    valorTotal: 96009.30,
     itens: [
       "Perfis Steel Frame certificados ABNT NBR 15253",
       "Placas Aquapanel (cimentícia) para vedação externa",
@@ -225,7 +225,7 @@ export const PACOTES_TEMPLATE: PacoteInvestimento[] = [
     descricao:
       "Solução completa: material certificado + acompanhamento técnico Berkahn durante toda obra + treinamento personalizado pela equipe Berkahn",
     valorM2: 3500,
-    valorTotal: 98731.98,
+    valorTotal: 98412.80,
     itens: [
       "Perfis Steel Frame certificados ABNT NBR 15253",
       "Placas Aquapanel (cimentícia) para vedação externa",
@@ -235,6 +235,7 @@ export const PACOTES_TEMPLATE: PacoteInvestimento[] = [
       "Sistema de cobertura completo (telhas e estrutura)",
       "Parafusos e fixações especializadas (autoperfurantes)",
       "Fitas para juntas e acabamentos",
+      "Treinamento técnico presencial de 2 dias (até 6 pessoas)",
       "Treinamento personalizado Berkahn (3 dias intensivos)",
       "Acompanhamento técnico Berkahn durante toda a obra",
       "Engenheiro Berkahn responsável pelo projeto",
