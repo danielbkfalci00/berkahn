@@ -40,7 +40,7 @@ export const PROJETO_TEMPLATE: OrcamentoProjeto = {
   subtipo: "chale",
   metragem: 69,
   localizacao: "Grande São Roque - SP",
-  imagemRender: "/images/hero/hero-home-2.webp",
+  imagemRender: "/images/orcamento/hero-chale-retangulo.webp",
 
   // Projeto Preliminar com metragens
   projetoPreliminar: {
@@ -724,6 +724,8 @@ export const CHALE_PROJETO: ChaleProjeto = {
     prototipo: [
       "/images/orcamento/chale-prototipo-1.webp",
       "/images/orcamento/chale-prototipo-2.webp",
+      "/images/orcamento/chale-prototipo-3.webp",
+      "/images/orcamento/chale-prototipo-4.webp",
     ],
     plantasBaixas: [
       { src: "/images/orcamento/chale-planta-01.webp", label: "PLANTA BAIXA 01" },
