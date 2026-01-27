@@ -78,7 +78,7 @@ export function OrcamentoHero({
           className="inline-flex items-center gap-2 mb-8"
         >
           <span className="bg-white/10 backdrop-blur-md border border-white/20 rounded-full px-5 py-2 text-xs uppercase tracking-[0.3em] text-white/80">
-            Projeto {projeto.titulo}
+            {projeto.localizacao}
           </span>
         </motion.div>
 
@@ -91,6 +91,19 @@ export function OrcamentoHero({
           <h1 className="font-heading text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-white mb-4 hero-text-shadow-strong">
             <CharReveal text={projeto.titulo} delay={0.3} />
           </h1>
+        </motion.div>
+
+        {/* Project Details Badge - Metragem */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6, duration: 0.8, ease: [0.19, 1, 0.22, 1] }}
+          className="flex items-center justify-center mb-8"
+        >
+          <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/10 rounded-full px-4 py-2">
+            <Ruler className="w-4 h-4 text-white/60" />
+            <span className="text-sm text-white/80">{projeto.metragem}m²</span>
+          </div>
         </motion.div>
 
         {/* Berkahn - Secondary Branding */}
@@ -111,32 +124,9 @@ export function OrcamentoHero({
         <motion.div
           initial={{ scaleX: 0 }}
           animate={{ scaleX: 1 }}
-          transition={{ delay: 1, duration: 1, ease: [0.19, 1, 0.22, 1] }}
+          transition={{ delay: 0.8, duration: 1, ease: [0.19, 1, 0.22, 1] }}
           className="w-24 h-px bg-gradient-to-r from-transparent via-white/50 to-transparent mx-auto mb-6"
         />
-
-        {/* Location - Large Text */}
-        <motion.p
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.1, duration: 0.8, ease: [0.19, 1, 0.22, 1] }}
-          className="text-xl md:text-2xl font-heading tracking-wide text-white/90 mb-6"
-        >
-          {projeto.localizacao}
-        </motion.p>
-
-        {/* Project Details Badge - Metragem Only */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.2, duration: 0.8, ease: [0.19, 1, 0.22, 1] }}
-          className="flex items-center justify-center mb-8"
-        >
-          <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/10 rounded-full px-4 py-2">
-            <Ruler className="w-4 h-4 text-white/60" />
-            <span className="text-sm text-white/80">{projeto.metragem}m²</span>
-          </div>
-        </motion.div>
 
         {/* Orçamento Info with glassmorphism card */}
         <motion.div

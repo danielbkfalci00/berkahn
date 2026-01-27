@@ -64,7 +64,7 @@ export function OrcamentoHeader({
             aria-label="Voltar para o topo do orçamento"
           >
             <h1 className="text-sm sm:text-base lg:text-lg font-semibold tracking-tight text-black truncate">
-              Orçamento: {projeto.titulo}
+              Berkahn & {projeto.titulo}
             </h1>
             {numeroOrcamento && (
               <p className="hidden sm:block text-xs text-black-70 mt-0.5">
