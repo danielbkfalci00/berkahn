@@ -353,43 +353,6 @@ export function InfograficoLSF() {
             );
           })}
         </div>
-
-        {/* Bottom Stats Row - 2 Large Cards */}
-        <RevealOnScroll delay={0.5}>
-          <div className="mt-16 pt-12 border-t border-white/10">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-3xl mx-auto">
-              {/* Card 1: +10 Anos Garantia Estrutural */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.1 }}
-                className="text-center group hover:scale-105 transition-transform duration-300"
-              >
-                <div className="w-20 h-20 rounded-full bg-gradient-to-br from-white/20 to-white/5 flex items-center justify-center mx-auto mb-6 border-2 border-white/20 group-hover:border-white/40 transition-colors">
-                  <Shield className="w-9 h-9 text-white/70" />
-                </div>
-                <p className="text-4xl font-bold text-white mb-2">+10 Anos</p>
-                <p className="text-base text-white/60">Garantia Estrutural</p>
-              </motion.div>
-
-              {/* Card 2: +100 Anos Vida Útil */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.2 }}
-                className="text-center group hover:scale-105 transition-transform duration-300"
-              >
-                <div className="w-20 h-20 rounded-full bg-gradient-to-br from-white/15 to-white/5 flex items-center justify-center mx-auto mb-6 border-2 border-white/15 group-hover:border-white/35 transition-colors">
-                  <Zap className="w-9 h-9 text-white/70" />
-                </div>
-                <p className="text-4xl font-bold text-white mb-2">+100 Anos</p>
-                <p className="text-base text-white/60">Vida Útil</p>
-              </motion.div>
-            </div>
-          </div>
-        </RevealOnScroll>
       </div>
     </section>
   );
