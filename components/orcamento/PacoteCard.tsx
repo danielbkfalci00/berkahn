@@ -4,7 +4,7 @@ import { useRef, useState } from "react";
 import Image from "next/image";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
-import { Check, Clock, Shield } from "lucide-react";
+import { Check } from "lucide-react";
 import { formatarValor } from "@/lib/orcamento-data";
 import type { PacoteInvestimento } from "@/types/orcamento";
 import { cn } from "@/lib/utils";
@@ -169,23 +169,6 @@ export function PacoteCard({
           <p className="text-sm text-black/50">
             {formatarValor(pacote.valorM2)}/m² | {metragem}m²
           </p>
-        </div>
-
-        {/* Quick Info - Timeline and Warranty */}
-        <div className="flex items-center gap-4 mb-6">
-          <div className="flex items-center gap-2 text-sm text-black/70">
-            <div className="w-8 h-8 rounded-full flex items-center justify-center bg-black/5">
-              <Clock className="w-4 h-4 text-black/60" />
-            </div>
-            <span className="font-medium">{pacote.cronograma}</span>
-          </div>
-          <div className="w-px h-6 bg-black/10" />
-          <div className="flex items-center gap-2 text-sm text-black/70">
-            <div className="w-8 h-8 rounded-full flex items-center justify-center bg-black/5">
-              <Shield className="w-4 h-4 text-black/60" />
-            </div>
-            <span className="font-medium">{pacote.garantia}</span>
-          </div>
         </div>
 
         {/* Diferenciais - Flex grow to fill space */}
