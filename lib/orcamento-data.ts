@@ -217,7 +217,7 @@ export const PACOTES_TEMPLATE: PacoteInvestimento[] = [
     ],
     cronograma: "Entrega 30 dias + 2 dias treinamento + 3 dias suporte inicial",
     garantia: "5 anos materiais + suporte técnico",
-    imagemRepresentativa: "/images/galeria/projeto-15.webp",
+    imagemRepresentativa: "/images/orcamento/chale-prototipo-2.webp",
     progressoCompletude: 70,
   },
 
@@ -258,7 +258,7 @@ export const PACOTES_TEMPLATE: PacoteInvestimento[] = [
     ],
     cronograma: "Entrega 30 dias + acompanhamento completo durante execução",
     garantia: "10 anos estrutura + 2 anos acompanhamento técnico",
-    imagemRepresentativa: "/images/galeria/projeto-01.webp",
+    imagemRepresentativa: "/images/orcamento/chale-prototipo-1.webp",
     progressoCompletude: 100,
     comparativoAnterior: [
       "Acompanhamento durante toda obra",
