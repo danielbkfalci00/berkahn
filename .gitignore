@@ -38,3 +38,6 @@ next-env.d.ts
 # claude code settings (contains sensitive tokens)
 .claude/settings.local.json
 .playwright-mcp/
+
+# scripts (migration and utility scripts, not needed in production)
+/scripts/
