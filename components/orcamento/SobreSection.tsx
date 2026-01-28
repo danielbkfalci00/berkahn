@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Home, Building2, Factory, Zap, Leaf, Gauge, Shield, Volume2, Maximize2, Target, Scale } from "lucide-react";
+import { Zap, Leaf, Gauge, Shield, Volume2, Maximize2, Target, Scale } from "lucide-react";
 import Image from "next/image";
 import { BENEFITS } from "@/lib/lsf-data";
 import { CountUp } from "@/components/animations/CountUp";
@@ -18,36 +18,82 @@ const iconMap: Record<string, React.ElementType> = {
   weight: Scale,
 };
 
-// Setores de atuação
+// Setores de atuação com imagens (mesmo da home)
 const SETORES = [
-  { icon: Home, label: "RESIDENCIAL" },
-  { icon: Building2, label: "CORPORATIVO / COMERCIAL" },
-  { icon: Factory, label: "INDUSTRIAL" },
+  {
+    label: "RESIDENCIAL",
+    description: "Projetos residenciais com qualidade técnica e acabamento de alto nível.",
+    image: "/images/Services/residencial.webp",
+  },
+  {
+    label: "CORPORATIVO / COMERCIAL",
+    description: "Ambientes corporativos com identidade e eficiência.",
+    image: "/images/Services/comercial.webp",
+  },
+  {
+    label: "INDUSTRIAL",
+    description: "Estruturas industriais para máxima eficiência e durabilidade.",
+    image: "/images/Services/industrial.webp",
+  },
 ];
 
 export function SobreSection() {
   return (
-    <section className="py-xl bg-gradient-to-b from-white via-white to-black/[0.02]">
-      <div className="container max-w-7xl">
-
-        {/* Decorative line */}
-        <div className="flex items-center justify-center gap-4 mb-6">
-          <div className="w-12 h-px bg-black/20" />
-          <div className="w-2 h-2 rotate-45 bg-black/20" />
-          <div className="w-12 h-px bg-black/20" />
+    <>
+      {/* Hero Header - Transição marcante */}
+      <section className="relative bg-black text-white py-20 lg:py-28 overflow-hidden">
+        {/* Background pattern */}
+        <div className="absolute inset-0 opacity-[0.03]">
+          <div className="absolute inset-0" style={{
+            backgroundImage: `repeating-linear-gradient(90deg, white 0px, white 1px, transparent 1px, transparent 60px),
+                              repeating-linear-gradient(0deg, white 0px, white 1px, transparent 1px, transparent 60px)`
+          }} />
         </div>
 
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-center mb-12"
-        >
-          <span className="inline-block text-xs uppercase tracking-[0.3em] text-black/40 mb-4">
-            Apresentação Construtora
-          </span>
-        </motion.div>
+        {/* Gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-br from-black via-black/95 to-black/90" />
+
+        <div className="container max-w-5xl relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="text-center"
+          >
+            {/* Section tag */}
+            <span className="inline-block text-[10px] uppercase tracking-[0.4em] text-white/40 mb-6">
+              01 — Apresentação Construtora
+            </span>
+
+            {/* Main title */}
+            <h1 className="font-heading text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight mb-4">
+              BERKAHN
+            </h1>
+
+            {/* Subtitle */}
+            <h2 className="font-heading text-xl sm:text-2xl lg:text-3xl font-light text-white/70 mb-6">
+              Mestres em construir
+            </h2>
+
+            {/* Tagline */}
+            <p className="text-sm text-white/50 uppercase tracking-[0.2em]">
+              Líderes em Light Steel Frame
+            </p>
+
+            {/* Decorative element */}
+            <div className="flex items-center justify-center gap-3 mt-10">
+              <div className="w-16 h-px bg-white/20" />
+              <div className="w-1.5 h-1.5 rotate-45 bg-white/30" />
+              <div className="w-16 h-px bg-white/20" />
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Content section */}
+      <section className="py-xl bg-gradient-to-b from-white via-white to-black/[0.02]">
+        <div className="container max-w-7xl">
 
         {/* Main Layout: 60% conteúdo | 40% foto */}
         <div className="grid lg:grid-cols-[1fr_40%] gap-8 lg:gap-12 items-start">
@@ -72,35 +118,48 @@ export function SobreSection() {
               </p>
             </motion.div>
 
-            {/* Setores de Atuação */}
+            {/* Setores de Atuação - Cards com imagens */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.1 }}
             >
-              <p className="text-sm text-black/60 mb-4 text-center lg:text-left">
+              <p className="text-sm text-black/60 mb-4 text-center lg:text-left uppercase tracking-widest">
                 Construímos para todos os setores
               </p>
               <div className="grid grid-cols-3 gap-3">
-                {SETORES.map((setor, index) => {
-                  const Icon = setor.icon;
-                  return (
-                    <motion.div
-                      key={setor.label}
-                      initial={{ opacity: 0, y: 20 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: 0.15 + index * 0.05 }}
-                      className="bg-black text-white rounded-xl p-4 lg:p-5 text-center"
-                    >
-                      <Icon className="w-6 h-6 mx-auto mb-2 text-white/70" strokeWidth={1.5} />
-                      <span className="text-[10px] lg:text-xs font-medium tracking-wider">
+                {SETORES.map((setor, index) => (
+                  <motion.div
+                    key={setor.label}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.15 + index * 0.05 }}
+                    className="group relative h-[180px] lg:h-[220px] rounded-xl overflow-hidden"
+                  >
+                    {/* Background Image */}
+                    <Image
+                      src={setor.image}
+                      alt={setor.label}
+                      fill
+                      className="object-cover transition-transform duration-700 group-hover:scale-105"
+                      sizes="(max-width: 768px) 33vw, 200px"
+                    />
+                    {/* Dark Overlay */}
+                    <div className="absolute inset-0 bg-black/50 transition-colors duration-300 group-hover:bg-black/40" />
+                    {/* Content */}
+                    <div className="absolute inset-0 flex flex-col items-center justify-center p-3 text-center text-white">
+                      <h4 className="text-[10px] lg:text-xs font-bold tracking-wider mb-1">
                         {setor.label}
-                      </span>
-                    </motion.div>
-                  );
-                })}
+                      </h4>
+                      <div className="w-6 h-px bg-white/40 mb-2" />
+                      <p className="text-[8px] lg:text-[10px] text-white/70 leading-tight hidden sm:block">
+                        {setor.description}
+                      </p>
+                    </div>
+                  </motion.div>
+                ))}
               </div>
             </motion.div>
 
@@ -171,7 +230,8 @@ export function SobreSection() {
           </div>
         </motion.div>
 
-      </div>
-    </section>
+        </div>
+      </section>
+    </>
   );
 }
