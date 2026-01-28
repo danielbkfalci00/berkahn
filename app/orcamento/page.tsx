@@ -85,12 +85,12 @@ export default function OrcamentoPage() {
       </section>
 
       {/* Subseção: Itens Não Inclusos (parte da seção 03) */}
-      <div className="bg-[#F4F2EC] pt-8">
+      <div className="bg-[#F4F2EC] pt-8 pb-0">
         <div className="container px-4 sm:px-6 lg:px-8">
           <SectionLabel number="03" title="Descrição Analítica dos Materiais" variant="light" subtitle="Itens Não Inclusos" />
         </div>
+        <NaoIncluiSubsection itensExclusos={PREMISSAS_TEMPLATE.itensExclusos} />
       </div>
-      <NaoIncluiSubsection itensExclusos={PREMISSAS_TEMPLATE.itensExclusos} />
 
       {/* Seção 7: Proposta de Investimento (CORE) - Pacotes */}
       <section id="investimento">
