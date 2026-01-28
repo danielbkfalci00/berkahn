@@ -21,6 +21,7 @@ export const ORCAMENTO_SECTIONS: OrcamentoSection[] = [
 interface UseOrcamentoNavigationReturn {
   activeId: string;
   activeIndex: number;
+  activeSection: OrcamentoSection;
   sections: OrcamentoSection[];
   scrollToSection: (id: string) => void;
 }
@@ -72,9 +73,12 @@ export function useOrcamentoNavigation(): UseOrcamentoNavigationReturn {
 
   const activeIndex = ORCAMENTO_SECTIONS.findIndex((s) => s.id === activeId);
 
+  const safeIndex = activeIndex >= 0 ? activeIndex : 0;
+
   return {
     activeId,
-    activeIndex: activeIndex >= 0 ? activeIndex : 0,
+    activeIndex: safeIndex,
+    activeSection: ORCAMENTO_SECTIONS[safeIndex],
     sections: ORCAMENTO_SECTIONS,
     scrollToSection,
   };

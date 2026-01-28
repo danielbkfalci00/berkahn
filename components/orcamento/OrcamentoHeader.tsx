@@ -1,76 +1,116 @@
 "use client";
 
-import Image from "next/image";
-import { PDFDownloadButton } from "./PDFDownloadButton";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { useOrcamentoNavigation } from "@/hooks/useOrcamentoNavigation";
 import type { OrcamentoProjeto } from "@/types/orcamento";
 
 interface OrcamentoHeaderProps {
   projeto: OrcamentoProjeto;
-  numeroOrcamento?: string;
-  pacoteSelecionadoId?: string;
 }
 
 /**
- * Header fixo/sticky para a página de orçamento
+ * OrcamentoHeader - Header com Indicador de Seção Dinâmico
  *
- * Layout de 3 colunas:
- * - Esquerda: Logo Berkahn
- * - Centro: Título do projeto (clicável - scroll to top)
- * - Direita: Botão "BAIXAR PDF"
- *
- * Sticky positioning com z-index 50 (abaixo de modais)
- * Background glassmorphism com backdrop blur
- * Responsivo com ajustes para mobile/tablet/desktop
+ * - Oculto na seção hero
+ * - Aparece após scroll com animação fade-in
+ * - Exibe nome da seção atual nos dois lados
+ * - Animação suave na troca de seção
  */
-export function OrcamentoHeader({
-  projeto,
-  numeroOrcamento = "BRK-2026-0042",
-  pacoteSelecionadoId = "material-acompanhamento-berkahn",
-}: OrcamentoHeaderProps) {
+export function OrcamentoHeader({ projeto }: OrcamentoHeaderProps) {
+  const { activeSection } = useOrcamentoNavigation();
+  const [isVisible, setIsVisible] = useState(false);
+
+  // Detectar quando passou o hero
+  useEffect(() => {
+    const handleScroll = () => {
+      const hero = document.getElementById("hero");
+      if (hero) {
+        const heroBottom = hero.getBoundingClientRect().bottom;
+        // Mostrar quando o hero estiver 80% fora da viewport
+        setIsVisible(heroBottom < window.innerHeight * 0.2);
+      }
+    };
+
+    // Verificar posição inicial
+    handleScroll();
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   return (
-    <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-black-10">
-      <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 sm:h-18 lg:h-20">
-          {/* Left: Logo Berkahn */}
-          <div className="flex-shrink-0">
-            <Image
-              src="/images/logo/berkahn-logo.webp"
-              alt="Berkahn Logo"
-              width={48}
-              height={48}
-              className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 object-contain"
-              quality={90}
-              priority
-            />
-          </div>
+    <AnimatePresence>
+      {isVisible && (
+        <motion.header
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -20 }}
+          transition={{ duration: 0.3, ease: "easeOut" }}
+          className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md border-b border-black/5"
+        >
+          <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex items-center justify-between h-14 sm:h-16">
+              {/* Left: Section indicator */}
+              <div className="flex-1 flex items-center justify-start">
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={activeSection.id}
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: 10 }}
+                    transition={{ duration: 0.2 }}
+                    className="flex items-center gap-2"
+                  >
+                    <span className="font-mono text-[10px] sm:text-xs text-black/40">
+                      {activeSection.number}
+                    </span>
+                    <span className="text-[10px] sm:text-xs uppercase tracking-[0.15em] text-black/60 font-medium">
+                      {activeSection.label}
+                    </span>
+                  </motion.div>
+                </AnimatePresence>
+              </div>
 
-          {/* Center: Clickable Title */}
-          <button
-            onClick={scrollToTop}
-            className="flex-1 text-center px-4 cursor-pointer group transition-opacity hover:opacity-70 focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2 rounded"
-            aria-label="Voltar para o topo do orçamento"
-          >
-            <h1 className="text-sm sm:text-base lg:text-lg font-semibold tracking-tight text-black truncate">
-              Berkahn & {projeto.titulo}
-            </h1>
-          </button>
+              {/* Center: Clickable Title */}
+              <button
+                onClick={scrollToTop}
+                className="flex-shrink-0 px-4 cursor-pointer group transition-opacity hover:opacity-70 focus:outline-none focus:ring-2 focus:ring-black/20 focus:ring-offset-2 rounded"
+                aria-label="Voltar para o topo do orçamento"
+              >
+                <h1 className="text-sm sm:text-base font-semibold tracking-tight text-black">
+                  Berkahn & {projeto.titulo}
+                </h1>
+              </button>
 
-          {/* Right: PDF Button */}
-          <div className="flex-shrink-0">
-            <PDFDownloadButton
-              pacoteSelecionadoId={pacoteSelecionadoId}
-              numeroOrcamento={numeroOrcamento}
-              variant="outline"
-              size="sm"
-              className="text-xs sm:text-sm"
-            />
+              {/* Right: Section indicator (mirror) */}
+              <div className="flex-1 flex items-center justify-end">
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={activeSection.id}
+                    initial={{ opacity: 0, x: 10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -10 }}
+                    transition={{ duration: 0.2 }}
+                    className="flex items-center gap-2"
+                  >
+                    <span className="text-[10px] sm:text-xs uppercase tracking-[0.15em] text-black/60 font-medium">
+                      {activeSection.label}
+                    </span>
+                    <span className="font-mono text-[10px] sm:text-xs text-black/40">
+                      {activeSection.number}
+                    </span>
+                  </motion.div>
+                </AnimatePresence>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-    </header>
+        </motion.header>
+      )}
+    </AnimatePresence>
   );
 }

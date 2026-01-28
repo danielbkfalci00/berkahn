@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { OrcamentoHeader } from "@/components/orcamento/OrcamentoHeader";
 import { OrcamentoHero } from "@/components/orcamento/OrcamentoHero";
-import { OrcamentoSideNav } from "@/components/orcamento/OrcamentoSideNav";
 // Seção Sobre - Storytelling com propósito
 import { SobreSection } from "@/components/orcamento/SobreSection";
 import { PacotesInvestimento } from "@/components/orcamento/PacotesInvestimento";
@@ -43,15 +42,8 @@ export default function OrcamentoPage() {
 
   return (
     <main className="relative">
-      {/* Navegação lateral fixa - Blueprint Style */}
-      <OrcamentoSideNav />
-
-      {/* Header Fixo */}
-      <OrcamentoHeader
-        projeto={PROJETO_TEMPLATE}
-        numeroOrcamento={numeroOrcamento}
-        pacoteSelecionadoId={pacoteSelecionadoId}
-      />
+      {/* Header com indicador de seção dinâmico */}
+      <OrcamentoHeader projeto={PROJETO_TEMPLATE} />
 
       {/* Seção 1: Hero/Capa Premium */}
       <section id="hero">
