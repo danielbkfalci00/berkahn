@@ -62,16 +62,14 @@ export function ProjetoChaleSubsection({ data, isNested }: ProjetoChaleSubsectio
           viewport={{ once: true }}
           className="mb-lg space-y-2"
         >
-          {/* Breadcrumb contextual - only when nested */}
-          {isNested && (
-            <p className="text-[10px] uppercase tracking-[0.3em] text-black/50 font-mono">
-              Premissas Adotadas → Projetos Considerados → Projeto Chalé
-            </p>
-          )}
+          {/* Breadcrumb contextual */}
+          <p className="text-[10px] uppercase tracking-[0.3em] text-black/50 font-mono">
+            Premissas Adotadas → Projetos Considerados
+          </p>
 
           {/* Título da subseção */}
           <h3 className="text-xl font-bold tracking-tight text-black uppercase">
-            PROJETO: {data.titulo}
+            {data.titulo}
           </h3>
         </motion.div>
 
