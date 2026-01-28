@@ -63,16 +63,18 @@ export default function OrcamentoPage() {
       </section>
 
       {/* Seção 2: Sobre a Berkahn - Storytelling com propósito */}
-      <SobreSection />
+      <section id="sobre">
+        <SobreSection />
+      </section>
 
-      {/* Seção 3: Infográficos LSF - Números que Falam */}
-      <InfograficoLSF />
-
-      {/* Seção 4: Diferenciais Steel Frame com Comparativo */}
-      <DiferenciaisLSF
-        comparativo={COMPARATIVO_ORCAMENTO}
-        beneficios={BENEFICIOS_LSF_STATS}
-      />
+      {/* Seção 3-4: Steel Frame - Infográficos + Diferenciais */}
+      <section id="lsf">
+        <InfograficoLSF />
+        <DiferenciaisLSF
+          comparativo={COMPARATIVO_ORCAMENTO}
+          beneficios={BENEFICIOS_LSF_STATS}
+        />
+      </section>
 
       {/* Transição Visual */}
       <div className="relative h-24 bg-white">

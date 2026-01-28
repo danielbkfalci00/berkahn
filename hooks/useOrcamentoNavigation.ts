@@ -9,12 +9,13 @@ export interface OrcamentoSection {
 }
 
 export const ORCAMENTO_SECTIONS: OrcamentoSection[] = [
-  { id: "hero", label: "INTRO", number: "01" },
-  { id: "premissas", label: "PREMISSAS", number: "02" },
-  { id: "investimento", label: "INVESTIMENTO", number: "03" },
-  { id: "pagamento", label: "PAGAMENTO", number: "04" },
-  { id: "plano", label: "PLANO", number: "05" },
-  { id: "contato", label: "CONTATO", number: "06" },
+  { id: "sobre", label: "SOBRE", number: "01" },
+  { id: "lsf", label: "STEEL FRAME", number: "02" },
+  { id: "premissas", label: "PROJETO", number: "03" },
+  { id: "investimento", label: "INVESTIMENTO", number: "04" },
+  { id: "pagamento", label: "PAGAMENTO", number: "05" },
+  { id: "plano", label: "GESTÃO", number: "06" },
+  { id: "contato", label: "CONTATO", number: "07" },
 ];
 
 interface UseOrcamentoNavigationReturn {
@@ -25,7 +26,7 @@ interface UseOrcamentoNavigationReturn {
 }
 
 export function useOrcamentoNavigation(): UseOrcamentoNavigationReturn {
-  const [activeId, setActiveId] = useState<string>("hero");
+  const [activeId, setActiveId] = useState<string>("sobre");
 
   useEffect(() => {
     const observers: IntersectionObserver[] = [];
