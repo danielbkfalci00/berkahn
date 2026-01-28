@@ -43,14 +43,11 @@ export function SobreSection() {
   return (
     <>
       {/* Hero Header - Transição marcante */}
-      <section className="relative bg-black text-white py-20 lg:py-28 overflow-hidden">
-        <OrcamentoWatermark variant="dark" logoPosition="center" />
-
-        {/* Gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-br from-black via-black/95 to-black/90 z-[1]" />
+      <section className="relative bg-white text-black py-20 lg:py-28 overflow-hidden">
+        <OrcamentoWatermark variant="light" logoPosition="center" />
 
         <div className="container max-w-5xl relative z-10">
-          <SectionLabel number="01" title="Apresentação Construtora" variant="dark" />
+          <SectionLabel number="01" title="Apresentação Construtora" variant="light" />
 
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -65,20 +62,20 @@ export function SobreSection() {
             </h1>
 
             {/* Subtitle */}
-            <h2 className="font-heading text-xl sm:text-2xl lg:text-3xl font-light text-white/70 mb-6">
+            <h2 className="font-heading text-xl sm:text-2xl lg:text-3xl font-light text-black/70 mb-6">
               Mestres em construir
             </h2>
 
             {/* Tagline */}
-            <p className="text-sm text-white/50 uppercase tracking-[0.2em]">
+            <p className="text-sm text-black/50 uppercase tracking-[0.2em]">
               Líderes em Light Steel Frame
             </p>
 
             {/* Decorative element */}
             <div className="flex items-center justify-center gap-3 mt-10">
-              <div className="w-16 h-px bg-white/20" />
-              <div className="w-1.5 h-1.5 rotate-45 bg-white/30" />
-              <div className="w-16 h-px bg-white/20" />
+              <div className="w-16 h-px bg-black/20" />
+              <div className="w-1.5 h-1.5 rotate-45 bg-black/30" />
+              <div className="w-16 h-px bg-black/20" />
             </div>
           </motion.div>
         </div>
