@@ -3,7 +3,6 @@
 import { useRef, useState } from "react";
 import Image from "next/image";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
-import { Badge } from "@/components/ui/badge";
 import { Check } from "lucide-react";
 import { formatarValor } from "@/lib/orcamento-data";
 import type { PacoteInvestimento } from "@/types/orcamento";
@@ -175,21 +174,21 @@ export function PacoteCard({
         <div className="flex-1 flex flex-col justify-end">
         </div>
 
-        {/* Differentials */}
-        {pacote.diferenciais && pacote.diferenciais.length > 0 && (
+        {/* Resumo com valores */}
+        {pacote.resumo && pacote.resumo.length > 0 && (
           <div className="mt-6 pt-5 border-t border-black/10">
             <p className="text-xs font-semibold text-black/40 uppercase tracking-wider mb-3">
-              Diferenciais
+              Resumo
             </p>
-            <div className="flex flex-wrap gap-2">
-              {pacote.diferenciais.map((diff, i) => (
-                <Badge
+            <div className="space-y-2">
+              {pacote.resumo.map((item, i) => (
+                <div
                   key={i}
-                  variant="outline"
-                  className="text-xs py-1 px-3 transition-colors duration-300 border-black/10 text-black/60 bg-black/[0.02] hover:bg-black/[0.05]"
+                  className="flex justify-between items-center text-sm"
                 >
-                  {diff}
-                </Badge>
+                  <span className="text-black/70">{item.nome}</span>
+                  <span className="font-mono text-black/60">{formatarValor(item.valor)}</span>
+                </div>
               ))}
             </div>
           </div>

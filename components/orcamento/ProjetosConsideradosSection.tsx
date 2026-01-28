@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { ProjetoChaleSubsection } from "./ProjetoChaleSubsection";
 import { PlantasElevacoesSubsection } from "./PlantasElevacoesSubsection";
 import { MaterialsTableSubsection } from "./MaterialsTableSubsection";
-import { CHALE_PROJETO, MATERIAIS_ANALITICOS } from "@/lib/orcamento-data";
+import { CHALE_PROJETO, MATERIAIS_DETALHADOS } from "@/lib/orcamento-data";
 
 /**
  * Seção hierárquica: Projetos Considerados na Proposta
@@ -74,7 +74,7 @@ export function ProjetosConsideradosSection() {
       {/* 3 subseções filhas */}
       <ProjetoChaleSubsection data={CHALE_PROJETO} isNested={true} />
       <PlantasElevacoesSubsection data={CHALE_PROJETO} isNested={true} />
-      <MaterialsTableSubsection data={MATERIAIS_ANALITICOS} isNested={true} />
+      <MaterialsTableSubsection data={MATERIAIS_DETALHADOS} isNested={true} />
     </>
   );
 }

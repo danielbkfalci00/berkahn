@@ -70,75 +70,69 @@ export function OrcamentoHero({
         style={{ opacity: contentOpacity, y: contentY }}
         className="relative z-10 text-center max-w-5xl mx-auto px-6"
       >
-        {/* Label with glassmorphism */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2, duration: 0.6, ease: [0.19, 1, 0.22, 1] }}
-          className="inline-flex items-center gap-2 mb-8"
-        >
-          <span className="bg-white/10 backdrop-blur-md border border-white/20 rounded-full px-5 py-2 text-xs uppercase tracking-[0.3em] text-white/80">
-            {projeto.localizacao}
-          </span>
-        </motion.div>
-
         {/* Project Title - DESTAQUE PRINCIPAL */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5 }}
         >
-          <h1 className="font-heading text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-white mb-4 hero-text-shadow-strong">
-            <CharReveal text={projeto.titulo} delay={0.3} />
+          <h1 className="font-heading text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-white mb-6 hero-text-shadow-strong">
+            <CharReveal text={`Projeto ${projeto.titulo}`} delay={0.3} />
           </h1>
         </motion.div>
 
-        {/* Project Details Badge - Metragem */}
+        {/* Project Info - Local e Cliente */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6, duration: 0.8, ease: [0.19, 1, 0.22, 1] }}
-          className="flex items-center justify-center mb-8"
+          transition={{ delay: 0.5, duration: 0.6, ease: [0.19, 1, 0.22, 1] }}
+          className="flex flex-col items-center gap-2 mb-6"
         >
-          <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/10 rounded-full px-4 py-2">
-            <Ruler className="w-4 h-4 text-white/60" />
-            <span className="text-sm text-white/80">{projeto.metragem}m²</span>
-          </div>
+          <p className="text-lg sm:text-xl text-white/90">
+            <span className="text-white/60">Local:</span> {projeto.localizacao}
+          </p>
+          {projeto.cliente && (
+            <p className="text-lg sm:text-xl text-white/90">
+              <span className="text-white/60">Cliente:</span> {projeto.cliente}
+            </p>
+          )}
         </motion.div>
 
-        {/* Berkahn - Secondary Branding */}
+        {/* Revisão */}
         <motion.div
-          initial={{ opacity: 0, y: 10 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.8, duration: 0.8, ease: [0.19, 1, 0.22, 1] }}
-          className="flex items-center justify-center gap-3 mb-8"
+          transition={{ delay: 0.7, duration: 0.6, ease: [0.19, 1, 0.22, 1] }}
+          className="mb-8"
         >
-          <div className="h-px w-12 bg-white/30" />
-          <p className="text-lg lg:text-xl font-heading tracking-[0.3em] text-white/80">
-            BERKAHN
-          </p>
-          <div className="h-px w-12 bg-white/30" />
+          <span className="text-base sm:text-lg text-white/80">Revisão 01</span>
         </motion.div>
 
         {/* Decorative Line with animation */}
         <motion.div
           initial={{ scaleX: 0 }}
           animate={{ scaleX: 1 }}
-          transition={{ delay: 0.8, duration: 1, ease: [0.19, 1, 0.22, 1] }}
-          className="w-24 h-px bg-gradient-to-r from-transparent via-white/50 to-transparent mx-auto mb-6"
+          transition={{ delay: 0.9, duration: 1, ease: [0.19, 1, 0.22, 1] }}
+          className="w-24 h-px bg-gradient-to-r from-transparent via-white/50 to-transparent mx-auto mb-8"
         />
 
-        {/* Orçamento Info with glassmorphism card */}
+        {/* Berkahn Logo */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.2, duration: 0.8 }}
-          className="inline-flex items-center gap-4 bg-black/30 backdrop-blur-md border border-white/10 rounded-xl px-6 py-4"
+          transition={{ delay: 1.1, duration: 0.8, ease: [0.19, 1, 0.22, 1] }}
+          className="flex flex-col items-center gap-2"
         >
-          <div className="flex items-center gap-2 text-white/60">
-            <span className="text-xs uppercase tracking-wider">Revisão</span>
-            <span className="text-sm font-medium text-white">01</span>
-          </div>
+          <Image
+            src="/images/logo/berkahn-logo.webp"
+            alt="Berkahn Construtora"
+            width={180}
+            height={60}
+            className="brightness-0 invert opacity-80"
+          />
+          <span className="text-xs uppercase tracking-[0.2em] text-white/60">
+            Construtora
+          </span>
         </motion.div>
 
       </motion.div>

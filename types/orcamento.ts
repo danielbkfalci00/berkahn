@@ -77,6 +77,7 @@ export interface OrcamentoProjeto {
   titulo: string; // Ex: "Residencia Familia Silva"
   tipo: "residencial" | "comercial" | "industrial";
   subtipo?: string; // Ex: "casa", "sobrado", "galpao"
+  cliente?: string; // Nome do cliente
   localizacao?: string;
   metragem: number; // m2
   terreno?: {
@@ -112,6 +113,11 @@ export interface ItemIncluso {
   incluso: boolean;
 }
 
+export interface ResumoItem {
+  nome: string;
+  valor: number;
+}
+
 export interface PacoteInvestimento {
   id: PacoteId;
   nome: string;
@@ -122,6 +128,7 @@ export interface PacoteInvestimento {
   itens: string[]; // Lista simplificada
   itensDetalhados?: ItemIncluso[]; // Lista detalhada
   diferenciais?: string[]; // O que adiciona vs pacote anterior
+  resumo?: ResumoItem[]; // Resumo com valores
   cronograma: string; // Ex: "120 dias"
   garantia: string; // Ex: "10 anos estrutura"
   // Novos campos premium
@@ -301,6 +308,15 @@ export interface MaterialAnalise {
   letra: string;
   categoria: string;
   especificacao: string;
+}
+
+// Nova estrutura hierárquica para materiais detalhados
+export interface MaterialItemDetalhado {
+  item: string; // "1", "1.1", "2", "2.1", etc.
+  descricao: string;
+  unidade?: string; // "un", "m2", etc. (vazio para categorias principais)
+  quantidade?: string; // "1,00", "101,00", "Incluso", etc.
+  isCategoria?: boolean; // true para itens principais (1, 2, 3, 4)
 }
 
 // ============================================

@@ -1,19 +1,18 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { SectionMarker } from "./SectionMarker";
-import type { MaterialAnalise } from "@/types/orcamento";
+import type { MaterialItemDetalhado } from "@/types/orcamento";
 
 interface MaterialsTableSubsectionProps {
-  data: MaterialAnalise[];
+  data: MaterialItemDetalhado[];
   isNested?: boolean; // Quando true, renderiza dentro de ProjetosConsideradosSection
 }
 
 /**
  * Subsecção: Descrição Analítica de Materiais
- * Layout: Tabela limpa com linhas separadoras sutis
+ * Layout: Tabela hierárquica com categorias e subitens
  * Background: Off-White #F4F2EC
- * Apresentação: Marcadores circulares (A-E) com especificações detalhadas
+ * Apresentação: Estrutura numerada (1, 1.1, 2, 2.1, etc.) com quantidades
  */
 export function MaterialsTableSubsection({ data, isNested }: MaterialsTableSubsectionProps) {
   const containerVariants = {
@@ -21,7 +20,7 @@ export function MaterialsTableSubsection({ data, isNested }: MaterialsTableSubse
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.1,
+        staggerChildren: 0.05,
         delayChildren: 0.1,
       },
     },
@@ -61,6 +60,9 @@ export function MaterialsTableSubsection({ data, isNested }: MaterialsTableSubse
           <h3 className="text-xl font-bold tracking-tight text-black uppercase">
             DESCRIÇÃO ANALÍTICA DE MATERIAIS
           </h3>
+          <p className="text-sm text-black/60">
+            Especificações técnicas dos materiais que serão utilizados na construção.
+          </p>
         </motion.div>
 
         {/* Table */}
@@ -69,45 +71,81 @@ export function MaterialsTableSubsection({ data, isNested }: MaterialsTableSubse
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          className="overflow-hidden"
+          className="overflow-hidden bg-white rounded-lg shadow-sm"
         >
-          <table className="w-full">
-            <tbody>
-              {data.map((item, index) => (
-                <motion.tr
-                  key={item.letra}
-                  variants={rowVariants}
-                  className={`group transition-colors duration-300 ${
-                    index % 2 === 0 ? "bg-transparent hover:bg-white-50" : "bg-white-30 hover:bg-white-50"
-                  }`}
-                >
-                  {/* Letter marker circle */}
-                  <td className="w-16 px-4 py-6 align-top">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-black bg-white font-mono text-sm font-bold text-black flex-shrink-0">
-                      {item.letra}
-                    </div>
-                  </td>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="bg-black text-white">
+                  <th className="px-4 py-3 text-left w-20 font-semibold tracking-wide text-xs">
+                    ITEM
+                  </th>
+                  <th className="px-4 py-3 text-left font-semibold tracking-wide text-xs">
+                    DESCRIÇÃO
+                  </th>
+                  <th className="px-4 py-3 text-center w-20 font-semibold tracking-wide text-xs">
+                    UNID.
+                  </th>
+                  <th className="px-4 py-3 text-right w-24 font-semibold tracking-wide text-xs">
+                    QNTD.
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {data.map((item, index) => (
+                  <motion.tr
+                    key={item.item}
+                    variants={rowVariants}
+                    className={`
+                      border-b border-black/5 transition-colors
+                      ${item.isCategoria
+                        ? "bg-black/[0.03]"
+                        : index % 2 === 0
+                          ? "bg-white hover:bg-black/[0.02]"
+                          : "bg-black/[0.01] hover:bg-black/[0.03]"
+                      }
+                    `}
+                  >
+                    {/* Coluna ITEM */}
+                    <td className={`px-4 py-3 ${item.isCategoria ? "font-bold" : ""}`}>
+                      {item.isCategoria ? (
+                        <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-black text-white text-xs font-bold">
+                          {item.item.replace(".", "")}
+                        </span>
+                      ) : (
+                        <span className="text-black/60 pl-2 font-mono text-xs">
+                          {item.item}
+                        </span>
+                      )}
+                    </td>
 
-                  {/* Category column */}
-                  <td className="px-4 py-6 align-top">
-                    <h3 className="font-semibold text-base uppercase tracking-tight text-black">
-                      {item.categoria}
-                    </h3>
-                  </td>
+                    {/* Coluna DESCRIÇÃO */}
+                    <td className={`px-4 py-3 ${
+                      item.isCategoria
+                        ? "font-bold text-black"
+                        : "text-black/80 pl-6"
+                    }`}>
+                      {item.descricao}
+                    </td>
 
-                  {/* Specification column */}
-                  <td className="px-4 py-6 align-top">
-                    <p className="text-sm leading-relaxed text-black-70">
-                      {item.especificacao}
-                    </p>
-                  </td>
-                </motion.tr>
-              ))}
-            </tbody>
-          </table>
+                    {/* Coluna UNIDADE */}
+                    <td className="px-4 py-3 text-center text-black/50 font-mono text-xs">
+                      {item.unidade || "—"}
+                    </td>
 
-          {/* Subtle bottom border */}
-          <div className="h-px bg-black-10 mt-sm" />
+                    {/* Coluna QUANTIDADE */}
+                    <td className={`px-4 py-3 text-right font-mono text-sm ${
+                      item.quantidade === "Incluso"
+                        ? "text-emerald-600 font-medium"
+                        : "text-black/70"
+                    }`}>
+                      {item.quantidade || "—"}
+                    </td>
+                  </motion.tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </motion.div>
 
         {/* Footer note */}
@@ -116,7 +154,7 @@ export function MaterialsTableSubsection({ data, isNested }: MaterialsTableSubse
           whileInView={{ opacity: 1 }}
           transition={{ delay: 0.6 }}
           viewport={{ once: true }}
-          className="mt-lg text-xs uppercase tracking-widest text-black-70 font-mono"
+          className="mt-lg text-xs uppercase tracking-widest text-black/50 font-mono"
         >
           Especificações sujeitas a alterações conforme projeto executivo
         </motion.p>

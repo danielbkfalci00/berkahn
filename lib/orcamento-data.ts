@@ -22,6 +22,7 @@ import type {
   ChaleProjeto,
   MetodologiaConstrutivaPremissas,
   MaterialAnalise,
+  MaterialItemDetalhado,
   // Company Story - Storytelling Humanizado
   CompanyStory,
 } from "@/types/orcamento";
@@ -38,6 +39,7 @@ export const PROJETO_TEMPLATE: OrcamentoProjeto = {
   titulo: "Chalé Johny",
   tipo: "residencial",
   subtipo: "chale",
+  cliente: "Johny",
   metragem: 44,
   localizacao: "São Roque - SP",
   imagemRender: "/images/orcamento/hero-chale-retangulo.webp",
@@ -155,8 +157,8 @@ export const PACOTES_TEMPLATE: PacoteInvestimento[] = [
     destaque: false,
     descricao:
       "Fornecimento completo de materiais certificados para construção em Steel Frame",
-    valorM2: 2200,
-    valorTotal: 94807.55,
+    valorM2: 2062,
+    valorTotal: 90724.93,
     itens: [
       "Perfis Steel Frame certificados ABNT NBR 15253",
       "Placas Aquapanel (cimentícia) para vedação externa",
@@ -167,13 +169,12 @@ export const PACOTES_TEMPLATE: PacoteInvestimento[] = [
       "Parafusos e fixações especializadas (autoperfurantes)",
       "Fitas para juntas e acabamentos",
       "Manual de montagem digital em PDF",
-      "Suporte técnico remoto via WhatsApp",
     ],
-    diferenciais: [
-      "Fornecimento completo certificado ABNT",
-      "Materiais de alta qualidade",
-      "Manuais digitais inclusos",
-      "Suporte técnico remoto",
+    resumo: [
+      { nome: "Estrutura", valor: 41618.50 },
+      { nome: "Revestimento Externo Paredes e Forro Externo", valor: 28083.92 },
+      { nome: "Revestimento Interno Paredes e Forro Interno", valor: 9649.01 },
+      { nome: "Cobertura", valor: 11373.50 },
     ],
     cronograma: "Entrega em 30 dias úteis",
     garantia: "5 anos materiais certificados",
@@ -181,15 +182,15 @@ export const PACOTES_TEMPLATE: PacoteInvestimento[] = [
     progressoCompletude: 30,
   },
 
-  // PROPOSTA 2: Material + Treinamento + 3 Dias Suporte (Intermediária)
+  // PROPOSTA 2: Material + Treinamento (Intermediária)
   {
     id: "material-treinamento-suporte",
-    nome: "Material + Treinamento + Suporte",
+    nome: "Material + Treinamento",
     destaque: false,
     descricao:
-      "Material completo + treinamento técnico presencial + 3 dias de acompanhamento técnico no início da obra",
-    valorM2: 2900,
-    valorTotal: 96009.30,
+      "Material completo + treinamento técnico presencial para capacitação da equipe de obra",
+    valorM2: 2088,
+    valorTotal: 91874.93,
     itens: [
       "Perfis Steel Frame certificados ABNT NBR 15253",
       "Placas Aquapanel (cimentícia) para vedação externa",
@@ -200,32 +201,31 @@ export const PACOTES_TEMPLATE: PacoteInvestimento[] = [
       "Parafusos e fixações especializadas (autoperfurantes)",
       "Fitas para juntas e acabamentos",
       "Treinamento técnico presencial de 2 dias (até 6 pessoas)",
-      "3 dias de acompanhamento técnico no início da obra",
       "Manual de montagem digital completo",
       "Certificado de conclusão do treinamento",
-      "Suporte remoto via WhatsApp durante 3 meses",
     ],
-    diferenciais: [
-      "Treinamento presencial 2 dias",
-      "3 dias acompanhamento inicial",
-      "Certificação de equipe",
-      "Suporte remoto 3 meses",
+    resumo: [
+      { nome: "Estrutura", valor: 41618.50 },
+      { nome: "Revestimento Externo Paredes e Forro Externo", valor: 28083.92 },
+      { nome: "Revestimento Interno Paredes e Forro Interno", valor: 9649.01 },
+      { nome: "Cobertura", valor: 11373.50 },
+      { nome: "Mão de Obra", valor: 1150.00 },
     ],
-    cronograma: "Entrega 30 dias + 2 dias treinamento + 3 dias suporte inicial",
+    cronograma: "Entrega 30 dias + 2 dias treinamento",
     garantia: "5 anos materiais + suporte técnico",
     imagemRepresentativa: "/images/orcamento/chale-prototipo-2.webp",
     progressoCompletude: 70,
   },
 
-  // PROPOSTA 3: Material + Acompanhamento Berkahn (MAIS POPULAR)
+  // PROPOSTA 3: Material + Treinamento + Acompanhamento Berkahn (MAIS POPULAR)
   {
     id: "material-acompanhamento-berkahn",
-    nome: "Material + Acompanhamento Berkahn",
+    nome: "Material + Treinamento + Acompanhamento Berkahn",
     destaque: true, // ⭐ MAIS POPULAR
     descricao:
       "Solução completa: material certificado + acompanhamento técnico Berkahn durante toda obra + treinamento personalizado pela equipe Berkahn",
-    valorM2: 3500,
-    valorTotal: 98412.80,
+    valorM2: 2140,
+    valorTotal: 94174.93,
     itens: [
       "Perfis Steel Frame certificados ABNT NBR 15253",
       "Placas Aquapanel (cimentícia) para vedação externa",
@@ -245,13 +245,12 @@ export const PACOTES_TEMPLATE: PacoteInvestimento[] = [
       "Suporte remoto ilimitado por 12 meses",
       "Certificado Berkahn de conclusão",
     ],
-    diferenciais: [
-      "Acompanhamento Berkahn completo",
-      "Engenheiro responsável dedicado",
-      "Visitas técnicas semanais",
-      "Treinamento personalizado 3 dias",
-      "Relatórios técnicos detalhados",
-      "Suporte ilimitado 12 meses",
+    resumo: [
+      { nome: "Estrutura", valor: 41618.50 },
+      { nome: "Revestimento Externo Paredes e Forro Externo", valor: 28083.92 },
+      { nome: "Revestimento Interno Paredes e Forro Interno", valor: 9649.01 },
+      { nome: "Cobertura", valor: 11373.50 },
+      { nome: "Mão de Obra", valor: 3450.00 },
     ],
     cronograma: "Entrega 30 dias + acompanhamento completo durante execução",
     garantia: "10 anos estrutura + 2 anos acompanhamento técnico",
@@ -627,8 +626,8 @@ export const CHALE_PROJETO: ChaleProjeto = {
       "/images/orcamento/chale-prototipo-4.webp",
     ],
     plantasBaixas: [
-      { src: "/images/orcamento/chale-planta-01.webp", label: "PLANTA BAIXA 01" },
-      { src: "/images/orcamento/chale-planta-02.webp", label: "PLANTA BAIXA 02" },
+      { src: "/images/orcamento/chale-planta-01.webp", label: "PLANTA BAIXA TÉRREO" },
+      { src: "/images/orcamento/chale-planta-cobertura.png", label: "PLANTA BAIXA COBERTURA" },
     ],
     elevacoes: [
       {
@@ -704,6 +703,80 @@ export const MATERIAIS_ANALITICOS: MaterialAnalise[] = [
     letra: "E",
     categoria: "Fechamento de forro",
     especificacao: "Forro em gesso acartonado com tratamento acústico conforme projeto",
+  },
+];
+
+// Nova estrutura detalhada com hierarquia (conforme planilha)
+export const MATERIAIS_DETALHADOS: MaterialItemDetalhado[] = [
+  // 1. Estrutura
+  {
+    item: "1.",
+    descricao: "Estrutura",
+    isCategoria: true,
+  },
+  {
+    item: "1.1",
+    descricao: "Estrutura em LSF 90mm - Aço galvanizado ZAR400 Z350",
+    unidade: "un",
+    quantidade: "1,00",
+  },
+  // 2. Revestimento Externo
+  {
+    item: "2.",
+    descricao: "Revestimento Externo Paredes e Forro Externo",
+    isCategoria: true,
+  },
+  {
+    item: "2.1",
+    descricao: "Aquapanel Residential 8mm",
+    unidade: "m²",
+    quantidade: "101,00",
+  },
+  {
+    item: "2.2",
+    descricao: "Barreira de Água AQUAPANEL",
+    quantidade: "Incluso",
+  },
+  // 3. Revestimento Interno
+  {
+    item: "3.",
+    descricao: "Revestimento Interno Paredes e Forro Interno",
+    isCategoria: true,
+  },
+  {
+    item: "3.1",
+    descricao: "Chapa de Gesso Hardboard Knauf (1200 x 1800) Esp. 12,5mm",
+    unidade: "m²",
+    quantidade: "115,00",
+  },
+  {
+    item: "3.2",
+    descricao: "Chapa de Gesso RU 1200 1800 12,55mm",
+    unidade: "m²",
+    quantidade: "60,00",
+  },
+  {
+    item: "3.3",
+    descricao: "Lã de rocha",
+    quantidade: "Incluso",
+  },
+  {
+    item: "3.4",
+    descricao: "Forro Leve KNAUF",
+    unidade: "m²",
+    quantidade: "70,00",
+  },
+  // 4. Cobertura
+  {
+    item: "4.",
+    descricao: "Cobertura",
+    isCategoria: true,
+  },
+  {
+    item: "4.1",
+    descricao: "Telha Sanduíche Trapezoidal Kingspan/Perfilor TP40",
+    unidade: "m²",
+    quantidade: "70,00",
   },
 ];
 
