@@ -14,7 +14,7 @@ export function MateriaisSection() {
   return (
     <section className="relative py-xl bg-[#F4F2EC]">
       <OrcamentoWatermark variant="light" logoPosition="top-right" />
-      <div className="container max-w-5xl relative z-10">
+      <div className="container px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
