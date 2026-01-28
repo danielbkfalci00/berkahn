@@ -39,7 +39,7 @@ export const PROJETO_TEMPLATE: OrcamentoProjeto = {
   tipo: "residencial",
   subtipo: "chale",
   metragem: 44,
-  localizacao: "Grande São Roque - SP",
+  localizacao: "São Roque - SP",
   imagemRender: "/images/orcamento/hero-chale-retangulo.webp",
 
   // Projeto Preliminar com metragens

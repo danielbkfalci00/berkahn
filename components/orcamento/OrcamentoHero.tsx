@@ -4,7 +4,7 @@ import { useRef } from "react";
 import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { CharReveal } from "@/components/animations/TextReveal";
-import { Calendar, Ruler } from "lucide-react";
+import { Ruler } from "lucide-react";
 import type { OrcamentoProjeto } from "@/types/orcamento";
 
 interface OrcamentoHeroProps {
@@ -133,17 +133,11 @@ export function OrcamentoHero({
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.2, duration: 0.8 }}
-          className="inline-flex flex-col sm:flex-row items-center gap-4 bg-black/30 backdrop-blur-md border border-white/10 rounded-xl px-6 py-4"
+          className="inline-flex items-center gap-4 bg-black/30 backdrop-blur-md border border-white/10 rounded-xl px-6 py-4"
         >
           <div className="flex items-center gap-2 text-white/60">
             <span className="text-xs uppercase tracking-wider">Revisão</span>
             <span className="text-sm font-medium text-white">01</span>
-          </div>
-          <div className="hidden sm:block w-px h-4 bg-white/20" />
-          <div className="flex items-center gap-2 text-white/60">
-            <Calendar className="w-4 h-4" />
-            <span className="text-xs uppercase tracking-wider">Valido ate</span>
-            <span className="text-sm font-medium text-white">{validoAte}</span>
           </div>
         </motion.div>
 
