@@ -132,9 +132,9 @@ export function OrcamentoHero({
           <Image
             src="/images/logo-berkahn-construtora.png"
             alt="Berkahn Construtora de Alto Padrão"
-            width={220}
-            height={80}
-            className="brightness-0 invert opacity-90"
+            width={400}
+            height={150}
+            className="brightness-0 invert opacity-90 w-[280px] sm:w-[340px] md:w-[400px] h-auto"
           />
         </motion.div>
 
