@@ -165,10 +165,7 @@ export function PacoteCard({
 
         {/* Resumo com valores */}
         {pacote.resumo && pacote.resumo.length > 0 && (
-          <div className="mt-6 pt-5 border-t border-black/10">
-            <p className="text-xs font-semibold text-black/40 uppercase tracking-wider mb-3">
-              Resumo
-            </p>
+          <div className="mt-6">
             <div className="space-y-2">
               {pacote.resumo.map((item, i) => (
                 <div
