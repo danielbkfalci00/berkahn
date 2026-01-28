@@ -298,6 +298,7 @@ export const PREMISSAS_TEMPLATE: PremissasProposta = {
     "Esquadrias (portas e janelas)",
     "Pintura final",
     "Fundação (radier ou sapata)",
+    "Deck externo",
   ],
   observacoes: [
     "Valores sujeitos a análise técnica do terreno",

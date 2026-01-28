@@ -3,7 +3,8 @@
 import { motion } from "framer-motion";
 import { MetodologiaSubsection } from "./MetodologiaSubsection";
 import { ProjetosConsideradosSection } from "./ProjetosConsideradosSection";
-import { METODOLOGIA_LSF } from "@/lib/orcamento-data";
+import { NaoIncluiSubsection } from "./NaoIncluiSubsection";
+import { METODOLOGIA_LSF, PREMISSAS_TEMPLATE } from "@/lib/orcamento-data";
 
 /**
  * Seção Premissas Adotadas para Orçamento (UNIFICADA)
@@ -82,6 +83,9 @@ export function PremissasUnificadasSection() {
 
       {/* Seção 2: Projetos Considerados na Proposta (Letter E hierarchy) */}
       <ProjetosConsideradosSection />
+
+      {/* Seção 3: Itens Não Inclusos */}
+      <NaoIncluiSubsection itensExclusos={PREMISSAS_TEMPLATE.itensExclusos} />
     </section>
   );
 }
