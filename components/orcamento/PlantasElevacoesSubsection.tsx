@@ -48,7 +48,7 @@ export function PlantasElevacoesSubsection({ data, isNested }: PlantasElevacoesS
           {/* Breadcrumb contextual - only when nested, colors inverted for black background */}
           {isNested && (
             <p className="text-[10px] uppercase tracking-[0.3em] text-white/50 font-mono">
-              Premissas Adotadas → Projetos Considerados → Plantas & Elevações
+              Premissas Adotadas
             </p>
           )}
 

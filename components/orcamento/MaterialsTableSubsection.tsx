@@ -52,7 +52,7 @@ export function MaterialsTableSubsection({ data, isNested }: MaterialsTableSubse
           {/* Breadcrumb contextual - only when nested */}
           {isNested && (
             <p className="text-[10px] uppercase tracking-[0.3em] text-black/50 font-mono">
-              Premissas Adotadas → Projetos Considerados → Descrição Analítica
+              Premissas Adotadas
             </p>
           )}
 

@@ -64,7 +64,7 @@ export function ProjetoChaleSubsection({ data, isNested }: ProjetoChaleSubsectio
         >
           {/* Breadcrumb contextual */}
           <p className="text-[10px] uppercase tracking-[0.3em] text-black/50 font-mono">
-            Premissas Adotadas → Projetos Considerados
+            Premissas Adotadas
           </p>
 
           {/* Título da subseção */}
