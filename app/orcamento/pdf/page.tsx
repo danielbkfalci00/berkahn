@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { OrcamentoHero } from "@/components/orcamento/OrcamentoHero";
+import { IndiceSectionPDF } from "@/components/orcamento/pdf/IndiceSectionPDF";
 import { SobreSectionPDF } from "@/components/orcamento/pdf/SobreSectionPDF";
 import { MetodologiaPDF } from "@/components/orcamento/pdf/MetodologiaPDF";
 import { ProjetoPrototipoPDF } from "@/components/orcamento/pdf/ProjetoPrototipoPDF";
@@ -48,7 +49,12 @@ export default function OrcamentoPDFPage() {
         />
       </section>
 
-      {/* Slide 2: Sobre a Berkahn */}
+      {/* Slide 2: Índice */}
+      <section className="min-h-screen flex items-center">
+        <IndiceSectionPDF />
+      </section>
+
+      {/* Slide 3: Sobre a Berkahn */}
       <section className="min-h-screen flex items-center">
         <SobreSectionPDF />
       </section>

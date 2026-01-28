@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { OrcamentoHeader } from "@/components/orcamento/OrcamentoHeader";
 import { OrcamentoHero } from "@/components/orcamento/OrcamentoHero";
+// Seção Índice
+import { IndiceSection } from "@/components/orcamento/IndiceSection";
 // Seção Sobre - Storytelling com propósito
 import { SobreSection } from "@/components/orcamento/SobreSection";
 import { PacotesInvestimento } from "@/components/orcamento/PacotesInvestimento";
@@ -54,7 +56,10 @@ export default function OrcamentoPage() {
         />
       </section>
 
-      {/* Seção 2: Sobre a Berkahn - Storytelling com propósito */}
+      {/* Seção 2: Índice */}
+      <IndiceSection />
+
+      {/* Seção 3: Sobre a Berkahn - Storytelling com propósito */}
       <section id="sobre">
         <SobreSection />
       </section>
