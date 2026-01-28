@@ -33,9 +33,9 @@ export function PacotesInvestimento({
       <OrcamentoWatermark variant="light" logoPosition="center" />
       <div className="container max-w-7xl relative z-10">
         {/* Section Header */}
+        <SectionLabel number="04" title="Planilha Orçamentária" variant="light" />
         <RevealOnScroll>
           <div className="text-center mb-16">
-            <SectionLabel number="04" title="Planilha Orçamentária" variant="light" />
             <h2 className="headline-md text-black mb-4">
               Opções de Investimento
             </h2>

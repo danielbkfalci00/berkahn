@@ -50,6 +50,8 @@ export function SobreSection() {
         <div className="absolute inset-0 bg-gradient-to-br from-black via-black/95 to-black/90 z-[1]" />
 
         <div className="container max-w-5xl relative z-10">
+          <SectionLabel number="01" title="Apresentação Construtora" variant="dark" />
+
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -57,9 +59,6 @@ export function SobreSection() {
             transition={{ duration: 0.8 }}
             className="text-center"
           >
-            {/* Section tag */}
-            <SectionLabel number="01" title="Apresentação Construtora" variant="dark" />
-
             {/* Main title */}
             <h1 className="font-heading text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight mb-4">
               BERKAHN

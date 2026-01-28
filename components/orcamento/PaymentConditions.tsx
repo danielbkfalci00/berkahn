@@ -27,6 +27,7 @@ export function PaymentConditions({
     <section className="relative py-xl bg-gradient-to-b from-white to-black/[0.02]">
       <OrcamentoWatermark variant="light" logoPosition="top-right" />
       <div className="container max-w-5xl relative z-10">
+        <SectionLabel number="06" title="Pagamento" variant="light" />
         <RevealOnScroll>
           <div className="text-center mb-12">
             {/* Decoração superior */}
@@ -36,7 +37,6 @@ export function PaymentConditions({
               <div className="w-12 h-px bg-black/20" />
             </div>
 
-            <SectionLabel number="06" title="Pagamento" variant="light" />
             <h2 className="headline-md text-black mb-4">
               Condições de Pagamento
             </h2>

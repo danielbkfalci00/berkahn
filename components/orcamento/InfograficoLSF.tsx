@@ -235,9 +235,9 @@ export function InfograficoLSF() {
       <OrcamentoWatermark variant="dark" logoPosition="center" />
       <div className="container max-w-7xl relative z-10">
         {/* Section Header */}
+        <SectionLabel number="01" title="Apresentação Construtora" variant="dark" subtitle="Eficiência Comprovada" />
         <RevealOnScroll>
           <div className="text-center mb-16">
-            <SectionLabel number="01" title="Apresentação Construtora" variant="dark" subtitle="Eficiência Comprovada" />
             <h2 className="headline-md text-white mb-4">
               Economia de recursos e precisão que fazem a diferença
             </h2>

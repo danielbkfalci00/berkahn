@@ -61,9 +61,9 @@ export function PlanoGerenciamentoSection({
     <section className="relative py-20 lg:py-32 bg-white overflow-hidden">
       <OrcamentoWatermark variant="light" logoPosition="top-right" />
       <div className="container max-w-6xl relative z-10">
+        <SectionLabel number="05" title="Plano de Gerenciamento Berkahn" variant="light" />
         <RevealOnScroll>
           <div className="text-center mb-16">
-            <SectionLabel number="05" title="Plano de Gerenciamento Berkahn" variant="light" />
             <h2 className="text-4xl lg:text-5xl font-bold tracking-tight text-black mb-4">
               {plano.titulo}
             </h2>

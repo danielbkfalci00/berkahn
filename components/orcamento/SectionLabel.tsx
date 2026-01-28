@@ -21,7 +21,7 @@ export function SectionLabel({
     <div className={cn("mb-6", className)}>
       <span
         className={cn(
-          "inline-block text-xs sm:text-sm uppercase tracking-[0.3em] font-mono",
+          "inline-block text-sm sm:text-base uppercase tracking-[0.3em] font-mono",
           isDark ? "text-white/60" : "text-black/60"
         )}
       >
@@ -30,7 +30,7 @@ export function SectionLabel({
       {subtitle && (
         <span
           className={cn(
-            "block text-[10px] sm:text-xs uppercase tracking-[0.25em] mt-1.5",
+            "block text-xs sm:text-sm uppercase tracking-[0.25em] mt-1.5",
             isDark ? "text-white/40" : "text-black/40"
           )}
         >
