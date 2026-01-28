@@ -16,8 +16,6 @@ import { cn } from "@/lib/utils";
 interface PacotesInvestimentoProps {
   pacotes: PacoteInvestimento[];
   metragemProjeto: number;
-  onPacoteSelecionado?: (id: string) => void;
-  pacoteSelecionadoId?: string;
   /** Quando true, força layout de grid estático (sem carousel) para geração de PDF */
   isPDFMode?: boolean;
 }
@@ -25,8 +23,6 @@ interface PacotesInvestimentoProps {
 export function PacotesInvestimento({
   pacotes,
   metragemProjeto,
-  onPacoteSelecionado,
-  pacoteSelecionadoId,
   isPDFMode = false,
 }: PacotesInvestimentoProps) {
 
@@ -45,12 +41,12 @@ export function PacotesInvestimento({
               Investimento
             </motion.span>
             <h2 className="headline-md text-black mb-4">
-              Escolha o pacote ideal para você
+              Opções de Investimento
             </h2>
             <p className="body-md text-black/60 max-w-2xl mx-auto">
               {pacotes.length === 2
-                ? "Oferecemos duas opções de pacotes pensados para atender diferentes necessidades. Ambos incluem nossa garantia de qualidade e compromisso com prazos."
-                : "Oferecemos opções de pacotes pensados para atender diferentes necessidades e expectativas. Todos incluem nossa garantia de qualidade e compromisso com prazos."}
+                ? "Apresentamos duas opções de pacotes pensados para atender diferentes necessidades. Ambos incluem nossa garantia de qualidade e compromisso com prazos."
+                : "Apresentamos opções de pacotes pensados para atender diferentes necessidades e expectativas. Todos incluem nossa garantia de qualidade e compromisso com prazos."}
             </p>
           </div>
         </RevealOnScroll>
@@ -72,8 +68,6 @@ export function PacotesInvestimento({
               pacote={pacote}
               metragem={metragemProjeto}
               index={index}
-              onSelect={() => onPacoteSelecionado?.(pacote.id)}
-              isSelected={pacoteSelecionadoId === pacote.id}
             />
           ))}
         </div>
@@ -99,8 +93,6 @@ export function PacotesInvestimento({
                     pacote={pacote}
                     metragem={metragemProjeto}
                     index={index}
-                    onSelect={() => onPacoteSelecionado?.(pacote.id)}
-                    isSelected={pacoteSelecionadoId === pacote.id}
                   />
                 </CarouselItem>
               ))}

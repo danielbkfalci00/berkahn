@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { OrcamentoHeader } from "@/components/orcamento/OrcamentoHeader";
 import { OrcamentoHero } from "@/components/orcamento/OrcamentoHero";
 // Seção Índice
@@ -31,14 +30,9 @@ export default function OrcamentoPage() {
   const numeroOrcamento = gerarNumeroOrcamento();
   const dataValidade = calcularDataValidade(20); // Validade de 20 dias
 
-  // Estado para seleção interativa de pacote
-  const [pacoteSelecionadoId, setPacoteSelecionadoId] = useState<string>(
-    PACOTES_TEMPLATE.find(p => p.destaque)?.id || PACOTES_TEMPLATE[0].id
-  );
-
-  // Calcula valor dinâmico baseado no pacote selecionado
-  const pacoteSelecionado = PACOTES_TEMPLATE.find(p => p.id === pacoteSelecionadoId) || PACOTES_TEMPLATE[0];
-  const valorTotal = pacoteSelecionado.valorTotal;
+  // Usa o pacote recomendado (destaque) para o valor total de referência
+  const pacoteRecomendado = PACOTES_TEMPLATE.find(p => p.destaque) || PACOTES_TEMPLATE[0];
+  const valorTotal = pacoteRecomendado.valorTotal;
 
   return (
     <main className="relative">
@@ -93,8 +87,6 @@ export default function OrcamentoPage() {
         <PacotesInvestimento
           pacotes={PACOTES_TEMPLATE}
           metragemProjeto={PROJETO_TEMPLATE.metragem}
-          onPacoteSelecionado={setPacoteSelecionadoId}
-          pacoteSelecionadoId={pacoteSelecionadoId}
         />
       </section>
 

@@ -3,7 +3,6 @@
 import { useRef, useState } from "react";
 import Image from "next/image";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
-import { Check } from "lucide-react";
 import { formatarValor } from "@/lib/orcamento-data";
 import type { PacoteInvestimento } from "@/types/orcamento";
 import { cn } from "@/lib/utils";
@@ -12,16 +11,12 @@ interface PacoteCardProps {
   pacote: PacoteInvestimento;
   metragem: number;
   index: number;
-  onSelect?: () => void;
-  isSelected?: boolean;
 }
 
 export function PacoteCard({
   pacote,
   metragem,
   index,
-  onSelect,
-  isSelected = false,
 }: PacoteCardProps) {
   const cardRef = useRef<HTMLDivElement>(null);
   const [isHovered, setIsHovered] = useState(false);
@@ -77,9 +72,7 @@ export function PacoteCard({
       }}
       className={cn(
         "group relative flex flex-col h-full overflow-hidden rounded-xl transition-all duration-500",
-        isSelected
-          ? "bg-white border-2 border-black shadow-luxury-xl scale-[1.02] z-10"
-          : isDestaque
+        isDestaque
           ? "bg-white border-2 border-black/50 shadow-luxury-lg hover:shadow-luxury-xl scale-[1.01] z-10"
           : "bg-white border border-black/10 hover:border-black/20",
         "hover:scale-[1.02]"
@@ -170,10 +163,6 @@ export function PacoteCard({
           </p>
         </div>
 
-        {/* Diferenciais - Flex grow to fill space */}
-        <div className="flex-1 flex flex-col justify-end">
-        </div>
-
         {/* Resumo com valores */}
         {pacote.resumo && pacote.resumo.length > 0 && (
           <div className="mt-6 pt-5 border-t border-black/10">
@@ -193,30 +182,6 @@ export function PacoteCard({
             </div>
           </div>
         )}
-      </div>
-
-      {/* Botão de Seleção Interativo */}
-      <div className="p-6 lg:p-8 pt-0">
-        <motion.button
-          onClick={onSelect}
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
-          className={cn(
-            "w-full h-14 flex items-center justify-center gap-2 text-base font-semibold rounded-lg transition-colors",
-            isSelected
-              ? "bg-black text-white cursor-default"
-              : "bg-black/5 text-black/60 border border-black/10 hover:bg-black/10 hover:border-black/20"
-          )}
-        >
-          {isSelected ? (
-            <>
-              <Check className="w-5 h-5" />
-              Pacote Selecionado
-            </>
-          ) : (
-            "Selecionar Pacote"
-          )}
-        </motion.button>
       </div>
 
       {/* Shine effect on hover - only for destaque card */}

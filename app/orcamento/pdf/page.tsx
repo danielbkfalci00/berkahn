@@ -1,6 +1,4 @@
 "use client";
-
-import { useState } from "react";
 import { OrcamentoHero } from "@/components/orcamento/OrcamentoHero";
 import { IndiceSectionPDF } from "@/components/orcamento/pdf/IndiceSectionPDF";
 import { SobreSectionPDF } from "@/components/orcamento/pdf/SobreSectionPDF";
@@ -31,12 +29,9 @@ export default function OrcamentoPDFPage() {
   const numeroOrcamento = gerarNumeroOrcamento();
   const dataValidade = calcularDataValidade(20);
 
-  const [pacoteSelecionadoId, setPacoteSelecionadoId] = useState<string>(
-    PACOTES_TEMPLATE.find(p => p.destaque)?.id || PACOTES_TEMPLATE[0].id
-  );
-
-  const pacoteSelecionado = PACOTES_TEMPLATE.find(p => p.id === pacoteSelecionadoId) || PACOTES_TEMPLATE[0];
-  const valorTotal = pacoteSelecionado.valorTotal;
+  // Usa o pacote recomendado (destaque) para o valor total de referência
+  const pacoteRecomendado = PACOTES_TEMPLATE.find(p => p.destaque) || PACOTES_TEMPLATE[0];
+  const valorTotal = pacoteRecomendado.valorTotal;
 
   return (
     <main className="relative bg-white">
@@ -103,8 +98,6 @@ export default function OrcamentoPDFPage() {
           <PacotesInvestimento
             pacotes={PACOTES_TEMPLATE}
             metragemProjeto={PROJETO_TEMPLATE.metragem}
-            onPacoteSelecionado={setPacoteSelecionadoId}
-            pacoteSelecionadoId={pacoteSelecionadoId}
             isPDFMode={true}
           />
         </div>
