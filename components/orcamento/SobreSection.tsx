@@ -37,49 +37,11 @@ export function SobreSection() {
           </p>
         </motion.div>
 
-        {/* Main Layout: 40% imagens | 60% conteúdo */}
-        <div className="grid lg:grid-cols-[40%_1fr] gap-8 lg:gap-12 items-start">
+        {/* Main Layout: 60% conteúdo | 40% foto */}
+        <div className="grid lg:grid-cols-[1fr_40%] gap-8 lg:gap-12 items-center">
 
-          {/* ESQUERDA: Duas imagens empilhadas */}
-          <div className="space-y-6">
-            {/* Imagem 1 - Principal */}
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              className="relative aspect-[4/5] rounded-2xl overflow-hidden shadow-luxury-md group"
-            >
-              <Image
-                src="/images/orcamento/sobre_berkahn_1.webp"
-                alt="Berkahn - Expertise em Light Steel Frame"
-                fill
-                className="object-cover transition-transform duration-700 group-hover:scale-[1.02]"
-                sizes="(max-width: 1024px) 100vw, 40vw"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
-            </motion.div>
-
-            {/* Imagem 2 - Secundária */}
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.1 }}
-              className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-luxury-md group"
-            >
-              <Image
-                src="/images/orcamento/sobre_berkahn_2.webp"
-                alt="Equipe Berkahn em obra"
-                fill
-                className="object-cover transition-transform duration-700 group-hover:scale-[1.02]"
-                sizes="(max-width: 1024px) 100vw, 40vw"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
-            </motion.div>
-          </div>
-
-          {/* DIREITA: Todo o conteúdo */}
-          <div className="space-y-6">
+          {/* ESQUERDA: Todo o conteúdo */}
+          <div className="space-y-6 order-2 lg:order-1">
 
             {/* Texto narrativo */}
             <motion.div
@@ -96,8 +58,8 @@ export function SobreSection() {
               </p>
             </motion.div>
 
-            {/* Grid de valores: 4 colunas */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            {/* Grid 3 colunas: valores */}
+            <div className="grid grid-cols-3 gap-4">
 
               {/* Card: Excelência */}
               <motion.div
@@ -105,12 +67,12 @@ export function SobreSection() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.1 }}
-                className="bg-white rounded-2xl p-6 border border-black/5 shadow-luxury-sm"
+                className="bg-white rounded-2xl p-5 lg:p-6 border border-black/5 shadow-luxury-sm"
               >
-                <Award className="w-7 h-7 text-black/30 mb-4" strokeWidth={1.5} />
-                <h3 className="text-lg font-semibold text-black mb-1">Excelência</h3>
-                <p className="text-sm text-black/60">
-                  Compromisso com qualidade e precisão
+                <Award className="w-6 h-6 text-black/30 mb-3" strokeWidth={1.5} />
+                <h3 className="text-base lg:text-lg font-semibold text-black mb-1">Excelência</h3>
+                <p className="text-xs lg:text-sm text-black/60">
+                  Compromisso com qualidade
                 </p>
               </motion.div>
 
@@ -120,12 +82,12 @@ export function SobreSection() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.15 }}
-                className="bg-white rounded-2xl p-6 border border-black/5 shadow-luxury-sm"
+                className="bg-white rounded-2xl p-5 lg:p-6 border border-black/5 shadow-luxury-sm"
               >
-                <Lightbulb className="w-7 h-7 text-black/30 mb-4" strokeWidth={1.5} />
-                <h3 className="text-lg font-semibold text-black mb-1">Inovação</h3>
-                <p className="text-sm text-black/60">
-                  Tecnologia e métodos modernos
+                <Lightbulb className="w-6 h-6 text-black/30 mb-3" strokeWidth={1.5} />
+                <h3 className="text-base lg:text-lg font-semibold text-black mb-1">Inovação</h3>
+                <p className="text-xs lg:text-sm text-black/60">
+                  Tecnologia moderna
                 </p>
               </motion.div>
 
@@ -135,56 +97,69 @@ export function SobreSection() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.2 }}
-                className="bg-white rounded-2xl p-6 border border-black/5 shadow-luxury-sm"
+                className="bg-white rounded-2xl p-5 lg:p-6 border border-black/5 shadow-luxury-sm"
               >
-                <Target className="w-7 h-7 text-black/30 mb-4" strokeWidth={1.5} />
-                <h3 className="text-lg font-semibold text-black mb-1">Precisão</h3>
-                <p className="text-sm text-black/60">
-                  Tolerância de ±1mm em cada peça
+                <Target className="w-6 h-6 text-black/30 mb-3" strokeWidth={1.5} />
+                <h3 className="text-base lg:text-lg font-semibold text-black mb-1">Precisão</h3>
+                <p className="text-xs lg:text-sm text-black/60">
+                  Tolerância de ±1mm
                 </p>
               </motion.div>
+            </div>
 
-              {/* Card: Big Number - 20+ anos */}
+            {/* Grid 2 colunas: estatísticas */}
+            <div className="grid grid-cols-2 gap-4">
+
+              {/* Card: 20+ anos */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.25 }}
-                className="bg-black text-white rounded-2xl p-6 flex flex-col justify-center"
+                className="bg-black text-white rounded-2xl p-6 lg:p-8"
               >
-                <span className="text-4xl font-bold mb-1">20+</span>
-                <p className="text-sm text-white/60">
-                  anos de experiência
+                <span className="text-4xl lg:text-5xl font-bold">20+</span>
+                <p className="text-sm text-white/60 mt-1">
+                  anos de experiência combinada
+                </p>
+              </motion.div>
+
+              {/* Card: 50% mais rápido */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.3 }}
+                className="bg-black text-white rounded-2xl p-6 lg:p-8"
+              >
+                <span className="text-4xl lg:text-5xl font-bold">50%</span>
+                <p className="text-sm text-white/60 mt-1">
+                  mais rápido que alvenaria
                 </p>
               </motion.div>
             </div>
 
-            {/* Featured Card: 50% mais rápido */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.3 }}
-              className="bg-black text-white rounded-2xl p-8 lg:p-10"
-            >
-              <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
-                <div>
-                  <h3 className="text-lg font-semibold text-white/60 mb-1">
-                    Tempo de obra
-                  </h3>
-                  <p className="text-4xl lg:text-5xl font-bold">
-                    50% mais rápido
-                  </p>
-                </div>
-                <p className="text-white/70 max-w-md lg:text-right">
-                  O sistema Light Steel Frame permite construir em metade do tempo
-                  de uma obra convencional. Menos tempo em obra significa menos
-                  custos indiretos e entrada mais rápida no imóvel.
-                </p>
-              </div>
-            </motion.div>
-
           </div>
+
+          {/* DIREITA: Uma única foto - corpo inteiro */}
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            className="relative rounded-2xl overflow-hidden shadow-luxury-md order-1 lg:order-2"
+          >
+            <Image
+              src="/images/orcamento/sobre_berkahn_1.webp"
+              alt="Berkahn - Expertise em Light Steel Frame"
+              width={600}
+              height={800}
+              quality={90}
+              className="w-full h-auto"
+              sizes="(max-width: 1024px) 100vw, 40vw"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent pointer-events-none" />
+          </motion.div>
+
         </div>
 
       </div>
