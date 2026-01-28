@@ -65,6 +65,15 @@ export default function OrcamentoPage() {
       {/* Seção 2: Sobre a Berkahn - Storytelling com propósito */}
       <SobreSection />
 
+      {/* Seção 3: Infográficos LSF - Números que Falam */}
+      <InfograficoLSF />
+
+      {/* Seção 4: Diferenciais Steel Frame com Comparativo */}
+      <DiferenciaisLSF
+        comparativo={COMPARATIVO_ORCAMENTO}
+        beneficios={BENEFICIOS_LSF_STATS}
+      />
+
       {/* Transição Visual */}
       <div className="relative h-24 bg-white">
         <div className="absolute inset-0 flex items-center justify-center">
@@ -76,7 +85,7 @@ export default function OrcamentoPage() {
         </div>
       </div>
 
-      {/* Seção 4-7: Premissas Adotadas para Orçamento (Unificada) */}
+      {/* Seção 5: Premissas Adotadas para Orçamento (Unificada) */}
       <section id="premissas">
         <PremissasUnificadasSection />
       </section>
@@ -106,16 +115,7 @@ export default function OrcamentoPage() {
         )}
       </section>
 
-      {/* Seção 10: Infográficos LSF Animados */}
-      <InfograficoLSF />
-
-      {/* Seção 12: Diferenciais Steel Frame com Comparativo */}
-      <DiferenciaisLSF
-        comparativo={COMPARATIVO_ORCAMENTO}
-        beneficios={BENEFICIOS_LSF_STATS}
-      />
-
-      {/* Seção 13: CTA Final Premium */}
+      {/* Seção 10: CTA Final Premium */}
       <section id="contato">
         <CTAFinal
           projeto={PROJETO_TEMPLATE}

@@ -53,7 +53,20 @@ export default function OrcamentoPDFPage() {
         <SobreSectionPDF />
       </section>
 
-      {/* Slide 3: Metodologia Construtiva (COM imagem técnica) */}
+      {/* Slide 3: Vantagens Steel Frame */}
+      <section className="min-h-screen flex items-center">
+        <InfograficoLSFPDF />
+      </section>
+
+      {/* Slide 4: Comparativo LSF vs Alvenaria */}
+      <section className="min-h-screen flex items-center">
+        <DiferenciaisLSFPDF
+          comparativo={COMPARATIVO_ORCAMENTO}
+          beneficios={BENEFICIOS_LSF_STATS}
+        />
+      </section>
+
+      {/* Slide 5: Metodologia Construtiva (COM imagem técnica) */}
       <section className="min-h-screen flex items-center">
         <MetodologiaPDF />
       </section>
@@ -101,26 +114,13 @@ export default function OrcamentoPDFPage() {
         </div>
       </section>
 
-      {/* Slide 10: Plano de Gerenciamento */}
+      {/* Slide 12: Plano de Gerenciamento */}
       <section className="min-h-screen flex items-center">
         <div className="w-full">
           {PROJETO_TEMPLATE.planoGerenciamento && (
             <PlanoGerenciamentoSectionPDF plano={PROJETO_TEMPLATE.planoGerenciamento} />
           )}
         </div>
-      </section>
-
-      {/* Slide 11: Vantagens Steel Frame */}
-      <section className="min-h-screen flex items-center">
-        <InfograficoLSFPDF />
-      </section>
-
-      {/* Slide 12: Comparativo LSF vs Alvenaria */}
-      <section className="min-h-screen flex items-center">
-        <DiferenciaisLSFPDF
-          comparativo={COMPARATIVO_ORCAMENTO}
-          beneficios={BENEFICIOS_LSF_STATS}
-        />
       </section>
 
       {/* Slide 13: CTA Final / Contato */}
