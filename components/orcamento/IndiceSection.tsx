@@ -14,7 +14,7 @@ const INDICE_ITEMS = [
 
 export function IndiceSection() {
   return (
-    <section className="relative py-16 lg:py-24 bg-white">
+    <section className="relative py-16 lg:py-24 bg-[#F4F2EC]">
       <OrcamentoWatermark variant="light" logoPosition="top-right" />
       <div className="container max-w-3xl relative z-10">
         {/* Header */}
