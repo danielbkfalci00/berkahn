@@ -111,51 +111,6 @@ export function SobreSection() {
               </p>
             </motion.div>
 
-            {/* Setores de Atuação - Cards com imagens */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.1 }}
-            >
-              <p className="text-sm text-black/60 mb-4 text-center lg:text-left uppercase tracking-widest">
-                Construímos para todos os setores
-              </p>
-              <div className="grid grid-cols-3 gap-3">
-                {SETORES.map((setor, index) => (
-                  <motion.div
-                    key={setor.label}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: 0.15 + index * 0.05 }}
-                    className="group relative h-[180px] lg:h-[220px] rounded-xl overflow-hidden"
-                  >
-                    {/* Background Image */}
-                    <Image
-                      src={setor.image}
-                      alt={setor.label}
-                      fill
-                      className="object-cover transition-transform duration-700 group-hover:scale-105"
-                      sizes="(max-width: 768px) 33vw, 200px"
-                    />
-                    {/* Dark Overlay */}
-                    <div className="absolute inset-0 bg-black/50 transition-colors duration-300 group-hover:bg-black/40" />
-                    {/* Content */}
-                    <div className="absolute inset-0 flex flex-col items-center justify-center p-3 text-center text-white">
-                      <h4 className="text-[10px] lg:text-xs font-bold tracking-wider mb-1">
-                        {setor.label}
-                      </h4>
-                      <div className="w-6 h-px bg-white/40 mb-2" />
-                      <p className="text-[8px] lg:text-[10px] text-white/70 leading-tight hidden sm:block">
-                        {setor.description}
-                      </p>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            </motion.div>
-
           </div>
 
           {/* DIREITA: Foto */}
@@ -178,6 +133,49 @@ export function SobreSection() {
           </motion.div>
 
         </div>
+
+        {/* Setores de Atuação - Full width, centralizado */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.1 }}
+          className="mt-12"
+        >
+          <p className="text-sm text-black/60 mb-6 uppercase tracking-widest">
+            Construímos para todos os setores
+          </p>
+          <div className="grid grid-cols-3 gap-4 lg:gap-6 max-w-5xl mx-auto">
+            {SETORES.map((setor, index) => (
+              <motion.div
+                key={setor.label}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.15 + index * 0.05 }}
+                className="group relative h-[220px] lg:h-[300px] rounded-xl overflow-hidden"
+              >
+                <Image
+                  src={setor.image}
+                  alt={setor.label}
+                  fill
+                  className="object-cover transition-transform duration-700 group-hover:scale-105"
+                  sizes="(max-width: 768px) 33vw, 400px"
+                />
+                <div className="absolute inset-0 bg-black/50 transition-colors duration-300 group-hover:bg-black/40" />
+                <div className="absolute inset-0 flex flex-col items-center justify-center p-4 text-center text-white">
+                  <h4 className="text-xs lg:text-sm font-bold tracking-wider mb-2">
+                    {setor.label}
+                  </h4>
+                  <div className="w-8 h-px bg-white/40 mb-2" />
+                  <p className="text-[10px] lg:text-xs text-white/70 leading-tight">
+                    {setor.description}
+                  </p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
 
         {/* Seção: Vantagens do Light Steel Frame */}
         <motion.div
