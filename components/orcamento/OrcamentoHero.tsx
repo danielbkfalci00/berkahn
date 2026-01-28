@@ -121,18 +121,15 @@ export function OrcamentoHero({
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.1, duration: 0.8, ease: [0.19, 1, 0.22, 1] }}
-          className="flex flex-col items-center gap-2"
+          className="flex flex-col items-center"
         >
           <Image
-            src="/images/logo/berkahn-logo.webp"
-            alt="Berkahn Construtora"
-            width={180}
-            height={60}
-            className="brightness-0 invert opacity-80"
+            src="/images/logo-berkahn-construtora.png"
+            alt="Berkahn Construtora de Alto Padrão"
+            width={220}
+            height={80}
+            className="brightness-0 invert opacity-90"
           />
-          <span className="text-xs uppercase tracking-[0.2em] text-white/60">
-            Construtora
-          </span>
         </motion.div>
 
       </motion.div>

@@ -4,12 +4,9 @@ import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
 import {
-  Zap,
   Droplets,
   Recycle,
-  Timer,
-  ThermometerSun,
-  Shield,
+  Target,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -28,19 +25,6 @@ interface BeneficioVisual {
 }
 
 const BENEFICIOS_VISUAIS: BeneficioVisual[] = [
-  {
-    icon: Timer,
-    valor: 6,
-    sufixo: "x",
-    label: "Mais Rápido",
-    descricao: "Tempo de construção até 6x menor que alvenaria",
-    cor: "dark",
-    comparativo: {
-      lsf: 4,
-      tradicional: 24,
-      unidade: "meses",
-    },
-  },
   {
     icon: Droplets,
     valor: 90,
@@ -68,16 +52,16 @@ const BENEFICIOS_VISUAIS: BeneficioVisual[] = [
     },
   },
   {
-    icon: ThermometerSun,
-    valor: 40,
+    icon: Target,
+    valor: 99,
     sufixo: "%",
-    label: "Economia Energia",
-    descricao: "Isolamento superior reduz custos de climatização",
-    cor: "accent",
+    label: "Precisão Orçamentária",
+    descricao: "Orçamento preciso sem surpresas no final da obra",
+    cor: "dark",
     comparativo: {
-      lsf: 40,
-      tradicional: 100,
-      unidade: "% consumo",
+      lsf: 99,
+      tradicional: 60,
+      unidade: "% precisão",
     },
   },
 ];
@@ -251,14 +235,14 @@ export function InfograficoLSF() {
         <RevealOnScroll>
           <div className="text-center mb-16">
             <span className="inline-block text-xs uppercase tracking-[0.3em] text-white/40 mb-4">
-              Números que Falam
+              Eficiência Comprovada
             </span>
             <h2 className="headline-md text-white mb-4">
-              Vantagens Comprovadas do Steel Frame
+              Economia de recursos e precisão que fazem a diferença
             </h2>
             <p className="body-md text-white/60 max-w-2xl mx-auto">
-              Compare visualmente as diferenças entre o sistema construtivo
-              Steel Frame e a construção tradicional em alvenaria.
+              Vantagens exclusivas do Steel Frame que impactam diretamente
+              no seu bolso e no meio ambiente.
             </p>
           </div>
         </RevealOnScroll>

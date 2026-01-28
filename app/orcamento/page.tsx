@@ -9,7 +9,6 @@ import { IndiceSection } from "@/components/orcamento/IndiceSection";
 import { SobreSection } from "@/components/orcamento/SobreSection";
 import { PacotesInvestimento } from "@/components/orcamento/PacotesInvestimento";
 import { InfograficoLSF } from "@/components/orcamento/InfograficoLSF";
-import { DiferenciaisLSF } from "@/components/orcamento/DiferenciaisLSF";
 import { CTAFinal } from "@/components/orcamento/CTAFinal";
 // Novos componentes para Chalé Johny
 import { PremissasUnificadasSection } from "@/components/orcamento/PremissasUnificadasSection";
@@ -22,8 +21,6 @@ import {
   PACOTES_TEMPLATE,
   PREMISSAS_TEMPLATE,
   COMPANY_STORY,
-  COMPARATIVO_ORCAMENTO,
-  BENEFICIOS_LSF_STATS,
   CONTATOS,
   CONDICOES_PAGAMENTO,
   gerarNumeroOrcamento,
@@ -65,13 +62,9 @@ export default function OrcamentoPage() {
         <SobreSection />
       </section>
 
-      {/* Seção 3-4: Steel Frame - Infográficos + Diferenciais */}
+      {/* Seção 3-4: Steel Frame - Eficiência Comprovada */}
       <section id="lsf">
         <InfograficoLSF />
-        <DiferenciaisLSF
-          comparativo={COMPARATIVO_ORCAMENTO}
-          beneficios={BENEFICIOS_LSF_STATS}
-        />
       </section>
 
       {/* Transição Visual */}
