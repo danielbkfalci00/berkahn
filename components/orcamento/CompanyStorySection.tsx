@@ -70,7 +70,7 @@ export function CompanyStorySection({ story }: CompanyStorySectionProps) {
                 whileInView={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.5, type: "spring" }}
                 viewport={{ once: true }}
-                className="absolute -right-4 lg:-right-8 top-1/2 font-handwritten text-lg text-[#C77D5C] hidden md:block"
+                className="absolute -right-4 lg:-right-8 top-1/2 font-handwritten text-lg text-[#2D2D2D] hidden md:block"
               >
                 <span className="relative">
                   Onde tudo começou
@@ -97,7 +97,7 @@ export function CompanyStorySection({ story }: CompanyStorySectionProps) {
                 viewport={{ once: true }}
                 className="font-serif text-4xl lg:text-5xl leading-tight text-[#2D2D2D]"
               >
-                Sabemos como é tomar essa decisão
+                Nascemos para fazer diferente
               </motion.h2>
 
               <motion.div
@@ -108,43 +108,24 @@ export function CompanyStorySection({ story }: CompanyStorySectionProps) {
                 className="space-y-4 text-lg leading-relaxed text-[#2D2D2D]/80"
               >
                 <p>
-                  Há {new Date().getFullYear() - story.founding.year} anos,
-                  começamos com uma pergunta simples:{" "}
+                  A Berkahn é nova, mas quem está por trás não é.{" "}
                   <em className="font-serif italic">
-                    "{story.founding.motivation}"
+                    "São 20 anos observando o que funciona — e o que não funciona — na construção civil."
                   </em>
                 </p>
 
                 <p>
-                  A resposta foi o Steel Frame — não por tendência, mas porque
-                  vimos famílias perdendo tempo e dinheiro com métodos
-                  tradicionais imprevisíveis.
+                  Vimos famílias perderem tempo e dinheiro com métodos
+                  tradicionais imprevisíveis. Vimos projetos atrasarem,
+                  orçamentos estourarem, e sonhos virarem dores de cabeça.
                 </p>
 
-                <div className="pt-4 pl-6 border-l-4 border-[#C77D5C]">
+                <div className="pt-4 pl-6 border-l-4 border-black/20">
                   <p className="text-2xl font-serif text-[#2D2D2D]">
-                    <span className="relative inline-block">
-                      Seu projeto é o 24º dessa jornada.
-                      {/* Handwritten circle */}
-                      <svg
-                        className="absolute -inset-2 w-[calc(100%+16px)] h-[calc(100%+8px)] pointer-events-none"
-                        viewBox="0 0 200 60"
-                      >
-                        <ellipse
-                          cx="100"
-                          cy="30"
-                          rx="95"
-                          ry="25"
-                          stroke="#C77D5C"
-                          strokeWidth="2"
-                          fill="none"
-                          opacity="0.6"
-                        />
-                      </svg>
-                    </span>
+                    Seu projeto é onde nossa história começa.
                   </p>
                   <p className="mt-2 text-base text-[#2D2D2D]/70">
-                    E cada um ensinou algo que só você vai aproveitar.
+                    E queremos que comece diferente.
                   </p>
                 </div>
               </motion.div>

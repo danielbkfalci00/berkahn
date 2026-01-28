@@ -27,7 +27,7 @@ export function InsightsNarrativeSection({
         <RevealOnScroll>
           <div className="text-center mb-20">
             <h2 className="font-serif text-4xl lg:text-5xl text-[#2D2D2D] mb-4">
-              O Que Aprendemos em 20 Anos
+              O Que Acreditamos
             </h2>
             <p className="text-lg text-[#2D2D2D]/70 max-w-2xl mx-auto">
               Três lições que transformam sonhos em realidade
@@ -86,7 +86,7 @@ function InsightCard({
       {/* Text Content */}
       <div className={cn("space-y-6", isReverse && "lg:col-start-2")}>
         <div className="inline-block">
-          <span className="font-handwritten text-2xl text-[#C77D5C]">
+          <span className="font-handwritten text-2xl text-[#2D2D2D]">
             Lição #{index + 1}
           </span>
         </div>
@@ -101,14 +101,14 @@ function InsightCard({
 
         {/* Proof Card - Project type */}
         {insight.proof.type === "project" && (
-          <div className="mt-6 p-6 bg-white/60 backdrop-blur rounded-lg border-l-4 border-[#C77D5C]">
+          <div className="mt-6 p-6 bg-white/60 backdrop-blur rounded-lg border-l-4 border-black/30">
             <p className="text-sm font-semibold text-[#2D2D2D]/60 mb-2">
               Exemplo Real
             </p>
             <p className="text-xl font-serif text-[#2D2D2D] mb-1">
               {insight.proof.name}
             </p>
-            <p className="text-[#C77D5C] font-medium">
+            <p className="text-[#2D2D2D] font-medium">
               "{insight.proof.quote}"
             </p>
           </div>
@@ -129,7 +129,7 @@ function InsightCard({
         {/* Proof Card - Metric type */}
         {insight.proof.type === "metric" && (
           <div className="mt-6 flex items-center gap-4">
-            <div className="text-5xl font-bold text-[#C77D5C]">
+            <div className="text-5xl font-bold text-[#2D2D2D]">
               {insight.proof.value}
             </div>
             <p className="text-[#2D2D2D]/70">{insight.proof.label}</p>

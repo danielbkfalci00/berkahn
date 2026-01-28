@@ -2,51 +2,32 @@
 
 import { motion, useInView } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
-import Image from "next/image";
-import type { StatWithContext, TestimonialContext } from "@/types/orcamento";
+import type { StatWithContext } from "@/types/orcamento";
 
 interface StatsWithContextProps {
   stats: StatWithContext[];
 }
 
 /**
- * Stats com contexto narrativo - "Números que Contam Histórias"
- * Count-up animation nos números
- * Suporta contexto textual OU testimonial
+ * Stats simplificado - "20 Anos de Aprendizado Combinados"
+ * Big number heroico centralizado com count-up animation
+ * Paleta monocromática (sem laranja)
  */
 export function StatsWithContext({ stats }: StatsWithContextProps) {
-  return (
-    <div>
-      <h3 className="font-serif text-3xl lg:text-4xl text-center text-[#2D2D2D] mb-12">
-        Números que Contam Histórias
-      </h3>
-
-      <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
-        {stats.map((stat, index) => (
-          <StatCard key={stat.label} stat={stat} index={index} />
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function StatCard({ stat, index }: { stat: StatWithContext; index: number }) {
+  const stat = stats[0]; // Apenas primeiro stat
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-10%" });
   const [count, setCount] = useState(0);
 
-  // Count-up animation
   useEffect(() => {
-    if (isInView) {
-      const duration = 2000; // 2 seconds
+    if (isInView && stat) {
+      const duration = 2000;
       const startTime = Date.now();
       const endValue = stat.value;
 
       const animate = () => {
         const elapsed = Date.now() - startTime;
         const progress = Math.min(elapsed / duration, 1);
-
-        // Easing function for smooth animation
         const easeOut = 1 - Math.pow(1 - progress, 3);
         setCount(Math.round(easeOut * endValue));
 
@@ -57,67 +38,30 @@ function StatCard({ stat, index }: { stat: StatWithContext; index: number }) {
 
       requestAnimationFrame(animate);
     }
-  }, [isInView, stat.value]);
+  }, [isInView, stat]);
 
-  const isTestimonialContext = typeof stat.context !== "string";
+  if (!stat) return null;
 
   return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 30 }}
-      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-      transition={{ duration: 0.6, delay: index * 0.15 }}
-      className="bg-white p-8 lg:p-10 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300"
-    >
-      {/* Animated Number */}
-      <div className="flex items-baseline gap-2 mb-3">
-        <span className="font-bold text-6xl lg:text-7xl text-[#C77D5C]">
+    <div ref={ref} className="text-center py-12">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.9 }}
+        transition={{ duration: 0.8, ease: [0.19, 1, 0.22, 1] }}
+        className="inline-block"
+      >
+        <span className="font-bold text-8xl lg:text-9xl text-black">
           {count}
         </span>
-        <span className="text-3xl font-medium text-[#C77D5C]">
-          {stat.suffix}
-        </span>
-      </div>
-
-      {/* Label */}
-      <h4 className="text-sm font-bold tracking-wider text-[#2D2D2D]/60 mb-4">
-        {stat.label}
-      </h4>
-
-      {/* Context */}
-      {!isTestimonialContext ? (
-        <p className="text-base text-[#2D2D2D]/70 leading-relaxed">
-          {stat.context as string}
+        <p className="text-xl font-mono uppercase tracking-widest text-[#2D2D2D]/70 mt-4">
+          {stat.label}
         </p>
-      ) : (
-        // Testimonial context
-        <TestimonialContextCard context={stat.context as TestimonialContext} />
-      )}
-    </motion.div>
-  );
-}
-
-function TestimonialContextCard({ context }: { context: TestimonialContext }) {
-  return (
-    <div className="space-y-3">
-      <p className="text-base italic text-[#2D2D2D]/80">"{context.quote}"</p>
-      <div className="flex items-center gap-3">
-        {context.image && (
-          <div className="relative w-10 h-10 rounded-full overflow-hidden">
-            <Image
-              src={context.image}
-              alt={context.name || ""}
-              fill
-              className="object-cover"
-              sizes="40px"
-            />
-          </div>
+        {typeof stat.context === "string" && (
+          <p className="text-lg text-[#2D2D2D]/60 mt-2 max-w-md mx-auto">
+            {stat.context}
+          </p>
         )}
-        <div>
-          <p className="text-sm font-medium text-[#2D2D2D]">{context.name}</p>
-          <p className="text-xs text-[#2D2D2D]/60">{context.project}</p>
-        </div>
-      </div>
+      </motion.div>
     </div>
   );
 }

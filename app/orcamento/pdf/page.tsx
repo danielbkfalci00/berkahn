@@ -11,14 +11,11 @@ import { PacotesInvestimento } from "@/components/orcamento/PacotesInvestimento"
 import { PaymentConditions } from "@/components/orcamento/PaymentConditions";
 import { PlanoGerenciamentoSectionPDF } from "@/components/orcamento/pdf/PlanoGerenciamentoSectionPDF";
 import { InfograficoLSFPDF } from "@/components/orcamento/pdf/InfograficoLSFPDF";
-import { DiferenciaisLSFPDF } from "@/components/orcamento/pdf/DiferenciaisLSFPDF";
 import { CTAFinal } from "@/components/orcamento/CTAFinal";
 
 import {
   PROJETO_TEMPLATE,
   PACOTES_TEMPLATE,
-  COMPARATIVO_ORCAMENTO,
-  BENEFICIOS_LSF_STATS,
   CONTATOS,
   CONDICOES_PAGAMENTO,
   gerarNumeroOrcamento,
@@ -57,14 +54,6 @@ export default function OrcamentoPDFPage() {
       {/* Slide 3: Vantagens Steel Frame */}
       <section className="min-h-screen flex items-center">
         <InfograficoLSFPDF />
-      </section>
-
-      {/* Slide 4: Comparativo LSF vs Alvenaria */}
-      <section className="min-h-screen flex items-center">
-        <DiferenciaisLSFPDF
-          comparativo={COMPARATIVO_ORCAMENTO}
-          beneficios={BENEFICIOS_LSF_STATS}
-        />
       </section>
 
       {/* Slide 5: Metodologia Construtiva (COM imagem técnica) */}

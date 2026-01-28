@@ -21,10 +21,10 @@ export function TimelineInteractive({ timeline }: TimelineInteractiveProps) {
   return (
     <div className="relative py-12">
       {/* Vintage measuring tape line */}
-      <div className="absolute left-0 right-0 top-1/2 h-1 bg-gradient-to-r from-[#C77D5C]/20 via-[#C77D5C] to-[#C77D5C]/20 hidden md:block" />
+      <div className="absolute left-0 right-0 top-1/2 h-1 bg-gradient-to-r from-[#2D2D2D]/20 via-[#2D2D2D] to-[#2D2D2D]/20 hidden md:block" />
 
       {/* Mobile: Vertical line */}
-      <div className="absolute left-8 top-0 bottom-0 w-px bg-gradient-to-b from-[#C77D5C]/20 via-[#C77D5C] to-[#C77D5C]/20 md:hidden" />
+      <div className="absolute left-8 top-0 bottom-0 w-px bg-gradient-to-b from-[#2D2D2D]/20 via-[#2D2D2D] to-[#2D2D2D]/20 md:hidden" />
 
       {/* Measuring marks - Desktop */}
       <div className="hidden md:block">
@@ -61,8 +61,8 @@ export function TimelineInteractive({ timeline }: TimelineInteractiveProps) {
                 "w-16 h-16 rounded-full flex items-center justify-center font-bold text-sm mb-0 md:mb-4 mr-4 md:mr-0 transition-all duration-300 flex-shrink-0",
                 "absolute left-0 md:static",
                 item.isHighlight
-                  ? "bg-[#C77D5C] text-white shadow-lg"
-                  : "bg-white text-[#2D2D2D] border-2 border-[#2D2D2D]/20 group-hover:border-[#C77D5C] group-hover:shadow-md"
+                  ? "bg-[#2D2D2D] text-white shadow-lg"
+                  : "bg-white text-[#2D2D2D] border-2 border-[#2D2D2D]/20 group-hover:border-[#2D2D2D] group-hover:shadow-md"
               )}
             >
               {item.year}
@@ -89,7 +89,7 @@ export function TimelineInteractive({ timeline }: TimelineInteractiveProps) {
                 className="absolute -left-2 md:-top-8 md:left-1/2 md:-translate-x-1/2"
               >
                 <svg
-                  className="w-8 h-8 text-[#C77D5C]"
+                  className="w-8 h-8 text-[#2D2D2D]"
                   fill="currentColor"
                   viewBox="0 0 20 20"
                 >

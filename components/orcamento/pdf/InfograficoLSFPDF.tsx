@@ -1,19 +1,10 @@
 import {
-  Timer,
   Droplets,
   Recycle,
-  ThermometerSun,
+  Target,
 } from "lucide-react";
 
 const BENEFICIOS_DATA = [
-  {
-    icon: Timer,
-    valor: "6x",
-    label: "Mais Rápido",
-    descricao: "Tempo de construção até 6x menor que alvenaria",
-    lsf: "4 meses",
-    tradicional: "24 meses",
-  },
   {
     icon: Droplets,
     valor: "90%",
@@ -26,17 +17,17 @@ const BENEFICIOS_DATA = [
     icon: Recycle,
     valor: "3%",
     label: "Desperdício",
-    descricao: "Apenas 3% de perda de materiais",
+    descricao: "Apenas 3% de perda de materiais vs 25% tradicional",
     lsf: "3% perda",
     tradicional: "25% perda",
   },
   {
-    icon: ThermometerSun,
-    valor: "40%",
-    label: "Economia Energia",
-    descricao: "Isolamento superior reduz custos de climatização",
-    lsf: "40% consumo",
-    tradicional: "100% consumo",
+    icon: Target,
+    valor: "99%",
+    label: "Precisão Orçamentária",
+    descricao: "Orçamento preciso sem surpresas no final da obra",
+    lsf: "99% precisão",
+    tradicional: "60% precisão",
   },
 ];
 
@@ -51,18 +42,19 @@ export function InfograficoLSFPDF() {
         {/* Header */}
         <div className="text-center mb-10">
           <p className="text-xs uppercase tracking-[0.3em] text-white/40 mb-3">
-            Números que Falam
+            Eficiência Comprovada
           </p>
           <h2 className="text-3xl font-bold tracking-tight text-white mb-3">
-            Vantagens Comprovadas do Steel Frame
+            Economia de recursos e precisão que fazem a diferença
           </h2>
           <p className="text-sm text-white/60 max-w-xl mx-auto">
-            Compare as diferenças entre Steel Frame e construção tradicional
+            Vantagens exclusivas do Steel Frame que impactam diretamente
+            no seu bolso e no meio ambiente.
           </p>
         </div>
 
         {/* Stats Grid 2x2 */}
-        <div className="grid grid-cols-2 gap-6 mb-10">
+        <div className="grid grid-cols-3 gap-6 mb-10">
           {BENEFICIOS_DATA.map((beneficio) => {
             const Icon = beneficio.icon;
             return (
