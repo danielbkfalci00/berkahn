@@ -9,12 +9,12 @@ export interface OrcamentoSection {
 }
 
 export const ORCAMENTO_SECTIONS: OrcamentoSection[] = [
-  { id: "sobre", label: "SOBRE", number: "01" },
-  { id: "lsf", label: "STEEL FRAME", number: "02" },
-  { id: "premissas", label: "PROJETO", number: "03" },
+  { id: "sobre", label: "APRESENTAÇÃO", number: "01" },
+  { id: "premissas", label: "PREMISSAS", number: "02" },
+  { id: "materiais", label: "MATERIAIS", number: "03" },
   { id: "investimento", label: "INVESTIMENTO", number: "04" },
-  { id: "pagamento", label: "PAGAMENTO", number: "05" },
-  { id: "plano", label: "GESTÃO", number: "06" },
+  { id: "plano", label: "GERENCIAMENTO", number: "05" },
+  { id: "pagamento", label: "PAGAMENTO", number: "06" },
   { id: "contato", label: "CONTATO", number: "07" },
 ];
 

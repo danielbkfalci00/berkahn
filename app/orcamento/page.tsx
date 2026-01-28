@@ -13,6 +13,7 @@ import { DiferenciaisLSF } from "@/components/orcamento/DiferenciaisLSF";
 import { CTAFinal } from "@/components/orcamento/CTAFinal";
 // Novos componentes para Chalé Johny
 import { PremissasUnificadasSection } from "@/components/orcamento/PremissasUnificadasSection";
+import { MateriaisSection } from "@/components/orcamento/MateriaisSection";
 import { PlanoGerenciamentoSection } from "@/components/orcamento/PlanoGerenciamentoSection";
 import { PaymentConditions } from "@/components/orcamento/PaymentConditions";
 
@@ -89,7 +90,12 @@ export default function OrcamentoPage() {
         <PremissasUnificadasSection />
       </section>
 
-      {/* Seção 7: Proposta de Investimento (CORE) - 2 Pacotes */}
+      {/* Seção 6: Descrição Analítica de Materiais */}
+      <section id="materiais">
+        <MateriaisSection />
+      </section>
+
+      {/* Seção 7: Proposta de Investimento (CORE) - Pacotes */}
       <section id="investimento">
         <PacotesInvestimento
           pacotes={PACOTES_TEMPLATE}
@@ -99,7 +105,14 @@ export default function OrcamentoPage() {
         />
       </section>
 
-      {/* Seção 8: Condições de Pagamento */}
+      {/* Seção 8: Plano de Gerenciamento Berkahn */}
+      <section id="plano">
+        {PROJETO_TEMPLATE.planoGerenciamento && (
+          <PlanoGerenciamentoSection plano={PROJETO_TEMPLATE.planoGerenciamento} />
+        )}
+      </section>
+
+      {/* Seção 9: Condições de Pagamento */}
       <section id="pagamento">
         <PaymentConditions
           condicoes={CONDICOES_PAGAMENTO}
@@ -107,14 +120,7 @@ export default function OrcamentoPage() {
         />
       </section>
 
-      {/* Seção 9: Plano de Gerenciamento Berkahn */}
-      <section id="plano">
-        {PROJETO_TEMPLATE.planoGerenciamento && (
-          <PlanoGerenciamentoSection plano={PROJETO_TEMPLATE.planoGerenciamento} />
-        )}
-      </section>
-
-      {/* Seção 10: CTA Final Premium */}
+      {/* Seção 10: CTA Final / Contato */}
       <section id="contato">
         <CTAFinal
           projeto={PROJETO_TEMPLATE}
