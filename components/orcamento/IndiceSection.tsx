@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { OrcamentoWatermark } from "./OrcamentoWatermark";
 
 const INDICE_ITEMS = [
   { numero: "01", titulo: "Apresentação construtora", href: "#sobre" },
@@ -14,8 +15,9 @@ const INDICE_ITEMS = [
 
 export function IndiceSection() {
   return (
-    <section className="py-16 lg:py-24 bg-white">
-      <div className="container max-w-3xl">
+    <section className="relative py-16 lg:py-24 bg-white">
+      <OrcamentoWatermark variant="light" logoPosition="top-right" />
+      <div className="container max-w-3xl relative z-10">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}

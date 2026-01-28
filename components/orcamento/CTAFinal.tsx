@@ -13,6 +13,7 @@ import {
   CheckCircle2,
 } from "lucide-react";
 import type { OrcamentoProjeto } from "@/types/orcamento";
+import { OrcamentoWatermark } from "./OrcamentoWatermark";
 import { cn } from "@/lib/utils";
 import { FOOTER_SOCIAL } from "@/lib/constants";
 
@@ -75,17 +76,9 @@ export function CTAFinal({
       >
         <div className="absolute inset-0 bg-gradient-to-b from-black via-black/95 to-black" />
         <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
-        {/* Decorative grid */}
-        <div className="absolute inset-0 opacity-[0.02]">
-          <div
-            className="w-full h-full"
-            style={{
-              backgroundImage: `linear-gradient(90deg, white 1px, transparent 1px), linear-gradient(white 1px, transparent 1px)`,
-              backgroundSize: "80px 80px",
-            }}
-          />
-        </div>
       </motion.div>
+
+      <OrcamentoWatermark variant="dark" logoPosition="center" />
 
       <div className="relative container max-w-6xl py-xl">
         {/* Informações de Contato (sem botões - proposta comercial) */}

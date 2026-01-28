@@ -5,6 +5,7 @@ import { Zap, Leaf, Gauge, Shield, Volume2, Maximize2, Target, Scale } from "luc
 import Image from "next/image";
 import { BENEFITS } from "@/lib/lsf-data";
 import { CountUp } from "@/components/animations/CountUp";
+import { OrcamentoWatermark } from "./OrcamentoWatermark";
 
 // Mapeamento de ícones
 const iconMap: Record<string, React.ElementType> = {
@@ -42,16 +43,10 @@ export function SobreSection() {
     <>
       {/* Hero Header - Transição marcante */}
       <section className="relative bg-black text-white py-20 lg:py-28 overflow-hidden">
-        {/* Background pattern */}
-        <div className="absolute inset-0 opacity-[0.03]">
-          <div className="absolute inset-0" style={{
-            backgroundImage: `repeating-linear-gradient(90deg, white 0px, white 1px, transparent 1px, transparent 60px),
-                              repeating-linear-gradient(0deg, white 0px, white 1px, transparent 1px, transparent 60px)`
-          }} />
-        </div>
+        <OrcamentoWatermark variant="dark" logoPosition="center" />
 
         {/* Gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-br from-black via-black/95 to-black/90" />
+        <div className="absolute inset-0 bg-gradient-to-br from-black via-black/95 to-black/90 z-[1]" />
 
         <div className="container max-w-5xl relative z-10">
           <motion.div
@@ -92,8 +87,9 @@ export function SobreSection() {
       </section>
 
       {/* Content section */}
-      <section className="py-xl bg-gradient-to-b from-white via-white to-black/[0.02]">
-        <div className="container max-w-7xl">
+      <section className="relative py-xl bg-gradient-to-b from-white via-white to-black/[0.02]">
+        <OrcamentoWatermark variant="light" logoPosition="top-right" />
+        <div className="container max-w-7xl relative z-10">
 
         {/* Main Layout: 60% conteúdo | 40% foto */}
         <div className="grid lg:grid-cols-[1fr_40%] gap-8 lg:gap-12 items-start">

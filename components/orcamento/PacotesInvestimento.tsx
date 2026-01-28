@@ -12,6 +12,7 @@ import {
 import { PacoteCard } from "./PacoteCard";
 import type { PacoteInvestimento } from "@/types/orcamento";
 import { cn } from "@/lib/utils";
+import { OrcamentoWatermark } from "./OrcamentoWatermark";
 
 interface PacotesInvestimentoProps {
   pacotes: PacoteInvestimento[];
@@ -27,8 +28,9 @@ export function PacotesInvestimento({
 }: PacotesInvestimentoProps) {
 
   return (
-    <section className="py-xl bg-gradient-to-b from-white via-white to-black/[0.02]">
-      <div className="container max-w-7xl">
+    <section className="relative py-xl bg-gradient-to-b from-white via-white to-black/[0.02]">
+      <OrcamentoWatermark variant="light" logoPosition="center" />
+      <div className="container max-w-7xl relative z-10">
         {/* Section Header */}
         <RevealOnScroll>
           <div className="text-center mb-16">

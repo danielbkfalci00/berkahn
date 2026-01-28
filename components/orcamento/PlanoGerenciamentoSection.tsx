@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import type { PlanoGerenciamento, EtapaGerenciamento } from "@/types/orcamento";
 import { cn } from "@/lib/utils";
+import { OrcamentoWatermark } from "./OrcamentoWatermark";
 
 interface PlanoGerenciamentoSectionProps {
   plano: PlanoGerenciamento;
@@ -56,8 +57,9 @@ export function PlanoGerenciamentoSection({
   plano,
 }: PlanoGerenciamentoSectionProps) {
   return (
-    <section className="py-20 lg:py-32 bg-white overflow-hidden">
-      <div className="container max-w-6xl">
+    <section className="relative py-20 lg:py-32 bg-white overflow-hidden">
+      <OrcamentoWatermark variant="light" logoPosition="top-right" />
+      <div className="container max-w-6xl relative z-10">
         <RevealOnScroll>
           <div className="text-center mb-16">
             <span className="inline-block text-xs uppercase tracking-[0.3em] text-black/40 mb-4">

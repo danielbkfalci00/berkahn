@@ -8,6 +8,7 @@ import {
   CheckCircle2,
 } from "lucide-react";
 import type { CondicaoPagamento } from "@/types/orcamento";
+import { OrcamentoWatermark } from "./OrcamentoWatermark";
 
 interface PaymentConditionsProps {
   condicoes: CondicaoPagamento[];
@@ -22,8 +23,9 @@ export function PaymentConditions({
   if (!condicaoPrincipal) return null;
 
   return (
-    <section className="py-xl bg-gradient-to-b from-white to-black/[0.02]">
-      <div className="container max-w-5xl">
+    <section className="relative py-xl bg-gradient-to-b from-white to-black/[0.02]">
+      <OrcamentoWatermark variant="light" logoPosition="top-right" />
+      <div className="container max-w-5xl relative z-10">
         <RevealOnScroll>
           <div className="text-center mb-12">
             {/* Decoração superior */}

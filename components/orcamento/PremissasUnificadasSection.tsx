@@ -5,6 +5,7 @@ import { MetodologiaSubsection } from "./MetodologiaSubsection";
 import { ProjetosConsideradosSection } from "./ProjetosConsideradosSection";
 import { NaoIncluiSubsection } from "./NaoIncluiSubsection";
 import { METODOLOGIA_LSF, PREMISSAS_TEMPLATE } from "@/lib/orcamento-data";
+import { OrcamentoWatermark } from "./OrcamentoWatermark";
 
 /**
  * Seção Premissas Adotadas para Orçamento (UNIFICADA)
@@ -35,6 +36,8 @@ import { METODOLOGIA_LSF, PREMISSAS_TEMPLATE } from "@/lib/orcamento-data";
 export function PremissasUnificadasSection() {
   return (
     <section className="relative">
+      <OrcamentoWatermark variant="light" logoPosition="top-right" />
+
       {/* Número gigante "P" de fundo - Seção Principal */}
       <motion.span
         initial={{ opacity: 0 }}

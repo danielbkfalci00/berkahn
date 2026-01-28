@@ -9,6 +9,7 @@ import {
   Target,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { OrcamentoWatermark } from "./OrcamentoWatermark";
 
 interface BeneficioVisual {
   icon: React.ElementType;
@@ -229,8 +230,9 @@ function CircularProgress({
 
 export function InfograficoLSF() {
   return (
-    <section className="py-xl bg-gradient-to-b from-black via-black/95 to-black">
-      <div className="container max-w-7xl">
+    <section className="relative py-xl bg-gradient-to-b from-black via-black/95 to-black">
+      <OrcamentoWatermark variant="dark" logoPosition="center" />
+      <div className="container max-w-7xl relative z-10">
         {/* Section Header */}
         <RevealOnScroll>
           <div className="text-center mb-16">

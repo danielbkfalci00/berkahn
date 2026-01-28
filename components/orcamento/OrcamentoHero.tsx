@@ -6,6 +6,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { CharReveal } from "@/components/animations/TextReveal";
 import { Ruler } from "lucide-react";
 import type { OrcamentoProjeto } from "@/types/orcamento";
+import { OrcamentoWatermark } from "./OrcamentoWatermark";
 
 interface OrcamentoHeroProps {
   projeto: OrcamentoProjeto;
@@ -64,6 +65,11 @@ export function OrcamentoHero({
           backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
         }}
       />
+
+      {/* Watermark */}
+      <div className="z-[3]">
+        <OrcamentoWatermark variant="dark" logoPosition="center" />
+      </div>
 
       {/* Content with fade on scroll */}
       <motion.div

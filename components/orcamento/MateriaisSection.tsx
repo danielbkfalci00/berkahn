@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { MATERIAIS_DETALHADOS } from "@/lib/orcamento-data";
+import { OrcamentoWatermark } from "./OrcamentoWatermark";
 
 /**
  * MateriaisSection - Descrição Analítica de Materiais
@@ -10,8 +11,9 @@ import { MATERIAIS_DETALHADOS } from "@/lib/orcamento-data";
  */
 export function MateriaisSection() {
   return (
-    <section className="py-xl bg-[#F4F2EC]">
-      <div className="container max-w-5xl">
+    <section className="relative py-xl bg-[#F4F2EC]">
+      <OrcamentoWatermark variant="light" logoPosition="top-right" />
+      <div className="container max-w-5xl relative z-10">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
