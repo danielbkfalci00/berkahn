@@ -32,7 +32,7 @@ const BENEFICIOS_VISUAIS: BeneficioVisual[] = [
     sufixo: "%",
     label: "Menos Água",
     descricao: "Construção a seco com mínimo uso de água",
-    cor: "neutral",
+    cor: "light",
     comparativo: {
       lsf: 10,
       tradicional: 100,
@@ -58,7 +58,7 @@ const BENEFICIOS_VISUAIS: BeneficioVisual[] = [
     sufixo: "%",
     label: "Precisão Orçamentária",
     descricao: "Orçamento preciso sem surpresas no final da obra",
-    cor: "dark",
+    cor: "light",
     comparativo: {
       lsf: 99,
       tradicional: 60,
