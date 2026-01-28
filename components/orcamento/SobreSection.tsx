@@ -23,10 +23,13 @@ export function SobreSection() {
           viewport={{ once: true }}
           className="text-center mb-12"
         >
-          <h1 className="text-xs uppercase tracking-[0.3em] text-black/40 mb-4">
-            A Berkahn
+          <span className="inline-block text-xs uppercase tracking-[0.3em] text-black/40 mb-4">
+            Sobre
+          </span>
+          <h1 className="font-heading text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tight text-black mb-4">
+            BERKAHN
           </h1>
-          <h2 className="headline-md text-black mb-4">
+          <h2 className="text-xl md:text-2xl font-medium text-black/70 mb-2">
             Mestres em construir
           </h2>
           <p className="body-md text-black/60 max-w-2xl mx-auto">
@@ -42,46 +45,50 @@ export function SobreSection() {
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            className="relative aspect-[4/5] rounded-2xl overflow-hidden shadow-luxury-md group"
+            className="relative rounded-2xl overflow-hidden shadow-luxury-md group"
           >
             <Image
               src="/images/orcamento/sobre_berkahn_1.webp"
               alt="Berkahn - Expertise em Light Steel Frame"
-              fill
-              className="object-cover transition-transform duration-700 group-hover:scale-105"
+              width={600}
+              height={750}
+              quality={90}
+              className="w-full h-auto object-contain transition-transform duration-700 group-hover:scale-[1.02]"
               sizes="(max-width: 1024px) 100vw, 38vw"
             />
             {/* Subtle gradient overlay for depth */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent pointer-events-none" />
           </motion.div>
 
           {/* Right: Content Grid */}
           <div className="space-y-6">
 
-            {/* Narrative Card with Subtle Image */}
+            {/* Narrative Card with Visible Image */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="relative bg-white rounded-2xl p-8 lg:p-10 border border-black/5 shadow-luxury-sm overflow-hidden"
+              className="relative bg-white rounded-2xl overflow-hidden border border-black/5 shadow-luxury-sm"
             >
-              {/* Background accent image (very subtle) */}
-              <div className="absolute right-0 top-0 w-1/3 h-full opacity-[0.03]">
-                <Image
-                  src="/images/orcamento/sobre_berkahn_2.webp"
-                  alt=""
-                  fill
-                  className="object-cover"
-                  sizes="200px"
-                />
+              <div className="grid lg:grid-cols-[1fr_40%]">
+                <div className="p-8 lg:p-10">
+                  <p className="text-lg text-black/80 leading-relaxed">
+                    Nascemos da experiência de quem conhece construção de verdade.
+                    São <strong className="text-black">20 anos somados</strong> em projetos
+                    industrializados que nos ensinaram uma coisa: a melhor surpresa
+                    é não ter surpresa nenhuma.
+                  </p>
+                </div>
+                <div className="relative aspect-[4/3] lg:aspect-auto lg:min-h-[200px]">
+                  <Image
+                    src="/images/orcamento/sobre_berkahn_2.webp"
+                    alt="Equipe Berkahn em obra"
+                    fill
+                    className="object-cover"
+                    sizes="300px"
+                  />
+                </div>
               </div>
-
-              <p className="text-lg text-black/80 leading-relaxed relative z-10">
-                Nascemos da experiência de quem conhece construção de verdade.
-                São <strong className="text-black">20 anos somados</strong> em projetos
-                industrializados que nos ensinaram uma coisa: a melhor surpresa
-                é não ter surpresa nenhuma.
-              </p>
             </motion.div>
 
             {/* Values Grid */}
