@@ -24,7 +24,7 @@ export function SobreSection() {
           className="text-center mb-12"
         >
           <span className="inline-block text-xs uppercase tracking-[0.3em] text-black/40 mb-4">
-            Sobre
+            Apresentação Construtora
           </span>
           <h1 className="font-heading text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tight text-black mb-4">
             BERKAHN

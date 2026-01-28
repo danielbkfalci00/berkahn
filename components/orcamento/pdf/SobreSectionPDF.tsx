@@ -11,7 +11,7 @@ export function SobreSectionPDF() {
         {/* Header */}
         <div className="text-center mb-12">
           <p className="text-xs uppercase tracking-[0.3em] text-black/40 mb-3">
-            A Berkahn
+            Apresentação Construtora
           </p>
           <h2 className="text-4xl font-bold text-black mb-4">
             Mestres em construir
