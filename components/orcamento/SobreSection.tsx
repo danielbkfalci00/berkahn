@@ -43,10 +43,10 @@ export function SobreSection() {
   return (
     <>
       {/* Hero Header - Transição marcante */}
-      <section className="relative bg-white text-black py-20 lg:py-28 overflow-hidden">
+      <section className="relative bg-white text-black py-10 lg:py-14 overflow-hidden">
         <OrcamentoWatermark variant="light" logoPosition="center" />
 
-        <div className="container px-4 sm:px-6 lg:px-8 relative z-10 mb-8">
+        <div className="container px-4 sm:px-6 lg:px-8 relative z-10 mb-4">
           <SectionLabel number="01" title="Apresentação Construtora" variant="light" className="mb-0" />
         </div>
 
