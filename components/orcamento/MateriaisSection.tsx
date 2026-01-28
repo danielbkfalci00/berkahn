@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { MATERIAIS_DETALHADOS } from "@/lib/orcamento-data";
 import { OrcamentoWatermark } from "./OrcamentoWatermark";
+import { SectionLabel } from "./SectionLabel";
 
 /**
  * MateriaisSection - Descrição Analítica de Materiais
@@ -21,9 +22,7 @@ export function MateriaisSection() {
           viewport={{ once: true }}
           className="mb-10"
         >
-          <p className="text-xs uppercase tracking-[0.3em] text-black/50 font-mono mb-2">
-            Premissas Adotadas → Especificações
-          </p>
+          <SectionLabel number="03" title="Descrição Analítica dos Materiais" variant="light" />
           <h2 className="text-3xl lg:text-4xl font-bold tracking-tight text-black mb-3">
             DESCRIÇÃO ANALÍTICA DE MATERIAIS
           </h2>

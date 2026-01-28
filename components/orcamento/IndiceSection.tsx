@@ -10,7 +10,6 @@ const INDICE_ITEMS = [
   { numero: "04", titulo: "Planilha Orçamentária", href: "#investimento" },
   { numero: "05", titulo: "Plano de Gerenciamento Berkahn", href: "#plano" },
   { numero: "06", titulo: "Pagamento", href: "#pagamento" },
-  { numero: "07", titulo: "Contato", href: "#contato" },
 ];
 
 export function IndiceSection() {

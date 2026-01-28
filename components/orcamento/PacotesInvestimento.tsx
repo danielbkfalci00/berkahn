@@ -13,6 +13,7 @@ import { PacoteCard } from "./PacoteCard";
 import type { PacoteInvestimento } from "@/types/orcamento";
 import { cn } from "@/lib/utils";
 import { OrcamentoWatermark } from "./OrcamentoWatermark";
+import { SectionLabel } from "./SectionLabel";
 
 interface PacotesInvestimentoProps {
   pacotes: PacoteInvestimento[];
@@ -34,14 +35,7 @@ export function PacotesInvestimento({
         {/* Section Header */}
         <RevealOnScroll>
           <div className="text-center mb-16">
-            <motion.span
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="inline-block text-xs uppercase tracking-[0.3em] text-black/40 mb-4"
-            >
-              Investimento
-            </motion.span>
+            <SectionLabel number="04" title="Planilha Orçamentária" variant="light" />
             <h2 className="headline-md text-black mb-4">
               Opções de Investimento
             </h2>

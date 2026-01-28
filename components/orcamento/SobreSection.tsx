@@ -6,6 +6,7 @@ import Image from "next/image";
 import { BENEFITS } from "@/lib/lsf-data";
 import { CountUp } from "@/components/animations/CountUp";
 import { OrcamentoWatermark } from "./OrcamentoWatermark";
+import { SectionLabel } from "./SectionLabel";
 
 // Mapeamento de ícones
 const iconMap: Record<string, React.ElementType> = {
@@ -57,9 +58,7 @@ export function SobreSection() {
             className="text-center"
           >
             {/* Section tag */}
-            <span className="inline-block text-[10px] uppercase tracking-[0.4em] text-white/40 mb-6">
-              01 — Apresentação Construtora
-            </span>
+            <SectionLabel number="01" title="Apresentação Construtora" variant="dark" />
 
             {/* Main title */}
             <h1 className="font-heading text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight mb-4">

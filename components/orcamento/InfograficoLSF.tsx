@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { OrcamentoWatermark } from "./OrcamentoWatermark";
+import { SectionLabel } from "./SectionLabel";
 
 interface BeneficioVisual {
   icon: React.ElementType;
@@ -236,9 +237,7 @@ export function InfograficoLSF() {
         {/* Section Header */}
         <RevealOnScroll>
           <div className="text-center mb-16">
-            <span className="inline-block text-xs uppercase tracking-[0.3em] text-white/40 mb-4">
-              Eficiência Comprovada
-            </span>
+            <SectionLabel number="01" title="Apresentação Construtora" variant="dark" subtitle="Eficiência Comprovada" />
             <h2 className="headline-md text-white mb-4">
               Economia de recursos e precisão que fazem a diferença
             </h2>

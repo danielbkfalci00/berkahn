@@ -13,6 +13,7 @@ import {
 import type { PlanoGerenciamento, EtapaGerenciamento } from "@/types/orcamento";
 import { cn } from "@/lib/utils";
 import { OrcamentoWatermark } from "./OrcamentoWatermark";
+import { SectionLabel } from "./SectionLabel";
 
 interface PlanoGerenciamentoSectionProps {
   plano: PlanoGerenciamento;
@@ -62,9 +63,7 @@ export function PlanoGerenciamentoSection({
       <div className="container max-w-6xl relative z-10">
         <RevealOnScroll>
           <div className="text-center mb-16">
-            <span className="inline-block text-xs uppercase tracking-[0.3em] text-black/40 mb-4">
-              Processo de Trabalho
-            </span>
+            <SectionLabel number="05" title="Plano de Gerenciamento Berkahn" variant="light" />
             <h2 className="text-4xl lg:text-5xl font-bold tracking-tight text-black mb-4">
               {plano.titulo}
             </h2>

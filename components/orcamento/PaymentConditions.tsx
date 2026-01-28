@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import type { CondicaoPagamento } from "@/types/orcamento";
 import { OrcamentoWatermark } from "./OrcamentoWatermark";
+import { SectionLabel } from "./SectionLabel";
 
 interface PaymentConditionsProps {
   condicoes: CondicaoPagamento[];
@@ -35,9 +36,7 @@ export function PaymentConditions({
               <div className="w-12 h-px bg-black/20" />
             </div>
 
-            <span className="inline-block text-xs uppercase tracking-[0.3em] text-black/40 mb-4">
-              Investimento
-            </span>
+            <SectionLabel number="06" title="Pagamento" variant="light" />
             <h2 className="headline-md text-black mb-4">
               Condições de Pagamento
             </h2>

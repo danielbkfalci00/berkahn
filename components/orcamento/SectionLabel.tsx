@@ -1,0 +1,42 @@
+import { cn } from "@/lib/utils";
+
+interface SectionLabelProps {
+  number: string;
+  title: string;
+  variant: "dark" | "light";
+  subtitle?: string;
+  className?: string;
+}
+
+export function SectionLabel({
+  number,
+  title,
+  variant,
+  subtitle,
+  className,
+}: SectionLabelProps) {
+  const isDark = variant === "dark";
+
+  return (
+    <div className={cn("mb-6", className)}>
+      <span
+        className={cn(
+          "inline-block text-xs sm:text-sm uppercase tracking-[0.3em] font-mono",
+          isDark ? "text-white/60" : "text-black/60"
+        )}
+      >
+        {number} — {title}
+      </span>
+      {subtitle && (
+        <span
+          className={cn(
+            "block text-[10px] sm:text-xs uppercase tracking-[0.25em] mt-1.5",
+            isDark ? "text-white/40" : "text-black/40"
+          )}
+        >
+          {subtitle}
+        </span>
+      )}
+    </div>
+  );
+}

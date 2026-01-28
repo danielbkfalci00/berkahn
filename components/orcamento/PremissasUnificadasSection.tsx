@@ -6,6 +6,7 @@ import { ProjetosConsideradosSection } from "./ProjetosConsideradosSection";
 import { NaoIncluiSubsection } from "./NaoIncluiSubsection";
 import { METODOLOGIA_LSF, PREMISSAS_TEMPLATE } from "@/lib/orcamento-data";
 import { OrcamentoWatermark } from "./OrcamentoWatermark";
+import { SectionLabel } from "./SectionLabel";
 
 /**
  * Seção Premissas Adotadas para Orçamento (UNIFICADA)
@@ -58,9 +59,7 @@ export function PremissasUnificadasSection() {
           className="max-w-4xl"
         >
           {/* Supra-título */}
-          <p className="text-xs uppercase tracking-[0.3em] text-black/70 font-mono mb-2">
-            Seção Principal
-          </p>
+          <SectionLabel number="02" title="Premissas Adotadas para o Orçamento" variant="light" />
 
           {/* Título Principal H2 */}
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-black mb-4">
