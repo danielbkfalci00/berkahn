@@ -13,6 +13,8 @@ import { CTAFinal } from "@/components/orcamento/CTAFinal";
 import { PremissasUnificadasSection } from "@/components/orcamento/PremissasUnificadasSection";
 import { MateriaisSection } from "@/components/orcamento/MateriaisSection";
 import { PlanoGerenciamentoSection } from "@/components/orcamento/PlanoGerenciamentoSection";
+import { NaoIncluiSubsection } from "@/components/orcamento/NaoIncluiSubsection";
+import { SectionLabel } from "@/components/orcamento/SectionLabel";
 import { PaymentConditions } from "@/components/orcamento/PaymentConditions";
 
 import {
@@ -81,6 +83,14 @@ export default function OrcamentoPage() {
       <section id="materiais">
         <MateriaisSection />
       </section>
+
+      {/* Subseção: Itens Não Inclusos (parte da seção 03) */}
+      <div className="bg-[#F4F2EC] pt-8">
+        <div className="container px-4 sm:px-6 lg:px-8">
+          <SectionLabel number="03" title="Descrição Analítica dos Materiais" variant="light" subtitle="Itens Não Inclusos" />
+        </div>
+      </div>
+      <NaoIncluiSubsection itensExclusos={PREMISSAS_TEMPLATE.itensExclusos} />
 
       {/* Seção 7: Proposta de Investimento (CORE) - Pacotes */}
       <section id="investimento">

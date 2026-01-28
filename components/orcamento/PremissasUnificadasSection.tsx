@@ -3,7 +3,6 @@
 import { motion } from "framer-motion";
 import { MetodologiaSubsection } from "./MetodologiaSubsection";
 import { ProjetosConsideradosSection } from "./ProjetosConsideradosSection";
-import { NaoIncluiSubsection } from "./NaoIncluiSubsection";
 import { METODOLOGIA_LSF, PREMISSAS_TEMPLATE } from "@/lib/orcamento-data";
 import { OrcamentoWatermark } from "./OrcamentoWatermark";
 import { SectionLabel } from "./SectionLabel";
@@ -86,8 +85,6 @@ export function PremissasUnificadasSection() {
       {/* Seção 2: Projetos Considerados na Proposta (Letter E hierarchy) */}
       <ProjetosConsideradosSection />
 
-      {/* Seção 3: Itens Não Inclusos */}
-      <NaoIncluiSubsection itensExclusos={PREMISSAS_TEMPLATE.itensExclusos} />
     </section>
   );
 }
