@@ -1,11 +1,18 @@
+"use client";
+
+import { useState } from "react";
 import { OrcamentoHero } from "@/components/orcamento/OrcamentoHero";
-import { SobreSection } from "@/components/orcamento/SobreSection";
-import { PremissasUnificadasSection } from "@/components/orcamento/PremissasUnificadasSection";
+import { SobreSectionPDF } from "@/components/orcamento/pdf/SobreSectionPDF";
+import { MetodologiaPDF } from "@/components/orcamento/pdf/MetodologiaPDF";
+import { ProjetoPrototipoPDF } from "@/components/orcamento/pdf/ProjetoPrototipoPDF";
+import { PlantasPDF } from "@/components/orcamento/pdf/PlantasPDF";
+import { ElevacoesPDF } from "@/components/orcamento/pdf/ElevacoesPDF";
+import { MateriaisPDF } from "@/components/orcamento/pdf/MateriaisPDF";
 import { PacotesInvestimento } from "@/components/orcamento/PacotesInvestimento";
 import { PaymentConditions } from "@/components/orcamento/PaymentConditions";
-import { PlanoGerenciamentoSection } from "@/components/orcamento/PlanoGerenciamentoSection";
-import { InfograficoLSF } from "@/components/orcamento/InfograficoLSF";
-import { DiferenciaisLSF } from "@/components/orcamento/DiferenciaisLSF";
+import { PlanoGerenciamentoSectionPDF } from "@/components/orcamento/pdf/PlanoGerenciamentoSectionPDF";
+import { InfograficoLSFPDF } from "@/components/orcamento/pdf/InfograficoLSFPDF";
+import { DiferenciaisLSFPDF } from "@/components/orcamento/pdf/DiferenciaisLSFPDF";
 import { CTAFinal } from "@/components/orcamento/CTAFinal";
 
 import {
@@ -19,36 +26,21 @@ import {
   calcularDataValidade,
 } from "@/lib/orcamento-data";
 
-interface PDFPageProps {
-  searchParams: Promise<{ pacote?: string }>;
-}
-
-/**
- * Página otimizada para geração de PDF via Puppeteer
- *
- * Esta página:
- * - Reutiliza TODOS os componentes existentes da página de orçamento
- * - Remove header fixo e navegação lateral (não necessários no PDF)
- * - Aplica classe "pdf-mode" para desabilitar animações e forçar layout estático
- * - Recebe pacote selecionado via query parameter
- *
- * Não é uma página para acesso direto - é renderizada pelo Puppeteer para gerar PDF
- */
-export default async function OrcamentoPDFPage({ searchParams }: PDFPageProps) {
-  const params = await searchParams;
-  const pacoteSelecionadoId = params.pacote || "material-acompanhamento-berkahn";
-
+export default function OrcamentoPDFPage() {
   const numeroOrcamento = gerarNumeroOrcamento();
   const dataValidade = calcularDataValidade(20);
 
-  // Encontra o pacote selecionado para calcular valor dinâmico
+  const [pacoteSelecionadoId, setPacoteSelecionadoId] = useState<string>(
+    PACOTES_TEMPLATE.find(p => p.destaque)?.id || PACOTES_TEMPLATE[0].id
+  );
+
   const pacoteSelecionado = PACOTES_TEMPLATE.find(p => p.id === pacoteSelecionadoId) || PACOTES_TEMPLATE[0];
   const valorTotal = pacoteSelecionado.valorTotal;
 
   return (
-    <main className="pdf-mode">
-      {/* Seção 1: Hero/Capa Premium */}
-      <section id="hero" className="pdf-page-break-after">
+    <main className="relative bg-white">
+      {/* Slide 1: Hero/Capa */}
+      <section className="min-h-screen">
         <OrcamentoHero
           projeto={PROJETO_TEMPLATE}
           numeroOrcamento={numeroOrcamento}
@@ -56,61 +48,83 @@ export default async function OrcamentoPDFPage({ searchParams }: PDFPageProps) {
         />
       </section>
 
-      {/* Seção 2: Sobre a Berkahn */}
-      <SobreSection />
+      {/* Slide 2: Sobre a Berkahn */}
+      <section className="min-h-screen flex items-center">
+        <SobreSectionPDF />
+      </section>
 
-      {/* Transição Visual */}
-      <div className="relative h-24 bg-white">
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="flex items-center gap-4">
-            <div className="w-32 h-[1px] bg-black/10" />
-            <div className="w-3 h-3 rotate-45 bg-black/20" />
-            <div className="w-32 h-[1px] bg-black/10" />
-          </div>
+      {/* Slide 3: Metodologia Construtiva (COM imagem técnica) */}
+      <section className="min-h-screen flex items-center">
+        <MetodologiaPDF />
+      </section>
+
+      {/* Slide 4: Projeto Chalé - Protótipos (COM 4 fotos) */}
+      <section className="min-h-screen flex items-center">
+        <ProjetoPrototipoPDF />
+      </section>
+
+      {/* Slide 5: Plantas Baixas (COM 2 plantas) */}
+      <section className="min-h-screen flex items-center">
+        <PlantasPDF />
+      </section>
+
+      {/* Slide 6: Elevações Técnicas (COM 4 elevações) */}
+      <section className="min-h-screen flex items-center">
+        <ElevacoesPDF />
+      </section>
+
+      {/* Slide 7: Descrição Analítica de Materiais */}
+      <section className="min-h-screen flex items-center">
+        <MateriaisPDF />
+      </section>
+
+      {/* Slide 8: Proposta de Investimento */}
+      <section className="min-h-screen flex items-center">
+        <div className="w-full">
+          <PacotesInvestimento
+            pacotes={PACOTES_TEMPLATE}
+            metragemProjeto={PROJETO_TEMPLATE.metragem}
+            onPacoteSelecionado={setPacoteSelecionadoId}
+            pacoteSelecionadoId={pacoteSelecionadoId}
+            isPDFMode={true}
+          />
         </div>
-      </div>
-
-      {/* Seção 3: Premissas Adotadas para Orçamento */}
-      <section id="premissas">
-        <PremissasUnificadasSection />
       </section>
 
-      {/* Seção 4: Proposta de Investimento */}
-      <section id="investimento">
-        <PacotesInvestimento
-          pacotes={PACOTES_TEMPLATE}
-          metragemProjeto={PROJETO_TEMPLATE.metragem}
-          pacoteSelecionadoId={pacoteSelecionadoId}
-          isPDFMode={true}
+      {/* Slide 9: Condições de Pagamento */}
+      <section className="min-h-screen flex items-center">
+        <div className="w-full">
+          <PaymentConditions
+            condicoes={CONDICOES_PAGAMENTO}
+            valorTotal={valorTotal}
+          />
+        </div>
+      </section>
+
+      {/* Slide 10: Plano de Gerenciamento */}
+      <section className="min-h-screen flex items-center">
+        <div className="w-full">
+          {PROJETO_TEMPLATE.planoGerenciamento && (
+            <PlanoGerenciamentoSectionPDF plano={PROJETO_TEMPLATE.planoGerenciamento} />
+          )}
+        </div>
+      </section>
+
+      {/* Slide 11: Vantagens Steel Frame */}
+      <section className="min-h-screen flex items-center">
+        <InfograficoLSFPDF />
+      </section>
+
+      {/* Slide 12: Comparativo LSF vs Alvenaria */}
+      <section className="min-h-screen flex items-center">
+        <DiferenciaisLSFPDF
+          comparativo={COMPARATIVO_ORCAMENTO}
+          beneficios={BENEFICIOS_LSF_STATS}
         />
       </section>
 
-      {/* Seção 5: Condições de Pagamento */}
-      <section id="pagamento">
-        <PaymentConditions
-          condicoes={CONDICOES_PAGAMENTO}
-          valorTotal={valorTotal}
-        />
-      </section>
-
-      {/* Seção 6: Plano de Gerenciamento */}
-      <section id="plano">
-        {PROJETO_TEMPLATE.planoGerenciamento && (
-          <PlanoGerenciamentoSection plano={PROJETO_TEMPLATE.planoGerenciamento} />
-        )}
-      </section>
-
-      {/* Seção 7: Infográficos LSF */}
-      <InfograficoLSF />
-
-      {/* Seção 8: Diferenciais Steel Frame */}
-      <DiferenciaisLSF
-        comparativo={COMPARATIVO_ORCAMENTO}
-        beneficios={BENEFICIOS_LSF_STATS}
-      />
-
-      {/* Seção 9: CTA Final / Contato */}
-      <section id="contato">
+      {/* Slide 13: CTA Final / Contato */}
+      <section className="min-h-screen">
         <CTAFinal
           projeto={PROJETO_TEMPLATE}
           validoAte={dataValidade}

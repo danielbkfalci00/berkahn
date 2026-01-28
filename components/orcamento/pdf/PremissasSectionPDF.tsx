@@ -1,0 +1,110 @@
+import { METODOLOGIA_LSF, MATERIAIS_ANALITICOS } from "@/lib/orcamento-data";
+
+/**
+ * PremissasSectionPDF - Versão compacta sem imagens
+ * Apenas texto, tabelas e listas
+ */
+export function PremissasSectionPDF() {
+  return (
+    <section className="py-12 bg-white w-full">
+      <div className="container max-w-5xl mx-auto px-6">
+        {/* Header */}
+        <div className="mb-10">
+          <p className="text-xs uppercase tracking-[0.3em] text-black/50 font-mono mb-2">
+            Seção Principal
+          </p>
+          <h2 className="text-3xl font-bold tracking-tight text-black mb-3">
+            PREMISSAS ADOTADAS PARA O ORÇAMENTO
+          </h2>
+          <p className="text-sm text-black/60 max-w-2xl">
+            Metodologia construtiva, projeto de referência e especificações de materiais.
+          </p>
+        </div>
+
+        {/* Grid: Metodologia + Projeto */}
+        <div className="grid md:grid-cols-2 gap-8 mb-10">
+          {/* Metodologia Construtiva */}
+          <div className="bg-[#F4F2EC] rounded-xl p-6">
+            <h3 className="text-lg font-bold text-black mb-4 uppercase tracking-wide">
+              Metodologia Construtiva
+            </h3>
+            <div className="space-y-3">
+              {METODOLOGIA_LSF.itens.map((item, index) => (
+                <div key={index} className="flex gap-3">
+                  <span className="w-6 h-6 rounded-full bg-black text-white text-xs font-bold flex items-center justify-center flex-shrink-0">
+                    {item.letra}
+                  </span>
+                  <div>
+                    <p className="text-sm font-semibold text-black">{item.titulo}</p>
+                    <p className="text-xs text-black/60">{item.descricao}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Projeto Considerado */}
+          <div className="bg-white border border-black/10 rounded-xl p-6">
+            <h3 className="text-lg font-bold text-black mb-4 uppercase tracking-wide">
+              Projeto: Chalé (01)
+            </h3>
+            <div className="space-y-4">
+              <div className="text-center py-4 bg-black/5 rounded-lg">
+                <span className="text-4xl font-bold text-black">44m²</span>
+                <p className="text-xs text-black/60 mt-1">Área Total</p>
+              </div>
+              <div className="grid grid-cols-2 gap-3 text-sm">
+                <div className="flex justify-between">
+                  <span className="text-black/60">Quarto</span>
+                  <span className="font-semibold">10 m²</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-black/60">Banheiro</span>
+                  <span className="font-semibold">6 m²</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-black/60">Sala</span>
+                  <span className="font-semibold">27 m²</span>
+                </div>
+                <div className="flex justify-between border-t border-black/10 pt-2">
+                  <span className="text-black/60">Total</span>
+                  <span className="font-bold">43 m²</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Descrição Analítica de Materiais */}
+        <div className="bg-[#F4F2EC] rounded-xl p-6">
+          <h3 className="text-lg font-bold text-black mb-4 uppercase tracking-wide">
+            Descrição Analítica de Materiais
+          </h3>
+          <div className="overflow-hidden rounded-lg border border-black/10">
+            <table className="w-full text-sm">
+              <thead className="bg-black text-white">
+                <tr>
+                  <th className="px-4 py-2 text-left w-12">#</th>
+                  <th className="px-4 py-2 text-left">Componente</th>
+                  <th className="px-4 py-2 text-left">Especificação</th>
+                </tr>
+              </thead>
+              <tbody>
+                {MATERIAIS_ANALITICOS.map((material, index) => (
+                  <tr key={index} className={index % 2 === 0 ? "bg-white" : "bg-black/5"}>
+                    <td className="px-4 py-3 font-bold">{material.letra}</td>
+                    <td className="px-4 py-3 font-medium">{material.categoria}</td>
+                    <td className="px-4 py-3 text-black/70">{material.especificacao}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p className="text-xs text-black/50 mt-3 italic">
+            * Especificações sujeitas a alterações conforme projeto executivo
+          </p>
+        </div>
+      </div>
+    </section>
+  );
+}
