@@ -3,13 +3,34 @@ import chromium from "@sparticuz/chromium";
 
 export const maxDuration = 60; // Timeout de 60 segundos para geração
 
+// Determina a URL base correta para o ambiente
+function getBaseUrl(requestUrl: string): string {
+  // Em desenvolvimento local
+  if (process.env.NODE_ENV === "development") {
+    return "http://localhost:3000";
+  }
+
+  // No Vercel, usa a URL do request ou VERCEL_URL
+  if (process.env.VERCEL_URL) {
+    return `https://${process.env.VERCEL_URL}`;
+  }
+
+  // Fallback: extrai a origem do request
+  try {
+    const url = new URL(requestUrl);
+    return url.origin;
+  } catch {
+    return "http://localhost:3000";
+  }
+}
+
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const pacoteId = searchParams.get("pacote") || "material-acompanhamento-berkahn";
   const numeroOrcamento = searchParams.get("numero") || "BRK-2026-0042";
 
   try {
-    // Configuração do Chromium
+    // Configuração do Chromium para ambiente serverless
     const browser = await puppeteer.launch({
       args: chromium.args,
       executablePath: await chromium.executablePath(),
@@ -21,9 +42,11 @@ export async function GET(request: Request) {
     // Viewport desktop para layout consistente
     await page.setViewport({ width: 1440, height: 900 });
 
-    // URL base - usa localhost em dev ou site em produção
-    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+    // URL base - usa a URL correta para o ambiente
+    const baseUrl = getBaseUrl(request.url);
     const pdfUrl = `${baseUrl}/orcamento/pdf?pacote=${pacoteId}`;
+
+    console.log("Generating PDF from:", pdfUrl);
 
     // Navega para a página PDF otimizada
     await page.goto(pdfUrl, {
