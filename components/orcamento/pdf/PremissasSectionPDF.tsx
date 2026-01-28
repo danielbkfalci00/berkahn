@@ -68,7 +68,7 @@ export function PremissasSectionPDF() {
                 </div>
                 <div className="flex justify-between border-t border-black/10 pt-2">
                   <span className="text-black/60">Total</span>
-                  <span className="font-bold">43 m²</span>
+                  <span className="font-bold">44 m²</span>
                 </div>
               </div>
             </div>

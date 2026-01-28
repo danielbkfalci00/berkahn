@@ -45,7 +45,7 @@ export const PROJETO_TEMPLATE: OrcamentoProjeto = {
   // Projeto Preliminar com metragens
   projetoPreliminar: {
     metragemTotal: 44,
-    areaUtil: 43,
+    areaUtil: 44,
     metragemComodos: [
       { nome: "Quarto", area: 10, categoria: "intimo" },
       { nome: "Banheiro", area: 6, categoria: "servico" },
