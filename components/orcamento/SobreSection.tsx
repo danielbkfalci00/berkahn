@@ -37,62 +37,67 @@ export function SobreSection() {
           </p>
         </motion.div>
 
-        {/* Main Layout: Image + Content Grid */}
-        <div className="grid lg:grid-cols-[38%_1fr] gap-6 items-start">
+        {/* Main Layout: 40% imagens | 60% conteúdo */}
+        <div className="grid lg:grid-cols-[40%_1fr] gap-8 lg:gap-12 items-start">
 
-          {/* Left: Large Anchor Image */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            className="relative rounded-2xl overflow-hidden shadow-luxury-md group"
-          >
-            <Image
-              src="/images/orcamento/sobre_berkahn_1.webp"
-              alt="Berkahn - Expertise em Light Steel Frame"
-              width={600}
-              height={750}
-              quality={90}
-              className="w-full h-auto object-contain transition-transform duration-700 group-hover:scale-[1.02]"
-              sizes="(max-width: 1024px) 100vw, 38vw"
-            />
-            {/* Subtle gradient overlay for depth */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent pointer-events-none" />
-          </motion.div>
+          {/* ESQUERDA: Duas imagens empilhadas */}
+          <div className="space-y-6">
+            {/* Imagem 1 - Principal */}
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="relative aspect-[4/5] rounded-2xl overflow-hidden shadow-luxury-md group"
+            >
+              <Image
+                src="/images/orcamento/sobre_berkahn_1.webp"
+                alt="Berkahn - Expertise em Light Steel Frame"
+                fill
+                className="object-cover transition-transform duration-700 group-hover:scale-[1.02]"
+                sizes="(max-width: 1024px) 100vw, 40vw"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
+            </motion.div>
 
-          {/* Right: Content Grid */}
+            {/* Imagem 2 - Secundária */}
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1 }}
+              className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-luxury-md group"
+            >
+              <Image
+                src="/images/orcamento/sobre_berkahn_2.webp"
+                alt="Equipe Berkahn em obra"
+                fill
+                className="object-cover transition-transform duration-700 group-hover:scale-[1.02]"
+                sizes="(max-width: 1024px) 100vw, 40vw"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
+            </motion.div>
+          </div>
+
+          {/* DIREITA: Todo o conteúdo */}
           <div className="space-y-6">
 
-            {/* Narrative Card with Visible Image */}
+            {/* Texto narrativo */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="relative bg-white rounded-2xl overflow-hidden border border-black/5 shadow-luxury-sm"
+              className="bg-white rounded-2xl p-8 lg:p-10 border border-black/5 shadow-luxury-sm"
             >
-              <div className="grid lg:grid-cols-[1fr_40%]">
-                <div className="p-8 lg:p-10">
-                  <p className="text-lg text-black/80 leading-relaxed">
-                    Nascemos da experiência de quem conhece construção de verdade.
-                    São <strong className="text-black">20 anos somados</strong> em projetos
-                    industrializados que nos ensinaram uma coisa: a melhor surpresa
-                    é não ter surpresa nenhuma.
-                  </p>
-                </div>
-                <div className="relative aspect-[4/3] lg:aspect-auto lg:min-h-[200px]">
-                  <Image
-                    src="/images/orcamento/sobre_berkahn_2.webp"
-                    alt="Equipe Berkahn em obra"
-                    fill
-                    className="object-cover"
-                    sizes="300px"
-                  />
-                </div>
-              </div>
+              <p className="text-lg text-black/80 leading-relaxed">
+                Nascemos da experiência de quem conhece construção de verdade.
+                São <strong className="text-black">20 anos somados</strong> em projetos
+                industrializados que nos ensinaram uma coisa: a melhor surpresa
+                é não ter surpresa nenhuma.
+              </p>
             </motion.div>
 
-            {/* Values Grid */}
-            <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
+            {/* Grid de valores: 4 colunas */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
 
               {/* Card: Excelência */}
               <motion.div
@@ -124,7 +129,7 @@ export function SobreSection() {
                 </p>
               </motion.div>
 
-              {/* Card: Precisão (NOVO - substituiu Agilidade) */}
+              {/* Card: Precisão */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -139,20 +144,18 @@ export function SobreSection() {
                 </p>
               </motion.div>
 
-              {/* Card: Big Number */}
+              {/* Card: Big Number - 20+ anos */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.25 }}
-                className="bg-black text-white rounded-2xl p-6 flex flex-col justify-center col-span-2 lg:col-span-3"
+                className="bg-black text-white rounded-2xl p-6 flex flex-col justify-center"
               >
-                <div className="flex items-baseline gap-2">
-                  <span className="text-5xl font-bold">20+</span>
-                  <p className="text-sm text-white/60">
-                    anos de experiência combinada
-                  </p>
-                </div>
+                <span className="text-4xl font-bold mb-1">20+</span>
+                <p className="text-sm text-white/60">
+                  anos de experiência
+                </p>
               </motion.div>
             </div>
 
