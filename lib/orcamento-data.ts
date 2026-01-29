@@ -281,7 +281,6 @@ export const PREMISSAS_TEMPLATE: PremissasProposta = {
   ],
   itensInclusos: [
     "Todos os insumos necessários que viabilizam a execução do escopo contratado",
-    "Ferramentas especializadas para montagem LSF",
     "Alimentação para equipe técnica",
     "Estadia para equipe técnica (se necessário)",
   ],
