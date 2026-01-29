@@ -8,38 +8,16 @@ interface NaoIncluiSubsectionProps {
 
 export function NaoIncluiSubsection({ itensExclusos }: NaoIncluiSubsectionProps) {
   return (
-    <div className="relative bg-[#F4F2EC] py-lg">
+    <div className="relative bg-black py-md">
       <div className="container px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="relative bg-white rounded-2xl p-8 lg:p-10 border border-black/10 shadow-luxury-sm"
+          className="relative bg-white rounded-2xl p-6 lg:p-8 border border-black/10 shadow-luxury-sm"
         >
-          {/* Header técnico */}
-          <div className="flex items-center justify-between mb-8">
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-px bg-black/20" />
-              <span className="text-[10px] uppercase tracking-[0.35em] text-black/60 font-mono">
-                4.2 — ITENS NÃO INCLUÍDOS
-              </span>
-              <div className="flex-1 h-px bg-black/20" />
-            </div>
-
-            {/* Blueprint bracket (canto superior direito) */}
-            <svg
-              className="w-8 h-8 text-black/20"
-              viewBox="0 0 32 32"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.5"
-            >
-              <path d="M24,0 L32,0 L32,8" />
-            </svg>
-          </div>
-
           {/* Lista compacta com bullets minimalistas */}
-          <ul className="space-y-2">
+          <ul className="space-y-1.5">
             {itensExclusos.map((item, index) => (
               <motion.li
                 key={index}
@@ -73,7 +51,7 @@ export function NaoIncluiSubsection({ itensExclusos }: NaoIncluiSubsectionProps)
 
           {/* Blueprint bracket (canto inferior esquerdo) */}
           <svg
-            className="absolute bottom-8 left-8 w-8 h-8 text-black/15"
+            className="absolute bottom-6 left-6 w-6 h-6 text-black/10"
             viewBox="0 0 32 32"
             fill="none"
             stroke="currentColor"
