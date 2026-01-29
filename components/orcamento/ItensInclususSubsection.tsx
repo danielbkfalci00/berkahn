@@ -1,7 +1,6 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { CheckCircle2 } from "lucide-react";
 
 interface ItensInclususSubsectionProps {
   itensInclusos: string[];
@@ -9,44 +8,79 @@ interface ItensInclususSubsectionProps {
 
 export function ItensInclususSubsection({ itensInclusos }: ItensInclususSubsectionProps) {
   return (
-    <div className="bg-black py-lg">
+    <div className="relative bg-black py-lg">
       <div className="container px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="bg-[#F4F2EC] rounded-2xl p-6 lg:p-8 border border-black/5"
+          className="relative bg-black rounded-2xl p-8 lg:p-10 border border-white/10"
         >
-          {/* Header com ícone */}
-          <div className="flex items-center gap-4 mb-6">
-            <div className="w-8 h-px bg-black/20" />
-            <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center">
-              <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+          {/* Header técnico */}
+          <div className="flex items-center justify-between mb-8">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-px bg-white/20" />
+              <span className="text-[10px] uppercase tracking-[0.35em] text-white/60 font-mono">
+                4.1 — ESCOPO INCLUÍDO
+              </span>
+              <div className="flex-1 h-px bg-white/20" />
             </div>
-            <span className="text-xs uppercase tracking-[0.3em] text-black/60 font-semibold">
-              INCLUI
-            </span>
-            <div className="w-8 h-px bg-black/20" />
+
+            {/* Blueprint bracket (canto superior direito) */}
+            <svg
+              className="w-8 h-8 text-white/30"
+              viewBox="0 0 32 32"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+            >
+              <path d="M24,0 L32,0 L32,8" />
+            </svg>
           </div>
 
-          {/* Grid de itens */}
-          <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          {/* Lista compacta com bullets minimalistas */}
+          <ul className="space-y-2">
             {itensInclusos.map((item, index) => (
               <motion.li
                 key={index}
-                initial={{ opacity: 0, x: -10 }}
+                className="flex items-start gap-4 group"
+                initial={{ opacity: 0, x: -20 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: index * 0.03 }}
-                className="flex items-start gap-3 p-3 bg-white rounded-lg border border-emerald-100"
+                transition={{
+                  delay: index * 0.05,
+                  duration: 0.4,
+                  ease: [0.19, 1, 0.22, 1],
+                }}
               >
-                <div className="w-5 h-5 rounded-full bg-emerald-100 flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <CheckCircle2 className="w-3 h-3 text-emerald-600" />
-                </div>
-                <span className="text-sm text-black/80">{item}</span>
+                {/* Numeração técnica */}
+                <span className="font-mono text-[10px] text-white/40 mt-1 w-6 flex-shrink-0">
+                  {String(index + 1).padStart(2, '0')}
+                </span>
+
+                {/* Bullet minimalista */}
+                <span className="text-white/40 text-lg font-light leading-none mt-0.5 flex-shrink-0">
+                  +
+                </span>
+
+                {/* Item text */}
+                <span className="text-sm text-white/90 leading-relaxed flex-1">
+                  {item}
+                </span>
               </motion.li>
             ))}
           </ul>
+
+          {/* Blueprint bracket (canto inferior esquerdo) */}
+          <svg
+            className="absolute bottom-8 left-8 w-8 h-8 text-white/20"
+            viewBox="0 0 32 32"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.5"
+          >
+            <path d="M0,24 L0,32 L8,32" />
+          </svg>
         </motion.div>
       </div>
     </div>
