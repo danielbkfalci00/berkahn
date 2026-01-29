@@ -48,7 +48,8 @@ export function PremissasUnificadasSection() {
       </motion.span>
 
       {/* Header da Seção Principal */}
-      <div className="container px-4 sm:px-6 lg:px-8 pt-xl pb-lg relative z-10">
+      <div className="bg-[#F4F2EC] relative z-10">
+      <div className="container px-4 sm:px-6 lg:px-8 pt-xl pb-lg">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -73,6 +74,7 @@ export function PremissasUnificadasSection() {
             <div className="w-32 h-[1px] bg-black/10" />
           </div>
         </motion.div>
+      </div>
       </div>
 
       {/* Seção 1: Metodologia Construtiva (Off-White) */}
