@@ -93,7 +93,7 @@ export function SobreSection() {
                 NOSSA EXPERTISE
               </h2>
               <p className="text-lg text-black/80 leading-relaxed">
-                Somos uma construtora especializada em Light Steel Frame no Brasil.
+                Somos uma construtora especializada em Light Steel Frame.
                 Priorizamos esta tecnologia por sua eficiência, precisão e sustentabilidade
                 — mas nossa expertise vai além: <strong className="text-black">Dominamos múltiplos sistemas construtivos</strong> para entregar sempre a melhor solução.
               </p>
