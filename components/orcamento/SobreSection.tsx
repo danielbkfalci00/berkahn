@@ -89,7 +89,7 @@ export function SobreSection() {
         <div className="container max-w-7xl relative z-10">
 
         {/* Main Layout: 60% conteúdo | 40% foto */}
-        <div className="grid lg:grid-cols-[1fr_40%] gap-8 lg:gap-12 items-start">
+        <div className="grid lg:grid-cols-[1fr_40%] gap-8 lg:gap-12 items-center">
 
           {/* ESQUERDA: Conteúdo */}
           <div className="space-y-8 order-2 lg:order-1">
