@@ -1,4 +1,4 @@
-import { METODOLOGIA_LSF, MATERIAIS_ANALITICOS } from "@/lib/orcamento-data";
+import { METODOLOGIA_LSF } from "@/lib/orcamento-data";
 
 /**
  * PremissasSectionPDF - Versão compacta sem imagens
@@ -6,10 +6,10 @@ import { METODOLOGIA_LSF, MATERIAIS_ANALITICOS } from "@/lib/orcamento-data";
  */
 export function PremissasSectionPDF() {
   return (
-    <section className="py-12 bg-white w-full">
+    <section className="py-8 bg-white w-full">
       <div className="container max-w-5xl mx-auto px-6">
         {/* Header */}
-        <div className="mb-10">
+        <div className="mb-6">
           <p className="text-sm uppercase tracking-[0.3em] font-mono text-black/60 mb-2">
             02 — Premissas adotadas para o orçamento
           </p>
@@ -22,7 +22,7 @@ export function PremissasSectionPDF() {
         </div>
 
         {/* Grid: Metodologia + Projeto */}
-        <div className="grid md:grid-cols-2 gap-8 mb-10">
+        <div className="grid md:grid-cols-2 gap-6">
           {/* Metodologia Construtiva */}
           <div className="bg-[#F4F2EC] rounded-xl p-6">
             <h3 className="text-lg font-bold text-black mb-4 uppercase tracking-wide">
@@ -75,35 +75,6 @@ export function PremissasSectionPDF() {
           </div>
         </div>
 
-        {/* Descrição Analítica de Materiais */}
-        <div className="bg-[#F4F2EC] rounded-xl p-6">
-          <h3 className="text-lg font-bold text-black mb-4 uppercase tracking-wide">
-            Descrição Analítica de Materiais
-          </h3>
-          <div className="overflow-hidden rounded-lg border border-black/10">
-            <table className="w-full text-sm">
-              <thead className="bg-black text-white">
-                <tr>
-                  <th className="px-4 py-2 text-left w-12">#</th>
-                  <th className="px-4 py-2 text-left">Componente</th>
-                  <th className="px-4 py-2 text-left">Especificação</th>
-                </tr>
-              </thead>
-              <tbody>
-                {MATERIAIS_ANALITICOS.map((material, index) => (
-                  <tr key={index} className={index % 2 === 0 ? "bg-white" : "bg-black/5"}>
-                    <td className="px-4 py-3 font-bold">{material.letra}</td>
-                    <td className="px-4 py-3 font-medium">{material.categoria}</td>
-                    <td className="px-4 py-3 text-black/70">{material.especificacao}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          <p className="text-xs text-black/50 mt-3 italic">
-            * Especificações sujeitas a alterações conforme projeto executivo
-          </p>
-        </div>
       </div>
     </section>
   );

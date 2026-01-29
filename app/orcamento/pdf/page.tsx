@@ -42,87 +42,83 @@ export default function OrcamentoPDFPage() {
       </section>
 
       {/* Slide 2: Índice */}
-      <section className="h-screen flex items-center overflow-hidden">
+      <section className="min-h-screen flex items-center">
         <IndiceSectionPDF />
       </section>
 
       {/* Slide 3: Sobre a Berkahn — Seção 01 */}
-      <section className="h-screen flex items-center overflow-hidden">
+      <section className="min-h-screen flex items-center">
         <SobreSectionPDF />
       </section>
 
       {/* Slide 4: Vantagens Steel Frame — Seção 01 */}
-      <section className="h-screen flex items-center overflow-hidden">
+      <section className="min-h-screen flex items-center">
         <InfograficoLSFPDF />
       </section>
 
       {/* Slide 5: Premissas — Seção 02 */}
-      <section className="h-screen flex items-center overflow-hidden">
+      <section className="min-h-screen flex items-center">
         <PremissasSectionPDF />
       </section>
 
       {/* Slide 6: Metodologia Construtiva — Seção 02 */}
-      <section className="h-screen flex items-center overflow-hidden">
+      <section className="min-h-screen flex items-center">
         <MetodologiaPDF />
       </section>
 
       {/* Slide 7: Projeto Protótipo — Seção 02 */}
-      <section className="h-screen flex items-center overflow-hidden">
+      <section className="min-h-screen flex items-center">
         <ProjetoPrototipoPDF />
       </section>
 
       {/* Slide 8: Plantas Baixas — Seção 02 */}
-      <section className="h-screen flex items-center overflow-hidden">
+      <section className="min-h-screen flex items-center">
         <PlantasPDF />
       </section>
 
       {/* Slide 9: Elevações Técnicas — Seção 02 */}
-      <section className="h-screen flex items-center overflow-hidden">
+      <section className="min-h-screen flex items-center">
         <ElevacoesPDF />
       </section>
 
       {/* Slide 10: Materiais — Seção 03 */}
-      <section className="h-screen flex items-center overflow-hidden">
+      <section className="min-h-screen flex items-center">
         <MateriaisPDF />
       </section>
 
       {/* Slide 11: Proposta de Investimento — Seção 04 */}
-      <section className="h-screen flex items-center overflow-hidden">
-        <div className="w-full">
-          <PacotesInvestimento
-            pacotes={PACOTES_TEMPLATE}
-            metragemProjeto={PROJETO_TEMPLATE.metragem}
-            isPDFMode={true}
-          />
-        </div>
+      <section className="min-h-screen flex items-center">
+        <PacotesInvestimento
+          pacotes={PACOTES_TEMPLATE}
+          metragemProjeto={PROJETO_TEMPLATE.metragem}
+          isPDFMode={true}
+        />
       </section>
 
       {/* Slide 12: Plano de Gerenciamento — Seção 05 */}
-      <section className="h-screen flex items-center overflow-hidden">
-        <div className="w-full">
-          {PROJETO_TEMPLATE.planoGerenciamento && (
-            <PlanoGerenciamentoSectionPDF plano={PROJETO_TEMPLATE.planoGerenciamento} />
-          )}
-        </div>
+      <section className="min-h-screen flex items-center">
+        {PROJETO_TEMPLATE.planoGerenciamento && (
+          <PlanoGerenciamentoSectionPDF plano={PROJETO_TEMPLATE.planoGerenciamento} />
+        )}
       </section>
 
       {/* Slide 13: Pagamento — Seção 06 */}
-      <section className="h-screen flex items-center overflow-hidden">
-        <div className="w-full">
-          <PaymentConditions
-            condicoes={CONDICOES_PAGAMENTO}
-            valorTotal={valorTotal}
-          />
-        </div>
+      <section className="min-h-screen flex items-center">
+        <PaymentConditions
+          condicoes={CONDICOES_PAGAMENTO}
+          valorTotal={valorTotal}
+          isPDFMode={true}
+        />
       </section>
 
       {/* Slide 14: CTA Final / Contato */}
-      <section className="h-screen">
+      <section className="min-h-screen">
         <CTAFinal
           projeto={PROJETO_TEMPLATE}
           validoAte={dataValidade}
           numeroOrcamento={numeroOrcamento}
           contatos={CONTATOS}
+          isPDFMode={true}
         />
       </section>
     </main>

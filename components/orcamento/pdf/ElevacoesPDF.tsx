@@ -9,7 +9,7 @@ export function ElevacoesPDF() {
   const { imagens } = CHALE_PROJETO;
 
   return (
-    <section className="py-12 bg-black w-full">
+    <section className="py-8 bg-black w-full">
       <div className="container max-w-5xl mx-auto px-6">
         {/* Header */}
         <div className="mb-8">

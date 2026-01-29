@@ -56,7 +56,7 @@ export function MateriaisPDF() {
                     `}
                   >
                     {/* Coluna ITEM */}
-                    <td className={`px-4 py-2 ${material.isCategoria ? "font-bold" : ""}`}>
+                    <td className={`px-4 py-1.5 ${material.isCategoria ? "font-bold" : ""}`}>
                       {material.isCategoria ? (
                         <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-black text-white text-sm font-bold">
                           {material.item.replace(".", "")}
@@ -69,7 +69,7 @@ export function MateriaisPDF() {
                     </td>
 
                     {/* Coluna DESCRIÇÃO */}
-                    <td className={`px-4 py-2 ${
+                    <td className={`px-4 py-1.5 ${
                       material.isCategoria
                         ? "font-bold text-black"
                         : "text-black/80 pl-6"
@@ -78,12 +78,12 @@ export function MateriaisPDF() {
                     </td>
 
                     {/* Coluna UNIDADE */}
-                    <td className="px-4 py-2 text-center text-black/50 font-mono text-xs">
+                    <td className="px-4 py-1.5 text-center text-black/50 font-mono text-xs">
                       {material.unidade || "—"}
                     </td>
 
                     {/* Coluna QUANTIDADE */}
-                    <td className={`px-4 py-2 text-right font-mono text-sm ${
+                    <td className={`px-4 py-1.5 text-right font-mono text-sm ${
                       material.quantidade === "Incluso"
                         ? "text-emerald-600 font-medium"
                         : "text-black/70"

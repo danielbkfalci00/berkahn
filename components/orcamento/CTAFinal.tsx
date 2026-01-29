@@ -28,6 +28,7 @@ interface CTAFinalProps {
     endereco: string;
     cnpj: string;
   };
+  isPDFMode?: boolean;
 }
 
 // Helper function for social icons
@@ -55,6 +56,7 @@ export function CTAFinal({
   validoAte,
   numeroOrcamento,
   contatos,
+  isPDFMode = false,
 }: CTAFinalProps) {
   const containerRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
@@ -67,7 +69,7 @@ export function CTAFinal({
   return (
     <section
       ref={containerRef}
-      className="relative min-h-screen bg-black text-white overflow-hidden"
+      className={cn("relative bg-black text-white overflow-hidden", isPDFMode ? "h-full" : "min-h-screen")}
     >
       {/* Background with parallax */}
       <motion.div
@@ -80,10 +82,10 @@ export function CTAFinal({
 
       <OrcamentoWatermark variant="dark" logoPosition="center" />
 
-      <div className="relative container max-w-6xl py-xl">
+      <div className={cn("relative container max-w-6xl", isPDFMode ? "py-8" : "py-xl")}>
         {/* Informações de Contato (sem botões - proposta comercial) */}
         <RevealOnScroll delay={0.4}>
-          <div className="mb-16">
+          <div className={isPDFMode ? "mb-8" : "mb-16"}>
             {/* Linha decorativa com label */}
             <div className="flex items-center justify-center gap-4 mb-8">
               <div className="w-16 h-px bg-white/20" />
@@ -130,7 +132,7 @@ export function CTAFinal({
 
         {/* Guarantees */}
         <RevealOnScroll delay={0.5}>
-          <div className="flex flex-wrap justify-center gap-4 mb-16">
+          <div className={cn("flex flex-wrap justify-center gap-4", isPDFMode ? "mb-8" : "mb-16")}>
             {[
               { icon: Shield, text: "10 Anos de Garantia" },
               { icon: Award, text: "Certificação ABNT" },

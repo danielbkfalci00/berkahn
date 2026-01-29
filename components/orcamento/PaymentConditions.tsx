@@ -14,24 +14,26 @@ import { SectionLabel } from "./SectionLabel";
 interface PaymentConditionsProps {
   condicoes: CondicaoPagamento[];
   valorTotal?: number;
+  isPDFMode?: boolean;
 }
 
 export function PaymentConditions({
   condicoes,
+  isPDFMode = false,
 }: PaymentConditionsProps) {
   const condicaoPrincipal = condicoes.find((c) => c.destaque) || condicoes[0];
 
   if (!condicaoPrincipal) return null;
 
   return (
-    <section className="relative py-xl bg-gradient-to-b from-white to-black/[0.02]">
+    <section className={`relative ${isPDFMode ? "py-8" : "py-xl"} bg-gradient-to-b from-white to-black/[0.02]`}>
       <OrcamentoWatermark variant="light" logoPosition="top-right" />
       <div className="container px-4 sm:px-6 lg:px-8 relative z-10 mb-4">
         <SectionLabel number="06" title="Pagamento" variant="light" className="mb-0" />
       </div>
       <div className="container max-w-5xl relative z-10">
         <RevealOnScroll>
-          <div className="text-center mb-12">
+          <div className={`text-center ${isPDFMode ? "mb-6" : "mb-12"}`}>
             {/* Decoração superior */}
             <div className="flex items-center justify-center gap-4 mb-6">
               <div className="w-12 h-px bg-black/20" />

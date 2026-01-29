@@ -29,13 +29,13 @@ export function PacotesInvestimento({
 }: PacotesInvestimentoProps) {
 
   return (
-    <section className="relative py-xl bg-gradient-to-b from-white via-white to-black/[0.02]">
+    <section className={cn("relative bg-gradient-to-b from-white via-white to-black/[0.02]", isPDFMode ? "py-8" : "py-xl")}>
       <OrcamentoWatermark variant="light" logoPosition="center" />
       <div className="container max-w-7xl relative z-10">
         {/* Section Header */}
         <SectionLabel number="04" title="Planilha Orçamentária" variant="light" />
         <RevealOnScroll>
-          <div className="text-center mb-16">
+          <div className={cn("text-center", isPDFMode ? "mb-6" : "mb-16")}>
             <h2 className="headline-md text-black mb-4">
               Opções de Investimento
             </h2>
@@ -119,7 +119,7 @@ export function PacotesInvestimento({
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ delay: 0.8 }}
-            className="text-center text-sm text-black/40 mt-12"
+            className={cn("text-center text-sm text-black/40", isPDFMode ? "mt-4" : "mt-12")}
           >
             * Valores calculados para {metragemProjeto}m². Consulte-nos para projetos com
             metragem diferente.
