@@ -14,7 +14,7 @@ export function NaoIncluiSubsection({ itensExclusos }: NaoIncluiSubsectionProps)
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="relative bg-white rounded-2xl p-6 lg:p-8 border border-black/10 shadow-luxury-sm"
+          className="relative bg-black rounded-2xl p-6 lg:p-8 border border-white/10"
         >
           {/* Lista compacta com bullets minimalistas */}
           <ul className="space-y-1.5">
@@ -32,17 +32,17 @@ export function NaoIncluiSubsection({ itensExclusos }: NaoIncluiSubsectionProps)
                 }}
               >
                 {/* Numeração técnica */}
-                <span className="font-mono text-[10px] text-black/40 mt-1 w-6 flex-shrink-0">
+                <span className="font-mono text-[10px] text-white/40 mt-1 w-6 flex-shrink-0">
                   {String(index + 1).padStart(2, '0')}
                 </span>
 
                 {/* Bullet minimalista */}
-                <span className="text-black/30 text-lg font-light leading-none mt-0.5 flex-shrink-0">
+                <span className="text-white/40 text-lg font-light leading-none mt-0.5 flex-shrink-0">
                   —
                 </span>
 
                 {/* Item text */}
-                <span className="text-sm text-black/70 leading-relaxed flex-1">
+                <span className="text-sm text-white/90 leading-relaxed flex-1">
                   {item}
                 </span>
               </motion.li>
@@ -51,7 +51,7 @@ export function NaoIncluiSubsection({ itensExclusos }: NaoIncluiSubsectionProps)
 
           {/* Blueprint bracket (canto inferior esquerdo) */}
           <svg
-            className="absolute bottom-6 left-6 w-6 h-6 text-black/10"
+            className="absolute bottom-6 left-6 w-6 h-6 text-white/15"
             viewBox="0 0 32 32"
             fill="none"
             stroke="currentColor"
