@@ -89,7 +89,7 @@ export function MetodologiaSubsection({ data }: MetodologiaSubsectionProps) {
 
           {/* Right side - Methodology list with markers */}
           <motion.div variants={itemVariants} className="flex flex-col justify-start gap-lg">
-            <div className="space-y-xl">
+            <div className="space-y-lg">
               {data.itens.map((item, index) => (
                 <motion.div
                   key={item.letra}
