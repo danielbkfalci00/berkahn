@@ -65,11 +65,11 @@ export function PlanoGerenciamentoSection({
       </div>
       <div className="container max-w-6xl relative z-10">
         <RevealOnScroll>
-          <div className="text-center mb-16">
+          <div className="mb-16">
             <h2 className="text-4xl lg:text-5xl font-bold tracking-tight text-black mb-4">
               {plano.titulo}
             </h2>
-            <p className="text-lg text-black/60 max-w-2xl mx-auto">
+            <p className="text-lg text-black/60 max-w-2xl">
               Nosso processo estruturado garante qualidade e transparência em
               cada etapa do seu projeto
             </p>

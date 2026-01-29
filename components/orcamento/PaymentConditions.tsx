@@ -33,18 +33,11 @@ export function PaymentConditions({
       </div>
       <div className="container max-w-5xl relative z-10">
         <RevealOnScroll>
-          <div className={`text-center ${isPDFMode ? "mb-6" : "mb-12"}`}>
-            {/* Decoração superior */}
-            <div className="flex items-center justify-center gap-4 mb-6">
-              <div className="w-12 h-px bg-black/20" />
-              <div className="w-2 h-2 rotate-45 bg-black/20" />
-              <div className="w-12 h-px bg-black/20" />
-            </div>
-
+          <div className={`${isPDFMode ? "mb-6" : "mb-12"}`}>
             <h2 className="headline-md text-black mb-4">
               Condições de Pagamento
             </h2>
-            <p className="body-md text-black/60 max-w-2xl mx-auto">
+            <p className="body-md text-black/60 max-w-2xl">
               {condicaoPrincipal.descricao}
             </p>
           </div>

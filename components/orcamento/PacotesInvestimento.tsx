@@ -35,11 +35,11 @@ export function PacotesInvestimento({
         {/* Section Header */}
         <SectionLabel number="04" title="Planilha Orçamentária" variant="light" />
         <RevealOnScroll>
-          <div className={cn("text-center", isPDFMode ? "mb-6" : "mb-16")}>
+          <div className={cn(isPDFMode ? "mb-6" : "mb-16")}>
             <h2 className="headline-md text-black mb-4">
               Opções de Investimento
             </h2>
-            <p className="body-md text-black/60 max-w-2xl mx-auto">
+            <p className="body-md text-black/60 max-w-2xl">
               {pacotes.length === 2
                 ? "Apresentamos duas opções de pacotes pensados para atender diferentes necessidades. Ambos incluem nossa garantia de qualidade e compromisso com prazos."
                 : "Apresentamos opções de pacotes pensados para atender diferentes necessidades e expectativas. Todos incluem nossa garantia de qualidade e compromisso com prazos."}
