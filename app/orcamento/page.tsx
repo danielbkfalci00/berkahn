@@ -60,17 +60,6 @@ export default function OrcamentoPage() {
       </section>
 
 
-      {/* Transição Visual */}
-      <div className="relative h-24 bg-white">
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="flex items-center gap-4">
-            <div className="w-32 h-[1px] bg-black/10" />
-            <div className="w-3 h-3 rotate-45 bg-black/20" />
-            <div className="w-32 h-[1px] bg-black/10" />
-          </div>
-        </div>
-      </div>
-
       {/* Seção 5: Premissas Adotadas para Orçamento (Unificada) */}
       <section id="premissas">
         <PremissasUnificadasSection />
