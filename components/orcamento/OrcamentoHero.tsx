@@ -111,7 +111,7 @@ export function OrcamentoHero({
           transition={{ delay: 0.7, duration: 0.6, ease: [0.19, 1, 0.22, 1] }}
           className="mb-8"
         >
-          <span className="text-base sm:text-lg text-white/80">Revisão 01</span>
+          <span className="text-base sm:text-lg text-white/80">Revisão 00</span>
         </motion.div>
 
         {/* Decorative Line with animation */}
