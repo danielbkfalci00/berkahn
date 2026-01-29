@@ -26,8 +26,10 @@ export function PaymentConditions({
   return (
     <section className="relative py-xl bg-gradient-to-b from-white to-black/[0.02]">
       <OrcamentoWatermark variant="light" logoPosition="top-right" />
+      <div className="container px-4 sm:px-6 lg:px-8 relative z-10 mb-4">
+        <SectionLabel number="06" title="Pagamento" variant="light" className="mb-0" />
+      </div>
       <div className="container max-w-5xl relative z-10">
-        <SectionLabel number="06" title="Pagamento" variant="light" />
         <RevealOnScroll>
           <div className="text-center mb-12">
             {/* Decoração superior */}
