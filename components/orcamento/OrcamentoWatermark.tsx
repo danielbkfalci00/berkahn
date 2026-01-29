@@ -37,24 +37,6 @@ export function OrcamentoWatermark({
 
   return (
     <div className="absolute inset-0 pointer-events-none select-none overflow-hidden z-0">
-      {/* Linha vertical + texto rotacionado na margem esquerda */}
-      <div className="absolute left-4 md:left-8 top-0 bottom-0 hidden lg:flex items-center">
-        {/* Linha vertical fina */}
-        <div className={`absolute left-0 top-8 bottom-8 w-px ${lineColor}`} />
-
-        {/* Texto rotacionado */}
-        <span
-          className={`${textColor} text-[10px] font-mono uppercase tracking-[0.35em] whitespace-nowrap`}
-          style={{
-            writingMode: "vertical-lr",
-            transform: "rotate(180deg)",
-            marginLeft: "8px",
-          }}
-        >
-          {sideText}
-        </span>
-      </div>
-
       {/* Logo Berkahn discreto */}
       {showLogo && (
         <div className={`absolute ${logoPositionClasses[logoPosition]} hidden md:block`}>
