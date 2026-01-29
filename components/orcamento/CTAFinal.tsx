@@ -155,7 +155,7 @@ export function CTAFinal({
 
         {/* Footer da Proposta */}
         <RevealOnScroll delay={0.6}>
-          <div className="pt-12 border-t border-white/10">
+          <div className="pt-12">
             {/* Linha decorativa */}
             <div className="flex items-center justify-center gap-4 mb-8">
               <div className="flex-1 h-px bg-white/10" />
