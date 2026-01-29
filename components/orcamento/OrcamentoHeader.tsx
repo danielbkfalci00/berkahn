@@ -21,18 +21,14 @@ export function OrcamentoHeader({ projeto }: OrcamentoHeaderProps) {
   const { activeSection } = useOrcamentoNavigation();
   const [isVisible, setIsVisible] = useState(false);
 
-  // Detectar quando a seção "sobre" começar
+  // Show header only after scrolling past the hero section
   useEffect(() => {
     const handleScroll = () => {
-      const sobre = document.getElementById("sobre");
-      if (sobre) {
-        const sobreTop = sobre.getBoundingClientRect().top;
-        // Mostrar quando a seção "sobre" entrar na viewport (100px do topo)
-        setIsVisible(sobreTop <= 100);
-      }
+      const threshold = window.innerHeight * 0.9;
+      setIsVisible(window.scrollY > threshold);
     };
 
-    // Verificar posição inicial
+    // Initial check
     handleScroll();
 
     window.addEventListener("scroll", handleScroll, { passive: true });
