@@ -9,7 +9,7 @@ interface NaoIncluiSubsectionProps {
 
 export function NaoIncluiSubsection({ itensExclusos }: NaoIncluiSubsectionProps) {
   return (
-    <div className="bg-[#F4F2EC] py-lg">
+    <div className="bg-black py-lg">
       <div className="container px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

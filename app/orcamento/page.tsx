@@ -90,17 +90,17 @@ export default function OrcamentoPage() {
       </section>
 
       {/* Subsection 4.1: Itens Inclusos (parte da seção 04) */}
-      <div className="bg-white pt-0 pb-0">
+      <div className="bg-black pt-0 pb-0">
         <div className="container px-4 sm:px-6 lg:px-8 py-8">
-          <SectionLabel number="04" title="Planilha Orçamentária" variant="light" subtitle="4.1 Itens Inclusos" />
+          <SectionLabel number="04" title="Planilha Orçamentária" variant="dark" subtitle="4.1 Itens Inclusos" />
         </div>
         <ItensInclususSubsection itensInclusos={PREMISSAS_TEMPLATE.itensInclusos} />
       </div>
 
       {/* Subsection 4.2: Itens Exclusos (parte da seção 04) */}
-      <div className="bg-[#F4F2EC] pt-0 pb-8">
+      <div className="bg-black pt-0 pb-8">
         <div className="container px-4 sm:px-6 lg:px-8 py-8">
-          <SectionLabel number="04" title="Planilha Orçamentária" variant="light" subtitle="4.2 Itens Exclusos" />
+          <SectionLabel number="04" title="Planilha Orçamentária" variant="dark" subtitle="4.2 Itens Exclusos" />
         </div>
         <NaoIncluiSubsection itensExclusos={PREMISSAS_TEMPLATE.itensExclusos} />
       </div>

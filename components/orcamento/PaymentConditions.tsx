@@ -26,7 +26,7 @@ export function PaymentConditions({
   if (!condicaoPrincipal) return null;
 
   return (
-    <section className={`relative ${isPDFMode ? "py-8" : "py-xl"} bg-gradient-to-b from-white to-black/[0.02]`}>
+    <section className={`relative ${isPDFMode ? "py-8" : "py-xl"} bg-[#F4F2EC]`}>
       <OrcamentoWatermark variant="light" logoPosition="top-right" />
       <div className="container px-4 sm:px-6 lg:px-8 relative z-10 mb-4">
         <SectionLabel number="06" title="Pagamento" variant="light" className="mb-0" />
@@ -102,20 +102,20 @@ export function PaymentConditions({
             {condicaoPrincipal.observacoesPagamento &&
               condicaoPrincipal.observacoesPagamento.length > 0 && (
                 <RevealOnScroll delay={0.3}>
-                  <div className="bg-amber-50 rounded-xl p-6 border border-amber-200">
+                  <div className="bg-white rounded-xl p-6 border border-black/10 shadow-sm">
                     <div className="flex gap-4">
-                      <AlertCircle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+                      <AlertCircle className="w-5 h-5 text-black/60 flex-shrink-0 mt-0.5" />
                       <div className="flex-1">
-                        <h4 className="text-sm font-semibold text-amber-900 mb-3">
+                        <h4 className="text-sm font-semibold text-black mb-3">
                           Informações de Faturamento
                         </h4>
                         <ul className="space-y-2">
                           {condicaoPrincipal.observacoesPagamento.map((obs, i) => (
                             <li
                               key={i}
-                              className="text-sm text-amber-800 flex items-start gap-2"
+                              className="text-sm text-black/70 flex items-start gap-2"
                             >
-                              <CheckCircle2 className="w-4 h-4 text-amber-600 flex-shrink-0 mt-0.5" />
+                              <CheckCircle2 className="w-4 h-4 text-black/60 flex-shrink-0 mt-0.5" />
                               <span>{obs}</span>
                             </li>
                           ))}

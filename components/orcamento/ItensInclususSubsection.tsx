@@ -9,7 +9,7 @@ interface ItensInclususSubsectionProps {
 
 export function ItensInclususSubsection({ itensInclusos }: ItensInclususSubsectionProps) {
   return (
-    <div className="bg-white py-lg">
+    <div className="bg-black py-lg">
       <div className="container px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
