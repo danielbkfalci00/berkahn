@@ -16,7 +16,7 @@ export function ProjetosConsideradosSection() {
   return (
     <>
       {/* Header da seção agrupadora com SectionLabel 2.1 */}
-      <section className="bg-white py-lg">
+      <section className="bg-white pt-lg pb-0">
         <div className="container max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
           <SectionLabel number="02" title="Premissas Adotadas para o Orçamento" variant="light" subtitle="2.2 Projetos Considerados na Proposta" />
         </div>

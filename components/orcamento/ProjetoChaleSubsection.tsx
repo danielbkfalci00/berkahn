@@ -59,7 +59,7 @@ export function ProjetoChaleSubsection({ data, isNested }: ProjetoChaleSubsectio
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
           viewport={{ once: true }}
-          className="mb-12"
+          className="mb-6"
         >
           <p className="text-sm font-mono uppercase tracking-widest text-black/60">
             Projeto Chalé
