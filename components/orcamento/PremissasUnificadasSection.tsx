@@ -62,7 +62,7 @@ export function PremissasUnificadasSection() {
 
           {/* Título principal */}
           <h2 className="font-heading text-4xl lg:text-5xl font-bold text-black mb-6">
-            PREMISSAS ADOTADAS PARA O ORÇAMENTO
+            METODOLOGIA E DOCUMENTAÇÃO TÉCNICA
           </h2>
 
           {/* Descrição */}
