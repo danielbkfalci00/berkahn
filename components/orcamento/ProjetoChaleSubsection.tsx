@@ -2,8 +2,6 @@
 
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { SectionMarker } from "./SectionMarker";
-import { SectionLabel } from "./SectionLabel";
 import type { ChaleProjeto } from "@/types/orcamento";
 
 interface ProjetoChaleSubsectionProps {
@@ -55,15 +53,17 @@ export function ProjetoChaleSubsection({ data, isNested }: ProjetoChaleSubsectio
   return (
     <section className="relative py-lg bg-white">
       <div className="container px-4 sm:px-6 lg:px-8">
-        {/* Header with section marker and breadcrumb */}
+        {/* Header with project title */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
           viewport={{ once: true }}
-          className="mb-lg space-y-2"
+          className="mb-12"
         >
-          <SectionLabel number="02" title="Premissas Adotadas para o Orçamento" variant="light" subtitle="Projeto Chalé" className="mb-0" />
+          <p className="text-sm font-mono uppercase tracking-widest text-black/60">
+            Projeto Chalé
+          </p>
         </motion.div>
 
         {/* Asymmetric photo grid - 4 images */}
