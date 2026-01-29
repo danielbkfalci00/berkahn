@@ -83,7 +83,7 @@ export function OrcamentoHero({
           transition={{ duration: 0.5 }}
         >
           <h1 className="font-heading text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-white mb-6 hero-text-shadow-strong">
-            <CharReveal text={`Projeto ${projeto.titulo}`} delay={0.3} />
+            <CharReveal text={`Projeto ${projeto.titulo}`} delay={0.3} className="text-center" />
           </h1>
         </motion.div>
 
