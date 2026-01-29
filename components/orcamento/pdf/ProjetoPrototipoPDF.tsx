@@ -2,18 +2,18 @@ import Image from "next/image";
 import { CHALE_PROJETO } from "@/lib/orcamento-data";
 
 /**
- * ProjetoPrototipoPDF - Slide com 4 fotos do protótipo + metragens
- * Layout: Grid 2x2 de imagens + card de metragens
+ * ProjetoPrototipoPDF - Slide com 4 fotos (info overlay na 4ª)
+ * Layout compacto: header + grid 2x2 com metragens na última foto
  */
 export function ProjetoPrototipoPDF() {
   const { titulo, metragem, imagens, comodos } = CHALE_PROJETO;
   const totalComodos = comodos.reduce((acc, c) => acc + c.area, 0);
 
   return (
-    <section className="py-12 bg-white w-full">
+    <section className="py-8 bg-white w-full">
       <div className="container max-w-5xl mx-auto px-6">
         {/* Header */}
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex items-center justify-between mb-6">
           <div>
             <p className="text-sm uppercase tracking-[0.3em] font-mono text-black/60 mb-2">
               02 — Premissas adotadas para o orçamento
@@ -28,9 +28,10 @@ export function ProjetoPrototipoPDF() {
           </div>
         </div>
 
-        {/* Grid 2x2 de Fotos */}
-        <div className="grid grid-cols-2 gap-4 mb-6">
-          {imagens.prototipo.map((src, index) => (
+        {/* Grid 2x2 — 3 fotos + 1 foto com overlay de metragens */}
+        <div className="grid grid-cols-2 gap-4">
+          {/* Fotos 1-3 */}
+          {imagens.prototipo.slice(0, 3).map((src, index) => (
             <div
               key={index}
               className="relative aspect-[4/3] rounded-xl overflow-hidden border border-black/10"
@@ -42,37 +43,48 @@ export function ProjetoPrototipoPDF() {
                 className="object-cover"
                 sizes="50vw"
               />
-              {/* Badge de número */}
               <div className="absolute top-3 left-3 w-8 h-8 rounded-full bg-black/70 text-white text-sm font-bold flex items-center justify-center">
                 {index + 1}
               </div>
             </div>
           ))}
-        </div>
 
-        {/* Card de Metragens */}
-        <div className="bg-[#F4F2EC] rounded-xl p-6">
-          <h3 className="text-lg font-bold text-black mb-4 uppercase tracking-wide">
-            Distribuição de Áreas
-          </h3>
-          <div className="grid grid-cols-4 gap-4">
-            {comodos.map((comodo) => (
-              <div
-                key={comodo.nome}
-                className="bg-white rounded-lg p-4 text-center border border-black/10"
-              >
-                <p className="text-2xl font-bold text-black">{comodo.area}m²</p>
-                <p className="text-sm text-black/60">{comodo.nome}</p>
+          {/* Foto 4 com overlay de distribuição de áreas */}
+          <div className="relative aspect-[4/3] rounded-xl overflow-hidden border border-black/10">
+            {imagens.prototipo[3] && (
+              <Image
+                src={imagens.prototipo[3]}
+                alt="Protótipo do Chalé - Vista 4"
+                fill
+                className="object-cover"
+                sizes="50vw"
+              />
+            )}
+            {/* Overlay escuro com metragens */}
+            <div className="absolute inset-0 bg-black/75 flex flex-col items-center justify-center p-4">
+              <h3 className="text-xs font-bold text-white/60 uppercase tracking-wider mb-3">
+                Distribuição de Áreas
+              </h3>
+              <div className="grid grid-cols-2 gap-2 w-full max-w-[280px]">
+                {comodos.map((comodo) => (
+                  <div
+                    key={comodo.nome}
+                    className="bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-center"
+                  >
+                    <p className="text-lg font-bold text-white">{comodo.area}m²</p>
+                    <p className="text-[10px] text-white/60">{comodo.nome}</p>
+                  </div>
+                ))}
               </div>
-            ))}
-            <div className="bg-black rounded-lg p-4 text-center">
-              <p className="text-2xl font-bold text-white">{totalComodos}m²</p>
-              <p className="text-sm text-white/70">Áreas Internas</p>
+              <div className="mt-2 bg-white rounded-lg px-4 py-2 text-center">
+                <p className="text-lg font-bold text-black">{totalComodos}m²</p>
+                <p className="text-[10px] text-black/60">Áreas Internas</p>
+              </div>
+              <p className="text-[9px] text-white/30 mt-2 italic">
+                * Área total de {metragem}m² inclui paredes e circulação
+              </p>
             </div>
           </div>
-          <p className="text-xs text-black/40 mt-4 text-center italic">
-            * Área total de {metragem}m² inclui paredes e circulação
-          </p>
         </div>
       </div>
     </section>
