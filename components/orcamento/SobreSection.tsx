@@ -56,7 +56,7 @@ export function SobreSection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
-            className="text-center"
+            className=""
           >
             {/* Main title */}
             <h1 className="font-heading text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight mb-4">
@@ -74,7 +74,7 @@ export function SobreSection() {
             </p>
 
             {/* Decorative element */}
-            <div className="flex items-center justify-center gap-3 mt-10">
+            <div className="flex items-center gap-3 mt-10">
               <div className="w-16 h-px bg-black/20" />
               <div className="w-1.5 h-1.5 rotate-45 bg-black/30" />
               <div className="w-16 h-px bg-black/20" />
