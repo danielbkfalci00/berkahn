@@ -48,6 +48,60 @@ export function SlideDiferenciais() {
           <div className="w-16 h-px bg-white/20 mx-auto mt-8" />
         </RevealOnScroll>
 
+        {/* ============================================ */}
+        {/* Composição do Sistema - Diagrama de Camadas */}
+        {/* ============================================ */}
+        <div className="mb-16 lg:mb-20">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+
+            {/* Column 1: DIAGRAM IMAGE */}
+            <RevealOnScroll className="order-2 lg:order-1">
+              <div className="relative h-[400px] lg:h-[500px] rounded-2xl overflow-hidden border border-white/10 bg-white/5">
+                <Image
+                  src="/images/Lsf/lsf-wall-layers-diagram.webp"
+                  alt="Diagrama técnico das camadas de parede LSF"
+                  fill
+                  className="object-contain p-6"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                />
+              </div>
+            </RevealOnScroll>
+
+            {/* Column 2: TEXT CONTENT */}
+            <RevealOnScroll delay={0.2} className="order-1 lg:order-2">
+              <div>
+                <h3 className="text-3xl lg:text-4xl font-bold text-white mb-4">
+                  A Composição do Sistema
+                </h3>
+                <h4 className="text-lg lg:text-xl font-medium text-white/70 mb-6">
+                  Paredes de Múltiplas Camadas (Multilayer Walls)
+                </h4>
+                <p className="text-base lg:text-lg text-white/80 leading-relaxed">
+                  A superioridade do LSF reside na sua configuração de paredes, que
+                  operam como sistemas multicamadas projetados para performance superior
+                  em estanqueidade, isolamento e acabamento, superando o desempenho da
+                  alvenaria convencional.
+                </p>
+              </div>
+            </RevealOnScroll>
+
+          </div>
+        </div>
+
+        {/* Transition Text - Bridge to Performance Indicators */}
+        <RevealOnScroll>
+          <div className="mb-12 lg:mb-16 max-w-3xl mx-auto text-center">
+            <p className="text-lg lg:text-xl text-white/70 leading-relaxed">
+              Essa configuração multicamadas resulta em vantagens mensuráveis que
+              revolucionam a construção civil:
+            </p>
+          </div>
+        </RevealOnScroll>
+
+        {/* ============================================ */}
+        {/* END NEW SECTION */}
+        {/* ============================================ */}
+
         {/* Stats Grid */}
         <motion.div
           ref={statsRef}
