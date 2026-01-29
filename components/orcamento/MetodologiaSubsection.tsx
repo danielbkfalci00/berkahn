@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { SectionMarker } from "./SectionMarker";
+import { SectionLabel } from "./SectionLabel";
 import type { MetodologiaConstrutivaPremissas } from "@/types/orcamento";
 
 interface MetodologiaSubsectionProps {
@@ -50,10 +51,7 @@ export function MetodologiaSubsection({ data }: MetodologiaSubsectionProps) {
           viewport={{ once: true }}
           className="mb-lg space-y-2"
         >
-          {/* Título da subseção */}
-          <h3 className="text-xl font-bold tracking-tight text-black uppercase">
-            METODOLOGIA CONSTRUTIVA
-          </h3>
+          <SectionLabel number="02" title="Premissas Adotadas para o Orçamento" variant="light" subtitle="2.1 Metodologia Construtiva" className="mb-0" />
         </motion.div>
 
         {/* Main content - horizontal split layout */}

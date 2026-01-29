@@ -45,7 +45,7 @@ export function PlantasElevacoesSubsection({ data, isNested }: PlantasElevacoesS
           viewport={{ once: true }}
           className="mb-lg"
         >
-          <SectionLabel number="2.2" title="Plantas & Elevações Técnicas" variant="dark" />
+          <SectionLabel number="02" title="Premissas Adotadas para o Orçamento" variant="dark" subtitle="2.3 Plantas & Elevações Técnicas" />
         </motion.div>
 
         {/* Plants section */}

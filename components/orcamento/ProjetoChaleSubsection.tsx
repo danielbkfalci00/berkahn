@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { SectionMarker } from "./SectionMarker";
+import { SectionLabel } from "./SectionLabel";
 import type { ChaleProjeto } from "@/types/orcamento";
 
 interface ProjetoChaleSubsectionProps {
@@ -62,10 +63,7 @@ export function ProjetoChaleSubsection({ data, isNested }: ProjetoChaleSubsectio
           viewport={{ once: true }}
           className="mb-lg space-y-2"
         >
-          {/* Título da subseção */}
-          <h3 className="text-xl font-bold tracking-tight text-black uppercase">
-            {data.titulo}
-          </h3>
+          <SectionLabel number="02" title="Premissas Adotadas para o Orçamento" variant="light" subtitle="Projeto Chalé" className="mb-0" />
         </motion.div>
 
         {/* Asymmetric photo grid - 4 images */}
