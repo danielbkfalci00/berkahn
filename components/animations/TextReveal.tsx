@@ -116,7 +116,7 @@ export function CharReveal({ text, className = "", delay = 0 }: CharRevealProps)
 
   // Respect user's reduced motion preference
   if (prefersReducedMotion) {
-    return <span className={`inline-block ${className}`}>{text}</span>;
+    return <span className={`block ${className}`}>{text}</span>;
   }
 
   return (
@@ -126,7 +126,7 @@ export function CharReveal({ text, className = "", delay = 0 }: CharRevealProps)
       animate={isInView ? "visible" : "hidden"}
       variants={charContainerVariants}
       custom={delay}
-      className={`inline-block ${className}`}
+      className={`block ${className}`}
     >
       {text.split("").map((char, index) => (
         <motion.span
