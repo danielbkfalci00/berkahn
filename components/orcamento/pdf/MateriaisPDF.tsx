@@ -6,12 +6,12 @@ import { MATERIAIS_DETALHADOS } from "@/lib/orcamento-data";
  */
 export function MateriaisPDF() {
   return (
-    <section className="py-16 bg-[#F4F2EC] w-full">
+    <section className="py-8 bg-[#F4F2EC] w-full">
       <div className="container max-w-5xl mx-auto px-6">
         {/* Header */}
-        <div className="mb-10">
-          <p className="text-xs uppercase tracking-[0.3em] text-black/50 font-mono mb-2">
-            Premissas Adotadas → Especificações
+        <div className="mb-6">
+          <p className="text-sm uppercase tracking-[0.3em] font-mono text-black/60 mb-2">
+            03 — Descrição Analítica dos Materiais
           </p>
           <h2 className="text-3xl font-bold tracking-tight text-black mb-3">
             DESCRIÇÃO ANALÍTICA DE MATERIAIS
@@ -27,16 +27,16 @@ export function MateriaisPDF() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="bg-black text-white">
-                  <th className="px-4 py-4 text-left w-20 font-semibold tracking-wide">
+                  <th className="px-4 py-2 text-left w-20 font-semibold tracking-wide">
                     ITEM
                   </th>
-                  <th className="px-4 py-4 text-left font-semibold tracking-wide">
+                  <th className="px-4 py-2 text-left font-semibold tracking-wide">
                     DESCRIÇÃO
                   </th>
-                  <th className="px-4 py-4 text-center w-24 font-semibold tracking-wide">
+                  <th className="px-4 py-2 text-center w-24 font-semibold tracking-wide">
                     UNID.
                   </th>
-                  <th className="px-4 py-4 text-right w-28 font-semibold tracking-wide">
+                  <th className="px-4 py-2 text-right w-28 font-semibold tracking-wide">
                     QNTD.
                   </th>
                 </tr>
@@ -56,7 +56,7 @@ export function MateriaisPDF() {
                     `}
                   >
                     {/* Coluna ITEM */}
-                    <td className={`px-4 py-4 ${material.isCategoria ? "font-bold" : ""}`}>
+                    <td className={`px-4 py-2 ${material.isCategoria ? "font-bold" : ""}`}>
                       {material.isCategoria ? (
                         <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-black text-white text-sm font-bold">
                           {material.item.replace(".", "")}
@@ -69,7 +69,7 @@ export function MateriaisPDF() {
                     </td>
 
                     {/* Coluna DESCRIÇÃO */}
-                    <td className={`px-4 py-4 ${
+                    <td className={`px-4 py-2 ${
                       material.isCategoria
                         ? "font-bold text-black"
                         : "text-black/80 pl-6"
@@ -78,12 +78,12 @@ export function MateriaisPDF() {
                     </td>
 
                     {/* Coluna UNIDADE */}
-                    <td className="px-4 py-4 text-center text-black/50 font-mono text-xs">
+                    <td className="px-4 py-2 text-center text-black/50 font-mono text-xs">
                       {material.unidade || "—"}
                     </td>
 
                     {/* Coluna QUANTIDADE */}
-                    <td className={`px-4 py-4 text-right font-mono text-sm ${
+                    <td className={`px-4 py-2 text-right font-mono text-sm ${
                       material.quantidade === "Incluso"
                         ? "text-emerald-600 font-medium"
                         : "text-black/70"

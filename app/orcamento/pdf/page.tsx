@@ -2,6 +2,8 @@
 import { OrcamentoHero } from "@/components/orcamento/OrcamentoHero";
 import { IndiceSectionPDF } from "@/components/orcamento/pdf/IndiceSectionPDF";
 import { SobreSectionPDF } from "@/components/orcamento/pdf/SobreSectionPDF";
+import { InfograficoLSFPDF } from "@/components/orcamento/pdf/InfograficoLSFPDF";
+import { PremissasSectionPDF } from "@/components/orcamento/pdf/PremissasSectionPDF";
 import { MetodologiaPDF } from "@/components/orcamento/pdf/MetodologiaPDF";
 import { ProjetoPrototipoPDF } from "@/components/orcamento/pdf/ProjetoPrototipoPDF";
 import { PlantasPDF } from "@/components/orcamento/pdf/PlantasPDF";
@@ -10,7 +12,6 @@ import { MateriaisPDF } from "@/components/orcamento/pdf/MateriaisPDF";
 import { PacotesInvestimento } from "@/components/orcamento/PacotesInvestimento";
 import { PaymentConditions } from "@/components/orcamento/PaymentConditions";
 import { PlanoGerenciamentoSectionPDF } from "@/components/orcamento/pdf/PlanoGerenciamentoSectionPDF";
-import { InfograficoLSFPDF } from "@/components/orcamento/pdf/InfograficoLSFPDF";
 import { CTAFinal } from "@/components/orcamento/CTAFinal";
 
 import {
@@ -26,14 +27,13 @@ export default function OrcamentoPDFPage() {
   const numeroOrcamento = gerarNumeroOrcamento();
   const dataValidade = calcularDataValidade(20);
 
-  // Usa o pacote recomendado (destaque) para o valor total de referência
   const pacoteRecomendado = PACOTES_TEMPLATE.find(p => p.destaque) || PACOTES_TEMPLATE[0];
   const valorTotal = pacoteRecomendado.valorTotal;
 
   return (
     <main className="relative bg-white">
       {/* Slide 1: Hero/Capa */}
-      <section className="min-h-screen">
+      <section className="h-screen">
         <OrcamentoHero
           projeto={PROJETO_TEMPLATE}
           numeroOrcamento={numeroOrcamento}
@@ -42,47 +42,52 @@ export default function OrcamentoPDFPage() {
       </section>
 
       {/* Slide 2: Índice */}
-      <section className="min-h-screen flex items-center">
+      <section className="h-screen flex items-center overflow-hidden">
         <IndiceSectionPDF />
       </section>
 
-      {/* Slide 3: Sobre a Berkahn */}
-      <section className="min-h-screen flex items-center">
+      {/* Slide 3: Sobre a Berkahn — Seção 01 */}
+      <section className="h-screen flex items-center overflow-hidden">
         <SobreSectionPDF />
       </section>
 
-      {/* Slide 3: Vantagens Steel Frame */}
-      <section className="min-h-screen flex items-center">
+      {/* Slide 4: Vantagens Steel Frame — Seção 01 */}
+      <section className="h-screen flex items-center overflow-hidden">
         <InfograficoLSFPDF />
       </section>
 
-      {/* Slide 5: Metodologia Construtiva (COM imagem técnica) */}
-      <section className="min-h-screen flex items-center">
+      {/* Slide 5: Premissas — Seção 02 */}
+      <section className="h-screen flex items-center overflow-hidden">
+        <PremissasSectionPDF />
+      </section>
+
+      {/* Slide 6: Metodologia Construtiva — Seção 02 */}
+      <section className="h-screen flex items-center overflow-hidden">
         <MetodologiaPDF />
       </section>
 
-      {/* Slide 4: Projeto Chalé - Protótipos (COM 4 fotos) */}
-      <section className="min-h-screen flex items-center">
+      {/* Slide 7: Projeto Protótipo — Seção 02 */}
+      <section className="h-screen flex items-center overflow-hidden">
         <ProjetoPrototipoPDF />
       </section>
 
-      {/* Slide 5: Plantas Baixas (COM 2 plantas) */}
-      <section className="min-h-screen flex items-center">
+      {/* Slide 8: Plantas Baixas — Seção 02 */}
+      <section className="h-screen flex items-center overflow-hidden">
         <PlantasPDF />
       </section>
 
-      {/* Slide 6: Elevações Técnicas (COM 4 elevações) */}
-      <section className="min-h-screen flex items-center">
+      {/* Slide 9: Elevações Técnicas — Seção 02 */}
+      <section className="h-screen flex items-center overflow-hidden">
         <ElevacoesPDF />
       </section>
 
-      {/* Slide 7: Descrição Analítica de Materiais */}
-      <section className="min-h-screen flex items-center">
+      {/* Slide 10: Materiais — Seção 03 */}
+      <section className="h-screen flex items-center overflow-hidden">
         <MateriaisPDF />
       </section>
 
-      {/* Slide 8: Proposta de Investimento */}
-      <section className="min-h-screen flex items-center">
+      {/* Slide 11: Proposta de Investimento — Seção 04 */}
+      <section className="h-screen flex items-center overflow-hidden">
         <div className="w-full">
           <PacotesInvestimento
             pacotes={PACOTES_TEMPLATE}
@@ -92,8 +97,17 @@ export default function OrcamentoPDFPage() {
         </div>
       </section>
 
-      {/* Slide 9: Condições de Pagamento */}
-      <section className="min-h-screen flex items-center">
+      {/* Slide 12: Plano de Gerenciamento — Seção 05 */}
+      <section className="h-screen flex items-center overflow-hidden">
+        <div className="w-full">
+          {PROJETO_TEMPLATE.planoGerenciamento && (
+            <PlanoGerenciamentoSectionPDF plano={PROJETO_TEMPLATE.planoGerenciamento} />
+          )}
+        </div>
+      </section>
+
+      {/* Slide 13: Pagamento — Seção 06 */}
+      <section className="h-screen flex items-center overflow-hidden">
         <div className="w-full">
           <PaymentConditions
             condicoes={CONDICOES_PAGAMENTO}
@@ -102,17 +116,8 @@ export default function OrcamentoPDFPage() {
         </div>
       </section>
 
-      {/* Slide 12: Plano de Gerenciamento */}
-      <section className="min-h-screen flex items-center">
-        <div className="w-full">
-          {PROJETO_TEMPLATE.planoGerenciamento && (
-            <PlanoGerenciamentoSectionPDF plano={PROJETO_TEMPLATE.planoGerenciamento} />
-          )}
-        </div>
-      </section>
-
-      {/* Slide 13: CTA Final / Contato */}
-      <section className="min-h-screen">
+      {/* Slide 14: CTA Final / Contato */}
+      <section className="h-screen">
         <CTAFinal
           projeto={PROJETO_TEMPLATE}
           validoAte={dataValidade}

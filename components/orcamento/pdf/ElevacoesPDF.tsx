@@ -13,8 +13,8 @@ export function ElevacoesPDF() {
       <div className="container max-w-5xl mx-auto px-6">
         {/* Header */}
         <div className="mb-8">
-          <p className="text-xs uppercase tracking-[0.3em] text-white/40 font-mono mb-2">
-            Premissas Adotadas → Projetos Considerados → Elevações
+          <p className="text-sm uppercase tracking-[0.3em] font-mono text-white/60 mb-2">
+            02 — Premissas adotadas para o orçamento
           </p>
           <h2 className="text-3xl font-bold tracking-tight text-white mb-2">
             ELEVAÇÕES TÉCNICAS

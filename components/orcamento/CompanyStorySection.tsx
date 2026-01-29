@@ -48,7 +48,7 @@ export function CompanyStorySection({ story }: CompanyStorySectionProps) {
             {/* Left: Polaroid Photo */}
             <motion.div style={{ y }} className="relative">
               <div className="relative aspect-[4/5] bg-white p-4 shadow-xl transform rotate-[-2deg] hover:rotate-0 transition-transform duration-500">
-                <div className="relative w-full h-full bg-[#E8E2D5]">
+                <div className="relative w-full h-full bg-[#F4F2EC]">
                   <Image
                     src={story.founding.firstProject.image}
                     alt={story.founding.firstProject.name}

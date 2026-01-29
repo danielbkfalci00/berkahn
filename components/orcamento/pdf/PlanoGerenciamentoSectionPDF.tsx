@@ -26,10 +26,14 @@ export function PlanoGerenciamentoSectionPDF({
   plano,
 }: PlanoGerenciamentoSectionPDFProps) {
   return (
-    <section className="py-16 bg-white w-full">
+    <section className="py-8 bg-white w-full">
       <div className="container max-w-5xl mx-auto px-6">
+        {/* Section Label */}
+        <p className="text-sm uppercase tracking-[0.3em] font-mono text-black/60 mb-6">
+          05 — Plano de Gerenciamento Berkahn
+        </p>
         {/* Header */}
-        <div className="text-center mb-10">
+        <div className="text-center mb-8">
           <p className="text-xs uppercase tracking-[0.3em] text-black/40 mb-3">
             Processo de Trabalho
           </p>

@@ -37,10 +37,14 @@ const BENEFICIOS_DATA = [
  */
 export function InfograficoLSFPDF() {
   return (
-    <section className="py-16 bg-black text-white w-full">
+    <section className="py-8 bg-black text-white w-full">
       <div className="container max-w-5xl mx-auto px-6">
+        {/* Section Label */}
+        <p className="text-sm uppercase tracking-[0.3em] font-mono text-white/60 mb-6">
+          01 — Apresentação Construtora
+        </p>
         {/* Header */}
-        <div className="text-center mb-10">
+        <div className="text-center mb-8">
           <p className="text-xs uppercase tracking-[0.3em] text-white/40 mb-3">
             Eficiência Comprovada
           </p>
@@ -54,7 +58,7 @@ export function InfograficoLSFPDF() {
         </div>
 
         {/* Stats Grid 2x2 */}
-        <div className="grid grid-cols-3 gap-6 mb-10">
+        <div className="grid grid-cols-3 gap-6 mb-6">
           {BENEFICIOS_DATA.map((beneficio) => {
             const Icon = beneficio.icon;
             return (

@@ -5,12 +5,11 @@ const INDICE_ITEMS = [
   { numero: "04", titulo: "Planilha Orçamentária" },
   { numero: "05", titulo: "Plano de Gerenciamento Berkahn" },
   { numero: "06", titulo: "Pagamento" },
-  { numero: "07", titulo: "Contato" },
 ];
 
 export function IndiceSectionPDF() {
   return (
-    <section className="py-16 bg-white w-full">
+    <section className="py-16 bg-[#F4F2EC] w-full">
       <div className="container max-w-3xl mx-auto px-8">
         {/* Header */}
         <div className="text-center mb-12">
@@ -29,15 +28,10 @@ export function IndiceSectionPDF() {
               key={item.numero}
               className="flex items-center gap-4 py-4 border-b border-black/10"
             >
-              {/* Número */}
               <span className="font-mono text-xl lg:text-2xl font-bold text-black w-10 lg:w-12 shrink-0">
                 {item.numero}
               </span>
-
-              {/* Linha conectora */}
               <div className="flex-1 h-px bg-black/20" />
-
-              {/* Título */}
               <span className="text-sm lg:text-base text-black/70 text-right">
                 {item.titulo}
               </span>

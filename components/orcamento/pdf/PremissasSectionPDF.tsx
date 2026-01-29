@@ -10,8 +10,8 @@ export function PremissasSectionPDF() {
       <div className="container max-w-5xl mx-auto px-6">
         {/* Header */}
         <div className="mb-10">
-          <p className="text-xs uppercase tracking-[0.3em] text-black/50 font-mono mb-2">
-            Seção Principal
+          <p className="text-sm uppercase tracking-[0.3em] font-mono text-black/60 mb-2">
+            02 — Premissas adotadas para o orçamento
           </p>
           <h2 className="text-3xl font-bold tracking-tight text-black mb-3">
             PREMISSAS ADOTADAS PARA O ORÇAMENTO

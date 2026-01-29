@@ -15,8 +15,8 @@ export function ProjetoPrototipoPDF() {
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div>
-            <p className="text-xs uppercase tracking-[0.3em] text-black/50 font-mono mb-2">
-              Premissas Adotadas → Projetos Considerados
+            <p className="text-sm uppercase tracking-[0.3em] font-mono text-black/60 mb-2">
+              02 — Premissas adotadas para o orçamento
             </p>
             <h2 className="text-3xl font-bold tracking-tight text-black">
               {titulo}

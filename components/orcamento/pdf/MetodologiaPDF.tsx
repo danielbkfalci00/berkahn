@@ -7,12 +7,16 @@ import { METODOLOGIA_LSF } from "@/lib/orcamento-data";
  */
 export function MetodologiaPDF() {
   return (
-    <section className="py-16 bg-[#F4F2EC] w-full">
+    <section className="py-8 bg-[#F4F2EC] w-full">
       <div className="container max-w-5xl mx-auto px-6">
+        {/* Section Label */}
+        <p className="text-sm uppercase tracking-[0.3em] font-mono text-black/60 mb-4">
+          02 — Premissas adotadas para o orçamento
+        </p>
         {/* Header */}
-        <div className="mb-8">
+        <div className="mb-6">
           <p className="text-xs uppercase tracking-[0.3em] text-black/50 font-mono mb-2">
-            Premissas Adotadas
+            Metodologia Construtiva
           </p>
           <h2 className="text-3xl font-bold tracking-tight text-black mb-2">
             METODOLOGIA CONSTRUTIVA

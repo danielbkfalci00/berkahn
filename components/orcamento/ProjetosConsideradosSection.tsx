@@ -33,7 +33,7 @@ export function ProjetosConsideradosSection() {
   return (
     <>
       {/* Header da seção agrupadora - Letra E */}
-      <section className="bg-[#E8E2D5] py-16">
+      <section className="bg-white py-16">
         <div className="container max-w-7xl px-4 sm:px-6 lg:px-8">
           <motion.div
             variants={containerVariants}

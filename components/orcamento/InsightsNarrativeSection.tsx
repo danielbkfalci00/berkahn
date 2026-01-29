@@ -21,7 +21,7 @@ export function InsightsNarrativeSection({
   story,
 }: InsightsNarrativeSectionProps) {
   return (
-    <section className="relative py-24 lg:py-32 bg-[#E8E2D5]">
+    <section className="relative py-24 lg:py-32 bg-[#F4F2EC]">
       <div className="container max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <RevealOnScroll>
