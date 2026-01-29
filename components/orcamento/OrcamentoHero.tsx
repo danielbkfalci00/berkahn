@@ -38,12 +38,12 @@ export function OrcamentoHero({
   return (
     <section
       ref={containerRef}
-      className="relative min-h-screen flex overflow-hidden"
+      className="relative min-h-screen flex overflow-hidden bg-black"
     >
       {/* Parallax Background Image */}
       <motion.div
         style={{ y: backgroundY, scale: backgroundScale }}
-        className="absolute inset-0 z-0"
+        className="absolute -inset-1 z-0"
       >
         <Image
           src={projeto.imagemRender || "/images/hero/hero-home-2.webp"}
@@ -148,9 +148,7 @@ export function OrcamentoHero({
 
       </motion.div>
 
-      {/* Decorative corner elements */}
-      <div className="absolute top-8 left-8 w-16 h-16 border-l border-t border-white/10 z-10 hidden lg:block" />
-      <div className="absolute top-8 right-8 w-16 h-16 border-r border-t border-white/10 z-10 hidden lg:block" />
+      {/* Decorative corner elements (bottom only) */}
       <div className="absolute bottom-8 left-8 w-16 h-16 border-l border-b border-white/10 z-10 hidden lg:block" />
       <div className="absolute bottom-8 right-8 w-16 h-16 border-r border-b border-white/10 z-10 hidden lg:block" />
     </section>
