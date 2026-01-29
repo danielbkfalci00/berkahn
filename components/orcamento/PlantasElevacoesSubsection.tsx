@@ -1,8 +1,8 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { SectionMarker } from "./SectionMarker";
 import { DrawingFrame } from "./DrawingFrame";
+import { SectionLabel } from "./SectionLabel";
 import type { ChaleProjeto } from "@/types/orcamento";
 import { useState } from "react";
 
@@ -36,26 +36,16 @@ export function PlantasElevacoesSubsection({ data, isNested }: PlantasElevacoesS
 
   return (
     <section className="relative py-xl bg-black">
-      <div className="container px-4 sm:px-6 lg:px-8">
-        {/* Header with section marker and breadcrumb */}
+      <div className="container px-4 sm:px-6 lg:px-8 relative z-10">
+        {/* SectionLabel 2.2 - substituindo o título anterior */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
           viewport={{ once: true }}
-          className="mb-lg space-y-2"
+          className="mb-lg"
         >
-          {/* Breadcrumb contextual - only when nested, colors inverted for black background */}
-          {isNested && (
-            <p className="text-[10px] uppercase tracking-[0.3em] text-white/50 font-mono">
-              Premissas Adotadas
-            </p>
-          )}
-
-          {/* Título da subseção */}
-          <h3 className="text-xl font-bold tracking-tight text-white uppercase">
-            PLANTAS & ELEVAÇÕES TÉCNICAS
-          </h3>
+          <SectionLabel number="2.2" title="Plantas & Elevações Técnicas" variant="dark" />
         </motion.div>
 
         {/* Plants section */}

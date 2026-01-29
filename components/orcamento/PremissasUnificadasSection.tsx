@@ -60,11 +60,6 @@ export function PremissasUnificadasSection() {
           {/* Supra-título */}
           <SectionLabel number="02" title="Premissas Adotadas para o Orçamento" variant="light" />
 
-          {/* Título Principal H2 */}
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-black mb-4">
-            PREMISSAS ADOTADAS PARA O ORÇAMENTO
-          </h2>
-
           {/* Descrição */}
           <p className="text-base text-black/70 leading-relaxed max-w-2xl mb-8">
             Apresentação detalhada da metodologia construtiva, projeto de referência, documentação técnica e especificações de materiais que fundamentam este orçamento.
