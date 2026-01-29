@@ -63,16 +63,9 @@ export function PremissasUnificadasSection() {
           </h2>
 
           {/* Descrição */}
-          <p className="text-base text-black/70 leading-relaxed max-w-2xl mb-8">
+          <p className="text-base text-black/70 leading-relaxed max-w-2xl">
             Apresentação detalhada da metodologia construtiva, projeto de referência, documentação técnica e especificações de materiais que fundamentam este orçamento.
           </p>
-
-          {/* Linha decorativa */}
-          <div className="flex items-center gap-4">
-            <div className="w-32 h-[1px] bg-black/10" />
-            <div className="w-3 h-3 rotate-45 bg-black/20" />
-            <div className="w-32 h-[1px] bg-black/10" />
-          </div>
         </motion.div>
       </div>
       </div>
