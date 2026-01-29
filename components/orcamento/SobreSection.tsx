@@ -50,7 +50,7 @@ export function SobreSection() {
           <SectionLabel number="01" title="Apresentação Construtora" variant="light" className="mb-0" />
         </div>
 
-        <div className="container max-w-5xl relative z-10">
+        <div className="container max-w-5xl px-4 sm:px-6 lg:px-8 relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
