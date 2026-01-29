@@ -29,17 +29,17 @@ export function PacotesInvestimento({
 }: PacotesInvestimentoProps) {
 
   return (
-    <section className={cn("relative bg-black", isPDFMode ? "py-8" : "py-xl")}>
-      <OrcamentoWatermark variant="dark" logoPosition="center" />
+    <section className={cn("relative bg-white", isPDFMode ? "py-8" : "py-xl")}>
+      <OrcamentoWatermark variant="light" logoPosition="center" />
       <div className="container max-w-7xl relative z-10">
         {/* Section Header */}
-        <SectionLabel number="04" title="Planilha Orçamentária" variant="dark" />
+        <SectionLabel number="04" title="Planilha Orçamentária" variant="light" />
         <RevealOnScroll>
           <div className={cn("text-center", isPDFMode ? "mb-6" : "mb-16")}>
-            <h2 className="headline-md text-white mb-4">
+            <h2 className="headline-md text-black mb-4">
               Opções de Investimento
             </h2>
-            <p className="body-md text-white/60 max-w-2xl mx-auto">
+            <p className="body-md text-black/60 max-w-2xl mx-auto">
               {pacotes.length === 2
                 ? "Apresentamos duas opções de pacotes pensados para atender diferentes necessidades. Ambos incluem nossa garantia de qualidade e compromisso com prazos."
                 : "Apresentamos opções de pacotes pensados para atender diferentes necessidades e expectativas. Todos incluem nossa garantia de qualidade e compromisso com prazos."}
@@ -96,8 +96,8 @@ export function PacotesInvestimento({
 
             {/* Navigation Arrows */}
             <div className="flex items-center justify-center gap-4 mt-8">
-              <CarouselPrevious className="static translate-y-0 h-12 w-12 border-white/20 text-white hover:bg-white hover:text-black transition-all" />
-              <CarouselNext className="static translate-y-0 h-12 w-12 border-white/20 text-white hover:bg-white hover:text-black transition-all" />
+              <CarouselPrevious className="static translate-y-0 h-12 w-12 border-black/20 text-black hover:bg-black hover:text-white transition-all" />
+              <CarouselNext className="static translate-y-0 h-12 w-12 border-black/20 text-black hover:bg-black hover:text-white transition-all" />
             </div>
 
             {/* Carousel Indicators */}
@@ -105,7 +105,7 @@ export function PacotesInvestimento({
               {pacotes.map((_, index) => (
                 <div
                   key={index}
-                  className="w-2 h-2 rounded-full bg-white/20 transition-colors"
+                  className="w-2 h-2 rounded-full bg-black/20 transition-colors"
                 />
               ))}
             </div>
@@ -119,7 +119,7 @@ export function PacotesInvestimento({
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ delay: 0.8 }}
-            className={cn("text-center text-sm text-white/40", isPDFMode ? "mt-4" : "mt-12")}
+            className={cn("text-center text-sm text-black/40", isPDFMode ? "mt-4" : "mt-12")}
           >
             * Valores calculados para {metragemProjeto}m². Consulte-nos para projetos com
             metragem diferente.
