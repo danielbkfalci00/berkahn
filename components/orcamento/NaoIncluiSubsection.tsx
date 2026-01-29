@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { AlertTriangle, XCircle } from "lucide-react";
 
 interface NaoIncluiSubsectionProps {
   itensExclusos: string[];
@@ -14,14 +15,32 @@ export function NaoIncluiSubsection({ itensExclusos }: NaoIncluiSubsectionProps)
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="relative bg-black rounded-2xl p-6 lg:p-8 border border-white/10"
+          className="relative rounded-2xl p-6 lg:p-8 border-l-4 border-l-amber-500 border border-white/10 bg-white/[0.03]"
         >
-          {/* Lista compacta com bullets minimalistas */}
-          <ul className="space-y-1.5">
+          {/* Header com ícone de alerta */}
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-10 h-10 rounded-full bg-amber-500/20 flex items-center justify-center flex-shrink-0">
+              <AlertTriangle className="w-5 h-5 text-amber-400" />
+            </div>
+            <div>
+              <h3 className="text-lg font-bold text-white uppercase tracking-wider">
+                Não Inclui
+              </h3>
+              <p className="text-xs text-white/40">
+                Itens listados abaixo não fazem parte deste orçamento
+              </p>
+            </div>
+          </div>
+
+          {/* Linha separadora */}
+          <div className="h-px bg-white/10 mb-6" />
+
+          {/* Lista com ícones XCircle */}
+          <ul className="space-y-3">
             {itensExclusos.map((item, index) => (
               <motion.li
                 key={index}
-                className="flex items-start gap-4 group"
+                className="flex items-start gap-3 group"
                 initial={{ opacity: 0, x: -20 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
@@ -31,33 +50,23 @@ export function NaoIncluiSubsection({ itensExclusos }: NaoIncluiSubsectionProps)
                   ease: [0.19, 1, 0.22, 1],
                 }}
               >
-                {/* Numeração técnica */}
-                <span className="font-mono text-[10px] text-white/40 mt-1 w-6 flex-shrink-0">
-                  {String(index + 1).padStart(2, '0')}
-                </span>
-
-                {/* Bullet minimalista */}
-                <span className="text-white/40 text-lg font-light leading-none mt-0.5 flex-shrink-0">
-                  —
-                </span>
-
-                {/* Item text */}
-                <span className="text-sm text-white/90 leading-relaxed flex-1">
+                <XCircle className="w-4 h-4 text-amber-500/60 flex-shrink-0 mt-0.5" />
+                <span className="text-sm text-white/80 leading-relaxed flex-1">
                   {item}
                 </span>
               </motion.li>
             ))}
           </ul>
 
-          {/* Blueprint bracket (canto inferior esquerdo) */}
+          {/* Blueprint bracket (canto inferior direito) */}
           <svg
-            className="absolute bottom-6 left-6 w-6 h-6 text-white/15"
+            className="absolute bottom-6 right-6 w-6 h-6 text-amber-500/15"
             viewBox="0 0 32 32"
             fill="none"
             stroke="currentColor"
             strokeWidth="1.5"
           >
-            <path d="M0,24 L0,32 L8,32" />
+            <path d="M24,32 L32,32 L32,24" />
           </svg>
         </motion.div>
       </div>
