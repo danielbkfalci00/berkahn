@@ -10,6 +10,8 @@ import { PlantasPDF } from "@/components/orcamento/pdf/PlantasPDF";
 import { ElevacoesPDF } from "@/components/orcamento/pdf/ElevacoesPDF";
 import { MateriaisPDF } from "@/components/orcamento/pdf/MateriaisPDF";
 import { PacotesInvestimento } from "@/components/orcamento/PacotesInvestimento";
+import { ItensInclususSubsection } from "@/components/orcamento/ItensInclususSubsection";
+import { NaoIncluiSubsection } from "@/components/orcamento/NaoIncluiSubsection";
 import { PaymentConditions } from "@/components/orcamento/PaymentConditions";
 import { PlanoGerenciamentoSectionPDF } from "@/components/orcamento/pdf/PlanoGerenciamentoSectionPDF";
 import { CTAFinal } from "@/components/orcamento/CTAFinal";
@@ -19,6 +21,7 @@ import {
   PACOTES_TEMPLATE,
   CONTATOS,
   CONDICOES_PAGAMENTO,
+  PREMISSAS_TEMPLATE,
   gerarNumeroOrcamento,
   calcularDataValidade,
 } from "@/lib/orcamento-data";
@@ -93,6 +96,16 @@ export default function OrcamentoPDFPage() {
           metragemProjeto={PROJETO_TEMPLATE.metragem}
           isPDFMode={true}
         />
+      </section>
+
+      {/* Slide 11b: Itens Inclusos — Seção 4.1 */}
+      <section className="min-h-screen flex items-center bg-white">
+        <ItensInclususSubsection itensInclusos={PREMISSAS_TEMPLATE.itensInclusos} />
+      </section>
+
+      {/* Slide 11c: Itens Exclusos — Seção 4.2 */}
+      <section className="min-h-screen flex items-center bg-[#F4F2EC]">
+        <NaoIncluiSubsection itensExclusos={PREMISSAS_TEMPLATE.itensExclusos} />
       </section>
 
       {/* Slide 12: Plano de Gerenciamento — Seção 05 */}
