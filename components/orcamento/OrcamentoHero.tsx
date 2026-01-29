@@ -74,7 +74,7 @@ export function OrcamentoHero({
       {/* Content with fade on scroll */}
       <motion.div
         style={{ opacity: contentOpacity, y: contentY }}
-        className="relative z-10 text-center max-w-5xl mx-auto px-6"
+        className="relative z-10 text-center max-w-5xl mx-auto px-6 flex flex-col items-center"
       >
         {/* Project Title - DESTAQUE PRINCIPAL */}
         <motion.div
