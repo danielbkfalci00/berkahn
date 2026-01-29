@@ -4,7 +4,6 @@ import { useRef } from "react";
 import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { CharReveal } from "@/components/animations/TextReveal";
-import { Ruler } from "lucide-react";
 import type { OrcamentoProjeto } from "@/types/orcamento";
 import { OrcamentoWatermark } from "./OrcamentoWatermark";
 
@@ -27,13 +26,8 @@ export function OrcamentoHero({
     offset: ["start start", "end start"],
   });
 
-  // Parallax effect for background
+  // Parallax effect for background (simple Y shift only — no scale for performance)
   const backgroundY = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
-  const backgroundScale = useTransform(scrollYProgress, [0, 1], [1, 1.1]);
-
-  // Fade out content on scroll
-  const contentOpacity = useTransform(scrollYProgress, [0, 0.4], [1, 0]);
-  const contentY = useTransform(scrollYProgress, [0, 0.4], ["0%", "15%"]);
 
   return (
     <section
@@ -42,7 +36,7 @@ export function OrcamentoHero({
     >
       {/* Parallax Background Image */}
       <motion.div
-        style={{ y: backgroundY, scale: backgroundScale }}
+        style={{ y: backgroundY }}
         className="absolute -inset-1 z-0"
       >
         <Image
@@ -50,13 +44,13 @@ export function OrcamentoHero({
           alt={projeto.titulo}
           fill
           priority
-          className="object-cover"
+          className="object-cover object-bottom"
           sizes="100vw"
         />
       </motion.div>
 
-      {/* Gradient Overlay with Glassmorphism effect */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-black/20 z-[1]" />
+      {/* Gradient Overlay - only darkens bottom half for text readability */}
+      <div className="absolute inset-0 z-[1]" style={{ background: 'linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.6) 40%, rgba(0,0,0,0.15) 65%, rgba(0,0,0,0) 100%)' }} />
 
       {/* Subtle noise texture overlay */}
       <div
@@ -72,8 +66,7 @@ export function OrcamentoHero({
       </div>
 
       {/* Content with fade on scroll */}
-      <motion.div
-        style={{ opacity: contentOpacity, y: contentY }}
+      <div
         className="relative z-10 text-center max-w-5xl mx-auto px-6 flex flex-col items-center justify-between w-full min-h-screen py-20 sm:py-24 lg:py-28"
       >
         {/* Top spacer */}
@@ -146,7 +139,7 @@ export function OrcamentoHero({
           />
         </motion.div>
 
-      </motion.div>
+      </div>
 
       {/* Decorative corner elements (bottom only) */}
       <div className="absolute bottom-8 left-8 w-16 h-16 border-l border-b border-white/10 z-10 hidden lg:block" />
