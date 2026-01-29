@@ -51,7 +51,7 @@ export const PROJETO_TEMPLATE: OrcamentoProjeto = {
     metragemComodos: [
       { nome: "Quarto", area: 10, categoria: "intimo" },
       { nome: "Banheiro", area: 6, categoria: "servico" },
-      { nome: "Sala", area: 27, categoria: "social" },
+      { nome: "Sala", area: 28, categoria: "social" },
     ],
     observacoes: "Metragens aproximadas conforme projeto preliminar",
   },
@@ -644,7 +644,7 @@ export const CHALE_PROJETO: ChaleProjeto = {
   comodos: [
     { nome: "Quarto", area: 10 },
     { nome: "Banheiro", area: 6 },
-    { nome: "Sala", area: 27 },
+    { nome: "Sala", area: 28 },
   ],
 };
 

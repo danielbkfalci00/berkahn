@@ -1,8 +1,7 @@
 "use client";
 
-import { useRef } from "react";
 import Image from "next/image";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 import { CharReveal } from "@/components/animations/TextReveal";
 import type { OrcamentoProjeto } from "@/types/orcamento";
 import { OrcamentoWatermark } from "./OrcamentoWatermark";
@@ -18,27 +17,12 @@ export function OrcamentoHero({
   numeroOrcamento,
   validoAte,
 }: OrcamentoHeroProps) {
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  // Scroll-based parallax
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end start"],
-  });
-
-  // Parallax effect for background (simple Y shift only — no scale for performance)
-  const backgroundY = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
-
   return (
     <section
-      ref={containerRef}
       className="relative min-h-screen flex overflow-hidden bg-black"
     >
-      {/* Parallax Background Image */}
-      <motion.div
-        style={{ y: backgroundY }}
-        className="absolute -inset-1 z-0"
-      >
+      {/* Background Image (static — no parallax for smooth scroll) */}
+      <div className="absolute -inset-1 z-0">
         <Image
           src={projeto.imagemRender || "/images/hero/hero-home-2.webp"}
           alt={projeto.titulo}
@@ -47,7 +31,7 @@ export function OrcamentoHero({
           className="object-cover object-bottom"
           sizes="100vw"
         />
-      </motion.div>
+      </div>
 
       {/* Gradient Overlay - only darkens bottom half for text readability */}
       <div className="absolute inset-0 z-[1]" style={{ background: 'linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.6) 40%, rgba(0,0,0,0.15) 65%, rgba(0,0,0,0) 100%)' }} />
@@ -131,11 +115,11 @@ export function OrcamentoHero({
           className="flex flex-col items-center"
         >
           <Image
-            src="/images/logo-berkahn-construtora.png"
+            src="/images/logo-berkahn-construtora-branco.png"
             alt="Berkahn Construtora de Alto Padrão"
             width={400}
             height={150}
-            className="brightness-0 invert opacity-90 w-[280px] sm:w-[340px] md:w-[400px] h-auto"
+            className="opacity-90 w-[280px] sm:w-[340px] md:w-[400px] h-auto"
           />
         </motion.div>
 
