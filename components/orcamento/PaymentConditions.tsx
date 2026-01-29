@@ -28,10 +28,8 @@ export function PaymentConditions({
   return (
     <section className={`relative ${isPDFMode ? "py-8" : "py-xl"} bg-[#F4F2EC]`}>
       <OrcamentoWatermark variant="light" logoPosition="top-right" />
-      <div className="container px-4 sm:px-6 lg:px-8 relative z-10 mb-4">
-        <SectionLabel number="06" title="Pagamento" variant="light" className="mb-0" />
-      </div>
-      <div className="container max-w-5xl relative z-10">
+      <div className="container px-4 sm:px-6 lg:px-8 relative z-10">
+        <SectionLabel number="06" title="Pagamento" variant="light" />
         <RevealOnScroll>
           <div className={`${isPDFMode ? "mb-6" : "mb-12"}`}>
             <h2 className="headline-md text-black mb-4">
@@ -42,6 +40,8 @@ export function PaymentConditions({
             </p>
           </div>
         </RevealOnScroll>
+      </div>
+      <div className="container max-w-5xl relative z-10">
 
         {condicaoPrincipal.estruturaPagamento && (
           <div className="space-y-6">

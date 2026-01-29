@@ -60,10 +60,8 @@ export function PlanoGerenciamentoSection({
   return (
     <section className="relative py-20 lg:py-32 bg-white overflow-hidden">
       <OrcamentoWatermark variant="light" logoPosition="top-right" />
-      <div className="container px-4 sm:px-6 lg:px-8 relative z-10 mb-4">
-        <SectionLabel number="05" title="Plano de Gerenciamento Berkahn" variant="light" className="mb-0" />
-      </div>
-      <div className="container max-w-6xl relative z-10">
+      <div className="container px-4 sm:px-6 lg:px-8 relative z-10">
+        <SectionLabel number="05" title="Plano de Gerenciamento Berkahn" variant="light" />
         <RevealOnScroll>
           <div className="mb-16">
             <h2 className="text-4xl lg:text-5xl font-bold tracking-tight text-black mb-4">
@@ -75,6 +73,8 @@ export function PlanoGerenciamentoSection({
             </p>
           </div>
         </RevealOnScroll>
+      </div>
+      <div className="container max-w-6xl relative z-10">
 
         {/* Desktop: Horizontal Timeline with Arrows */}
         <div className="hidden lg:flex items-center gap-6">
