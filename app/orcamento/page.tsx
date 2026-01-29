@@ -7,12 +7,13 @@ import { IndiceSection } from "@/components/orcamento/IndiceSection";
 // Seção Sobre - Storytelling com propósito
 import { SobreSection } from "@/components/orcamento/SobreSection";
 import { PacotesInvestimento } from "@/components/orcamento/PacotesInvestimento";
-import { InfograficoLSF } from "@/components/orcamento/InfograficoLSF";
+
 import { CTAFinal } from "@/components/orcamento/CTAFinal";
 // Novos componentes para Chalé Johny
 import { PremissasUnificadasSection } from "@/components/orcamento/PremissasUnificadasSection";
 import { MateriaisSection } from "@/components/orcamento/MateriaisSection";
 import { PlanoGerenciamentoSection } from "@/components/orcamento/PlanoGerenciamentoSection";
+import { ItensInclususSubsection } from "@/components/orcamento/ItensInclususSubsection";
 import { NaoIncluiSubsection } from "@/components/orcamento/NaoIncluiSubsection";
 import { SectionLabel } from "@/components/orcamento/SectionLabel";
 import { PaymentConditions } from "@/components/orcamento/PaymentConditions";
@@ -58,10 +59,6 @@ export default function OrcamentoPage() {
         <SobreSection />
       </section>
 
-      {/* Seção 3-4: Steel Frame - Eficiência Comprovada */}
-      <section id="lsf">
-        <InfograficoLSF />
-      </section>
 
       {/* Transição Visual */}
       <div className="relative h-24 bg-white">
@@ -84,14 +81,6 @@ export default function OrcamentoPage() {
         <MateriaisSection />
       </section>
 
-      {/* Subseção: Itens Não Inclusos (parte da seção 03) */}
-      <div className="bg-[#F4F2EC] pt-8 pb-0">
-        <div className="container px-4 sm:px-6 lg:px-8">
-          <SectionLabel number="03" title="Descrição Analítica dos Materiais" variant="light" subtitle="Itens Não Inclusos" />
-        </div>
-        <NaoIncluiSubsection itensExclusos={PREMISSAS_TEMPLATE.itensExclusos} />
-      </div>
-
       {/* Seção 7: Proposta de Investimento (CORE) - Pacotes */}
       <section id="investimento">
         <PacotesInvestimento
@@ -99,6 +88,22 @@ export default function OrcamentoPage() {
           metragemProjeto={PROJETO_TEMPLATE.metragem}
         />
       </section>
+
+      {/* Subsection 4.1: Itens Inclusos (parte da seção 04) */}
+      <div className="bg-white pt-0 pb-0">
+        <div className="container px-4 sm:px-6 lg:px-8 py-8">
+          <SectionLabel number="04" title="Planilha Orçamentária" variant="light" subtitle="4.1 Itens Inclusos" />
+        </div>
+        <ItensInclususSubsection itensInclusos={PREMISSAS_TEMPLATE.itensInclusos} />
+      </div>
+
+      {/* Subsection 4.2: Itens Exclusos (parte da seção 04) */}
+      <div className="bg-[#F4F2EC] pt-0 pb-8">
+        <div className="container px-4 sm:px-6 lg:px-8 py-8">
+          <SectionLabel number="04" title="Planilha Orçamentária" variant="light" subtitle="4.2 Itens Exclusos" />
+        </div>
+        <NaoIncluiSubsection itensExclusos={PREMISSAS_TEMPLATE.itensExclusos} />
+      </div>
 
       {/* Seção 8: Plano de Gerenciamento Berkahn */}
       <section id="plano">
