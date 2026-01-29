@@ -52,7 +52,7 @@ export function ProjetoChaleSubsection({ data, isNested }: ProjetoChaleSubsectio
   const images = data.imagens.prototipo;
 
   return (
-    <section className="relative py-xl bg-white">
+    <section className="relative py-lg bg-white">
       <div className="container px-4 sm:px-6 lg:px-8">
         {/* Header with section marker and breadcrumb */}
         <motion.div
@@ -62,11 +62,6 @@ export function ProjetoChaleSubsection({ data, isNested }: ProjetoChaleSubsectio
           viewport={{ once: true }}
           className="mb-lg space-y-2"
         >
-          {/* Breadcrumb contextual */}
-          <p className="text-[10px] uppercase tracking-[0.3em] text-black/50 font-mono">
-            Premissas Adotadas
-          </p>
-
           {/* Título da subseção */}
           <h3 className="text-xl font-bold tracking-tight text-black uppercase">
             {data.titulo}
