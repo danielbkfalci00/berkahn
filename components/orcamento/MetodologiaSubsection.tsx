@@ -39,9 +39,6 @@ export function MetodologiaSubsection({ data }: MetodologiaSubsectionProps) {
 
   return (
     <section className="relative py-xl bg-[#F4F2EC]">
-      {/* Section marker line (architectural drawing style) */}
-      <div className="absolute left-0 top-0 h-px w-full bg-black-10" />
-
       <div className="container px-4 sm:px-6 lg:px-8">
         {/* Header with section marker and breadcrumb */}
         <motion.div
