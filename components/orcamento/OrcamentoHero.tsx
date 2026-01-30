@@ -21,7 +21,7 @@ export function OrcamentoHero({
 }: OrcamentoHeroProps) {
   return (
     <section
-      className="relative min-h-screen flex overflow-hidden bg-black"
+      className="relative h-screen flex overflow-hidden bg-black"
     >
       {/* Background Image (static — no parallax for smooth scroll) */}
       <div className="absolute -inset-1 z-0">
@@ -30,13 +30,13 @@ export function OrcamentoHero({
           alt={projeto.titulo}
           fill
           priority
-          className="object-cover object-bottom"
+          className="object-cover object-center"
           sizes="100vw"
         />
       </div>
 
       {/* Gradient Overlay - only darkens bottom half for text readability */}
-      <div className="absolute inset-0 z-[1]" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.4) 30%, rgba(0,0,0,0.15) 60%, rgba(0,0,0,0) 100%)' }} />
+      <div className="absolute inset-0 z-[1]" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.5) 30%, rgba(0,0,0,0.15) 60%, rgba(0,0,0,0) 100%)' }} />
 
       {/* Subtle noise texture overlay */}
       <div
@@ -53,7 +53,7 @@ export function OrcamentoHero({
 
       {/* Content with fade on scroll */}
       <div
-        className={`relative z-10 text-center max-w-5xl mx-auto px-6 flex flex-col items-center justify-between w-full min-h-screen ${isPDFMode ? "py-8" : "py-20 sm:py-24 lg:py-28"}`}
+        className={`relative z-10 text-center max-w-5xl mx-auto px-6 flex flex-col items-center justify-between w-full h-screen ${isPDFMode ? "py-8" : "py-20 sm:py-24 lg:py-28"}`}
       >
         {/* Top spacer */}
         <div className={isPDFMode ? "flex-[0.3]" : "flex-1"} />
