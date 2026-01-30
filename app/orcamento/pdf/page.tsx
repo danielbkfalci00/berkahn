@@ -2,7 +2,6 @@
 import { OrcamentoHero } from "@/components/orcamento/OrcamentoHero";
 import { IndiceSectionPDF } from "@/components/orcamento/pdf/IndiceSectionPDF";
 import { SobreSectionPDF } from "@/components/orcamento/pdf/SobreSectionPDF";
-import { InfograficoLSFPDF } from "@/components/orcamento/pdf/InfograficoLSFPDF";
 import { PremissasSectionPDF } from "@/components/orcamento/pdf/PremissasSectionPDF";
 import { MetodologiaPDF } from "@/components/orcamento/pdf/MetodologiaPDF";
 import { ProjetoPrototipoPDF } from "@/components/orcamento/pdf/ProjetoPrototipoPDF";
@@ -55,12 +54,7 @@ export default function OrcamentoPDFPage() {
         <SobreSectionPDF />
       </section>
 
-      {/* Slide 4: Vantagens Steel Frame — Seção 01 */}
-      <section className="min-h-screen flex items-center">
-        <InfograficoLSFPDF />
-      </section>
-
-      {/* Slide 5: Premissas — Seção 02 */}
+      {/* Slide 4: Premissas — Seção 02 */}
       <section className="min-h-screen flex items-center">
         <PremissasSectionPDF />
       </section>
