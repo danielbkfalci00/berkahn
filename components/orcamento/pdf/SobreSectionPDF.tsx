@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { BENEFITS } from "@/lib/lsf-data";
 
 const SETORES = [
   {
@@ -20,7 +21,7 @@ const SETORES = [
 
 /**
  * SobreSectionPDF - Versão PDF alinhada à web
- * Hero BERKAHN + Expertise + Setores + Stats
+ * Left-aligned header + Expertise box + Setores + 8 Benefits grid
  */
 export function SobreSectionPDF() {
   return (
@@ -31,31 +32,23 @@ export function SobreSectionPDF() {
           01 — Apresentação Construtora
         </p>
 
-        {/* Hero Header */}
-        <div className="text-center mb-6">
-          <h1 className="font-heading text-5xl font-bold tracking-tight text-black mb-2">
+        {/* Hero Header - Left aligned (matching web) */}
+        <div className="mb-6">
+          <h1 className="font-heading text-5xl font-bold tracking-tight text-black mb-4">
             BERKAHN
           </h1>
-          <h2 className="font-heading text-2xl font-light text-black/70 mb-3">
-            Mestres em construir
-          </h2>
-          <p className="text-sm text-black/50 uppercase tracking-[0.2em]">
-            Líderes em Light Steel Frame
+          <p className="text-lg text-black/60 max-w-2xl leading-relaxed">
+            Especialistas em construção com Light Steel Frame, oferecemos soluções construtivas de alta precisão e qualidade técnica. Com metodologia própria e equipe especializada, transformamos projetos em realidade com agilidade, eficiência e compromisso com prazos.
           </p>
-          <div className="flex items-center justify-center gap-3 mt-4">
-            <div className="w-16 h-px bg-black/20" />
-            <div className="w-1.5 h-1.5 rotate-45 bg-black/30" />
-            <div className="w-16 h-px bg-black/20" />
-          </div>
         </div>
 
         {/* Nossa Expertise */}
-        <div className="bg-[#F4F2EC] rounded-xl p-6 mb-6">
+        <div className="bg-white rounded-2xl p-6 mb-6 border border-black/5 shadow-sm">
           <h3 className="font-heading text-xl font-bold text-black mb-3">
             NOSSA EXPERTISE
           </h3>
           <p className="text-base text-black/80 leading-relaxed">
-            Somos uma construtora especializada em Light Steel Frame no Brasil.
+            Somos uma construtora especializada em Light Steel Frame.
             Priorizamos esta tecnologia por sua eficiência, precisão e sustentabilidade
             — mas nossa expertise vai além: <strong className="text-black">Dominamos múltiplos sistemas construtivos</strong> para entregar sempre a melhor solução.
           </p>
@@ -70,7 +63,7 @@ export function SobreSectionPDF() {
             {SETORES.map((setor) => (
               <div
                 key={setor.label}
-                className="relative h-[160px] rounded-xl overflow-hidden"
+                className="relative h-[130px] rounded-xl overflow-hidden"
               >
                 <Image
                   src={setor.image}
@@ -94,17 +87,28 @@ export function SobreSectionPDF() {
           </div>
         </div>
 
-        {/* Stats Row */}
-        <div className="grid grid-cols-2 gap-4">
-          <div className="bg-black text-white rounded-xl p-5 flex items-center justify-center gap-4">
-            <span className="text-4xl font-bold">20+</span>
-            <p className="text-sm text-white/70">
-              anos de experiência<br />combinada
-            </p>
-          </div>
-          <div className="bg-black text-white rounded-xl p-5">
-            <p className="text-sm text-white/60 mb-1">Tempo de obra</p>
-            <p className="text-2xl font-bold">50% mais rápido</p>
+        {/* Vantagens LSF - 8 Benefits Grid (matching web) */}
+        <div>
+          <h3 className="font-heading text-lg font-semibold text-black text-center mb-4">
+            E quais são as Vantagens do Light Steel Frame?
+          </h3>
+          <div className="grid grid-cols-4 gap-3">
+            {BENEFITS.map((benefit) => (
+              <div
+                key={benefit.title}
+                className="bg-white rounded-xl p-3 border border-black/5 shadow-sm text-center"
+              >
+                <span className="font-heading text-2xl font-bold text-black">
+                  {benefit.stat}{benefit.suffix}
+                </span>
+                <p className="text-[10px] text-black/50 mt-0.5 uppercase tracking-wider">
+                  {benefit.description.split(" ").slice(0, 3).join(" ")}
+                </p>
+                <p className="text-xs text-black/70 mt-0.5 font-medium">
+                  {benefit.title}
+                </p>
+              </div>
+            ))}
           </div>
         </div>
       </div>

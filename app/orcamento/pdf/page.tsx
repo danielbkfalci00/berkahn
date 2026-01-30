@@ -15,6 +15,7 @@ import { NaoIncluiSubsection } from "@/components/orcamento/NaoIncluiSubsection"
 import { PaymentConditions } from "@/components/orcamento/PaymentConditions";
 import { PlanoGerenciamentoSectionPDF } from "@/components/orcamento/pdf/PlanoGerenciamentoSectionPDF";
 import { CTAFinal } from "@/components/orcamento/CTAFinal";
+import { SectionLabel } from "@/components/orcamento/SectionLabel";
 
 import {
   PROJETO_TEMPLATE,
@@ -99,12 +100,18 @@ export default function OrcamentoPDFPage() {
       </section>
 
       {/* Slide 11b: Itens Inclusos — Seção 4.1 */}
-      <section className="min-h-screen flex items-center bg-white">
+      <section className="min-h-screen flex flex-col justify-center bg-black">
+        <div className="container px-4 sm:px-6 lg:px-8 py-8">
+          <SectionLabel number="04" title="Planilha Orçamentária" variant="dark" subtitle="4.1 Itens Inclusos" />
+        </div>
         <ItensInclususSubsection itensInclusos={PREMISSAS_TEMPLATE.itensInclusos} />
       </section>
 
       {/* Slide 11c: Itens Exclusos — Seção 4.2 */}
-      <section className="min-h-screen flex items-center bg-[#F4F2EC]">
+      <section className="min-h-screen flex flex-col justify-center bg-black">
+        <div className="container px-4 sm:px-6 lg:px-8 py-8">
+          <SectionLabel number="04" title="Planilha Orçamentária" variant="dark" subtitle="4.2 Itens Exclusos" />
+        </div>
         <NaoIncluiSubsection itensExclusos={PREMISSAS_TEMPLATE.itensExclusos} />
       </section>
 

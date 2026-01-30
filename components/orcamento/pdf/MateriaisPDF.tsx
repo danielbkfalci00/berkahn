@@ -14,10 +14,10 @@ export function MateriaisPDF() {
             03 — Descrição Analítica dos Materiais
           </p>
           <h2 className="text-3xl font-bold tracking-tight text-black mb-3">
-            DESCRIÇÃO ANALÍTICA DE MATERIAIS
+            COMPOSIÇÃO TÉCNICA DO PROJETO
           </h2>
           <p className="text-sm text-black/60 max-w-2xl">
-            Especificações técnicas dos materiais que serão utilizados na construção.
+            Relação detalhada de materiais, componentes e quantidades previstas para a execução.
           </p>
         </div>
 
