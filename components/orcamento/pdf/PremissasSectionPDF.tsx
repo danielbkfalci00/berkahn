@@ -1,80 +1,42 @@
 import { METODOLOGIA_LSF } from "@/lib/orcamento-data";
 
 /**
- * PremissasSectionPDF - Versão compacta sem imagens
- * Apenas texto, tabelas e listas
+ * PremissasSectionPDF - Header da seção + Metodologia A-D
+ * Alinhado com PremissasUnificadasSection da web
  */
 export function PremissasSectionPDF() {
   return (
-    <section className="py-8 bg-white w-full">
+    <section className="py-8 bg-[#F4F2EC] w-full">
       <div className="container max-w-5xl mx-auto px-6">
         {/* Header */}
-        <div className="mb-6">
+        <div className="mb-8">
           <p className="text-sm uppercase tracking-[0.3em] font-mono text-black/60 mb-2">
             02 — Premissas adotadas para o orçamento
           </p>
-          <h2 className="text-3xl font-bold tracking-tight text-black mb-3">
-            PREMISSAS ADOTADAS PARA O ORÇAMENTO
+          <h2 className="text-3xl font-bold tracking-tight text-black mb-4">
+            METODOLOGIA E DOCUMENTAÇÃO TÉCNICA
           </h2>
-          <p className="text-sm text-black/60 max-w-2xl">
-            Metodologia construtiva, projeto de referência e especificações de materiais.
+          <p className="text-base text-black/70 leading-relaxed max-w-2xl">
+            Apresentação detalhada da metodologia construtiva, projeto de referência, documentação técnica e especificações de materiais que fundamentam este orçamento.
           </p>
         </div>
 
-        {/* Grid: Metodologia + Projeto */}
-        <div className="grid md:grid-cols-2 gap-6">
-          {/* Metodologia Construtiva */}
-          <div className="bg-[#F4F2EC] rounded-xl p-6">
-            <h3 className="text-lg font-bold text-black mb-4 uppercase tracking-wide">
-              Metodologia Construtiva
-            </h3>
-            <div className="space-y-3">
-              {METODOLOGIA_LSF.itens.map((item, index) => (
-                <div key={index} className="flex gap-3">
-                  <span className="w-6 h-6 rounded-full bg-black text-white text-xs font-bold flex items-center justify-center flex-shrink-0">
-                    {item.letra}
-                  </span>
-                  <div>
-                    <p className="text-sm font-semibold text-black">{item.titulo}</p>
-                    <p className="text-xs text-black/60">{item.descricao}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Projeto Considerado */}
-          <div className="bg-white border border-black/10 rounded-xl p-6">
-            <h3 className="text-lg font-bold text-black mb-4 uppercase tracking-wide">
-              Projeto: Chalé (01)
-            </h3>
-            <div className="space-y-4">
-              <div className="text-center py-4 bg-black/5 rounded-lg">
-                <span className="text-4xl font-bold text-black">44m²</span>
-                <p className="text-xs text-black/60 mt-1">Área Total</p>
-              </div>
-              <div className="grid grid-cols-2 gap-3 text-sm">
-                <div className="flex justify-between">
-                  <span className="text-black/60">Quarto</span>
-                  <span className="font-semibold">10 m²</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-black/60">Banheiro</span>
-                  <span className="font-semibold">6 m²</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-black/60">Sala</span>
-                  <span className="font-semibold">28 m²</span>
-                </div>
-                <div className="flex justify-between border-t border-black/10 pt-2">
-                  <span className="text-black/60">Total</span>
-                  <span className="font-bold">44 m²</span>
+        {/* Metodologia Construtiva A-D */}
+        <div className="bg-white rounded-xl p-6 border border-black/5">
+          <div className="space-y-4">
+            {METODOLOGIA_LSF.itens.map((item, index) => (
+              <div key={index} className="flex gap-4">
+                <span className="w-8 h-8 rounded-full border-2 border-black bg-white text-black text-sm font-bold flex items-center justify-center flex-shrink-0 font-mono">
+                  {item.letra}
+                </span>
+                <div className="flex-1 pt-0.5">
+                  <p className="text-sm font-semibold text-black uppercase tracking-tight">{item.titulo}</p>
+                  <p className="text-sm text-black/60 leading-relaxed mt-0.5">{item.descricao}</p>
                 </div>
               </div>
-            </div>
+            ))}
           </div>
         </div>
-
       </div>
     </section>
   );
