@@ -34,7 +34,7 @@ export function OrcamentoHero({
       </div>
 
       {/* Gradient Overlay - only darkens bottom half for text readability */}
-      <div className="absolute inset-0 z-[1]" style={{ background: 'linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.6) 40%, rgba(0,0,0,0.15) 65%, rgba(0,0,0,0) 100%)' }} />
+      <div className="absolute inset-0 z-[1]" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.4) 30%, rgba(0,0,0,0.15) 60%, rgba(0,0,0,0) 100%)' }} />
 
       {/* Subtle noise texture overlay */}
       <div
@@ -125,9 +125,6 @@ export function OrcamentoHero({
 
       </div>
 
-      {/* Decorative corner elements (bottom only) */}
-      <div className="absolute bottom-8 left-8 w-16 h-16 border-l border-b border-white/10 z-10 hidden lg:block" />
-      <div className="absolute bottom-8 right-8 w-16 h-16 border-r border-b border-white/10 z-10 hidden lg:block" />
     </section>
   );
 }
