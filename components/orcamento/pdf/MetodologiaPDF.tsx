@@ -7,10 +7,10 @@ import { METODOLOGIA_LSF } from "@/lib/orcamento-data";
  */
 export function MetodologiaPDF() {
   return (
-    <section className="py-8 bg-[#F4F2EC] w-full">
+    <section className="py-4 bg-[#F4F2EC] w-full">
       <div className="container max-w-5xl mx-auto px-6">
         {/* Section Label - matching web SectionLabel pattern */}
-        <div className="mb-6">
+        <div className="mb-3">
           <p className="text-sm uppercase tracking-[0.3em] font-mono text-black/60">
             02 — Premissas Adotadas para o Orçamento
           </p>
@@ -20,7 +20,7 @@ export function MetodologiaPDF() {
         </div>
 
         {/* Grid: Imagem + Lista */}
-        <div className="grid grid-cols-2 gap-8 items-start">
+        <div className="grid grid-cols-2 gap-4 items-start">
           {/* Imagem Técnica */}
           <div className="relative w-full">
             <div className="relative aspect-auto overflow-hidden border border-black">
@@ -39,7 +39,7 @@ export function MetodologiaPDF() {
           </div>
 
           {/* Lista Metodologia A-D - sem título extra */}
-          <div className="space-y-5">
+          <div className="space-y-3">
             {METODOLOGIA_LSF.itens.map((item, index) => (
               <div key={index} className="flex gap-4">
                 <div className="flex-shrink-0">

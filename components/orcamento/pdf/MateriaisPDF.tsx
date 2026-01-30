@@ -6,10 +6,10 @@ import { MATERIAIS_DETALHADOS } from "@/lib/orcamento-data";
  */
 export function MateriaisPDF() {
   return (
-    <section className="py-8 bg-[#F4F2EC] w-full">
+    <section className="py-4 bg-[#F4F2EC] w-full">
       <div className="container max-w-5xl mx-auto px-6">
         {/* Header */}
-        <div className="mb-6">
+        <div className="mb-3">
           <p className="text-sm uppercase tracking-[0.3em] font-mono text-black/60 mb-2">
             03 — Descrição Analítica dos Materiais
           </p>

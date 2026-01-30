@@ -25,15 +25,15 @@ const SETORES = [
  */
 export function SobreSectionPDF() {
   return (
-    <section className="py-8 bg-white w-full">
+    <section className="py-3 bg-white w-full">
       <div className="container max-w-5xl mx-auto px-6">
         {/* Section Label */}
-        <p className="text-sm uppercase tracking-[0.3em] font-mono text-black/60 mb-6">
+        <p className="text-sm uppercase tracking-[0.3em] font-mono text-black/60 mb-3">
           01 — Apresentação Construtora
         </p>
 
         {/* Hero Header - Left aligned (matching web) */}
-        <div className="mb-6">
+        <div className="mb-3">
           <h1 className="font-heading text-5xl font-bold tracking-tight text-black mb-4">
             BERKAHN
           </h1>
@@ -43,7 +43,7 @@ export function SobreSectionPDF() {
         </div>
 
         {/* Nossa Expertise */}
-        <div className="bg-white rounded-2xl p-6 mb-6 border border-black/5 shadow-sm">
+        <div className="bg-white rounded-2xl p-6 mb-3 border border-black/5 shadow-sm">
           <h3 className="font-heading text-xl font-bold text-black mb-3">
             NOSSA EXPERTISE
           </h3>
@@ -55,7 +55,7 @@ export function SobreSectionPDF() {
         </div>
 
         {/* Setores */}
-        <div className="mb-6">
+        <div className="mb-3">
           <p className="text-sm text-black/60 mb-4 uppercase tracking-widest">
             Construímos para todos os setores
           </p>
@@ -63,7 +63,7 @@ export function SobreSectionPDF() {
             {SETORES.map((setor) => (
               <div
                 key={setor.label}
-                className="relative h-[130px] rounded-xl overflow-hidden"
+                className="relative h-[100px] rounded-xl overflow-hidden"
               >
                 <Image
                   src={setor.image}
@@ -92,7 +92,7 @@ export function SobreSectionPDF() {
           <h3 className="font-heading text-lg font-semibold text-black text-center mb-4">
             E quais são as Vantagens do Light Steel Frame?
           </h3>
-          <div className="grid grid-cols-4 gap-3">
+          <div className="grid grid-cols-4 gap-2">
             {BENEFITS.map((benefit) => (
               <div
                 key={benefit.title}

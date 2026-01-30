@@ -5,20 +5,21 @@ import { AlertTriangle, XCircle } from "lucide-react";
 
 interface NaoIncluiSubsectionProps {
   itensExclusos: string[];
+  isPDFMode?: boolean;
 }
 
-export function NaoIncluiSubsection({ itensExclusos }: NaoIncluiSubsectionProps) {
+export function NaoIncluiSubsection({ itensExclusos, isPDFMode = false }: NaoIncluiSubsectionProps) {
   return (
-    <div className="relative bg-black py-md">
+    <div className={`relative bg-black ${isPDFMode ? "py-2" : "py-md"}`}>
       <div className="container px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="relative rounded-2xl p-6 lg:p-8 border-l-4 border-l-amber-500 border border-white/10 bg-white/[0.03]"
+          className={`relative rounded-2xl ${isPDFMode ? "p-3" : "p-6 lg:p-8"} border-l-4 border-l-amber-500 border border-white/10 bg-white/[0.03]`}
         >
           {/* Header com ícone de alerta */}
-          <div className="flex items-center gap-3 mb-6">
+          <div className={`flex items-center gap-3 ${isPDFMode ? "mb-3" : "mb-6"}`}>
             <div className="w-10 h-10 rounded-full bg-amber-500/20 flex items-center justify-center flex-shrink-0">
               <AlertTriangle className="w-5 h-5 text-amber-400" />
             </div>
@@ -33,10 +34,10 @@ export function NaoIncluiSubsection({ itensExclusos }: NaoIncluiSubsectionProps)
           </div>
 
           {/* Linha separadora */}
-          <div className="h-px bg-white/10 mb-6" />
+          <div className={`h-px bg-white/10 ${isPDFMode ? "mb-3" : "mb-6"}`} />
 
           {/* Lista com ícones XCircle */}
-          <ul className="space-y-3">
+          <ul className={isPDFMode ? "space-y-1.5" : "space-y-3"}>
             {itensExclusos.map((item, index) => (
               <motion.li
                 key={index}

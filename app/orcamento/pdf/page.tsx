@@ -41,51 +41,52 @@ export default function OrcamentoPDFPage() {
           projeto={PROJETO_TEMPLATE}
           numeroOrcamento={numeroOrcamento}
           validoAte={dataValidade}
+          isPDFMode={true}
         />
       </section>
 
       {/* Slide 2: Índice */}
-      <section className="min-h-screen flex items-center">
+      <section className="h-screen flex flex-col justify-center overflow-hidden">
         <IndiceSectionPDF />
       </section>
 
       {/* Slide 3: Sobre a Berkahn — Seção 01 */}
-      <section className="min-h-screen flex items-center">
+      <section className="h-screen flex flex-col justify-center overflow-hidden">
         <SobreSectionPDF />
       </section>
 
       {/* Slide 4: Premissas — Seção 02 */}
-      <section className="min-h-screen flex items-center">
+      <section className="h-screen flex flex-col justify-center overflow-hidden">
         <PremissasSectionPDF />
       </section>
 
       {/* Slide 6: Metodologia Construtiva — Seção 02 */}
-      <section className="min-h-screen flex items-center">
+      <section className="h-screen flex flex-col justify-center overflow-hidden">
         <MetodologiaPDF />
       </section>
 
       {/* Slide 7: Projeto Protótipo — Seção 02 */}
-      <section className="min-h-screen flex items-center">
+      <section className="h-screen flex flex-col justify-center overflow-hidden">
         <ProjetoPrototipoPDF />
       </section>
 
       {/* Slide 8: Plantas Baixas — Seção 02 */}
-      <section className="min-h-screen flex items-center">
+      <section className="h-screen flex flex-col justify-center overflow-hidden">
         <PlantasPDF />
       </section>
 
       {/* Slide 9: Elevações Técnicas — Seção 02 */}
-      <section className="min-h-screen flex items-center">
+      <section className="h-screen flex flex-col justify-center overflow-hidden">
         <ElevacoesPDF />
       </section>
 
       {/* Slide 10: Materiais — Seção 03 */}
-      <section className="min-h-screen flex items-center">
+      <section className="h-screen flex flex-col justify-center overflow-hidden">
         <MateriaisPDF />
       </section>
 
       {/* Slide 11: Proposta de Investimento — Seção 04 */}
-      <section className="min-h-screen flex items-center">
+      <section className="h-screen flex flex-col justify-center overflow-hidden">
         <PacotesInvestimento
           pacotes={PACOTES_TEMPLATE}
           metragemProjeto={PROJETO_TEMPLATE.metragem}
@@ -94,30 +95,30 @@ export default function OrcamentoPDFPage() {
       </section>
 
       {/* Slide 11b: Itens Inclusos — Seção 4.1 */}
-      <section className="min-h-screen flex flex-col justify-center bg-black">
-        <div className="container px-4 sm:px-6 lg:px-8 py-8">
+      <section className="h-screen flex flex-col justify-center overflow-hidden bg-black">
+        <div className="container px-4 sm:px-6 lg:px-8 py-4">
           <SectionLabel number="04" title="Planilha Orçamentária" variant="dark" subtitle="4.1 Itens Inclusos" />
         </div>
-        <ItensInclususSubsection itensInclusos={PREMISSAS_TEMPLATE.itensInclusos} />
+        <ItensInclususSubsection itensInclusos={PREMISSAS_TEMPLATE.itensInclusos} isPDFMode={true} />
       </section>
 
       {/* Slide 11c: Itens Exclusos — Seção 4.2 */}
-      <section className="min-h-screen flex flex-col justify-center bg-black">
-        <div className="container px-4 sm:px-6 lg:px-8 py-8">
+      <section className="h-screen flex flex-col justify-center overflow-hidden bg-black">
+        <div className="container px-4 sm:px-6 lg:px-8 py-4">
           <SectionLabel number="04" title="Planilha Orçamentária" variant="dark" subtitle="4.2 Itens Exclusos" />
         </div>
-        <NaoIncluiSubsection itensExclusos={PREMISSAS_TEMPLATE.itensExclusos} />
+        <NaoIncluiSubsection itensExclusos={PREMISSAS_TEMPLATE.itensExclusos} isPDFMode={true} />
       </section>
 
       {/* Slide 12: Plano de Gerenciamento — Seção 05 */}
-      <section className="min-h-screen flex items-center">
+      <section className="h-screen flex flex-col justify-center overflow-hidden">
         {PROJETO_TEMPLATE.planoGerenciamento && (
           <PlanoGerenciamentoSectionPDF plano={PROJETO_TEMPLATE.planoGerenciamento} />
         )}
       </section>
 
       {/* Slide 13: Pagamento — Seção 06 */}
-      <section className="min-h-screen flex items-center">
+      <section className="h-screen flex flex-col justify-center overflow-hidden">
         <PaymentConditions
           condicoes={CONDICOES_PAGAMENTO}
           valorTotal={valorTotal}
@@ -126,7 +127,7 @@ export default function OrcamentoPDFPage() {
       </section>
 
       {/* Slide 14: CTA Final / Contato */}
-      <section className="min-h-screen">
+      <section className="h-screen">
         <CTAFinal
           projeto={PROJETO_TEMPLATE}
           validoAte={dataValidade}

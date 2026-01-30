@@ -82,10 +82,10 @@ export function CTAFinal({
 
       <OrcamentoWatermark variant="dark" logoPosition="center" />
 
-      <div className={cn("relative container max-w-6xl", isPDFMode ? "py-8" : "py-xl")}>
+      <div className={cn("relative container max-w-6xl", isPDFMode ? "py-4" : "py-xl")}>
         {/* Informações de Contato (sem botões - proposta comercial) */}
         <RevealOnScroll delay={0.4}>
-          <div className={isPDFMode ? "mb-8" : "mb-16"}>
+          <div className={isPDFMode ? "mb-4" : "mb-16"}>
             {/* Linha decorativa com label */}
             <div className="flex items-center justify-center gap-4 mb-8">
               <div className="w-16 h-px bg-white/20" />
@@ -96,9 +96,9 @@ export function CTAFinal({
             </div>
 
             {/* Cards de contato estáticos */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl mx-auto">
-              <div className="flex flex-col items-center gap-3 p-6 rounded-xl bg-white/5 border border-white/10">
-                <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center">
+            <div className={cn("grid grid-cols-1 md:grid-cols-3 max-w-3xl mx-auto", isPDFMode ? "gap-3" : "gap-6")}>
+              <div className={cn("flex flex-col items-center gap-2 rounded-xl bg-white/5 border border-white/10", isPDFMode ? "p-3" : "p-6")}>
+                <div className={cn("rounded-full bg-white/10 flex items-center justify-center", isPDFMode ? "w-8 h-8" : "w-12 h-12")}>
                   <Phone className="w-5 h-5 text-white/60" />
                 </div>
                 <p className="text-xs uppercase tracking-widest text-white/40">
@@ -107,8 +107,8 @@ export function CTAFinal({
                 <p className="text-white font-medium">{contatos.telefone}</p>
               </div>
 
-              <div className="flex flex-col items-center gap-3 p-6 rounded-xl bg-white/5 border border-white/10">
-                <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center">
+              <div className={cn("flex flex-col items-center gap-2 rounded-xl bg-white/5 border border-white/10", isPDFMode ? "p-3" : "p-6")}>
+                <div className={cn("rounded-full bg-white/10 flex items-center justify-center", isPDFMode ? "w-8 h-8" : "w-12 h-12")}>
                   <Mail className="w-5 h-5 text-white/60" />
                 </div>
                 <p className="text-xs uppercase tracking-widest text-white/40">
@@ -117,8 +117,8 @@ export function CTAFinal({
                 <p className="text-white font-medium">{contatos.email}</p>
               </div>
 
-              <div className="flex flex-col items-center gap-3 p-6 rounded-xl bg-white/5 border border-white/10">
-                <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center">
+              <div className={cn("flex flex-col items-center gap-2 rounded-xl bg-white/5 border border-white/10", isPDFMode ? "p-3" : "p-6")}>
+                <div className={cn("rounded-full bg-white/10 flex items-center justify-center", isPDFMode ? "w-8 h-8" : "w-12 h-12")}>
                   <MapPin className="w-5 h-5 text-white/60" />
                 </div>
                 <p className="text-xs uppercase tracking-widest text-white/40">
@@ -132,7 +132,7 @@ export function CTAFinal({
 
         {/* Guarantees */}
         <RevealOnScroll delay={0.5}>
-          <div className={cn("flex flex-wrap justify-center gap-4", isPDFMode ? "mb-8" : "mb-16")}>
+          <div className={cn("flex flex-wrap justify-center gap-4", isPDFMode ? "mb-4" : "mb-16")}>
             {[
               { icon: Shield, text: "10 Anos de Garantia" },
               { icon: Award, text: "Certificação ABNT" },
@@ -155,7 +155,7 @@ export function CTAFinal({
 
         {/* Footer da Proposta */}
         <RevealOnScroll delay={0.6}>
-          <div className="pt-12">
+          <div className={isPDFMode ? "pt-4" : "pt-12"}>
             {/* Linha decorativa */}
             <div className="flex items-center justify-center gap-4 mb-8">
               <div className="flex-1 h-px bg-white/10" />
@@ -195,7 +195,7 @@ export function CTAFinal({
         </RevealOnScroll>
 
         {/* Footer - Direitos Reservados e Redes Sociais */}
-        <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mt-12 pt-8 border-t border-white/10">
+        <div className={cn("flex flex-col sm:flex-row justify-between items-center gap-4 border-t border-white/10", isPDFMode ? "mt-4 pt-3" : "mt-12 pt-8")}>
           <p className="text-white/50 text-sm">
             © 2026 Berkahn. Todos os direitos reservados.
           </p>

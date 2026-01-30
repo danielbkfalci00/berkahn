@@ -10,12 +10,14 @@ interface OrcamentoHeroProps {
   projeto: OrcamentoProjeto;
   numeroOrcamento: string;
   validoAte: string;
+  isPDFMode?: boolean;
 }
 
 export function OrcamentoHero({
   projeto,
   numeroOrcamento,
   validoAte,
+  isPDFMode = false,
 }: OrcamentoHeroProps) {
   return (
     <section
@@ -51,10 +53,10 @@ export function OrcamentoHero({
 
       {/* Content with fade on scroll */}
       <div
-        className="relative z-10 text-center max-w-5xl mx-auto px-6 flex flex-col items-center justify-between w-full min-h-screen py-20 sm:py-24 lg:py-28"
+        className={`relative z-10 text-center max-w-5xl mx-auto px-6 flex flex-col items-center justify-between w-full min-h-screen ${isPDFMode ? "py-8" : "py-20 sm:py-24 lg:py-28"}`}
       >
         {/* Top spacer */}
-        <div className="flex-1" />
+        <div className={isPDFMode ? "flex-[0.3]" : "flex-1"} />
 
         {/* Center content: Title + Info */}
         <div className="flex flex-col items-center">
@@ -105,7 +107,7 @@ export function OrcamentoHero({
         </div>
 
         {/* Bottom spacer */}
-        <div className="flex-1" />
+        <div className={isPDFMode ? "flex-[0.3]" : "flex-1"} />
 
         {/* Berkahn Logo - Fixed at bottom */}
         <motion.div
@@ -119,7 +121,7 @@ export function OrcamentoHero({
             alt="Berkahn Construtora de Alto Padrão"
             width={400}
             height={150}
-            className="opacity-90 w-[280px] sm:w-[340px] md:w-[400px] h-auto"
+            className={`opacity-90 h-auto ${isPDFMode ? "w-[200px]" : "w-[280px] sm:w-[340px] md:w-[400px]"}`}
           />
         </motion.div>
 

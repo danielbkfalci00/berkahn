@@ -9,10 +9,10 @@ export function PlantasPDF() {
   const { imagens } = CHALE_PROJETO;
 
   return (
-    <section className="py-8 bg-black w-full">
+    <section className="py-4 bg-black w-full">
       <div className="container max-w-5xl mx-auto px-6">
         {/* Header */}
-        <div className="mb-8">
+        <div className="mb-4">
           <p className="text-sm uppercase tracking-[0.3em] font-mono text-white/60 mb-2">
             02 — Premissas adotadas para o orçamento
           </p>
@@ -25,7 +25,7 @@ export function PlantasPDF() {
         </div>
 
         {/* Grid 2 Plantas */}
-        <div className="grid grid-cols-2 gap-6">
+        <div className="grid grid-cols-2 gap-4">
           {imagens.plantasBaixas.map((planta) => (
             <div key={planta.label} className="relative">
               {/* Frame arquitetônico */}
@@ -49,7 +49,7 @@ export function PlantasPDF() {
         </div>
 
         {/* Legenda técnica */}
-        <div className="mt-8 pt-6 border-t border-white/10">
+        <div className="mt-4 pt-3 border-t border-white/10">
           <div className="flex items-center justify-center gap-8 text-xs text-white/40">
             <div className="flex items-center gap-2">
               <div className="w-4 h-0.5 bg-white/40" />

@@ -10,10 +10,10 @@ export function ProjetoPrototipoPDF() {
   const totalComodos = comodos.reduce((acc, c) => acc + c.area, 0);
 
   return (
-    <section className="py-8 bg-white w-full">
+    <section className="py-4 bg-white w-full">
       <div className="container max-w-5xl mx-auto px-6">
         {/* Header */}
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center justify-between mb-3">
           <div>
             <p className="text-sm uppercase tracking-[0.3em] font-mono text-black/60 mb-2">
               02 — Premissas adotadas para o orçamento

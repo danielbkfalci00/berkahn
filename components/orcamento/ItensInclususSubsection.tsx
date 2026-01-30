@@ -4,17 +4,18 @@ import { motion } from "framer-motion";
 
 interface ItensInclususSubsectionProps {
   itensInclusos: string[];
+  isPDFMode?: boolean;
 }
 
-export function ItensInclususSubsection({ itensInclusos }: ItensInclususSubsectionProps) {
+export function ItensInclususSubsection({ itensInclusos, isPDFMode = false }: ItensInclususSubsectionProps) {
   return (
-    <div className="relative bg-black py-md">
+    <div className={`relative bg-black ${isPDFMode ? "py-2" : "py-md"}`}>
       <div className="container px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="relative bg-black rounded-2xl p-6 lg:p-8 border border-white/10"
+          className={`relative bg-black rounded-2xl ${isPDFMode ? "p-3" : "p-6 lg:p-8"} border border-white/10`}
         >
           {/* Lista compacta com bullets minimalistas */}
           <ul className="space-y-1.5">

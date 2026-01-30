@@ -26,14 +26,14 @@ export function PlanoGerenciamentoSectionPDF({
   plano,
 }: PlanoGerenciamentoSectionPDFProps) {
   return (
-    <section className="py-8 bg-white w-full">
+    <section className="py-4 bg-white w-full">
       <div className="container max-w-5xl mx-auto px-6">
         {/* Section Label */}
-        <p className="text-sm uppercase tracking-[0.3em] font-mono text-black/60 mb-6">
+        <p className="text-sm uppercase tracking-[0.3em] font-mono text-black/60 mb-3">
           05 — Plano de Gerenciamento Berkahn
         </p>
         {/* Header */}
-        <div className="text-center mb-8">
+        <div className="text-center mb-4">
           <p className="text-xs uppercase tracking-[0.3em] text-black/40 mb-3">
             Processo de Trabalho
           </p>
@@ -46,7 +46,7 @@ export function PlanoGerenciamentoSectionPDF({
         </div>
 
         {/* Grid 2x2 */}
-        <div className="grid grid-cols-2 gap-6">
+        <div className="grid grid-cols-2 gap-4">
           {plano.etapas.map((etapa, index) => {
             const Icon = etapa.icone ? iconMap[etapa.icone] : FileCheck;
             const isLast = index === 3;
@@ -55,7 +55,7 @@ export function PlanoGerenciamentoSectionPDF({
               <div
                 key={etapa.fase}
                 className={cn(
-                  "rounded-xl p-6",
+                  "rounded-xl p-4",
                   isLast
                     ? "bg-black text-white"
                     : "bg-[#F4F2EC] border border-black/10"

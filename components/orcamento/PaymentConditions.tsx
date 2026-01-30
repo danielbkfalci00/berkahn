@@ -26,12 +26,12 @@ export function PaymentConditions({
   if (!condicaoPrincipal) return null;
 
   return (
-    <section className={`relative ${isPDFMode ? "py-8" : "py-xl"} bg-[#F4F2EC]`}>
+    <section className={`relative ${isPDFMode ? "py-4" : "py-xl"} bg-[#F4F2EC]`}>
       <OrcamentoWatermark variant="light" logoPosition="top-right" />
       <div className="container px-4 sm:px-6 lg:px-8 relative z-10">
         <SectionLabel number="06" title="Pagamento" variant="light" />
         <RevealOnScroll>
-          <div className={`${isPDFMode ? "mb-4" : "mb-12"}`}>
+          <div className={`${isPDFMode ? "mb-2" : "mb-12"}`}>
             <h2 className="headline-md text-black mb-4">
               Condições de Pagamento
             </h2>

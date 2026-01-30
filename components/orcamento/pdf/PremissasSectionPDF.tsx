@@ -6,10 +6,10 @@ import { METODOLOGIA_LSF } from "@/lib/orcamento-data";
  */
 export function PremissasSectionPDF() {
   return (
-    <section className="py-8 bg-[#F4F2EC] w-full">
+    <section className="py-4 bg-[#F4F2EC] w-full">
       <div className="container max-w-5xl mx-auto px-6">
         {/* Header */}
-        <div className="mb-8">
+        <div className="mb-4">
           <p className="text-sm uppercase tracking-[0.3em] font-mono text-black/60 mb-2">
             02 — Premissas adotadas para o orçamento
           </p>
@@ -22,7 +22,7 @@ export function PremissasSectionPDF() {
         </div>
 
         {/* Metodologia Construtiva A-D */}
-        <div className="bg-white rounded-xl p-6 border border-black/5">
+        <div className="bg-white rounded-xl p-4 border border-black/5">
           <div className="space-y-4">
             {METODOLOGIA_LSF.itens.map((item, index) => (
               <div key={index} className="flex gap-4">
