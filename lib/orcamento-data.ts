@@ -190,7 +190,7 @@ export const PACOTES_TEMPLATE: PacoteInvestimento[] = [
     descricao:
       "Material completo + treinamento técnico presencial para capacitação da equipe de obra",
     valorM2: 2088,
-    valorTotal: 91874.93,
+    valorTotal: 92324.93,
     itens: [
       "Perfis Steel Frame certificados ABNT NBR 15253",
       "Placas Aquapanel (cimentícia) para vedação externa",
@@ -209,7 +209,7 @@ export const PACOTES_TEMPLATE: PacoteInvestimento[] = [
       { nome: "Revestimento Externo Paredes e Forro Externo", valor: 28083.92 },
       { nome: "Revestimento Interno Paredes e Forro Interno", valor: 9649.01 },
       { nome: "Cobertura", valor: 11373.50 },
-      { nome: "Mão de Obra", valor: 1150.00 },
+      { nome: "Mão de Obra", valor: 1600.00 },
     ],
     cronograma: "Entrega 30 dias + 2 dias treinamento",
     garantia: "5 anos materiais + suporte técnico",
@@ -225,7 +225,7 @@ export const PACOTES_TEMPLATE: PacoteInvestimento[] = [
     descricao:
       "Solução completa: material certificado + acompanhamento técnico Berkahn durante toda obra + treinamento personalizado pela equipe Berkahn",
     valorM2: 2140,
-    valorTotal: 94174.93,
+    valorTotal: 95524.93,
     itens: [
       "Perfis Steel Frame certificados ABNT NBR 15253",
       "Placas Aquapanel (cimentícia) para vedação externa",
@@ -250,7 +250,7 @@ export const PACOTES_TEMPLATE: PacoteInvestimento[] = [
       { nome: "Revestimento Externo Paredes e Forro Externo", valor: 28083.92 },
       { nome: "Revestimento Interno Paredes e Forro Interno", valor: 9649.01 },
       { nome: "Cobertura", valor: 11373.50 },
-      { nome: "Mão de Obra", valor: 3450.00 },
+      { nome: "Mão de Obra", valor: 4800.00 },
     ],
     cronograma: "Entrega 30 dias + acompanhamento completo durante execução",
     garantia: "10 anos estrutura + 2 anos acompanhamento técnico",
