@@ -31,7 +31,7 @@ export function PaymentConditions({
       <div className="container px-4 sm:px-6 lg:px-8 relative z-10">
         <SectionLabel number="06" title="Pagamento" variant="light" />
         <RevealOnScroll>
-          <div className={`${isPDFMode ? "mb-6" : "mb-12"}`}>
+          <div className={`${isPDFMode ? "mb-4" : "mb-12"}`}>
             <h2 className="headline-md text-black mb-4">
               Condições de Pagamento
             </h2>
@@ -44,23 +44,23 @@ export function PaymentConditions({
       <div className="container max-w-5xl relative z-10">
 
         {condicaoPrincipal.estruturaPagamento && (
-          <div className="space-y-6">
+          <div className={isPDFMode ? "space-y-4" : "space-y-6"}>
             {/* Estrutura de Pagamento - 3 Cards */}
-            <div className="grid md:grid-cols-3 gap-4">
+            <div className={`grid md:grid-cols-3 ${isPDFMode ? "gap-3" : "gap-4"}`}>
               {/* Sinal */}
               {condicaoPrincipal.estruturaPagamento.sinal && (
                 <RevealOnScroll delay={0.1}>
                   <motion.div
-                    whileHover={{ y: -4 }}
-                    className="h-full flex flex-col bg-white rounded-xl p-6 border border-black/10 hover:border-black/20 transition-all duration-300 shadow-sm hover:shadow-md text-center"
+                    whileHover={isPDFMode ? {} : { y: -4 }}
+                    className={`h-full flex flex-col bg-white rounded-xl ${isPDFMode ? "p-4" : "p-6"} border border-black/10 hover:border-black/20 transition-all duration-300 shadow-sm hover:shadow-md text-center`}
                   >
-                    <div className="w-12 h-12 rounded-full bg-black text-white flex items-center justify-center mx-auto mb-4 shadow-lg">
+                    <div className={`${isPDFMode ? "w-10 h-10 mb-3" : "w-12 h-12 mb-4"} rounded-full bg-black text-white flex items-center justify-center mx-auto shadow-lg`}>
                       <span className="text-lg font-bold">1</span>
                     </div>
-                    <h3 className="text-lg font-semibold text-black mb-2">
+                    <h3 className={`${isPDFMode ? "text-base" : "text-lg"} font-semibold text-black mb-2`}>
                       Sinal
                     </h3>
-                    <p className="text-3xl font-bold text-black mb-2">
+                    <p className={`${isPDFMode ? "text-2xl" : "text-3xl"} font-bold text-black mb-2`}>
                       {condicaoPrincipal.estruturaPagamento.sinal.percentual}%
                     </p>
                     <p className="text-sm text-black/60 flex-1">
@@ -74,16 +74,16 @@ export function PaymentConditions({
               {condicaoPrincipal.estruturaPagamento.parcelas?.map((parcela, index) => (
                 <RevealOnScroll key={parcela.numero} delay={0.15 + index * 0.05}>
                   <motion.div
-                    whileHover={{ y: -4 }}
-                    className="h-full flex flex-col bg-white rounded-xl p-6 border border-black/10 hover:border-black/20 transition-all duration-300 shadow-sm hover:shadow-md text-center"
+                    whileHover={isPDFMode ? {} : { y: -4 }}
+                    className={`h-full flex flex-col bg-white rounded-xl ${isPDFMode ? "p-4" : "p-6"} border border-black/10 hover:border-black/20 transition-all duration-300 shadow-sm hover:shadow-md text-center`}
                   >
-                    <div className="w-12 h-12 rounded-full bg-black/10 text-black flex items-center justify-center mx-auto mb-4">
+                    <div className={`${isPDFMode ? "w-10 h-10 mb-3" : "w-12 h-12 mb-4"} rounded-full bg-black/10 text-black flex items-center justify-center mx-auto`}>
                       <span className="text-lg font-bold">{parcela.numero + 1}</span>
                     </div>
-                    <h3 className="text-lg font-semibold text-black mb-2">
+                    <h3 className={`${isPDFMode ? "text-base" : "text-lg"} font-semibold text-black mb-2`}>
                       {parcela.descricao || `${parcela.numero}ª Parcela`}
                     </h3>
-                    <p className="text-3xl font-bold text-black mb-2">
+                    <p className={`${isPDFMode ? "text-2xl" : "text-3xl"} font-bold text-black mb-2`}>
                       {parcela.percentual}%
                     </p>
                   </motion.div>

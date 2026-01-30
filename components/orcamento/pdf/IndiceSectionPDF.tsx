@@ -9,10 +9,10 @@ const INDICE_ITEMS = [
 
 export function IndiceSectionPDF() {
   return (
-    <section className="py-16 bg-[#F4F2EC] w-full">
+    <section className="py-10 bg-[#F4F2EC] w-full">
       <div className="container max-w-3xl mx-auto px-8">
         {/* Header */}
-        <div className="text-center mb-12">
+        <div className="text-center mb-8">
           <span className="inline-block text-xs uppercase tracking-[0.3em] text-black/40 mb-2">
             Sumário
           </span>
@@ -40,7 +40,7 @@ export function IndiceSectionPDF() {
         </div>
 
         {/* Footer decorativo */}
-        <div className="flex items-center justify-center gap-4 mt-12">
+        <div className="flex items-center justify-center gap-4 mt-8">
           <div className="w-8 h-px bg-black/20" />
           <div className="w-1.5 h-1.5 rotate-45 bg-black/20" />
           <div className="w-8 h-px bg-black/20" />
