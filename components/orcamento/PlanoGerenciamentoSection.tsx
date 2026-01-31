@@ -31,25 +31,25 @@ const phaseStyles = {
   1: {
     card: "border-2 border-black/10 bg-white shadow-luxury-sm",
     icon: "w-12 h-12 border-2 border-black/10 bg-white text-black/60",
-    title: "text-lg font-bold",
+    title: "text-xl font-bold",
     textColor: "text-black",
   },
   2: {
     card: "border border-black/20 bg-[#F4F2EC] shadow-luxury-md",
     icon: "w-14 h-14 border border-black/20 bg-white text-black/70",
-    title: "text-lg font-bold",
+    title: "text-xl font-bold",
     textColor: "text-black",
   },
   3: {
     card: "border border-black/30 bg-black/5 shadow-luxury-lg",
     icon: "w-16 h-16 border border-black/30 bg-white text-black/80",
-    title: "text-xl font-bold",
+    title: "text-2xl font-bold",
     textColor: "text-black",
   },
   4: {
     card: "border-2 border-black bg-black shadow-luxury-xl",
     icon: "w-20 h-20 border-2 border-white bg-black text-white",
-    title: "text-xl font-bold text-white",
+    title: "text-2xl font-bold text-white",
     textColor: "text-white/90",
   },
 };
@@ -64,10 +64,10 @@ export function PlanoGerenciamentoSection({
         <SectionLabel number="05" title="Plano de Gerenciamento Berkahn" variant="light" />
         <RevealOnScroll>
           <div className="mb-16">
-            <h2 className="text-4xl lg:text-5xl font-bold tracking-tight text-black mb-4">
+            <h2 className="text-5xl lg:text-6xl font-bold tracking-tight text-black mb-4">
               {plano.titulo}
             </h2>
-            <p className="text-lg text-black/60 max-w-2xl">
+            <p className="text-xl text-black/60 max-w-2xl">
               Nosso processo estruturado garante qualidade e transparência em
               cada etapa do seu projeto
             </p>
@@ -168,7 +168,7 @@ function EtapaCard({
       viewport={{ once: true }}
       transition={{ delay: index * 0.15, duration: 0.6 }}
       className={cn(
-        "rounded-lg p-6 lg:p-8 transition-all duration-500",
+        "rounded-lg p-8 lg:p-10 transition-all duration-500",
         "hover:scale-[1.02]",
         styles.card
       )}
@@ -189,7 +189,7 @@ function EtapaCard({
           styles.icon
         )}
       >
-        {Icon && <Icon className="w-6 h-6" />}
+        {Icon && <Icon className="w-7 h-7" />}
       </motion.div>
 
       {/* Title */}
@@ -198,7 +198,7 @@ function EtapaCard({
       </h3>
 
       {/* Description */}
-      <p className={cn("text-sm leading-relaxed mb-4 min-h-[50px]", styles.textColor, isLast ? "text-white/80" : "text-black/60")}>
+      <p className={cn("text-base leading-relaxed mb-4 min-h-[60px]", styles.textColor, isLast ? "text-white/80" : "text-black/60")}>
         {etapa.descricao}
       </p>
 
@@ -208,7 +208,7 @@ function EtapaCard({
           {etapa.entregas.map((entrega, i) => (
             <div key={i} className="flex items-start gap-2">
               <div className={cn(
-                "w-4 h-4 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5",
+                "w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5",
                 isLast
                   ? "bg-white/20 text-white"
                   : "bg-black/10 text-black/60"
@@ -218,7 +218,7 @@ function EtapaCard({
                 </svg>
               </div>
               <span className={cn(
-                "text-xs leading-relaxed",
+                "text-sm leading-relaxed",
                 isLast ? "text-white/90" : "text-black/70"
               )}>
                 {entrega}

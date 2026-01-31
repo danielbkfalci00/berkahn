@@ -43,7 +43,7 @@ export function SobreSection() {
   return (
     <>
       {/* Hero Header - Transição marcante */}
-      <section className="relative bg-white text-black py-10 lg:py-14 overflow-hidden">
+      <section className="relative bg-white text-black py-16 lg:py-24 overflow-hidden">
         <OrcamentoWatermark variant="light" logoPosition="center" />
 
         <div className="container px-4 sm:px-6 lg:px-8 relative z-10 mb-4">
@@ -59,12 +59,12 @@ export function SobreSection() {
             className=""
           >
             {/* Main title */}
-            <h1 className="font-heading text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight mb-6">
+            <h1 className="font-heading text-6xl sm:text-7xl lg:text-8xl font-bold tracking-tight mb-8">
               BERKAHN
             </h1>
 
             {/* Introductory paragraph */}
-            <p className="text-lg text-black/60 max-w-2xl leading-relaxed">
+            <p className="text-xl text-black/60 max-w-2xl leading-relaxed">
               Especialistas em construção com Light Steel Frame, oferecemos soluções construtivas de alta precisão e qualidade técnica. Com metodologia própria e equipe especializada, transformamos projetos em realidade com agilidade, eficiência e compromisso com prazos.
             </p>
           </motion.div>
@@ -87,12 +87,12 @@ export function SobreSection() {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="bg-white rounded-2xl p-8 lg:p-10 border border-black/5 shadow-luxury-sm"
+              className="bg-white rounded-2xl p-10 lg:p-14 border border-black/5 shadow-luxury-sm"
             >
-              <h2 className="font-heading text-2xl lg:text-3xl font-bold text-black mb-4">
+              <h2 className="font-heading text-3xl lg:text-4xl font-bold text-black mb-4">
                 NOSSA EXPERTISE
               </h2>
-              <p className="text-lg text-black/80 leading-relaxed">
+              <p className="text-xl text-black/80 leading-relaxed">
                 Somos uma construtora especializada em Light Steel Frame.
                 Priorizamos esta tecnologia por sua eficiência, precisão e sustentabilidade
                 — mas nossa expertise vai além: <strong className="text-black">Dominamos múltiplos sistemas construtivos</strong> para entregar sempre a melhor solução.
@@ -130,7 +130,7 @@ export function SobreSection() {
           transition={{ delay: 0.1 }}
           className="mt-12"
         >
-          <p className="text-sm text-black/60 mb-6 uppercase tracking-widest">
+          <p className="text-base text-black/60 mb-8 uppercase tracking-widest">
             Construímos para todos os setores
           </p>
           <div className="grid grid-cols-3 gap-4 lg:gap-6 max-w-5xl mx-auto">
@@ -141,7 +141,7 @@ export function SobreSection() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.15 + index * 0.05 }}
-                className="group relative h-[220px] lg:h-[300px] rounded-xl overflow-hidden"
+                className="group relative h-[260px] lg:h-[360px] rounded-xl overflow-hidden"
               >
                 <Image
                   src={setor.image}
@@ -152,11 +152,11 @@ export function SobreSection() {
                 />
                 <div className="absolute inset-0 bg-black/50 transition-colors duration-300 group-hover:bg-black/40" />
                 <div className="absolute inset-0 flex flex-col items-center justify-center p-4 text-center text-white">
-                  <h4 className="text-xs lg:text-sm font-bold tracking-wider mb-2">
+                  <h4 className="text-sm lg:text-base font-bold tracking-wider mb-2">
                     {setor.label}
                   </h4>
                   <div className="w-8 h-px bg-white/40 mb-2" />
-                  <p className="text-[10px] lg:text-xs text-white/70 leading-tight">
+                  <p className="text-xs lg:text-sm text-white/70 leading-tight">
                     {setor.description}
                   </p>
                 </div>
@@ -172,7 +172,7 @@ export function SobreSection() {
           viewport={{ once: true }}
           className="mt-16"
         >
-          <h3 className="font-heading text-xl lg:text-2xl font-semibold text-black text-center mb-8">
+          <h3 className="font-heading text-2xl lg:text-3xl font-semibold text-black text-center mb-10">
             E quais são as Vantagens do Light Steel Frame?
           </h3>
 
@@ -187,20 +187,20 @@ export function SobreSection() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: 0.1 + index * 0.05 }}
-                  className="bg-white rounded-xl p-5 border border-black/5 shadow-luxury-sm text-center hover:shadow-luxury-md transition-shadow"
+                  className="bg-white rounded-xl p-6 lg:p-8 border border-black/5 shadow-luxury-sm text-center hover:shadow-luxury-md transition-shadow"
                 >
                   {Icon && (
-                    <Icon className="w-6 h-6 mx-auto mb-3 text-black/30" strokeWidth={1.5} />
+                    <Icon className="w-7 h-7 mx-auto mb-4 text-black/30" strokeWidth={1.5} />
                   )}
                   <CountUp
                     end={benefit.stat}
                     suffix={benefit.suffix}
                     className="font-heading text-3xl lg:text-4xl font-bold text-black"
                   />
-                  <p className="text-xs text-black/50 mt-1 uppercase tracking-wider">
+                  <p className="text-sm text-black/50 mt-1 uppercase tracking-wider">
                     {benefit.description.split(" ").slice(0, 3).join(" ")}
                   </p>
-                  <p className="text-sm text-black/70 mt-1 font-medium">
+                  <p className="text-base text-black/70 mt-1 font-medium">
                     {benefit.title}
                   </p>
                 </motion.div>

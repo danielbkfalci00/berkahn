@@ -43,7 +43,7 @@ export function PremissasUnificadasSection() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 2 }}
-        className="absolute top-12 md:top-20 lg:top-24 right-4 md:right-8 lg:right-12 text-[180px] md:text-[220px] lg:text-[280px] font-black text-black/[0.015] leading-none select-none font-heading pointer-events-none z-0"
+        className="absolute top-12 md:top-20 lg:top-24 right-4 md:right-8 lg:right-12 text-[220px] md:text-[280px] lg:text-[360px] font-black text-black/[0.015] leading-none select-none font-heading pointer-events-none z-0"
       >
         P
       </motion.span>
@@ -61,12 +61,12 @@ export function PremissasUnificadasSection() {
           <SectionLabel number="02" title="Premissas Adotadas para o Orçamento" variant="light" />
 
           {/* Título principal */}
-          <h2 className="font-heading text-4xl lg:text-5xl font-bold text-black mb-6">
+          <h2 className="font-heading text-5xl lg:text-6xl font-bold text-black mb-6">
             METODOLOGIA E DOCUMENTAÇÃO TÉCNICA
           </h2>
 
           {/* Descrição */}
-          <p className="text-base text-black/70 leading-relaxed max-w-2xl">
+          <p className="text-lg text-black/70 leading-relaxed max-w-3xl">
             Apresentação detalhada da metodologia construtiva, projeto de referência, documentação técnica e especificações de materiais que fundamentam este orçamento.
           </p>
         </motion.div>

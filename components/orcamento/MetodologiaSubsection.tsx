@@ -81,7 +81,7 @@ export function MetodologiaSubsection({ data }: MetodologiaSubsectionProps) {
               </div>
 
               {/* Technical caption */}
-              <p className="mt-sm font-mono text-xs tracking-wider uppercase text-black-70">
+              <p className="mt-sm font-mono text-sm tracking-wider uppercase text-black-70">
                 CORTE TÉCNICO - SISTEMA DE VEDAÇÃO LSF
               </p>
             </div>
@@ -105,7 +105,7 @@ export function MetodologiaSubsection({ data }: MetodologiaSubsectionProps) {
                 >
                   {/* Circular letter marker */}
                   <div className="flex-shrink-0">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-black bg-white font-mono text-sm font-bold text-black">
+                    <div className="flex h-10 w-10 lg:h-12 lg:w-12 items-center justify-center rounded-full border-2 border-black bg-white font-mono text-base lg:text-lg font-bold text-black">
                       {item.letra}
                     </div>
                   </div>
@@ -115,10 +115,10 @@ export function MetodologiaSubsection({ data }: MetodologiaSubsectionProps) {
                     {/* Connecting line */}
                     <div className="absolute -ml-md h-px w-md bg-black-30 mt-4" style={{ marginLeft: "-2rem" }} />
 
-                    <h3 className="font-semibold text-base text-black uppercase tracking-tight">
+                    <h3 className="font-semibold text-lg lg:text-xl text-black uppercase tracking-tight">
                       {item.titulo}
                     </h3>
-                    <p className="mt-xs text-sm leading-relaxed text-black-70">
+                    <p className="mt-xs text-base leading-relaxed text-black-70">
                       {item.descricao}
                     </p>
                   </div>
