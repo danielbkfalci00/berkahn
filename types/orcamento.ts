@@ -312,11 +312,24 @@ export interface MaterialAnalise {
 
 // Nova estrutura hierárquica para materiais detalhados
 export interface MaterialItemDetalhado {
-  item: string; // "1", "1.1", "2", "2.1", etc.
+  item: string; // "1", "1.1", "2.1.1", etc.
   descricao: string;
-  unidade?: string; // "un", "m2", etc. (vazio para categorias principais)
+  unidade?: string; // "un", "m2", etc. (vazio para categorias)
   quantidade?: string; // "1,00", "101,00", "Incluso", etc.
-  isCategoria?: boolean; // true para itens principais (1, 2, 3, 4)
+  custoUnitarioMat?: number; // Custo unitário material (R$)
+  custoUnitarioMO?: number; // Custo unitário mão de obra (R$)
+  valorTotal?: number | string; // Valor total numérico ou "INCLUSO"
+  isCategoria?: boolean; // true para categorias principais (1, 2, 3)
+  isSubcategoria?: boolean; // true para subcategorias (2.1, 2.2, 2.3)
+}
+
+export interface ImpostoInfo {
+  cnae: string;
+  anexo: string;
+  faixaDescricao: string;
+  aliquotaNominal: string;
+  aliquotaEfetiva: number;
+  valorTotal: number;
 }
 
 // ============================================

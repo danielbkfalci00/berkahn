@@ -23,6 +23,7 @@ import type {
   MetodologiaConstrutivaPremissas,
   MaterialAnalise,
   MaterialItemDetalhado,
+  ImpostoInfo,
   // Company Story - Storytelling Humanizado
   CompanyStory,
 } from "@/types/orcamento";
@@ -704,77 +705,156 @@ export const MATERIAIS_ANALITICOS: MaterialAnalise[] = [
 
 // Nova estrutura detalhada com hierarquia (conforme planilha)
 export const MATERIAIS_DETALHADOS: MaterialItemDetalhado[] = [
-  // 1. Estrutura
+  // 1. Projetos
   {
     item: "1.",
-    descricao: "Estrutura",
+    descricao: "Projetos",
     isCategoria: true,
   },
   {
     item: "1.1",
-    descricao: "Estrutura em LSF 90mm - Aço galvanizado ZAR400 Z350",
+    descricao: "Projeto Estrutural Light Steel Frame",
     unidade: "un",
     quantidade: "1,00",
+    valorTotal: "INCLUSO",
   },
-  // 2. Revestimento Externo
+  // 2. Material
   {
     item: "2.",
-    descricao: "Revestimento Externo Paredes e Forro Externo",
+    descricao: "Material",
     isCategoria: true,
+    valorTotal: 90724.93,
   },
+  // 2.1 Estrutura
   {
     item: "2.1",
+    descricao: "Estrutura",
+    isSubcategoria: true,
+    valorTotal: 41618.50,
+  },
+  {
+    item: "2.1.1",
+    descricao: "Estrutura em LSF - Aço galvanizado ZAR400 Z350",
+    unidade: "un",
+    quantidade: "1,00",
+    custoUnitarioMat: 41618.50,
+    custoUnitarioMO: 0,
+    valorTotal: 41618.50,
+  },
+  // 2.2 Revestimento Externo e Interno Paredes
+  {
+    item: "2.2",
+    descricao: "Revestimento Externo e Interno Paredes",
+    isSubcategoria: true,
+    valorTotal: 32231.80,
+  },
+  {
+    item: "2.2.1",
     descricao: "Aquapanel Residential 8mm",
     unidade: "m²",
     quantidade: "101,00",
+    custoUnitarioMat: 223.59,
+    custoUnitarioMO: 0,
+    valorTotal: 22582.79,
   },
   {
-    item: "2.2",
-    descricao: "Barreira de Água AQUAPANEL",
-    quantidade: "Incluso",
-  },
-  // 3. Revestimento Interno
-  {
-    item: "3.",
-    descricao: "Revestimento Interno Paredes e Forro Interno",
-    isCategoria: true,
-  },
-  {
-    item: "3.1",
-    descricao: "Chapa de Gesso Hardboard Knauf (1200 x 1800) Esp. 12,5mm",
+    item: "2.2.2",
+    descricao: "Chapa de Gesso ST Knauf 1200 1800 12,5mm",
     unidade: "m²",
     quantidade: "115,00",
+    custoUnitarioMat: 50.81,
+    custoUnitarioMO: 0,
+    valorTotal: 5842.82,
   },
   {
-    item: "3.2",
+    item: "2.2.3",
     descricao: "Chapa de Gesso RU 1200 1800 12,55mm",
     unidade: "m²",
     quantidade: "60,00",
+    custoUnitarioMat: 63.44,
+    custoUnitarioMO: 0,
+    valorTotal: 3806.19,
+  },
+  // 2.3 Forros de Gesso
+  {
+    item: "2.3",
+    descricao: "Forros de Gesso",
+    isSubcategoria: true,
+    valorTotal: 5501.13,
   },
   {
-    item: "3.3",
-    descricao: "Lã de rocha",
-    quantidade: "Incluso",
-  },
-  {
-    item: "3.4",
+    item: "2.3.1",
     descricao: "Forro Leve KNAUF",
     unidade: "m²",
     quantidade: "70,00",
+    custoUnitarioMat: 78.59,
+    custoUnitarioMO: 0,
+    valorTotal: 5501.13,
   },
-  // 4. Cobertura
+  // 2.4 Cobertura
   {
-    item: "4.",
+    item: "2.4",
     descricao: "Cobertura",
-    isCategoria: true,
+    isSubcategoria: true,
+    valorTotal: 11373.50,
   },
   {
-    item: "4.1",
-    descricao: "Telha Sanduíche Trapezoidal Kingspan/Perfilor TP40",
+    item: "2.4.1",
+    descricao: "Telha Sanduiche Trapezoidal Kingspan/Perfilor",
     unidade: "m²",
-    quantidade: "70,00",
+    quantidade: "86,00",
+    custoUnitarioMat: 132.25,
+    custoUnitarioMO: 0,
+    valorTotal: 11373.50,
+  },
+  // 3. Mão de Obra
+  {
+    item: "3.",
+    descricao: "MÃO DE OBRA",
+    isCategoria: true,
+    valorTotal: 4800.00,
+  },
+  // 3.1 Treinamento Presencial
+  {
+    item: "3.1",
+    descricao: "Treinamento Presencial",
+    isSubcategoria: true,
+    valorTotal: 1600.00,
+  },
+  {
+    item: "3.2",
+    descricao: "1 dia de treinamento + 1 dia de acompanhamento inicial",
+    unidade: "dia",
+    quantidade: "2,00",
+    custoUnitarioMat: 800.00,
+    valorTotal: 1600.00,
+  },
+  // 3.3 Acompanhamento Técnico de Obra
+  {
+    item: "3.3",
+    descricao: "Acompanhamento Técnico de Obra",
+    isSubcategoria: true,
+    valorTotal: 3200.00,
+  },
+  {
+    item: "3.4",
+    descricao: "Acompanhamento contínuo da equipe durante execução",
+    unidade: "mês",
+    quantidade: "1,00",
+    custoUnitarioMat: 3200.00,
+    valorTotal: 3200.00,
   },
 ];
+
+// Informações de Tributação
+export const IMPOSTO_INFO: ImpostoInfo = {
+  cnae: "71.12-0-00 - Serviços de engenharia",
+  anexo: "Anexo IV do Simples Nacional",
+  faixaDescricao: "Presumindo Faturamento de 180 mil anualmente: Faixa 1",
+  aliquotaNominal: "4,5%",
+  aliquotaEfetiva: 14.2,
+  valorTotal: 11628.56,
+};
 
 // ============================================
 // HELPER: Formatar valor em Real
