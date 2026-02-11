@@ -79,7 +79,7 @@ export default function OrcamentoPage() {
       </section>
 
       {/* Subsection 4.1: Itens Inclusos (parte da seção 04) */}
-      <div className="bg-black pt-0 pb-0">
+      <div className="bg-black pt-8 pb-0">
         <div className="container px-4 sm:px-6 lg:px-8 py-8">
           <SectionLabel number="04" title="Planilha Orçamentária" variant="dark" subtitle="4.1 Itens Inclusos" />
         </div>
@@ -87,7 +87,7 @@ export default function OrcamentoPage() {
       </div>
 
       {/* Subsection 4.2: Itens Exclusos (parte da seção 04) */}
-      <div className="bg-black pt-0 pb-8">
+      <div className="bg-black pt-8 pb-8">
         <div className="container px-4 sm:px-6 lg:px-8 py-8">
           <SectionLabel number="04" title="Planilha Orçamentária" variant="dark" subtitle="4.2 Itens Exclusos" />
         </div>
