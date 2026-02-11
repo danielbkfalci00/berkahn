@@ -600,4 +600,9 @@ export const LSF_FAQ: FAQItem[] = [
     answer:
       "Sim. Para construções em regiões litorâneas (até 2 km da costa), utiliza-se galvanização reforçada Z350 (350 g/m² de zinco) nos perfis de aço, que oferece proteção anticorrosiva superior à galvanização padrão Z275. Além disso, o sistema de múltiplas camadas do Steel Frame (placa cimentícia, manta hidrófuga, isolamento, gesso) mantém os perfis em uma cavidade totalmente protegida da maresia e da umidade salina. A combinação de galvanização reforçada com a proteção do envelope construtivo garante durabilidade e desempenho estrutural mesmo em ambientes costeiros agressivos.",
   },
+  {
+    question: "Vocês realizam apenas a execução da obra, sem o projeto completo?",
+    answer:
+      "Sim. Embora nosso cenário ideal seja acompanhar o projeto do início ao fim — desde a concepção até a entrega — nós nos adaptamos à necessidade de cada cliente. Se você já possui projetos arquitetônico e complementares definidos, podemos atuar exclusivamente na execução da obra com nossa mão de obra especializada e certificada em Steel Frame. Também oferecemos consultoria técnica para validar projetos existentes antes da execução.",
+  },
 ];

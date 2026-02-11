@@ -34,7 +34,9 @@ export function HowWeWorkTimeline() {
             <h2 className="headline-md mb-6">Como Trabalhamos</h2>
             <p className="body-lg text-black-70 max-w-3xl mx-auto">
               Do primeiro contato à entrega das chaves, acompanhamos cada etapa
-              do seu projeto com transparência, qualidade e compromisso.
+              do seu projeto com transparência, qualidade e compromisso. Já
+              possui projeto definido? Podemos atuar diretamente na execução com
+              nossa mão de obra especializada.
             </p>
           </div>
         </RevealOnScroll>

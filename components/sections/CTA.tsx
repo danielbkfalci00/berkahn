@@ -13,7 +13,7 @@ export function CTA() {
               Transforme seu projeto em realidade com a Berkahn
             </h2>
             <p className="body-md mb-8 text-black-70">
-              Entre em contato e descubra como nossa expertise em Steel Frame e construção de alto desempenho pode materializar sua visão. Residencial, comercial ou industrial — estamos prontos.
+              Entre em contato e descubra como nossa expertise em Steel Frame e construção de alto desempenho pode materializar sua visão. Projeto completo, execução de obra ou mão de obra especializada — estamos prontos.
             </p>
             <ContactFormDialog>
               <button className="inline-flex items-center gap-2 px-8 py-4 bg-black text-white uppercase tracking-wider text-sm font-medium hover:bg-black-90 transition-colors duration-300">
