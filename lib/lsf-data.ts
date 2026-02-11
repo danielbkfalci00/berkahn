@@ -547,3 +547,57 @@ export const GALLERY_IMAGES = [
 export const COMPARISON_DATA_HOME: ComparisonItem[] = COMPARISON_DATA.filter(
   item => !["Isolamento Térmico", "Flexibilidade de Projeto", "Facilidade de Ampliação"].includes(item.category)
 );
+
+// FAQ - Perguntas Frequentes sobre Light Steel Frame
+export interface FAQItem {
+  question: string;
+  answer: string;
+}
+
+export const LSF_FAQ: FAQItem[] = [
+  {
+    question: "O aço do Steel Frame enferruja?",
+    answer:
+      "Não. O aço utilizado no Steel Frame recebe galvanização a quente com camada de zinco (mínimo Z275 — 275 g/m² conforme NBR 15253), que cria uma barreira protetora impedindo o contato direto do aço com a umidade. Os perfis ficam dentro de uma cavidade protegida entre as placas de fechamento, nunca expostos às intempéries. Estudos do IPT (Instituto de Pesquisas Tecnológicas) comprovam que estruturas em Steel Frame adequadamente executadas possuem vida útil superior a 90 anos. Para regiões litorâneas (até 2 km da costa), utiliza-se galvanização reforçada Z350 para proteção adicional.",
+  },
+  {
+    question: "Quanto custa construir em Steel Frame comparado à alvenaria?",
+    answer:
+      "O custo inicial por metro quadrado do Steel Frame é tipicamente 15 a 30% superior ao da alvenaria convencional. No entanto, essa comparação direta é incompleta. O Steel Frame oferece previsibilidade orçamentária com variação de apenas 3 a 5% (contra até 30% de estouro na alvenaria), economia de até 8% na fundação pelo menor peso estrutural, redução de 50 a 60% no prazo de obra (diminuindo custos indiretos como aluguel, supervisão e atrasos por chuva), e economia de 20 a 40% em climatização ao longo da vida útil do imóvel. Considerando o custo total de propriedade, o Steel Frame frequentemente se mostra mais econômico.",
+  },
+  {
+    question: "É possível financiar uma casa em Steel Frame?",
+    answer:
+      "Sim. Desde a publicação da norma ABNT NBR 16970 em 2022, o Steel Frame é classificado como sistema construtivo \"convencional\" pela Caixa Econômica Federal. A Caixa financia até 80% do valor da construção em até 360 meses, com possibilidade de uso do FGTS. Não é mais necessário Documento de Avaliação Técnica (DATec) ou laudos especiais. Outros bancos como Bradesco, Itaú e Santander também oferecem linhas de crédito para construção em Steel Frame, geralmente exigindo que a execução seja feita por construtora certificada.",
+  },
+  {
+    question: "Uma casa em Steel Frame é segura contra incêndios?",
+    answer:
+      "Sim, o Steel Frame oferece segurança contra incêndio superior a muitos sistemas construtivos. Os perfis de aço galvanizado são completamente incombustíveis — não alimentam chamas. Os materiais de isolamento (lã de vidro, lã de rocha, gesso acartonado) também são não combustíveis. Configurações de paredes em Steel Frame podem atingir resistência ao fogo de 30 a 180 minutos, dependendo da composição. Existem versões específicas de placas de gesso com resistência ao fogo (tipo RF) que aumentam ainda mais essa proteção. Na prática, o Steel Frame oferece segurança contra incêndio comparável ou superior à alvenaria convencional.",
+  },
+  {
+    question: "Posso pendurar quadros, TV e armários nas paredes?",
+    answer:
+      "Sim, sem nenhum problema. Todas as paredes externas recebem placas OSB que suportam cargas distribuídas. Para paredes internas em drywall, buchas específicas para gesso suportam até 50 kg por ponto de fixação — suficiente para quadros, prateleiras e objetos decorativos. Para itens mais pesados como TVs, armários de cozinha e suportes de banheiro, a fixação é feita diretamente nos perfis de aço, garantindo máxima resistência. A equipe de construção fornece um mapeamento da estrutura por trás das paredes, facilitando futuras fixações.",
+  },
+  {
+    question: "A casa resiste a ventos fortes e tempestades?",
+    answer:
+      "Sim. Uma casa em Steel Frame é projetada para resistir a condições climáticas extremas. A norma brasileira exige que edificações residenciais suportem ventos de 144 km/h, mas estruturas em Steel Frame são tipicamente dimensionadas para resistir a ventos de até 200 a 300 km/h — mais que o dobro da exigência. A estrutura leve mas totalmente interconectada, com cada junta parafusada, distribui as forças de vento eficientemente por todo o esqueleto estrutural. Além disso, a estrutura metálica funciona como uma gaiola de Faraday, oferecendo proteção superior contra descargas atmosféricas ao conduzir a eletricidade com segurança ao redor dos ocupantes.",
+  },
+  {
+    question: "O Steel Frame tem norma técnica no Brasil?",
+    answer:
+      "Sim, o sistema é completamente regulamentado. A norma ABNT NBR 16970, aprovada em maio de 2022, é dedicada exclusivamente ao Light Steel Frame e está dividida em três partes: requisitos de desempenho, projeto estrutural e interfaces do sistema. Ela cobre edificações residenciais e não residenciais de até 2 pavimentos (expansível para 4-5 com a Diretriz SINAT nº 003). Normas complementares incluem a NBR 15253 (perfis de aço), NBR 14762 (dimensionamento estrutural) e NBR 15575 (desempenho de edificações). Esse arcabouço normativo significa que o Steel Frame não é mais \"alternativo\" — é um sistema construtivo convencional e plenamente regulamentado no Brasil.",
+  },
+  {
+    question: "É possível fazer reformas e ampliações em uma casa Steel Frame?",
+    answer:
+      "Sim, e de forma significativamente mais fácil que na alvenaria. Por ser um sistema construtivo a seco, ampliações e reformas são mais limpas, rápidas e simples. Uma placa de gesso pode ser aberta com estilete — sem necessidade de demolição. Paredes não estruturais podem ser removidas ou reposicionadas facilmente. Adicionar um segundo pavimento é especialmente vantajoso porque as paredes em Steel Frame pesam aproximadamente 40 kg/m² — quatro vezes menos que alvenaria — o que significa que a fundação existente pode frequentemente suportar a ampliação sem reforço. Durante reformas, os moradores podem muitas vezes continuar habitando o imóvel.",
+  },
+  {
+    question: "O Steel Frame funciona em regiões litorâneas?",
+    answer:
+      "Sim. Para construções em regiões litorâneas (até 2 km da costa), utiliza-se galvanização reforçada Z350 (350 g/m² de zinco) nos perfis de aço, que oferece proteção anticorrosiva superior à galvanização padrão Z275. Além disso, o sistema de múltiplas camadas do Steel Frame (placa cimentícia, manta hidrófuga, isolamento, gesso) mantém os perfis em uma cavidade totalmente protegida da maresia e da umidade salina. A combinação de galvanização reforçada com a proteção do envelope construtivo garante durabilidade e desempenho estrutural mesmo em ambientes costeiros agressivos.",
+  },
+];

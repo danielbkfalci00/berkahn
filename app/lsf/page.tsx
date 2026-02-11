@@ -5,6 +5,8 @@ import { ParallaxHero } from "@/components/sections/ParallaxHero";
 import { WallLayersTabs } from "@/components/lsf/WallLayersTabs";
 import { TechnicalSpecs } from "@/components/lsf/TechnicalSpecs";
 import { ComparisonTable } from "@/components/lsf/ComparisonTable";
+import { FAQ } from "@/components/lsf/FAQ";
+import { LSF_FAQ } from "@/lib/lsf-data";
 
 export const metadata = {
   title: "Light Steel Frame | Berkahn Steel Frame",
@@ -230,8 +232,41 @@ export default function LSFPage() {
         </div>
       </section>
 
-      {/* 8. CTA */}
+      {/* 8. FAQ */}
+      <section className="py-xl bg-black-5">
+        <div className="container max-w-4xl">
+          <RevealOnScroll>
+            <p className="label-text text-center mb-4">DÚVIDAS FREQUENTES</p>
+            <h2 className="headline-md text-center mb-12">
+              Perguntas Frequentes sobre o Light Steel Frame
+            </h2>
+          </RevealOnScroll>
+
+          <FAQ />
+        </div>
+      </section>
+
+      {/* 9. CTA */}
       <CTA />
+
+      {/* FAQ Schema.org structured data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            mainEntity: LSF_FAQ.map((item) => ({
+              "@type": "Question",
+              name: item.question,
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: item.answer,
+              },
+            })),
+          }),
+        }}
+      />
     </>
   );
 }
