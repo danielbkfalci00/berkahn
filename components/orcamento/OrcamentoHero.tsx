@@ -117,7 +117,7 @@ export function OrcamentoHero({
           className="flex flex-col items-center"
         >
           <Image
-            src="/images/logo-berkahn-construtora-branco.png"
+            src="/images/orcamento/logo-berkahn-construtora-branco.webp"
             alt="Berkahn Construtora de Alto Padrão"
             width={400}
             height={150}

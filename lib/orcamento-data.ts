@@ -624,7 +624,7 @@ export const CHALE_PROJETO: ChaleProjeto = {
     ],
     plantasBaixas: [
       { src: "/images/orcamento/chale-planta-01.webp", label: "PLANTA BAIXA TÉRREO" },
-      { src: "/images/orcamento/chale-planta-cobertura.png", label: "PLANTA BAIXA COBERTURA" },
+      { src: "/images/orcamento/chale-planta-cobertura.webp", label: "PLANTA BAIXA COBERTURA" },
     ],
     elevacoes: [
       {
