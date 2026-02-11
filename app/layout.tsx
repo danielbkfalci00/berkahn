@@ -3,6 +3,9 @@ import { Manrope, Caveat } from "next/font/google";
 import Script from "next/script";
 import { ClientLayout } from "@/components/layout/ClientLayout";
 import { ConditionalFooter } from "@/components/layout/ConditionalFooter";
+import { CookieConsentProvider } from "@/components/providers/CookieConsentProvider";
+import { CookieBanner } from "@/components/layout/CookieBanner";
+import { WhatsAppButton } from "@/components/layout/WhatsAppButton";
 import "./globals.css";
 
 const manrope = Manrope({
@@ -66,8 +69,12 @@ export default function RootLayout({
   return (
     <html lang="pt-BR" className={`${manrope.variable} ${caveat.variable}`}>
       <body>
-        <ClientLayout>{children}</ClientLayout>
-        <ConditionalFooter />
+        <CookieConsentProvider>
+          <ClientLayout>{children}</ClientLayout>
+          <ConditionalFooter />
+          <CookieBanner />
+          <WhatsAppButton />
+        </CookieConsentProvider>
 
         {/* Google Analytics */}
         <Script
