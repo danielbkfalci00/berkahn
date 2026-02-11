@@ -38,6 +38,12 @@ export const FOOTER_CONTACT = [
   { label: "CNPJ", value: "39.455.932/0001-64", type: "cnpj" },
 ] as const;
 
+// Footer Legal Links
+export const FOOTER_LEGAL = [
+  { label: "Política de Privacidade", href: "/privacidade" },
+  { label: "Termos de Uso", href: "/termos-de-uso" },
+] as const;
+
 // Footer Social Data
 export const FOOTER_SOCIAL = [
   { label: "LinkedIn", href: "https://www.linkedin.com/company/construtora-berkahn/?viewAsMember=true", type: "linkedin" },

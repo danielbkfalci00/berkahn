@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { NAV_LINKS, FOOTER_CONTACT, FOOTER_SOCIAL } from "@/lib/constants";
+import { NAV_LINKS, FOOTER_CONTACT, FOOTER_LEGAL, FOOTER_SOCIAL } from "@/lib/constants";
 
 // Helper function to get contact icons
 function getContactIcon(type: string) {
@@ -167,6 +167,19 @@ export function Footer() {
           <p className="text-white-50 text-sm">
             © 2026 Berkahn. Todos os direitos reservados.
           </p>
+          <div className="flex items-center gap-3 text-sm">
+            {FOOTER_LEGAL.map((item, index) => (
+              <span key={item.href} className="flex items-center gap-3">
+                {index > 0 && <span className="text-white-30">·</span>}
+                <Link
+                  href={item.href}
+                  className="text-white-50 hover:text-white transition-colors duration-300"
+                >
+                  {item.label}
+                </Link>
+              </span>
+            ))}
+          </div>
           <div className="flex gap-4">
             {FOOTER_SOCIAL.map((item) => (
               <a
