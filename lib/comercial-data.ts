@@ -9,6 +9,7 @@ export interface SegmentSolution {
   tabLabel: string;
   title: string;
   paragraphs: string[];
+  description: string; // Condensed single paragraph for SegmentShowcase
   image: string;
   imageAlt: string;
 }
@@ -18,6 +19,8 @@ export const SEGMENT_SOLUTIONS: SegmentSolution[] = [
     id: "comercial-varejo",
     tabLabel: "Comercial",
     title: "Lojas, escritórios e showrooms",
+    description:
+      "Tempo é receita. O Steel Frame reduz o prazo em 50–70%, antecipando o retorno sobre o investimento. Paredes internas reposicionáveis sem quebra permitem que o layout acompanhe a vida do negócio. Construção silenciosa e limpa — viável em shoppings e centros comerciais ocupados.",
     paragraphs: [
       "Para o varejo e para operações comerciais, tempo é receita. Cada mês a mais de obra é um mês a menos de faturamento. O Steel Frame reduz o prazo de construção em 50% a 70% comparado à alvenaria tradicional, o que significa que a operação começa antes, o ponto comercial gera receita mais cedo e o retorno sobre o investimento se antecipa.",
       "Além da velocidade, o sistema oferece flexibilidade de layout que acompanha a vida do negócio. Paredes internas em LSF são reposicionáveis com intervenções mínimas, sem quebra e sem entulho. Para operações de varejo que mudam de configuração com frequência, para showrooms que se adaptam a cada temporada ou para escritórios que precisam crescer sem mudar de endereço, essa flexibilidade é um diferencial operacional real.",
@@ -30,6 +33,8 @@ export const SEGMENT_SOLUTIONS: SegmentSolution[] = [
     id: "industrial",
     tabLabel: "Industrial",
     title: "Galpões, centros de distribuição e áreas técnicas",
+    description:
+      "Estrutura 12x mais leve que alvenaria (60–100 kg/m²), resultando em fundações mais simples e econômicas. Modularidade que permite expansão futura sem intervenções pesadas. Sistemas híbridos com aço laminado para vãos amplos e cargas pesadas.",
     paragraphs: [
       "No contexto industrial, a equação é direta: quanto mais rápido o galpão fica pronto, mais cedo ele opera. O LSF entrega essa velocidade com um benefício adicional significativo. O peso reduzido da estrutura, entre 60 e 100 kg/m² contra 1.200 a 1.500 kg/m² da construção convencional, resulta em fundações mais simples e mais econômicas.",
       "Para centros de distribuição e áreas logísticas, a modularidade do sistema é outro fator relevante. A estrutura pode ser projetada para expansão futura, permitindo que o espaço cresça junto com a operação sem a necessidade de intervenções pesadas na estrutura original. A previsibilidade do processo industrializado também importa em projetos industriais, onde atrasos no cronograma se traduzem diretamente em prejuízo operacional.",
@@ -41,7 +46,9 @@ export const SEGMENT_SOLUTIONS: SegmentSolution[] = [
   {
     id: "temporarias",
     tabLabel: "Temporárias",
-    title: "Estandes, escritórios provisórios, estruturas para eventos e canteiros de obra",
+    title: "Estandes, eventos e canteiros de obra",
+    description:
+      "Montagem rápida, desmontagem sem destruição, custo que faz sentido. Qualidade construtiva de edificação permanente em estrutura temporária. Perfis 100% recicláveis e reutilizáveis em outros projetos — custo-benefício superior a contêineres.",
     paragraphs: [
       "Construções temporárias precisam de três coisas: montagem rápida, desmontagem sem destruição e custo que faça sentido para o período de uso. O Steel Frame atende às três.",
       "A montagem de estruturas em LSF é significativamente mais rápida do que em alvenaria ou em sistemas de contêiner adaptado, e o resultado final tem qualidade construtiva de edificação permanente. Isso faz diferença para escritórios de canteiro de obra que precisam funcionar por meses, para estandes de eventos que representam a imagem de uma marca ou para estruturas temporárias em operações industriais.",
@@ -53,7 +60,9 @@ export const SEGMENT_SOLUTIONS: SegmentSolution[] = [
   {
     id: "reformas-corporativas",
     tabLabel: "Reformas",
-    title: "Ampliação de fábricas, retrofit de espaços comerciais",
+    title: "Ampliação de fábricas e retrofit comercial",
+    description:
+      "Leveza estrutural (60–100 kg/m²) que permite ampliações sem reforço de fundação. Construção a seco elimina poeira e entulho que paralisam operações. Cronograma integrado aos turnos e restrições operacionais do cliente.",
     paragraphs: [
       "Reformar ou ampliar uma operação em funcionamento é um desafio que vai além da engenharia. Envolve manter a produção rodando, minimizar o impacto nos funcionários e nos clientes, e cumprir prazos que geralmente são definidos por necessidades operacionais.",
       "O Steel Frame é particularmente vantajoso nesse cenário. A leveza da estrutura (60 a 100 kg/m²) permite ampliações sobre estruturas existentes sem reforço de fundação na maioria dos casos. A construção a seco elimina a poeira e o entulho que paralisam operações. E a velocidade de montagem reduz o período de transtorno ao mínimo.",

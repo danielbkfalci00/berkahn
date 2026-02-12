@@ -1,18 +1,16 @@
 import { ParallaxHero } from "@/components/sections/ParallaxHero";
 import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
-import { SegmentSolutions } from "@/components/comercial/SegmentSolutions";
-import { ESGSection } from "@/components/comercial/ESGSection";
+import { SegmentShowcase } from "@/components/comercial/SegmentShowcase";
+import { ESGBentoGrid } from "@/components/comercial/ESGBentoGrid";
 import { MetricsCards } from "@/components/comercial/MetricsCards";
-import { ContentBlocksGrid } from "@/components/sections/ContentBlocksGrid";
-import { ProcessTimeline } from "@/components/sections/ProcessTimeline";
+import { TransparencyAccordion } from "@/components/comercial/TransparencyAccordion";
+import { ProcessTimelineVisual } from "@/components/comercial/ProcessTimelineVisual";
 import { CorporateContactForm } from "@/components/comercial/CorporateContactForm";
 import { CTA } from "@/components/sections/CTA";
 import {
   SEGMENT_SOLUTIONS,
-  ESG_PILLARS,
   COMERCIAL_TRANSPARENCY_BLOCKS,
   COMERCIAL_METRICS,
-  COMERCIAL_PROCESS_STEPS,
 } from "@/lib/comercial-data";
 
 export const metadata = {
@@ -44,20 +42,22 @@ export default function ComercialIndustrialPage() {
             <h2 className="headline-md mb-6">
               Cada negócio tem uma demanda. A engenharia se adapta.
             </h2>
-            <p className="body-lg text-black-70 max-w-4xl mb-16">
-              O Light Steel Frame (LSF) é um sistema construtivo industrializado
-              que utiliza perfis de aço galvanizado como estrutura. Diferente da
-              construção convencional em alvenaria, o LSF trabalha com peças
-              fabricadas sob medida em ambiente industrial e montadas no canteiro
-              com velocidade, precisão e mínima geração de resíduos. A Berkahn
-              aplica essa tecnologia em projetos comerciais, industriais e em
-              construções temporárias, sempre combinando o LSF com sistemas
-              híbridos quando o projeto exige.
+            <p className="body-lg text-black-70 max-w-3xl mb-16">
+              Steel Frame aplicado a projetos comerciais, industriais e
+              temporários — com sistemas híbridos quando o projeto exige.
             </p>
           </RevealOnScroll>
-
-          <SegmentSolutions data={SEGMENT_SOLUTIONS} />
         </div>
+
+        <SegmentShowcase
+          data={SEGMENT_SOLUTIONS.map((s) => ({
+            id: s.id,
+            title: s.title,
+            description: s.description,
+            image: s.image,
+            imageAlt: s.imageAlt,
+          }))}
+        />
       </section>
 
       {/* ================================================================ */}
@@ -68,22 +68,16 @@ export default function ComercialIndustrialPage() {
           <RevealOnScroll>
             <p className="label-text text-white/40 mb-4">ESG & SUSTENTABILIDADE</p>
             <h2 className="headline-md text-white mb-6">
-              Steel Frame e ESG: construir com responsabilidade é construir com
-              inteligência.
+              Impacto ambiental, social e de governança — documentado e
+              mensurável.
             </h2>
-            <p className="body-lg text-white/70 max-w-4xl mb-16">
-              A construção civil é responsável por 37% das emissões globais de
-              gases de efeito estufa, segundo o Programa das Nações Unidas para
-              o Meio Ambiente (UNEP). Para empresas com compromissos ESG reais, a
-              escolha do sistema construtivo é uma decisão estratégica que
-              impacta diretamente os indicadores ambientais, sociais e de
-              governança do negócio. O Light Steel Frame se alinha naturalmente
-              às três dimensões do ESG. É uma consequência técnica do processo,
-              documentada e mensurável.
+            <p className="body-lg text-white/70 max-w-3xl mb-16">
+              O Steel Frame se alinha naturalmente às três dimensões do ESG.
+              Não é discurso — são dados técnicos do processo construtivo.
             </p>
           </RevealOnScroll>
 
-          <ESGSection data={ESG_PILLARS} />
+          <ESGBentoGrid />
         </div>
       </section>
 
@@ -106,7 +100,7 @@ export default function ComercialIndustrialPage() {
             </p>
           </RevealOnScroll>
 
-          <ContentBlocksGrid data={COMERCIAL_TRANSPARENCY_BLOCKS} columns={2} />
+          <TransparencyAccordion data={COMERCIAL_TRANSPARENCY_BLOCKS} />
         </div>
       </section>
 
@@ -120,10 +114,8 @@ export default function ComercialIndustrialPage() {
             <h2 className="headline-md text-white mb-6">
               Os números que importam para a decisão.
             </h2>
-            <p className="body-lg text-white/70 max-w-4xl mb-16">
-              Dados concretos sobre o desempenho do Steel Frame em projetos
-              comerciais e industriais. Cada métrica é documentada e verificável
-              no projeto executivo.
+            <p className="body-lg text-white/70 max-w-3xl mb-16">
+              Dados concretos e verificáveis sobre o desempenho do Steel Frame.
             </p>
           </RevealOnScroll>
 
@@ -141,14 +133,13 @@ export default function ComercialIndustrialPage() {
             <h2 className="headline-md mb-6">
               Do briefing à operação.
             </h2>
-            <p className="body-lg text-black-70 max-w-4xl mb-16">
-              Um processo estruturado para que cada etapa do projeto tenha
-              clareza, previsibilidade e controle. Da primeira reunião à entrega
-              das chaves, você sabe exatamente onde está e o que vem a seguir.
+            <p className="body-lg text-black-70 max-w-3xl mb-16">
+              Cada etapa com clareza, previsibilidade e controle. Você sabe
+              exatamente onde está e o que vem a seguir.
             </p>
           </RevealOnScroll>
 
-          <ProcessTimeline steps={COMERCIAL_PROCESS_STEPS} />
+          <ProcessTimelineVisual />
         </div>
       </section>
 

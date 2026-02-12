@@ -28,7 +28,7 @@
   }
 
   body {
-    @apply font-body text-black bg-white antialiased;
+    @apply font-body text-black bg-white antialiased overflow-x-hidden;
     overscroll-behavior: contain;
   }
 
