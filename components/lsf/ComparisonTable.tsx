@@ -1,9 +1,15 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { COMPARISON_DATA } from "@/lib/lsf-data";
+import { COMPARISON_DATA, type ComparisonItem } from "@/lib/lsf-data";
 
-export function ComparisonTable() {
+interface ComparisonTableProps {
+  data?: ComparisonItem[];
+}
+
+export function ComparisonTable({ data }: ComparisonTableProps = {}) {
+  const rows = data || COMPARISON_DATA;
+
   return (
     <div className="overflow-x-auto">
       <table className="w-full bg-white rounded-lg shadow-luxury-lg overflow-hidden">
@@ -24,7 +30,7 @@ export function ComparisonTable() {
 
         {/* Body */}
         <tbody>
-          {COMPARISON_DATA.map((item, index) => (
+          {rows.map((item, index) => (
             <motion.tr
               key={item.category}
               className="border-b border-black-10 last:border-b-0 hover:bg-black-5 transition-colors"

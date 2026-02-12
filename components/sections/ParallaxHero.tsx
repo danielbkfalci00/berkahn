@@ -7,17 +7,23 @@ import { motion, useScroll, useTransform } from "framer-motion";
 interface ParallaxHeroProps {
   title: string;
   subtitle?: string;
+  label?: string;
   backgroundImage: string;
   height?: string;
   imagePosition?: string;
+  ctaText?: string;
+  ctaHref?: string;
 }
 
 export function ParallaxHero({
   title,
   subtitle,
+  label,
   backgroundImage,
   height = "100vh",
   imagePosition,
+  ctaText,
+  ctaHref,
 }: ParallaxHeroProps) {
   const ref = useRef<HTMLElement>(null);
 
@@ -93,7 +99,7 @@ export function ParallaxHero({
                 ease: [0.19, 1, 0.22, 1],
               }}
             >
-              SISTEMA CONSTRUTIVO INDUSTRIALIZADO
+              {label || "SISTEMA CONSTRUTIVO INDUSTRIALIZADO"}
             </motion.p>
 
             <motion.h1
@@ -108,6 +114,51 @@ export function ParallaxHero({
             >
               {title}
             </motion.h1>
+
+            {subtitle && (
+              <motion.p
+                className="body-lg text-white/90 max-w-2xl hero-text-shadow"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{
+                  duration: 1,
+                  delay: 0.5,
+                  ease: [0.19, 1, 0.22, 1],
+                }}
+              >
+                {subtitle}
+              </motion.p>
+            )}
+
+            {ctaText && (
+              <motion.a
+                href={ctaHref || "#"}
+                className="inline-flex items-center gap-2 mt-8 px-8 py-4 bg-white text-black uppercase tracking-wider text-sm font-medium hover:bg-white/90 transition-colors duration-300"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{
+                  duration: 1,
+                  delay: 0.6,
+                  ease: [0.19, 1, 0.22, 1],
+                }}
+              >
+                {ctaText}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth="2"
+                  stroke="currentColor"
+                  className="w-4 h-4"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
+                  />
+                </svg>
+              </motion.a>
+            )}
           </motion.div>
         </div>
       </div>
