@@ -30,6 +30,7 @@ const services = [
     ],
     image: "/images/Services/residencial.webp",
     icon: Home,
+    href: "/residencial",
   },
   {
     id: "comercial",
@@ -43,6 +44,7 @@ const services = [
     ],
     image: "/images/Services/comercial.webp",
     icon: Building2,
+    href: "/comercial-industrial",
   },
   {
     id: "industrial",
@@ -56,6 +58,7 @@ const services = [
     ],
     image: "/images/Services/industrial.webp",
     icon: Factory,
+    href: "/comercial-industrial",
   },
 ];
 
@@ -139,10 +142,13 @@ export default function ServicosPage() {
                       ))}
                     </ul>
 
-                    {/* Link */}
-                    <ContactFormDialog>
-                      <button className="inline-flex items-center gap-2 text-black font-medium hover:gap-4 transition-all duration-300 cursor-pointer">
-                        Solicitar orçamento
+                    {/* Links */}
+                    <div className="flex flex-col sm:flex-row gap-4">
+                      <Link
+                        href={service.href}
+                        className="inline-flex items-center gap-2 text-black font-medium hover:gap-4 transition-all duration-300"
+                      >
+                        Saiba mais
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           fill="none"
@@ -157,8 +163,13 @@ export default function ServicosPage() {
                             d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
                           />
                         </svg>
-                      </button>
-                    </ContactFormDialog>
+                      </Link>
+                      <ContactFormDialog>
+                        <button className="inline-flex items-center gap-2 text-black-50 font-medium hover:text-black transition-colors duration-300 cursor-pointer">
+                          Solicitar orçamento
+                        </button>
+                      </ContactFormDialog>
+                    </div>
                   </div>
                 </div>
               </RevealOnScroll>

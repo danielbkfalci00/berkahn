@@ -8,21 +8,21 @@ const categories = [
     description:
       "Projetos residenciais que traduzem qualidade técnica, acabamento de alto nível e soluções integradas para elevar cada ambiente.",
     image: "/images/Services/residencial.webp",
-    href: "/servicos#residencial",
+    href: "/residencial",
   },
   {
     title: "CORPORATIVO / COMERCIAL",
     description:
       "Ambientes corporativos executados para refletir identidade e eficiência, com gestão de obra precisa e soluções técnicas de alto padrão.",
     image: "/images/Services/comercial.webp",
-    href: "/servicos#comercial",
+    href: "/comercial-industrial",
   },
   {
     title: "INDUSTRIAL",
     description:
       "Estruturas industriais projetadas para máxima eficiência, durabilidade e conformidade com as normas técnicas mais exigentes.",
     image: "/images/Services/industrial.webp",
-    href: "/servicos#industrial",
+    href: "/comercial-industrial",
   },
 ];
 
@@ -76,7 +76,7 @@ export function Categories() {
 
                   {/* Botão Saiba Mais */}
                   <Link
-                    href="/servicos"
+                    href={category.href}
                     className="inline-block px-8 py-3 bg-white text-black text-sm uppercase tracking-widest font-medium transition-all duration-300 hover:bg-black hover:text-white hover:border hover:border-white mt-8"
                   >
                     Saiba Mais
