@@ -31,6 +31,8 @@ export function HeroPage({
           priority
           sizes="100vw"
         />
+        {/* Overlay for text readability */}
+        <div className="absolute inset-0 hero-overlay-top" aria-hidden="true" />
       </div>
 
       {/* Content */}

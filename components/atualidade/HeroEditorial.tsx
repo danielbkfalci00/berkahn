@@ -50,9 +50,9 @@ export function HeroEditorial({
         />
       </motion.div>
 
-      {/* Gradient Overlay Dinâmico para legibilidade */}
+      {/* Gradient Overlay Dinâmico para legibilidade - top vignette */}
       <motion.div
-        className="absolute inset-0 z-5 bg-gradient-to-t from-black/40 via-black/20 to-transparent"
+        className="absolute inset-0 z-5 hero-overlay-top"
         style={{ opacity: overlayOpacity }}
         aria-hidden="true"
       />

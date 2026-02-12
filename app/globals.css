@@ -155,6 +155,44 @@
       0 4px 24px rgba(0, 0, 0, 0.4);   /* Camada 3: Halo difuso */
   }
 
+  /* Hero overlay - Top vignette (texto no topo) */
+  .hero-overlay-top {
+    background: linear-gradient(to bottom,
+      rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.30) 30%,
+      rgba(0,0,0,0.05) 55%, transparent 70%);
+  }
+
+  @media (max-width: 768px) {
+    .hero-overlay-top {
+      background: linear-gradient(to bottom,
+        rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.40) 35%,
+        rgba(0,0,0,0.10) 60%, transparent 75%);
+    }
+  }
+
+  /* Hero overlay - Vignette completo (texto topo + stats fundo) */
+  .hero-overlay-vignette {
+    background: linear-gradient(to bottom,
+      rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.25) 25%,
+      rgba(0,0,0,0.10) 50%, rgba(0,0,0,0.25) 75%,
+      rgba(0,0,0,0.60) 100%);
+  }
+
+  @media (max-width: 768px) {
+    .hero-overlay-vignette {
+      background: linear-gradient(to bottom,
+        rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.35) 25%,
+        rgba(0,0,0,0.15) 50%, rgba(0,0,0,0.35) 75%,
+        rgba(0,0,0,0.65) 100%);
+    }
+  }
+
+  /* Hero overlay - Bottom only (compatibilidade) */
+  .hero-overlay-bottom {
+    background: linear-gradient(to top,
+      rgba(0,0,0,0.60) 0%, rgba(0,0,0,0.30) 30%, transparent 60%);
+  }
+
   /* Container texto à esquerda */
   .hero-content-left {
     max-width: 800px;

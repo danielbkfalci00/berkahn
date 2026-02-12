@@ -9,6 +9,7 @@ interface ParallaxHeroProps {
   subtitle?: string;
   backgroundImage: string;
   height?: string;
+  imagePosition?: string;
 }
 
 export function ParallaxHero({
@@ -16,6 +17,7 @@ export function ParallaxHero({
   subtitle,
   backgroundImage,
   height = "100vh",
+  imagePosition,
 }: ParallaxHeroProps) {
   const ref = useRef<HTMLElement>(null);
 
@@ -47,12 +49,15 @@ export function ParallaxHero({
           src={backgroundImage}
           alt={title}
           fill
-          className="object-cover"
+          className={`object-cover ${imagePosition || ''}`}
           priority
           sizes="100vw"
           quality={90}
         />
       </motion.div>
+
+      {/* Overlay for text readability - static, above parallax */}
+      <div className="absolute inset-0 z-5 hero-overlay-top" aria-hidden="true" />
 
       {/* Content Layer (normal scroll speed) */}
       <div className="relative z-20 text-left">

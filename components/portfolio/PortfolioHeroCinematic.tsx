@@ -54,8 +54,8 @@ export function PortfolioHeroCinematic() {
         />
       </motion.div>
 
-      {/* Dark Gradient Overlay for text readability */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent z-5" />
+      {/* Dark Gradient Overlay for text readability - vignette (top title + bottom stats) */}
+      <div className="absolute inset-0 hero-overlay-vignette z-5" aria-hidden="true" />
 
       {/* Content */}
       <motion.div
