@@ -4,6 +4,7 @@ import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
 import { BerkahnTimeline } from "@/components/timeline/BerkahnTimeline";
 import { Founders } from "@/components/sections/Founders";
 import { CTA } from "@/components/sections/CTA";
+import { Partners } from "@/components/sections/Partners";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
@@ -74,8 +75,8 @@ export default function EmpresaPage() {
             sizes="100vw"
           />
 
-          {/* Gradient Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
+          {/* Gradient Overlay - vignette (title top + stats bottom) */}
+          <div className="absolute inset-0 hero-overlay-vignette" aria-hidden="true" />
         </div>
 
         {/* Hero Content - Título no topo */}
@@ -301,6 +302,9 @@ export default function EmpresaPage() {
           </div>
         </div>
       </section>
+
+      {/* Marcas Parceiras */}
+      <Partners />
 
       {/* CTA */}
       <CTA />
