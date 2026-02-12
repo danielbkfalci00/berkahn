@@ -1,7 +1,7 @@
 "use client";
 
 import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
-import type { ContentBlock } from "@/lib/residencial-data";
+import type { ContentBlock } from "@/lib/types";
 
 interface ContentBlocksGridProps {
   data: ContentBlock[];

@@ -94,13 +94,13 @@ export function Hero() {
           {/* Headline - Two lines */}
           <div className="mb-8">
             <CharReveal
-              text="Líderes em Steel Frame."
-              className="hero-headline-line text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-heading font-extrabold tracking-tighter text-white hero-text-shadow-strong"
+              text="Especialistas em Light Steel Frame"
+              className="hero-headline-line text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-heading font-extrabold tracking-tighter text-white hero-text-shadow-strong"
               delay={0.2}
             />
             <CharReveal
-              text="Mestres em construir."
-              className="hero-headline-line text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-heading font-extrabold tracking-tighter text-white hero-text-shadow-strong"
+              text="Mestres em Construir"
+              className="hero-headline-line text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-heading font-extrabold tracking-tighter text-white hero-text-shadow-strong"
               delay={0.4}
             />
           </div>

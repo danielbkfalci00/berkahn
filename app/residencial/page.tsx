@@ -3,9 +3,9 @@ import { ParallaxHero } from "@/components/sections/ParallaxHero";
 import { Partners } from "@/components/sections/Partners";
 import { CTA } from "@/components/sections/CTA";
 import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
-import { ContentBlocksGrid } from "@/components/residencial/ContentBlocksGrid";
+import { ContentBlocksGrid } from "@/components/sections/ContentBlocksGrid";
 import { ComparisonTable } from "@/components/lsf/ComparisonTable";
-import { ProcessTimeline } from "@/components/residencial/ProcessTimeline";
+import { ProcessTimeline } from "@/components/sections/ProcessTimeline";
 import { ResidencialContactForm } from "@/components/residencial/ResidencialContactForm";
 import { DomeGallery } from "@/components/presentation/DomeGallery";
 import {

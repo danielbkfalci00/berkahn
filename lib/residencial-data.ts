@@ -1,16 +1,7 @@
 import type { ComparisonItem } from "@/lib/lsf-data";
-export type { ComparisonItem };
+import type { ContentBlock, ProcessStep } from "@/lib/types";
 
-export interface ProcessStep {
-  step: number;
-  title: string;
-  description: string;
-}
-
-export interface ContentBlock {
-  title: string;
-  description: string;
-}
+export type { ComparisonItem, ContentBlock, ProcessStep };
 
 export interface GalleryImage {
   src: string;

@@ -3,7 +3,7 @@
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
-import type { ProcessStep } from "@/lib/residencial-data";
+import type { ProcessStep } from "@/lib/types";
 
 interface ProcessTimelineProps {
   steps: ProcessStep[];
