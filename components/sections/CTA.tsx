@@ -33,8 +33,8 @@ const buttonClasses =
 
 export function CTA({
   label = "PRONTO PARA CONSTRUIR?",
-  title = "Transforme seu projeto em realidade com a Berkahn",
-  description = "Entre em contato e descubra como nossa expertise em Steel Frame e construção de alto desempenho pode materializar sua visão. Projeto completo, execução de obra ou mão de obra especializada — estamos prontos.",
+  title = "Vamos conversar sobre seu projeto",
+  description = "Conte-nos sobre seu projeto. Trabalhamos com Steel Frame e construção de alto desempenho: projeto completo, execução de obra ou mão de obra especializada.",
   actionType = "dialog",
   actionText = "Fale Conosco",
   actionHref = "/",

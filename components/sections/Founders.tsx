@@ -43,7 +43,7 @@ const FOUNDERS: Founder[] = [
         year: "2024",
         role: "Co-Fundador",
         company: "BERKAHN",
-        description: "Fundação da BERKAHN trazendo expertise em Lean Construction e melhorias em processos para revolucionar a construção civil.",
+        description: "Fundação da BERKAHN aplicando Lean Construction e melhoria de processos à construção civil.",
         achievements: [
           "Implementação de metodologia Lean Construction",
           "Melhorias em fluxos de trabalho e redução de desperdícios",
@@ -103,9 +103,8 @@ export function Founders() {
         <RevealOnScroll>
           <h2 className="headline-md mb-6 text-center">Quem Lidera a Berkahn</h2>
           <p className="body-md text-black-70 text-center max-w-3xl mx-auto mb-12">
-            A BERKAHN é guiada por fundadores com décadas de experiência em
-            construção civil, engenharia e gestão de projetos. Unidos pela visão
-            de transformar a construção no Brasil através da inovação e excelência.
+            Engenheiros com mais de duas décadas de experiência combinada em
+            construção civil, gestão de obras e processos industrializados.
           </p>
         </RevealOnScroll>
 

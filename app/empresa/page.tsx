@@ -40,12 +40,12 @@ const diferenciais = [
   {
     category: "CERTIFICAÇÃO",
     title: "Certificações Técnicas",
-    desc: "Seguimos rigorosamente as normas NBR 16970 (Steel Frame) e NBR 15575 (Desempenho de Edificações). Garantia de qualidade certificada e conformidade técnica em cada projeto.",
+    desc: "Seguimos as normas NBR 16970 (Steel Frame) e NBR 15575 (Desempenho de Edificações), com conformidade técnica verificada em cada projeto.",
   },
   {
     category: "EQUIPE",
     title: "Equipe Especializada",
-    desc: "Profissionais capacitados por empresa internacional com vasta experiência em Steel Frame. Equipe técnica treinada em processos industrializados e construção sustentável de alta performance.",
+    desc: "Profissionais com formação técnica em Steel Frame e processos industrializados. Equipe treinada em construção a seco e métodos de alta performance.",
   },
   {
     category: "PROCESSO",
@@ -148,23 +148,21 @@ export default function EmpresaPage() {
               A BERKAHN surge como uma empresa jovem, porém construída sobre bases
               sólidas e conhecimento empírico de seus fundadores. Após anos vivenciando
               de perto as limitações dos métodos tradicionais na engenharia residencial
-              e corporativa — lidando com desperdícios, retrabalhos, atrasos e custos
-              imprevisíveis que se repetem obra após obra — decidimos transformar a
-              forma como se constrói no Brasil.
+              e corporativa, lidando com desperdícios, retrabalhos, atrasos e custos
+              imprevisíveis, decidimos mudar essa realidade.
             </p>
             <p className="body-lg text-black-70">
-              Nossa premissa reside na convicção de que construir bem exige mais do
-              que empilhar materiais: exige método, precisão e propósito. Por isso,
-              abandonamos as limitações do passado e introduzimos processos mais
-              eficientes e tecnologias mais leves, rápidas e sustentáveis, reunindo
-              conhecimento em planejamento e construção, sempre com foco em qualidade
-              e desempenho. Somos, com orgulho, uma empresa brasileira com visão
-              contemporânea, que utiliza esta integração de sistemas e processos
-              industriais para oferecer mais qualidade, velocidade e sustentabilidade.
-              A BERKAHN nasce com um propósito claro: elevar o padrão e a otimização
-              da construção, proporcionando aos clientes uma experiência transparente,
-              precisa e moderna, e entregando obras mais inteligentes, eficientes e
-              humanas que resultem numa nova concepção de excelência na construção civil.
+              Construir bem exige mais do que empilhar materiais: exige método,
+              precisão e propósito. Por isso, trocamos as limitações dos métodos
+              tradicionais por processos industrializados, tecnologias mais leves
+              e planejamento rigoroso. Somos uma empresa brasileira que integra
+              sistemas construtivos e processos industriais para entregar mais
+              qualidade, velocidade e sustentabilidade.
+            </p>
+            <p className="body-lg text-black-70">
+              A BERKAHN nasce com um propósito claro: oferecer aos clientes uma
+              experiência transparente e precisa, com obras mais eficientes do
+              início ao fim.
             </p>
           </div>
 
@@ -174,8 +172,8 @@ export default function EmpresaPage() {
           {/* Texto adicional sobre hoje */}
           <p className="body-md text-black-70">
             Hoje, com uma equipe de profissionais altamente especializados e um portfólio
-            crescente de projetos, continuamos comprometidos em transformar a forma como
-            se constrói no Brasil, entregando residências que combinam inovação, conforto
+            crescente de projetos, continuamos comprometidos em elevar o padrão da
+            construção no Brasil, entregando residências que combinam inovação, conforto
             e durabilidade.
           </p>
         </div>
@@ -195,8 +193,7 @@ export default function EmpresaPage() {
               </div>
               <h3 className="headline-sm mb-4">Excelência</h3>
               <p className="body-md text-black-70">
-                Compromisso inabalável com qualidade e precisão em cada
-                detalhe dos nossos projetos.
+                Qualidade e precisão em cada detalhe, do projeto à entrega.
               </p>
             </div>
             <div className="text-center">
@@ -205,8 +202,8 @@ export default function EmpresaPage() {
               </div>
               <h3 className="headline-sm mb-4">Inovação</h3>
               <p className="body-md text-black-70">
-                Buscamos constantemente novas tecnologias e métodos para
-                entregar soluções cada vez mais eficientes.
+                Aplicamos tecnologias e métodos atuais para entregar
+                soluções mais eficientes.
               </p>
             </div>
             <div className="text-center">
