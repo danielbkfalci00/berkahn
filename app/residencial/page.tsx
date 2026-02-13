@@ -13,6 +13,11 @@ import { BenefitsScrollSection } from "@/components/residencial/BenefitsScrollSe
 import { TransparencyAccordion } from "@/components/residencial/TransparencyAccordion";
 import { Masonry } from "@/components/ui/masonry";
 import {
+  ImageComparison,
+  ImageComparisonImage,
+  ImageComparisonSlider,
+} from "@/components/core/image-comparison";
+import {
   RESIDENCIAL_SERVICES,
   RESIDENCIAL_BENEFITS_SCROLL,
   RESIDENCIAL_TRANSPARENCY_BLOCKS,
@@ -167,17 +172,25 @@ export default function ResidencialPage() {
       <section className="py-xl">
         <div className="container">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-            {/* Image */}
+            {/* Before/After Comparison */}
             <RevealOnScroll>
-              <div className="relative h-[400px] md:h-[500px] overflow-hidden rounded-lg">
-                <Image
+              <ImageComparison
+                className="aspect-[16/10] w-full rounded-lg border border-black-10 overflow-hidden"
+                enableHover
+                springOptions={{ bounce: 0.3 }}
+              >
+                <ImageComparisonImage
                   src="/images/Apresentação/estrutura-1.webp"
-                  alt="Estrutura Steel Frame em ampliação residencial"
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  alt="Estrutura Steel Frame — antes do acabamento"
+                  position="left"
                 />
-              </div>
+                <ImageComparisonImage
+                  src="/images/Apresentação/acabamentos_2.webp"
+                  alt="Casa finalizada — após acabamento"
+                  position="right"
+                />
+                <ImageComparisonSlider className="w-0.5 bg-white/50 backdrop-blur-sm" />
+              </ImageComparison>
             </RevealOnScroll>
 
             {/* Text */}
