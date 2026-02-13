@@ -167,7 +167,7 @@ export default function ComercialIndustrialPage() {
 
       {/* 8. CTA de redirecionamento */}
       <CTA
-        label="CONSTRUINDO PARA A SUA FAMÍLIA?"
+        label="PROJETO RESIDENCIAL?"
         title="Construindo para a sua família?"
         description="Se o seu projeto é residencial, construção nova, reforma ou ampliação, conheça o que a Berkahn pode fazer pela sua casa."
         actionType="link"
