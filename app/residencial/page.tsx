@@ -9,7 +9,7 @@ import { ProcessTimeline } from "@/components/sections/ProcessTimeline";
 import { ResidencialContactForm } from "@/components/residencial/ResidencialContactForm";
 import { DomeGallery } from "@/components/presentation/DomeGallery";
 import { FocusCardsSection } from "@/components/residencial/FocusCardsSection";
-import { BenefitsScrollSection } from "@/components/residencial/BenefitsScrollSection";
+import { BenefitsMorphingGrid } from "@/components/residencial/BenefitsMorphingGrid";
 import { TransparencyAccordion } from "@/components/residencial/TransparencyAccordion";
 import { Masonry } from "@/components/ui/masonry";
 import {
@@ -83,7 +83,7 @@ export default function ResidencialPage() {
       <PartnersFlowingMenu />
 
       {/* ================================================================ */}
-      {/* 4. Por que Steel Frame — Sticky Scroll Reveal */}
+      {/* 4. Por que Steel Frame — MorphingDialog Grid */}
       {/* ================================================================ */}
       <section className="py-xl">
         <div className="container">
@@ -97,7 +97,7 @@ export default function ResidencialPage() {
             </p>
           </RevealOnScroll>
 
-          <BenefitsScrollSection benefits={RESIDENCIAL_BENEFITS_SCROLL} />
+          <BenefitsMorphingGrid benefits={RESIDENCIAL_BENEFITS_SCROLL} />
 
           {/* Sub-block: Versatilidade arquitetônica + Masonry Grid */}
           <div className="mt-16 pt-16 border-t border-black-10">
