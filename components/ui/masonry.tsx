@@ -9,6 +9,7 @@ import {
   useState,
 } from "react";
 import gsap from "gsap";
+import { XIcon } from "lucide-react";
 
 /* ─── Types ─── */
 
@@ -293,16 +294,25 @@ export function Masonry({
       {/* Lightbox */}
       {selectedImage && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 cursor-pointer"
+          className="fixed inset-0 z-50 grid place-items-center bg-black/80 cursor-pointer p-8"
           onClick={() => setSelectedImage(null)}
         >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={selectedImage.img}
-            alt={selectedImage.alt}
-            className="max-w-[90vw] max-h-[90vh] object-contain rounded-lg"
-            onClick={(e) => e.stopPropagation()}
-          />
+          <div className="relative" onClick={(e) => e.stopPropagation()}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={selectedImage.img}
+              alt={selectedImage.alt}
+              className="max-w-[min(600px,80vw)] max-h-[65vh] object-contain rounded-lg"
+            />
+            <button
+              type="button"
+              aria-label="Fechar"
+              onClick={() => setSelectedImage(null)}
+              className="absolute -top-3 -right-3 flex h-8 w-8 items-center justify-center rounded-full bg-black/50 text-white backdrop-blur-sm transition-colors hover:bg-black/70"
+            >
+              <XIcon size={18} />
+            </button>
+          </div>
         </div>
       )}
     </>

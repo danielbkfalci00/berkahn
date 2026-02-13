@@ -83,7 +83,7 @@ export function BenefitsMorphingGrid({ benefits }: BenefitsMorphingGridProps) {
                   </p>
                 </MorphingDialogDescription>
               </div>
-              <MorphingDialogClose className="text-black" />
+              <MorphingDialogClose className="text-white bg-black/50 backdrop-blur-sm rounded-full p-1.5" />
             </MorphingDialogContent>
           </MorphingDialogContainer>
         </MorphingDialog>

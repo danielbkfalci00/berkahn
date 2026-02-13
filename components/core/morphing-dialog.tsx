@@ -247,7 +247,7 @@ function MorphingDialogContainer({ children }: MorphingDialogContainerProps) {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           />
-          <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto p-4">
+          <div className="fixed inset-0 z-50 grid place-items-center overflow-y-auto p-4">
             {children}
           </div>
         </>
