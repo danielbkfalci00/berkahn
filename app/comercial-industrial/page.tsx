@@ -33,6 +33,12 @@ export default function ComercialIndustrialPage() {
         ctaText="Solicite uma consultoria"
         ctaHref="#formulario"
         backgroundImage="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1920&q=80"
+        images={[
+          "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1920&q=80",
+          "/images/Services/comercial.webp",
+          "/images/Services/industrial.webp",
+          "/images/Others/comercial_steel_frame.webp",
+        ]}
       />
 
       {/* ================================================================ */}

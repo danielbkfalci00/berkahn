@@ -3,12 +3,14 @@
 import { useRef } from "react";
 import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
+import { ImagesSlider } from "@/components/ui/images-slider";
 
 interface ParallaxHeroProps {
   title: string;
   subtitle?: string;
   label?: string;
   backgroundImage: string;
+  images?: string[];
   height?: string;
   imagePosition?: string;
   ctaText?: string;
@@ -20,6 +22,7 @@ export function ParallaxHero({
   subtitle,
   label,
   backgroundImage,
+  images,
   height = "100vh",
   imagePosition,
   ctaText,
@@ -51,15 +54,25 @@ export function ParallaxHero({
         className="absolute inset-0 z-0"
         style={{ y: yBackground, top: "-20%", bottom: "-20%", height: "140%" }}
       >
-        <Image
-          src={backgroundImage}
-          alt={title}
-          fill
-          className={`object-cover ${imagePosition || ''}`}
-          priority
-          sizes="100vw"
-          quality={90}
-        />
+        {images && images.length > 1 ? (
+          <ImagesSlider
+            images={images}
+            overlay={false}
+            autoplay
+            direction="up"
+            className="h-full w-full"
+          />
+        ) : (
+          <Image
+            src={backgroundImage}
+            alt={title}
+            fill
+            className={`object-cover ${imagePosition || ""}`}
+            priority
+            sizes="100vw"
+            quality={90}
+          />
+        )}
       </motion.div>
 
       {/* Overlay for text readability - static, above parallax */}

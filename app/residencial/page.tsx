@@ -47,6 +47,13 @@ export default function ResidencialPage() {
         ctaText="Fale com a Berkahn"
         ctaHref="#formulario"
         backgroundImage="/images/apresentacao/casa-laranjeiras/casa-laranjeiras-fachada-frontal.webp"
+        images={[
+          "/images/apresentacao/casa-laranjeiras/casa-laranjeiras-fachada-frontal.webp",
+          "/images/apresentacao/casa-laranjeiras/casa-laranjeiras-lateral-piscina.webp",
+          "/images/apresentacao/casa-laranjeiras/casa-laranjeiras-living.webp",
+          "/images/apresentacao/casa-santa-cristina/casa-santa-cristina-cover.webp",
+          "/images/hero/hero-home-1.webp",
+        ]}
       />
 
       {/* ================================================================ */}
