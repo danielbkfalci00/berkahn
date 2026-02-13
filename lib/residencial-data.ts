@@ -170,3 +170,38 @@ export const GALLERY_IMAGES_PROJECTS: GalleryImage[] = [
   { src: "/images/galeria/projeto-30.webp", alt: "Projeto residencial - Fachada" },
   { src: "/images/galeria/projeto-35.webp", alt: "Projeto residencial - Acabamento" },
 ];
+
+// ---------------------------------------------------------------------------
+// 3D Marquee — Gallery Images (Section 12)
+// ---------------------------------------------------------------------------
+
+export const RESIDENCIAL_3D_GALLERY: string[] = [
+  "https://picsum.photos/seed/res01/600/430",
+  "https://picsum.photos/seed/res02/600/430",
+  "https://picsum.photos/seed/res03/600/430",
+  "https://picsum.photos/seed/res04/600/430",
+  "https://picsum.photos/seed/res05/600/430",
+  "https://picsum.photos/seed/res06/600/430",
+  "https://picsum.photos/seed/res07/600/430",
+  "https://picsum.photos/seed/res08/600/430",
+  "https://picsum.photos/seed/res09/600/430",
+  "https://picsum.photos/seed/res10/600/430",
+  "https://picsum.photos/seed/res11/600/430",
+  "https://picsum.photos/seed/res12/600/430",
+  "https://picsum.photos/seed/res13/600/430",
+  "https://picsum.photos/seed/res14/600/430",
+  "https://picsum.photos/seed/res15/600/430",
+  "https://picsum.photos/seed/res16/600/430",
+  "https://picsum.photos/seed/res17/600/430",
+  "https://picsum.photos/seed/res18/600/430",
+  "https://picsum.photos/seed/res19/600/430",
+  "https://picsum.photos/seed/res20/600/430",
+  "https://picsum.photos/seed/res21/600/430",
+  "https://picsum.photos/seed/res22/600/430",
+  "https://picsum.photos/seed/res23/600/430",
+  "https://picsum.photos/seed/res24/600/430",
+  "https://picsum.photos/seed/res25/600/430",
+  "https://picsum.photos/seed/res26/600/430",
+  "https://picsum.photos/seed/res27/600/430",
+  "https://picsum.photos/seed/res28/600/430",
+];

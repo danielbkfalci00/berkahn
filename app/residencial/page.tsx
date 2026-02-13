@@ -2,6 +2,7 @@ import Image from "next/image";
 import { ParallaxHero } from "@/components/sections/ParallaxHero";
 import { PartnersFlowingMenu } from "@/components/residencial/PartnersFlowingMenu";
 import { CTA } from "@/components/sections/CTA";
+import { ThreeDMarquee } from "@/components/ui/3d-marquee";
 import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
 import { ComparisonTable } from "@/components/lsf/ComparisonTable";
 import { ProcessTimeline } from "@/components/sections/ProcessTimeline";
@@ -18,6 +19,7 @@ import {
   RESIDENCIAL_PROCESS_STEPS,
   GALLERY_IMAGES_STYLES,
   GALLERY_IMAGES_PROJECTS,
+  RESIDENCIAL_3D_GALLERY,
 } from "@/lib/residencial-data";
 
 export const metadata = {
@@ -311,6 +313,13 @@ export default function ResidencialPage() {
         actionText="Conheça nossas soluções corporativas"
         actionHref="/comercial-industrial"
       />
+
+      {/* ================================================================ */}
+      {/* 12. Galeria 3D — Projetos */}
+      {/* ================================================================ */}
+      <section className="bg-white overflow-hidden">
+        <ThreeDMarquee images={RESIDENCIAL_3D_GALLERY} />
+      </section>
     </>
   );
 }
