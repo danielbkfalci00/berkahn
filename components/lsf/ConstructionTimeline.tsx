@@ -28,9 +28,8 @@ export function ConstructionTimeline() {
               Do Projeto à Obra Finalizada
             </h2>
             <p className="body-lg text-black-70 max-w-3xl mx-auto">
-              A construção em Light Steel Frame segue um processo industrializado
-              e eficiente, com etapas bem definidas que garantem qualidade e
-              agilidade.
+              A construção em Light Steel Frame segue etapas industrializadas
+              com prazos definidos.
             </p>
           </div>
         </RevealOnScroll>

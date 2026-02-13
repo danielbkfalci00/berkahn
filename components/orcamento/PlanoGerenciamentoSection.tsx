@@ -65,7 +65,7 @@ export function PlanoGerenciamentoSection({
         <RevealOnScroll>
           <div className="mb-16">
             <h2 className="text-5xl lg:text-6xl font-bold tracking-tight text-black mb-4">
-              {plano.titulo}
+              COMO EXECUTAMOS SEU PROJETO
             </h2>
             <p className="text-xl text-black/60 max-w-2xl">
               Nosso processo estruturado garante qualidade e transparência em

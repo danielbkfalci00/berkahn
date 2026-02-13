@@ -11,7 +11,7 @@ import { LSF_FAQ } from "@/lib/lsf-data";
 export const metadata = {
   title: "Light Steel Frame | Berkahn Steel Frame",
   description:
-    "Descubra o sistema construtivo Light Steel Frame: tecnologia industrializada que combina velocidade, sustentabilidade e eficiência energética. Construção de alta performance com precisão milimétrica.",
+    "Sistema construtivo Light Steel Frame: construção industrializada com velocidade, sustentabilidade e eficiência energética. Alta performance com precisão milimétrica.",
 };
 
 export default function LSFPage() {
@@ -37,7 +37,7 @@ export default function LSFPage() {
                     O Light Steel Frame (LSF) é um sistema construtivo industrializado a seco caracterizado pela utilização de uma estrutura primária formada por perfis leves de aço galvanizado (aço estrutural de conformação a frio).
                   </p>
                   <p className="body-lg text-black-70">
-                    Este sistema é a vanguarda da construção racionalizada, garantindo alta precisão geométrica, controle de qualidade e redução drástica de resíduos no canteiro de obras.
+                    Esse sistema representa o estado atual da construção racionalizada, com alta precisão geométrica, controle de qualidade e redução drástica de resíduos no canteiro de obras.
                   </p>
                   <p className="body-lg text-black-70">
                     Os perfis de aço compõem o esqueleto estrutural em painéis modulares, suportando lajes, paredes e coberturas em edificações de pequeno e médio porte.
@@ -86,10 +86,9 @@ export default function LSFPage() {
                   Paredes de Múltiplas Camadas (Multilayer Walls)
                 </h3>
                 <p className="body-lg text-black-70 leading-relaxed">
-                  A superioridade do LSF reside na sua configuração de paredes, que
-                  operam como sistemas multicamadas projetados para performance superior
-                  em estanqueidade, isolamento e acabamento, superando o desempenho da
-                  alvenaria convencional.
+                  No LSF, as paredes funcionam como sistemas multicamadas que entregam
+                  melhor estanqueidade, isolamento e acabamento que a alvenaria
+                  convencional.
                 </p>
               </div>
             </RevealOnScroll>
@@ -106,7 +105,7 @@ export default function LSFPage() {
               Sistema de 6 Camadas
             </h2>
             <p className="body-md text-black-70 text-center max-w-3xl mx-auto mb-16">
-              O Light Steel Frame utiliza um sistema multicamadas que garante isolamento térmico e acústico superior, proteção contra intempéries e durabilidade estrutural.
+              O Light Steel Frame utiliza um sistema multicamadas para isolamento térmico, acústico, proteção contra intempéries e durabilidade estrutural.
             </p>
           </RevealOnScroll>
 
