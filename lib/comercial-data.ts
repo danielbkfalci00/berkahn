@@ -150,8 +150,10 @@ export interface MetricCard {
   suffix?: string;
   label: string;
   description: string;
-  isText?: boolean; // For card 4 that has no numeric value
+  isText?: boolean;
   textValue?: string;
+  image?: string;
+  imageAlt?: string;
 }
 
 export const COMERCIAL_METRICS: MetricCard[] = [
@@ -162,6 +164,8 @@ export const COMERCIAL_METRICS: MetricCard[] = [
     label: "50% a 70% mais rápido",
     description:
       "Comparado à construção convencional. Cada mês antecipado é receita que começa antes.",
+    image: "/images/galeria/projeto-30.webp",
+    imageAlt: "Estrutura Steel Frame em montagem — vista interna das treliças",
   },
   {
     value: 5,
@@ -170,6 +174,8 @@ export const COMERCIAL_METRICS: MetricCard[] = [
     label: "Menos de 5% de desperdício",
     description:
       "Contra 25% a 30% da alvenaria. Processo industrializado com controle real de materiais.",
+    image: "/images/galeria/projeto-12.webp",
+    imageAlt: "Estrutura Steel Frame pré-fabricada com precisão industrial",
   },
   {
     value: 40,
@@ -178,6 +184,8 @@ export const COMERCIAL_METRICS: MetricCard[] = [
     label: "Até 40% de economia",
     description:
       "No consumo de energia para aquecimento e refrigeração durante a vida útil do imóvel.",
+    image: "/images/galeria/projeto-20.webp",
+    imageAlt: "Isolamento térmico com lã mineral em paredes Steel Frame",
   },
   {
     value: 0,
@@ -186,6 +194,8 @@ export const COMERCIAL_METRICS: MetricCard[] = [
     label: "Previsibilidade industrial",
     description:
       "Peças fabricadas sob medida, desperdício mínimo e cronograma definido. O orçamento que se apresenta é o que se cumpre.",
+    image: "/images/Others/comercial_steel_frame.webp",
+    imageAlt: "Projeto comercial Steel Frame finalizado",
   },
 ];
 

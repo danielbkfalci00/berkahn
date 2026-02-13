@@ -108,20 +108,20 @@ export default function ComercialIndustrialPage() {
       {/* ================================================================ */}
       {/* 5. Métricas & ROI */}
       {/* ================================================================ */}
-      <section className="py-xl bg-black">
-        <div className="container">
+      <section className="bg-black">
+        <div className="container pt-xl pb-8">
           <RevealOnScroll>
             <p className="label-text text-white/40 mb-4">MÉTRICAS & ROI</p>
             <h2 className="headline-md text-white mb-6">
               Os números que importam para a decisão.
             </h2>
-            <p className="body-lg text-white/70 max-w-3xl mb-16">
+            <p className="body-lg text-white/70 max-w-3xl">
               Dados concretos e verificáveis sobre o desempenho do Steel Frame.
             </p>
           </RevealOnScroll>
-
-          <MetricsCards data={COMERCIAL_METRICS} />
         </div>
+
+        <MetricsCards data={COMERCIAL_METRICS} />
       </section>
 
       {/* ================================================================ */}
