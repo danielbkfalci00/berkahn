@@ -46,7 +46,7 @@ const PROCESS_STEPS: ProcessStep[] = [
   {
     title: "Entrega",
     description:
-      "Inspeção final, documentação técnica completa e entrega no prazo. Espaço pronto para a operação começar.",
+      "Inspeção final, documentação técnica completa e entrega no prazo combinado. O espaço sai pronto para operar.",
     image:
       "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=800&q=80",
     imageAlt: "Edifício corporativo finalizado",

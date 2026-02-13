@@ -31,7 +31,7 @@ import {
 export const metadata = {
   title: "Residencial | Berkahn Steel Frame",
   description:
-    "Sua casa construída com a precisão que você merece. Construção nova, reforma ou ampliação com Light Steel Frame — obra mais rápida, mais limpa e sem surpresas no orçamento.",
+    "Sua casa com a precisão de um processo industrial. Construção nova, reforma ou ampliação com Light Steel Frame: obra rápida, limpa e com orçamento previsível.",
 };
 
 export default function ResidencialPage() {
@@ -42,8 +42,8 @@ export default function ResidencialPage() {
       {/* ================================================================ */}
       <ParallaxHero
         label="CONSTRUÇÃO RESIDENCIAL"
-        title="Sua casa construída com a precisão que você merece."
-        subtitle="Construção nova, reforma ou ampliação com Light Steel Frame. Sua obra mais rápida, mais limpa e sem surpresas no orçamento."
+        title="Sua casa com a precisão de um processo industrial."
+        subtitle="Construção nova, reforma ou ampliação com Light Steel Frame. Obra rápida, limpa e com orçamento fechado desde o início."
         ctaText="Fale com a Berkahn"
         ctaHref="#formulario"
         backgroundImage="/images/apresentacao/casa-laranjeiras/casa-laranjeiras-fachada-frontal.webp"
@@ -67,7 +67,7 @@ export default function ResidencialPage() {
               A Berkahn constrói, reforma e amplia.
             </h2>
             <p className="body-lg text-black-70 max-w-3xl mb-12">
-              O Light Steel Frame é o sistema construtivo que domina mais de 90% das construções residenciais nos EUA, Canadá e Japão. A Berkahn aplica essa tecnologia no Brasil com engenharia própria, cobrindo o ciclo completo da sua obra.
+              O Light Steel Frame é o sistema construtivo que domina mais de 90% das construções residenciais nos EUA, Canadá e Japão. A Berkahn trouxe essa tecnologia para o Brasil com engenharia própria e cobre o ciclo completo da sua obra.
             </p>
           </RevealOnScroll>
 
@@ -90,10 +90,10 @@ export default function ResidencialPage() {
           <RevealOnScroll>
             <p className="label-text mb-4">POR QUE STEEL FRAME</p>
             <h2 className="headline-md mb-6">
-              O que o Steel Frame muda na prática.
+              O que muda quando a estrutura é industrializada.
             </h2>
             <p className="body-lg text-black-70 max-w-3xl mb-12">
-              A diferença entre construir em Steel Frame e em alvenaria é estrutural. Ela aparece em cada etapa da obra e em cada dia que você mora no imóvel.
+              A diferença entre Steel Frame e alvenaria aparece na obra e continua depois que você mora no imóvel.
             </p>
           </RevealOnScroll>
 
@@ -141,10 +141,10 @@ export default function ResidencialPage() {
               <div>
                 <p className="label-text text-white/50 mb-4">DESIGN & PERSONALIZAÇÃO</p>
                 <h2 className="headline-md text-white mb-8">
-                  Cada projeto é único. E o seu também será.
+                  Projeto sob medida, do traço ao acabamento.
                 </h2>
                 <p className="body-lg text-white/70">
-                  A Berkahn trabalha com arquitetas parceiras que atuam em diferentes linguagens de design. O Steel Frame permite personalização total sem comprometer prazos ou previsibilidade de custo.
+                  A Berkahn trabalha com arquitetas parceiras em diferentes linguagens de design. O Steel Frame dá liberdade criativa ao projeto mantendo prazo e orçamento sob controle.
                 </p>
               </div>
             </RevealOnScroll>
@@ -160,10 +160,10 @@ export default function ResidencialPage() {
           <RevealOnScroll>
             <p className="label-text mb-4">O QUE VOCÊ PRECISA SABER</p>
             <h2 className="headline-md mb-6">
-              Transparência antes de tudo.
+              O que vale saber antes de decidir.
             </h2>
             <p className="body-lg text-black-70 mb-12">
-              Nenhum sistema é perfeito para todas as situações. O Steel Frame tem vantagens claras, mas também exige atenção em pontos específicos.
+              O Steel Frame tem vantagens claras e pontos que pedem atenção. Preferimos que você saiba de tudo antes de fechar.
             </p>
           </RevealOnScroll>
 
@@ -232,7 +232,7 @@ export default function ResidencialPage() {
                     </div>
                     <div>
                       <p className="font-heading font-semibold mb-1">Obra limpa e rápida</p>
-                      <p className="body-md text-black-70">Sem poeira, sem entulho. Morador pode ficar no imóvel.</p>
+                      <p className="body-md text-black-70">Canteiro limpo, o morador pode continuar no imóvel durante a obra.</p>
                     </div>
                   </div>
 
@@ -262,7 +262,7 @@ export default function ResidencialPage() {
           <RevealOnScroll>
             <p className="label-text mb-4">COMPARATIVO</p>
             <h2 className="headline-md mb-6">
-              Os números falam.
+              Steel Frame vs. alvenaria: os dados.
             </h2>
             <p className="body-lg text-black-70 max-w-3xl mb-12">
               Veja como o Steel Frame se compara à construção tradicional nos critérios que mais importam.
@@ -284,7 +284,7 @@ export default function ResidencialPage() {
               Do primeiro contato à entrega das chaves.
             </h2>
             <p className="body-lg text-black-70 max-w-3xl mb-16">
-              Cada etapa com transparência, planejamento e controle.
+              Você acompanha cada etapa, do orçamento ao acabamento.
             </p>
           </RevealOnScroll>
 
@@ -303,7 +303,7 @@ export default function ResidencialPage() {
               Fale com a Berkahn sobre o seu projeto.
             </h2>
             <p className="body-lg text-black-70 mb-12">
-              Conte o que você tem em mente. A gente responde com uma análise técnica inicial e sem compromisso.
+              Descreva o que você tem em mente. Respondemos com uma análise técnica inicial, sem compromisso.
             </p>
           </RevealOnScroll>
 
@@ -319,7 +319,7 @@ export default function ResidencialPage() {
       <CTA
         label="SOLUÇÕES CORPORATIVAS"
         title="A Berkahn também atende empresas."
-        description="Se você procura soluções em Steel Frame para projetos comerciais, industriais ou construções temporárias, conheça o que podemos fazer pelo seu negócio."
+        description="Projetos comerciais, industriais ou construções temporárias em Steel Frame. Veja como a Berkahn pode atender seu negócio."
         actionType="link"
         actionText="Conheça nossas soluções corporativas"
         actionHref="/comercial-industrial"

@@ -31,9 +31,9 @@ export const RESIDENCIAL_SERVICES = [
 // ---------------------------------------------------------------------------
 export const RESIDENCIAL_BENEFITS_SCROLL = [
   {
-    title: "Velocidade real, comprovada.",
+    title: "Obra pronta em metade do tempo.",
     description:
-      "Casa pronta em 3 a 6 meses — até 70% mais rápido que a construção convencional. Menos tempo de obra, menos custo com aluguel, mais tranquilidade.",
+      "Casa pronta em 3 a 6 meses, até 70% mais rápido que a construção convencional. Menos tempo de obra e menos custo com aluguel provisório.",
     image: "/images/Services/servicos-structure.webp",
   },
   {
@@ -43,27 +43,27 @@ export const RESIDENCIAL_BENEFITS_SCROLL = [
     image: "/images/Services/servicos-foundations.webp",
   },
   {
-    title: "Conforto que se sente.",
+    title: "Isolamento que faz diferença no dia a dia.",
     description:
       "Isolamento termoacústico multicamadas: ambientes mais frescos no verão, aquecidos no inverno e até 40% de economia em climatização.",
     image: "/images/apresentacao/casa-laranjeiras/casa-laranjeiras-living.webp",
   },
   {
-    title: "Precisão industrial.",
+    title: "Precisão milimétrica em cada parede.",
     description:
       "Tolerância de ±1 a 2mm contra ±10 a 20mm da alvenaria. Paredes alinhadas, esquadrias perfeitas, pisos nivelados sem correção.",
     image: "/images/Services/servicos-finished.webp",
   },
   {
-    title: "Durabilidade comprovada.",
+    title: "Estrutura com vida útil acima de 150 anos.",
     description:
       "Aço galvanizado com vida útil superior a 150 anos. Imune a cupins, umidade e degradação biológica.",
     image: "/images/Apresentação/estrutura-1.webp",
   },
   {
-    title: "Sustentabilidade concreta.",
+    title: "Obra a seco, aço 100% reciclável.",
     description:
-      "Aço 100% reciclável, obra a seco com economia de 99% em consumo de água. Canteiro limpo, sem entulho.",
+      "Aço 100% reciclável, obra a seco com economia de 99% no consumo de água e canteiro limpo.",
     image: "/images/apresentacao/casa-santa-cristina/casa-santa-cristina-01.webp",
   },
 ];
@@ -80,7 +80,7 @@ export const RESIDENCIAL_TRANSPARENCY_BLOCKS: ContentBlock[] = [
   {
     title: "O planejamento precisa ser detalhado.",
     description:
-      "Todas as decisões são definidas antes da fabricação. Sem improvisos, sem custos inesperados — a precisão industrial exige definições antecipadas.",
+      "Todas as decisões de projeto são definidas antes da fabricação. A precisão industrial exige isso, e o resultado é uma obra que cumpre o orçamento.",
   },
   {
     title: "A sensação tátil da parede é diferente.",
@@ -235,7 +235,7 @@ export const RESIDENCIAL_PROCESS_STEPS: ProcessStep[] = [
   {
     step: 4,
     title: "Montagem e execução",
-    description: "Estrutura montada com velocidade e limpeza. Sem entulho, sem surpresas, cronograma cumprido.",
+    description: "Estrutura montada com velocidade e limpeza. Cronograma acompanhado etapa a etapa.",
   },
   {
     step: 5,

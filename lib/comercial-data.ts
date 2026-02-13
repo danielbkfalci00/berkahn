@@ -20,7 +20,7 @@ export const SEGMENT_SOLUTIONS: SegmentSolution[] = [
     tabLabel: "Comercial",
     title: "Lojas, escritórios e showrooms",
     description:
-      "Tempo é receita. O Steel Frame reduz o prazo em 50–70%, antecipando o retorno sobre o investimento. Paredes internas reposicionáveis sem quebra permitem que o layout acompanhe a vida do negócio. Construção silenciosa e limpa — viável em shoppings e centros comerciais ocupados.",
+      "Tempo é receita. O Steel Frame reduz o prazo em 50–70%, antecipando o retorno sobre o investimento. Paredes internas reposicionáveis permitem que o layout acompanhe a vida do negócio. Construção silenciosa e limpa, viável até em shoppings e centros comerciais em operação.",
     paragraphs: [
       "Para o varejo e para operações comerciais, tempo é receita. Cada mês a mais de obra é um mês a menos de faturamento. O Steel Frame reduz o prazo de construção em 50% a 70% comparado à alvenaria tradicional, o que significa que a operação começa antes, o ponto comercial gera receita mais cedo e o retorno sobre o investimento se antecipa.",
       "Além da velocidade, o sistema oferece flexibilidade de layout que acompanha a vida do negócio. Paredes internas em LSF são reposicionáveis com intervenções mínimas, sem quebra e sem entulho. Para operações de varejo que mudam de configuração com frequência, para showrooms que se adaptam a cada temporada ou para escritórios que precisam crescer sem mudar de endereço, essa flexibilidade é um diferencial operacional real.",
@@ -34,7 +34,7 @@ export const SEGMENT_SOLUTIONS: SegmentSolution[] = [
     tabLabel: "Industrial",
     title: "Galpões, centros de distribuição e áreas técnicas",
     description:
-      "Estrutura 12x mais leve que alvenaria (60–100 kg/m²), resultando em fundações mais simples e econômicas. Modularidade que permite expansão futura sem intervenções pesadas. Sistemas híbridos com aço laminado para vãos amplos e cargas pesadas.",
+      "Estrutura que pesa entre 60 e 100 kg/m², resultando em fundações mais simples e econômicas. Modularidade que permite expansão futura com intervenções mínimas. Sistemas híbridos com aço laminado para vãos amplos e cargas pesadas.",
     paragraphs: [
       "No contexto industrial, a equação é direta: quanto mais rápido o galpão fica pronto, mais cedo ele opera. O LSF entrega essa velocidade com um benefício adicional significativo. O peso reduzido da estrutura, entre 60 e 100 kg/m² contra 1.200 a 1.500 kg/m² da construção convencional, resulta em fundações mais simples e mais econômicas.",
       "Para centros de distribuição e áreas logísticas, a modularidade do sistema é outro fator relevante. A estrutura pode ser projetada para expansão futura, permitindo que o espaço cresça junto com a operação sem a necessidade de intervenções pesadas na estrutura original. A previsibilidade do processo industrializado também importa em projetos industriais, onde atrasos no cronograma se traduzem diretamente em prejuízo operacional.",
@@ -48,7 +48,7 @@ export const SEGMENT_SOLUTIONS: SegmentSolution[] = [
     tabLabel: "Temporárias",
     title: "Estandes, eventos e canteiros de obra",
     description:
-      "Montagem rápida, desmontagem sem destruição, custo que faz sentido. Qualidade construtiva de edificação permanente em estrutura temporária. Perfis 100% recicláveis e reutilizáveis em outros projetos — custo-benefício superior a contêineres.",
+      "Montagem rápida, desmontagem limpa e custo compatível com o período de uso. Qualidade construtiva de edificação permanente em estrutura temporária. Perfis 100% recicláveis e reutilizáveis em novos projetos, com custo-benefício superior a contêineres.",
     paragraphs: [
       "Construções temporárias precisam de três coisas: montagem rápida, desmontagem sem destruição e custo que faça sentido para o período de uso. O Steel Frame atende às três.",
       "A montagem de estruturas em LSF é significativamente mais rápida do que em alvenaria ou em sistemas de contêiner adaptado, e o resultado final tem qualidade construtiva de edificação permanente. Isso faz diferença para escritórios de canteiro de obra que precisam funcionar por meses, para estandes de eventos que representam a imagem de uma marca ou para estruturas temporárias em operações industriais.",
@@ -131,7 +131,7 @@ export const COMERCIAL_TRANSPARENCY_BLOCKS: ContentBlock[] = [
   {
     title: "Planejamento detalhado.",
     description:
-      "O LSF exige que todas as decisões de projeto sejam tomadas antes da fabricação dos componentes. Cada definição entra no projeto antes de qualquer peça ser produzida. Para empresas acostumadas ao planejamento rigoroso, isso é natural. Para projetos onde o escopo muda constantemente, pode exigir uma disciplina de definição que resulta em obras sem estouros de orçamento e prazo.",
+      "O LSF exige que todas as decisões de projeto sejam tomadas antes da fabricação dos componentes. Cada definição entra no projeto antes de qualquer peça ser produzida. Para empresas acostumadas ao planejamento rigoroso, isso é natural. Para projetos onde o escopo muda constantemente, pode exigir uma disciplina de definição maior, que no final garante obra dentro do orçamento e do prazo.",
   },
   {
     title: "Custo inicial de materiais.",
@@ -163,9 +163,9 @@ export const COMERCIAL_METRICS: MetricCard[] = [
     suffix: "%",
     label: "50% a 70% mais rápido",
     description:
-      "Comparado à construção convencional. Cada mês antecipado é receita que começa antes.",
+      "Comparado à construção convencional. Cada mês antecipado é um mês a mais de operação.",
     image: "/images/galeria/projeto-30.webp",
-    imageAlt: "Estrutura Steel Frame em montagem — vista interna das treliças",
+    imageAlt: "Estrutura Steel Frame em montagem, vista interna das treliças",
   },
   {
     value: 5,

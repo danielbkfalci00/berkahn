@@ -19,7 +19,7 @@ import {
 export const metadata = {
   title: "Comercial & Industrial | Berkahn Steel Frame",
   description:
-    "Construção inteligente para negócios que precisam de resultado. Lojas, galpões, escritórios, construções temporárias — projetos com Steel Frame entregues mais rápido, com mais controle e menos impacto ambiental.",
+    "Construção corporativa com engenharia industrial e prazo real. Lojas, galpões, escritórios e construções temporárias com Steel Frame: entrega rápida, controle total e baixo impacto ambiental.",
 };
 
 export default function ComercialIndustrialPage() {
@@ -28,8 +28,8 @@ export default function ComercialIndustrialPage() {
       {/* 1. Hero Section */}
       <ParallaxHero
         label="CONSTRUÇÃO CORPORATIVA"
-        title="Construção inteligente para negócios que precisam de resultado."
-        subtitle="Lojas, galpões, escritórios, construções temporárias. A Berkahn projeta e executa com Steel Frame para entregar mais rápido, com mais controle e menos impacto ambiental."
+        title="Construção corporativa com engenharia industrial e prazo real."
+        subtitle="Lojas, galpões, escritórios e construções temporárias. A Berkahn projeta e executa com Steel Frame: prazo reduzido, custo previsível e baixo impacto ambiental."
         ctaText="Solicite uma consultoria"
         ctaHref="#formulario"
         backgroundImage="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1920&q=80"
@@ -49,11 +49,11 @@ export default function ComercialIndustrialPage() {
           <RevealOnScroll>
             <p className="label-text mb-4">SOLUÇÕES POR SEGMENTO</p>
             <h2 className="headline-md mb-6">
-              Cada negócio tem uma demanda. A engenharia se adapta.
+              Soluções técnicas para cada tipo de operação.
             </h2>
             <p className="body-lg text-black-70 max-w-3xl mb-16">
               Steel Frame aplicado a projetos comerciais, industriais e
-              temporários — com sistemas híbridos quando o projeto exige.
+              temporários, com sistemas híbridos quando a demanda estrutural exige.
             </p>
           </RevealOnScroll>
         </div>
@@ -77,12 +77,12 @@ export default function ComercialIndustrialPage() {
           <RevealOnScroll>
             <p className="label-text text-white/40 mb-4">ESG & SUSTENTABILIDADE</p>
             <h2 className="headline-md text-white mb-6">
-              Impacto ambiental, social e de governança — documentado e
-              mensurável.
+              Impacto ambiental, social e de governança documentado em
+              cada obra.
             </h2>
             <p className="body-lg text-white/70 max-w-3xl mb-16">
-              O Steel Frame se alinha naturalmente às três dimensões do ESG.
-              Não é discurso — são dados técnicos do processo construtivo.
+              O Steel Frame se alinha às três dimensões do ESG com dados
+              técnicos mensuráveis do processo construtivo.
             </p>
           </RevealOnScroll>
 
@@ -98,7 +98,7 @@ export default function ComercialIndustrialPage() {
           <RevealOnScroll>
             <p className="label-text mb-4">O QUE VOCÊ PRECISA SABER</p>
             <h2 className="headline-md mb-6">
-              Transparência para decisões informadas.
+              O que vale considerar antes de decidir.
             </h2>
             <p className="body-lg text-black-70 max-w-4xl mb-16">
               O Steel Frame é uma tecnologia comprovada e cada vez mais adotada,
@@ -121,10 +121,10 @@ export default function ComercialIndustrialPage() {
           <RevealOnScroll>
             <p className="label-text text-white/40 mb-4">MÉTRICAS & ROI</p>
             <h2 className="headline-md text-white mb-6">
-              Os números que importam para a decisão.
+              Desempenho do Steel Frame em dados.
             </h2>
             <p className="body-lg text-white/70 max-w-3xl">
-              Dados concretos e verificáveis sobre o desempenho do Steel Frame.
+              Indicadores reais de prazo, custo e eficiência energética.
             </p>
           </RevealOnScroll>
         </div>
@@ -143,8 +143,8 @@ export default function ComercialIndustrialPage() {
               Do briefing à operação.
             </h2>
             <p className="body-lg text-black-70 max-w-3xl mb-16">
-              Cada etapa com clareza, previsibilidade e controle. Você sabe
-              exatamente onde está e o que vem a seguir.
+              Você acompanha cada etapa e sabe exatamente onde o projeto
+              está e o que vem a seguir.
             </p>
           </RevealOnScroll>
 
@@ -199,8 +199,8 @@ export default function ComercialIndustrialPage() {
       {/* 8. CTA de redirecionamento */}
       <CTA
         label="PROJETO RESIDENCIAL?"
-        title="Construindo para a sua família?"
-        description="Se o seu projeto é residencial, construção nova, reforma ou ampliação, conheça o que a Berkahn pode fazer pela sua casa."
+        title="Seu projeto é residencial?"
+        description="Construção nova, reforma ou ampliação. Veja como a Berkahn trabalha em projetos para casas."
         actionType="link"
         actionText="Conheça nossas soluções residenciais"
         actionHref="/residencial"

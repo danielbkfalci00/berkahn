@@ -50,7 +50,7 @@ const ESG_METRICS: ESGMetric[] = [
   {
     icon: ShieldCheck,
     value: "Zero entulho",
-    label: "Canteiro limpo, silencioso e seguro — sem poeira, sem riscos ocupacionais",
+    label: "Canteiro limpo, silencioso e seguro para trabalhadores e vizinhança",
     pillar: "S",
   },
   {
