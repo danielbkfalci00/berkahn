@@ -59,14 +59,14 @@ export function BenefitsMorphingGrid({ benefits }: BenefitsMorphingGridProps) {
           <MorphingDialogContainer>
             <MorphingDialogContent
               style={{ borderRadius: "24px" }}
-              className="pointer-events-auto relative flex h-auto w-full flex-col overflow-hidden border border-black-10 bg-white sm:w-[500px]"
+              className="pointer-events-auto relative flex h-auto w-[calc(100%-2rem)] max-h-[80vh] flex-col overflow-hidden border border-black-10 bg-white sm:w-[420px]"
             >
               <MorphingDialogImage
                 src={benefit.image}
                 alt={benefit.title}
-                className="h-full w-full"
+                className="h-48 w-full shrink-0 object-cover"
               />
-              <div className="p-6">
+              <div className="overflow-y-auto p-6">
                 <MorphingDialogTitle className="font-heading font-semibold text-black text-xl">
                   {benefit.title}
                 </MorphingDialogTitle>
