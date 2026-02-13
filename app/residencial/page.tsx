@@ -7,6 +7,7 @@ import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
 import { ComparisonBars } from "@/components/residencial/ComparisonBars";
 import { ProcessTimeline } from "@/components/sections/ProcessTimeline";
 import { ResidencialContactForm } from "@/components/residencial/ResidencialContactForm";
+import { BrazilMapBeam } from "@/components/comercial/BrazilMapBeam";
 import { DomeGallery } from "@/components/presentation/DomeGallery";
 import { FocusCardsSection } from "@/components/residencial/FocusCardsSection";
 import { BenefitsMorphingGrid } from "@/components/residencial/BenefitsMorphingGrid";
@@ -296,20 +297,42 @@ export default function ResidencialPage() {
       {/* 10. Formulário de contato */}
       {/* ================================================================ */}
       <section id="formulario" className="py-xl bg-black-5">
-        <div className="container max-w-3xl">
-          <RevealOnScroll>
-            <p className="label-text mb-4">FALE CONOSCO</p>
-            <h2 className="headline-md mb-4">
-              Fale com a Berkahn sobre o seu projeto.
-            </h2>
-            <p className="body-lg text-black-70 mb-12">
-              Descreva o que você tem em mente. Respondemos com uma análise técnica inicial, sem compromisso.
-            </p>
-          </RevealOnScroll>
+        <div className="container max-w-6xl">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
+            {/* Left column: Info + Map */}
+            <div>
+              <RevealOnScroll>
+                <p className="label-text mb-4">FALE CONOSCO</p>
+                <h2 className="headline-md mb-6">
+                  Fale com a Berkahn sobre o seu projeto.
+                </h2>
+                <p className="body-lg text-black-70 mb-8">
+                  Descreva o que você tem em mente. Respondemos com uma análise técnica inicial, sem compromisso.
+                </p>
+              </RevealOnScroll>
 
-          <RevealOnScroll delay={0.2}>
-            <ResidencialContactForm />
-          </RevealOnScroll>
+              {/* Map (desktop only) */}
+              <RevealOnScroll delay={0.2}>
+                <div className="hidden lg:block">
+                  <BrazilMapBeam />
+                </div>
+              </RevealOnScroll>
+            </div>
+
+            {/* Right column: Form card */}
+            <RevealOnScroll delay={0.15}>
+              <div className="bg-white rounded-2xl p-6 md:p-8 shadow-input">
+                <ResidencialContactForm />
+              </div>
+            </RevealOnScroll>
+          </div>
+
+          {/* Map (mobile only — below form) */}
+          <div className="lg:hidden mt-12">
+            <RevealOnScroll>
+              <BrazilMapBeam />
+            </RevealOnScroll>
+          </div>
         </div>
       </section>
 
