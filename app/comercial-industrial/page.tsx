@@ -218,20 +218,7 @@ export default function ComercialIndustrialPage() {
       />
 
       {/* 9. Galeria 3D — Projetos Residenciais */}
-      <section className="dark py-xl bg-black overflow-hidden">
-        <div className="container mb-12">
-          <RevealOnScroll>
-            <p className="label-text text-white/40 mb-4">PORTFÓLIO RESIDENCIAL</p>
-            <h2 className="headline-md text-white mb-6">
-              Projetos que falam por si.
-            </h2>
-            <p className="body-lg text-white/70 max-w-3xl">
-              Casas, chalés e ampliações executadas com Steel Frame —
-              do projeto à entrega, cada detalhe planejado.
-            </p>
-          </RevealOnScroll>
-        </div>
-
+      <section className="bg-white overflow-hidden">
         <ThreeDMarquee images={RESIDENTIAL_GALLERY_IMAGES} />
       </section>
     </>

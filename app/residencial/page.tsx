@@ -1,15 +1,18 @@
 import Image from "next/image";
 import { ParallaxHero } from "@/components/sections/ParallaxHero";
-import { Partners } from "@/components/sections/Partners";
+import { PartnersFlowingMenu } from "@/components/residencial/PartnersFlowingMenu";
 import { CTA } from "@/components/sections/CTA";
 import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
-import { ContentBlocksGrid } from "@/components/sections/ContentBlocksGrid";
 import { ComparisonTable } from "@/components/lsf/ComparisonTable";
 import { ProcessTimeline } from "@/components/sections/ProcessTimeline";
 import { ResidencialContactForm } from "@/components/residencial/ResidencialContactForm";
 import { DomeGallery } from "@/components/presentation/DomeGallery";
+import { FocusCardsSection } from "@/components/residencial/FocusCardsSection";
+import { BenefitsScrollSection } from "@/components/residencial/BenefitsScrollSection";
+import { TransparencyAccordion } from "@/components/residencial/TransparencyAccordion";
 import {
-  RESIDENCIAL_BENEFITS,
+  RESIDENCIAL_SERVICES,
+  RESIDENCIAL_BENEFITS_SCROLL,
   RESIDENCIAL_TRANSPARENCY_BLOCKS,
   RESIDENCIAL_COMPARISON_DATA,
   RESIDENCIAL_PROCESS_STEPS,
@@ -26,68 +29,46 @@ export const metadata = {
 export default function ResidencialPage() {
   return (
     <>
+      {/* ================================================================ */}
       {/* 1. Hero Section */}
+      {/* ================================================================ */}
       <ParallaxHero
         label="CONSTRUÇÃO RESIDENCIAL"
         title="Sua casa construída com a precisão que você merece."
         subtitle="Construção nova, reforma ou ampliação com Light Steel Frame. Sua obra mais rápida, mais limpa e sem surpresas no orçamento."
         ctaText="Fale com a Berkahn"
         ctaHref="#formulario"
-        backgroundImage="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1920&q=80"
+        backgroundImage="/images/apresentacao/casa-laranjeiras/casa-laranjeiras-fachada-frontal.webp"
       />
 
       {/* ================================================================ */}
-      {/* 2. O que fazemos por você */}
+      {/* 2. O que fazemos — Focus Cards */}
       {/* ================================================================ */}
       <section className="pt-xl pb-lg">
         <div className="container">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-            {/* Text Column */}
-            <RevealOnScroll>
-              <div>
-                <p className="label-text mb-4">O QUE FAZEMOS POR VOCÊ</p>
-                <h2 className="headline-md mb-8">
-                  A Berkahn constrói, reforma e amplia.
-                </h2>
+          <RevealOnScroll>
+            <p className="label-text mb-4">O QUE FAZEMOS POR VOCÊ</p>
+            <h2 className="headline-md mb-6">
+              A Berkahn constrói, reforma e amplia.
+            </h2>
+            <p className="body-lg text-black-70 max-w-3xl mb-12">
+              O Light Steel Frame é o sistema construtivo que domina mais de 90% das construções residenciais nos EUA, Canadá e Japão. A Berkahn aplica essa tecnologia no Brasil com engenharia própria, cobrindo o ciclo completo da sua obra.
+            </p>
+          </RevealOnScroll>
 
-                <div className="space-y-5">
-                  <p className="body-lg text-black-70">
-                    O Light Steel Frame (LSF) é um sistema construtivo industrializado que utiliza perfis de aço galvanizado como estrutura, fechados externamente com placas cimentícias e internamente com gesso acartonado. É o mesmo sistema que domina mais de 90% das construções residenciais nos Estados Unidos, Canadá e Japão, e que vem crescendo de forma acelerada no Brasil pela superioridade técnica comprovada em relação à alvenaria tradicional.
-                  </p>
-                  <p className="body-lg text-black-70">
-                    A Berkahn trabalha com o LSF como tecnologia primária, mas também atua com sistemas híbridos que combinam Steel Frame com concreto armado e aço laminado. Isso significa que o projeto se beneficia da melhor solução técnica para cada situação, ampliando as possibilidades arquitetônicas sem comprometer eficiência.
-                  </p>
-                  <p className="body-lg text-black-70">
-                    Nosso escopo cobre o ciclo completo. Construímos casas do zero, executamos reformas estruturais e realizamos ampliações, inclusive verticais, em imóveis já existentes. Se o seu projeto é construir algo novo ou transformar algo que já existe, a engenharia por trás é a mesma: industrializada, previsível e com controle milimétrico.
-                  </p>
-                </div>
-              </div>
-            </RevealOnScroll>
-
-            {/* Image Column */}
-            <RevealOnScroll delay={0.2}>
-              <div className="relative h-[500px] overflow-hidden">
-                <Image
-                  src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80"
-                  alt="Residência de alto padrão em Steel Frame"
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 1024px) 100vw, 50vw"
-                />
-              </div>
-            </RevealOnScroll>
-          </div>
+          <RevealOnScroll delay={0.2}>
+            <FocusCardsSection cards={RESIDENCIAL_SERVICES} />
+          </RevealOnScroll>
         </div>
       </section>
 
-      {/* Partners sub-block */}
-      <Partners
-        label="PARCERIAS QUE SUSTENTAM A QUALIDADE"
-        title="Marcas que Garantem o Padrão Berkahn"
-      />
+      {/* ================================================================ */}
+      {/* 3. Partners */}
+      {/* ================================================================ */}
+      <PartnersFlowingMenu />
 
       {/* ================================================================ */}
-      {/* 3. Por que Steel Frame para sua casa */}
+      {/* 4. Por que Steel Frame — Sticky Scroll Reveal */}
       {/* ================================================================ */}
       <section className="py-xl">
         <div className="container">
@@ -96,26 +77,25 @@ export default function ResidencialPage() {
             <h2 className="headline-md mb-6">
               O que o Steel Frame muda na prática.
             </h2>
-            <p className="body-lg text-black-70 max-w-4xl mb-16">
-              A diferença entre construir em Steel Frame e construir em alvenaria tradicional é estrutural. Ela aparece em cada etapa da obra e em cada dia que você mora no imóvel depois que ela termina.
+            <p className="body-lg text-black-70 max-w-3xl mb-12">
+              A diferença entre construir em Steel Frame e em alvenaria é estrutural. Ela aparece em cada etapa da obra e em cada dia que você mora no imóvel.
             </p>
           </RevealOnScroll>
 
-          <ContentBlocksGrid data={RESIDENCIAL_BENEFITS} columns={3} />
+          <BenefitsScrollSection benefits={RESIDENCIAL_BENEFITS_SCROLL} />
 
-          {/* Sub-block: Versatilidade arquitetônica */}
+          {/* Sub-block: Versatilidade arquitetônica + DomeGallery */}
           <div className="mt-16 pt-16 border-t border-black-10">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               <RevealOnScroll>
                 <div>
                   <h3 className="headline-sm mb-6">Versatilidade arquitetônica</h3>
                   <p className="body-lg text-black-70 leading-relaxed">
-                    Uma das percepções equivocadas sobre o Steel Frame é que ele limita o design. Na realidade, o sistema permite desde linhas retas e minimalistas até fachadas com curvas e formas complexas, utilizando placas cimentícias moldáveis. Combinado com outros materiais em soluções híbridas, como madeira, concreto aparente ou vidro, o LSF se adapta a praticamente qualquer linguagem arquitetônica.
+                    O Steel Frame permite desde linhas minimalistas até fachadas com curvas complexas. Combinado com madeira, concreto aparente ou vidro, adapta-se a qualquer linguagem arquitetônica.
                   </p>
                 </div>
               </RevealOnScroll>
 
-              {/* DomeGallery — estilos arquitetônicos */}
               <div className="h-[400px] md:h-[500px]">
                 <DomeGallery
                   images={GALLERY_IMAGES_STYLES}
@@ -132,7 +112,7 @@ export default function ResidencialPage() {
       </section>
 
       {/* ================================================================ */}
-      {/* 4. Design e personalização */}
+      {/* 5. Design & Personalização — DomeGallery (bg preto) */}
       {/* ================================================================ */}
       <section className="py-xl bg-black">
         <div className="container">
@@ -149,21 +129,109 @@ export default function ResidencialPage() {
               />
             </div>
 
-            {/* Text Column (right on desktop) */}
+            {/* Text Column */}
             <RevealOnScroll delay={0.2} className="order-1 lg:order-2">
               <div>
                 <p className="label-text text-white/50 mb-4">DESIGN & PERSONALIZAÇÃO</p>
                 <h2 className="headline-md text-white mb-8">
                   Cada projeto é único. E o seu também será.
                 </h2>
+                <p className="body-lg text-white/70">
+                  A Berkahn trabalha com arquitetas parceiras que atuam em diferentes linguagens de design. O Steel Frame permite personalização total sem comprometer prazos ou previsibilidade de custo.
+                </p>
+              </div>
+            </RevealOnScroll>
+          </div>
+        </div>
+      </section>
 
-                <div className="space-y-5">
-                  <p className="body-lg text-white/70">
-                    A Berkahn mantém parcerias com arquitetas qualificadas que atuam em diferentes linguagens de design, do contemporâneo ao clássico, do minimalista ao integrado com natureza. Isso garante que o projeto da sua casa seja pensado para a forma como você e sua família vivem, e que saia de um processo criativo real, com profissionais que entendem tanto de estética quanto de engenharia.
-                  </p>
-                  <p className="body-lg text-white/70">
-                    A personalização começa no projeto estrutural, passa pelas decisões de layout, considera a orientação solar do terreno, o aproveitamento de ventilação natural e chega até a escolha dos acabamentos internos e externos. O Steel Frame permite esse nível de personalização sem comprometer prazos ou previsibilidade de custo, porque o processo industrializado absorve a complexidade que na alvenaria se transformaria em retrabalho.
-                  </p>
+      {/* ================================================================ */}
+      {/* 6. Transparência — Accordion */}
+      {/* ================================================================ */}
+      <section className="py-xl bg-black-5">
+        <div className="container max-w-4xl">
+          <RevealOnScroll>
+            <p className="label-text mb-4">O QUE VOCÊ PRECISA SABER</p>
+            <h2 className="headline-md mb-6">
+              Transparência antes de tudo.
+            </h2>
+            <p className="body-lg text-black-70 mb-12">
+              Nenhum sistema é perfeito para todas as situações. O Steel Frame tem vantagens claras, mas também exige atenção em pontos específicos.
+            </p>
+          </RevealOnScroll>
+
+          <RevealOnScroll delay={0.2}>
+            <TransparencyAccordion items={RESIDENCIAL_TRANSPARENCY_BLOCKS} />
+          </RevealOnScroll>
+        </div>
+      </section>
+
+      {/* ================================================================ */}
+      {/* 7. Reformas & Ampliações — Imagem + Texto */}
+      {/* ================================================================ */}
+      <section className="py-xl">
+        <div className="container">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+            {/* Image */}
+            <RevealOnScroll>
+              <div className="relative h-[400px] md:h-[500px] overflow-hidden rounded-lg">
+                <Image
+                  src="/images/Apresentação/estrutura-1.webp"
+                  alt="Estrutura Steel Frame em ampliação residencial"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                />
+              </div>
+            </RevealOnScroll>
+
+            {/* Text */}
+            <RevealOnScroll delay={0.2}>
+              <div>
+                <p className="label-text mb-4">REFORMAS & AMPLIAÇÕES</p>
+                <h2 className="headline-md mb-6">
+                  Reformar sem o caos de uma obra tradicional.
+                </h2>
+                <p className="body-lg text-black-70 mb-8">
+                  O LSF pesa entre 60 e 100 kg/m², contra 1.200 a 1.500 kg/m² da alvenaria. Isso permite ampliar sobre lajes existentes sem reforço de fundação na maioria dos casos.
+                </p>
+
+                <div className="space-y-4">
+                  <div className="flex items-start gap-4">
+                    <div className="w-10 h-10 rounded-full bg-black flex items-center justify-center shrink-0 mt-0.5">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="white" className="w-5 h-5">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" />
+                      </svg>
+                    </div>
+                    <div>
+                      <p className="font-heading font-semibold mb-1">Peso até 15x menor</p>
+                      <p className="body-md text-black-70">Ampliações verticais sem reforço estrutural.</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-4">
+                    <div className="w-10 h-10 rounded-full bg-black flex items-center justify-center shrink-0 mt-0.5">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="white" className="w-5 h-5">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.455 2.456L21.75 6l-1.036.259a3.375 3.375 0 0 0-2.455 2.456ZM16.894 20.567 16.5 21.75l-.394-1.183a2.25 2.25 0 0 0-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 0 0 1.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 0 0 1.423 1.423l1.183.394-1.183.394a2.25 2.25 0 0 0-1.423 1.423Z" />
+                      </svg>
+                    </div>
+                    <div>
+                      <p className="font-heading font-semibold mb-1">Obra limpa e rápida</p>
+                      <p className="body-md text-black-70">Sem poeira, sem entulho. Morador pode ficar no imóvel.</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-4">
+                    <div className="w-10 h-10 rounded-full bg-black flex items-center justify-center shrink-0 mt-0.5">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="white" className="w-5 h-5">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                      </svg>
+                    </div>
+                    <div>
+                      <p className="font-heading font-semibold mb-1">Prazo definido</p>
+                      <p className="body-md text-black-70">Mesmo nível de planejamento de construções novas.</p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </RevealOnScroll>
@@ -172,54 +240,7 @@ export default function ResidencialPage() {
       </section>
 
       {/* ================================================================ */}
-      {/* 5. Transparência antes de tudo */}
-      {/* ================================================================ */}
-      <section className="py-xl bg-black-5">
-        <div className="container">
-          <RevealOnScroll>
-            <p className="label-text mb-4">O QUE VOCÊ PRECISA SABER</p>
-            <h2 className="headline-md mb-6">
-              Transparência antes de tudo.
-            </h2>
-            <p className="body-lg text-black-70 max-w-4xl mb-16">
-              Nenhum sistema construtivo é perfeito para todas as situações. O Steel Frame tem vantagens claras e documentadas, mas também tem características que exigem atenção e planejamento. A Berkahn acredita que você toma decisões melhores quando tem todas as informações. Por isso, aqui vai o que você precisa saber.
-            </p>
-          </RevealOnScroll>
-
-          <ContentBlocksGrid data={RESIDENCIAL_TRANSPARENCY_BLOCKS} columns={2} />
-        </div>
-      </section>
-
-      {/* ================================================================ */}
-      {/* 6. Reformas e Ampliações */}
-      {/* ================================================================ */}
-      <section className="py-xl">
-        <div className="container max-w-4xl">
-          <RevealOnScroll>
-            <p className="label-text mb-4">REFORMAS & AMPLIAÇÕES</p>
-            <h2 className="headline-md mb-8">
-              Reformar e ampliar sem o caos de uma obra tradicional.
-            </h2>
-          </RevealOnScroll>
-
-          <RevealOnScroll delay={0.1}>
-            <div className="space-y-6">
-              <p className="body-lg text-black-70 leading-relaxed">
-                Uma das aplicações mais inteligentes do Steel Frame é em reformas e ampliações de imóveis existentes. E o motivo é simples: o peso. A estrutura do LSF pesa entre 60 e 100 kg/m², comparada aos 1.200 a 1.500 kg/m² da alvenaria convencional. Isso significa que uma ampliação em Steel Frame pode ser construída sobre uma laje ou estrutura existente sem necessidade de reforço de fundação na maioria dos casos. Para quem quer adicionar um andar, expandir lateralmente ou transformar um espaço interno, essa diferença de peso é a diferença entre uma obra simples e uma obra de grande intervenção.
-              </p>
-              <p className="body-lg text-black-70 leading-relaxed">
-                Além disso, a construção a seco elimina os problemas clássicos de reformas em alvenaria: poeira excessiva, quebra de paredes, entulho, meses de obra e a impossibilidade de usar o imóvel durante o processo. Com LSF, a montagem é limpa e rápida, e em muitos casos o morador pode continuar no imóvel durante parte significativa da obra.
-              </p>
-              <p className="body-lg text-black-70 leading-relaxed">
-                A Berkahn executa reformas e ampliações residenciais com o mesmo nível de planejamento e precisão que aplica em construções novas. O processo começa com uma avaliação técnica da estrutura existente, seguida pelo projeto de integração entre o novo e o existente, e termina com a execução industrializada com prazo definido.
-              </p>
-            </div>
-          </RevealOnScroll>
-        </div>
-      </section>
-
-      {/* ================================================================ */}
-      {/* 7. Comparativo LSF vs. Tradicional */}
+      {/* 8. Comparativo LSF vs. Tradicional */}
       {/* ================================================================ */}
       <section className="py-xl bg-black-5">
         <div className="container max-w-5xl">
@@ -228,8 +249,8 @@ export default function ResidencialPage() {
             <h2 className="headline-md mb-6">
               Os números falam.
             </h2>
-            <p className="body-lg text-black-70 max-w-4xl mb-12">
-              Veja como o Steel Frame se compara à construção tradicional nos critérios que mais importam para quem vai construir, reformar ou ampliar.
+            <p className="body-lg text-black-70 max-w-3xl mb-12">
+              Veja como o Steel Frame se compara à construção tradicional nos critérios que mais importam.
             </p>
           </RevealOnScroll>
 
@@ -240,7 +261,7 @@ export default function ResidencialPage() {
       </section>
 
       {/* ================================================================ */}
-      {/* 8. Como funciona o processo */}
+      {/* 9. Como funciona o processo */}
       {/* ================================================================ */}
       <section className="py-xl">
         <div className="container">
@@ -249,9 +270,8 @@ export default function ResidencialPage() {
             <h2 className="headline-md mb-6">
               Do primeiro contato à entrega das chaves.
             </h2>
-            <p className="body-lg text-black-70 max-w-4xl mb-16">
-              Cada etapa é conduzida com transparência, planejamento e controle.
-              Você acompanha tudo, do início ao fim.
+            <p className="body-lg text-black-70 max-w-3xl mb-16">
+              Cada etapa com transparência, planejamento e controle.
             </p>
           </RevealOnScroll>
 
@@ -260,7 +280,7 @@ export default function ResidencialPage() {
       </section>
 
       {/* ================================================================ */}
-      {/* 9. Formulário de contato */}
+      {/* 10. Formulário de contato */}
       {/* ================================================================ */}
       <section id="formulario" className="py-xl bg-black-5">
         <div className="container max-w-3xl">
@@ -270,8 +290,7 @@ export default function ResidencialPage() {
               Fale com a Berkahn sobre o seu projeto.
             </h2>
             <p className="body-lg text-black-70 mb-12">
-              Conte o que você tem em mente. A gente responde com uma análise
-              técnica inicial e sem compromisso.
+              Conte o que você tem em mente. A gente responde com uma análise técnica inicial e sem compromisso.
             </p>
           </RevealOnScroll>
 
@@ -282,7 +301,7 @@ export default function ResidencialPage() {
       </section>
 
       {/* ================================================================ */}
-      {/* 10. CTA de redirecionamento */}
+      {/* 11. CTA de redirecionamento */}
       {/* ================================================================ */}
       <CTA
         label="SOLUÇÕES CORPORATIVAS"
