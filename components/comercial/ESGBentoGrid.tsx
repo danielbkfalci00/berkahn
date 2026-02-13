@@ -18,7 +18,6 @@ interface ESGMetric {
   value: string;
   label: string;
   pillar: "E" | "S" | "G";
-  span?: 2;
   numericValue?: number;
   suffix?: string;
   prefix?: string;
@@ -47,7 +46,6 @@ const ESG_METRICS: ESGMetric[] = [
     value: "LEED · BREEAM · AQUA",
     label: "Aderência nativa às principais certificações internacionais de sustentabilidade",
     pillar: "E",
-    span: 2,
   },
   {
     icon: ShieldCheck,
@@ -68,7 +66,6 @@ const ESG_METRICS: ESGMetric[] = [
     value: "40%",
     label: "Redução no consumo de climatização durante toda a vida útil do imóvel",
     pillar: "E",
-    span: 2,
     numericValue: 40,
     suffix: "%",
   },
@@ -88,7 +85,7 @@ const pillarBadgeColors: Record<string, string> = {
 
 export function ESGBentoGrid() {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
       {ESG_METRICS.map((metric, index) => {
         const Icon = metric.icon;
         return (
@@ -99,10 +96,8 @@ export function ESGBentoGrid() {
             <div
               className={cn(
                 "relative border border-white/10 p-6 sm:p-8 transition-all duration-500 hover:border-white/20 group h-full",
-                metric.span === 2 && "sm:col-span-2",
                 pillarColors[metric.pillar]
               )}
-              style={metric.span === 2 ? { gridColumn: "span 2" } : undefined}
             >
               {/* Pillar badge */}
               <span
