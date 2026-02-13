@@ -22,8 +22,6 @@ export const NAV_LINKS: NavLinks = [
     children: [
       { label: "Residencial", href: "/residencial" },
       { label: "Comercial & Industrial", href: "/comercial-industrial" },
-      { label: "Execução de Obras", href: "/servicos#execucao" },
-      // TODO: REVELAR - { label: "Projetos Prontos", href: "/servicos#projetos" },
     ],
   },
   { label: "LSF", href: "/lsf" },

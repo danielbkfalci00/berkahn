@@ -49,7 +49,10 @@ function NavItemWithChildren({ link, isActive, close, pathname }: NavItemWithChi
   // Verifica se sub-link está ativo
   const isChildActive = (childHref: string) => {
     const [childPath, childHash] = childHref.split("#");
-    return pathname === childPath && currentHash === `#${childHash}`;
+    if (childHash) {
+      return pathname === childPath && currentHash === `#${childHash}`;
+    }
+    return pathname === childPath;
   };
 
   // Handler para smooth scroll + fechar menu
@@ -108,7 +111,7 @@ function NavItemWithChildren({ link, isActive, close, pathname }: NavItemWithChi
                 className={cn(
                   "block py-2 px-4 text-base transition-all duration-300",
                   isChildActive(child.href)
-                    ? "text-black font-medium bg-black-5"
+                    ? "bg-black text-white font-medium"
                     : "text-black-50 hover:text-black hover:bg-black-5"
                 )}
               >
@@ -125,6 +128,11 @@ function NavItemWithChildren({ link, isActive, close, pathname }: NavItemWithChi
 export function Sidebar() {
   const { isOpen, close } = useMenu();
   const pathname = usePathname();
+
+  // Auto-expand accordion when on a child page
+  const defaultAccordionValue = NAV_LINKS.find(
+    (link) => hasChildren(link) && link.children?.some((c) => pathname === c.href.split("#")[0])
+  )?.href;
 
   return (
     <AnimatePresence>
@@ -165,7 +173,7 @@ export function Sidebar() {
 
               {/* Navigation */}
               <nav className="flex-1">
-                <Accordion type="single" collapsible className="w-full">
+                <Accordion type="single" collapsible defaultValue={defaultAccordionValue} className="w-full">
                   <ul className="space-y-2">
                     {NAV_LINKS.map((link, index) => {
                       const isActive = pathname === link.href;
