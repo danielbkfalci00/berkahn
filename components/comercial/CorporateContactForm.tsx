@@ -305,7 +305,7 @@ export function CorporateContactForm() {
               <SelectTrigger className={inputClasses}>
                 <SelectValue placeholder="Selecione o tipo" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="bg-white border border-black-10 shadow-luxury-md">
                 {COMERCIAL_FORM_PROJECT_TYPES.map((type) => (
                   <SelectItem key={type.value} value={type.value}>
                     {type.label}

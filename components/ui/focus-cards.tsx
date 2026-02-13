@@ -33,8 +33,10 @@ export const Card = React.memo(
       />
       <div
         className={cn(
-          "absolute inset-0 bg-black/50 flex items-end py-8 px-6 transition-opacity duration-300",
-          hovered === index ? "opacity-100" : "opacity-0"
+          "absolute inset-0 flex items-end py-8 px-6 transition-opacity duration-300",
+          hovered === index
+            ? "opacity-100 bg-black/50"
+            : "opacity-100 bg-gradient-to-t from-black/60 to-transparent md:opacity-0"
         )}
       >
         <div className="text-xl md:text-2xl font-heading font-semibold text-white">

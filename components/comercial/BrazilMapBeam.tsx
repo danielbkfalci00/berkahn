@@ -5,18 +5,18 @@ import { motion } from "motion/react";
 
 export function BrazilMapBeam() {
   // São Paulo position on the map (percentage-based)
-  const spLeft = "68%";
-  const spTop = "70%";
+  const spLeft = "62%";
+  const spTop = "73%";
 
   return (
-    <div className="relative w-full max-w-sm mx-auto select-none">
+    <div className="relative w-full max-w-md mx-auto select-none">
       {/* Map image */}
       <Image
         src="/images/mapa-brazil.png"
         alt="Mapa do Brasil — sede em São Paulo"
         width={400}
         height={400}
-        className="w-full h-auto opacity-30"
+        className="w-full h-auto opacity-50"
         draggable={false}
       />
 

@@ -165,23 +165,6 @@ export default function ComercialIndustrialPage() {
                 </p>
               </RevealOnScroll>
 
-              <RevealOnScroll delay={0.1}>
-                <div className="flex flex-col gap-3 mb-12">
-                  <a
-                    href="mailto:contato@berkahn.com.br"
-                    className="text-sm text-black-50 hover:text-black transition-colors"
-                  >
-                    contato@berkahn.com.br
-                  </a>
-                  <a
-                    href="tel:+5511999999999"
-                    className="text-sm text-black-50 hover:text-black transition-colors"
-                  >
-                    +55 (11) 99999-9999
-                  </a>
-                </div>
-              </RevealOnScroll>
-
               {/* Map (desktop only) */}
               <RevealOnScroll delay={0.2}>
                 <div className="hidden lg:block">
