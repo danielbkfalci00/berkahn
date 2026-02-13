@@ -162,6 +162,24 @@ export const GALLERY_IMAGES_STYLES: GalleryImage[] = [
   { src: "/images/galeria/projeto-25.webp", alt: "Interior minimalista com amplas janelas" },
 ];
 
+// ---------------------------------------------------------------------------
+// Masonry Grid — "Versatilidade arquitetônica" section
+// ---------------------------------------------------------------------------
+export const GALLERY_MASONRY_ITEMS = [
+  { id: "m1",  img: "/images/galeria/projeto-01.webp", alt: "Residência moderna com fachada minimalista", height: 400 },
+  { id: "m2",  img: "/images/galeria/projeto-03.webp", alt: "Casa contemporânea com linhas limpas", height: 300 },
+  { id: "m3",  img: "/images/galeria/projeto-06.webp", alt: "Projeto residencial com jardim integrado", height: 500 },
+  { id: "m4",  img: "/images/galeria/projeto-08.webp", alt: "Fachada com revestimento em madeira", height: 350 },
+  { id: "m5",  img: "/images/galeria/projeto-10.webp", alt: "Sobrado contemporâneo com linhas retas", height: 450 },
+  { id: "m6",  img: "/images/galeria/projeto-14.webp", alt: "Casa térrea com varanda ampla", height: 280 },
+  { id: "m7",  img: "/images/galeria/projeto-18.webp", alt: "Residência com pé-direito duplo", height: 500 },
+  { id: "m8",  img: "/images/galeria/projeto-22.webp", alt: "Fachada com vidro e concreto aparente", height: 320 },
+  { id: "m9",  img: "/images/galeria/projeto-25.webp", alt: "Interior minimalista com amplas janelas", height: 400 },
+  { id: "m10", img: "/images/galeria/projeto-30.webp", alt: "Projeto com acabamento em pedra natural", height: 350 },
+  { id: "m11", img: "/images/galeria/projeto-35.webp", alt: "Residência com telhado verde", height: 450 },
+  { id: "m12", img: "/images/galeria/projeto-40.webp", alt: "Casa com fachada mista em steel frame", height: 300 },
+];
+
 export const GALLERY_IMAGES_PROJECTS: GalleryImage[] = [
   { src: "/images/apresentacao/casa-laranjeiras/casa-laranjeiras-fachada-frontal.webp", alt: "Projeto Casa Laranjeiras - Fachada frontal" },
   { src: "/images/apresentacao/casa-laranjeiras/casa-laranjeiras-piscina.webp", alt: "Projeto Casa Laranjeiras - Área de piscina" },

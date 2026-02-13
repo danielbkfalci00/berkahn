@@ -11,13 +11,14 @@ import { DomeGallery } from "@/components/presentation/DomeGallery";
 import { FocusCardsSection } from "@/components/residencial/FocusCardsSection";
 import { BenefitsScrollSection } from "@/components/residencial/BenefitsScrollSection";
 import { TransparencyAccordion } from "@/components/residencial/TransparencyAccordion";
+import { Masonry } from "@/components/ui/masonry";
 import {
   RESIDENCIAL_SERVICES,
   RESIDENCIAL_BENEFITS_SCROLL,
   RESIDENCIAL_TRANSPARENCY_BLOCKS,
   RESIDENCIAL_COMPARISON_DATA,
   RESIDENCIAL_PROCESS_STEPS,
-  GALLERY_IMAGES_STYLES,
+  GALLERY_MASONRY_ITEMS,
   GALLERY_IMAGES_PROJECTS,
   RESIDENCIAL_3D_GALLERY,
 } from "@/lib/residencial-data";
@@ -86,29 +87,21 @@ export default function ResidencialPage() {
 
           <BenefitsScrollSection benefits={RESIDENCIAL_BENEFITS_SCROLL} />
 
-          {/* Sub-block: Versatilidade arquitetônica + DomeGallery */}
+          {/* Sub-block: Versatilidade arquitetônica + Masonry Grid */}
           <div className="mt-16 pt-16 border-t border-black-10">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-              <RevealOnScroll>
-                <div>
-                  <h3 className="headline-sm mb-6">Versatilidade arquitetônica</h3>
-                  <p className="body-lg text-black-70 leading-relaxed">
-                    O Steel Frame permite desde linhas minimalistas até fachadas com curvas complexas. Combinado com madeira, concreto aparente ou vidro, adapta-se a qualquer linguagem arquitetônica.
-                  </p>
-                </div>
-              </RevealOnScroll>
+            <RevealOnScroll>
+              <h3 className="headline-sm mb-6">Versatilidade arquitetônica</h3>
+              <p className="body-lg text-black-70 leading-relaxed max-w-3xl mb-12">
+                O Steel Frame permite desde linhas minimalistas até fachadas com curvas complexas. Combinado com madeira, concreto aparente ou vidro, adapta-se a qualquer linguagem arquitetônica.
+              </p>
+            </RevealOnScroll>
 
-              <div className="h-[400px] md:h-[500px]">
-                <DomeGallery
-                  images={GALLERY_IMAGES_STYLES}
-                  fit={0.7}
-                  minRadius={400}
-                  segments={20}
-                  grayscale={false}
-                  overlayBlurColor="#ffffff"
-                />
-              </div>
-            </div>
+            <Masonry
+              items={GALLERY_MASONRY_ITEMS}
+              scaleOnHover
+              hoverScale={0.95}
+              blurToFocus
+            />
           </div>
         </div>
       </section>

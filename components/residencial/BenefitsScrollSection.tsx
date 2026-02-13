@@ -24,7 +24,7 @@ export function BenefitsScrollSection({ benefits }: BenefitsScrollSectionProps) 
           alt={benefit.title}
           fill
           className="object-cover rounded-lg"
-          sizes="384px"
+          sizes="(min-width: 1024px) 384px, (min-width: 640px) 90vw, 100vw"
         />
       </div>
     ),
