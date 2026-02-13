@@ -4,7 +4,7 @@ import { PartnersFlowingMenu } from "@/components/residencial/PartnersFlowingMen
 import { CTA } from "@/components/sections/CTA";
 import { ThreeDMarquee } from "@/components/ui/3d-marquee";
 import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
-import { ComparisonTable } from "@/components/lsf/ComparisonTable";
+import { ComparisonBars } from "@/components/residencial/ComparisonBars";
 import { ProcessTimeline } from "@/components/sections/ProcessTimeline";
 import { ResidencialContactForm } from "@/components/residencial/ResidencialContactForm";
 import { DomeGallery } from "@/components/presentation/DomeGallery";
@@ -21,7 +21,7 @@ import {
   RESIDENCIAL_SERVICES,
   RESIDENCIAL_BENEFITS_SCROLL,
   RESIDENCIAL_TRANSPARENCY_BLOCKS,
-  RESIDENCIAL_COMPARISON_DATA,
+  RESIDENCIAL_COMPARISON_BARS,
   RESIDENCIAL_PROCESS_STEPS,
   GALLERY_MASONRY_ITEMS,
   GALLERY_IMAGES_PROJECTS,
@@ -262,9 +262,7 @@ export default function ResidencialPage() {
             </p>
           </RevealOnScroll>
 
-          <RevealOnScroll delay={0.2}>
-            <ComparisonTable data={RESIDENCIAL_COMPARISON_DATA} />
-          </RevealOnScroll>
+          <ComparisonBars data={RESIDENCIAL_COMPARISON_BARS} />
         </div>
       </section>
 

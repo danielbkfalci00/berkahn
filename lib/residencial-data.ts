@@ -111,6 +111,109 @@ export const RESIDENCIAL_COMPARISON_DATA: ComparisonItem[] = [
 ];
 
 // ---------------------------------------------------------------------------
+// Section 7 (v2): Comparativo — Progress Bars animadas
+// ---------------------------------------------------------------------------
+export interface ComparisonBarItem {
+  category: string;
+  lsfValue: string;
+  traditionalValue: string;
+  lsfPercent: number;
+  traditionalPercent: number;
+  lsfNumeric?: number;
+  traditionalNumeric?: number;
+  numericPrefix?: string;
+  numericSuffix?: string;
+}
+
+export const RESIDENCIAL_COMPARISON_BARS: ComparisonBarItem[] = [
+  {
+    category: "Tempo de obra",
+    lsfValue: "6 meses",
+    traditionalValue: "12 meses",
+    lsfPercent: 30,
+    traditionalPercent: 85,
+    lsfNumeric: 6,
+    traditionalNumeric: 12,
+    numericSuffix: " meses",
+  },
+  {
+    category: "Desperdício de material",
+    lsfValue: "< 5%",
+    traditionalValue: "25 a 30%",
+    lsfPercent: 15,
+    traditionalPercent: 85,
+    lsfNumeric: 5,
+    traditionalNumeric: 30,
+    numericSuffix: "%",
+  },
+  {
+    category: "Precisão dimensional",
+    lsfValue: "±2mm",
+    traditionalValue: "±20mm",
+    lsfPercent: 12,
+    traditionalPercent: 90,
+    lsfNumeric: 2,
+    traditionalNumeric: 20,
+    numericPrefix: "±",
+    numericSuffix: "mm",
+  },
+  {
+    category: "Peso estrutural",
+    lsfValue: "100 kg/m²",
+    traditionalValue: "1.500 kg/m²",
+    lsfPercent: 8,
+    traditionalPercent: 95,
+  },
+  {
+    category: "Conforto térmico",
+    lsfValue: "Superior (multicamadas)",
+    traditionalValue: "Limitado",
+    lsfPercent: 92,
+    traditionalPercent: 35,
+  },
+  {
+    category: "Conforto acústico",
+    lsfValue: "Superior",
+    traditionalValue: "Depende da espessura",
+    lsfPercent: 88,
+    traditionalPercent: 40,
+  },
+  {
+    category: "Economia em climatização",
+    lsfValue: "Até 40%",
+    traditionalValue: "Referência",
+    lsfPercent: 90,
+    traditionalPercent: 50,
+    lsfNumeric: 40,
+    numericSuffix: "%",
+  },
+  {
+    category: "Previsibilidade de custo",
+    lsfValue: "Alta (processo industrial)",
+    traditionalValue: "Baixa (variáveis no canteiro)",
+    lsfPercent: 95,
+    traditionalPercent: 30,
+  },
+  {
+    category: "Durabilidade",
+    lsfValue: "+150 anos",
+    traditionalValue: "Variável",
+    lsfPercent: 95,
+    traditionalPercent: 40,
+    lsfNumeric: 150,
+    numericPrefix: "+",
+    numericSuffix: " anos",
+  },
+  {
+    category: "Sustentabilidade",
+    lsfValue: "Aço 100% reciclável",
+    traditionalValue: "Alto consumo e resíduos",
+    lsfPercent: 95,
+    traditionalPercent: 25,
+  },
+];
+
+// ---------------------------------------------------------------------------
 // Section 8: Processo — 5 steps (textos reduzidos)
 // ---------------------------------------------------------------------------
 export const RESIDENCIAL_PROCESS_STEPS: ProcessStep[] = [
