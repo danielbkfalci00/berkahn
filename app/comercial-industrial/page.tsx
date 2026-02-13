@@ -8,10 +8,12 @@ import { ProcessTimelineVisual } from "@/components/comercial/ProcessTimelineVis
 import { CorporateContactForm } from "@/components/comercial/CorporateContactForm";
 import { BrazilMapBeam } from "@/components/comercial/BrazilMapBeam";
 import { CTA } from "@/components/sections/CTA";
+import { ThreeDMarquee } from "@/components/ui/3d-marquee";
 import {
   SEGMENT_SOLUTIONS,
   COMERCIAL_TRANSPARENCY_BLOCKS,
   COMERCIAL_METRICS,
+  RESIDENTIAL_GALLERY_IMAGES,
 } from "@/lib/comercial-data";
 
 export const metadata = {
@@ -214,6 +216,24 @@ export default function ComercialIndustrialPage() {
         actionText="Conheça nossas soluções residenciais"
         actionHref="/residencial"
       />
+
+      {/* 9. Galeria 3D — Projetos Residenciais */}
+      <section className="dark py-xl bg-black overflow-hidden">
+        <div className="container mb-12">
+          <RevealOnScroll>
+            <p className="label-text text-white/40 mb-4">PORTFÓLIO RESIDENCIAL</p>
+            <h2 className="headline-md text-white mb-6">
+              Projetos que falam por si.
+            </h2>
+            <p className="body-lg text-white/70 max-w-3xl">
+              Casas, chalés e ampliações executadas com Steel Frame —
+              do projeto à entrega, cada detalhe planejado.
+            </p>
+          </RevealOnScroll>
+        </div>
+
+        <ThreeDMarquee images={RESIDENTIAL_GALLERY_IMAGES} />
+      </section>
     </>
   );
 }

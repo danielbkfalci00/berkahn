@@ -129,7 +129,7 @@ function StickyMetricCard({
         transformOrigin: "top center",
       }}
     >
-      <div className="bg-white/[0.03] border border-white/10 rounded-2xl overflow-hidden h-[420px] grid grid-cols-5 gap-0">
+      <div className="bg-neutral-900 border border-white/10 rounded-2xl overflow-hidden h-[420px] grid grid-cols-5 gap-0">
         {/* Left: Metric content (3 cols) */}
         <div className="col-span-3 flex flex-col justify-center p-10 xl:p-14">
           {/* Card counter */}
@@ -197,7 +197,7 @@ function MobileFallback({ data }: { data: MetricCard[] }) {
     <div className="space-y-6">
       {data.map((metric, index) => (
         <RevealOnScroll key={metric.label} delay={index * 0.1}>
-          <div className="bg-white/[0.03] border border-white/10 rounded-xl overflow-hidden">
+          <div className="bg-neutral-900 border border-white/10 rounded-xl overflow-hidden">
             {/* Image */}
             {metric.image && (
               <div className="relative aspect-[16/9] overflow-hidden">
