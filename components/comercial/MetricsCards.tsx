@@ -15,9 +15,8 @@ import type { MetricCard } from "@/lib/comercial-data";
 
 /* ─── Config ─── */
 
-const STACK_TOP_BASE = 100; // px — first card sticky top (clears navbar)
-const STACK_OFFSET = 35; // px — vertical offset between stacked cards
-const SCALE_DECREMENT = 0.03; // scale reduction per depth level
+const STACK_TOP_BASE = 100; // px — all cards pin at same viewport position
+const SCALE_DECREMENT = 0.05; // scale reduction per depth level
 
 /* ─── Main Component ─── */
 
@@ -116,7 +115,7 @@ function StickyMetricCard({
     isLastCard ? ["brightness(1)", "brightness(1)"] : ["brightness(1)", "brightness(0.7)"]
   );
 
-  const stickyTop = STACK_TOP_BASE + index * STACK_OFFSET;
+  const stickyTop = STACK_TOP_BASE;
 
   return (
     <motion.div
