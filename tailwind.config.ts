@@ -75,7 +75,8 @@ const config: Config = {
   			'luxury-sm': '0 2px 8px rgba(0, 0, 0, 0.04)',
   			'luxury-md': '0 4px 16px rgba(0, 0, 0, 0.06)',
   			'luxury-lg': '0 8px 32px rgba(0, 0, 0, 0.08)',
-  			'luxury-xl': '0 16px 48px rgba(0, 0, 0, 0.12)'
+  			'luxury-xl': '0 16px 48px rgba(0, 0, 0, 0.12)',
+  			'input': '0px 2px 3px -1px rgba(0,0,0,0.1), 0px 1px 0px 0px rgba(25,28,33,0.02), 0px 0px 0px 1px rgba(25,28,33,0.08)'
   		},
   		keyframes: {
   			fadeIn: {

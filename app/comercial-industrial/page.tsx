@@ -6,6 +6,7 @@ import { MetricsCards } from "@/components/comercial/MetricsCards";
 import { TransparencyAccordion } from "@/components/comercial/TransparencyAccordion";
 import { ProcessTimelineVisual } from "@/components/comercial/ProcessTimelineVisual";
 import { CorporateContactForm } from "@/components/comercial/CorporateContactForm";
+import { BrazilMapBeam } from "@/components/comercial/BrazilMapBeam";
 import { CTA } from "@/components/sections/CTA";
 import {
   SEGMENT_SOLUTIONS,
@@ -147,21 +148,60 @@ export default function ComercialIndustrialPage() {
       {/* 7. Formulário de contato corporativo */}
       {/* ================================================================ */}
       <section id="formulario" className="py-xl bg-black-5">
-        <div className="container max-w-3xl">
-          <RevealOnScroll>
-            <p className="label-text mb-4">FALE COM A BERKAHN</p>
-            <h2 className="headline-md mb-6">
-              Conte-nos sobre o seu projeto.
-            </h2>
-            <p className="body-lg text-black-70 mb-12">
-              Preencha o formulário abaixo e nossa equipe entrará em contato
-              para uma consultoria técnica inicial, sem compromisso.
-            </p>
-          </RevealOnScroll>
+        <div className="container max-w-6xl">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
+            {/* Left column: Info + Map */}
+            <div>
+              <RevealOnScroll>
+                <p className="label-text mb-4">FALE COM A BERKAHN</p>
+                <h2 className="headline-md mb-6">
+                  Conte-nos sobre o seu projeto.
+                </h2>
+                <p className="body-lg text-black-70 mb-8">
+                  Preencha o formulário e nossa equipe entrará em contato para
+                  uma consultoria técnica inicial, sem compromisso.
+                </p>
+              </RevealOnScroll>
 
-          <RevealOnScroll delay={0.15}>
-            <CorporateContactForm />
-          </RevealOnScroll>
+              <RevealOnScroll delay={0.1}>
+                <div className="flex flex-col gap-3 mb-12">
+                  <a
+                    href="mailto:contato@berkahn.com.br"
+                    className="text-sm text-black-50 hover:text-black transition-colors"
+                  >
+                    contato@berkahn.com.br
+                  </a>
+                  <a
+                    href="tel:+5511999999999"
+                    className="text-sm text-black-50 hover:text-black transition-colors"
+                  >
+                    +55 (11) 99999-9999
+                  </a>
+                </div>
+              </RevealOnScroll>
+
+              {/* Map (desktop only) */}
+              <RevealOnScroll delay={0.2}>
+                <div className="hidden lg:block">
+                  <BrazilMapBeam />
+                </div>
+              </RevealOnScroll>
+            </div>
+
+            {/* Right column: Form card */}
+            <RevealOnScroll delay={0.15}>
+              <div className="bg-white rounded-2xl p-6 md:p-8 shadow-input">
+                <CorporateContactForm />
+              </div>
+            </RevealOnScroll>
+          </div>
+
+          {/* Map (mobile only — below form) */}
+          <div className="lg:hidden mt-12">
+            <RevealOnScroll>
+              <BrazilMapBeam />
+            </RevealOnScroll>
+          </div>
         </div>
       </section>
 
