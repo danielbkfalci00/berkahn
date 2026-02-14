@@ -22,7 +22,7 @@ const services = [
     id: "residencial",
     title: "Residencial",
     description:
-      "Casas e sobrados com design personalizado, conforto térmico superior e acabamento premium. Projetos que transformam sonhos em lares modernos e eficientes.",
+      "Casas e sobrados com design personalizado, conforto térmico superior e acabamento premium. Do projeto à entrega, com foco em eficiência e qualidade.",
     items: [
       "Casas térreas e sobrados",
       "Condomínios residenciais",
@@ -90,9 +90,9 @@ export default function ServicosPage() {
               </h1>
               <p className="body-lg text-black-70">
                 Da concepção à entrega, oferecemos serviços integrados de
-                construção civil para diferentes segmentos. Especializados em
-                métodos construtivos tradicionais e inovadores como Light Steel
-                Frame, sempre com foco em qualidade, prazo e excelência técnica.
+                construção civil para diferentes segmentos. Trabalhamos com
+                métodos construtivos tradicionais e industrializados como Light
+                Steel Frame, com foco em qualidade e prazo.
               </p>
             </div>
           </RevealOnScroll>
