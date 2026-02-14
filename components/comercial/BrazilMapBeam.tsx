@@ -5,7 +5,7 @@ import { motion } from "motion/react";
 
 export function BrazilMapBeam() {
   // São Paulo position on the map (percentage-based)
-  const spLeft = "57%";
+  const spLeft = "52%";
   const spTop = "68%";
 
   return (
