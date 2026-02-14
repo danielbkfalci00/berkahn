@@ -1,7 +1,9 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useCallback } from "react";
+import { useEffect, useMemo, useRef, useCallback, useState } from "react";
+import { createPortal } from "react-dom";
 import { useGesture } from "@use-gesture/react";
+import { XIcon } from "lucide-react";
 import "./DomeGallery.css";
 
 interface ImageItem {
@@ -146,6 +148,8 @@ export function DomeGallery({
   const scrimRef = useRef<HTMLDivElement>(null);
   const focusedElRef = useRef<HTMLDivElement | null>(null);
   const originalTilePositionRef = useRef<DOMRect | null>(null);
+
+  const [lightboxSrc, setLightboxSrc] = useState<string | null>(null);
 
   const rotationRef = useRef({ x: 0, y: 0 });
   const startRotRef = useRef({ x: 0, y: 0 });
@@ -591,15 +595,22 @@ export function DomeGallery({
     [enlargeTransitionMs, lockScroll, segments, unlockScroll]
   );
 
+  const getSrcFromTile = useCallback(
+    (el: HTMLDivElement) => {
+      return el.parentElement?.dataset.src || el.querySelector("img")?.src || "";
+    },
+    []
+  );
+
   const onTileClick = useCallback(
     (e: React.MouseEvent<HTMLDivElement>) => {
       if (draggingRef.current) return;
       if (movedRef.current) return;
       if (performance.now() - lastDragEndAt.current < 80) return;
-      if (openingRef.current) return;
-      openItemFromElement(e.currentTarget);
+      const src = getSrcFromTile(e.currentTarget);
+      if (src) setLightboxSrc(src);
     },
-    [openItemFromElement]
+    [getSrcFromTile]
   );
 
   const onTilePointerUp = useCallback(
@@ -608,10 +619,10 @@ export function DomeGallery({
       if (draggingRef.current) return;
       if (movedRef.current) return;
       if (performance.now() - lastDragEndAt.current < 80) return;
-      if (openingRef.current) return;
-      openItemFromElement(e.currentTarget);
+      const src = getSrcFromTile(e.currentTarget);
+      if (src) setLightboxSrc(src);
     },
-    [openItemFromElement]
+    [getSrcFromTile]
   );
 
   useEffect(() => {
@@ -620,7 +631,22 @@ export function DomeGallery({
     };
   }, []);
 
+  /* ─── Lightbox: Escape handler + body overflow lock ─── */
+  useEffect(() => {
+    if (!lightboxSrc) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setLightboxSrc(null);
+    };
+    document.addEventListener("keydown", onKey);
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = "";
+    };
+  }, [lightboxSrc]);
+
   return (
+    <>
     <div
       ref={rootRef}
       className="sphere-root"
@@ -683,5 +709,33 @@ export function DomeGallery({
         </div>
       </main>
     </div>
+
+    {/* Lightbox — full-viewport overlay via portal */}
+    {lightboxSrc &&
+      createPortal(
+        <div
+          className="fixed inset-0 z-[110] grid place-items-center bg-black/80 cursor-pointer p-8"
+          onClick={() => setLightboxSrc(null)}
+        >
+          <div className="relative" onClick={(e) => e.stopPropagation()}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={lightboxSrc}
+              alt="Projeto"
+              className="max-w-[min(600px,80vw)] max-h-[65vh] object-contain rounded-lg"
+            />
+            <button
+              type="button"
+              aria-label="Fechar"
+              onClick={() => setLightboxSrc(null)}
+              className="absolute -top-3 -right-3 flex h-8 w-8 items-center justify-center rounded-full bg-black/50 text-white backdrop-blur-sm transition-colors hover:bg-black/70"
+            >
+              <XIcon size={18} />
+            </button>
+          </div>
+        </div>,
+        document.body
+      )}
+    </>
   );
 }
