@@ -25,7 +25,7 @@ export function Partners({
 }: PartnersProps = {}) {
   const partnerList = partners || defaultPartners;
   const displayLabel = label ?? "MARCAS PARCEIRAS";
-  const displayTitle = title ?? "Trabalhamos com as Melhores";
+  const displayTitle = title ?? "Marcas que Utilizamos";
 
   const content = (
     <>

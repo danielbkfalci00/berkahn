@@ -6,21 +6,21 @@ const categories = [
   {
     title: "RESIDENCIAL",
     description:
-      "Projetos residenciais que traduzem qualidade técnica, acabamento de alto nível e soluções integradas para elevar cada ambiente.",
+      "Projetos residenciais com qualidade técnica, acabamento criterioso e soluções integradas do projeto à entrega.",
     image: "/images/Services/residencial.webp",
     href: "/residencial",
   },
   {
     title: "CORPORATIVO / COMERCIAL",
     description:
-      "Ambientes corporativos executados para refletir identidade e eficiência, com gestão de obra precisa e soluções técnicas de alto padrão.",
+      "Ambientes corporativos que refletem identidade e eficiência, com gestão de obra precisa e soluções técnicas sob medida.",
     image: "/images/Services/comercial.webp",
     href: "/comercial-industrial",
   },
   {
     title: "INDUSTRIAL",
     description:
-      "Estruturas industriais projetadas para máxima eficiência, durabilidade e conformidade com as normas técnicas mais exigentes.",
+      "Estruturas industriais projetadas para eficiência, durabilidade e conformidade com as normas técnicas do setor.",
     image: "/images/Services/industrial.webp",
     href: "/comercial-industrial",
   },

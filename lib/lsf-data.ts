@@ -195,7 +195,7 @@ export const BENEFITS: Benefit[] = [
     suffix: "+",
     description: "Anos de garantia",
     details:
-      "Aço galvanizado ASTM A653 com revestimento Z275 garante proteção contra corrosão por décadas. Sistema multicamadas protege estrutura de umidade e intempéries. Vida útil projetada de 100+ anos com manutenção adequada, comparável ou superior à construção tradicional. Estrutura não apodrece, não é atacada por cupins ou outros insetos.",
+      "Aço galvanizado ASTM A653 com revestimento Z275 protege contra corrosão por décadas. Sistema multicamadas protege estrutura de umidade e intempéries. Vida útil projetada de 100+ anos com manutenção adequada, comparável ou superior à construção tradicional. Estrutura não apodrece, não é atacada por cupins ou outros insetos.",
   },
 ];
 
