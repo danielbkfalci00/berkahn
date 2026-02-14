@@ -5,7 +5,7 @@ import { Gallery } from "@/components/sections/Gallery";
 import { LSFIntro } from "@/components/sections/LSFIntro";
 import { BenefitsGridCompact } from "@/components/sections/BenefitsGridCompact";
 import { ComparisonTableHome } from "@/components/sections/ComparisonTableHome";
-import { Partners } from "@/components/sections/Partners";
+import { PartnersFlowingMenu } from "@/components/residencial/PartnersFlowingMenu";
 import { CTA } from "@/components/sections/CTA";
 
 export default function Home() {
@@ -18,7 +18,7 @@ export default function Home() {
       <LSFIntro />
       <BenefitsGridCompact />
       <ComparisonTableHome />
-      <Partners />
+      <PartnersFlowingMenu />
       <CTA />
     </>
   );
