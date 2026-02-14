@@ -184,7 +184,7 @@ export function BenefitsGridCompact() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-black/50 h-full w-full z-10"
+              className="fixed inset-0 bg-black/50 h-full w-full z-[110]"
             />
           )}
         </AnimatePresence>
@@ -192,7 +192,7 @@ export function BenefitsGridCompact() {
         {/* Card Expandido */}
         <AnimatePresence>
           {active && (
-            <div className="fixed inset-0 grid place-items-center z-[100] p-4">
+            <div className="fixed inset-0 grid place-items-center z-[110] p-4">
               <motion.div
                 ref={ref}
                 initial={{ opacity: 0, scale: 0.95 }}

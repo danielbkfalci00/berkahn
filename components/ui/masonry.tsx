@@ -294,7 +294,7 @@ export function Masonry({
       {/* Lightbox */}
       {selectedImage && (
         <div
-          className="fixed inset-0 z-50 grid place-items-center bg-black/80 cursor-pointer p-8"
+          className="fixed inset-0 z-[110] grid place-items-center bg-black/80 cursor-pointer p-8"
           onClick={() => setSelectedImage(null)}
         >
           <div className="relative" onClick={(e) => e.stopPropagation()}>

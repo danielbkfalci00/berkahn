@@ -105,7 +105,7 @@ export function PlantasElevacoesSubsection({ data, isNested }: PlantasElevacoesS
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setExpandedImage(null)}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 p-4"
+            className="fixed inset-0 z-[110] flex items-center justify-center bg-black/95 p-4"
           >
           <motion.div
             initial={{ scale: 0.9 }}
