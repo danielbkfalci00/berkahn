@@ -4,7 +4,7 @@ import { useRef, useEffect, type ReactNode } from "react";
 import gsap from "gsap";
 
 interface MenuItem {
-  link: string;
+  link?: string;
   text: string;
   image: string;
 }
@@ -115,9 +115,32 @@ function MenuItemComponent({
     el.addEventListener("mouseenter", handleMouseEnter);
     el.addEventListener("mouseleave", handleMouseLeave);
 
+    // Touch support — show marquee on tap
+    const handleTouchStart = () => {
+      gsap.fromTo(
+        marquee,
+        { yPercent: 100 },
+        { yPercent: 0, duration: 0.5, ease: "power2.out" }
+      );
+    };
+
+    const handleTouchEnd = () => {
+      gsap.to(marquee, {
+        yPercent: 100,
+        duration: 0.5,
+        ease: "power2.in",
+        delay: 1.5,
+      });
+    };
+
+    el.addEventListener("touchstart", handleTouchStart, { passive: true });
+    el.addEventListener("touchend", handleTouchEnd, { passive: true });
+
     return () => {
       el.removeEventListener("mouseenter", handleMouseEnter);
       el.removeEventListener("mouseleave", handleMouseLeave);
+      el.removeEventListener("touchstart", handleTouchStart);
+      el.removeEventListener("touchend", handleTouchEnd);
       animationTl.kill();
     };
   }, [speed]);
@@ -150,9 +173,14 @@ function MenuItemComponent({
         ["--border-color" as string]: borderColor,
       }}
     >
-      <a className="menu__item-link font-heading" href={item.link}>
+      <div className="menu__item-link font-heading">
         {item.text}
-      </a>
+        <span className="menu__item-hint" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="9 18 15 12 9 6" />
+          </svg>
+        </span>
+      </div>
       <div
         className="marquee"
         style={{

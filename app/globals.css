@@ -419,6 +419,25 @@
   transition: opacity 0.3s;
 }
 
+.menu__item-hint {
+  display: none;
+}
+
+@media (hover: none) {
+  .menu__item-hint {
+    display: inline-flex;
+    align-items: center;
+    margin-left: 0.75rem;
+    opacity: 0.3;
+    animation: hint-pulse 2s ease-in-out infinite;
+  }
+}
+
+@keyframes hint-pulse {
+  0%, 100% { opacity: 0.3; transform: translateX(0); }
+  50% { opacity: 0.5; transform: translateX(3px); }
+}
+
 .menu__item:hover .menu__item-link {
   opacity: 0;
 }

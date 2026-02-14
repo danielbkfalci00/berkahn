@@ -4,10 +4,10 @@ import { FlowingMenu } from "@/components/ui/flowing-menu";
 import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
 
 const PARTNERS = [
-  { text: "Eternit", image: "/images/parceiros/eternit.webp", link: "#" },
-  { text: "Knauf", image: "/images/parceiros/knauf.webp", link: "#" },
-  { text: "Aquapanel", image: "/images/parceiros/aquapanel.webp", link: "#" },
-  { text: "Sicla", image: "/images/parceiros/sicla.webp", link: "#" },
+  { text: "Eternit", image: "/images/parceiros/eternit.webp" },
+  { text: "Knauf", image: "/images/parceiros/knauf.webp" },
+  { text: "Aquapanel", image: "/images/parceiros/aquapanel.webp" },
+  { text: "Sicla", image: "/images/parceiros/sicla.webp" },
 ];
 
 export function PartnersFlowingMenu() {
