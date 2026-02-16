@@ -197,7 +197,14 @@ export default function ResidencialPage() {
                   alt="Casa finalizada — após acabamento"
                   position="right"
                 />
-                <ImageComparisonSlider className="w-0.5 bg-white/50 backdrop-blur-sm" />
+                <ImageComparisonSlider className="w-0.5 bg-white/80">
+                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center justify-center w-10 h-10 rounded-full bg-white shadow-lg border border-black-10">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-black-50">
+                      <polyline points="6 8 3 10 6 12" />
+                      <polyline points="14 8 17 10 14 12" />
+                    </svg>
+                  </div>
+                </ImageComparisonSlider>
               </ImageComparison>
             </RevealOnScroll>
 
