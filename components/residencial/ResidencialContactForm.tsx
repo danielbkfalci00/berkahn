@@ -258,7 +258,7 @@ export function ResidencialContactForm() {
               </SelectTrigger>
               <SelectContent className="bg-white border border-black-10 shadow-luxury-md">
                 {CONTACT_FORM_PROJECT_TYPES.map((type) => (
-                  <SelectItem key={type.value} value={type.value}>
+                  <SelectItem key={type.value} value={type.value} className="focus:bg-black-5 focus:text-black">
                     {type.label}
                   </SelectItem>
                 ))}
