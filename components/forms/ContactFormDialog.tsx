@@ -15,6 +15,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { CONTACT_FORM_PROJECT_TYPES } from "@/lib/residencial-data";
 import { COMERCIAL_FORM_PROJECT_TYPES } from "@/lib/comercial-data";
 
@@ -129,7 +136,7 @@ export function ContactFormDialog({ children, defaultSegment = "" }: ContactForm
   return (
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className="w-[calc(100%-2rem)] sm:max-w-[360px] p-0 overflow-hidden rounded-none sm:rounded-lg bg-white">
+      <DialogContent className="w-[calc(100%-2rem)] sm:max-w-[360px] p-0 rounded-none sm:rounded-lg bg-white max-h-[90vh] overflow-y-auto">
         <AnimatePresence mode="wait">
           {status === "success" ? (
             <motion.div
@@ -288,22 +295,24 @@ export function ContactFormDialog({ children, defaultSegment = "" }: ContactForm
 
                 {/* Segment Field */}
                 <div className="space-y-1.5">
-                  <Label htmlFor="segment" className="text-xs text-black-70 font-medium">
+                  <Label className="text-xs text-black-70 font-medium">
                     Segmento
                   </Label>
-                  <select
-                    id="segment"
-                    value={formData.segment}
-                    onChange={(e) =>
-                      setFormData({ ...formData, segment: e.target.value, projectType: "" })
+                  <Select
+                    value={formData.segment || undefined}
+                    onValueChange={(value) =>
+                      setFormData({ ...formData, segment: value, projectType: "" })
                     }
                     disabled={status === "loading"}
-                    className="flex w-full h-10 text-sm bg-white border border-black-10 rounded-md px-3 py-2 focus:border-black-30 focus:outline-none transition-colors appearance-none"
                   >
-                    <option value="" disabled>Selecione o segmento</option>
-                    <option value="residencial">Residencial</option>
-                    <option value="comercial">Comercial / Industrial</option>
-                  </select>
+                    <SelectTrigger className="h-10 text-sm bg-white border border-black-10 rounded-md px-3 py-2 shadow-none focus:border-black-30 focus:ring-0 transition-colors data-[placeholder]:text-black-30">
+                      <SelectValue placeholder="Selecione o segmento" />
+                    </SelectTrigger>
+                    <SelectContent portal={false} className="bg-white border border-black-10 shadow-luxury-md">
+                      <SelectItem value="residencial" className="focus:bg-black-5 focus:text-black">Residencial</SelectItem>
+                      <SelectItem value="comercial" className="focus:bg-black-5 focus:text-black">Comercial / Industrial</SelectItem>
+                    </SelectContent>
+                  </Select>
                   <AnimatePresence>
                     {errors.segment && (
                       <motion.p
@@ -321,28 +330,30 @@ export function ContactFormDialog({ children, defaultSegment = "" }: ContactForm
                 {/* Project Type Field (conditional) */}
                 {formData.segment && (
                   <div className="space-y-1.5">
-                    <Label htmlFor="projectType" className="text-xs text-black-70 font-medium">
+                    <Label className="text-xs text-black-70 font-medium">
                       Tipo de Projeto
                     </Label>
-                    <select
-                      id="projectType"
-                      value={formData.projectType}
-                      onChange={(e) =>
-                        setFormData({ ...formData, projectType: e.target.value })
+                    <Select
+                      value={formData.projectType || undefined}
+                      onValueChange={(value) =>
+                        setFormData({ ...formData, projectType: value })
                       }
                       disabled={status === "loading"}
-                      className="flex w-full h-10 text-sm bg-white border border-black-10 rounded-md px-3 py-2 focus:border-black-30 focus:outline-none transition-colors appearance-none"
                     >
-                      <option value="" disabled>Selecione o tipo</option>
-                      {(formData.segment === "residencial"
-                        ? CONTACT_FORM_PROJECT_TYPES
-                        : COMERCIAL_FORM_PROJECT_TYPES
-                      ).map((type) => (
-                        <option key={type.value} value={type.value}>
-                          {type.label}
-                        </option>
-                      ))}
-                    </select>
+                      <SelectTrigger className="h-10 text-sm bg-white border border-black-10 rounded-md px-3 py-2 shadow-none focus:border-black-30 focus:ring-0 transition-colors data-[placeholder]:text-black-30">
+                        <SelectValue placeholder="Selecione o tipo" />
+                      </SelectTrigger>
+                      <SelectContent portal={false} className="bg-white border border-black-10 shadow-luxury-md">
+                        {(formData.segment === "residencial"
+                          ? CONTACT_FORM_PROJECT_TYPES
+                          : COMERCIAL_FORM_PROJECT_TYPES
+                        ).map((type) => (
+                          <SelectItem key={type.value} value={type.value} className="focus:bg-black-5 focus:text-black">
+                            {type.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                     <AnimatePresence>
                       {errors.projectType && (
                         <motion.p
