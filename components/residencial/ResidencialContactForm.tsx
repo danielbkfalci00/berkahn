@@ -94,7 +94,7 @@ export function ResidencialContactForm() {
       )?.label;
 
       const response = await fetch(
-        "https://script.google.com/macros/s/AKfycbx7CBwOaj7Vn1HtXlAy-OLINEmxuVXgSYMIsUmqzYp6JJbjv_lENeTI56IP3Z8sVwuJ/exec",
+        "https://script.google.com/macros/s/AKfycbxmOqnCc1tGfXGZk8XRBTd-XJbsN69BGdv7bHV-YaQDjDGpSXMeKds4_SmINfGhesvtUA/exec",
         {
           method: "POST",
           headers: { "Content-Type": "text/plain" },
@@ -102,7 +102,9 @@ export function ResidencialContactForm() {
             name: formData.name,
             email: formData.email,
             phone: formData.phone,
-            message: `[Residencial] [${projectLabel || "Não informado"}] ${formData.description}`,
+            categoria: "Residencial",
+            tipo: projectLabel || "Não informado",
+            message: formData.description,
           }),
         }
       );

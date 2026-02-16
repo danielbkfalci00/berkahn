@@ -90,7 +90,7 @@ export function ContactFormDialog({ children, defaultSegment = "" }: ContactForm
 
     try {
       const response = await fetch(
-        'https://script.google.com/macros/s/AKfycbx7CBwOaj7Vn1HtXlAy-OLINEmxuVXgSYMIsUmqzYp6JJbjv_lENeTI56IP3Z8sVwuJ/exec',
+        'https://script.google.com/macros/s/AKfycbxmOqnCc1tGfXGZk8XRBTd-XJbsN69BGdv7bHV-YaQDjDGpSXMeKds4_SmINfGhesvtUA/exec',
         {
           method: 'POST',
           headers: {
@@ -100,14 +100,12 @@ export function ContactFormDialog({ children, defaultSegment = "" }: ContactForm
             name: formData.name,
             email: formData.email,
             phone: formData.phone,
-            message: (() => {
-              const segmentLabel = formData.segment === "residencial" ? "Residencial" : "Comercial/Industrial";
-              const types = formData.segment === "residencial"
-                ? CONTACT_FORM_PROJECT_TYPES
-                : COMERCIAL_FORM_PROJECT_TYPES;
-              const projectLabel = types.find(t => t.value === formData.projectType)?.label || "";
-              return `[${segmentLabel}] [${projectLabel}] ${formData.message}`;
-            })(),
+            categoria: formData.segment === "residencial" ? "Residencial" : "Comercial/Industrial",
+            tipo: (formData.segment === "residencial"
+              ? CONTACT_FORM_PROJECT_TYPES
+              : COMERCIAL_FORM_PROJECT_TYPES
+            ).find(t => t.value === formData.projectType)?.label || "",
+            message: formData.message,
           }),
         }
       );

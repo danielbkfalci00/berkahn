@@ -101,7 +101,7 @@ export function CorporateContactForm() {
       )?.label;
 
       const response = await fetch(
-        "https://script.google.com/macros/s/AKfycbx7CBwOaj7Vn1HtXlAy-OLINEmxuVXgSYMIsUmqzYp6JJbjv_lENeTI56IP3Z8sVwuJ/exec",
+        "https://script.google.com/macros/s/AKfycbxmOqnCc1tGfXGZk8XRBTd-XJbsN69BGdv7bHV-YaQDjDGpSXMeKds4_SmINfGhesvtUA/exec",
         {
           method: "POST",
           headers: { "Content-Type": "text/plain" },
@@ -109,7 +109,9 @@ export function CorporateContactForm() {
             name: formData.name,
             email: formData.email,
             phone: formData.phone,
-            message: `[Comercial/Industrial] [${projectLabel || "Não informado"}] Empresa: ${formData.company}${formData.role ? ` | Cargo: ${formData.role}` : ""} | ${formData.description}`,
+            categoria: "Comercial/Industrial",
+            tipo: projectLabel || "Não informado",
+            message: `Empresa: ${formData.company}${formData.role ? ` | Cargo: ${formData.role}` : ""}${formData.description ? ` | ${formData.description}` : ""}`,
           }),
         }
       );
