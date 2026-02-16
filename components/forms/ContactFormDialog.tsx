@@ -90,7 +90,7 @@ export function ContactFormDialog({ children, defaultSegment = "" }: ContactForm
 
     try {
       const response = await fetch(
-        'https://script.google.com/macros/s/AKfycbxmOqnCc1tGfXGZk8XRBTd-XJbsN69BGdv7bHV-YaQDjDGpSXMeKds4_SmINfGhesvtUA/exec',
+        'https://script.google.com/macros/s/AKfycbx7AGRX_hBuPp4z8UAv27xKQCZls0QRT4g1P2jGeGvqZ6v7IQesTDLmvijN5RwAyvAt4Q/exec',
         {
           method: 'POST',
           headers: {
