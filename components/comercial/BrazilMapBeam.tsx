@@ -5,8 +5,8 @@ import { motion } from "motion/react";
 
 export function BrazilMapBeam() {
   // São Paulo position on the map (percentage-based)
-  const spLeft = "66%";
-  const spTop = "68%";
+  const spLeft = "63%";
+  const spTop = "65%";
 
   return (
     <div className="relative w-full max-w-md mx-auto select-none">
@@ -25,7 +25,7 @@ export function BrazilMapBeam() {
         className="absolute w-px"
         style={{
           left: spLeft,
-          top: "60%",
+          top: "57%",
           height: "8%",
           background:
             "linear-gradient(to bottom, transparent 0%, rgba(96,165,250,0.15) 20%, rgba(96,165,250,0.35) 50%, rgba(96,165,250,0.5) 80%, rgba(96,165,250,0.7) 100%)",
@@ -97,7 +97,7 @@ export function BrazilMapBeam() {
       {/* "Estamos aqui" tooltip */}
       <motion.div
         className="absolute -translate-x-1/2"
-        style={{ left: spLeft, top: "55%" }}
+        style={{ left: spLeft, top: "52%" }}
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.5, duration: 0.6, ease: [0.19, 1, 0.22, 1] }}
