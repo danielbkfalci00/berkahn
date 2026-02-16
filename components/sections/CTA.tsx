@@ -9,6 +9,7 @@ interface CTAProps {
   actionType?: "dialog" | "link";
   actionText?: string;
   actionHref?: string;
+  defaultSegment?: "residencial" | "comercial" | "";
 }
 
 const ArrowIcon = () => (
@@ -38,6 +39,7 @@ export function CTA({
   actionType = "dialog",
   actionText = "Fale Conosco",
   actionHref = "/",
+  defaultSegment,
 }: CTAProps = {}) {
   return (
     <section className="py-xl bg-black-5">
@@ -54,7 +56,7 @@ export function CTA({
                 <ArrowIcon />
               </Link>
             ) : (
-              <ContactFormDialog>
+              <ContactFormDialog defaultSegment={defaultSegment}>
                 <button className={buttonClasses}>
                   {actionText}
                   <ArrowIcon />

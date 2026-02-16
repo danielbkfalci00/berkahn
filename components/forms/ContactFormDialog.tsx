@@ -15,25 +15,41 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { CONTACT_FORM_PROJECT_TYPES } from "@/lib/residencial-data";
+import { COMERCIAL_FORM_PROJECT_TYPES } from "@/lib/comercial-data";
+
+type Segment = "residencial" | "comercial" | "";
 
 interface ContactFormDialogProps {
   children: React.ReactNode;
+  defaultSegment?: Segment;
 }
 
 interface FormData {
   name: string;
   email: string;
   phone: string;
+  segment: string;
+  projectType: string;
   message: string;
 }
 
 type FormStatus = "idle" | "loading" | "success" | "error";
 
-export function ContactFormDialog({ children }: ContactFormDialogProps) {
+export function ContactFormDialog({ children, defaultSegment = "" }: ContactFormDialogProps) {
   const [formData, setFormData] = useState<FormData>({
     name: "",
     email: "",
     phone: "",
+    segment: defaultSegment,
+    projectType: "",
     message: "",
   });
   const [status, setStatus] = useState<FormStatus>("idle");
@@ -49,6 +65,12 @@ export function ContactFormDialog({ children }: ContactFormDialogProps) {
       newErrors.email = "Email é obrigatório";
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       newErrors.email = "Email inválido";
+    }
+    if (!formData.segment) {
+      newErrors.segment = "Selecione o segmento";
+    }
+    if (formData.segment && !formData.projectType) {
+      newErrors.projectType = "Selecione o tipo de projeto";
     }
     if (!formData.message.trim()) {
       newErrors.message = "Mensagem é obrigatória";
@@ -78,7 +100,14 @@ export function ContactFormDialog({ children }: ContactFormDialogProps) {
             name: formData.name,
             email: formData.email,
             phone: formData.phone,
-            message: formData.message,
+            message: (() => {
+              const segmentLabel = formData.segment === "residencial" ? "Residencial" : "Comercial/Industrial";
+              const types = formData.segment === "residencial"
+                ? CONTACT_FORM_PROJECT_TYPES
+                : COMERCIAL_FORM_PROJECT_TYPES;
+              const projectLabel = types.find(t => t.value === formData.projectType)?.label || "";
+              return `[${segmentLabel}] [${projectLabel}] ${formData.message}`;
+            })(),
           }),
         }
       );
@@ -99,7 +128,7 @@ export function ContactFormDialog({ children }: ContactFormDialogProps) {
   };
 
   const resetForm = () => {
-    setFormData({ name: "", email: "", phone: "", message: "" });
+    setFormData({ name: "", email: "", phone: "", segment: defaultSegment, projectType: "", message: "" });
     setErrors({});
     setStatus("idle");
   };
@@ -263,6 +292,82 @@ export function ContactFormDialog({ children }: ContactFormDialogProps) {
                     className="h-10 text-sm bg-white border border-black-10 placeholder:text-black-30 focus:border-black-30 focus:ring-0 transition-colors"
                   />
                 </div>
+
+                {/* Segment Field */}
+                <div className="space-y-1.5">
+                  <Label className="text-xs text-black-70 font-medium">
+                    Segmento
+                  </Label>
+                  <Select
+                    value={formData.segment}
+                    onValueChange={(value) =>
+                      setFormData({ ...formData, segment: value, projectType: "" })
+                    }
+                    disabled={status === "loading"}
+                  >
+                    <SelectTrigger className="h-10 text-sm bg-white border border-black-10 focus:border-black-30 focus:ring-0 transition-colors">
+                      <SelectValue placeholder="Selecione o segmento" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="residencial">Residencial</SelectItem>
+                      <SelectItem value="comercial">Comercial / Industrial</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <AnimatePresence>
+                    {errors.segment && (
+                      <motion.p
+                        initial={{ opacity: 0, y: -5 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -5 }}
+                        className="text-xs text-red-600"
+                      >
+                        {errors.segment}
+                      </motion.p>
+                    )}
+                  </AnimatePresence>
+                </div>
+
+                {/* Project Type Field (conditional) */}
+                {formData.segment && (
+                  <div className="space-y-1.5">
+                    <Label className="text-xs text-black-70 font-medium">
+                      Tipo de Projeto
+                    </Label>
+                    <Select
+                      value={formData.projectType}
+                      onValueChange={(value) =>
+                        setFormData({ ...formData, projectType: value })
+                      }
+                      disabled={status === "loading"}
+                    >
+                      <SelectTrigger className="h-10 text-sm bg-white border border-black-10 focus:border-black-30 focus:ring-0 transition-colors">
+                        <SelectValue placeholder="Selecione o tipo" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {(formData.segment === "residencial"
+                          ? CONTACT_FORM_PROJECT_TYPES
+                          : COMERCIAL_FORM_PROJECT_TYPES
+                        ).map((type) => (
+                          <SelectItem key={type.value} value={type.value}>
+                            {type.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <AnimatePresence>
+                      {errors.projectType && (
+                        <motion.p
+                          initial={{ opacity: 0, y: -5 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -5 }}
+                          className="text-xs text-red-600"
+                        >
+                          {errors.projectType}
+                        </motion.p>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                )}
 
                 {/* Message Field */}
                 <div className="space-y-1.5">

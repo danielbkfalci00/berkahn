@@ -164,7 +164,7 @@ export default function ServicosPage() {
                           />
                         </svg>
                       </Link>
-                      <ContactFormDialog>
+                      <ContactFormDialog defaultSegment={service.id === "residencial" ? "residencial" : "comercial"}>
                         <button className="inline-flex items-center gap-2 text-black-50 font-medium hover:text-black transition-colors duration-300 cursor-pointer">
                           Solicitar orçamento
                         </button>
