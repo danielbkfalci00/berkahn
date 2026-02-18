@@ -181,17 +181,18 @@ export function Founders() {
                 </div>
 
                 {/* Conteúdo */}
-                <CardContent className="p-6">
+                <CardContent className="p-6 flex flex-col flex-1">
                   <h3 className="headline-sm mb-2">{founder.name}</h3>
                   <p className="text-sm text-black-50 mb-4 uppercase tracking-wider">
                     {founder.role}
                   </p>
-                  <p className="body-md text-black-70 leading-relaxed mb-6">
+                  <p className="body-md text-black-70 leading-relaxed">
                     {founder.bio}
                   </p>
 
                   {/* Dialog Trigger - só aparece se houver timeline */}
                   {founder.timeline && founder.timeline.length > 0 && (
+                    <div className="mt-auto pt-2">
                     <Dialog>
                       <DialogTrigger asChild>
                         <Button
@@ -282,6 +283,7 @@ export function Founders() {
                         </div>
                       </DialogContent>
                     </Dialog>
+                    </div>
                   )}
                 </CardContent>
               </Card>

@@ -269,13 +269,13 @@ export const GALLERY_IMAGES_STYLES: GalleryImage[] = [
 // Masonry Grid — "Versatilidade arquitetônica" section
 // ---------------------------------------------------------------------------
 export const GALLERY_MASONRY_ITEMS = [
-  { id: "m1", img: "/images/Residencial/versatilidade-01.webp", alt: "Residência moderna com fachada minimalista", height: 260 },
-  { id: "m2", img: "/images/Residencial/versatilidade-02.webp", alt: "Casa contemporânea com linhas limpas", height: 320 },
-  { id: "m3", img: "/images/Residencial/versatilidade-03.webp", alt: "Projeto residencial com acabamento premium", height: 200 },
-  { id: "m4", img: "/images/Residencial/versatilidade-04.webp", alt: "Fachada com revestimento em madeira", height: 290 },
-  { id: "m5", img: "/images/Residencial/versatilidade-05.webp", alt: "Residência com design diferenciado", height: 230 },
-  { id: "m6", img: "/images/Residencial/versatilidade-06.webp", alt: "Casa com arquitetura contemporânea", height: 320 },
-  { id: "m7", img: "/images/Residencial/versatilidade-07.webp", alt: "Projeto residencial integrado à paisagem", height: 260 },
+  { id: "m1", img: "/images/Residencial/versatilidade-01.webp", alt: "Residência moderna com fachada minimalista", width: 2048, height: 1364 },
+  { id: "m2", img: "/images/Residencial/versatilidade-02.webp", alt: "Casa contemporânea com linhas limpas", width: 2560, height: 1709 },
+  { id: "m3", img: "/images/Residencial/versatilidade-03.webp", alt: "Projeto residencial com acabamento premium", width: 2399, height: 1600 },
+  { id: "m4", img: "/images/Residencial/versatilidade-04.webp", alt: "Fachada com revestimento em madeira", width: 2399, height: 1600 },
+  { id: "m5", img: "/images/Residencial/versatilidade-05.webp", alt: "Residência com design diferenciado", width: 1901, height: 1074 },
+  { id: "m6", img: "/images/Residencial/versatilidade-06.webp", alt: "Casa com arquitetura contemporânea", width: 1600, height: 2171 },
+  { id: "m7", img: "/images/Residencial/versatilidade-07.webp", alt: "Projeto residencial integrado à paisagem", width: 1500, height: 1001 },
 ];
 
 export const GALLERY_IMAGES_PROJECTS: GalleryImage[] = [

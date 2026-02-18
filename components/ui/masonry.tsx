@@ -17,6 +17,7 @@ export interface MasonryItem {
   id: string;
   img: string;
   alt: string;
+  width: number;
   height: number;
 }
 
@@ -178,7 +179,7 @@ export function Masonry({
     return items.map((child) => {
       const col = colHeights.indexOf(Math.min(...colHeights));
       const x = columnWidth * col;
-      const height = child.height / 2;
+      const height = columnWidth * (child.height / child.width);
       const y = colHeights[col];
       colHeights[col] += height;
       return { ...child, x, y, w: columnWidth, h: height };
