@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { ParallaxHero } from "@/components/sections/ParallaxHero";
 import { PartnersFlowingMenu } from "@/components/residencial/PartnersFlowingMenu";
 import { CTA } from "@/components/sections/CTA";
@@ -47,13 +46,11 @@ export default function ResidencialPage() {
         subtitle="Construção nova, reforma ou ampliação com Light Steel Frame. Obra rápida, limpa e com orçamento fechado desde o início."
         ctaText="Fale com a Berkahn"
         ctaHref="#formulario"
-        backgroundImage="/images/apresentacao/casa-laranjeiras/casa-laranjeiras-fachada-frontal.webp"
+        backgroundImage="/images/Residencial/hero-01.webp"
         images={[
-          "/images/apresentacao/casa-laranjeiras/casa-laranjeiras-fachada-frontal.webp",
-          "/images/apresentacao/casa-laranjeiras/casa-laranjeiras-lateral-piscina.webp",
-          "/images/apresentacao/casa-laranjeiras/casa-laranjeiras-living.webp",
-          "/images/apresentacao/casa-santa-cristina/casa-santa-cristina-cover.webp",
-          "/images/hero/hero-home-1.webp",
+          "/images/Residencial/hero-01.webp",
+          "/images/Residencial/hero-02.webp",
+          "/images/Residencial/hero-03.webp",
         ]}
       />
 

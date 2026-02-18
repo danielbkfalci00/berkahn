@@ -14,15 +14,15 @@ export interface GalleryImage {
 export const RESIDENCIAL_SERVICES = [
   {
     title: "Construção Nova",
-    src: "/images/apresentacao/casa-laranjeiras/casa-laranjeiras-fachada-frontal.webp",
+    src: "/images/Residencial/construcao-nova.webp",
   },
   {
     title: "Reformas",
-    src: "/images/apresentacao/casa-santa-cristina/casa-santa-cristina-cover.webp",
+    src: "/images/Residencial/reformas.webp",
   },
   {
     title: "Ampliações",
-    src: "/images/apresentacao/casa-laranjeiras/casa-laranjeiras-lateral-piscina.webp",
+    src: "/images/Residencial/ampliacoes.webp",
   },
 ];
 
@@ -34,19 +34,19 @@ export const RESIDENCIAL_BENEFITS_SCROLL = [
     title: "Obra pronta em metade do tempo.",
     description:
       "Casa pronta em 3 a 6 meses, até 70% mais rápido que a construção convencional. Menos tempo de obra e menos custo com aluguel provisório.",
-    image: "/images/Services/servicos-structure.webp",
+    image: "/images/Residencial/obra-rapida.webp",
   },
   {
     title: "Previsibilidade orçamentária.",
     description:
       "Peças fabricadas sob medida, desperdício abaixo de 5%. Na Berkahn, o orçamento apresentado é o orçamento entregue.",
-    image: "/images/Services/servicos-foundations.webp",
+    image: "/images/Residencial/previsibilidade.webp",
   },
   {
     title: "Isolamento que faz diferença no dia a dia.",
     description:
       "Isolamento termoacústico multicamadas: ambientes mais frescos no verão, aquecidos no inverno e até 40% de economia em climatização.",
-    image: "/images/apresentacao/casa-laranjeiras/casa-laranjeiras-living.webp",
+    image: "/images/Residencial/isolamento.webp",
   },
   {
     title: "Precisão milimétrica em cada parede.",
@@ -64,7 +64,7 @@ export const RESIDENCIAL_BENEFITS_SCROLL = [
     title: "Obra a seco, aço 100% reciclável.",
     description:
       "Aço 100% reciclável, obra a seco com economia de 99% no consumo de água e canteiro limpo.",
-    image: "/images/apresentacao/casa-santa-cristina/casa-santa-cristina-01.webp",
+    image: "/images/Residencial/obra-seco.webp",
   },
 ];
 
@@ -269,18 +269,13 @@ export const GALLERY_IMAGES_STYLES: GalleryImage[] = [
 // Masonry Grid — "Versatilidade arquitetônica" section
 // ---------------------------------------------------------------------------
 export const GALLERY_MASONRY_ITEMS = [
-  { id: "m1",  img: "/images/galeria/projeto-01.webp", alt: "Residência moderna com fachada minimalista", height: 260 },
-  { id: "m2",  img: "/images/galeria/projeto-03.webp", alt: "Casa contemporânea com linhas limpas", height: 200 },
-  { id: "m3",  img: "/images/galeria/projeto-06.webp", alt: "Projeto residencial com jardim integrado", height: 320 },
-  { id: "m4",  img: "/images/galeria/projeto-08.webp", alt: "Fachada com revestimento em madeira", height: 230 },
-  { id: "m5",  img: "/images/galeria/projeto-10.webp", alt: "Sobrado contemporâneo com linhas retas", height: 290 },
-  { id: "m6",  img: "/images/galeria/projeto-14.webp", alt: "Casa térrea com varanda ampla", height: 180 },
-  { id: "m7",  img: "/images/galeria/projeto-18.webp", alt: "Residência com pé-direito duplo", height: 320 },
-  { id: "m8",  img: "/images/galeria/projeto-22.webp", alt: "Fachada com vidro e concreto aparente", height: 210 },
-  { id: "m9",  img: "/images/galeria/projeto-25.webp", alt: "Interior minimalista com amplas janelas", height: 260 },
-  { id: "m10", img: "/images/galeria/projeto-30.webp", alt: "Projeto com acabamento em pedra natural", height: 230 },
-  { id: "m11", img: "/images/galeria/projeto-35.webp", alt: "Residência com telhado verde", height: 290 },
-  { id: "m12", img: "/images/galeria/projeto-40.webp", alt: "Casa com fachada mista em steel frame", height: 200 },
+  { id: "m1", img: "/images/Residencial/versatilidade-01.webp", alt: "Residência moderna com fachada minimalista", height: 260 },
+  { id: "m2", img: "/images/Residencial/versatilidade-02.webp", alt: "Casa contemporânea com linhas limpas", height: 320 },
+  { id: "m3", img: "/images/Residencial/versatilidade-03.webp", alt: "Projeto residencial com acabamento premium", height: 200 },
+  { id: "m4", img: "/images/Residencial/versatilidade-04.webp", alt: "Fachada com revestimento em madeira", height: 290 },
+  { id: "m5", img: "/images/Residencial/versatilidade-05.webp", alt: "Residência com design diferenciado", height: 230 },
+  { id: "m6", img: "/images/Residencial/versatilidade-06.webp", alt: "Casa com arquitetura contemporânea", height: 320 },
+  { id: "m7", img: "/images/Residencial/versatilidade-07.webp", alt: "Projeto residencial integrado à paisagem", height: 260 },
 ];
 
 export const GALLERY_IMAGES_PROJECTS: GalleryImage[] = [

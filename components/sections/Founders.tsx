@@ -31,6 +31,48 @@ const FOUNDERS: Founder[] = [
     bio: "Engenheiro civil com sólida experiência em planejamento, gerenciamento e execução de obras. Atuou em projetos residenciais, comerciais e logísticos de alto padrão em São Paulo.",
     image: "/images/founders/daniel-falci.webp",
     linkedin: "https://www.linkedin.com/in/danielbkfalci/",
+    timeline: [
+      {
+        year: "2024 - Atual",
+        role: "Co-Fundador",
+        company: "BERKAHN",
+        description: "Fundação da BERKAHN com foco em construção industrializada em Steel Frame, aplicando gestão de qualidade e metodologia BIM.",
+        achievements: [
+          "Implementação do SGQ (Sistema de Gestão da Qualidade)",
+          "Gestão de segurança do trabalho nas obras",
+          "Aplicação de metodologia BIM em todos os projetos",
+        ]
+      },
+      {
+        year: "2024-2025",
+        role: "Engenheiro Civil",
+        company: "Construtora",
+        description: "Execução de obras de altíssimo padrão em São Paulo, com aplicação de metodologias Lean e tecnologia BIM.",
+        achievements: [
+          "Aplicação de metodologias Lean na gestão de obras",
+          "Implementação de BIM nos processos construtivos",
+        ]
+      },
+      {
+        year: "2023-2024",
+        role: "Engenheiro Civil",
+        company: "Gerenciamento de Obras",
+        description: "Gerenciamento de obras residenciais e comerciais, com responsabilidade integral sobre contratos e planejamento.",
+        achievements: [
+          "Membro do PMO (Project Management Office)",
+          "Gerenciamento completo de contratos de obras",
+        ]
+      },
+      {
+        year: "2018-2023",
+        role: "Graduação em Engenharia de Produção",
+        company: "Instituto Mauá de Tecnologia",
+        description: "Formação em engenharia com ênfase em gestão de processos e produção.",
+        achievements: [
+          "Formação pelo Instituto Mauá de Tecnologia",
+        ]
+      }
+    ]
   },
   {
     name: "Matheus Bertevello",
