@@ -15,14 +15,26 @@ export const RESIDENCIAL_SERVICES = [
   {
     title: "Construção Nova",
     src: "/images/Residencial/construcao-nova.webp",
+    benefits:
+      "Construa sua casa com velocidade, precisão milimétrica e zero desperdício. Obra limpa do início ao fim.",
   },
   {
     title: "Reformas",
     src: "/images/Residencial/reformas.webp",
+    benefits:
+      "Reforma leve, limpa e rápida. Menos entulho, menos barulho e máximo aproveitamento do espaço existente.",
   },
   {
     title: "Ampliações",
     src: "/images/Residencial/ampliacoes.webp",
+    benefits:
+      "Amplie sua casa aproveitando ao máximo o que você já tem. Estrutura leve que não sobrecarrega a fundação original.",
+  },
+  {
+    title: "Investimento",
+    src: "/images/Services/projetos-prontos/vila-serrana/vila-serrana-exterior-completo.webp",
+    benefits:
+      "Projetos prontos com retorno rápido. Construção acelerada significa ocupação antecipada e receita mais cedo.",
   },
 ];
 
@@ -65,6 +77,18 @@ export const RESIDENCIAL_BENEFITS_SCROLL = [
     description:
       "Aço 100% reciclável, obra a seco com economia de 99% no consumo de água e canteiro limpo.",
     image: "/images/Residencial/obra-seco.webp",
+  },
+  {
+    title: "Versatilidade arquitetônica.",
+    description:
+      "O Steel Frame permite desde linhas minimalistas até fachadas com curvas complexas. Combinado com madeira, concreto aparente ou vidro, adapta-se a qualquer linguagem arquitetônica.",
+    image: "/images/Residencial/versatilidade-01.webp",
+  },
+  {
+    title: "Materiais de alto desempenho.",
+    description:
+      "Perfis de aço galvanizado, isolamento em lã de rocha ou lã de vidro, placas OSB estruturais e placas cimentícias externas. Cada camada tem função específica: estrutura, isolamento, vedação e acabamento.",
+    image: "/images/Residencial/versatilidade-03.webp",
   },
 ];
 
@@ -285,6 +309,9 @@ export const GALLERY_IMAGES_PROJECTS: GalleryImage[] = [
   { src: "/images/apresentacao/casa-santa-cristina/casa-santa-cristina-03.webp", alt: "Projeto Casa Santa Cristina - Interior" },
   { src: "/images/galeria/projeto-30.webp", alt: "Projeto residencial - Fachada" },
   { src: "/images/galeria/projeto-35.webp", alt: "Projeto residencial - Acabamento" },
+  { src: "/images/Residencial/versatilidade-02.webp", alt: "Casa contemporânea com linhas limpas" },
+  { src: "/images/Residencial/versatilidade-04.webp", alt: "Fachada com revestimento em madeira" },
+  { src: "/images/Residencial/versatilidade-05.webp", alt: "Residência com design diferenciado" },
 ];
 
 // ---------------------------------------------------------------------------

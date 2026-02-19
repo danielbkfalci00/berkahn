@@ -14,7 +14,40 @@ interface PartnersProps {
   label?: string;
   className?: string;
   inline?: boolean;
+  marquee?: boolean;
 }
+
+/* ─── Marquee (infinite scroll) ─── */
+
+function LogoMarquee({ partners }: { partners: { name: string; logo: string }[] }) {
+  // Duplicate list for seamless loop
+  const doubled = [...partners, ...partners];
+
+  return (
+    <div className="overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
+      <div className="flex gap-16 lg:gap-24 animate-marquee hover:[animation-play-state:paused]">
+        {doubled.map((partner, i) => (
+          <div
+            key={`${partner.name}-${i}`}
+            className="flex items-center justify-center shrink-0 h-20 md:h-28 w-36 md:w-48"
+          >
+            <div className="relative w-full h-full grayscale opacity-50 hover:grayscale-0 hover:opacity-100 transition-all duration-500">
+              <Image
+                src={partner.logo}
+                alt={`Logo ${partner.name}`}
+                fill
+                className="object-contain"
+                sizes="200px"
+              />
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ─── Component ─── */
 
 export function Partners({
   partners,
@@ -22,6 +55,7 @@ export function Partners({
   label,
   className,
   inline = false,
+  marquee = false,
 }: PartnersProps = {}) {
   const partnerList = partners || defaultPartners;
   const displayLabel = label ?? "MARCAS PARCEIRAS";
@@ -39,21 +73,25 @@ export function Partners({
       </RevealOnScroll>
 
       <RevealOnScroll delay={0.2}>
-        <div className={`grid grid-cols-2 ${partnerList.length <= 3 ? "md:grid-cols-3" : "md:grid-cols-4"} gap-10 lg:gap-16 items-center max-w-5xl mx-auto`}>
-          {partnerList.map((partner) => (
-            <div key={partner.name} className="flex items-center justify-center h-24 md:h-32 px-4">
-              <div className="relative w-full h-full grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-500">
-                <Image
-                  src={partner.logo}
-                  alt={`Logo ${partner.name}`}
-                  fill
-                  className="object-contain"
-                  sizes="(max-width: 768px) 40vw, 20vw"
-                />
+        {marquee ? (
+          <LogoMarquee partners={partnerList} />
+        ) : (
+          <div className={`grid grid-cols-2 ${partnerList.length <= 3 ? "md:grid-cols-3" : "md:grid-cols-4"} gap-10 lg:gap-16 items-center max-w-5xl mx-auto`}>
+            {partnerList.map((partner) => (
+              <div key={partner.name} className="flex items-center justify-center h-24 md:h-32 px-4">
+                <div className="relative w-full h-full grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-500">
+                  <Image
+                    src={partner.logo}
+                    alt={`Logo ${partner.name}`}
+                    fill
+                    className="object-contain"
+                    sizes="(max-width: 768px) 40vw, 20vw"
+                  />
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </RevealOnScroll>
     </>
   );

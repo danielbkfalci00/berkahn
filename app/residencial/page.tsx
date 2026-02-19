@@ -1,5 +1,5 @@
 import { ParallaxHero } from "@/components/sections/ParallaxHero";
-import { PartnersFlowingMenu } from "@/components/residencial/PartnersFlowingMenu";
+import { Partners } from "@/components/sections/Partners";
 import { CTA } from "@/components/sections/CTA";
 import { ThreeDMarquee } from "@/components/ui/3d-marquee";
 import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
@@ -11,7 +11,6 @@ import { DomeGallery } from "@/components/presentation/DomeGallery";
 import { FocusCardsSection } from "@/components/residencial/FocusCardsSection";
 import { BenefitsMorphingGrid } from "@/components/residencial/BenefitsMorphingGrid";
 import { TransparencyAccordion } from "@/components/residencial/TransparencyAccordion";
-import { Masonry } from "@/components/ui/masonry";
 import {
   ImageComparison,
   ImageComparisonImage,
@@ -23,7 +22,6 @@ import {
   RESIDENCIAL_TRANSPARENCY_BLOCKS,
   RESIDENCIAL_COMPARISON_BARS,
   RESIDENCIAL_PROCESS_STEPS,
-  GALLERY_MASONRY_ITEMS,
   GALLERY_IMAGES_PROJECTS,
   RESIDENCIAL_3D_GALLERY,
 } from "@/lib/residencial-data";
@@ -31,7 +29,7 @@ import {
 export const metadata = {
   title: "Residencial | Berkahn Steel Frame",
   description:
-    "Sua casa com a precisão de um processo industrial. Construção nova, reforma ou ampliação com Light Steel Frame: obra rápida, limpa e com orçamento previsível.",
+    "Construção residencial com velocidade e precisão industrial. Construção nova, reforma ou ampliação com Light Steel Frame: obra rápida, limpa e com orçamento previsível.",
 };
 
 export default function ResidencialPage() {
@@ -42,7 +40,7 @@ export default function ResidencialPage() {
       {/* ================================================================ */}
       <ParallaxHero
         label="CONSTRUÇÃO RESIDENCIAL"
-        title="Sua casa com a precisão de um processo industrial."
+        title="Construção residencial com velocidade e precisão industrial."
         subtitle="Construção nova, reforma ou ampliação com Light Steel Frame. Obra rápida, limpa e com orçamento fechado desde o início."
         ctaText="Fale com a Berkahn"
         ctaHref="#formulario"
@@ -65,7 +63,7 @@ export default function ResidencialPage() {
               A Berkahn constrói, reforma e amplia.
             </h2>
             <p className="body-lg text-black-70 max-w-3xl mb-12">
-              O Light Steel Frame é o sistema construtivo que domina mais de 90% das construções residenciais nos EUA, Canadá e Japão. A Berkahn trouxe essa tecnologia para o Brasil com engenharia própria e cobre o ciclo completo da sua obra.
+              Nos EUA, mais de 90% das casas são construídas com métodos a seco — sem tijolos, sem argamassa. O Light Steel Frame é a evolução desse conceito: mais leve, mais preciso e 100% reciclável. A Berkahn trouxe essa tecnologia para o Brasil com engenharia própria e cobre o ciclo completo da sua obra.
             </p>
           </RevealOnScroll>
 
@@ -78,7 +76,11 @@ export default function ResidencialPage() {
       {/* ================================================================ */}
       {/* 3. Partners */}
       {/* ================================================================ */}
-      <PartnersFlowingMenu />
+      <Partners
+        label="PARCERIAS QUE SUSTENTAM A QUALIDADE"
+        title="Marcas que Garantem o Padrão Berkahn"
+        marquee
+      />
 
       {/* ================================================================ */}
       {/* 4. Por que Steel Frame — MorphingDialog Grid */}
@@ -96,23 +98,6 @@ export default function ResidencialPage() {
           </RevealOnScroll>
 
           <BenefitsMorphingGrid benefits={RESIDENCIAL_BENEFITS_SCROLL} />
-
-          {/* Sub-block: Versatilidade arquitetônica + Masonry Grid */}
-          <div className="mt-16 pt-16 border-t border-black-10">
-            <RevealOnScroll>
-              <h3 className="headline-sm mb-6">Versatilidade arquitetônica</h3>
-              <p className="body-lg text-black-70 leading-relaxed max-w-3xl mb-12">
-                O Steel Frame permite desde linhas minimalistas até fachadas com curvas complexas. Combinado com madeira, concreto aparente ou vidro, adapta-se a qualquer linguagem arquitetônica.
-              </p>
-            </RevealOnScroll>
-
-            <Masonry
-              items={GALLERY_MASONRY_ITEMS}
-              scaleOnHover
-              hoverScale={0.95}
-              blurToFocus
-            />
-          </div>
         </div>
       </section>
 

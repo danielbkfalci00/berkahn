@@ -8,8 +8,7 @@ import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
 import { CTA } from "@/components/sections/CTA";
 import { ProjectsGrid } from "@/components/sections/ProjectsGrid";
 import { ExecutionPhases } from "@/components/servicos/ExecutionPhases";
-import { ContactFormDialog } from "@/components/forms/ContactFormDialog";
-import { Home, Building2, Factory, CheckIcon } from "lucide-react";
+import { Home, Building2, CheckIcon } from "lucide-react";
 import { StatsGrid } from "@/components/article/StatHighlight";
 import { HowWeWorkTimeline } from "@/components/servicos/HowWeWorkTimeline";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
@@ -34,30 +33,16 @@ const services = [
   },
   {
     id: "comercial",
-    title: "Comercial",
+    title: "Comercial & Industrial",
     description:
-      "Edifícios comerciais, lojas e escritórios com agilidade na execução e flexibilidade de layout. Soluções que otimizam espaços e reduzem custos operacionais.",
+      "Edifícios comerciais, galpões e estruturas industriais com agilidade na execução e flexibilidade de layout. Soluções que otimizam espaços e reduzem custos operacionais.",
     items: [
       "Escritórios e coworkings",
       "Lojas e showrooms",
-      "Centros médicos e clínicas",
+      "Galpões logísticos e centros de distribuição",
     ],
     image: "/images/Services/comercial.webp",
     icon: Building2,
-    href: "/comercial-industrial",
-  },
-  {
-    id: "industrial",
-    title: "Industrial",
-    description:
-      "Galpões e estruturas industriais com alta resistência e prazos reduzidos de construção. Projetos robustos que atendem às demandas mais exigentes do setor.",
-    items: [
-      "Galpões logísticos",
-      "Centros de distribuição",
-      "Estruturas modulares",
-    ],
-    image: "/images/Services/industrial.webp",
-    icon: Factory,
     href: "/comercial-industrial",
   },
 ];
@@ -142,34 +127,27 @@ export default function ServicosPage() {
                       ))}
                     </ul>
 
-                    {/* Links */}
-                    <div className="flex flex-col sm:flex-row gap-4">
-                      <Link
-                        href={service.href}
-                        className="inline-flex items-center gap-2 text-black font-medium hover:gap-4 transition-all duration-300"
+                    {/* Link */}
+                    <Link
+                      href={service.href}
+                      className="inline-flex items-center gap-2 text-black font-medium hover:gap-4 transition-all duration-300"
+                    >
+                      Saiba mais
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth="2"
+                        stroke="currentColor"
+                        className="w-5 h-5"
                       >
-                        Saiba mais
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          strokeWidth="2"
-                          stroke="currentColor"
-                          className="w-5 h-5"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
-                          />
-                        </svg>
-                      </Link>
-                      <ContactFormDialog defaultSegment={service.id === "residencial" ? "residencial" : "comercial"}>
-                        <button className="inline-flex items-center gap-2 text-black-50 font-medium hover:text-black transition-colors duration-300 cursor-pointer">
-                          Solicitar orçamento
-                        </button>
-                      </ContactFormDialog>
-                    </div>
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
+                        />
+                      </svg>
+                    </Link>
                   </div>
                 </div>
               </RevealOnScroll>

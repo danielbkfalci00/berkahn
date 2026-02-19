@@ -11,17 +11,10 @@ const categories = [
     href: "/residencial",
   },
   {
-    title: "CORPORATIVO / COMERCIAL",
+    title: "COMERCIAL & INDUSTRIAL",
     description:
-      "Ambientes corporativos que refletem identidade e eficiência, com gestão de obra precisa e soluções técnicas sob medida.",
+      "Ambientes corporativos e estruturas industriais com gestão de obra precisa, eficiência e soluções técnicas sob medida.",
     image: "/images/Services/comercial.webp",
-    href: "/comercial-industrial",
-  },
-  {
-    title: "INDUSTRIAL",
-    description:
-      "Estruturas industriais projetadas para eficiência, durabilidade e conformidade com as normas técnicas do setor.",
-    image: "/images/Services/industrial.webp",
     href: "/comercial-industrial",
   },
 ];
@@ -43,7 +36,7 @@ export function Categories() {
         </RevealOnScroll>
 
         {/* Categories Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {categories.map((category, index) => (
             <RevealOnScroll key={category.title} delay={index * 0.1}>
               <div className="group relative h-[500px] overflow-hidden">

@@ -120,6 +120,10 @@ const config: Config = {
   				to: {
   					height: '0'
   				}
+  			},
+  			marquee: {
+  				from: { transform: 'translateX(0)' },
+  				to: { transform: 'translateX(-50%)' }
   			}
   		},
   		animation: {
@@ -127,7 +131,8 @@ const config: Config = {
   			fadeInUp: 'fadeInUp 0.5s cubic-bezier(0.19, 1, 0.22, 1)',
   			slideIn: 'slideIn 0.5s cubic-bezier(0.65, 0, 0.35, 1)',
   			'accordion-down': 'accordion-down 0.2s ease-out',
-  			'accordion-up': 'accordion-up 0.2s ease-out'
+  			'accordion-up': 'accordion-up 0.2s ease-out',
+  			marquee: 'marquee 20s linear infinite'
   		}
   	}
   },
