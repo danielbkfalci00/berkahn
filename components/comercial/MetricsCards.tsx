@@ -48,7 +48,7 @@ export function MetricsCards({ data }: MetricsCardsProps) {
 
                 {/* Big number */}
                 {metric.isText ? (
-                  <p className="font-heading text-4xl xl:text-5xl font-bold text-white mb-4 tracking-tighter leading-none">
+                  <p className="font-heading text-2xl xl:text-3xl font-bold text-white mb-4 tracking-tighter leading-none">
                     {metric.textValue}
                   </p>
                 ) : (
