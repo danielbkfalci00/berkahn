@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { SlideSection } from "../ui/SlideSection";
 import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
 import { CharReveal } from "@/components/animations/TextReveal";
-import { Mail, Phone, ArrowUpRight, Linkedin, Instagram } from "lucide-react";
+import { Mail, Phone, ArrowUpRight, Linkedin } from "lucide-react";
 import Link from "next/link";
 
 const contactInfo = {
@@ -14,7 +14,6 @@ const contactInfo = {
   website: "https://berkahn.com.br",
   cnpj: "39.455.932/0001-64",
   linkedin: "https://www.linkedin.com/company/construtora-berkahn/?viewAsMember=true",
-  instagram: "https://www.instagram.com/berkahn.co/",
 };
 
 export function SlideContact() {
@@ -84,16 +83,6 @@ export function SlideContact() {
               aria-label="LinkedIn"
             >
               <Linkedin className="w-6 h-6" strokeWidth={1.5} />
-            </motion.a>
-            <motion.a
-              href={contactInfo.instagram}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-white/60 hover:text-white transition-colors duration-300"
-              whileHover={{ scale: 1.1 }}
-              aria-label="Instagram"
-            >
-              <Instagram className="w-6 h-6" strokeWidth={1.5} />
             </motion.a>
           </div>
         </RevealOnScroll>

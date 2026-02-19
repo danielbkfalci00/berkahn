@@ -47,5 +47,4 @@ export const FOOTER_LEGAL = [
 // Footer Social Data
 export const FOOTER_SOCIAL = [
   { label: "LinkedIn", href: "https://www.linkedin.com/company/construtora-berkahn/?viewAsMember=true", type: "linkedin" },
-  { label: "Instagram", href: "https://www.instagram.com/berkahn.co/", type: "instagram" },
 ] as const;
