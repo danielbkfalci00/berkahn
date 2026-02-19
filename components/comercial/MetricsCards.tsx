@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { CountUp } from "@/components/animations/CountUp";
 import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
 import type { MetricCard } from "@/lib/comercial-data";
@@ -20,7 +21,7 @@ export function MetricsCards({ data }: MetricsCardsProps) {
             <RevealOnScroll key={metric.label} delay={index * 0.1}>
               <div
                 className={[
-                  "flex flex-col px-6 lg:px-8 py-8",
+                  "group flex flex-col px-6 lg:px-8 py-8",
                   // Mobile: border-b on all except last
                   !isLast && "border-b border-white/10 sm:border-b-0",
                   // Tablet (2-col): border-b on first row, border-r on odd index
@@ -32,6 +33,19 @@ export function MetricsCards({ data }: MetricsCardsProps) {
                   .filter(Boolean)
                   .join(" ")}
               >
+                {/* Thumbnail image */}
+                {metric.image && (
+                  <div className="relative aspect-[16/10] overflow-hidden rounded-lg mb-5">
+                    <Image
+                      src={metric.image}
+                      alt={metric.imageAlt || ""}
+                      fill
+                      className="object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                    />
+                  </div>
+                )}
+
                 {/* Big number */}
                 {metric.isText ? (
                   <p className="font-heading text-4xl xl:text-5xl font-bold text-white mb-4 tracking-tighter leading-none">
