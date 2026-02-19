@@ -83,12 +83,38 @@ export default function LSFPage() {
               <div>
                 <h2 className="headline-md mb-4">A Composição do Sistema</h2>
                 <h3 className="text-xl font-medium mb-6 text-black-70">
-                  Paredes de Múltiplas Camadas (Multilayer Walls)
+                  Soluções que se adaptam ao seu projeto
                 </h3>
-                <p className="body-lg text-black-70 leading-relaxed">
-                  No LSF, as paredes funcionam como sistemas multicamadas que entregam
-                  melhor estanqueidade, isolamento e acabamento que a alvenaria
-                  convencional.
+
+                <div className="space-y-4">
+                  <p className="body-lg text-black-70 leading-relaxed">
+                    No LSF, as paredes funcionam como sistemas multicamadas que entregam
+                    estanqueidade, isolamento e acabamento superiores à alvenaria
+                    convencional.
+                  </p>
+                  <p className="body-lg text-black-70 leading-relaxed">
+                    Para cada tipo de projeto, desenvolvemos uma composição específica
+                    — espessuras, materiais isolantes, revestimentos e acabamentos são
+                    definidos de acordo com as necessidades técnicas e preferências de
+                    cada cliente.
+                  </p>
+                </div>
+
+                {/* Tags de tipos de projeto */}
+                <div className="flex flex-wrap gap-2 mt-6">
+                  {["Residencial", "Comercial", "Industrial", "Reformas"].map((type) => (
+                    <span
+                      key={type}
+                      className="inline-flex items-center px-3 py-1.5 rounded-full bg-black-5 text-xs font-medium text-black-70 tracking-wide"
+                    >
+                      {type}
+                    </span>
+                  ))}
+                </div>
+
+                <p className="text-sm text-black-50 mt-6 leading-relaxed">
+                  O diagrama ao lado e as camadas detalhadas abaixo ilustram uma
+                  composição padrão para projetos residenciais.
                 </p>
               </div>
             </RevealOnScroll>
@@ -105,7 +131,10 @@ export default function LSFPage() {
               Sistema de 6 Camadas
             </h2>
             <p className="body-md text-black-70 text-center max-w-3xl mx-auto mb-16">
-              O Light Steel Frame utiliza um sistema multicamadas para isolamento térmico, acústico, proteção contra intempéries e durabilidade estrutural.
+              Exemplo de composição para projetos residenciais. O sistema multicamadas
+              pode ser adaptado conforme as exigências de cada projeto — isolamento
+              térmico, acústico, proteção contra intempéries e resistência ao fogo
+              variam de acordo com a aplicação.
             </p>
           </RevealOnScroll>
 
