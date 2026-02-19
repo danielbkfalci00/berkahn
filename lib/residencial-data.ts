@@ -22,13 +22,13 @@ export const RESIDENCIAL_SERVICES = [
     title: "Reformas",
     src: "/images/Residencial/reformas.webp",
     benefits:
-      "Reforma leve, limpa e rápida. Menos entulho, menos barulho e máximo aproveitamento do espaço existente.",
+      "Reforma leve, limpa e rápida — o morador pode continuar no imóvel durante a obra. Menos entulho, menos barulho e prazo definido desde o início.",
   },
   {
     title: "Ampliações",
     src: "/images/Residencial/ampliacoes.webp",
     benefits:
-      "Amplie sua casa aproveitando ao máximo o que você já tem. Estrutura leve que não sobrecarrega a fundação original.",
+      "Estrutura até 15× mais leve que alvenaria: amplie sobre lajes existentes sem reforço de fundação. Máximo aproveitamento do espaço que você já tem.",
   },
   {
     title: "Investimento",

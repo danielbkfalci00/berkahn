@@ -22,18 +22,10 @@ const PROCESS_STEPS: ProcessStep[] = [
   {
     title: "Projeto",
     description:
-      "Projeto estrutural e arquitetônico integrado às necessidades operacionais. Cronograma, orçamento e especificações técnicas definidos antes de qualquer fabricação.",
+      "Coordenação completa de todas as disciplinas: estrutural, arquitetônico, elétrico, hidráulico e complementares. Cronograma, orçamento e especificações técnicas definidos antes de qualquer execução.",
     image:
       "https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=800&q=80",
     imageAlt: "Projeto executivo em desenvolvimento",
-  },
-  {
-    title: "Fabricação",
-    description:
-      "Componentes fabricados sob medida em ambiente industrial. Paralelamente, o canteiro avança com fundação e preparações.",
-    image:
-      "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&w=800&q=80",
-    imageAlt: "Fabricação de componentes em ambiente industrial",
   },
   {
     title: "Execução",

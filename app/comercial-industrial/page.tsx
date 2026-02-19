@@ -8,12 +8,11 @@ import { ProcessTimelineVisual } from "@/components/comercial/ProcessTimelineVis
 import { CorporateContactForm } from "@/components/comercial/CorporateContactForm";
 import { BrazilMapBeam } from "@/components/comercial/BrazilMapBeam";
 import { CTA } from "@/components/sections/CTA";
-import { ThreeDMarquee } from "@/components/ui/3d-marquee";
+import { Partners } from "@/components/sections/Partners";
 import {
   SEGMENT_SOLUTIONS,
   COMERCIAL_TRANSPARENCY_BLOCKS,
   COMERCIAL_METRICS,
-  RESIDENTIAL_GALLERY_IMAGES,
 } from "@/lib/comercial-data";
 
 export const metadata = {
@@ -29,7 +28,7 @@ export default function ComercialIndustrialPage() {
       <ParallaxHero
         label="CONSTRUÇÃO CORPORATIVA"
         title="Construção corporativa com engenharia industrial e prazo real."
-        subtitle="Lojas, galpões, escritórios e construções temporárias. A Berkahn projeta e executa com Steel Frame: prazo reduzido, custo previsível e baixo impacto ambiental."
+        subtitle="Lojas, galpões, escritórios e construções temporárias. Construção a seco aplicada a projetos comerciais e industriais: prazo reduzido, custo previsível e baixo impacto ambiental."
         ctaText="Solicite uma consultoria"
         ctaHref="#formulario"
         backgroundImage="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1920&q=80"
@@ -52,7 +51,7 @@ export default function ComercialIndustrialPage() {
               Soluções técnicas para cada tipo de operação.
             </h2>
             <p className="body-lg text-black-70 max-w-3xl mb-16">
-              Steel Frame aplicado a projetos comerciais, industriais e
+              Construção a seco aplicada a projetos comerciais, industriais e
               temporários, com sistemas híbridos quando a demanda estrutural exige.
             </p>
           </RevealOnScroll>
@@ -138,7 +137,7 @@ export default function ComercialIndustrialPage() {
       <section className="py-xl">
         <div className="container">
           <RevealOnScroll>
-            <p className="label-text mb-4">PROCESSO</p>
+            <p className="label-text mb-4">COMO TRABALHAMOS</p>
             <h2 className="headline-md mb-6">
               Do briefing à operação.
             </h2>
@@ -153,7 +152,16 @@ export default function ComercialIndustrialPage() {
       </section>
 
       {/* ================================================================ */}
-      {/* 7. Formulário de contato corporativo */}
+      {/* 7. Partners */}
+      {/* ================================================================ */}
+      <Partners
+        label="PARCERIAS QUE SUSTENTAM A QUALIDADE"
+        title="Marcas que Garantem o Padrão Berkahn"
+        marquee
+      />
+
+      {/* ================================================================ */}
+      {/* 8. Formulário de contato corporativo */}
       {/* ================================================================ */}
       <section id="formulario" className="py-xl bg-black-5">
         <div className="container max-w-6xl">
@@ -206,10 +214,6 @@ export default function ComercialIndustrialPage() {
         actionHref="/residencial"
       />
 
-      {/* 9. Galeria 3D — Projetos Residenciais */}
-      <section className="bg-white overflow-hidden">
-        <ThreeDMarquee images={RESIDENTIAL_GALLERY_IMAGES} />
-      </section>
     </>
   );
 }
