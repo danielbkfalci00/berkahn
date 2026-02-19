@@ -17,6 +17,7 @@ interface FocusCardsSectionProps {
 
 export function FocusCardsSection({ cards }: FocusCardsSectionProps) {
   const [activeCard, setActiveCard] = useState<number | null>(null);
+  const [hoveredCard, setHoveredCard] = useState<number | null>(null);
 
   function handleClick(index: number) {
     setActiveCard((prev) => (prev === index ? null : index));
@@ -32,10 +33,13 @@ export function FocusCardsSection({ cards }: FocusCardsSectionProps) {
           <motion.div
             key={card.title}
             onClick={() => handleClick(index)}
+            onMouseEnter={() => setHoveredCard(index)}
+            onMouseLeave={() => setHoveredCard(null)}
             className={cn(
               "relative rounded-lg overflow-hidden h-72 md:h-[28rem] w-full cursor-pointer select-none",
               "transition-[filter,transform] duration-300 ease-out",
-              hasActive && !isActive && "blur-sm scale-[0.98]"
+              hasActive && !isActive && "blur-sm scale-[0.98]",
+              hoveredCard !== null && hoveredCard !== index && !hasActive && "md:blur-sm md:scale-[0.98]"
             )}
             layout
           >
@@ -58,16 +62,21 @@ export function FocusCardsSection({ cards }: FocusCardsSectionProps) {
                   "absolute inset-0 transition-opacity duration-300",
                   isActive
                     ? "bg-black/40"
-                    : "bg-gradient-to-t from-black/60 to-transparent"
+                    : hoveredCard === index
+                      ? "bg-black/50"
+                      : "bg-gradient-to-t from-black/60 to-transparent md:opacity-0"
                 )}
               />
             </motion.div>
 
-            {/* Title overlay — always visible at bottom when closed */}
+            {/* Title overlay — hover on desktop, always on mobile */}
             <AnimatePresence>
               {!isActive && (
                 <motion.div
-                  className="absolute inset-x-0 bottom-0 p-6 flex items-end justify-between"
+                  className={cn(
+                    "absolute inset-x-0 bottom-0 p-6 flex items-end justify-between transition-opacity duration-300",
+                    hoveredCard === index ? "opacity-100" : "opacity-100 md:opacity-0"
+                  )}
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}

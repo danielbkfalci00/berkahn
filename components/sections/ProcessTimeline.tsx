@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import Image from "next/image";
 import { motion, useScroll, useTransform, useInView } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
@@ -87,6 +88,23 @@ function TimelineStep({ step, index }: { step: ProcessStep; index: number }) {
           >
             {step.description}
           </p>
+
+          {step.image && (
+            <div
+              className={cn(
+                "relative aspect-[16/10] overflow-hidden rounded-lg mt-4 transition-opacity duration-500",
+                isInView ? "opacity-100" : "opacity-50"
+              )}
+            >
+              <Image
+                src={step.image}
+                alt={step.title}
+                fill
+                className="object-cover"
+                sizes="(max-width: 768px) 100vw, 600px"
+              />
+            </div>
+          )}
         </div>
       </div>
     </RevealOnScroll>

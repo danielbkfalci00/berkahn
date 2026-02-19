@@ -67,28 +67,16 @@ export const RESIDENCIAL_BENEFITS_SCROLL = [
     image: "/images/Services/servicos-finished.webp",
   },
   {
-    title: "Estrutura com vida útil acima de 150 anos.",
+    title: "Durável, reciclável, sustentável.",
     description:
-      "Aço galvanizado com vida útil superior a 150 anos. Imune a cupins, umidade e degradação biológica.",
+      "Aço galvanizado com vida útil superior a 150 anos, imune a cupins e umidade. Obra a seco com economia de 99% no consumo de água e aço 100% reciclável.",
     image: "/images/Apresentação/estrutura-1.webp",
   },
   {
-    title: "Obra a seco, aço 100% reciclável.",
+    title: "Versatilidade com materiais premium.",
     description:
-      "Aço 100% reciclável, obra a seco com economia de 99% no consumo de água e canteiro limpo.",
-    image: "/images/Residencial/obra-seco.webp",
-  },
-  {
-    title: "Versatilidade arquitetônica.",
-    description:
-      "O Steel Frame permite desde linhas minimalistas até fachadas com curvas complexas. Combinado com madeira, concreto aparente ou vidro, adapta-se a qualquer linguagem arquitetônica.",
+      "Do minimalismo a fachadas com curvas complexas. Perfis de aço galvanizado, isolamento em lã de rocha, placas OSB e cimentícias: cada camada cumpre uma função e o conjunto se adapta a qualquer linguagem arquitetônica.",
     image: "/images/Residencial/versatilidade-01.webp",
-  },
-  {
-    title: "Materiais de alto desempenho.",
-    description:
-      "Perfis de aço galvanizado, isolamento em lã de rocha ou lã de vidro, placas OSB estruturais e placas cimentícias externas. Cada camada tem função específica: estrutura, isolamento, vedação e acabamento.",
-    image: "/images/Residencial/versatilidade-03.webp",
   },
 ];
 
@@ -245,26 +233,31 @@ export const RESIDENCIAL_PROCESS_STEPS: ProcessStep[] = [
     step: 1,
     title: "Conversa inicial",
     description: "Entendemos o que você precisa, o terreno e o orçamento. Sem compromisso.",
+    image: "/images/Services/Como-trabalhamos/consulta-inicial-1.webp",
   },
   {
     step: 2,
     title: "Projeto e planejamento",
     description: "Projeto executável com nossas arquitetas parceiras. Layout, instalações, acabamentos, cronograma e orçamento definitivo.",
+    image: "/images/Services/Como-trabalhamos/desenvolvimento-de-projetos-1.webp",
   },
   {
     step: 3,
     title: "Fabricação",
     description: "Perfis fabricados sob medida com precisão milimétrica enquanto o canteiro avança na fundação.",
+    image: "/images/Services/Execução-de-obras/Estrutura/estrutura-1.webp",
   },
   {
     step: 4,
     title: "Montagem e execução",
     description: "Estrutura montada com velocidade e limpeza. Cronograma acompanhado etapa a etapa.",
+    image: "/images/Services/Execução-de-obras/Estrutura/estrutura-2.webp",
   },
   {
     step: 5,
     title: "Acabamento e entrega",
     description: "Instalações finais, acabamentos e inspeção de qualidade. Entrega no prazo e no orçamento.",
+    image: "/images/Services/Como-trabalhamos/entrega-e-garantia-1.webp",
   },
 ];
 
