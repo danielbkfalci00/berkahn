@@ -5,7 +5,7 @@ import { Gallery } from "@/components/sections/Gallery";
 import { LSFIntro } from "@/components/sections/LSFIntro";
 import { BenefitsGridCompact } from "@/components/sections/BenefitsGridCompact";
 import { ComparisonTableHome } from "@/components/sections/ComparisonTableHome";
-import { PartnersFlowingMenu } from "@/components/residencial/PartnersFlowingMenu";
+import { Partners } from "@/components/sections/Partners";
 import { CTA } from "@/components/sections/CTA";
 
 export default function Home() {
@@ -18,7 +18,11 @@ export default function Home() {
       <LSFIntro />
       <BenefitsGridCompact />
       <ComparisonTableHome />
-      <PartnersFlowingMenu />
+      <Partners
+        label="PARCERIAS QUE SUSTENTAM A QUALIDADE"
+        title="Marcas que Garantem o Padrão Berkahn"
+        marquee
+      />
       <CTA />
     </>
   );

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "motion/react";
 import { cn } from "@/lib/utils";
@@ -18,16 +18,26 @@ interface FocusCardsSectionProps {
 export function FocusCardsSection({ cards }: FocusCardsSectionProps) {
   const [activeCard, setActiveCard] = useState<number | null>(null);
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
+  const [isDesktop, setIsDesktop] = useState(false);
+
+  useEffect(() => {
+    const mql = window.matchMedia("(min-width: 768px)");
+    setIsDesktop(mql.matches);
+    const handler = (e: MediaQueryListEvent) => setIsDesktop(e.matches);
+    mql.addEventListener("change", handler);
+    return () => mql.removeEventListener("change", handler);
+  }, []);
 
   function handleClick(index: number) {
+    if (isDesktop) return;
     setActiveCard((prev) => (prev === index ? null : index));
   }
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 w-full">
       {cards.map((card, index) => {
-        const isActive = activeCard === index;
-        const hasActive = activeCard !== null;
+        const isActive = isDesktop ? hoveredCard === index : activeCard === index;
+        const hasActive = isDesktop ? hoveredCard !== null : activeCard !== null;
 
         return (
           <motion.div
