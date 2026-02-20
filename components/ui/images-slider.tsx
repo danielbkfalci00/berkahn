@@ -83,31 +83,29 @@ export function ImagesSlider({
 
   const slideVariants = {
     initial: {
-      scale: 0,
+      scale: 1.08,
       opacity: 0,
-      rotateX: 45,
     },
     visible: {
       scale: 1,
       opacity: 1,
-      rotateX: 0,
       transition: {
-        duration: 0.5,
-        ease: [0.645, 0.045, 0.355, 1.0] as [number, number, number, number],
+        duration: 1.2,
+        ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
       },
     },
     upExit: {
-      opacity: 1,
-      y: "-150%",
+      opacity: 0,
+      scale: 0.95,
       transition: {
-        duration: 1,
+        duration: 0.8,
       },
     },
     downExit: {
-      opacity: 1,
-      y: "150%",
+      opacity: 0,
+      scale: 0.95,
       transition: {
-        duration: 1,
+        duration: 0.8,
       },
     },
   };
@@ -118,7 +116,6 @@ export function ImagesSlider({
         "overflow-hidden h-full w-full relative flex items-center justify-center",
         className
       )}
-      style={{ perspective: "1000px" }}
     >
       {children}
       {overlay && (

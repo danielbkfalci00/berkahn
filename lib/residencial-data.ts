@@ -33,7 +33,7 @@ export const RESIDENCIAL_SERVICES = [
     title: "Investimento",
     src: "/images/Services/projetos-prontos/vila-serrana/vila-serrana-exterior-completo.webp",
     benefits:
-      "Projetos prontos com retorno rápido. Construção acelerada significa ocupação antecipada e receita mais cedo.",
+      "Projetos prontos com retorno rápido. Construção acelerada significa ocupação e receita antecipada.",
   },
 ];
 
