@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import Image from "next/image";
-import { motion, useScroll, useTransform, useInView } from "framer-motion";
+import { motion, useScroll, useTransform, useInView } from "motion/react";
 import { cn } from "@/lib/utils";
 import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
 import type { ProcessStep } from "@/lib/types";

@@ -1,14 +1,31 @@
+import dynamic from "next/dynamic";
 import { ParallaxHero } from "@/components/sections/ParallaxHero";
 import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
-import { SegmentShowcase } from "@/components/comercial/SegmentShowcase";
-import { ESGBentoGrid } from "@/components/comercial/ESGBentoGrid";
-import { MetricsCards } from "@/components/comercial/MetricsCards";
-import { TransparencyAccordion } from "@/components/comercial/TransparencyAccordion";
-import { ProcessTimelineVisual } from "@/components/comercial/ProcessTimelineVisual";
-import { CorporateContactForm } from "@/components/comercial/CorporateContactForm";
-import { BrazilMapBeam } from "@/components/comercial/BrazilMapBeam";
 import { CTA } from "@/components/sections/CTA";
 import { Partners } from "@/components/sections/Partners";
+
+// Below-fold components — lazy loaded for smaller initial bundle
+const SegmentShowcase = dynamic(() =>
+  import("@/components/comercial/SegmentShowcase").then((m) => m.SegmentShowcase)
+);
+const ESGBentoGrid = dynamic(() =>
+  import("@/components/comercial/ESGBentoGrid").then((m) => m.ESGBentoGrid)
+);
+const MetricsCards = dynamic(() =>
+  import("@/components/comercial/MetricsCards").then((m) => m.MetricsCards)
+);
+const TransparencyAccordion = dynamic(() =>
+  import("@/components/comercial/TransparencyAccordion").then((m) => m.TransparencyAccordion)
+);
+const ProcessTimelineVisual = dynamic(() =>
+  import("@/components/comercial/ProcessTimelineVisual").then((m) => m.ProcessTimelineVisual)
+);
+const CorporateContactForm = dynamic(() =>
+  import("@/components/comercial/CorporateContactForm").then((m) => m.CorporateContactForm)
+);
+const BrazilMapBeam = dynamic(() =>
+  import("@/components/comercial/BrazilMapBeam").then((m) => m.BrazilMapBeam)
+);
 import {
   SEGMENT_SOLUTIONS,
   COMERCIAL_TRANSPARENCY_BLOCKS,

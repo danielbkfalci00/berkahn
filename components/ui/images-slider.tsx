@@ -23,25 +23,28 @@ export function ImagesSlider({
   direction?: "up" | "down";
 }) {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [loading, setLoading] = useState(false);
-  const [loadedImages, setLoadedImages] = useState<string[]>([]);
+  // Show first image immediately; preload remaining in background
+  const [loadedImages, setLoadedImages] = useState<string[]>(
+    images.length > 0 ? [images[0]] : []
+  );
 
   const handleNext = useCallback(() => {
     setCurrentIndex((prevIndex) =>
-      prevIndex + 1 === images.length ? 0 : prevIndex + 1
+      prevIndex + 1 === loadedImages.length ? 0 : prevIndex + 1
     );
-  }, [images.length]);
+  }, [loadedImages.length]);
 
   const handlePrevious = useCallback(() => {
     setCurrentIndex((prevIndex) =>
-      prevIndex - 1 < 0 ? images.length - 1 : prevIndex - 1
+      prevIndex - 1 < 0 ? loadedImages.length - 1 : prevIndex - 1
     );
-  }, [images.length]);
+  }, [loadedImages.length]);
 
-  // Preload images
+  // Preload remaining images in background
   useEffect(() => {
-    setLoading(true);
-    const loadPromises = images.map(
+    if (images.length <= 1) return;
+    const remaining = images.slice(1);
+    const loadPromises = remaining.map(
       (image) =>
         new Promise<string>((resolve, reject) => {
           const img = new window.Image();
@@ -52,10 +55,7 @@ export function ImagesSlider({
     );
 
     Promise.all(loadPromises)
-      .then((loaded) => {
-        setLoadedImages(loaded);
-        setLoading(false);
-      })
+      .then((loaded) => setLoadedImages([images[0], ...loaded]))
       .catch((error) => console.error("Failed to load images", error));
   }, [images]);
 
@@ -111,8 +111,6 @@ export function ImagesSlider({
       },
     },
   };
-
-  if (loading) return null;
 
   return (
     <div

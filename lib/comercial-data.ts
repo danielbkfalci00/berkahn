@@ -1,4 +1,4 @@
-import type { ContentBlock, ProcessStep } from "@/lib/types";
+import type { ContentBlock } from "@/lib/types";
 
 // ---------------------------------------------------------------------------
 // Segment Solutions (Section 2)
@@ -70,46 +70,6 @@ export const SEGMENT_SOLUTIONS: SegmentSolution[] = [
     ],
     image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=800&q=80",
     imageAlt: "Edifício corporativo em renovação",
-  },
-];
-
-// ---------------------------------------------------------------------------
-// ESG Pillars (Section 3)
-// ---------------------------------------------------------------------------
-
-export interface ESGPillar {
-  badge: string;
-  badgeLabel: string;
-  paragraphs: string[];
-}
-
-export const ESG_PILLARS: ESGPillar[] = [
-  {
-    badge: "E",
-    badgeLabel: "Environmental",
-    paragraphs: [
-      "O aço utilizado na estrutura LSF é 100% reciclável e possui um conteúdo mínimo de 25% de material reciclado na sua composição. Pode ser reprocessado inúmeras vezes sem perder qualidade. Isso contribui diretamente para a economia circular e para a redução da demanda por matéria-prima virgem.",
-      "A construção a seco consome água praticamente apenas na etapa de fundação, uma economia superior a 99% comparada à construção convencional. O desperdício de materiais fica abaixo de 5%, contra os 25% a 30% da alvenaria tradicional. E os resíduos que eventualmente são gerados são completamente recicláveis.",
-      "Do ponto de vista de certificações, projetos em LSF possuem forte aderência aos critérios de sistemas como LEED, BREEAM e AQUA, que são cada vez mais exigidos em empreendimentos corporativos e imobiliários. O sistema também atende integralmente à NBR 15575 (Norma de Desempenho), à NBR 15220 (desempenho térmico) e à NBR 16970:2022, norma técnica específica para sistemas construtivos em LSF.",
-      "O fechamento com placas cimentícias e isolamento termoacústico proporciona alto desempenho térmico à edificação, reduzindo o consumo de energia com climatização em até 40% durante toda a vida útil do imóvel. Na operação de uma empresa, isso se traduz em conta de energia menor e pegada de carbono reduzida.",
-    ],
-  },
-  {
-    badge: "S",
-    badgeLabel: "Social",
-    paragraphs: [
-      "O canteiro de obra do Steel Frame é mais limpo e mais seguro do que o da construção convencional. A ausência de argamassa, grandes volumes de cimento e processos de quebra reduz significativamente a exposição dos trabalhadores a riscos de saúde ocupacional, poeira e ruído excessivo.",
-      "Para as comunidades vizinhas ao canteiro, o impacto também é menor. Obras em LSF geram menos ruído, menos poeira, menos tráfego de caminhões de entulho e têm duração consideravelmente menor. Em projetos dentro de áreas urbanas consolidadas, como reformas de lojas em centros comerciais ou ampliações de fábricas em zonas mistas, essa diferença é relevante para a relação da empresa com o entorno.",
-    ],
-  },
-  {
-    badge: "G",
-    badgeLabel: "Governance",
-    paragraphs: [
-      "O processo industrializado do LSF oferece rastreabilidade que a construção artesanal não consegue igualar. Cada perfil é fabricado sob especificação, cada componente tem origem documentada e cada etapa da obra segue um cronograma previamente definido e mensurável.",
-      "Os materiais utilizados no sistema LSF são certificados por institutos como o IPT (Instituto de Pesquisas Tecnológicas) e o Falcão Bauer Centro Tecnológico de Controle de Qualidade, atendendo às Normas Brasileiras (NBR) e a padrões internacionais de controle de qualidade.",
-      "A previsibilidade de custos e prazos inerente ao processo industrializado também contribui para a governança corporativa, permitindo que decisões de investimento em infraestrutura sejam tomadas com base em dados confiáveis.",
-    ],
   },
 ];
 
@@ -200,43 +160,6 @@ export const COMERCIAL_METRICS: MetricCard[] = [
 ];
 
 // ---------------------------------------------------------------------------
-// Process Steps (Section 6)
-// ---------------------------------------------------------------------------
-
-export const COMERCIAL_PROCESS_STEPS: ProcessStep[] = [
-  {
-    step: 1,
-    title: "Diagnóstico",
-    description:
-      "Entendemos a operação, o espaço necessário, o prazo e os requisitos técnicos. Avaliamos o terreno ou a estrutura existente e definimos a viabilidade do projeto.",
-  },
-  {
-    step: 2,
-    title: "Projeto executivo",
-    description:
-      "Desenvolvemos o projeto estrutural e arquitetônico integrado às necessidades operacionais do negócio. Cronograma, orçamento e especificações técnicas são definidos antes de qualquer fabricação.",
-  },
-  {
-    step: 3,
-    title: "Fabricação e preparação",
-    description:
-      "Componentes fabricados sob medida em ambiente industrial. Paralelamente, o canteiro avança com fundação e preparações, otimizando o cronograma total.",
-  },
-  {
-    step: 4,
-    title: "Execução",
-    description:
-      "Montagem industrializada com equipe especializada. Acompanhamento rigoroso de cronograma e qualidade. Comunicação clara sobre andamento e eventuais ajustes.",
-  },
-  {
-    step: 5,
-    title: "Entrega e operação",
-    description:
-      "Inspeção final, documentação técnica completa e entrega no prazo. O espaço é entregue pronto para a operação começar.",
-  },
-];
-
-// ---------------------------------------------------------------------------
 // Contact form project types (Section 7)
 // ---------------------------------------------------------------------------
 
@@ -247,41 +170,3 @@ export const COMERCIAL_FORM_PROJECT_TYPES = [
   { value: "reforma-expansao", label: "Reforma ou expansão" },
 ] as const;
 
-// ---------------------------------------------------------------------------
-// 3D Marquee — Residential Gallery Images (Section 9)
-// ---------------------------------------------------------------------------
-
-export const RESIDENTIAL_GALLERY_IMAGES: string[] = [
-  // Coluna 0 — Fachadas + interiores alternados
-  "/images/Residencial/versatilidade-02.webp",
-  "/images/apresentacao/casa-laranjeiras/casa-laranjeiras-living.webp",
-  "/images/Residencial/hero-01.webp",
-  "/images/Residencial/versatilidade-03.webp",
-  "/images/apresentacao/casa-laranjeiras/casa-laranjeiras-fachada-frontal.webp",
-  "/images/Residencial/reformas.webp",
-  "/images/Residencial/hero-03.webp",
-  // Coluna 1 — Design diferenciado + ambientes
-  "/images/Residencial/versatilidade-05.webp",
-  "/images/apresentacao/casa-laranjeiras/casa-laranjeiras-piscina.webp",
-  "/images/Residencial/construcao-nova.webp",
-  "/images/Residencial/versatilidade-04.webp",
-  "/images/apresentacao/casa-laranjeiras/casa-laranjeiras-pergola.webp",
-  "/images/Residencial/hero-02.webp",
-  "/images/Residencial/obra-rapida.webp",
-  // Coluna 2 — Projetos + acabamentos
-  "/images/Residencial/versatilidade-01.webp",
-  "/images/apresentacao/casa-laranjeiras/casa-laranjeiras-jantar.webp",
-  "/images/Residencial/ampliacoes.webp",
-  "/images/Residencial/versatilidade-07.webp",
-  "/images/apresentacao/casa-laranjeiras/casa-laranjeiras-entrada-principal.webp",
-  "/images/Residencial/previsibilidade.webp",
-  "/images/Home/home-gallery-1.webp",
-  // Coluna 3 — Mix diversificado
-  "/images/apresentacao/casa-laranjeiras/casa-laranjeiras-fachada-lateral.webp",
-  "/images/Residencial/isolamento.webp",
-  "/images/apresentacao/casa-laranjeiras/casa-laranjeiras-lateral-piscina.webp",
-  "/images/Home/home-gallery-2.webp",
-  "/images/Residencial/obra-seco.webp",
-  "/images/Services/projetos-prontos/vila-serrana/vila-serrana-exterior-completo.webp",
-  "/images/Services/projetos-prontos/Casa-de-campo/casa-de-campo-hero.webp",
-];

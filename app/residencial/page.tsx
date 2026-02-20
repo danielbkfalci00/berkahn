@@ -1,14 +1,29 @@
+import dynamic from "next/dynamic";
 import { ParallaxHero } from "@/components/sections/ParallaxHero";
 import { Partners } from "@/components/sections/Partners";
 import { CTA } from "@/components/sections/CTA";
 import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
-import { ProcessTimeline } from "@/components/sections/ProcessTimeline";
-import { ResidencialContactForm } from "@/components/residencial/ResidencialContactForm";
-import { BrazilMapBeam } from "@/components/comercial/BrazilMapBeam";
-import { DomeGallery } from "@/components/presentation/DomeGallery";
 import { FocusCardsSection } from "@/components/residencial/FocusCardsSection";
-import { BenefitsMorphingGrid } from "@/components/residencial/BenefitsMorphingGrid";
-import { TransparencyAccordion } from "@/components/residencial/TransparencyAccordion";
+
+// Below-fold components — lazy loaded for smaller initial bundle
+const BenefitsMorphingGrid = dynamic(() =>
+  import("@/components/residencial/BenefitsMorphingGrid").then((m) => m.BenefitsMorphingGrid)
+);
+const ProcessTimeline = dynamic(() =>
+  import("@/components/sections/ProcessTimeline").then((m) => m.ProcessTimeline)
+);
+const TransparencyAccordion = dynamic(() =>
+  import("@/components/residencial/TransparencyAccordion").then((m) => m.TransparencyAccordion)
+);
+const DomeGallery = dynamic(() =>
+  import("@/components/presentation/DomeGallery").then((m) => m.DomeGallery)
+);
+const ResidencialContactForm = dynamic(() =>
+  import("@/components/residencial/ResidencialContactForm").then((m) => m.ResidencialContactForm)
+);
+const BrazilMapBeam = dynamic(() =>
+  import("@/components/comercial/BrazilMapBeam").then((m) => m.BrazilMapBeam)
+);
 import {
   RESIDENCIAL_SERVICES,
   RESIDENCIAL_BENEFITS_SCROLL,

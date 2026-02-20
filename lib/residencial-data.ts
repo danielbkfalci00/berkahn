@@ -1,7 +1,6 @@
-import type { ComparisonItem } from "@/lib/lsf-data";
 import type { ContentBlock, ProcessStep } from "@/lib/types";
 
-export type { ComparisonItem, ContentBlock, ProcessStep };
+export type { ContentBlock, ProcessStep };
 
 export interface GalleryImage {
   src: string;
@@ -70,7 +69,7 @@ export const RESIDENCIAL_BENEFITS_SCROLL = [
     title: "Durável, reciclável, sustentável.",
     description:
       "Aço galvanizado com vida útil superior a 150 anos, imune a cupins e umidade. Obra a seco com economia de 99% no consumo de água e aço 100% reciclável.",
-    image: "/images/Apresentação/estrutura-1.webp",
+    image: "/images/apresentacao/estrutura-1.webp",
   },
   {
     title: "Versatilidade com materiais premium.",
@@ -103,125 +102,6 @@ export const RESIDENCIAL_TRANSPARENCY_BLOCKS: ContentBlock[] = [
     title: "Versatilidade com sistemas híbridos.",
     description:
       "Para vãos grandes ou cargas pesadas, combinamos Steel Frame com concreto armado, aço laminado e madeira. O melhor de cada sistema para o melhor resultado.",
-  },
-];
-
-// ---------------------------------------------------------------------------
-// Section 7: Comparativo LSF vs. Tradicional — 10 rows (mantido)
-// ---------------------------------------------------------------------------
-export const RESIDENCIAL_COMPARISON_DATA: ComparisonItem[] = [
-  { category: "Tempo de obra", lsf: "3 a 6 meses", traditional: "8 a 12 meses", winner: "lsf" },
-  { category: "Desperdício de material", lsf: "Menos de 5%", traditional: "25% a 30%", winner: "lsf" },
-  { category: "Precisão dimensional", lsf: "±1 a 2mm", traditional: "±10 a 20mm", winner: "lsf" },
-  { category: "Peso estrutural", lsf: "60 a 100 kg/m²", traditional: "1.200 a 1.500 kg/m²", winner: "lsf" },
-  { category: "Conforto térmico", lsf: "Superior (isolamento multicamadas)", traditional: "Limitado", winner: "lsf" },
-  { category: "Conforto acústico", lsf: "Superior", traditional: "Depende da espessura", winner: "lsf" },
-  { category: "Economia em climatização", lsf: "Até 40%", traditional: "Referência", winner: "lsf" },
-  { category: "Previsibilidade de custo", lsf: "Alta (processo industrial)", traditional: "Baixa (variáveis no canteiro)", winner: "lsf" },
-  { category: "Durabilidade", lsf: "+150 anos", traditional: "Variável", winner: "lsf" },
-  { category: "Sustentabilidade", lsf: "Aço 100% reciclável, obra a seco", traditional: "Alto consumo de água e resíduos", winner: "lsf" },
-];
-
-// ---------------------------------------------------------------------------
-// Section 7 (v2): Comparativo — Progress Bars animadas
-// ---------------------------------------------------------------------------
-export interface ComparisonBarItem {
-  category: string;
-  lsfValue: string;
-  traditionalValue: string;
-  lsfPercent: number;
-  traditionalPercent: number;
-  lsfNumeric?: number;
-  traditionalNumeric?: number;
-  numericPrefix?: string;
-  numericSuffix?: string;
-}
-
-export const RESIDENCIAL_COMPARISON_BARS: ComparisonBarItem[] = [
-  {
-    category: "Tempo de obra",
-    lsfValue: "6 meses",
-    traditionalValue: "12 meses",
-    lsfPercent: 30,
-    traditionalPercent: 85,
-    lsfNumeric: 6,
-    traditionalNumeric: 12,
-    numericSuffix: " meses",
-  },
-  {
-    category: "Desperdício de material",
-    lsfValue: "< 5%",
-    traditionalValue: "25 a 30%",
-    lsfPercent: 15,
-    traditionalPercent: 85,
-    lsfNumeric: 5,
-    traditionalNumeric: 30,
-    numericSuffix: "%",
-  },
-  {
-    category: "Precisão dimensional",
-    lsfValue: "±2mm",
-    traditionalValue: "±20mm",
-    lsfPercent: 12,
-    traditionalPercent: 90,
-    lsfNumeric: 2,
-    traditionalNumeric: 20,
-    numericPrefix: "±",
-    numericSuffix: "mm",
-  },
-  {
-    category: "Peso estrutural",
-    lsfValue: "100 kg/m²",
-    traditionalValue: "1.500 kg/m²",
-    lsfPercent: 8,
-    traditionalPercent: 95,
-  },
-  {
-    category: "Conforto térmico",
-    lsfValue: "Superior (multicamadas)",
-    traditionalValue: "Limitado",
-    lsfPercent: 92,
-    traditionalPercent: 35,
-  },
-  {
-    category: "Conforto acústico",
-    lsfValue: "Superior",
-    traditionalValue: "Depende da espessura",
-    lsfPercent: 88,
-    traditionalPercent: 40,
-  },
-  {
-    category: "Economia em climatização",
-    lsfValue: "Até 40%",
-    traditionalValue: "Referência",
-    lsfPercent: 90,
-    traditionalPercent: 50,
-    lsfNumeric: 40,
-    numericSuffix: "%",
-  },
-  {
-    category: "Previsibilidade de custo",
-    lsfValue: "Alta (processo industrial)",
-    traditionalValue: "Baixa (variáveis no canteiro)",
-    lsfPercent: 95,
-    traditionalPercent: 30,
-  },
-  {
-    category: "Durabilidade",
-    lsfValue: "+150 anos",
-    traditionalValue: "Variável",
-    lsfPercent: 95,
-    traditionalPercent: 40,
-    lsfNumeric: 150,
-    numericPrefix: "+",
-    numericSuffix: " anos",
-  },
-  {
-    category: "Sustentabilidade",
-    lsfValue: "Aço 100% reciclável",
-    traditionalValue: "Alto consumo e resíduos",
-    lsfPercent: 95,
-    traditionalPercent: 25,
   },
 ];
 
@@ -271,30 +151,8 @@ export const CONTACT_FORM_PROJECT_TYPES = [
 ] as const;
 
 // ---------------------------------------------------------------------------
-// Gallery images for DomeGallery sections (imagens reais)
+// Gallery images for DomeGallery
 // ---------------------------------------------------------------------------
-export const GALLERY_IMAGES_STYLES: GalleryImage[] = [
-  { src: "/images/galeria/projeto-01.webp", alt: "Residência moderna com fachada minimalista" },
-  { src: "/images/galeria/projeto-05.webp", alt: "Casa de campo com varanda integrada" },
-  { src: "/images/galeria/projeto-10.webp", alt: "Sobrado contemporâneo com linhas retas" },
-  { src: "/images/galeria/projeto-15.webp", alt: "Fachada com revestimento em pedra e madeira" },
-  { src: "/images/galeria/projeto-20.webp", alt: "Residência rústica com materiais naturais" },
-  { src: "/images/galeria/projeto-25.webp", alt: "Interior minimalista com amplas janelas" },
-];
-
-// ---------------------------------------------------------------------------
-// Masonry Grid — "Versatilidade arquitetônica" section
-// ---------------------------------------------------------------------------
-export const GALLERY_MASONRY_ITEMS = [
-  { id: "m1", img: "/images/Residencial/versatilidade-01.webp", alt: "Residência moderna com fachada minimalista", width: 2048, height: 1364 },
-  { id: "m2", img: "/images/Residencial/versatilidade-02.webp", alt: "Casa contemporânea com linhas limpas", width: 2560, height: 1709 },
-  { id: "m3", img: "/images/Residencial/versatilidade-03.webp", alt: "Projeto residencial com acabamento premium", width: 2399, height: 1600 },
-  { id: "m4", img: "/images/Residencial/versatilidade-04.webp", alt: "Fachada com revestimento em madeira", width: 2399, height: 1600 },
-  { id: "m5", img: "/images/Residencial/versatilidade-05.webp", alt: "Residência com design diferenciado", width: 1901, height: 1074 },
-  { id: "m6", img: "/images/Residencial/versatilidade-06.webp", alt: "Casa com arquitetura contemporânea", width: 1600, height: 2171 },
-  { id: "m7", img: "/images/Residencial/versatilidade-07.webp", alt: "Projeto residencial integrado à paisagem", width: 1500, height: 1001 },
-];
-
 export const GALLERY_IMAGES_PROJECTS: GalleryImage[] = [
   { src: "/images/apresentacao/casa-laranjeiras/casa-laranjeiras-fachada-frontal.webp", alt: "Projeto Casa Laranjeiras - Fachada frontal" },
   { src: "/images/apresentacao/casa-laranjeiras/casa-laranjeiras-piscina.webp", alt: "Projeto Casa Laranjeiras - Área de piscina" },
@@ -305,39 +163,4 @@ export const GALLERY_IMAGES_PROJECTS: GalleryImage[] = [
   { src: "/images/Residencial/versatilidade-02.webp", alt: "Casa contemporânea com linhas limpas" },
   { src: "/images/Residencial/versatilidade-04.webp", alt: "Fachada com revestimento em madeira" },
   { src: "/images/Residencial/versatilidade-05.webp", alt: "Residência com design diferenciado" },
-];
-
-// ---------------------------------------------------------------------------
-// 3D Marquee — Gallery Images (Section 12)
-// ---------------------------------------------------------------------------
-
-export const RESIDENCIAL_3D_GALLERY: string[] = [
-  "https://picsum.photos/seed/res01/600/430",
-  "https://picsum.photos/seed/res02/600/430",
-  "https://picsum.photos/seed/res03/600/430",
-  "https://picsum.photos/seed/res04/600/430",
-  "https://picsum.photos/seed/res05/600/430",
-  "https://picsum.photos/seed/res06/600/430",
-  "https://picsum.photos/seed/res07/600/430",
-  "https://picsum.photos/seed/res08/600/430",
-  "https://picsum.photos/seed/res09/600/430",
-  "https://picsum.photos/seed/res10/600/430",
-  "https://picsum.photos/seed/res11/600/430",
-  "https://picsum.photos/seed/res12/600/430",
-  "https://picsum.photos/seed/res13/600/430",
-  "https://picsum.photos/seed/res14/600/430",
-  "https://picsum.photos/seed/res15/600/430",
-  "https://picsum.photos/seed/res16/600/430",
-  "https://picsum.photos/seed/res17/600/430",
-  "https://picsum.photos/seed/res18/600/430",
-  "https://picsum.photos/seed/res19/600/430",
-  "https://picsum.photos/seed/res20/600/430",
-  "https://picsum.photos/seed/res21/600/430",
-  "https://picsum.photos/seed/res22/600/430",
-  "https://picsum.photos/seed/res23/600/430",
-  "https://picsum.photos/seed/res24/600/430",
-  "https://picsum.photos/seed/res25/600/430",
-  "https://picsum.photos/seed/res26/600/430",
-  "https://picsum.photos/seed/res27/600/430",
-  "https://picsum.photos/seed/res28/600/430",
 ];
