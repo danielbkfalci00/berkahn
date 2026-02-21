@@ -304,6 +304,15 @@
                 0 4px 6px -2px rgba(0, 0, 0, 0.04);
   }
 
+  /* Hide scrollbar utility */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
   /* Border opacity utilities */
   .border-black-10 {
     border-color: rgba(0, 0, 0, 0.1);

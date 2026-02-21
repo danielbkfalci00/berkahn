@@ -87,7 +87,7 @@ export function FAQSearch({ categories }: FAQSearchProps) {
   return (
     <div>
       {/* Sticky search + chips */}
-      <div className="sticky top-20 z-10 bg-[#f2f2f2] pt-2 pb-6">
+      <div className="pb-6">
         {/* Search input */}
         <div className="relative mb-6">
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-black-40" />
@@ -110,11 +110,11 @@ export function FAQSearch({ categories }: FAQSearchProps) {
         </div>
 
         {/* Category chips with counts */}
-        <div className="flex flex-wrap gap-2">
+        <div className="flex gap-2 overflow-x-auto md:flex-wrap md:overflow-x-visible pb-2 scrollbar-hide">
           <button
             onClick={() => setActiveCategory(null)}
             className={cn(
-              "px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-200",
+              "px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-200 whitespace-nowrap shrink-0",
               activeCategory === null
                 ? "bg-black text-white"
                 : "bg-black-5 text-black-60 hover:bg-black-10"
@@ -137,7 +137,7 @@ export function FAQSearch({ categories }: FAQSearchProps) {
                   setActiveCategory(activeCategory === cat.id ? null : cat.id)
                 }
                 className={cn(
-                  "px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-200",
+                  "px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-200 whitespace-nowrap shrink-0",
                   activeCategory === cat.id
                     ? "bg-black text-white"
                     : "bg-black-5 text-black-60 hover:bg-black-10"

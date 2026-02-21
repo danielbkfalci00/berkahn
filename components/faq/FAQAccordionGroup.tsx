@@ -43,6 +43,29 @@ function highlightText(text: string, term: string): React.ReactNode {
   );
 }
 
+/** Parse **bold** markers and optionally apply search highlight */
+function renderFormattedText(text: string, highlightTerm?: string): React.ReactNode {
+  // Split on **bold** pattern, capturing the bold content
+  const parts = text.split(/\*\*(.+?)\*\*/g);
+
+  // parts alternates: [normal, bold, normal, bold, ...]
+  const segments = parts.map((part, i) => {
+    const isBold = i % 2 === 1;
+    const content = highlightTerm ? highlightText(part, highlightTerm) : part;
+
+    if (isBold) {
+      return (
+        <strong key={i} className="font-semibold text-black">
+          {content}
+        </strong>
+      );
+    }
+    return <span key={i}>{content}</span>;
+  });
+
+  return <>{segments}</>;
+}
+
 const CATEGORY_ICONS: Record<string, React.ElementType> = {
   tecnologia: Wrench,
   processo: ClipboardList,
@@ -93,7 +116,7 @@ export function FAQAccordionGroup({ categories, highlightTerm = "" }: FAQAccordi
                     </AccordionTrigger>
                     <AccordionContent className="pb-6">
                       <p className="body-md text-black-70 leading-relaxed">
-                        {highlightTerm ? highlightText(item.answer, highlightTerm) : item.answer}
+                        {renderFormattedText(item.answer, highlightTerm || undefined)}
                       </p>
                     </AccordionContent>
                   </AccordionItem>
