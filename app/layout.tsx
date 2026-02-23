@@ -23,7 +23,7 @@ const caveat = Caveat({
 });
 
 export const metadata: Metadata = {
-  title: "Construtora Berkahn | Construção de Alto Padrão",
+  title: "Construtora Berkahn",
   description:
     "Erguendo o amanhã. Construtora especializada em projetos de Steel Frame.",
   keywords: [
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
   authors: [{ name: "Berkahn" }],
   metadataBase: new URL("https://www.berkahn.com.br"),
   openGraph: {
-    title: "Construtora Berkahn | Construção de Alto Padrão",
+    title: "Construtora Berkahn",
     description: "Erguendo o amanhã. Construtora especializada em projetos de Steel Frame.",
     siteName: "Construtora Berkahn",
     url: "https://www.berkahn.com.br",
@@ -49,13 +49,13 @@ export const metadata: Metadata = {
         url: "/images/Compartilhamento/og-image.webp",
         width: 1200,
         height: 630,
-        alt: "Construtora Berkahn - Construção de Alto Padrão",
+        alt: "Construtora Berkahn",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Construtora Berkahn | Construção de Alto Padrão",
+    title: "Construtora Berkahn",
     description: "Erguendo o amanhã. Construtora especializada em projetos de Steel Frame.",
     images: ["/images/Compartilhamento/og-image.webp"],
   },

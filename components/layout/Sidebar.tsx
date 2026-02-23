@@ -172,7 +172,7 @@ export function Sidebar() {
               </div>
 
               {/* Navigation */}
-              <nav className="flex-1">
+              <nav className="flex-1 overflow-y-auto">
                 <Accordion type="single" collapsible defaultValue={defaultAccordionValue} className="w-full">
                   <ul className="space-y-2">
                     {NAV_LINKS.map((link, index) => {
