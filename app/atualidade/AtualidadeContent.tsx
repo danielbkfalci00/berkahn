@@ -7,7 +7,6 @@ import { HeroEditorial } from "@/components/atualidade/HeroEditorial";
 import { FeaturedArticle } from "@/components/atualidade/FeaturedArticle";
 import { CategoryFilter } from "@/components/atualidade/CategoryFilter";
 import { MasonryGrid } from "@/components/atualidade/MasonryGrid";
-import { NewsletterSection } from "@/components/atualidade/NewsletterSection";
 import { CTA } from "@/components/sections/CTA";
 import {
   blogPosts,
@@ -89,9 +88,6 @@ export function AtualidadeContent({ supabasePosts }: AtualidadeContentProps) {
 
       {/* Article Grid */}
       <MasonryGrid posts={filteredPosts} variant="masonry" />
-
-      {/* Newsletter Section */}
-      <NewsletterSection />
 
       {/* CTA Section */}
       <CTA />
