@@ -132,7 +132,8 @@ const config: Config = {
   			slideIn: 'slideIn 0.5s cubic-bezier(0.65, 0, 0.35, 1)',
   			'accordion-down': 'accordion-down 0.2s ease-out',
   			'accordion-up': 'accordion-up 0.2s ease-out',
-  			marquee: 'marquee 20s linear infinite'
+  			marquee: 'marquee 20s linear infinite',
+			'marquee-fast': 'marquee 10s linear infinite'
   		}
   	}
   },
