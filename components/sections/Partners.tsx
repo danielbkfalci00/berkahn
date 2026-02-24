@@ -29,7 +29,7 @@ function LogoMarquee({ partners }: { partners: { name: string; logo: string }[] 
         {doubled.map((partner, i) => (
           <div
             key={`${partner.name}-${i}`}
-            className="flex items-center justify-center shrink-0 h-24 md:h-28 w-44 md:w-48"
+            className="flex items-center justify-center shrink-0 h-32 md:h-28 w-56 md:w-48"
           >
             <div className="relative w-full h-full md:grayscale md:opacity-50 md:hover:grayscale-0 md:hover:opacity-100 transition-all duration-500">
               <Image
@@ -78,7 +78,7 @@ export function Partners({
         ) : (
           <div className={`grid grid-cols-2 ${partnerList.length <= 3 ? "md:grid-cols-3" : "md:grid-cols-4"} gap-6 md:gap-10 lg:gap-16 items-center max-w-5xl mx-auto`}>
             {partnerList.map((partner) => (
-              <div key={partner.name} className="flex items-center justify-center h-20 md:h-24 lg:h-32 px-4">
+              <div key={partner.name} className="flex items-center justify-center h-28 md:h-24 lg:h-32 px-4">
                 <div className="relative w-full h-full md:grayscale md:opacity-60 md:hover:grayscale-0 md:hover:opacity-100 transition-all duration-500">
                   <Image
                     src={partner.logo}

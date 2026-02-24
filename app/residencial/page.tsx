@@ -15,8 +15,8 @@ const ProcessTimeline = dynamic(() =>
 const TransparencyAccordion = dynamic(() =>
   import("@/components/residencial/TransparencyAccordion").then((m) => m.TransparencyAccordion)
 );
-const DomeGallery = dynamic(() =>
-  import("@/components/presentation/DomeGallery").then((m) => m.DomeGallery)
+const Stack = dynamic(() =>
+  import("@/components/ui/stack").then((m) => m.Stack)
 );
 const ResidencialContactForm = dynamic(() =>
   import("@/components/residencial/ResidencialContactForm").then((m) => m.ResidencialContactForm)
@@ -151,20 +151,19 @@ export default function ResidencialPage() {
       />
 
       {/* ================================================================ */}
-      {/* 7. Design & Personalização — DomeGallery (bg preto) */}
+      {/* 7. Design & Personalização — Stack Cards (bg preto) */}
       {/* ================================================================ */}
       <section className="py-xl bg-black">
         <div className="container">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-            {/* DomeGallery — projetos residenciais */}
-            <div className="order-2 lg:order-1 h-[400px] md:h-[500px]">
-              <DomeGallery
-                images={GALLERY_IMAGES_PROJECTS}
-                fit={0.7}
-                minRadius={400}
-                segments={20}
-                grayscale={false}
-                overlayBlurColor="#000000"
+            {/* Stack Cards — projetos residenciais */}
+            <div className="order-2 lg:order-1 flex items-center justify-center h-[320px] md:h-[400px]">
+              <Stack
+                cards={GALLERY_IMAGES_PROJECTS.map((g, i) => ({ id: i + 1, img: g.src }))}
+                sensitivity={200}
+                randomRotation
+                autoplay
+                autoplayInterval={4000}
               />
             </div>
 
