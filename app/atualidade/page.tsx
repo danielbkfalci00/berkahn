@@ -23,6 +23,9 @@ export const metadata: Metadata = {
   },
 };
 
+// Revalidate every 60 seconds to fetch new posts from Supabase
+export const revalidate = 60;
+
 import { createClient } from "@/lib/supabase/server";
 import type { Post } from "@/types/admin";
 
