@@ -135,3 +135,172 @@ export interface ArticleChecklist {
     description: string;
   }[];
 }
+
+// ============================================
+// FASE 1: NOVOS PLACEHOLDERS (Quick Wins)
+// ============================================
+
+// Video embed structure for YouTube, Vimeo, or direct video
+export interface ArticleVideo {
+  id: string;
+  platform: 'youtube' | 'vimeo' | 'direct';
+  videoId: string; // YouTube/Vimeo ID or direct URL
+  url?: string; // Direct MP4 URL (for platform: 'direct')
+  title?: string;
+  caption?: string;
+  aspectRatio?: '16:9' | '4:3' | '1:1';
+}
+
+// Before/After comparison with image slider
+export interface BeforeAfterComparison {
+  id: string;
+  title?: string;
+  beforeImage: string;
+  afterImage: string;
+  beforeLabel?: string; // Default: "Antes"
+  afterLabel?: string; // Default: "Depois"
+}
+
+// Construction timeline visualization
+export interface ConstructionTimeline {
+  id: string;
+  title?: string;
+  milestones: ProcessStep[]; // Reuses existing ProcessStep type
+  totalDuration?: string;
+  showProgress?: boolean;
+}
+
+// FAQ section with accordion
+export interface ArticleFAQ {
+  id: string;
+  title?: string;
+  questions: {
+    question: string;
+    answer: string;
+    category?: string;
+  }[];
+}
+
+// ============================================
+// FASE 2: ENGAJAMENTO INTERATIVO
+// ============================================
+
+// Dynamic calculator for ROI, cost comparisons, etc.
+export interface ArticleCalculator {
+  id: string;
+  type: 'roi' | 'cost-comparison' | 'timeline-estimate' | 'custom';
+  title: string;
+  description?: string;
+  inputs: {
+    id: string;
+    label: string;
+    type: 'number' | 'select' | 'slider';
+    unit?: string; // "m²", "R$", "%"
+    min?: number;
+    max?: number;
+    step?: number;
+    options?: { value: string; label: string }[];
+    defaultValue: number | string;
+    tooltip?: string;
+  }[];
+  formula: string; // Safe math expression (evaluated with math.js)
+  resultLabel: string;
+  resultUnit?: string;
+  resultFormat?: 'currency' | 'percentage' | 'number' | 'days';
+  disclaimer?: string;
+}
+
+// Certification badges for ABNT, LEED, ISO, etc.
+export interface CertificationBadges {
+  id: string;
+  title?: string;
+  certifications: {
+    name: string;
+    issuer: string; // "ABNT", "LEED", "ISO"
+    code?: string; // "NBR 15253:2014"
+    logo?: string;
+    description?: string;
+    link?: string;
+    year?: string;
+  }[];
+  layout?: 'grid' | 'list' | 'carousel';
+}
+
+// Client testimonials with ratings
+export interface ArticleTestimonial {
+  id: string;
+  title?: string;
+  testimonials: {
+    quote: string;
+    author: string;
+    role?: string; // "Proprietário", "Arquiteto"
+    company?: string;
+    project?: string; // "Casa Laranjeiras"
+    avatar?: string;
+    rating?: number; // 1-5 stars
+    date?: string; // "Janeiro 2025"
+    location?: string; // "São Paulo, SP"
+  }[];
+  layout?: 'cards' | 'carousel' | 'list';
+}
+
+// Resource downloads (PDFs, spreadsheets, guides)
+export interface ResourceLibrary {
+  id: string;
+  title?: string;
+  description?: string;
+  resources: {
+    title: string;
+    description: string;
+    type: 'pdf' | 'xlsx' | 'docx' | 'zip' | 'link';
+    fileSize?: string; // "2.3 MB"
+    downloadUrl?: string;
+    thumbnail?: string;
+    requiresEmail?: boolean; // Lead capture gate
+    tags?: string[];
+  }[];
+  layout?: 'grid' | 'list';
+}
+
+// ============================================
+// FASE 3: COMPONENTES AVANÇADOS
+// ============================================
+
+// 3D comparison matrix using radar chart
+export interface Comparison3DMatrix {
+  id: string;
+  title: string;
+  description?: string;
+  dimensions: string[]; // ["Custo", "Prazo", "Sustentabilidade", "Durabilidade", "Manutenção"]
+  options: {
+    name: string; // "Steel Frame", "Alvenaria", "Madeira"
+    scores: number[]; // [8, 9, 10, 7, 8] (0-10 scale for each dimension)
+    color?: string; // Optional custom color
+    description?: string;
+  }[];
+  maxScore?: number; // Default: 10
+  showLegend?: boolean;
+}
+
+// Material specification sheet
+export interface MaterialSpecSheet {
+  id: string;
+  material: string; // "Perfil Steel Frame 90mm"
+  manufacturer?: string;
+  category?: string; // "Estrutural", "Fechamento", "Acabamento"
+  image?: string;
+  specifications: {
+    category: string; // "Dimensões", "Características Técnicas", "Desempenho"
+    items: {
+      property: string; // "Espessura"
+      value: string; // "0.95 mm"
+      unit?: string; // "mm"
+      tolerance?: string; // "±0.05"
+      standard?: string; // "NBR 15253"
+    }[];
+  }[];
+  datasheetUrl?: string; // Link to PDF datasheet
+  certifications?: string[]; // ["NBR 15253:2014", "ISO 9001"]
+  applications?: string[]; // ["Paredes estruturais", "Lajes secas"]
+  notes?: string;
+}

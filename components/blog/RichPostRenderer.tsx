@@ -8,6 +8,16 @@ import { ChartSection } from '@/components/article/ChartSection';
 import { MythBuster } from '@/components/article/MythBuster';
 import { ComparisonTabs } from '@/components/article/ComparisonTabs';
 import { DecisionGuideSection } from '@/components/article/DecisionGuideSection';
+import { VideoEmbed } from '@/components/article/VideoEmbed';
+import { BeforeAfterSlider } from '@/components/article/BeforeAfterSlider';
+import { TimelineSection } from '@/components/article/TimelineSection';
+import { FAQSection } from '@/components/article/FAQSection';
+import { DynamicCalculator } from '@/components/article/DynamicCalculator';
+import { CertificationBadges } from '@/components/article/CertificationBadges';
+import { TestimonialCard } from '@/components/article/TestimonialCard';
+import { ResourceDownload } from '@/components/article/ResourceDownload';
+import { Comparison3DMatrix } from '@/components/article/Comparison3DMatrix';
+import { SpecificationSheet } from '@/components/article/SpecificationSheet';
 import { RevealOnScroll } from '@/components/animations/RevealOnScroll';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -34,6 +44,19 @@ const PLACEHOLDER_PATTERNS = {
   PROCESS: /\[PROCESS:([^\]]+)\]/g,
   COMPARISON: /\[COMPARISON:([^\]]+)\]/g,
   GUIDE: /\[GUIDE:([^\]]+)\]/g,
+  // Fase 1: Quick Wins
+  VIDEO: /\[VIDEO:([^\]]+)\]/g,
+  BEFOREAFTER: /\[BEFOREAFTER:([^\]]+)\]/g,
+  TIMELINE: /\[TIMELINE:([^\]]+)\]/g,
+  FAQ: /\[FAQ:([^\]]+)\]/g,
+  // Fase 2: Engajamento Interativo
+  CALCULATOR: /\[CALCULATOR:([^\]]+)\]/g,
+  CERTIFICATIONS: /\[CERTIFICATIONS:([^\]]+)\]/g,
+  TESTIMONIAL: /\[TESTIMONIAL:([^\]]+)\]/g,
+  RESOURCES: /\[RESOURCES:([^\]]+)\]/g,
+  // Fase 3: Componentes Avançados
+  COMPARISON3D: /\[COMPARISON3D:([^\]]+)\]/g,
+  SPECSHEET: /\[SPECSHEET:([^\]]+)\]/g,
 };
 
 /**
@@ -41,7 +64,7 @@ const PLACEHOLDER_PATTERNS = {
  * Returns array of content segments with their types (text or component)
  */
 function extractPlaceholders(content: string, components: PostComponents | null) {
-  if (!components) return [{ type: 'text', content }];
+  if (!components) return [{ type: 'text' as const, content }];
 
   const segments: Array<{
     type: 'text' | 'component';
@@ -124,6 +147,39 @@ function extractPlaceholders(content: string, components: PostComponents | null)
         break;
       case 'GUIDE':
         componentData = components.decisionGuide;
+        break;
+      // Fase 1: Quick Wins
+      case 'VIDEO':
+        componentData = components.videos?.find((v) => v.id === id);
+        break;
+      case 'BEFOREAFTER':
+        componentData = components.beforeAfters?.find((b) => b.id === id);
+        break;
+      case 'TIMELINE':
+        componentData = components.timelines?.find((t) => t.id === id);
+        break;
+      case 'FAQ':
+        componentData = components.faqs?.find((f) => f.id === id);
+        break;
+      // Fase 2: Engajamento Interativo
+      case 'CALCULATOR':
+        componentData = components.calculators?.find((c) => c.id === id);
+        break;
+      case 'CERTIFICATIONS':
+        componentData = components.certifications?.find((c) => c.id === id);
+        break;
+      case 'TESTIMONIAL':
+        componentData = components.testimonials?.find((t) => t.id === id);
+        break;
+      case 'RESOURCES':
+        componentData = components.resources?.find((r) => r.id === id);
+        break;
+      // Fase 3: Componentes Avançados
+      case 'COMPARISON3D':
+        componentData = components.comparison3D?.find((c) => c.id === id);
+        break;
+      case 'SPECSHEET':
+        componentData = components.specSheets?.find((s) => s.id === id);
         break;
     }
 
@@ -389,6 +445,69 @@ function renderComponent(type: string, data: any, key: string | number) {
       return (
         <RevealOnScroll key={key}>
           <DecisionGuideSection guide={data} className="my-8" />
+        </RevealOnScroll>
+      );
+    // Fase 1: Quick Wins
+    case 'VIDEO':
+      return (
+        <RevealOnScroll key={key}>
+          <VideoEmbed video={data} className="my-8" />
+        </RevealOnScroll>
+      );
+    case 'BEFOREAFTER':
+      return (
+        <RevealOnScroll key={key}>
+          <BeforeAfterSlider comparison={data} className="my-8" />
+        </RevealOnScroll>
+      );
+    case 'TIMELINE':
+      return (
+        <RevealOnScroll key={key}>
+          <TimelineSection timeline={data} className="my-8" />
+        </RevealOnScroll>
+      );
+    case 'FAQ':
+      return (
+        <RevealOnScroll key={key}>
+          <FAQSection faq={data} className="my-8" />
+        </RevealOnScroll>
+      );
+    // Fase 2: Engajamento Interativo
+    case 'CALCULATOR':
+      return (
+        <RevealOnScroll key={key}>
+          <DynamicCalculator calculator={data} className="my-8" />
+        </RevealOnScroll>
+      );
+    case 'CERTIFICATIONS':
+      return (
+        <RevealOnScroll key={key}>
+          <CertificationBadges certifications={data} className="my-8" />
+        </RevealOnScroll>
+      );
+    case 'TESTIMONIAL':
+      return (
+        <RevealOnScroll key={key}>
+          <TestimonialCard testimonial={data} className="my-8" />
+        </RevealOnScroll>
+      );
+    case 'RESOURCES':
+      return (
+        <RevealOnScroll key={key}>
+          <ResourceDownload resources={data} className="my-8" />
+        </RevealOnScroll>
+      );
+    // Fase 3: Componentes Avançados
+    case 'COMPARISON3D':
+      return (
+        <RevealOnScroll key={key}>
+          <Comparison3DMatrix matrix={data} className="my-8" />
+        </RevealOnScroll>
+      );
+    case 'SPECSHEET':
+      return (
+        <RevealOnScroll key={key}>
+          <SpecificationSheet specSheet={data} className="my-8" />
         </RevealOnScroll>
       );
     default:

@@ -13,6 +13,16 @@ import type {
   DecisionGuide,
   ArticleGallery,
   ArticleChecklist,
+  ArticleVideo,
+  BeforeAfterComparison,
+  ConstructionTimeline,
+  ArticleFAQ,
+  ArticleCalculator,
+  CertificationBadges,
+  ArticleTestimonial,
+  ResourceLibrary,
+  Comparison3DMatrix,
+  MaterialSpecSheet,
 } from './article';
 
 // ============================================
@@ -46,6 +56,19 @@ export interface PostComponents {
   decisionGuide?: DecisionGuide;
   gallery?: ArticleGallery;
   checklist?: ArticleChecklist;
+  // Fase 1: Quick Wins
+  videos?: ArticleVideo[];
+  beforeAfters?: BeforeAfterComparison[];
+  timelines?: ConstructionTimeline[];
+  faqs?: ArticleFAQ[];
+  // Fase 2: Engajamento Interativo
+  calculators?: ArticleCalculator[];
+  certifications?: CertificationBadges[];
+  testimonials?: ArticleTestimonial[];
+  resources?: ResourceLibrary[];
+  // Fase 3: Componentes Avançados
+  comparison3D?: Comparison3DMatrix[];
+  specSheets?: MaterialSpecSheet[];
 }
 
 export interface Post extends BaseEntity {

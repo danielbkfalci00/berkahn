@@ -204,13 +204,29 @@ Continuação do texto...
 ```
 
 **Placeholders disponíveis**:
-- `[CHART:chart-id]` - Insere um gráfico específico
+
+**Básicos**:
+- `[CHART:chart-id]` - Insere um gráfico específico (bar, line, pie, radar)
 - `[TABLE:table-id]` - Insere uma tabela específica
 - `[STATS:stats-id]` - Insere um grid de estatísticas
 - `[CHECKLIST:checklist-id]` - Insere uma checklist
 - `[MYTHS:myths-id]` - Insere seção myth-buster
 - `[GALLERY:gallery-id]` - Insere galeria de imagens
-- `[NORMS:norms-id]` - Insere seção de normas
+- `[NORMS:norms-id]` - Insere seção de normas técnicas
+- `[VIDEO:video-id]` - Insere embed de vídeo (YouTube, Vimeo ou direto)
+- `[BEFOREAFTER:beforeafter-id]` - Insere comparação visual antes/depois
+- `[TIMELINE:timeline-id]` - Insere linha do tempo de cronograma
+- `[FAQ:faq-id]` - Insere seção de perguntas frequentes (com schema.org)
+
+**Engajamento**:
+- `[CALCULATOR:calc-id]` - Insere calculadora dinâmica (ROI, custos, estimativas)
+- `[CERTIFICATIONS:cert-id]` - Insere badges de certificações (ABNT, LEED, ISO)
+- `[TESTIMONIAL:testimonial-id]` - Insere depoimentos de clientes com avaliações
+- `[RESOURCES:resources-id]` - Insere biblioteca de downloads (PDFs, planilhas)
+
+**Avançados**:
+- `[COMPARISON3D:comparison-id]` - Insere comparação multidimensional com radar chart
+- `[SPECSHEET:spec-id]` - Insere ficha técnica completa de materiais
 
 **Regras importantes**:
 1. O `id` no placeholder DEVE corresponder ao `id` no objeto do componente JSONB
