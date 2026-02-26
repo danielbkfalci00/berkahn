@@ -171,10 +171,12 @@ export function ChartSection({ chart, className = "" }: ChartSectionProps) {
               dataKey="value"
               nameKey="name"
               cx="50%"
-              cy="50%"
-              outerRadius={120}
-              label
+              cy={isMobile ? "45%" : "50%"}
+              outerRadius={isMobile ? 80 : 120}
+              label={!isMobile} // Disable labels on mobile to avoid overlap
+              labelLine={!isMobile}
               animationDuration={800}
+              activeShape={false}
             >
               {chart.data.map((entry, index) => (
                 <Cell
@@ -196,10 +198,21 @@ export function ChartSection({ chart, className = "" }: ChartSectionProps) {
                 color: "#fff",
                 borderRadius: "8px",
                 border: "none",
-                fontFamily: "var(--font-manrope)"
+                fontFamily: "var(--font-manrope)",
+                fontSize: isMobile ? "12px" : "14px"
               }}
             />
-            <Legend wrapperStyle={{ fontFamily: "var(--font-manrope)" }} />
+            <Legend
+              wrapperStyle={{
+                fontFamily: "var(--font-manrope)",
+                fontSize: isMobile ? "11px" : "14px",
+                paddingTop: isMobile ? "10px" : "0"
+              }}
+              layout={isMobile ? "horizontal" : "vertical"}
+              align={isMobile ? "center" : "right"}
+              verticalAlign={isMobile ? "bottom" : "middle"}
+              iconSize={isMobile ? 8 : 10}
+            />
           </PieChart>
         );
 
@@ -217,9 +230,9 @@ export function ChartSection({ chart, className = "" }: ChartSectionProps) {
       transition={{ duration: 0.8, ease: [0.19, 1, 0.22, 1] }}
     >
       {chart.title && (
-        <h3 className="headline-sm mb-6 text-center">{chart.title}</h3>
+        <h3 className="headline-sm mb-4 md:mb-6 text-center text-sm md:text-base">{chart.title}</h3>
       )}
-      <div className="h-[300px] md:h-[400px]">
+      <div className="h-[350px] md:h-[400px]">
         <ResponsiveContainer width="100%" height="100%">
           {renderChart()}
         </ResponsiveContainer>

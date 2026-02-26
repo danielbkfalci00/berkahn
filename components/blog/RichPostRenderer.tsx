@@ -531,12 +531,14 @@ export function RichPostRenderer({ post, className = '' }: RichPostRendererProps
   // Track which components were used via placeholders
   const usedComponentKeys = useMemo(() => {
     const keys = new Set<string>();
+    const types = new Set<string>(); // Track component types used (for single-object components)
     segments.forEach((segment) => {
       if (segment.type === 'component' && segment.componentType && segment.componentId) {
         keys.add(`${segment.componentType}:${segment.componentId}`);
+        types.add(segment.componentType); // Track the type was used
       }
     });
-    return keys;
+    return { keys, types };
   }, [segments]);
 
   // Check if components exist
@@ -573,7 +575,7 @@ export function RichPostRenderer({ post, className = '' }: RichPostRendererProps
         <div className="not-prose">
           {/* Tables not used via placeholder */}
           {components.tables?.map((table) => {
-            if (usedComponentKeys.has(`TABLE:${table.id}`)) return null;
+            if (usedComponentKeys.keys.has(`TABLE:${table.id}`)) return null;
             return (
               <RevealOnScroll key={`fallback-table-${table.id}`}>
                 <DataTable table={table} className="my-8" />
@@ -583,7 +585,7 @@ export function RichPostRenderer({ post, className = '' }: RichPostRendererProps
 
           {/* Charts not used via placeholder */}
           {components.charts?.map((chart) => {
-            if (usedComponentKeys.has(`CHART:${chart.id}`)) return null;
+            if (usedComponentKeys.keys.has(`CHART:${chart.id}`)) return null;
             return (
               <RevealOnScroll key={`fallback-chart-${chart.id}`}>
                 <ChartSection chart={chart} className="my-8" />
@@ -593,7 +595,7 @@ export function RichPostRenderer({ post, className = '' }: RichPostRendererProps
 
           {/* Tab Comparisons not used via placeholder */}
           {components.tabComparisons?.map((comparison) => {
-            if (usedComponentKeys.has(`COMPARISON:${comparison.id}`)) return null;
+            if (usedComponentKeys.keys.has(`COMPARISON:${comparison.id}`)) return null;
             return (
               <RevealOnScroll key={`fallback-comparison-${comparison.id}`}>
                 <ComparisonTabs comparison={comparison} className="my-8" />
@@ -602,7 +604,7 @@ export function RichPostRenderer({ post, className = '' }: RichPostRendererProps
           })}
 
           {/* Stats (single object, no ID) */}
-          {components.stats && !usedComponentKeys.has('STATS:undefined') && (
+          {components.stats && !usedComponentKeys.types.has('STATS') && (
             <RevealOnScroll>
               <div className="my-8">
                 <StatsGrid stats={components.stats} />
@@ -611,7 +613,7 @@ export function RichPostRenderer({ post, className = '' }: RichPostRendererProps
           )}
 
           {/* Myths (single array, no ID) */}
-          {components.myths && !usedComponentKeys.has('MYTHS:undefined') && (
+          {components.myths && !usedComponentKeys.types.has('MYTHS') && (
             <RevealOnScroll>
               <div className="my-8">
                 <h3 className="text-xl font-semibold mb-4">Mitos e Verdades</h3>
@@ -621,31 +623,131 @@ export function RichPostRenderer({ post, className = '' }: RichPostRendererProps
           )}
 
           {/* Decision Guide (single object) */}
-          {components.decisionGuide && !usedComponentKeys.has('GUIDE:undefined') && (
+          {components.decisionGuide && !usedComponentKeys.types.has('GUIDE') && (
             <RevealOnScroll>
               <DecisionGuideSection guide={components.decisionGuide} className="my-8" />
             </RevealOnScroll>
           )}
 
           {/* Process (single array) */}
-          {components.process && !usedComponentKeys.has('PROCESS:undefined') && (
+          {components.process && !usedComponentKeys.types.has('PROCESS') && (
             <ProcessSection process={components.process} />
           )}
 
           {/* Norms (single array) */}
-          {components.norms && !usedComponentKeys.has('NORMS:undefined') && (
+          {components.norms && !usedComponentKeys.types.has('NORMS') && (
             <NormsSection norms={components.norms} />
           )}
 
           {/* Checklist (single object) */}
-          {components.checklist && !usedComponentKeys.has('CHECKLIST:undefined') && (
+          {components.checklist && !usedComponentKeys.types.has('CHECKLIST') && (
             <ChecklistSection checklist={components.checklist} />
           )}
 
           {/* Gallery (single object) */}
-          {components.gallery && !usedComponentKeys.has('GALLERY:undefined') && (
+          {components.gallery && !usedComponentKeys.types.has('GALLERY') && (
             <GallerySection gallery={components.gallery} />
           )}
+
+          {/* Fase 1: Quick Wins - Videos not used via placeholder */}
+          {components.videos?.map((video) => {
+            if (usedComponentKeys.keys.has(`VIDEO:${video.id}`)) return null;
+            return (
+              <RevealOnScroll key={`fallback-video-${video.id}`}>
+                <VideoEmbed video={video} className="my-8" />
+              </RevealOnScroll>
+            );
+          })}
+
+          {/* Fase 1: Before/After Comparisons not used via placeholder */}
+          {components.beforeAfters?.map((comparison) => {
+            if (usedComponentKeys.keys.has(`BEFOREAFTER:${comparison.id}`)) return null;
+            return (
+              <RevealOnScroll key={`fallback-beforeafter-${comparison.id}`}>
+                <BeforeAfterSlider comparison={comparison} className="my-8" />
+              </RevealOnScroll>
+            );
+          })}
+
+          {/* Fase 1: Timelines not used via placeholder */}
+          {components.timelines?.map((timeline) => {
+            if (usedComponentKeys.keys.has(`TIMELINE:${timeline.id}`)) return null;
+            return (
+              <RevealOnScroll key={`fallback-timeline-${timeline.id}`}>
+                <TimelineSection timeline={timeline} className="my-8" />
+              </RevealOnScroll>
+            );
+          })}
+
+          {/* Fase 1: FAQs not used via placeholder */}
+          {components.faqs?.map((faq) => {
+            if (usedComponentKeys.keys.has(`FAQ:${faq.id}`)) return null;
+            return (
+              <RevealOnScroll key={`fallback-faq-${faq.id}`}>
+                <FAQSection faq={faq} className="my-8" />
+              </RevealOnScroll>
+            );
+          })}
+
+          {/* Fase 2: Calculators not used via placeholder */}
+          {components.calculators?.map((calculator) => {
+            if (usedComponentKeys.keys.has(`CALCULATOR:${calculator.id}`)) return null;
+            return (
+              <RevealOnScroll key={`fallback-calculator-${calculator.id}`}>
+                <DynamicCalculator calculator={calculator} className="my-8" />
+              </RevealOnScroll>
+            );
+          })}
+
+          {/* Fase 2: Certifications not used via placeholder */}
+          {components.certifications?.map((cert) => {
+            if (usedComponentKeys.keys.has(`CERTIFICATIONS:${cert.id}`)) return null;
+            return (
+              <RevealOnScroll key={`fallback-cert-${cert.id}`}>
+                <CertificationBadges certifications={cert} className="my-8" />
+              </RevealOnScroll>
+            );
+          })}
+
+          {/* Fase 2: Testimonials not used via placeholder */}
+          {components.testimonials?.map((testimonial) => {
+            if (usedComponentKeys.keys.has(`TESTIMONIAL:${testimonial.id}`)) return null;
+            return (
+              <RevealOnScroll key={`fallback-testimonial-${testimonial.id}`}>
+                <TestimonialCard testimonial={testimonial} className="my-8" />
+              </RevealOnScroll>
+            );
+          })}
+
+          {/* Fase 2: Resources not used via placeholder */}
+          {components.resources?.map((resource) => {
+            if (usedComponentKeys.keys.has(`RESOURCES:${resource.id}`)) return null;
+            return (
+              <RevealOnScroll key={`fallback-resource-${resource.id}`}>
+                <ResourceDownload resources={resource} className="my-8" />
+              </RevealOnScroll>
+            );
+          })}
+
+          {/* Fase 3: 3D Comparisons not used via placeholder */}
+          {components.comparison3D?.map((comparison) => {
+            if (usedComponentKeys.keys.has(`COMPARISON3D:${comparison.id}`)) return null;
+            return (
+              <RevealOnScroll key={`fallback-comparison3d-${comparison.id}`}>
+                <Comparison3DMatrix matrix={comparison} className="my-8" />
+              </RevealOnScroll>
+            );
+          })}
+
+          {/* Fase 3: Spec Sheets not used via placeholder */}
+          {components.specSheets?.map((specSheet) => {
+            if (usedComponentKeys.keys.has(`SPECSHEET:${specSheet.id}`)) return null;
+            return (
+              <RevealOnScroll key={`fallback-specsheet-${specSheet.id}`}>
+                <SpecificationSheet specSheet={specSheet} className="my-8" />
+              </RevealOnScroll>
+            );
+          })}
         </div>
       )}
     </article>
