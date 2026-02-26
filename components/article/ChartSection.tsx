@@ -10,6 +10,19 @@ import {
 } from "recharts";
 import { ChartData } from "@/types/article";
 
+// Default color palette for charts (grayscale + accents)
+// Provides graceful fallback when colors aren't specified
+const DEFAULT_COLORS = [
+  "#18181b", // zinc-900 (darkest)
+  "#52525b", // zinc-600
+  "#a1a1aa", // zinc-400
+  "#d4d4d8", // zinc-300
+  "#e5e5e7", // zinc-200 (lightest)
+  "#10B981", // green-500 (accent)
+  "#3B82F6", // blue-500 (accent)
+  "#F59E0B"  // amber-500 (accent)
+];
+
 interface ChartSectionProps {
   chart: ChartData;
   className?: string;
@@ -64,7 +77,10 @@ export function ChartSection({ chart, className = "" }: ChartSectionProps) {
               <Bar
                 key={key}
                 dataKey={key}
-                fill={chart.config?.colors?.[index] || "#000"}
+                fill={
+                  chart.config?.colors?.[index] ||
+                  DEFAULT_COLORS[index % DEFAULT_COLORS.length]
+                }
                 animationDuration={800}
               />
             ))}
@@ -96,7 +112,10 @@ export function ChartSection({ chart, className = "" }: ChartSectionProps) {
                 key={key}
                 type="monotone"
                 dataKey={key}
-                stroke={chart.config?.colors?.[index] || "#000"}
+                stroke={
+                  chart.config?.colors?.[index] ||
+                  DEFAULT_COLORS[index % DEFAULT_COLORS.length]
+                }
                 strokeWidth={2}
                 animationDuration={800}
               />
@@ -127,16 +146,20 @@ export function ChartSection({ chart, className = "" }: ChartSectionProps) {
               }}
             />
             <Legend wrapperStyle={{ fontFamily: "var(--font-manrope)" }} />
-            {chart.config?.dataKeys?.map((key, index) => (
-              <Radar
-                key={key}
-                name={key}
-                dataKey={key}
-                stroke={chart.config?.colors?.[index] || "#000"}
-                fill={chart.config?.colors?.[index] || "#000"}
-                fillOpacity={0.2}
-              />
-            ))}
+            {chart.config?.dataKeys?.map((key, index) => {
+              const color = chart.config?.colors?.[index] ||
+                DEFAULT_COLORS[index % DEFAULT_COLORS.length];
+              return (
+                <Radar
+                  key={key}
+                  name={key}
+                  dataKey={key}
+                  stroke={color}
+                  fill={color}
+                  fillOpacity={0.2}
+                />
+              );
+            })}
           </RadarChart>
         );
 
@@ -153,8 +176,18 @@ export function ChartSection({ chart, className = "" }: ChartSectionProps) {
               label
               animationDuration={800}
             >
-              {chart.data.map((_, index) => (
-                <Cell key={`cell-${index}`} fill={chart.config?.colors?.[index] || "#000"} />
+              {chart.data.map((entry, index) => (
+                <Cell
+                  key={`cell-${index}`}
+                  fill={
+                    // 1. Try config.colors array (preferred format)
+                    chart.config?.colors?.[index] ||
+                    // 2. Try data[].fill property (legacy format)
+                    entry.fill ||
+                    // 3. Fallback to default color palette
+                    DEFAULT_COLORS[index % DEFAULT_COLORS.length]
+                  }
+                />
               ))}
             </Pie>
             <Tooltip

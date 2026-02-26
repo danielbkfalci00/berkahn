@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useMemo, Fragment } from 'react';
 import type { Post, PostComponents } from '@/types/admin';
 import { StatsGrid } from '@/components/article/StatHighlight';
 import { DataTable } from '@/components/article/DataTable';
@@ -17,6 +17,138 @@ import { CheckCircle } from 'lucide-react';
 interface RichPostRendererProps {
   post: Post;
   className?: string;
+}
+
+/**
+ * Placeholder patterns for component intercalation
+ * Format: [COMPONENT_TYPE:component-id]
+ */
+const PLACEHOLDER_PATTERNS = {
+  CHART: /\[CHART:([^\]]+)\]/g,
+  TABLE: /\[TABLE:([^\]]+)\]/g,
+  STATS: /\[STATS:([^\]]+)\]/g,
+  CHECKLIST: /\[CHECKLIST:([^\]]+)\]/g,
+  MYTHS: /\[MYTHS:([^\]]+)\]/g,
+  GALLERY: /\[GALLERY:([^\]]+)\]/g,
+  NORMS: /\[NORMS:([^\]]+)\]/g,
+  PROCESS: /\[PROCESS:([^\]]+)\]/g,
+  COMPARISON: /\[COMPARISON:([^\]]+)\]/g,
+  GUIDE: /\[GUIDE:([^\]]+)\]/g,
+};
+
+/**
+ * Identifies and extracts placeholders from markdown content
+ * Returns array of content segments with their types (text or component)
+ */
+function extractPlaceholders(content: string, components: PostComponents | null) {
+  if (!components) return [{ type: 'text', content }];
+
+  const segments: Array<{
+    type: 'text' | 'component';
+    content?: string;
+    componentType?: string;
+    componentId?: string;
+    componentData?: any;
+  }> = [];
+
+  let lastIndex = 0;
+  const placeholderMatches: Array<{
+    index: number;
+    match: string;
+    type: string;
+    id: string;
+  }> = [];
+
+  // Find all placeholders in content
+  Object.entries(PLACEHOLDER_PATTERNS).forEach(([type, pattern]) => {
+    const matches = [...content.matchAll(pattern)];
+    matches.forEach((match) => {
+      placeholderMatches.push({
+        index: match.index!,
+        match: match[0],
+        type,
+        id: match[1],
+      });
+    });
+  });
+
+  // Sort by position in content
+  placeholderMatches.sort((a, b) => a.index - b.index);
+
+  // Track which components were used
+  const usedComponents = new Set<string>();
+
+  // Split content by placeholders
+  placeholderMatches.forEach((placeholder) => {
+    // Add text before placeholder
+    if (placeholder.index > lastIndex) {
+      segments.push({
+        type: 'text',
+        content: content.substring(lastIndex, placeholder.index),
+      });
+    }
+
+    // Find matching component
+    let componentData = null;
+    const { type, id } = placeholder;
+
+    switch (type) {
+      case 'CHART':
+        componentData = components.charts?.find((c) => c.id === id);
+        break;
+      case 'TABLE':
+        componentData = components.tables?.find((t) => t.id === id);
+        break;
+      case 'STATS':
+        // Stats doesn't have individual IDs in current structure
+        componentData = components.stats;
+        break;
+      case 'CHECKLIST':
+        // Checklist is a single object
+        componentData = components.checklist;
+        break;
+      case 'MYTHS':
+        componentData = components.myths;
+        break;
+      case 'GALLERY':
+        componentData = components.gallery;
+        break;
+      case 'NORMS':
+        componentData = components.norms;
+        break;
+      case 'PROCESS':
+        componentData = components.process;
+        break;
+      case 'COMPARISON':
+        componentData = components.tabComparisons?.find((c) => c.id === id);
+        break;
+      case 'GUIDE':
+        componentData = components.decisionGuide;
+        break;
+    }
+
+    if (componentData) {
+      segments.push({
+        type: 'component',
+        componentType: type,
+        componentId: id,
+        componentData,
+      });
+      usedComponents.add(`${type}:${id}`);
+    }
+
+    lastIndex = placeholder.index + placeholder.match.length;
+  });
+
+  // Add remaining text
+  if (lastIndex < content.length) {
+    segments.push({
+      type: 'text',
+      content: content.substring(lastIndex),
+    });
+  }
+
+  return segments;
 }
 
 /**
@@ -190,31 +322,168 @@ function GallerySection({ gallery }: { gallery: NonNullable<PostComponents['gall
 }
 
 /**
+ * Renders a single component based on type and data
+ */
+function renderComponent(type: string, data: any, key: string | number) {
+  switch (type) {
+    case 'CHART':
+      return (
+        <RevealOnScroll key={key}>
+          <ChartSection chart={data} className="my-8" />
+        </RevealOnScroll>
+      );
+    case 'TABLE':
+      return (
+        <RevealOnScroll key={key}>
+          <DataTable table={data} className="my-8" />
+        </RevealOnScroll>
+      );
+    case 'STATS':
+      return (
+        <RevealOnScroll key={key}>
+          <div className="my-8">
+            <StatsGrid stats={data} />
+          </div>
+        </RevealOnScroll>
+      );
+    case 'CHECKLIST':
+      return (
+        <RevealOnScroll key={key}>
+          <ChecklistSection checklist={data} />
+        </RevealOnScroll>
+      );
+    case 'MYTHS':
+      return (
+        <RevealOnScroll key={key}>
+          <div className="my-8">
+            <h3 className="text-xl font-semibold mb-4">Mitos e Verdades</h3>
+            <MythBuster myths={data} variant="cards" />
+          </div>
+        </RevealOnScroll>
+      );
+    case 'GALLERY':
+      return (
+        <RevealOnScroll key={key}>
+          <GallerySection gallery={data} />
+        </RevealOnScroll>
+      );
+    case 'NORMS':
+      return (
+        <RevealOnScroll key={key}>
+          <NormsSection norms={data} />
+        </RevealOnScroll>
+      );
+    case 'PROCESS':
+      return (
+        <RevealOnScroll key={key}>
+          <ProcessSection process={data} />
+        </RevealOnScroll>
+      );
+    case 'COMPARISON':
+      return (
+        <RevealOnScroll key={key}>
+          <ComparisonTabs comparison={data} className="my-8" />
+        </RevealOnScroll>
+      );
+    case 'GUIDE':
+      return (
+        <RevealOnScroll key={key}>
+          <DecisionGuideSection guide={data} className="my-8" />
+        </RevealOnScroll>
+      );
+    default:
+      return null;
+  }
+}
+
+/**
  * Main RichPostRenderer component
- * Renders markdown content with embedded rich components
+ * Renders markdown content with embedded rich components via placeholders
  */
 export function RichPostRenderer({ post, className = '' }: RichPostRendererProps) {
   const { content, components } = post;
 
-  // Parse markdown to HTML
-  const htmlContent = useMemo(() => renderMarkdown(content), [content]);
+  // Extract content segments with placeholders
+  const segments = useMemo(
+    () => extractPlaceholders(content, components || null),
+    [content, components]
+  );
 
-  // Check if components exist and have data
+  // Track which components were used via placeholders
+  const usedComponentKeys = useMemo(() => {
+    const keys = new Set<string>();
+    segments.forEach((segment) => {
+      if (segment.type === 'component' && segment.componentType && segment.componentId) {
+        keys.add(`${segment.componentType}:${segment.componentId}`);
+      }
+    });
+    return keys;
+  }, [segments]);
+
+  // Check if components exist
   const hasComponents = components && Object.keys(components).length > 0;
 
   return (
     <article className={`prose prose-neutral max-w-none ${className}`}>
-      {/* Main markdown content */}
-      <div
-        className="mb-8"
-        dangerouslySetInnerHTML={{ __html: htmlContent }}
-      />
+      {/* Render content segments with intercalated components */}
+      {segments.map((segment, index) => {
+        if (segment.type === 'text') {
+          const html = renderMarkdown(segment.content || '');
+          return (
+            <div
+              key={`text-${index}`}
+              dangerouslySetInnerHTML={{ __html: html }}
+            />
+          );
+        } else if (segment.type === 'component') {
+          return (
+            <div key={`component-${index}`} className="not-prose">
+              {renderComponent(
+                segment.componentType!,
+                segment.componentData,
+                `${segment.componentType}-${segment.componentId}-${index}`
+              )}
+            </div>
+          );
+        }
+        return null;
+      })}
 
-      {/* Rich components */}
+      {/* Fallback: Render unused components at the end */}
       {hasComponents && (
         <div className="not-prose">
-          {/* Stats Grid */}
-          {components.stats && components.stats.length > 0 && (
+          {/* Tables not used via placeholder */}
+          {components.tables?.map((table) => {
+            if (usedComponentKeys.has(`TABLE:${table.id}`)) return null;
+            return (
+              <RevealOnScroll key={`fallback-table-${table.id}`}>
+                <DataTable table={table} className="my-8" />
+              </RevealOnScroll>
+            );
+          })}
+
+          {/* Charts not used via placeholder */}
+          {components.charts?.map((chart) => {
+            if (usedComponentKeys.has(`CHART:${chart.id}`)) return null;
+            return (
+              <RevealOnScroll key={`fallback-chart-${chart.id}`}>
+                <ChartSection chart={chart} className="my-8" />
+              </RevealOnScroll>
+            );
+          })}
+
+          {/* Tab Comparisons not used via placeholder */}
+          {components.tabComparisons?.map((comparison) => {
+            if (usedComponentKeys.has(`COMPARISON:${comparison.id}`)) return null;
+            return (
+              <RevealOnScroll key={`fallback-comparison-${comparison.id}`}>
+                <ComparisonTabs comparison={comparison} className="my-8" />
+              </RevealOnScroll>
+            );
+          })}
+
+          {/* Stats (single object, no ID) */}
+          {components.stats && !usedComponentKeys.has('STATS:undefined') && (
             <RevealOnScroll>
               <div className="my-8">
                 <StatsGrid stats={components.stats} />
@@ -222,22 +491,8 @@ export function RichPostRenderer({ post, className = '' }: RichPostRendererProps
             </RevealOnScroll>
           )}
 
-          {/* Data Tables */}
-          {components.tables?.map((table) => (
-            <RevealOnScroll key={table.id}>
-              <DataTable table={table} className="my-8" />
-            </RevealOnScroll>
-          ))}
-
-          {/* Charts */}
-          {components.charts?.map((chart) => (
-            <RevealOnScroll key={chart.id}>
-              <ChartSection chart={chart} className="my-8" />
-            </RevealOnScroll>
-          ))}
-
-          {/* Myths */}
-          {components.myths && components.myths.length > 0 && (
+          {/* Myths (single array, no ID) */}
+          {components.myths && !usedComponentKeys.has('MYTHS:undefined') && (
             <RevealOnScroll>
               <div className="my-8">
                 <h3 className="text-xl font-semibold mb-4">Mitos e Verdades</h3>
@@ -246,37 +501,30 @@ export function RichPostRenderer({ post, className = '' }: RichPostRendererProps
             </RevealOnScroll>
           )}
 
-          {/* Tab Comparisons */}
-          {components.tabComparisons?.map((comparison) => (
-            <RevealOnScroll key={comparison.id}>
-              <ComparisonTabs comparison={comparison} className="my-8" />
-            </RevealOnScroll>
-          ))}
-
-          {/* Decision Guide */}
-          {components.decisionGuide && (
+          {/* Decision Guide (single object) */}
+          {components.decisionGuide && !usedComponentKeys.has('GUIDE:undefined') && (
             <RevealOnScroll>
               <DecisionGuideSection guide={components.decisionGuide} className="my-8" />
             </RevealOnScroll>
           )}
 
-          {/* Process Steps */}
-          {components.process && components.process.length > 0 && (
+          {/* Process (single array) */}
+          {components.process && !usedComponentKeys.has('PROCESS:undefined') && (
             <ProcessSection process={components.process} />
           )}
 
-          {/* Norms */}
-          {components.norms && components.norms.length > 0 && (
+          {/* Norms (single array) */}
+          {components.norms && !usedComponentKeys.has('NORMS:undefined') && (
             <NormsSection norms={components.norms} />
           )}
 
-          {/* Checklist */}
-          {components.checklist && (
+          {/* Checklist (single object) */}
+          {components.checklist && !usedComponentKeys.has('CHECKLIST:undefined') && (
             <ChecklistSection checklist={components.checklist} />
           )}
 
-          {/* Gallery */}
-          {components.gallery && (
+          {/* Gallery (single object) */}
+          {components.gallery && !usedComponentKeys.has('GALLERY:undefined') && (
             <GallerySection gallery={components.gallery} />
           )}
         </div>
