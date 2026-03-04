@@ -23,6 +23,8 @@ import type {
   ResourceLibrary,
   Comparison3DMatrix,
   MaterialSpecSheet,
+  ArticleImage,
+  ArticleCTA,
 } from './article';
 
 // ============================================
@@ -69,6 +71,10 @@ export interface PostComponents {
   // Fase 3: Componentes Avançados
   comparison3D?: Comparison3DMatrix[];
   specSheets?: MaterialSpecSheet[];
+  // Imagens Contextuais
+  images?: ArticleImage[];
+  // CTAs Customizáveis
+  ctas?: ArticleCTA[];
 }
 
 export interface Post extends BaseEntity {

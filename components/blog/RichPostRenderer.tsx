@@ -18,6 +18,8 @@ import { TestimonialCard } from '@/components/article/TestimonialCard';
 import { ResourceDownload } from '@/components/article/ResourceDownload';
 import { Comparison3DMatrix } from '@/components/article/Comparison3DMatrix';
 import { SpecificationSheet } from '@/components/article/SpecificationSheet';
+import { ArticleImage } from '@/components/article/ArticleImage';
+import { CTA } from '@/components/sections/CTA';
 import { RevealOnScroll } from '@/components/animations/RevealOnScroll';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -57,6 +59,10 @@ const PLACEHOLDER_PATTERNS = {
   // Fase 3: Componentes Avançados
   COMPARISON3D: /\[COMPARISON3D:([^\]]+)\]/g,
   SPECSHEET: /\[SPECSHEET:([^\]]+)\]/g,
+  // Imagens Contextuais
+  IMAGE: /\[IMAGE:([^\]]+)\]/g,
+  // CTAs Customizáveis
+  CTA: /\[CTA:([^\]]+)\]/g,
 };
 
 /**
@@ -180,6 +186,14 @@ function extractPlaceholders(content: string, components: PostComponents | null)
         break;
       case 'SPECSHEET':
         componentData = components.specSheets?.find((s) => s.id === id);
+        break;
+      // Imagens Contextuais
+      case 'IMAGE':
+        componentData = components.images?.find((img) => img.id === id);
+        break;
+      // CTAs Customizáveis
+      case 'CTA':
+        componentData = components.ctas?.find((cta) => cta.id === id);
         break;
     }
 
@@ -510,6 +524,28 @@ function renderComponent(type: string, data: any, key: string | number) {
           <SpecificationSheet specSheet={data} className="my-8" />
         </RevealOnScroll>
       );
+    // Imagens Contextuais
+    case 'IMAGE':
+      return (
+        <RevealOnScroll key={key}>
+          <ArticleImage image={data} className="my-8" />
+        </RevealOnScroll>
+      );
+    // CTAs Customizáveis
+    case 'CTA':
+      return (
+        <RevealOnScroll key={key}>
+          <CTA
+            label={data.label}
+            title={data.title}
+            description={data.description}
+            actionType={data.actionType}
+            actionText={data.actionText}
+            actionHref={data.actionHref}
+            defaultSegment={data.defaultSegment}
+          />
+        </RevealOnScroll>
+      );
     default:
       return null;
   }
@@ -745,6 +781,16 @@ export function RichPostRenderer({ post, className = '' }: RichPostRendererProps
             return (
               <RevealOnScroll key={`fallback-specsheet-${specSheet.id}`}>
                 <SpecificationSheet specSheet={specSheet} className="my-8" />
+              </RevealOnScroll>
+            );
+          })}
+
+          {/* Images not used via placeholder */}
+          {components.images?.map((image) => {
+            if (usedComponentKeys.keys.has(`IMAGE:${image.id}`)) return null;
+            return (
+              <RevealOnScroll key={`fallback-image-${image.id}`}>
+                <ArticleImage image={image} className="my-8" />
               </RevealOnScroll>
             );
           })}

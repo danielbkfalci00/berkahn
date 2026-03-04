@@ -95,6 +95,14 @@ Analise o conteúdo e identifique seções que podem se beneficiar de componente
    - Accordion colapsável
    - Ideal para NBRs, regulamentações
 
+8. **CTA (Call-to-Action)** - Para conversão contextual ao final do artigo
+   - **OBRIGATÓRIO em todo artigo** — cada artigo DEVE ter um CTA contextualizado
+   - Dois modos: `dialog` (abre formulário de contato) ou `link` (navega para página)
+   - `defaultSegment`: pré-seleciona "residencial" ou "comercial" no formulário
+   - Copy deve ser contextual ao tema do artigo (não genérico)
+   - Exemplo: artigo sobre financiamento → CTA "Consultar Financiamento" (dialog, residencial)
+   - Exemplo: artigo informacional → CTA "Ver Nossos Projetos" (link, /servicos)
+
 **Minhas sugestões de componentes interativos para este artigo**:
 - [Descreva aqui onde e como usar cada componente]
 
@@ -148,7 +156,7 @@ O artigo será inserido no Supabase com a seguinte estrutura:
   featured: boolean,
   meta_title: string, // Para SEO
   meta_description: string, // Para SEO
-  components: jsonb[] // Array de componentes interativos
+  components: jsonb // Objeto JSONB com arrays nomeados (charts, stats, tables, ctas, etc.)
 }
 ```
 
@@ -156,18 +164,43 @@ O artigo será inserido no Supabase com a seguinte estrutura:
 
 ```json
 {
-  "type": "stats",
-  "title": "Steel Frame em Números",
   "stats": [
     {
-      "icon": "Zap",
-      "value": "30%",
-      "label": "Mais rápido que alvenaria",
-      "description": "Redução no prazo de obra"
+      "id": "numeros-steel-frame",
+      "title": "Steel Frame em Números",
+      "stats": [
+        {
+          "icon": "Zap",
+          "value": "30%",
+          "label": "Mais rápido que alvenaria",
+          "description": "Redução no prazo de obra"
+        }
+      ]
+    }
+  ],
+  "ctas": [
+    {
+      "id": "cta-artigo-orcamento",
+      "label": "PRÓXIMO PASSO",
+      "title": "Pronto para construir com Steel Frame?",
+      "description": "Solicite um orçamento personalizado.",
+      "actionType": "dialog",
+      "actionText": "Solicitar Orçamento",
+      "defaultSegment": "residencial"
     }
   ]
 }
 ```
+
+**Interface ArticleCTA** (definida em `types/article.ts`):
+- `id` (string) - Identificador único, corresponde ao placeholder `[CTA:id]`
+- `label` (string) - Texto pequeno acima do título (e.g., "PRÓXIMO PASSO")
+- `title` (string) - Título principal do CTA
+- `description` (string) - Descrição/motivação
+- `actionType` ("dialog" | "link") - Dialog abre formulário, link navega
+- `actionText` (string) - Texto do botão
+- `actionHref` (string) - URL destino (apenas para `actionType: "link"`)
+- `defaultSegment` ("residencial" | "comercial" | "") - Segmento pré-selecionado no formulário
 
 ### 2.3 Checklist de Implementação
 
@@ -212,6 +245,7 @@ Continuação do texto...
 - `[CHECKLIST:checklist-id]` - Insere uma checklist
 - `[MYTHS:myths-id]` - Insere seção myth-buster
 - `[GALLERY:gallery-id]` - Insere galeria de imagens
+- `[IMAGE:image-id]` - Insere imagem única otimizada (com lightbox opcional)
 - `[NORMS:norms-id]` - Insere seção de normas técnicas
 - `[VIDEO:video-id]` - Insere embed de vídeo (YouTube, Vimeo ou direto)
 - `[BEFOREAFTER:beforeafter-id]` - Insere comparação visual antes/depois
@@ -228,11 +262,15 @@ Continuação do texto...
 - `[COMPARISON3D:comparison-id]` - Insere comparação multidimensional com radar chart
 - `[SPECSHEET:spec-id]` - Insere ficha técnica completa de materiais
 
+**Conversão**:
+- `[CTA:cta-id]` - Insere seção de Call-to-Action contextualizada (dialog ou link)
+
 **Regras importantes**:
 1. O `id` no placeholder DEVE corresponder ao `id` no objeto do componente JSONB
 2. Placeholders devem estar em linhas separadas (não inline)
 3. Se um componente não tiver placeholder, será renderizado no final automaticamente
 4. Placeholders inválidos (id não encontrado) serão removidos silenciosamente
+5. **Todo artigo DEVE ter um `[CTA:cta-id]` ao final do conteúdo** — é obrigatório para conversão
 
 - [ ] **Imagem de capa otimizada**
   - Formato WebP para performance
@@ -287,7 +325,22 @@ const article = {
   featured: ...,
   meta_title: "...",
   meta_description: "...",
-  components: [...] // Array de componentes interativos
+  components: {
+    // Arrays nomeados para cada tipo de componente
+    stats: [...],
+    charts: [...],
+    tables: [...],
+    // CTA OBRIGATÓRIO - cada artigo deve ter pelo menos um
+    ctas: [{
+      id: "cta-[slug]-orcamento",
+      label: "PRÓXIMO PASSO",
+      title: "...", // Contextual ao tema do artigo
+      description: "...",
+      actionType: "dialog", // ou "link"
+      actionText: "Solicitar Orçamento",
+      defaultSegment: "residencial" // ou "comercial" ou ""
+    }]
+  }
 };
 
 const data = JSON.stringify(article);
@@ -544,6 +597,12 @@ Execute todo o processo seguindo `.claude/prompts/article-implementation-prompt.
 **COMPONENTES INTERATIVOS DESEJADOS** (opcional):
 [Descreva onde quer stats, tabelas, gráficos, etc. Se não especificar, você decide baseado no conteúdo]
 
+**CTA DO ARTIGO** (obrigatório — será criado automaticamente se não especificado):
+- Tipo: [dialog/link]
+- Segmento: [residencial/comercial/nenhum]
+- Texto do botão: [ex: "Solicitar Orçamento"]
+- Se link, URL destino: [ex: /servicos]
+
 ---
 
 **IMPORTANTE**:
@@ -555,6 +614,6 @@ Execute todo o processo seguindo `.claude/prompts/article-implementation-prompt.
 
 ---
 
-**Versão**: 1.0
-**Última atualização**: 2026-02-25
+**Versão**: 1.1
+**Última atualização**: 2026-03-04
 **Mantido por**: Equipe de Desenvolvimento Berkahn

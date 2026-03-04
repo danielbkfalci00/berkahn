@@ -304,3 +304,34 @@ export interface MaterialSpecSheet {
   applications?: string[]; // ["Paredes estruturais", "Lajes secas"]
   notes?: string;
 }
+
+/**
+ * Article Image - Single optimized image for contextual use in articles
+ * Use for photos that illustrate specific points in the text
+ */
+export interface ArticleImage {
+  id: string;
+  src: string; // Image path (e.g., "/images/blog/article/photo.jpg")
+  alt: string; // Required for accessibility
+  caption?: string; // Optional caption below image
+  credit?: string; // Photo credit/attribution
+  layout?: 'full' | 'wide' | 'center' | 'float-left' | 'float-right'; // Layout style
+  aspectRatio?: '16:9' | '4:3' | '1:1' | '3:2' | 'auto'; // Aspect ratio
+  priority?: boolean; // Load immediately (for above-fold images)
+  enableLightbox?: boolean; // Allow click to expand
+}
+
+/**
+ * CTA (Call-to-Action) customizável para artigos
+ * Permite configurar ação contextual ao final do artigo
+ */
+export interface ArticleCTA {
+  id: string;
+  label?: string; // Texto pequeno acima do título (e.g., "PRÓXIMO PASSO")
+  title?: string; // Título principal do CTA
+  description?: string; // Descrição do CTA
+  actionType?: "dialog" | "link"; // Dialog abre form, link navega
+  actionText?: string; // Texto do botão (e.g., "Solicitar Orçamento")
+  actionHref?: string; // URL (apenas para actionType="link")
+  defaultSegment?: "residencial" | "comercial" | ""; // Segmento pré-selecionado no form
+}
