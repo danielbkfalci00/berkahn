@@ -123,7 +123,7 @@ const config: Config = {
   			},
   			marquee: {
   				from: { transform: 'translateX(0)' },
-  				to: { transform: 'translateX(calc(-100% / 3))' }
+  				to: { transform: 'translateX(-50%)' }
   			}
   		},
   		animation: {

@@ -20,16 +20,16 @@ interface PartnersProps {
 /* ─── Marquee (infinite scroll) ─── */
 
 function LogoMarquee({ partners }: { partners: { name: string; logo: string }[] }) {
-  // Triple list for seamless infinite loop
-  const tripled = [...partners, ...partners, ...partners];
+  // Duplicate list for seamless infinite loop
+  const doubled = [...partners, ...partners];
 
   return (
     <div className="overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
-      <div className="flex gap-3 md:gap-16 lg:gap-24 animate-marquee-fast md:animate-marquee hover:[animation-play-state:paused]">
-        {tripled.map((partner, i) => (
+      <div className="flex w-max animate-marquee-fast md:animate-marquee hover:[animation-play-state:paused]">
+        {doubled.map((partner, i) => (
           <div
             key={`${partner.name}-${i}`}
-            className="flex items-center justify-center shrink-0 h-32 md:h-28 w-40 md:w-48"
+            className="flex items-center justify-center shrink-0 h-32 md:h-28 w-40 md:w-48 mr-3 md:mr-16 lg:mr-24"
           >
             <div className="relative w-full h-full md:grayscale md:opacity-50 md:hover:grayscale-0 md:hover:opacity-100 transition-all duration-500">
               <Image
