@@ -32,7 +32,7 @@ export function ArticleCard({ post, size = "small", index = 0 }: ArticleCardProp
         isLarge ? "row-span-2" : "row-span-1"
       )}
     >
-      <Link href={`/atualidade/${post.slug}`} className="block h-full">
+      <Link href={`/atualidades/${post.slug}`} className="block h-full">
         {/* Image Container */}
         <div
           className={cn(
@@ -134,7 +134,7 @@ export function ArticleCardMinimal({ post, index = 0 }: Omit<ArticleCardProps, "
       }}
       className="group"
     >
-      <Link href={`/atualidade/${post.slug}`} className="block">
+      <Link href={`/atualidades/${post.slug}`} className="block">
         {/* Image */}
         <div className="relative aspect-[16/10] overflow-hidden mb-4">
           <motion.div

@@ -28,7 +28,7 @@ async function triggerPublishWebhook(post: Post): Promise<void> {
           category: post.category,
           author: post.author,
           published_at: post.published_at,
-          url: `https://berkahn.com.br/atualidade/${post.slug}`,
+          url: `https://berkahn.com.br/atualidades/${post.slug}`,
         },
         timestamp: new Date().toISOString(),
       }),
@@ -117,7 +117,7 @@ export async function updatePost(id: string, data: PostUpdate): Promise<{ data: 
 
   revalidatePath('/admin/posts')
   revalidatePath('/admin')
-  revalidatePath(`/atualidade/${post?.slug}`)
+  revalidatePath(`/atualidades/${post?.slug}`)
   return { data: post as Post, error: null }
 }
 
@@ -203,7 +203,7 @@ export async function toggleFeatured(
   }
 
   revalidatePath('/admin/posts')
-  revalidatePath('/atualidade')
+  revalidatePath('/atualidades')
   return { error: null }
 }
 

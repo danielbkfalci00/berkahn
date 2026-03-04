@@ -101,7 +101,7 @@ export function ArticleContent({ article }: ArticleContentProps) {
               transition={{ delay: 0.2, duration: 0.6 }}
             >
               <Link
-                href="/atualidade"
+                href="/atualidades"
                 className="inline-flex items-center gap-2 text-white/70 hover:text-white transition-colors mb-6"
               >
                 <ArrowLeft className="w-4 h-4" />
@@ -601,9 +601,6 @@ export function ArticleContent({ article }: ArticleContentProps) {
           </div>
         </div>
       </div>
-
-      {/* CTA Section */}
-      <CTA />
     </>
   );
 }

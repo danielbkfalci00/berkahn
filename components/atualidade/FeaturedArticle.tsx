@@ -20,7 +20,7 @@ export function FeaturedArticle({ post }: FeaturedArticleProps) {
           <p className="label-text text-black-50 mb-4">Em Destaque</p>
         </RevealOnScroll>
 
-        <Link href={`/atualidade/${post.slug}`} className="group block">
+        <Link href={`/atualidades/${post.slug}`} className="group block">
           <div className="grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-8 lg:gap-16 items-center">
             {/* Image */}
             <RevealOnScroll delay={0.1}>

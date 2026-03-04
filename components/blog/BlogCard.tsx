@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export function BlogCard({ post }: { post: BlogPost }) {
   return (
-    <Link href={`/atualidade/${post.slug}`} className="group block">
+    <Link href={`/atualidades/${post.slug}`} className="group block">
       <article className="bg-white overflow-hidden shadow-luxury-sm hover:shadow-luxury-md transition-shadow duration-300 h-full flex flex-col">
         {/* Image */}
         <div className="aspect-video overflow-hidden">

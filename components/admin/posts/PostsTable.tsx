@@ -201,7 +201,7 @@ export function PostsTable({ posts }: PostsTableProps) {
                   <div className="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                     {post.status === "published" && (
                       <Link
-                        href={`/atualidade/${post.slug}`}
+                        href={`/atualidades/${post.slug}`}
                         target="_blank"
                         className="inline-flex"
                       >

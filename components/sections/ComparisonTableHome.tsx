@@ -174,43 +174,43 @@ export function ComparisonTableHome() {
               </AnimatePresence>
             </tbody>
           </table>
+        </div>
 
-          {/* Botão Ver Mais */}
-          <div className="flex justify-center py-4 border-t border-black-10 bg-white rounded-b-lg -mt-1">
-            <button
-              onClick={() => setIsExpanded(!isExpanded)}
-              className="inline-flex items-center gap-2 text-black hover:text-black-70 transition-colors duration-300 text-sm font-medium"
+        {/* Botão Ver Mais */}
+        <div className="flex justify-center py-4 border-t border-black-10 bg-white rounded-b-lg -mt-1">
+          <button
+            onClick={() => setIsExpanded(!isExpanded)}
+            className="inline-flex items-center gap-2 text-black hover:text-black-70 transition-colors duration-300 text-sm font-medium"
+          >
+            {isExpanded ? "Ver menos" : "Ver comparação completa"}
+            <motion.div
+              animate={{ rotate: isExpanded ? 180 : 0 }}
+              transition={{ duration: 0.3 }}
             >
-              {isExpanded ? "Ver menos" : "Ver comparação completa"}
-              <motion.div
-                animate={{ rotate: isExpanded ? 180 : 0 }}
-                transition={{ duration: 0.3 }}
-              >
-                <ChevronDown className="w-4 h-4" />
-              </motion.div>
-            </button>
-          </div>
+              <ChevronDown className="w-4 h-4" />
+            </motion.div>
+          </button>
+        </div>
 
-          {/* Summary */}
-          <div className="mt-4 p-6 bg-black-5 rounded-lg">
-            <p className="text-sm text-black-70 text-center">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={2}
-                stroke="currentColor"
-                className="w-4 h-4 inline mr-2"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M4.5 12.75l6 6 9-13.5"
-                />
-              </svg>
-              indica vantagem competitiva no critério
-            </p>
-          </div>
+        {/* Summary */}
+        <div className="mt-4 p-6 bg-black-5 rounded-lg">
+          <p className="text-sm text-black-70 text-center">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={2}
+              stroke="currentColor"
+              className="w-4 h-4 inline mr-2"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M4.5 12.75l6 6 9-13.5"
+              />
+            </svg>
+            indica vantagem competitiva no critério
+          </p>
         </div>
       </div>
     </section>

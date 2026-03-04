@@ -123,7 +123,7 @@ const config: Config = {
   			},
   			marquee: {
   				from: { transform: 'translateX(0)' },
-  				to: { transform: 'translateX(-50%)' }
+  				to: { transform: 'translateX(calc(-100% / 3))' }
   			}
   		},
   		animation: {
@@ -133,7 +133,7 @@ const config: Config = {
   			'accordion-down': 'accordion-down 0.2s ease-out',
   			'accordion-up': 'accordion-up 0.2s ease-out',
   			marquee: 'marquee 20s linear infinite',
-			'marquee-fast': 'marquee 10s linear infinite'
+			'marquee-fast': 'marquee 6s linear infinite'
   		}
   	}
   },

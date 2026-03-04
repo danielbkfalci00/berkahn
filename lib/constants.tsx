@@ -27,7 +27,7 @@ export const NAV_LINKS: NavLinks = [
   { label: "LSF", href: "/lsf" },
   // TODO: Descomentar para mostrar Portfólio no menu
   // { label: "Portfólio", href: "/portfolio" },
-  { label: "Atualidades", href: "/atualidade" },
+  { label: "Atualidades", href: "/atualidades" },
   { label: "FAQ", href: "/perguntas-frequentes" },
 ] as const;
 

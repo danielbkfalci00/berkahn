@@ -14,11 +14,30 @@ const nextConfig: NextConfig = {
     unoptimized: true, // Required for static export
   },
   reactStrictMode: true,
-  // Note: redirects() don't work with output:"export"
-  // Configure redirects in hosting platform (Vercel/Netlify) instead:
-  // - /atualidade/5-vantagens-light-steel-frame → /atualidade/5-vantagens-decisivas-light-steel-frame
-  // - /atualidade/como-funciona-construcao-steel-frame → /atualidade/passo-passo-construcao-steel-frame
-  // - /atualidade/steel-frame-vs-alvenaria-comparativo → /atualidade/steel-frame-vs-alvenaria
+  // Redirects only work in "full" mode (not with output:"export")
+  ...(BUILD_MODE !== "static" && {
+    async redirects() {
+      return [
+        // Old /atualidade → /atualidades (SEO-safe permanent redirect)
+        {
+          source: "/atualidade",
+          destination: "/atualidades",
+          permanent: true,
+        },
+        {
+          source: "/atualidade/:slug",
+          destination: "/atualidades/:slug",
+          permanent: true,
+        },
+      ];
+    },
+  }),
+  // Note: For static export, configure redirects in hosting platform (Vercel/Netlify):
+  // - /atualidade → /atualidades
+  // - /atualidade/:slug → /atualidades/:slug
+  // - /atualidades/5-vantagens-light-steel-frame → /atualidades/5-vantagens-decisivas-light-steel-frame
+  // - /atualidades/como-funciona-construcao-steel-frame → /atualidades/passo-passo-construcao-steel-frame
+  // - /atualidades/steel-frame-vs-alvenaria-comparativo → /atualidades/steel-frame-vs-alvenaria
 };
 
 export default nextConfig;

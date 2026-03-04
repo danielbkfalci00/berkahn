@@ -373,7 +373,7 @@ export function PostEditor({ post }: PostEditorProps) {
                 <Label htmlFor="slug">Slug (URL)</Label>
                 <div className="flex items-center">
                   <span className="text-sm text-neutral-500 mr-1">
-                    /atualidade/
+                    /atualidades/
                   </span>
                   <Input
                     id="slug"
