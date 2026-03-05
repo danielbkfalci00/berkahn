@@ -10,6 +10,33 @@ import {
 } from "recharts";
 import { ChartData } from "@/types/article";
 
+// Custom tick component that wraps long x-axis labels into multiple lines
+function CustomXAxisTick({ x, y, payload, isMobile }: any) {
+  const maxCharsPerLine = isMobile ? 15 : 20;
+  const words = (payload.value as string).split(' ');
+  const lines: string[] = [];
+  let currentLine = '';
+
+  for (const word of words) {
+    if ((currentLine + ' ' + word).trim().length > maxCharsPerLine && currentLine) {
+      lines.push(currentLine.trim());
+      currentLine = word;
+    } else {
+      currentLine = currentLine ? currentLine + ' ' + word : word;
+    }
+  }
+  if (currentLine) lines.push(currentLine.trim());
+
+  return (
+    <text x={x} y={y + 12} textAnchor="middle" fill="#000"
+          fontFamily="var(--font-manrope)" fontSize={isMobile ? 10 : 11}>
+      {lines.map((line, i) => (
+        <tspan key={i} x={x} dy={i === 0 ? 0 : 14}>{line}</tspan>
+      ))}
+    </text>
+  );
+}
+
 // Default color palette for charts (grayscale + accents)
 // Provides graceful fallback when colors aren't specified
 const DEFAULT_COLORS = [
@@ -48,7 +75,7 @@ export function ChartSection({ chart, className = "" }: ChartSectionProps) {
         top: 20,
         right: isMobile ? 10 : 30,
         left: isMobile ? 0 : 20,
-        bottom: 20
+        bottom: 5
       }
     };
 
@@ -59,8 +86,10 @@ export function ChartSection({ chart, className = "" }: ChartSectionProps) {
             <CartesianGrid strokeDasharray="3 3" stroke="rgba(0,0,0,0.1)" />
             <XAxis
               dataKey={chart.config?.xAxisKey || "name"}
-              tick={{ fill: "#000", fontFamily: "var(--font-manrope)" }}
+              tick={<CustomXAxisTick isMobile={isMobile} />}
               stroke="#000"
+              interval={0}
+              height={isMobile ? 60 : 50}
             />
             <YAxis tick={{ fill: "#000" }} stroke="#000" />
             <Tooltip
@@ -93,8 +122,10 @@ export function ChartSection({ chart, className = "" }: ChartSectionProps) {
             <CartesianGrid strokeDasharray="3 3" stroke="rgba(0,0,0,0.1)" />
             <XAxis
               dataKey={chart.config?.xAxisKey || "name"}
-              tick={{ fill: "#000", fontFamily: "var(--font-manrope)" }}
+              tick={<CustomXAxisTick isMobile={isMobile} />}
               stroke="#000"
+              interval={0}
+              height={isMobile ? 60 : 50}
             />
             <YAxis tick={{ fill: "#000" }} stroke="#000" />
             <Tooltip
