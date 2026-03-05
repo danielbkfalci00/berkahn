@@ -10,10 +10,24 @@ import {
 } from "recharts";
 import { ChartData } from "@/types/article";
 
-// Custom tick component that wraps long x-axis labels into multiple lines
+// Custom tick component: rotated on mobile, word-wrapped on desktop
 function CustomXAxisTick({ x, y, payload, isMobile }: any) {
-  const maxCharsPerLine = isMobile ? 15 : 20;
-  const words = (payload.value as string).split(' ');
+  const label = payload.value as string;
+
+  // Mobile: rotate labels -45° to prevent overlap
+  if (isMobile) {
+    return (
+      <text x={x} y={y + 8} textAnchor="end" fill="#000"
+            fontFamily="var(--font-manrope)" fontSize={9}
+            transform={`rotate(-45, ${x}, ${y + 8})`}>
+        {label}
+      </text>
+    );
+  }
+
+  // Desktop: word-wrap into multiple lines
+  const maxCharsPerLine = 20;
+  const words = label.split(' ');
   const lines: string[] = [];
   let currentLine = '';
 
@@ -29,7 +43,7 @@ function CustomXAxisTick({ x, y, payload, isMobile }: any) {
 
   return (
     <text x={x} y={y + 12} textAnchor="middle" fill="#000"
-          fontFamily="var(--font-manrope)" fontSize={isMobile ? 10 : 11}>
+          fontFamily="var(--font-manrope)" fontSize={11}>
       {lines.map((line, i) => (
         <tspan key={i} x={x} dy={i === 0 ? 0 : 14}>{line}</tspan>
       ))}
@@ -89,7 +103,7 @@ export function ChartSection({ chart, className = "" }: ChartSectionProps) {
               tick={<CustomXAxisTick isMobile={isMobile} />}
               stroke="#000"
               interval={0}
-              height={isMobile ? 60 : 50}
+              height={isMobile ? 80 : 50}
             />
             <YAxis tick={{ fill: "#000" }} stroke="#000" />
             <Tooltip
@@ -125,7 +139,7 @@ export function ChartSection({ chart, className = "" }: ChartSectionProps) {
               tick={<CustomXAxisTick isMobile={isMobile} />}
               stroke="#000"
               interval={0}
-              height={isMobile ? 60 : 50}
+              height={isMobile ? 80 : 50}
             />
             <YAxis tick={{ fill: "#000" }} stroke="#000" />
             <Tooltip
