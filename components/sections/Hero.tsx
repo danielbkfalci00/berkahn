@@ -92,7 +92,7 @@ export function Hero() {
           </RevealOnScroll>
 
           {/* Headline - Two lines */}
-          <div className="mb-8">
+          <h1 className="mb-8">
             <CharReveal
               text="Especialistas em Light Steel Frame"
               className="hero-headline-line text-xl sm:text-3xl md:text-5xl lg:text-6xl font-heading font-extrabold tracking-tighter text-white hero-text-shadow-strong"
@@ -103,7 +103,7 @@ export function Hero() {
               className="hero-headline-line text-xl sm:text-3xl md:text-5xl lg:text-6xl font-heading font-extrabold tracking-tighter text-white hero-text-shadow-strong"
               delay={0.4}
             />
-          </div>
+          </h1>
 
           {/* Subheadline - TextReveal */}
           <TextReveal
