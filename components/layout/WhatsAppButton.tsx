@@ -20,7 +20,7 @@ export function WhatsAppButton() {
     <motion.a
       href={WHATSAPP_URL}
       target="_blank"
-      rel="noopener noreferrer"
+      rel="nofollow noopener noreferrer"
       aria-label="Fale conosco pelo WhatsApp"
       title="Fale conosco"
       initial={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, scale: 0.8 }}
