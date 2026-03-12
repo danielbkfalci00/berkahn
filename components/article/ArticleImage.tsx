@@ -98,7 +98,19 @@ export function ArticleImage({ image, className = "" }: ArticleImageProps) {
           {image.caption && <p>{image.caption}</p>}
           {image.credit && (
             <p className="text-xs text-neutral-500 mt-1">
-              Crédito: {image.credit}
+              Crédito:{" "}
+              {image.sourceUrl ? (
+                <a
+                  href={image.sourceUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:underline"
+                >
+                  {image.credit}
+                </a>
+              ) : (
+                image.credit
+              )}
             </p>
           )}
         </figcaption>

@@ -315,6 +315,7 @@ export interface ArticleImage {
   alt: string; // Required for accessibility
   caption?: string; // Optional caption below image
   credit?: string; // Photo credit/attribution
+  sourceUrl?: string; // Link to original source (makes credit clickable)
   layout?: 'full' | 'wide' | 'center' | 'float-left' | 'float-right'; // Layout style
   aspectRatio?: '16:9' | '4:3' | '1:1' | '3:2' | 'auto'; // Aspect ratio
   priority?: boolean; // Load immediately (for above-fold images)
