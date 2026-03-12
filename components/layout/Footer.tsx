@@ -118,7 +118,7 @@ function getSocialIcon(type: string) {
 
 export function Footer() {
   return (
-    <footer className="bg-black text-white py-16">
+    <footer className="bg-black text-white py-16" data-nosnippet>
       <div className="container mx-auto px-6">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
           {/* Brand */}
@@ -132,7 +132,7 @@ export function Footer() {
 
           {/* Navigation */}
           <div>
-            <h4 className="label-text mb-6">Navegação</h4>
+            <p className="label-text mb-6">Navegação</p>
             <ul className="space-y-2">
               {NAV_LINKS.map((link) => (
                 <li key={link.href}>
@@ -149,7 +149,7 @@ export function Footer() {
 
           {/* Contact - FIX: SVG sizing */}
           <div>
-            <h4 className="label-text mb-6">Contato</h4>
+            <p className="label-text mb-6">Contato</p>
             <div className="space-y-3">
               {FOOTER_CONTACT.map((item) => (
                 <p key={item.label} className="flex items-center gap-3">

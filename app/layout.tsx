@@ -76,6 +76,20 @@ export default function RootLayout({
           <WhatsAppButton />
         </CookieConsentProvider>
 
+        {/* Organization schema — informs Google Knowledge Panel logo */}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            name: "Construtora Berkahn",
+            url: "https://www.berkahn.com.br",
+            logo: "https://www.berkahn.com.br/images/logo/berkahn-logo.webp",
+            sameAs: [
+              "https://www.linkedin.com/company/construtora-berkahn/",
+            ],
+          })}
+        </script>
+
         {/* Google Analytics */}
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-RBQJ1D6JHW"

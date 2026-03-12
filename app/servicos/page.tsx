@@ -70,9 +70,9 @@ export default function ServicosPage() {
         <div className="container max-w-4xl">
           <RevealOnScroll>
             <div className="text-center">
-              <h1 className="headline-lg mb-6">
+              <h2 className="headline-lg mb-6">
                 Soluções Completas em Construção
-              </h1>
+              </h2>
               <p className="body-lg text-black-70">
                 Da concepção à entrega, oferecemos serviços integrados de
                 construção civil para diferentes segmentos. Trabalhamos com

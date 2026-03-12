@@ -59,9 +59,9 @@ export function SobreSection() {
             className=""
           >
             {/* Main title */}
-            <h1 className="font-heading text-6xl sm:text-7xl lg:text-8xl font-bold tracking-tight mb-8">
+            <h2 className="font-heading text-6xl sm:text-7xl lg:text-8xl font-bold tracking-tight mb-8">
               BERKAHN
-            </h1>
+            </h2>
 
             {/* Introductory paragraph */}
             <p className="text-xl text-black/60 max-w-2xl leading-relaxed">

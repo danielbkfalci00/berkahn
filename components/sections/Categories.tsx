@@ -70,6 +70,7 @@ export function Categories() {
                   {/* Botão Saiba Mais */}
                   <Link
                     href={category.href}
+                    aria-label={`Saiba mais sobre ${category.title}`}
                     className="inline-block px-8 py-3 bg-white text-black text-sm uppercase tracking-widest font-medium transition-all duration-300 hover:bg-black hover:text-white hover:border hover:border-white mt-8"
                   >
                     Saiba Mais

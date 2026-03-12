@@ -34,6 +34,7 @@ export function LSFIntro() {
             </p>
             <Link
               href="/lsf"
+              aria-label="Saiba mais sobre Light Steel Frame"
               className="inline-flex items-center gap-2 text-black hover:gap-4 transition-all duration-300 font-medium group"
             >
               Saiba mais

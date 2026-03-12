@@ -2,6 +2,9 @@
   "name": "berkahn-nextjs",
   "version": "2.0.0",
   "private": true,
+  "browserslist": [
+    "defaults and fully supports es6-module"
+  ],
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -47,6 +50,7 @@
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",
     "autoprefixer": "^10.4.0",
+    "critters": "^0.0.23",
     "eslint": "^8.55.0",
     "eslint-config-next": "^15.0.0",
     "pg": "^8.17.1",

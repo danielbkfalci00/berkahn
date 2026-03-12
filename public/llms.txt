@@ -1,0 +1,19 @@
+# Berkahn — Construtora Steel Frame
+
+> Construtora especializada em Light Steel Frame em Belo Horizonte. Projetos residenciais e comerciais com agilidade, sustentabilidade e acabamento premium.
+
+## Serviços
+- [Residencial](https://www.berkahn.com.br/residencial): Construção de casas em Light Steel Frame — projetos customizados, rápidos e sustentáveis.
+- [Comercial & Industrial](https://www.berkahn.com.br/comercial-industrial): Galpões, escritórios e empreendimentos comerciais em Steel Frame.
+- [Serviços](https://www.berkahn.com.br/servicos): Visão completa dos serviços oferecidos pela Berkahn.
+
+## Sobre
+- [Empresa](https://www.berkahn.com.br/empresa): Fundadores, missão, valores e história da Berkahn.
+- [Light Steel Frame](https://www.berkahn.com.br/lsf): O que é o sistema construtivo Light Steel Frame e suas vantagens.
+- [Portfolio](https://www.berkahn.com.br/portfolio): Projetos realizados pela Berkahn.
+
+## Blog — Atualidades
+- [Atualidades](https://www.berkahn.com.br/atualidades): Artigos técnicos sobre Steel Frame, construção industrializada e mercado imobiliário.
+
+## Suporte
+- [Perguntas Frequentes](https://www.berkahn.com.br/perguntas-frequentes): Respostas às dúvidas mais comuns sobre Steel Frame e a Berkahn.

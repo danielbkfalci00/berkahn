@@ -110,7 +110,7 @@ export function FAQSearch({ categories }: FAQSearchProps) {
         </div>
 
         {/* Category chips with counts */}
-        <div className="flex gap-2 overflow-x-auto md:flex-wrap md:overflow-x-visible pb-2 scrollbar-hide">
+        <div className="flex gap-2 overflow-x-auto md:flex-wrap md:overflow-x-visible pb-2 scrollbar-hide" data-nosnippet>
           <button
             onClick={() => setActiveCategory(null)}
             className={cn(

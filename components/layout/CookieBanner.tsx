@@ -41,7 +41,7 @@ export function CookieBanner() {
                 </p>
                 <a
                   href="/privacidade"
-                  className="text-xs text-black/50 underline underline-offset-2 hover:text-black transition-colors"
+                  className="text-xs text-black/70 underline underline-offset-2 hover:text-black transition-colors"
                 >
                   Política de Privacidade
                 </a>
