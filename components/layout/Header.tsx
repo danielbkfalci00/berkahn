@@ -21,10 +21,7 @@ export function Header({
 }: HeaderProps = {}) {
   const pathname = usePathname();
   const { isOpen, toggle } = useMenu();
-  const { isScrolled } = useHeaderScroll();
-
-  // Mostrar slogan apenas em páginas não-Home e quando no topo
-  const showSlogan = pathname !== "/" && !isScrolled;
+  const { isScrolled, isPastHero } = useHeaderScroll();
 
   return (
     <header
@@ -82,12 +79,15 @@ export function Header({
             BERKAHN
           </span>
 
-          {/* Slogan condicional */}
-          {showSlogan && (
-            <span className="text-[10px] uppercase tracking-[0.2em] text-black-50 font-body mt-0.5 transition-opacity duration-300">
-              Erguendo o amanhã
-            </span>
-          )}
+          {/* Slogan — visível quando scrollado além da hero */}
+          <span
+            className={cn(
+              "text-[10px] uppercase tracking-[0.2em] text-black-50 font-body mt-0.5 transition-all duration-300",
+              isPastHero ? "opacity-100 max-h-4" : "opacity-0 max-h-0 overflow-hidden"
+            )}
+          >
+            Erguendo o amanhã
+          </span>
         </Link>
 
         {/* RIGHT: CTA - Hidden on mobile, visible on desktop */}
