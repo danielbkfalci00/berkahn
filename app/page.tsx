@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { Hero } from "@/components/sections/Hero";
 import { Categories } from "@/components/sections/Categories";
 import { Expertise } from "@/components/sections/Expertise";
@@ -7,6 +8,12 @@ import { BenefitsGridCompact } from "@/components/sections/BenefitsGridCompact";
 import { ComparisonTableHome } from "@/components/sections/ComparisonTableHome";
 import { Partners } from "@/components/sections/Partners";
 import { CTA } from "@/components/sections/CTA";
+
+export const metadata: Metadata = {
+  title: "Berkahn | Construtora Steel Frame em BH",
+  description:
+    "Construtora especializada em Light Steel Frame em Belo Horizonte. Projetos residenciais e comerciais com agilidade, sustentabilidade e acabamento premium.",
+};
 
 export default function Home() {
   return (
