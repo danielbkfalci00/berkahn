@@ -99,7 +99,7 @@ export function FAQSection({ faq, className = "" }: FAQSectionProps) {
       {/* Footer with structured data hint */}
       <div className="px-4 md:px-6 lg:px-8 pb-6 pt-4 border-t border-black-10">
         <p className="text-xs text-black-50 text-center">
-          💡 Não encontrou sua dúvida? Entre em contato conosco
+          Não encontrou sua dúvida? Entre em contato conosco
         </p>
       </div>
 
