@@ -20,6 +20,16 @@ export function Hero() {
     <section className="relative h-[70vh] md:h-screen min-h-[500px] md:min-h-[600px] flex items-start justify-start pt-32 md:pt-40 overflow-hidden">
       {/* Background Carousel */}
       <div className="absolute inset-0 z-0">
+        {/* Static LCP image — outside Embla, paints immediately from SSR without waiting for carousel JS init */}
+        <Image
+          src="/images/hero/hero-home-1.webp"
+          alt="Estrutura Steel Frame em construção"
+          fill
+          className="object-cover"
+          priority
+          sizes="100vw"
+        />
+
         <Carousel
           opts={{
             loop: true,
@@ -29,14 +39,13 @@ export function Hero() {
           className="h-full w-full"
         >
           <CarouselContent className="h-full">
-            {/* Slide 1 */}
+            {/* Slide 1 — no priority; static image above handles LCP */}
             <CarouselItem className="basis-full min-w-0 h-full">
               <Image
                 src="/images/hero/hero-home-1.webp"
                 alt="Estrutura Steel Frame em construção"
                 fill
                 className="object-cover"
-                priority
                 sizes="100vw"
               />
             </CarouselItem>
