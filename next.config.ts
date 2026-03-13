@@ -14,9 +14,6 @@ const nextConfig: NextConfig = {
     unoptimized: true, // Required for static export
   },
   reactStrictMode: true,
-  experimental: {
-    optimizeCss: true,
-  },
   // Redirects only work in "full" mode (not with output:"export")
   ...(BUILD_MODE !== "static" && {
     async redirects() {
