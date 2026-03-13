@@ -39,13 +39,14 @@ export function Hero() {
           className="h-full w-full"
         >
           <CarouselContent className="h-full">
-            {/* Slide 1 — no priority; static image above handles LCP */}
+            {/* Slide 1 — priority=eager so browser doesn't delay load inside overflow:hidden Embla container */}
             <CarouselItem className="basis-full min-w-0 h-full">
               <Image
                 src="/images/hero/hero-home-1.webp"
                 alt="Estrutura Steel Frame em construção"
                 fill
                 className="object-cover"
+                priority
                 sizes="100vw"
               />
             </CarouselItem>
