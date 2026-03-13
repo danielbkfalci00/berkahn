@@ -14,6 +14,7 @@ export function LSFIntro() {
               alt="Estrutura Light Steel Frame"
               width={1920}
               height={1080}
+              sizes="(max-width: 1024px) 100vw, 50vw"
               className="w-full h-auto object-cover"
             />
           </RevealOnScroll>

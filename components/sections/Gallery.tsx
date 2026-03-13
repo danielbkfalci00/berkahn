@@ -14,6 +14,7 @@ export function Gallery() {
                 alt="Residência em Light Steel Frame - Projeto Berkahn"
                 width={2048}
                 height={1152}
+                sizes="(max-width: 768px) 100vw, 50vw"
                 className="w-full h-64 lg:h-80 object-cover group-hover:scale-105 transition-transform duration-500"
               />
             </Link>
@@ -23,6 +24,7 @@ export function Gallery() {
                 alt="Edifício Comercial em Steel Frame - Projeto Berkahn"
                 width={2048}
                 height={1152}
+                sizes="(max-width: 768px) 100vw, 50vw"
                 className="w-full h-64 lg:h-80 object-cover group-hover:scale-105 transition-transform duration-500"
               />
             </Link>
