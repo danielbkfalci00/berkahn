@@ -12,7 +12,7 @@ interface TextRevealProps {
 }
 
 const containerVariants = {
-  hidden: { opacity: 1 },
+  hidden: { opacity: 0 },
   visible: (delay: number) => ({
     opacity: 1,
     transition: {
@@ -23,7 +23,7 @@ const containerVariants = {
 };
 
 const wordVariants = {
-  hidden: { opacity: 1, y: 20 },
+  hidden: { opacity: 0, y: 20 },
   visible: {
     opacity: 1,
     y: 0,
@@ -87,7 +87,7 @@ interface CharRevealProps {
 }
 
 const charContainerVariants = {
-  hidden: { opacity: 1 },
+  hidden: { opacity: 0 },
   visible: (delay: number) => ({
     opacity: 1,
     transition: {
@@ -98,7 +98,7 @@ const charContainerVariants = {
 };
 
 const charVariants = {
-  hidden: { opacity: 1, y: 50 },
+  hidden: { opacity: 0, y: 50 },
   visible: {
     opacity: 1,
     y: 0,
@@ -151,7 +151,7 @@ interface LineRevealProps {
 }
 
 const lineContainerVariants = {
-  hidden: { opacity: 1 },
+  hidden: { opacity: 0 },
   visible: (delay: number) => ({
     opacity: 1,
     transition: {
@@ -162,7 +162,7 @@ const lineContainerVariants = {
 };
 
 const lineVariants = {
-  hidden: { opacity: 1, y: 30 },
+  hidden: { opacity: 0, y: 30 },
   visible: {
     opacity: 1,
     y: 0,
