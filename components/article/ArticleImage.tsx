@@ -52,6 +52,7 @@ export function ArticleImage({ image, className = "" }: ArticleImageProps) {
         className={`${aspectRatioClass ? "object-cover" : "w-full h-auto"}`}
         priority={image.priority}
         quality={90}
+        sizes="(max-width: 768px) 100vw, 768px"
       />
 
       {/* Lightbox indicator */}

@@ -281,7 +281,7 @@ function renderMarkdown(content: string): string {
     .replace(/(<li class="ml-4 list-decimal">.*<\/li>\n?)+/gim, '<ol class="list-decimal my-4 space-y-2">$&</ol>')
     // Paragraphs
     .replace(/\n\n/gim, '</p><p class="mb-4">')
-    .replace(/^(.+)$/gim, '<p class="mb-4 leading-relaxed">$1</p>')
+    .replace(/^(?!<)(.+)$/gim, '<p class="mb-4 leading-relaxed">$1</p>')
     // Clean up empty paragraphs
     .replace(/<p class="mb-4 leading-relaxed"><\/p>/gim, '')
     .replace(/<p class="mb-4 leading-relaxed">(<h[123])/gim, '$1')
