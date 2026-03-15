@@ -1,24 +1,53 @@
 'use client';
 
 import { useMemo, Fragment } from 'react';
+import dynamic from 'next/dynamic';
 import type { Post, PostComponents } from '@/types/admin';
+// Lightweight components — keep as static imports (fast, used in most articles)
 import { StatsGrid } from '@/components/article/StatHighlight';
 import { DataTable } from '@/components/article/DataTable';
-import { ChartSection } from '@/components/article/ChartSection';
-import { MythBuster } from '@/components/article/MythBuster';
-import { ComparisonTabs } from '@/components/article/ComparisonTabs';
-import { DecisionGuideSection } from '@/components/article/DecisionGuideSection';
-import { VideoEmbed } from '@/components/article/VideoEmbed';
-import { BeforeAfterSlider } from '@/components/article/BeforeAfterSlider';
-import { TimelineSection } from '@/components/article/TimelineSection';
 import { FAQSection } from '@/components/article/FAQSection';
-import { DynamicCalculator } from '@/components/article/DynamicCalculator';
-import { CertificationBadges } from '@/components/article/CertificationBadges';
-import { TestimonialCard } from '@/components/article/TestimonialCard';
-import { ResourceDownload } from '@/components/article/ResourceDownload';
-import { Comparison3DMatrix } from '@/components/article/Comparison3DMatrix';
-import { SpecificationSheet } from '@/components/article/SpecificationSheet';
 import { ArticleImage } from '@/components/article/ArticleImage';
+// Heavy / rarely-used components — lazy loaded to reduce initial bundle
+const ChartSection = dynamic(() =>
+  import('@/components/article/ChartSection').then((m) => m.ChartSection)
+);
+const MythBuster = dynamic(() =>
+  import('@/components/article/MythBuster').then((m) => m.MythBuster)
+);
+const ComparisonTabs = dynamic(() =>
+  import('@/components/article/ComparisonTabs').then((m) => m.ComparisonTabs)
+);
+const DecisionGuideSection = dynamic(() =>
+  import('@/components/article/DecisionGuideSection').then((m) => m.DecisionGuideSection)
+);
+const VideoEmbed = dynamic(() =>
+  import('@/components/article/VideoEmbed').then((m) => m.VideoEmbed)
+);
+const BeforeAfterSlider = dynamic(() =>
+  import('@/components/article/BeforeAfterSlider').then((m) => m.BeforeAfterSlider)
+);
+const TimelineSection = dynamic(() =>
+  import('@/components/article/TimelineSection').then((m) => m.TimelineSection)
+);
+const DynamicCalculator = dynamic(() =>
+  import('@/components/article/DynamicCalculator').then((m) => m.DynamicCalculator)
+);
+const CertificationBadges = dynamic(() =>
+  import('@/components/article/CertificationBadges').then((m) => m.CertificationBadges)
+);
+const TestimonialCard = dynamic(() =>
+  import('@/components/article/TestimonialCard').then((m) => m.TestimonialCard)
+);
+const ResourceDownload = dynamic(() =>
+  import('@/components/article/ResourceDownload').then((m) => m.ResourceDownload)
+);
+const Comparison3DMatrix = dynamic(() =>
+  import('@/components/article/Comparison3DMatrix').then((m) => m.Comparison3DMatrix)
+);
+const SpecificationSheet = dynamic(() =>
+  import('@/components/article/SpecificationSheet').then((m) => m.SpecificationSheet)
+);
 import { CTA } from '@/components/sections/CTA';
 import { RevealOnScroll } from '@/components/animations/RevealOnScroll';
 import { Badge } from '@/components/ui/badge';

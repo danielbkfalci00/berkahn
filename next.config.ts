@@ -11,7 +11,16 @@ const nextConfig: NextConfig = {
     output: "export",
   }),
   images: {
-    unoptimized: true, // Required for static export
+    ...(BUILD_MODE === "static"
+      ? { unoptimized: true }
+      : {
+          remotePatterns: [
+            {
+              protocol: "https",
+              hostname: "sfqaknxomxwmviarpwfy.supabase.co",
+            },
+          ],
+        }),
   },
   reactStrictMode: true,
   // Redirects only work in "full" mode (not with output:"export")

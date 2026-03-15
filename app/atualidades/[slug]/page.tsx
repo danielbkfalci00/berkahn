@@ -1,5 +1,7 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
+import Image from "next/image";
+import { preload } from "react-dom";
 import { createClient } from "@/lib/supabase/server";
 import { getArticleBySlug, richArticles } from "@/data/articles/steel-frame-futuro";
 import { ArticleContent } from "./ArticleContent";
@@ -127,18 +129,28 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
   const post = await getPostBySlug(slug);
 
   if (post) {
+    // Preload LCP cover image — injects <link rel="preload" fetchpriority="high"> in <head>
+    if (post.cover_image) {
+      preload(post.cover_image, { as: "image", fetchPriority: "high" });
+    }
+
     // Use new RichPostRenderer for Supabase posts
     return (
       <main className="min-h-screen bg-white">
         {/* Hero Section */}
         <section className="relative h-[50vh] min-h-[400px] flex items-end">
           {post.cover_image && (
-            <div
-              className="absolute inset-0 bg-cover bg-center"
-              style={{ backgroundImage: `url(${post.cover_image})` }}
-            >
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
-            </div>
+            <Image
+              src={post.cover_image}
+              alt={post.title}
+              fill
+              className="object-cover"
+              priority
+              sizes="100vw"
+            />
+          )}
+          {post.cover_image && (
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
           )}
           <div className="relative z-10 container mx-auto px-4 pb-12">
             <span className="inline-block bg-white text-neutral-900 text-sm font-medium px-3 py-1 rounded-full mb-4">
