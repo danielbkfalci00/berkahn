@@ -1,4 +1,5 @@
 import dynamic from "next/dynamic";
+import { Breadcrumb } from "@/components/layout/Breadcrumb";
 import { ParallaxHero } from "@/components/sections/ParallaxHero";
 import { Partners } from "@/components/sections/Partners";
 import { CTA } from "@/components/sections/CTA";
@@ -41,9 +42,34 @@ export const metadata = {
 export default function ResidencialPage() {
   return (
     <>
-      {/* ================================================================ */}
+      <Breadcrumb
+        items={[
+          { name: "Serviços", href: "/servicos" },
+          { name: "Residencial", href: "/residencial" },
+        ]}
+        className="container mx-auto px-4 pt-24 pb-2"
+      />
+
+      {/* Service structured data */}
+      <script type="application/ld+json">
+        {JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Service",
+          name: "Construção Residencial em Steel Frame",
+          description:
+            "Construção residencial com Light Steel Frame: obra rápida, limpa e com orçamento previsível. Construção nova, reforma ou ampliação.",
+          provider: {
+            "@id": "https://www.berkahn.com.br/#organization",
+          },
+          areaServed: {
+            "@type": "State",
+            name: "São Paulo",
+          },
+          serviceType: "Construção Residencial",
+        })}
+      </script>
+
       {/* 1. Hero Section */}
-      {/* ================================================================ */}
       <ParallaxHero
         label="CONSTRUÇÃO RESIDENCIAL"
         title="Construção residencial com velocidade e precisão industrial."

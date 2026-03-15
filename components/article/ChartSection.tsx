@@ -282,6 +282,31 @@ export function ChartSection({ chart, className = "" }: ChartSectionProps) {
           {renderChart()}
         </ResponsiveContainer>
       </div>
+
+      {/* Accessible table fallback for crawlers and screen readers */}
+      {chart.data && chart.data.length > 0 && (
+        <div className="sr-only">
+          <table>
+            {chart.title && <caption>{chart.title}</caption>}
+            <thead>
+              <tr>
+                {Object.keys(chart.data[0]).filter(k => k !== 'fill').map(key => (
+                  <th key={key}>{key}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {chart.data.map((row: Record<string, unknown>, i: number) => (
+                <tr key={i}>
+                  {Object.entries(row).filter(([k]) => k !== 'fill').map(([k, v]) => (
+                    <td key={k}>{String(v)}</td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </motion.div>
   );
 }

@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { Breadcrumb } from "@/components/layout/Breadcrumb";
 import { CountUp } from "@/components/animations/CountUp";
 import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
 import { BerkahnTimeline } from "@/components/timeline/BerkahnTimeline";
@@ -62,6 +63,22 @@ const diferenciais = [
 export default function EmpresaPage() {
   return (
     <>
+      <Breadcrumb
+        items={[{ name: "Empresa", href: "/empresa" }]}
+        className="container mx-auto px-4 pt-24 pb-2"
+      />
+
+      {/* AboutPage structured data */}
+      <script type="application/ld+json">
+        {JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "AboutPage",
+          mainEntity: {
+            "@id": "https://www.berkahn.com.br/#organization",
+          },
+        })}
+      </script>
+
       {/* Hero com Imagem e Stats Overlay */}
       <section className="relative h-[85vh] md:h-screen min-h-[550px] md:min-h-[600px] flex items-start justify-start pt-24 md:pt-32 lg:pt-40 overflow-hidden">
         {/* Background Image */}

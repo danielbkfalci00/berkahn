@@ -76,16 +76,50 @@ export default function RootLayout({
           <WhatsAppButton />
         </CookieConsentProvider>
 
-        {/* Organization schema — informs Google Knowledge Panel logo */}
+        {/* Structured data — Organization + WebSite for Google Knowledge Panel & sitelinks */}
         <script type="application/ld+json">
           {JSON.stringify({
             "@context": "https://schema.org",
-            "@type": "Organization",
-            name: "Construtora Berkahn",
-            url: "https://www.berkahn.com.br",
-            logo: "https://www.berkahn.com.br/images/logo/berkahn-logo.webp",
-            sameAs: [
-              "https://www.linkedin.com/company/construtora-berkahn/",
+            "@graph": [
+              {
+                "@type": "Organization",
+                "@id": "https://www.berkahn.com.br/#organization",
+                name: "Construtora Berkahn",
+                url: "https://www.berkahn.com.br",
+                logo: {
+                  "@type": "ImageObject",
+                  url: "https://www.berkahn.com.br/images/logo/berkahn-logo.webp",
+                },
+                description:
+                  "Construtora especializada em Light Steel Frame para projetos residenciais e comerciais em São Paulo.",
+                address: {
+                  "@type": "PostalAddress",
+                  addressLocality: "São Paulo",
+                  addressRegion: "SP",
+                  addressCountry: "BR",
+                },
+                telephone: "+5511966415742",
+                email: "contato.berkahn@gmail.com",
+                taxID: "39.455.932/0001-64",
+                sameAs: [
+                  "https://www.linkedin.com/company/construtora-berkahn/",
+                ],
+                contactPoint: {
+                  "@type": "ContactPoint",
+                  telephone: "+5511966415742",
+                  contactType: "sales",
+                  availableLanguage: "Portuguese",
+                },
+              },
+              {
+                "@type": "WebSite",
+                "@id": "https://www.berkahn.com.br/#website",
+                name: "Construtora Berkahn",
+                url: "https://www.berkahn.com.br",
+                publisher: {
+                  "@id": "https://www.berkahn.com.br/#organization",
+                },
+              },
             ],
           })}
         </script>

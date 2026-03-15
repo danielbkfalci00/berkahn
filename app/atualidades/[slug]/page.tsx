@@ -2,6 +2,8 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import { preload } from "react-dom";
+import { Breadcrumb } from "@/components/layout/Breadcrumb";
+import { AuthorBio } from "@/components/article/AuthorBio";
 import { createClient } from "@/lib/supabase/server";
 import { getArticleBySlug, richArticles } from "@/data/articles/steel-frame-futuro";
 import { ArticleContent } from "./ArticleContent";
@@ -137,6 +139,14 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
     // Use new RichPostRenderer for Supabase posts
     return (
       <main className="min-h-screen bg-white">
+        <Breadcrumb
+          items={[
+            { name: "Blog", href: "/atualidades" },
+            { name: post.title, href: `/atualidades/${slug}` },
+          ]}
+          className="container mx-auto px-4 pt-24 pb-2"
+        />
+
         {/* Hero Section */}
         <section className="relative h-[50vh] min-h-[400px] flex items-end">
           {post.cover_image && (
@@ -160,7 +170,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
               {post.title}
             </h1>
             <p className="text-neutral-300 text-lg max-w-2xl">{post.excerpt}</p>
-            <div className="flex items-center gap-4 mt-6 text-neutral-300 text-sm">
+            <div className="flex flex-wrap items-center gap-4 mt-6 text-neutral-300 text-sm">
               <span>{post.author}</span>
               <span>•</span>
               <span>{post.read_time} min de leitura</span>
@@ -170,14 +180,46 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                   <span>{new Date(post.published_at).toLocaleDateString('pt-BR')}</span>
                 </>
               )}
+              {post.updated_at && post.updated_at !== post.published_at && (
+                <span className="bg-white/10 text-white/80 text-xs px-2 py-0.5 rounded">
+                  Atualizado em {new Date(post.updated_at).toLocaleDateString('pt-BR')}
+                </span>
+              )}
             </div>
           </div>
         </section>
+
+        {/* BlogPosting structured data for rich snippets + AI citation */}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BlogPosting",
+            headline: post.title,
+            description: post.excerpt,
+            image: post.cover_image || undefined,
+            datePublished: post.published_at || undefined,
+            dateModified: post.updated_at || post.published_at || undefined,
+            author: {
+              "@type": "Person",
+              name: post.author,
+            },
+            publisher: {
+              "@id": "https://www.berkahn.com.br/#organization",
+            },
+            mainEntityOfPage: {
+              "@type": "WebPage",
+              "@id": `https://www.berkahn.com.br/atualidades/${slug}`,
+            },
+            wordCount: Math.round(post.content.split(/\s+/).length),
+            timeRequired: `PT${post.read_time}M`,
+          })}
+        </script>
 
         {/* Content */}
         <section className="container mx-auto px-4 py-12">
           <div className="max-w-3xl mx-auto">
             <RichPostRenderer post={post} />
+            <AuthorBio authorName={post.author} />
           </div>
         </section>
       </main>

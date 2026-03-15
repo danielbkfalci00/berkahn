@@ -1,4 +1,5 @@
 import dynamic from "next/dynamic";
+import { Breadcrumb } from "@/components/layout/Breadcrumb";
 import { ParallaxHero } from "@/components/sections/ParallaxHero";
 import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
 import { CTA } from "@/components/sections/CTA";
@@ -41,6 +42,33 @@ export const metadata = {
 export default function ComercialIndustrialPage() {
   return (
     <>
+      <Breadcrumb
+        items={[
+          { name: "Serviços", href: "/servicos" },
+          { name: "Comercial & Industrial", href: "/comercial-industrial" },
+        ]}
+        className="container mx-auto px-4 pt-24 pb-2"
+      />
+
+      {/* Service structured data */}
+      <script type="application/ld+json">
+        {JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Service",
+          name: "Construção Comercial & Industrial em Steel Frame",
+          description:
+            "Construção corporativa com Steel Frame: lojas, galpões, escritórios e construções temporárias. Prazo reduzido, custo previsível e baixo impacto ambiental.",
+          provider: {
+            "@id": "https://www.berkahn.com.br/#organization",
+          },
+          areaServed: {
+            "@type": "State",
+            name: "São Paulo",
+          },
+          serviceType: "Construção Comercial e Industrial",
+        })}
+      </script>
+
       {/* 1. Hero Section */}
       <ParallaxHero
         label="CONSTRUÇÃO CORPORATIVA"
