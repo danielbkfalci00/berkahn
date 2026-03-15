@@ -1,6 +1,7 @@
 // Atualidades - Blog da Berkahn
 import { Metadata } from "next";
 import { AtualidadeContent } from "./AtualidadeContent";
+import { Breadcrumb } from "@/components/layout/Breadcrumb";
 
 export const metadata: Metadata = {
   title: "Atualidades | Berkahn Steel Frame",
@@ -48,5 +49,13 @@ export default async function AtualidadePage() {
     console.error('Error fetching posts:', err);
   }
 
-  return <AtualidadeContent supabasePosts={supabasePosts} />;
+  return (
+    <>
+      <Breadcrumb
+        items={[{ name: "Blog", href: "/atualidades" }]}
+        className="container mx-auto px-4 pt-24 pb-2"
+      />
+      <AtualidadeContent supabasePosts={supabasePosts} />
+    </>
+  );
 }

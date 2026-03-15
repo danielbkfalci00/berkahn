@@ -7,6 +7,7 @@ import { TechnicalSpecs } from "@/components/lsf/TechnicalSpecs";
 import { ComparisonTable } from "@/components/lsf/ComparisonTable";
 import { FAQ } from "@/components/lsf/FAQ";
 import { LSF_FAQ } from "@/lib/lsf-data";
+import { Breadcrumb } from "@/components/layout/Breadcrumb";
 
 export const metadata = {
   title: "Light Steel Frame | Berkahn Steel Frame",
@@ -17,6 +18,11 @@ export const metadata = {
 export default function LSFPage() {
   return (
     <>
+      <Breadcrumb
+        items={[{ name: "Tecnologia LSF", href: "/lsf" }]}
+        className="container mx-auto px-4 pt-24 pb-2"
+      />
+
       {/* 1. Hero Parallax */}
       <ParallaxHero
         title="Light Steel Frame"

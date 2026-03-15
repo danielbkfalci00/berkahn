@@ -11,6 +11,7 @@ import { SegmentShowcase } from "@/components/portfolio/SegmentShowcase";
 import { StatsCounter } from "@/components/sections/StatsCounter";
 import { CTA } from "@/components/sections/CTA";
 import { LineReveal } from "@/components/animations/TextReveal";
+import { Breadcrumb } from "@/components/layout/Breadcrumb";
 
 // Manifesto/Statement Section
 function PortfolioManifesto() {
@@ -242,6 +243,11 @@ export default function PortfolioPage() {
 
   return (
     <main>
+      <Breadcrumb
+        items={[{ name: "Portfólio", href: "/portfolio" }]}
+        className="container mx-auto px-4 pt-24 pb-2"
+      />
+
       {/* 1. Hero Cinematico com Parallax */}
       <PortfolioHeroCinematic />
 

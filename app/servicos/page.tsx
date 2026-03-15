@@ -9,6 +9,7 @@ import { CTA } from "@/components/sections/CTA";
 import { ProjectsGrid } from "@/components/sections/ProjectsGrid";
 import { ExecutionPhases } from "@/components/servicos/ExecutionPhases";
 import { Home, Building2, CheckIcon } from "lucide-react";
+import { Breadcrumb } from "@/components/layout/Breadcrumb";
 import { StatsGrid } from "@/components/article/StatHighlight";
 import { HowWeWorkTimeline } from "@/components/servicos/HowWeWorkTimeline";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
@@ -50,6 +51,11 @@ const services = [
 export default function ServicosPage() {
   return (
     <main>
+      <Breadcrumb
+        items={[{ name: "Serviços", href: "/servicos" }]}
+        className="container mx-auto px-4 pt-24 pb-2"
+      />
+
       {/* 1. Hero */}
       <HeroPage
         title="Serviços"

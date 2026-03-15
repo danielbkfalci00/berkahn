@@ -6,6 +6,7 @@ import { CTA } from "@/components/sections/CTA";
 import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
 import { FAQ_CATEGORIES, getAllFAQItems } from "@/lib/faq-data";
 import { ArrowRight } from "lucide-react";
+import { Breadcrumb } from "@/components/layout/Breadcrumb";
 
 const FAQSearch = dynamic(() =>
   import("@/components/faq/FAQSearch").then((m) => m.FAQSearch)
@@ -49,6 +50,11 @@ export default function PerguntasFrequentes() {
 
   return (
     <>
+      <Breadcrumb
+        items={[{ name: "FAQ", href: "/perguntas-frequentes" }]}
+        className="container mx-auto px-4 pt-24 pb-2"
+      />
+
       {/* 1. Hero */}
       <ParallaxHero
         label="TIRE SUAS DÚVIDAS"
