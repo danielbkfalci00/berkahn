@@ -78,7 +78,7 @@ function NavItemWithChildren({ link, isActive, close, pathname }: NavItemWithChi
           href={link.href}
           onClick={close}
           className={cn(
-            "flex-1 py-3 px-4 text-lg transition-all duration-300",
+            "flex-1 py-2 px-4 text-base transition-all duration-300",
             isActive && !link.children.some((c) => isChildActive(c.href))
               ? "bg-black text-white font-medium"
               : "text-black-70 hover:text-black hover:bg-black-5"
@@ -88,7 +88,7 @@ function NavItemWithChildren({ link, isActive, close, pathname }: NavItemWithChi
         </Link>
 
         {/* Chevron - expande/colapsa accordion */}
-        <AccordionTrigger className="py-3 px-4 hover:bg-black-5 transition-colors duration-300 [&[data-state=open]>svg]:rotate-180 [&>svg]:h-5 [&>svg]:w-5 [&>svg]:text-black-50" />
+        <AccordionTrigger className="py-2 px-3 hover:bg-black-5 transition-colors duration-300 [&[data-state=open]>svg]:rotate-180 [&>svg]:h-5 [&>svg]:w-5 [&>svg]:text-black-50" />
       </div>
 
       {/* Sub-links */}
@@ -109,7 +109,7 @@ function NavItemWithChildren({ link, isActive, close, pathname }: NavItemWithChi
                 href={child.href}
                 onClick={() => handleSubLinkClick(child.href)}
                 className={cn(
-                  "block py-2 px-4 text-base transition-all duration-300",
+                  "block py-1.5 px-4 text-sm transition-all duration-300",
                   isChildActive(child.href)
                     ? "bg-black text-white font-medium"
                     : "text-black-50 hover:text-black hover:bg-black-5"
@@ -159,22 +159,22 @@ export function Sidebar() {
             }}
             className="fixed top-0 left-0 bottom-0 w-80 max-w-[85vw] bg-white z-[201] shadow-luxury-xl"
           >
-            <div className="flex flex-col h-full p-8">
+            <div className="flex flex-col h-full p-6">
               {/* Logo */}
-              <div className="mb-12">
+              <div className="mb-6">
                 <Link
                   href="/"
                   onClick={close}
-                  className="text-3xl font-heading tracking-wider block"
+                  className="text-2xl font-heading tracking-wider block"
                 >
                   BERKAHN
                 </Link>
               </div>
 
               {/* Navigation */}
-              <nav className="flex-1 overflow-y-auto">
+              <nav className="flex-1">
                 <Accordion type="single" collapsible defaultValue={defaultAccordionValue} className="w-full">
-                  <ul className="space-y-2">
+                  <ul className="space-y-0">
                     {NAV_LINKS.map((link, index) => {
                       const isActive = pathname === link.href;
 
@@ -201,7 +201,7 @@ export function Sidebar() {
                               href={link.href}
                               onClick={close}
                               className={cn(
-                                "block py-3 px-4 text-lg transition-all duration-300",
+                                "block py-2 px-4 text-base transition-all duration-300",
                                 isActive
                                   ? "bg-black text-white font-medium"
                                   : "text-black-70 hover:text-black hover:bg-black-5"
@@ -226,17 +226,17 @@ export function Sidebar() {
                   duration: 0.3,
                   ease: [0.19, 1, 0.22, 1],
                 }}
-                className="mt-8 px-4"
+                className="mt-4 px-4"
               >
                 <ContactFormDialog>
-                  <button className="w-full py-3 bg-black text-white text-sm uppercase tracking-wider hover:bg-black-90 transition-colors duration-300 border border-black">
+                  <button className="w-full py-2.5 bg-black text-white text-sm uppercase tracking-wider hover:bg-black-90 transition-colors duration-300 border border-black">
                     Fale Conosco
                   </button>
                 </ContactFormDialog>
               </motion.div>
 
               {/* Footer */}
-              <div className="pt-8 border-t border-black-10">
+              <div className="pt-4 border-t border-black-10">
                 <p className="text-sm text-black-50">
                   © 2026 Berkahn. Todos os direitos reservados.
                 </p>
