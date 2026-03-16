@@ -17,6 +17,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE_URL}/portfolio`, changeFrequency: "monthly", priority: 0.7 },
     { url: `${BASE_URL}/empresa`, changeFrequency: "monthly", priority: 0.7 },
     { url: `${BASE_URL}/perguntas-frequentes`, changeFrequency: "monthly", priority: 0.6 },
+    { url: `${BASE_URL}/privacidade`, changeFrequency: "yearly", priority: 0.3 },
+    { url: `${BASE_URL}/termos-de-uso`, changeFrequency: "yearly", priority: 0.3 },
   ];
 
   // 2. Dynamic articles from Supabase

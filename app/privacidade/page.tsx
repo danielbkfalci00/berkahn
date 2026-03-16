@@ -5,6 +5,23 @@ export const metadata = {
   title: "Política de Privacidade | Berkahn",
   description:
     "Política de Privacidade da Construtora Berkahn. Saiba como coletamos, utilizamos e protegemos seus dados pessoais em conformidade com a LGPD.",
+  openGraph: {
+    title: "Política de Privacidade | Berkahn",
+    description:
+      "Política de Privacidade da Construtora Berkahn. Saiba como coletamos, utilizamos e protegemos seus dados pessoais em conformidade com a LGPD.",
+    url: "https://www.berkahn.com.br/privacidade",
+    siteName: "Construtora Berkahn",
+    type: "website",
+    locale: "pt_BR",
+    images: [{ url: "/images/Compartilhamento/og-image.webp", width: 1200, height: 630, alt: "Construtora Berkahn" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Política de Privacidade | Berkahn",
+    description:
+      "Política de Privacidade da Construtora Berkahn. Saiba como coletamos, utilizamos e protegemos seus dados pessoais em conformidade com a LGPD.",
+    images: ["/images/Compartilhamento/og-image.webp"],
+  },
 };
 
 const LINK_CLASSES =

@@ -5,6 +5,23 @@ export const metadata = {
   title: "Termos de Uso | Berkahn",
   description:
     "Termos de Uso do site da Construtora Berkahn. Conheça as condições de acesso e utilização do nosso site.",
+  openGraph: {
+    title: "Termos de Uso | Berkahn",
+    description:
+      "Termos de Uso do site da Construtora Berkahn. Conheça as condições de acesso e utilização do nosso site.",
+    url: "https://www.berkahn.com.br/termos-de-uso",
+    siteName: "Construtora Berkahn",
+    type: "website",
+    locale: "pt_BR",
+    images: [{ url: "/images/Compartilhamento/og-image.webp", width: 1200, height: 630, alt: "Construtora Berkahn" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Termos de Uso | Berkahn",
+    description:
+      "Termos de Uso do site da Construtora Berkahn. Conheça as condições de acesso e utilização do nosso site.",
+    images: ["/images/Compartilhamento/og-image.webp"],
+  },
 };
 
 function CheckList({ items }: { items: string[] }) {

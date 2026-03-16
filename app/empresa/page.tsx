@@ -15,6 +15,23 @@ export const metadata = {
   title: "Empresa | Berkahn Steel Frame",
   description:
     "Construtora moderna com expertise em Steel Frame e sistemas integrados. Conheça a BERKAHN e nossa abordagem inovadora na construção civil.",
+  openGraph: {
+    title: "Empresa | Berkahn Steel Frame",
+    description:
+      "Construtora moderna com expertise em Steel Frame e sistemas integrados. Conheça a BERKAHN e nossa abordagem inovadora na construção civil.",
+    url: "https://www.berkahn.com.br/empresa",
+    siteName: "Construtora Berkahn",
+    type: "website",
+    locale: "pt_BR",
+    images: [{ url: "/images/Compartilhamento/og-image.webp", width: 1200, height: 630, alt: "Construtora Berkahn" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Empresa | Berkahn Steel Frame",
+    description:
+      "Construtora moderna com expertise em Steel Frame e sistemas integrados. Conheça a BERKAHN e nossa abordagem inovadora na construção civil.",
+    images: ["/images/Compartilhamento/og-image.webp"],
+  },
 };
 
 // Stats com categorias - foco em compromissos e entregas

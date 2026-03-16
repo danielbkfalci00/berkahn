@@ -11,9 +11,9 @@ import { Partners } from "@/components/sections/Partners";
 import { CTA } from "@/components/sections/CTA";
 
 export const metadata: Metadata = {
-  title: "Berkahn | Construtora Steel Frame em BH",
+  title: "Berkahn | Construtora Steel Frame em SP",
   description:
-    "Construtora especializada em Light Steel Frame em Belo Horizonte. Projetos residenciais e comerciais com agilidade, sustentabilidade e acabamento premium.",
+    "Construtora especializada em Light Steel Frame em São Paulo. Projetos residenciais e comerciais com agilidade, sustentabilidade e acabamento premium.",
 };
 
 export default function Home() {

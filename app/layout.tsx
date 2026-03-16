@@ -82,7 +82,7 @@ export default function RootLayout({
             "@context": "https://schema.org",
             "@graph": [
               {
-                "@type": "Organization",
+                "@type": ["Organization", "GeneralContractor"],
                 "@id": "https://www.berkahn.com.br/#organization",
                 name: "Construtora Berkahn",
                 url: "https://www.berkahn.com.br",
@@ -98,9 +98,15 @@ export default function RootLayout({
                   addressRegion: "SP",
                   addressCountry: "BR",
                 },
+                geo: {
+                  "@type": "GeoCoordinates",
+                  latitude: -23.5505,
+                  longitude: -46.6333,
+                },
                 telephone: "+5511966415742",
                 email: "contato.berkahn@gmail.com",
                 taxID: "39.455.932/0001-64",
+                priceRange: "$$$$",
                 sameAs: [
                   "https://www.linkedin.com/company/construtora-berkahn/",
                 ],
@@ -109,6 +115,12 @@ export default function RootLayout({
                   telephone: "+5511966415742",
                   contactType: "sales",
                   availableLanguage: "Portuguese",
+                },
+                openingHoursSpecification: {
+                  "@type": "OpeningHoursSpecification",
+                  dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+                  opens: "08:00",
+                  closes: "18:00",
                 },
               },
               {

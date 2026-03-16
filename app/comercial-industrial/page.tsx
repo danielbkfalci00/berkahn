@@ -37,6 +37,23 @@ export const metadata = {
   title: "Comercial & Industrial | Berkahn Steel Frame",
   description:
     "Construção corporativa com engenharia industrial e prazo real. Lojas, galpões, escritórios e construções temporárias com Steel Frame: entrega rápida, controle total e baixo impacto ambiental.",
+  openGraph: {
+    title: "Comercial & Industrial | Berkahn Steel Frame",
+    description:
+      "Construção corporativa com engenharia industrial e prazo real. Lojas, galpões, escritórios e construções temporárias com Steel Frame: entrega rápida, controle total e baixo impacto ambiental.",
+    url: "https://www.berkahn.com.br/comercial-industrial",
+    siteName: "Construtora Berkahn",
+    type: "website",
+    locale: "pt_BR",
+    images: [{ url: "/images/Compartilhamento/og-image.webp", width: 1200, height: 630, alt: "Construtora Berkahn" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Comercial & Industrial | Berkahn Steel Frame",
+    description:
+      "Construção corporativa com engenharia industrial e prazo real. Lojas, galpões, escritórios e construções temporárias com Steel Frame: entrega rápida, controle total e baixo impacto ambiental.",
+    images: ["/images/Compartilhamento/og-image.webp"],
+  },
 };
 
 export default function ComercialIndustrialPage() {

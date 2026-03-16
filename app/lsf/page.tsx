@@ -13,6 +13,23 @@ export const metadata = {
   title: "Light Steel Frame | Berkahn Steel Frame",
   description:
     "Sistema construtivo Light Steel Frame: construção industrializada com velocidade, sustentabilidade e eficiência energética. Alta performance com precisão milimétrica.",
+  openGraph: {
+    title: "Light Steel Frame | Berkahn Steel Frame",
+    description:
+      "Sistema construtivo Light Steel Frame: construção industrializada com velocidade, sustentabilidade e eficiência energética. Alta performance com precisão milimétrica.",
+    url: "https://www.berkahn.com.br/lsf",
+    siteName: "Construtora Berkahn",
+    type: "website",
+    locale: "pt_BR",
+    images: [{ url: "/images/Compartilhamento/og-image.webp", width: 1200, height: 630, alt: "Construtora Berkahn" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Light Steel Frame | Berkahn Steel Frame",
+    description:
+      "Sistema construtivo Light Steel Frame: construção industrializada com velocidade, sustentabilidade e eficiência energética. Alta performance com precisão milimétrica.",
+    images: ["/images/Compartilhamento/og-image.webp"],
+  },
 };
 
 export default function LSFPage() {

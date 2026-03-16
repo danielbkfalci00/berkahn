@@ -16,6 +16,23 @@ export const metadata = {
   title: "Perguntas Frequentes | Berkahn Steel Frame",
   description:
     "Respostas sobre custo, prazo, financiamento, durabilidade, manutenção e processo construtivo em Light Steel Frame. Tudo o que você precisa saber antes de construir.",
+  openGraph: {
+    title: "Perguntas Frequentes | Berkahn Steel Frame",
+    description:
+      "Respostas sobre custo, prazo, financiamento, durabilidade, manutenção e processo construtivo em Light Steel Frame. Tudo o que você precisa saber antes de construir.",
+    url: "https://www.berkahn.com.br/perguntas-frequentes",
+    siteName: "Construtora Berkahn",
+    type: "website",
+    locale: "pt_BR",
+    images: [{ url: "/images/Compartilhamento/og-image.webp", width: 1200, height: 630, alt: "Construtora Berkahn" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Perguntas Frequentes | Berkahn Steel Frame",
+    description:
+      "Respostas sobre custo, prazo, financiamento, durabilidade, manutenção e processo construtivo em Light Steel Frame. Tudo o que você precisa saber antes de construir.",
+    images: ["/images/Compartilhamento/og-image.webp"],
+  },
 };
 
 const EXPLORE_CARDS = [

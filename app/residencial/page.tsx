@@ -37,6 +37,23 @@ export const metadata = {
   title: "Residencial | Berkahn Steel Frame",
   description:
     "Construção residencial com velocidade e precisão industrial. Construção nova, reforma ou ampliação com Light Steel Frame: obra rápida, limpa e com orçamento previsível.",
+  openGraph: {
+    title: "Residencial | Berkahn Steel Frame",
+    description:
+      "Construção residencial com velocidade e precisão industrial. Construção nova, reforma ou ampliação com Light Steel Frame: obra rápida, limpa e com orçamento previsível.",
+    url: "https://www.berkahn.com.br/residencial",
+    siteName: "Construtora Berkahn",
+    type: "website",
+    locale: "pt_BR",
+    images: [{ url: "/images/Compartilhamento/og-image.webp", width: 1200, height: 630, alt: "Construtora Berkahn" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Residencial | Berkahn Steel Frame",
+    description:
+      "Construção residencial com velocidade e precisão industrial. Construção nova, reforma ou ampliação com Light Steel Frame: obra rápida, limpa e com orçamento previsível.",
+    images: ["/images/Compartilhamento/og-image.webp"],
+  },
 };
 
 export default function ResidencialPage() {
