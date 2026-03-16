@@ -14,7 +14,7 @@ interface HeroEditorialProps {
 export function HeroEditorial({
   title = "ATUALIDADES",
   subtitle = "Insights & Tendências em Steel Frame",
-  imageSrc = "https://images.unsplash.com/photo-1504307651254-35680f356dfd?ixlib=rb-4.0.3&auto=format&fit=crop&w=2400&q=80",
+  imageSrc = "/images/empresa/primeira-imagem.webp",
 }: HeroEditorialProps) {
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -32,7 +32,7 @@ export function HeroEditorial({
   return (
     <section
       ref={containerRef}
-      className="relative h-[70vh] min-h-[500px] max-h-[800px] flex items-start justify-start pt-24 md:pt-32 overflow-hidden"
+      className="relative h-[70vh] min-h-[500px] max-h-[800px] flex items-start justify-start pt-32 md:pt-40 overflow-hidden"
     >
       {/* Background Image with Parallax */}
       <motion.div

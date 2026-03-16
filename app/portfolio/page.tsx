@@ -243,13 +243,16 @@ export default function PortfolioPage() {
 
   return (
     <main>
-      <Breadcrumb
-        items={[{ name: "Portfólio", href: "/portfolio" }]}
-        className="container mx-auto px-4 pt-24 pb-2"
-      />
-
       {/* 1. Hero Cinematico com Parallax */}
-      <PortfolioHeroCinematic />
+      <div className="relative">
+        <div className="absolute z-30 w-full">
+          <Breadcrumb
+            items={[{ name: "Portfólio", href: "/portfolio" }]}
+            className="container mx-auto px-4 pt-24 pb-2"
+          />
+        </div>
+        <PortfolioHeroCinematic />
+      </div>
 
       {/* 2. Manifesto */}
       <PortfolioManifesto />

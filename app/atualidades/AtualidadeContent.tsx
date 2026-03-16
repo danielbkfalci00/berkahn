@@ -73,7 +73,7 @@ export function AtualidadeContent({ supabasePosts }: AtualidadeContentProps) {
       <HeroEditorial
         title="ATUALIDADES"
         subtitle="Insights & Tendências em Steel Frame"
-        imageSrc="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?ixlib=rb-4.0.3&auto=format&fit=crop&w=2400&q=80"
+        imageSrc="/images/empresa/primeira-imagem.webp"
       />
 
       {/* Featured Article */}

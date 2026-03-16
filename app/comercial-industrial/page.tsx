@@ -59,14 +59,6 @@ export const metadata = {
 export default function ComercialIndustrialPage() {
   return (
     <>
-      <Breadcrumb
-        items={[
-          { name: "Serviços", href: "/servicos" },
-          { name: "Comercial & Industrial", href: "/comercial-industrial" },
-        ]}
-        className="container mx-auto px-4 pt-24 pb-2"
-      />
-
       {/* Service structured data */}
       <script type="application/ld+json">
         {JSON.stringify({
@@ -87,6 +79,16 @@ export default function ComercialIndustrialPage() {
       </script>
 
       {/* 1. Hero Section */}
+      <div className="relative">
+        <div className="absolute z-30 w-full">
+          <Breadcrumb
+            items={[
+              { name: "Serviços", href: "/servicos" },
+              { name: "Comercial & Industrial", href: "/comercial-industrial" },
+            ]}
+            className="container mx-auto px-4 pt-24 pb-2"
+          />
+        </div>
       <ParallaxHero
         label="CONSTRUÇÃO CORPORATIVA"
         title="Construção corporativa com engenharia industrial e prazo real."
@@ -101,6 +103,7 @@ export default function ComercialIndustrialPage() {
           "/images/Others/comercial_steel_frame.webp",
         ]}
       />
+      </div>
 
       {/* ================================================================ */}
       {/* 2. Soluções por segmento */}

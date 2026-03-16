@@ -67,18 +67,21 @@ export default function PerguntasFrequentes() {
 
   return (
     <>
-      <Breadcrumb
-        items={[{ name: "FAQ", href: "/perguntas-frequentes" }]}
-        className="container mx-auto px-4 pt-24 pb-2"
-      />
-
       {/* 1. Hero */}
-      <ParallaxHero
-        label="TIRE SUAS DÚVIDAS"
-        title="Tudo o que Você Precisa Saber"
-        subtitle="Respostas diretas sobre Steel Frame, nosso processo, financiamento e pós-obra."
-        backgroundImage="/images/apresentacao/casa-santa-cristina/casa-santa-cristina-cover.webp"
-      />
+      <div className="relative">
+        <div className="absolute z-30 w-full">
+          <Breadcrumb
+            items={[{ name: "FAQ", href: "/perguntas-frequentes" }]}
+            className="container mx-auto px-4 pt-24 pb-2"
+          />
+        </div>
+        <ParallaxHero
+          label="TIRE SUAS DÚVIDAS"
+          title="Tudo o que Você Precisa Saber"
+          subtitle="Respostas diretas sobre Steel Frame, nosso processo, financiamento e pós-obra."
+          backgroundImage="/images/apresentacao/casa-santa-cristina/casa-santa-cristina-cover.webp"
+        />
+      </div>
 
       {/* 2. FAQ Accordion por categorias */}
       <section className="py-xl bg-black-5">

@@ -59,14 +59,6 @@ export const metadata = {
 export default function ResidencialPage() {
   return (
     <>
-      <Breadcrumb
-        items={[
-          { name: "Serviços", href: "/servicos" },
-          { name: "Residencial", href: "/residencial" },
-        ]}
-        className="container mx-auto px-4 pt-24 pb-2"
-      />
-
       {/* Service structured data */}
       <script type="application/ld+json">
         {JSON.stringify({
@@ -87,6 +79,16 @@ export default function ResidencialPage() {
       </script>
 
       {/* 1. Hero Section */}
+      <div className="relative">
+        <div className="absolute z-30 w-full">
+          <Breadcrumb
+            items={[
+              { name: "Serviços", href: "/servicos" },
+              { name: "Residencial", href: "/residencial" },
+            ]}
+            className="container mx-auto px-4 pt-24 pb-2"
+          />
+        </div>
       <ParallaxHero
         label="CONSTRUÇÃO RESIDENCIAL"
         title="Construção residencial com velocidade e precisão industrial."
@@ -100,6 +102,7 @@ export default function ResidencialPage() {
           "/images/Residencial/hero-03.webp",
         ]}
       />
+      </div>
 
       {/* ================================================================ */}
       {/* 2. O que fazemos — Focus Cards */}

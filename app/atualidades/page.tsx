@@ -51,11 +51,15 @@ export default async function AtualidadePage() {
 
   return (
     <>
-      <Breadcrumb
-        items={[{ name: "Blog", href: "/atualidades" }]}
-        className="container mx-auto px-4 pt-24 pb-2"
-      />
-      <AtualidadeContent supabasePosts={supabasePosts} />
+      <div className="relative">
+        <div className="absolute z-30 w-full">
+          <Breadcrumb
+            items={[{ name: "Blog", href: "/atualidades" }]}
+            className="container mx-auto px-4 pt-24 pb-2"
+          />
+        </div>
+        <AtualidadeContent supabasePosts={supabasePosts} />
+      </div>
     </>
   );
 }

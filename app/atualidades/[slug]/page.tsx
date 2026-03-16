@@ -139,15 +139,17 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
     // Use new RichPostRenderer for Supabase posts
     return (
       <main className="min-h-screen bg-white">
-        <Breadcrumb
-          items={[
-            { name: "Blog", href: "/atualidades" },
-            { name: post.title, href: `/atualidades/${slug}` },
-          ]}
-          className="container mx-auto px-4 pt-24 pb-2"
-        />
-
         {/* Hero Section */}
+        <div className="relative">
+          <div className="absolute z-30 w-full">
+            <Breadcrumb
+              items={[
+                { name: "Blog", href: "/atualidades" },
+                { name: post.title, href: `/atualidades/${slug}` },
+              ]}
+              className="container mx-auto px-4 pt-24 pb-2"
+            />
+          </div>
         <section className="relative h-[50vh] min-h-[400px] flex items-end">
           {post.cover_image && (
             <Image
@@ -188,6 +190,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
             </div>
           </div>
         </section>
+        </div>
 
         {/* BlogPosting structured data for rich snippets + AI citation */}
         <script type="application/ld+json">

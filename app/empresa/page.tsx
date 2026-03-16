@@ -80,11 +80,6 @@ const diferenciais = [
 export default function EmpresaPage() {
   return (
     <>
-      <Breadcrumb
-        items={[{ name: "Empresa", href: "/empresa" }]}
-        className="container mx-auto px-4 pt-24 pb-2"
-      />
-
       {/* AboutPage structured data */}
       <script type="application/ld+json">
         {JSON.stringify({
@@ -97,7 +92,14 @@ export default function EmpresaPage() {
       </script>
 
       {/* Hero com Imagem e Stats Overlay */}
-      <section className="relative h-[85vh] md:h-screen min-h-[550px] md:min-h-[600px] flex items-start justify-start pt-24 md:pt-32 lg:pt-40 overflow-hidden">
+      <div className="relative">
+        <div className="absolute z-30 w-full">
+          <Breadcrumb
+            items={[{ name: "Empresa", href: "/empresa" }]}
+            className="container mx-auto px-4 pt-24 pb-2"
+          />
+        </div>
+      <section className="relative h-[85vh] md:h-screen min-h-[550px] md:min-h-[600px] flex items-start justify-start pt-32 md:pt-40 lg:pt-48 overflow-hidden">
         {/* Background Image */}
         <div className="absolute inset-0 z-0">
           <Image
@@ -157,6 +159,7 @@ export default function EmpresaPage() {
           </div>
         </div>
       </section>
+      </div>
 
       {/* Story */}
       <section className="py-xl">

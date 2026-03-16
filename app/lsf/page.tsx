@@ -35,17 +35,20 @@ export const metadata = {
 export default function LSFPage() {
   return (
     <>
-      <Breadcrumb
-        items={[{ name: "Tecnologia LSF", href: "/lsf" }]}
-        className="container mx-auto px-4 pt-24 pb-2"
-      />
-
       {/* 1. Hero Parallax */}
-      <ParallaxHero
-        title="Light Steel Frame"
-        backgroundImage="/images/Lsf/lsf-hero-structure.webp"
-        height="100vh"
-      />
+      <div className="relative">
+        <div className="absolute z-30 w-full">
+          <Breadcrumb
+            items={[{ name: "Tecnologia LSF", href: "/lsf" }]}
+            className="container mx-auto px-4 pt-24 pb-2"
+          />
+        </div>
+        <ParallaxHero
+          title="Light Steel Frame"
+          backgroundImage="/images/Lsf/lsf-hero-structure.webp"
+          height="100vh"
+        />
+      </div>
 
       {/* 2. Introduction */}
       <section className="pt-xl pb-lg">
