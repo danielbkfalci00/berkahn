@@ -55,6 +55,7 @@ export default async function AtualidadePage() {
         <div className="absolute z-30 w-full">
           <Breadcrumb
             items={[{ name: "Blog", href: "/atualidades" }]}
+          light={true}
             className="container mx-auto px-4 pt-24 pb-2"
           />
         </div>

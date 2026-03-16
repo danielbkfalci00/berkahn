@@ -147,6 +147,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                 { name: "Blog", href: "/atualidades" },
                 { name: post.title, href: `/atualidades/${slug}` },
               ]}
+              light={true}
               className="container mx-auto px-4 pt-24 pb-2"
             />
           </div>

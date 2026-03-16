@@ -57,24 +57,6 @@ export function HeroEditorial({
         aria-hidden="true"
       />
 
-      {/* Decorative Lines - Left Side */}
-      <div className="absolute inset-0 z-15 pointer-events-none">
-        {/* Vertical line left */}
-        <motion.div
-          initial={{ scaleY: 0 }}
-          animate={{ scaleY: 1 }}
-          transition={{ duration: 1.2, delay: 0.5, ease: [0.19, 1, 0.22, 1] }}
-          className="absolute left-8 md:left-16 top-0 bottom-0 w-px bg-white/30 origin-top"
-        />
-        {/* Horizontal line left */}
-        <motion.div
-          initial={{ scaleX: 0 }}
-          animate={{ scaleX: 1 }}
-          transition={{ duration: 1.5, delay: 0.8, ease: [0.19, 1, 0.22, 1] }}
-          className="absolute left-8 md:left-16 top-24 md:top-32 w-24 h-px bg-white/40 origin-left"
-        />
-      </div>
-
       {/* Content */}
       <motion.div
         className="relative z-20 text-left"

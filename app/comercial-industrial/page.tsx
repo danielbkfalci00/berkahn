@@ -86,6 +86,7 @@ export default function ComercialIndustrialPage() {
               { name: "Serviços", href: "/servicos" },
               { name: "Comercial & Industrial", href: "/comercial-industrial" },
             ]}
+            light={true}
             className="container mx-auto px-4 pt-24 pb-2"
           />
         </div>

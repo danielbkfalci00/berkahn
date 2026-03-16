@@ -49,19 +49,23 @@ const services = [
 export default function ServicosPage() {
   return (
     <main>
-      <Breadcrumb
-        items={[{ name: "Serviços", href: "/servicos" }]}
-        className="container mx-auto px-4 pt-24 pb-2"
-      />
-
       {/* 1. Hero */}
-      <HeroPage
-        title="Serviços"
-        subtitle="O que fazemos"
-        imageSrc="/images/Services/hero-servicos.webp"
-        imageAlt="Serviços Berkahn"
-        imagePosition="object-[70%_center] md:object-center"
-      />
+      <div className="relative">
+        <div className="absolute z-30 w-full">
+          <Breadcrumb
+            items={[{ name: "Serviços", href: "/servicos" }]}
+            light={true}
+            className="container mx-auto px-4 pt-24 pb-2"
+          />
+        </div>
+        <HeroPage
+          title="Serviços"
+          subtitle="O que fazemos"
+          imageSrc="/images/Services/hero-servicos.webp"
+          imageAlt="Serviços Berkahn"
+          imagePosition="object-[70%_center] md:object-center"
+        />
+      </div>
 
       {/* 2. Como Trabalhamos - Nova Timeline Visual */}
       <HowWeWorkTimeline />

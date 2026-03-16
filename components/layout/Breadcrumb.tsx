@@ -8,9 +8,10 @@ interface BreadcrumbItem {
 interface BreadcrumbProps {
   items: BreadcrumbItem[];
   className?: string;
+  light?: boolean;
 }
 
-export function Breadcrumb({ items, className = "" }: BreadcrumbProps) {
+export function Breadcrumb({ items, className = "", light = false }: BreadcrumbProps) {
   const fullItems = [{ name: "Home", href: "/" }, ...items];
 
   return (
@@ -18,24 +19,24 @@ export function Breadcrumb({ items, className = "" }: BreadcrumbProps) {
       {/* Visual breadcrumb */}
       <nav
         aria-label="Breadcrumb"
-        className={`text-sm text-neutral-500 ${className}`}
+        className={`text-sm ${light ? "text-white/80" : "text-neutral-500"} ${className}`}
       >
         <ol className="flex flex-wrap items-center gap-1">
           {fullItems.map((item, index) => (
             <li key={item.href} className="flex items-center gap-1">
               {index > 0 && (
-                <span className="text-neutral-400" aria-hidden="true">
+                <span className={light ? "text-white/50" : "text-neutral-400"} aria-hidden="true">
                   /
                 </span>
               )}
               {index === fullItems.length - 1 ? (
-                <span className="text-neutral-700 font-medium truncate max-w-[200px]">
+                <span className={`font-medium truncate max-w-[200px] ${light ? "text-white" : "text-neutral-700"}`}>
                   {item.name}
                 </span>
               ) : (
                 <Link
                   href={item.href}
-                  className="hover:text-neutral-900 transition-colors"
+                  className={`transition-colors ${light ? "hover:text-white" : "hover:text-neutral-900"}`}
                 >
                   {item.name}
                 </Link>

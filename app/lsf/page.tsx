@@ -40,6 +40,7 @@ export default function LSFPage() {
         <div className="absolute z-30 w-full">
           <Breadcrumb
             items={[{ name: "Tecnologia LSF", href: "/lsf" }]}
+            light={true}
             className="container mx-auto px-4 pt-24 pb-2"
           />
         </div>

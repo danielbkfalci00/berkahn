@@ -86,6 +86,7 @@ export default function ResidencialPage() {
               { name: "Serviços", href: "/servicos" },
               { name: "Residencial", href: "/residencial" },
             ]}
+            light={true}
             className="container mx-auto px-4 pt-24 pb-2"
           />
         </div>
