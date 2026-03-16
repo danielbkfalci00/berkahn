@@ -6,7 +6,7 @@ import { Breadcrumb } from "@/components/layout/Breadcrumb";
 export const metadata: Metadata = {
   title: "Atualidades | Berkahn Steel Frame",
   description:
-    "Insights, tendências e conteúdos exclusivos sobre construção industrializada em Light Steel Frame. Descubra o futuro da construção civil.",
+    "Artigos e guias sobre Steel Frame: custos, prazos, comparativos e tendências da construção industrializada. Blog da Berkahn Construtora em São Paulo.",
   keywords: [
     "steel frame notícias",
     "construção industrializada",
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Atualidades | Berkahn Steel Frame",
     description:
-      "Insights, tendências e conteúdos exclusivos sobre construção industrializada em Light Steel Frame.",
+      "Artigos e guias sobre Steel Frame: custos, prazos, comparativos e tendências da construção industrializada. Blog da Berkahn.",
     type: "website",
   },
 };

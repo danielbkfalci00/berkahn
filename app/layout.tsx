@@ -59,6 +59,20 @@ export const metadata: Metadata = {
     description: "Erguendo o amanhã. Construtora especializada em projetos de Steel Frame.",
     images: ["/images/Compartilhamento/og-image.webp"],
   },
+  icons: {
+    icon: "/favicon.ico",
+    apple: "/apple-icon.png",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-snippet": -1,
+      "max-image-preview": "large",
+    },
+  },
 };
 
 export default function RootLayout({
