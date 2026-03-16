@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { SectionMarker } from "./SectionMarker";
 import { SectionLabel } from "./SectionLabel";
 import type { MetodologiaConstrutivaPremissas } from "@/types/orcamento";
@@ -33,7 +33,7 @@ export function MetodologiaSubsection({ data }: MetodologiaSubsectionProps) {
     visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.6, ease: [0.19, 1, 0.22, 1] },
+      transition: { duration: 0.6, ease: [0.19, 1, 0.22, 1] as const },
     },
   };
 

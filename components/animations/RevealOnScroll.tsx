@@ -1,7 +1,7 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
-import { useInView } from "framer-motion";
+import { motion, useReducedMotion } from "motion/react";
+import { useInView } from "motion/react";
 import { useRef } from "react";
 
 interface RevealProps {

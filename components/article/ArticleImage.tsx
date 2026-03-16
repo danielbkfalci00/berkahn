@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { motion, useInView } from "framer-motion";
+import { motion, useInView } from "motion/react";
 import Image from "next/image";
 import { ArticleImage as ArticleImageType } from "@/types/article";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";

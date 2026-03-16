@@ -1,7 +1,7 @@
 "use client";
 
 import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import {
   CreditCard,
   AlertCircle,

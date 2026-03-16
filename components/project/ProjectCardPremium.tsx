@@ -3,7 +3,7 @@
 import { useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { motion, useMotionValue, useSpring, useTransform } from "motion/react";
 import { Project, getCategoryLabel, formatArea } from "@/types/project";
 import { Badge } from "@/components/ui/badge";
 import { ArrowRight, Maximize2 } from "lucide-react";

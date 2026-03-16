@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { CharReveal } from "@/components/animations/TextReveal";
 import type { OrcamentoProjeto } from "@/types/orcamento";
 import { OrcamentoWatermark } from "./OrcamentoWatermark";

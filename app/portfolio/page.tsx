@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react";
 import { PROJECTS } from "@/data/projects";
 import { ProjectCategory, SEGMENTS } from "@/types/project";
 import { ProjectCardPremium } from "@/components/project/ProjectCardPremium";

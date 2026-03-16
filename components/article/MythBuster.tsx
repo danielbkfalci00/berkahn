@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react";
 import { Myth } from "@/types/article";
 import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
 import { X, CheckCircle } from "lucide-react";

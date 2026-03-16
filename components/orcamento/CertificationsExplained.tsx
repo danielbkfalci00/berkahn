@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { useState } from "react";
 import { Shield, Award, CheckCircle2 } from "lucide-react";
 import type { CertificationExplained } from "@/types/orcamento";

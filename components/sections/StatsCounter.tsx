@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useEffect, useState } from "react";
-import { motion, useInView } from "framer-motion";
+import { motion, useInView } from "motion/react";
 
 interface Stat {
   value: number;
@@ -81,7 +81,7 @@ const itemVariants = {
     y: 0,
     transition: {
       duration: 0.8,
-      ease: [0.19, 1, 0.22, 1],
+      ease: [0.19, 1, 0.22, 1] as const,
     },
   },
 };

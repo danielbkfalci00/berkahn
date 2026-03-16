@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { TabComparison } from "@/types/article";
 import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
 import { CheckCircle, AlertCircle, Lightbulb } from "lucide-react";

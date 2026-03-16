@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { SlideSection } from "../ui/SlideSection";
 import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
 import { CountUp } from "@/components/animations/CountUp";

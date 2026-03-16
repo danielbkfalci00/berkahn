@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { BlogPost } from "@/types/blog";
 import { ArticleCard, ArticleCardMinimal } from "./ArticleCard";
 import { RevealOnScroll } from "@/components/animations/RevealOnScroll";

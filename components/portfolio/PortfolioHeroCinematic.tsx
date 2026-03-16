@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform } from "motion/react";
 import Image from "next/image";
 import { CharReveal, LineReveal } from "@/components/animations/TextReveal";
 import { CountUp } from "@/components/animations/CountUp";

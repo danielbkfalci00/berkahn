@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { SlideSection } from "../ui/SlideSection";
 import { FounderCard } from "../ui/FounderCard";
 import { RevealOnScroll } from "@/components/animations/RevealOnScroll";

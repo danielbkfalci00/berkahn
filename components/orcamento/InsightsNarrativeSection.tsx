@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useInView } from "framer-motion";
+import { motion, useInView } from "motion/react";
 import { useRef } from "react";
 import Image from "next/image";
 import type { CompanyStory, Insight } from "@/types/orcamento";

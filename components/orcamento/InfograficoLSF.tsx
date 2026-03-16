@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useInView } from "framer-motion";
+import { motion, useInView } from "motion/react";
 import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
 import {
   Droplets,

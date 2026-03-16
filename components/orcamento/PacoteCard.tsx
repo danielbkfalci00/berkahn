@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 import Image from "next/image";
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { motion, useMotionValue, useSpring, useTransform } from "motion/react";
 import { formatarValor } from "@/lib/orcamento-data";
 import type { PacoteInvestimento } from "@/types/orcamento";
 import { cn } from "@/lib/utils";

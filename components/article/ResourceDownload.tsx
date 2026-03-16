@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { motion, useInView } from "framer-motion";
+import { motion, useInView } from "motion/react";
 import Image from "next/image";
 import { ResourceLibrary } from "@/types/article";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";

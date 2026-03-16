@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
 import { ArrowUpRight, Maximize2 } from "lucide-react";
 import type { ProjetoGaleria } from "@/types/orcamento";

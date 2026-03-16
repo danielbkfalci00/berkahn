@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState, useEffect } from "react";
-import { motion, useInView } from "framer-motion";
+import { motion, useInView } from "motion/react";
 import { Comparison3DMatrix as Comparison3DMatrixType } from "@/types/article";
 import {
   RadarChart,

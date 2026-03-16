@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useInView, useReducedMotion } from "framer-motion";
+import { motion, useInView, useReducedMotion } from "motion/react";
 import { useRef } from "react";
 
 interface TextRevealProps {
@@ -29,7 +29,7 @@ const wordVariants = {
     y: 0,
     transition: {
       duration: 0.6,
-      ease: [0.19, 1, 0.22, 1], // expo-out
+      ease: [0.19, 1, 0.22, 1] as const,
     },
   },
 };
@@ -104,7 +104,7 @@ const charVariants = {
     y: 0,
     transition: {
       duration: 0.5,
-      ease: [0.19, 1, 0.22, 1],
+      ease: [0.19, 1, 0.22, 1] as const,
     },
   },
 };
@@ -168,7 +168,7 @@ const lineVariants = {
     y: 0,
     transition: {
       duration: 0.8,
-      ease: [0.19, 1, 0.22, 1],
+      ease: [0.19, 1, 0.22, 1] as const,
     },
   },
 };

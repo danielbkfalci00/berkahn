@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { MetodologiaSubsection } from "./MetodologiaSubsection";
 import { ProjetosConsideradosSection } from "./ProjetosConsideradosSection";
 import { METODOLOGIA_LSF, PREMISSAS_TEMPLATE } from "@/lib/orcamento-data";

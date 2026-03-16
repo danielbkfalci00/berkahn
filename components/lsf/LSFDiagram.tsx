@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react";
 import { LSF_LAYERS } from "@/lib/lsf-data";
 import { Badge } from "@/components/ui/badge";
 

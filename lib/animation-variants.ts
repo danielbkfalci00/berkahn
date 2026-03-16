@@ -1,4 +1,4 @@
-import { Variants } from "framer-motion";
+import { Variants } from "motion/react";
 
 /**
  * Variantes de animação centralizadas para Framer Motion
@@ -23,7 +23,7 @@ export const itemVariants: Variants = {
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.6, ease: [0.19, 1, 0.22, 1] },
+    transition: { duration: 0.6, ease: [0.19, 1, 0.22, 1] as const },
   },
 };
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import type { MaterialItemDetalhado } from "@/types/orcamento";
 
 interface MaterialsTableSubsectionProps {
@@ -31,7 +31,7 @@ export function MaterialsTableSubsection({ data, isNested }: MaterialsTableSubse
     visible: {
       opacity: 1,
       x: 0,
-      transition: { duration: 0.5, ease: [0.19, 1, 0.22, 1] },
+      transition: { duration: 0.5, ease: [0.19, 1, 0.22, 1] as const },
     },
   };
 

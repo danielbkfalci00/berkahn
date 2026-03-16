@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react";
 import { COMPARISON_DATA } from "@/lib/lsf-data";
 import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
 import { ChevronDown } from "lucide-react";

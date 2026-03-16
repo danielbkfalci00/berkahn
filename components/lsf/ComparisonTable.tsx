@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { COMPARISON_DATA, type ComparisonItem } from "@/lib/lsf-data";
 
 interface ComparisonTableProps {

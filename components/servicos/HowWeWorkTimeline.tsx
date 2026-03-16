@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import Image from "next/image";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform } from "motion/react";
 import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
 import { HOW_WE_WORK_TIMELINE } from "@/lib/servicos-data";
 import { CheckIcon } from "lucide-react";

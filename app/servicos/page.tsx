@@ -1,5 +1,3 @@
-"use client";
-
 // Serviços Berkahn - Atualizado em 11/12/2025
 import Image from "next/image";
 import Link from "next/link";

@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 import { useCookieConsent } from "@/components/providers/CookieConsentProvider";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";

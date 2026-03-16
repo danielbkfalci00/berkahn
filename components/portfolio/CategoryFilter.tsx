@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { PROJECT_CATEGORIES } from "@/data/projects";
 import { ProjectCategory } from "@/types/project";
 

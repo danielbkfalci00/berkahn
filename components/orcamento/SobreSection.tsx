@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { Zap, Leaf, Gauge, Shield, Volume2, Maximize2, Target, Scale } from "lucide-react";
 import Image from "next/image";
 import { BENEFITS } from "@/lib/lsf-data";

@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import type { ChaleProjeto } from "@/types/orcamento";
 
 interface ProjetoChaleSubsectionProps {
@@ -43,7 +43,7 @@ export function ProjetoChaleSubsection({ data, isNested }: ProjetoChaleSubsectio
       opacity: 1,
       y: 0,
       scale: 1,
-      transition: { duration: 0.6, ease: [0.19, 1, 0.22, 1] },
+      transition: { duration: 0.6, ease: [0.19, 1, 0.22, 1] as const },
     },
   };
 

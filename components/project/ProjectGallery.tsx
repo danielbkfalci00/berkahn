@@ -21,7 +21,7 @@ import { Badge } from "@/components/ui/badge";
 import { X, ZoomIn, Grid3X3 } from "lucide-react";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { cn } from "@/lib/utils";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react";
 
 interface ProjectGalleryProps {
   images: ProjectImage[];

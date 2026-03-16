@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState, useEffect } from "react";
-import { motion, useInView } from "framer-motion";
+import { motion, useInView } from "motion/react";
 import Image from "next/image";
 import { CertificationBadges as CertificationBadgesType } from "@/types/article";
 import { Badge } from "@/components/ui/badge";
