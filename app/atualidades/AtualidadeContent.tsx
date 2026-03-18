@@ -76,6 +76,14 @@ export function AtualidadeContent({ supabasePosts }: AtualidadeContentProps) {
         imageSrc="/images/empresa/primeira-imagem.webp"
       />
 
+      {/* Intro text — visível para Google e usuários */}
+      <section className="container mx-auto px-4 pt-12 pb-6 max-w-3xl text-center">
+        <p className="text-black-50 text-base md:text-lg leading-relaxed">
+          Artigos e guias sobre Steel Frame: custos, prazos, comparativos e tendências
+          da construção industrializada. Acompanhe as novidades do blog da Berkahn.
+        </p>
+      </section>
+
       {/* Featured Article */}
       {featuredPost && <FeaturedArticle post={featuredPost} />}
 
