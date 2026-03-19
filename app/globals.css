@@ -39,6 +39,7 @@
   /* Smooth scroll global */
   html {
     scroll-behavior: smooth;
+    overflow-x: hidden;
   }
 
   /* Respeitar preferência de movimento reduzido */
