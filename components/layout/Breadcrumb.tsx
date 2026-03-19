@@ -9,10 +9,28 @@ interface BreadcrumbProps {
   items: BreadcrumbItem[];
   className?: string;
   light?: boolean;
+  schemaOnly?: boolean;
 }
 
-export function Breadcrumb({ items, className = "", light = false }: BreadcrumbProps) {
+export function Breadcrumb({ items, className = "", light = false, schemaOnly = false }: BreadcrumbProps) {
   const fullItems = [{ name: "Home", href: "/" }, ...items];
+
+  if (schemaOnly) {
+    return (
+      <script type="application/ld+json">
+        {JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          itemListElement: fullItems.map((item, index) => ({
+            "@type": "ListItem",
+            position: index + 1,
+            name: item.name,
+            item: `https://www.berkahn.com.br${item.href}`,
+          })),
+        })}
+      </script>
+    );
+  }
 
   return (
     <>

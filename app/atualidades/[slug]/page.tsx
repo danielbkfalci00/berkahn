@@ -141,16 +141,13 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
       <main className="min-h-screen bg-white">
         {/* Hero Section */}
         <div className="relative">
-          <div className="absolute z-30 w-full">
-            <Breadcrumb
-              items={[
-                { name: "Blog", href: "/atualidades" },
-                { name: post.title, href: `/atualidades/${slug}` },
-              ]}
-              light={true}
-              className="container mx-auto px-4 pt-24 pb-2"
-            />
-          </div>
+          <Breadcrumb
+            items={[
+              { name: "Atualidades", href: "/atualidades" },
+              { name: post.title, href: `/atualidades/${slug}` },
+            ]}
+            schemaOnly
+          />
         <section className="relative h-[50vh] min-h-[400px] flex items-end">
           {post.cover_image && (
             <Image
