@@ -80,16 +80,13 @@ export default function ComercialIndustrialPage() {
 
       {/* 1. Hero Section */}
       <div className="relative">
-        <div className="absolute z-30 w-full">
-          <Breadcrumb
-            items={[
-              { name: "Serviços", href: "/servicos" },
-              { name: "Comercial & Industrial", href: "/comercial-industrial" },
-            ]}
-            light={true}
-            className="container mx-auto px-4 pt-24 pb-2"
-          />
-        </div>
+        <Breadcrumb
+          items={[
+            { name: "Serviços", href: "/servicos" },
+            { name: "Comercial & Industrial", href: "/comercial-industrial" },
+          ]}
+          schemaOnly
+        />
       <ParallaxHero
         label="CONSTRUÇÃO CORPORATIVA"
         title="Construção corporativa com engenharia industrial e prazo real."

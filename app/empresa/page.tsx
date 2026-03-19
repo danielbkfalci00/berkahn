@@ -93,13 +93,10 @@ export default function EmpresaPage() {
 
       {/* Hero com Imagem e Stats Overlay */}
       <div className="relative">
-        <div className="absolute z-30 w-full">
-          <Breadcrumb
-            items={[{ name: "Empresa", href: "/empresa" }]}
-            light={true}
-            className="container mx-auto px-4 pt-24 pb-2"
-          />
-        </div>
+        <Breadcrumb
+          items={[{ name: "Empresa", href: "/empresa" }]}
+          schemaOnly
+        />
       <section className="relative h-[85vh] md:h-screen min-h-[550px] md:min-h-[600px] flex items-start justify-start pt-32 md:pt-40 lg:pt-48 overflow-hidden">
         {/* Background Image */}
         <div className="absolute inset-0 z-0">

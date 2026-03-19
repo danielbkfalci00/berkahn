@@ -69,13 +69,10 @@ export default function PerguntasFrequentes() {
     <>
       {/* 1. Hero */}
       <div className="relative">
-        <div className="absolute z-30 w-full">
-          <Breadcrumb
-            items={[{ name: "FAQ", href: "/perguntas-frequentes" }]}
-            light={true}
-            className="container mx-auto px-4 pt-24 pb-2"
-          />
-        </div>
+        <Breadcrumb
+          items={[{ name: "Perguntas Frequentes", href: "/perguntas-frequentes" }]}
+          schemaOnly
+        />
         <ParallaxHero
           label="TIRE SUAS DÚVIDAS"
           title="Tudo o que Você Precisa Saber"

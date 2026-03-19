@@ -51,13 +51,10 @@ export default function ServicosPage() {
     <main>
       {/* 1. Hero */}
       <div className="relative">
-        <div className="absolute z-30 w-full">
-          <Breadcrumb
-            items={[{ name: "Serviços", href: "/servicos" }]}
-            light={true}
-            className="container mx-auto px-4 pt-24 pb-2"
-          />
-        </div>
+        <Breadcrumb
+          items={[{ name: "Serviços", href: "/servicos" }]}
+          schemaOnly
+        />
         <HeroPage
           title="Serviços"
           subtitle="O que fazemos"
@@ -98,7 +95,10 @@ export default function ServicosPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {services.map((service, index) => (
               <RevealOnScroll key={service.id} delay={index * 0.1}>
-                <div className="bg-white overflow-hidden shadow-luxury-sm hover:shadow-luxury-md transition-shadow duration-300">
+                <Link
+                href={service.href}
+                className="block bg-white overflow-hidden shadow-luxury-sm hover:shadow-luxury-md transition-shadow duration-300 cursor-pointer"
+              >
                   {/* Image */}
                   <div className="aspect-video overflow-hidden bg-black-5">
                     <Image
@@ -106,7 +106,7 @@ export default function ServicosPage() {
                       alt={`Construção ${service.title}`}
                       width={600}
                       height={338}
-                      className="w-full h-full object-contain hover:scale-105 transition-transform duration-500"
+                      className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
                     />
                   </div>
 
@@ -135,11 +135,8 @@ export default function ServicosPage() {
                       ))}
                     </ul>
 
-                    {/* Link */}
-                    <Link
-                      href={service.href}
-                      className="inline-flex items-center gap-2 text-black font-medium hover:gap-4 transition-all duration-300"
-                    >
+                    {/* Visual indicator */}
+                    <span className="inline-flex items-center gap-2 text-black font-medium">
                       Saiba mais
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -155,9 +152,9 @@ export default function ServicosPage() {
                           d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
                         />
                       </svg>
-                    </Link>
+                    </span>
                   </div>
-                </div>
+                </Link>
               </RevealOnScroll>
             ))}
           </div>

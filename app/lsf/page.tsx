@@ -37,13 +37,10 @@ export default function LSFPage() {
     <>
       {/* 1. Hero Parallax */}
       <div className="relative">
-        <div className="absolute z-30 w-full">
-          <Breadcrumb
-            items={[{ name: "Tecnologia LSF", href: "/lsf" }]}
-            light={true}
-            className="container mx-auto px-4 pt-24 pb-2"
-          />
-        </div>
+        <Breadcrumb
+          items={[{ name: "Tecnologia LSF", href: "/lsf" }]}
+          schemaOnly
+        />
         <ParallaxHero
           title="Light Steel Frame"
           backgroundImage="/images/Lsf/lsf-hero-structure.webp"

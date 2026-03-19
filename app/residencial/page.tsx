@@ -80,16 +80,13 @@ export default function ResidencialPage() {
 
       {/* 1. Hero Section */}
       <div className="relative">
-        <div className="absolute z-30 w-full">
-          <Breadcrumb
-            items={[
-              { name: "Serviços", href: "/servicos" },
-              { name: "Residencial", href: "/residencial" },
-            ]}
-            light={true}
-            className="container mx-auto px-4 pt-24 pb-2"
-          />
-        </div>
+        <Breadcrumb
+          items={[
+            { name: "Serviços", href: "/servicos" },
+            { name: "Residencial", href: "/residencial" },
+          ]}
+          schemaOnly
+        />
       <ParallaxHero
         label="CONSTRUÇÃO RESIDENCIAL"
         title="Construção residencial com velocidade e precisão industrial."
