@@ -32,6 +32,7 @@ export const metadata = {
       "Construtora moderna com expertise em Steel Frame e sistemas integrados. Conheça a BERKAHN e nossa abordagem inovadora na construção civil.",
     images: ["/images/Compartilhamento/og-image.webp"],
   },
+  alternates: { canonical: "/empresa" },
 };
 
 // Stats com categorias - foco em compromissos e entregas

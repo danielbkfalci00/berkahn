@@ -54,6 +54,7 @@ export const metadata = {
       "Construção corporativa com engenharia industrial e prazo real. Lojas, galpões, escritórios e construções temporárias com Steel Frame: entrega rápida, controle total e baixo impacto ambiental.",
     images: ["/images/Compartilhamento/og-image.webp"],
   },
+  alternates: { canonical: "/comercial-industrial" },
 };
 
 export default function ComercialIndustrialPage() {

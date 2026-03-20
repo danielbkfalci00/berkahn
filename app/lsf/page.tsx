@@ -30,6 +30,7 @@ export const metadata = {
       "Sistema construtivo Light Steel Frame: construção industrializada com velocidade, sustentabilidade e eficiência energética. Alta performance com precisão milimétrica.",
     images: ["/images/Compartilhamento/og-image.webp"],
   },
+  alternates: { canonical: "/lsf" },
 };
 
 export default function LSFPage() {

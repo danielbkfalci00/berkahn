@@ -14,6 +14,7 @@ export const metadata: Metadata = {
   title: "Berkahn | Construtora Steel Frame em SP",
   description:
     "Construtora especializada em Light Steel Frame em São Paulo. Projetos residenciais e comerciais com agilidade, sustentabilidade e acabamento premium.",
+  alternates: { canonical: "/" },
 };
 
 export default function Home() {

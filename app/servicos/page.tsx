@@ -1,5 +1,29 @@
 // Serviços Berkahn - Atualizado em 11/12/2025
+import type { Metadata } from "next";
 import Image from "next/image";
+
+export const metadata: Metadata = {
+  title: "Serviços | Berkahn Steel Frame",
+  description:
+    "Construção residencial, comercial e industrial em Light Steel Frame. Projetos personalizados com execução rápida e acabamento premium em São Paulo.",
+  openGraph: {
+    title: "Serviços | Berkahn Steel Frame",
+    description:
+      "Construção residencial, comercial e industrial em Light Steel Frame. Projetos personalizados com execução rápida e acabamento premium em São Paulo.",
+    url: "https://www.berkahn.com.br/servicos",
+    siteName: "Construtora Berkahn",
+    type: "website",
+    locale: "pt_BR",
+    images: [{ url: "/images/Compartilhamento/og-image.webp", width: 1200, height: 630, alt: "Serviços Berkahn" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Serviços | Berkahn Steel Frame",
+    description: "Construção residencial, comercial e industrial em Light Steel Frame.",
+    images: ["/images/Compartilhamento/og-image.webp"],
+  },
+  alternates: { canonical: "/servicos" },
+};
 import Link from "next/link";
 import { HeroPage } from "@/components/sections/HeroPage";
 import { RevealOnScroll } from "@/components/animations/RevealOnScroll";

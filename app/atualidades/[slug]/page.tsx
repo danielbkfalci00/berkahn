@@ -83,7 +83,10 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
         images: post.cover_image ? [{ url: post.cover_image }] : [],
         type: "article",
         publishedTime: post.published_at || undefined,
+        modifiedTime: post.updated_at || undefined,
         authors: [post.author],
+        section: post.category,
+        tags: post.tags,
       },
       twitter: {
         card: "summary_large_image",
@@ -91,6 +94,7 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
         description: post.excerpt,
         images: post.cover_image ? [post.cover_image] : [],
       },
+      alternates: { canonical: `/atualidades/${slug}` },
     };
   }
 
@@ -121,6 +125,7 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
       description: article.excerpt,
       images: [article.heroImage],
     },
+    alternates: { canonical: `/atualidades/${slug}` },
   };
 }
 

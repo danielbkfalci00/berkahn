@@ -58,6 +58,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description: project.tagline,
       images: [project.heroImage],
     },
+    alternates: { canonical: `/projetos/${slug}` },
   };
 }
 

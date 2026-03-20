@@ -22,6 +22,7 @@ export const metadata = {
       "Política de Privacidade da Construtora Berkahn. Saiba como coletamos, utilizamos e protegemos seus dados pessoais em conformidade com a LGPD.",
     images: ["/images/Compartilhamento/og-image.webp"],
   },
+  alternates: { canonical: "/privacidade" },
 };
 
 const LINK_CLASSES =

@@ -22,6 +22,7 @@ export const metadata: Metadata = {
       "Artigos e guias sobre Steel Frame: custos, prazos, comparativos e tendências da construção industrializada. Blog da Berkahn.",
     type: "website",
   },
+  alternates: { canonical: "/atualidades" },
 };
 
 // Revalidate every 60 seconds to fetch new posts from Supabase

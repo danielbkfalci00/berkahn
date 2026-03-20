@@ -21,6 +21,7 @@ export const metadata: Metadata = {
       "Veja os projetos realizados pela Berkahn em Light Steel Frame: casas, galpões, escritórios e reformas em São Paulo e região.",
     images: ["/images/Compartilhamento/og-image.webp"],
   },
+  alternates: { canonical: "/portfolio" },
 };
 
 export default function PortfolioLayout({

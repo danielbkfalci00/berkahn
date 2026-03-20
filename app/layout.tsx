@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Manrope, Caveat } from "next/font/google";
 import Script from "next/script";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { ClientLayout } from "@/components/layout/ClientLayout";
 import { ConditionalFooter } from "@/components/layout/ConditionalFooter";
 import { CookieConsentProvider } from "@/components/providers/CookieConsentProvider";
@@ -63,6 +64,9 @@ export const metadata: Metadata = {
     icon: "/favicon.ico",
     apple: "/apple-icon.png",
   },
+  verification: {
+    google: "PENDENTE_CODIGO_GSC",
+  },
   robots: {
     index: true,
     follow: true,
@@ -82,6 +86,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR" className={`${manrope.variable} ${caveat.variable}`}>
+      <head>
+        <link rel="preconnect" href="https://sfqaknxomxwmviarpwfy.supabase.co" />
+        <link rel="preconnect" href="https://www.googletagmanager.com" />
+        <link rel="dns-prefetch" href="https://images.unsplash.com" />
+      </head>
       <body>
         <CookieConsentProvider>
           <ClientLayout>{children}</ClientLayout>
@@ -163,6 +172,7 @@ export default function RootLayout({
             gtag('config', 'G-RBQJ1D6JHW');
           `}
         </Script>
+        <SpeedInsights />
       </body>
     </html>
   );
