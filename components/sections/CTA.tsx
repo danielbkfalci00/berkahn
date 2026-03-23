@@ -30,7 +30,7 @@ const ArrowIcon = () => (
 );
 
 const buttonClasses =
-  "inline-flex items-center gap-2 px-8 py-4 bg-black text-white uppercase tracking-wider text-sm font-medium hover:bg-black-90 transition-colors duration-300";
+  "inline-flex items-center gap-2 px-8 py-4 bg-white text-black uppercase tracking-wider text-sm font-medium hover:bg-white/90 transition-colors duration-300";
 
 export function CTA({
   label = "PRONTO PARA CONSTRUIR?",
@@ -42,13 +42,13 @@ export function CTA({
   defaultSegment,
 }: CTAProps = {}) {
   return (
-    <section className="py-xl bg-black-5">
+    <section className="py-xl bg-white">
       <div className="container">
-        <div className="text-center max-w-3xl mx-auto">
+        <div className="text-center max-w-3xl mx-auto bg-black p-12 md:p-16">
           <RevealOnScroll>
-            <p className="label-text mb-4">{label}</p>
-            <h2 className="headline-lg mb-6">{title}</h2>
-            <p className="body-md mb-8 text-black-70">{description}</p>
+            <p className="label-text mb-4 text-white/60">{label}</p>
+            <h2 className="headline-lg mb-6 text-white">{title}</h2>
+            <p className="body-md mb-8 text-white/70">{description}</p>
 
             {actionType === "link" ? (
               <Link href={actionHref} className={buttonClasses}>

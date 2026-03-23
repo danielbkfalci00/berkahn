@@ -10,12 +10,12 @@ export function LSFIntro() {
           {/* Left Column - Image */}
           <RevealOnScroll>
             <Image
-              src="/images/Home/hero-3.webp"
-              alt="Estrutura Light Steel Frame"
-              width={1920}
-              height={1080}
+              src="/images/Home/home-gallery-2.webp"
+              alt="Estrutura Steel Frame em construção"
+              width={2048}
+              height={1152}
               sizes="(max-width: 1024px) 100vw, 50vw"
-              className="w-full h-auto object-cover"
+              className="w-full h-auto object-cover rounded-lg shadow-[0_20px_60px_-15px_rgba(0,0,0,0.3)]"
             />
           </RevealOnScroll>
 
