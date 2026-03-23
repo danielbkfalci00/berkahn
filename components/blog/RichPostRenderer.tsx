@@ -92,6 +92,8 @@ const PLACEHOLDER_PATTERNS = {
   IMAGE: /\[IMAGE:([^\]]+)\]/g,
   // CTAs Customizáveis
   CTA: /\[CTA:([^\]]+)\]/g,
+  // Internal Linking (AEO)
+  SERVICELINK: /\[SERVICELINK:([^\]]+)\]/g,
 };
 
 /**
@@ -223,6 +225,10 @@ function extractPlaceholders(content: string, components: PostComponents | null)
       // CTAs Customizáveis
       case 'CTA':
         componentData = components.ctas?.find((cta) => cta.id === id);
+        break;
+      // Internal Linking (AEO) — self-contained, no component data needed
+      case 'SERVICELINK':
+        componentData = { slug: id };
         break;
     }
 
@@ -575,9 +581,69 @@ function renderComponent(type: string, data: any, key: string | number) {
           />
         </RevealOnScroll>
       );
+    case 'SERVICELINK':
+      return renderServiceLink(data.slug, key);
     default:
       return null;
   }
+}
+
+/** Service link map for internal linking (AEO) */
+const SERVICE_LINKS: Record<string, { href: string; label: string; description: string }> = {
+  residencial: {
+    href: "/residencial",
+    label: "Construção Residencial em Steel Frame",
+    description: "Casas, reformas e ampliações com Light Steel Frame.",
+  },
+  "comercial-industrial": {
+    href: "/comercial-industrial",
+    label: "Construção Comercial & Industrial",
+    description: "Lojas, galpões, escritórios e construções temporárias.",
+  },
+  servicos: {
+    href: "/servicos",
+    label: "Nossos Serviços",
+    description: "Conheça todos os serviços da Berkahn.",
+  },
+  lsf: {
+    href: "/lsf",
+    label: "O que é Light Steel Frame?",
+    description: "Entenda o sistema construtivo que usamos.",
+  },
+  empresa: {
+    href: "/empresa",
+    label: "Sobre a Berkahn",
+    description: "Conheça nossa história e equipe.",
+  },
+  portfolio: {
+    href: "/portfolio",
+    label: "Portfólio de Projetos",
+    description: "Veja nossos projetos realizados.",
+  },
+  faq: {
+    href: "/perguntas-frequentes",
+    label: "Perguntas Frequentes",
+    description: "Tire suas dúvidas sobre Steel Frame.",
+  },
+};
+
+function renderServiceLink(slug: string, key: string | number) {
+  const service = SERVICE_LINKS[slug];
+  if (!service) return null;
+
+  return (
+    <a
+      key={key}
+      href={service.href}
+      className="block my-6 p-4 border border-neutral-200 rounded-lg hover:border-neutral-400 hover:bg-neutral-50 transition-all group no-underline"
+    >
+      <span className="text-sm text-neutral-500 uppercase tracking-wider">Saiba mais</span>
+      <span className="block font-semibold text-neutral-900 group-hover:text-black mt-1">
+        {service.label} →
+      </span>
+      <span className="block text-sm text-neutral-600 mt-1">{service.description}</span>
+    </a>
+  );
 }
 
 /**

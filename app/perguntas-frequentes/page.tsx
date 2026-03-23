@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
@@ -94,7 +95,9 @@ export default function PerguntasFrequentes() {
             </h2>
           </RevealOnScroll>
 
-          <FAQSearch categories={FAQ_CATEGORIES} />
+          <Suspense>
+            <FAQSearch categories={FAQ_CATEGORIES} />
+          </Suspense>
         </div>
       </section>
 

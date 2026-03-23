@@ -64,8 +64,9 @@ export const metadata: Metadata = {
     icon: "/favicon.ico",
     apple: "/apple-icon.png",
   },
-  verification: {
-    google: "PENDENTE_CODIGO_GSC",
+  manifest: "/manifest.json",
+  other: {
+    "theme-color": "#000000",
   },
   robots: {
     index: true,
@@ -105,7 +106,7 @@ export default function RootLayout({
             "@context": "https://schema.org",
             "@graph": [
               {
-                "@type": ["Organization", "GeneralContractor"],
+                "@type": ["LocalBusiness", "GeneralContractor"],
                 "@id": "https://www.berkahn.com.br/#organization",
                 name: "Construtora Berkahn",
                 url: "https://www.berkahn.com.br",
@@ -113,6 +114,7 @@ export default function RootLayout({
                   "@type": "ImageObject",
                   url: "https://www.berkahn.com.br/images/logo/berkahn-logo.webp",
                 },
+                image: "https://www.berkahn.com.br/images/logo/berkahn-logo.webp",
                 description:
                   "Construtora especializada em Light Steel Frame para projetos residenciais e comerciais em São Paulo.",
                 address: {
@@ -130,6 +132,21 @@ export default function RootLayout({
                 email: "contato.berkahn@gmail.com",
                 taxID: "39.455.932/0001-64",
                 priceRange: "$$$$",
+                currenciesAccepted: "BRL",
+                paymentAccepted: "Transferência bancária, Financiamento",
+                areaServed: [
+                  { "@type": "State", name: "São Paulo" },
+                  { "@type": "City", name: "São Paulo" },
+                ],
+                hasOfferCatalog: {
+                  "@type": "OfferCatalog",
+                  name: "Serviços de Construção",
+                  itemListElement: [
+                    { "@type": "OfferCatalog", name: "Construção Residencial" },
+                    { "@type": "OfferCatalog", name: "Construção Comercial & Industrial" },
+                    { "@type": "OfferCatalog", name: "Reformas e Ampliações" },
+                  ],
+                },
                 sameAs: [
                   "https://www.linkedin.com/company/construtora-berkahn/",
                 ],
@@ -153,6 +170,11 @@ export default function RootLayout({
                 url: "https://www.berkahn.com.br",
                 publisher: {
                   "@id": "https://www.berkahn.com.br/#organization",
+                },
+                potentialAction: {
+                  "@type": "SearchAction",
+                  target: "https://www.berkahn.com.br/perguntas-frequentes?q={search_term_string}",
+                  "query-input": "required name=search_term_string",
                 },
               },
             ],

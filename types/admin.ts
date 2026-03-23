@@ -93,6 +93,7 @@ export interface Post extends BaseEntity {
   featured: boolean;
   meta_title: string | null;
   meta_description: string | null;
+  answer_summary: string | null; // AEO: direct answer paragraph for AI citation
   components: PostComponents; // Rich components (stats, tables, charts, etc.)
 }
 
@@ -112,6 +113,7 @@ export interface PostInsert {
   featured?: boolean;
   meta_title?: string | null;
   meta_description?: string | null;
+  answer_summary?: string | null; // AEO: direct answer paragraph for AI citation
   components?: PostComponents; // Rich components (optional)
 }
 

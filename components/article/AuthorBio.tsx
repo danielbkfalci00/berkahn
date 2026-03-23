@@ -1,11 +1,18 @@
 import Image from "next/image";
 
+interface AuthorCredential {
+  name: string;
+  category: string;
+}
+
 interface AuthorData {
   name: string;
   role: string;
   bio: string;
   image: string;
   linkedin?: string;
+  credential?: AuthorCredential;
+  alumniOf?: string;
 }
 
 const AUTHORS: Record<string, AuthorData> = {
@@ -15,6 +22,7 @@ const AUTHORS: Record<string, AuthorData> = {
     bio: "Engenheiro civil com sólida experiência em planejamento, gerenciamento e execução de obras residenciais, comerciais e logísticas de alto padrão em São Paulo. Co-fundador da Berkahn.",
     image: "/images/founders/daniel-falci.webp",
     linkedin: "https://www.linkedin.com/in/danielbkfalci/",
+    credential: { name: "CREA-SP", category: "Professional License" },
   },
   "Bruno Ribeiro": {
     name: "Bruno Ribeiro",
@@ -22,6 +30,7 @@ const AUTHORS: Record<string, AuthorData> = {
     bio: "Engenheiro civil especialista em Steel Frame e construção industrializada. Experiência em projetos residenciais e comerciais com foco em eficiência e inovação. Co-fundador da Berkahn.",
     image: "/images/founders/bruno-ribeiro.webp",
     linkedin: "https://www.linkedin.com/in/bruno-ribeiro-berkahn/",
+    credential: { name: "CREA-SP", category: "Professional License" },
   },
 };
 
@@ -75,6 +84,19 @@ export function AuthorBio({ authorName }: AuthorBioProps) {
           worksFor: {
             "@id": "https://www.berkahn.com.br/#organization",
           },
+          ...(author.credential && {
+            hasCredential: {
+              "@type": "EducationalOccupationalCredential",
+              credentialCategory: author.credential.category,
+              name: author.credential.name,
+            },
+          }),
+          ...(author.alumniOf && {
+            alumniOf: {
+              "@type": "CollegeOrUniversity",
+              name: author.alumniOf,
+            },
+          }),
           ...(author.linkedin && { sameAs: [author.linkedin] }),
         })}
       </script>

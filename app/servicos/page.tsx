@@ -73,6 +73,52 @@ const services = [
 export default function ServicosPage() {
   return (
     <main>
+      {/* HowTo structured data */}
+      <script type="application/ld+json">
+        {JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "HowTo",
+          name: "Como construir em Steel Frame: o processo Berkahn",
+          description: "Passo a passo do processo de construção em Light Steel Frame, da consulta inicial à entrega da obra com garantia.",
+          totalTime: "PT4320H",
+          estimatedCost: {
+            "@type": "MonetaryAmount",
+            currency: "BRL",
+            value: "Sob consulta",
+          },
+          step: [
+            {
+              "@type": "HowToStep",
+              position: 1,
+              name: "Consulta Inicial",
+              text: "Reunião para entender suas necessidades, objetivos e expectativas. Analisamos o terreno, discutimos ideias e apresentamos as melhores soluções em Steel Frame para seu projeto.",
+              url: "https://www.berkahn.com.br/servicos#consulta-inicial",
+            },
+            {
+              "@type": "HowToStep",
+              position: 2,
+              name: "Desenvolvimento do Projeto",
+              text: "Projeto arquitetônico e estrutural completo. Modelagem BIM 3D, orçamento detalhado e cronograma executivo.",
+              url: "https://www.berkahn.com.br/servicos#projeto",
+            },
+            {
+              "@type": "HowToStep",
+              position: 3,
+              name: "Execução da Obra",
+              text: "Fundação, montagem estrutural, vedação e instalações. Construção até 50% mais rápida que alvenaria convencional com monitoramento constante.",
+              url: "https://www.berkahn.com.br/servicos#execucao",
+            },
+            {
+              "@type": "HowToStep",
+              position: 4,
+              name: "Entrega e Garantia",
+              text: "Vistoria final, manual do proprietário e garantia estrutural de 5 anos. Suporte técnico pós-entrega.",
+              url: "https://www.berkahn.com.br/servicos#entrega",
+            },
+          ],
+        })}
+      </script>
+
       {/* 1. Hero */}
       <div className="relative">
         <Breadcrumb
@@ -121,16 +167,16 @@ export default function ServicosPage() {
               <RevealOnScroll key={service.id} delay={index * 0.1}>
                 <Link
                 href={service.href}
-                className="block bg-white overflow-hidden shadow-luxury-sm hover:shadow-luxury-md transition-shadow duration-300 cursor-pointer"
+                className="group block bg-white overflow-hidden shadow-luxury-sm hover:shadow-luxury-md transition-all duration-300 cursor-pointer"
               >
                   {/* Image */}
-                  <div className="aspect-video overflow-hidden bg-black-5">
+                  <div className="relative aspect-video overflow-hidden bg-black-5">
                     <Image
                       src={service.image}
                       alt={`Construção ${service.title}`}
-                      width={600}
-                      height={338}
-                      className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-500"
+                      sizes="(max-width: 768px) 100vw, 50vw"
                     />
                   </div>
 
@@ -160,7 +206,7 @@ export default function ServicosPage() {
                     </ul>
 
                     {/* Visual indicator */}
-                    <span className="inline-flex items-center gap-2 text-black font-medium">
+                    <span className="inline-flex items-center gap-1 text-black font-medium group-hover:gap-2 transition-all">
                       Saiba mais
                       <svg
                         xmlns="http://www.w3.org/2000/svg"

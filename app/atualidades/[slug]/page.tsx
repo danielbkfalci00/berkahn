@@ -8,6 +8,7 @@ import { createClient } from "@/lib/supabase/server";
 import { getArticleBySlug, richArticles } from "@/data/articles/steel-frame-futuro";
 import { ArticleContent } from "./ArticleContent";
 import { RichPostRenderer } from "@/components/blog/RichPostRenderer";
+import { AnswerSummary } from "@/components/article/AnswerSummary";
 import type { Post } from "@/types/admin";
 
 interface ArticlePageProps {
@@ -224,6 +225,9 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         {/* Content */}
         <section className="container mx-auto px-4 py-12">
           <div className="max-w-3xl mx-auto">
+            {post.answer_summary && (
+              <AnswerSummary summary={post.answer_summary} articleTitle={post.title} />
+            )}
             <RichPostRenderer post={post} />
             <AuthorBio authorName={post.author} />
           </div>

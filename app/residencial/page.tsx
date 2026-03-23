@@ -76,6 +76,29 @@ export default function ResidencialPage() {
             name: "São Paulo",
           },
           serviceType: "Construção Residencial",
+          url: "https://www.berkahn.com.br/residencial",
+          hasOfferCatalog: {
+            "@type": "OfferCatalog",
+            name: "Serviços Residenciais Steel Frame",
+            itemListElement: [
+              {
+                "@type": "Offer",
+                itemOffered: { "@type": "Service", name: "Construção Nova Residencial" },
+                description: "Casa pronta em 3-6 meses, até 70% mais rápido que construção convencional.",
+                priceSpecification: { "@type": "UnitPriceSpecification", priceCurrency: "BRL", unitText: "m²" },
+              },
+              {
+                "@type": "Offer",
+                itemOffered: { "@type": "Service", name: "Reformas Residenciais" },
+                description: "Reforma leve, limpa e rápida com morador no imóvel.",
+              },
+              {
+                "@type": "Offer",
+                itemOffered: { "@type": "Service", name: "Ampliações" },
+                description: "Estrutura até 15x mais leve que alvenaria: amplie sobre lajes existentes sem reforço de fundação.",
+              },
+            ],
+          },
         })}
       </script>
 

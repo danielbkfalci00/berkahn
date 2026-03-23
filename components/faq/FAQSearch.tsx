@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useMemo, useCallback } from "react";
+import { useSearchParams } from "next/navigation";
 import { Search, SearchX, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { FAQAccordionGroup } from "@/components/faq/FAQAccordionGroup";
@@ -11,8 +12,10 @@ interface FAQSearchProps {
 }
 
 export function FAQSearch({ categories }: FAQSearchProps) {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [debouncedTerm, setDebouncedTerm] = useState("");
+  const searchParams = useSearchParams();
+  const initialQuery = searchParams.get("q") || "";
+  const [searchTerm, setSearchTerm] = useState(initialQuery);
+  const [debouncedTerm, setDebouncedTerm] = useState(initialQuery);
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
 
   // Debounce search term (250ms)

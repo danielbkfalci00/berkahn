@@ -76,6 +76,33 @@ export default function ComercialIndustrialPage() {
             name: "São Paulo",
           },
           serviceType: "Construção Comercial e Industrial",
+          url: "https://www.berkahn.com.br/comercial-industrial",
+          hasOfferCatalog: {
+            "@type": "OfferCatalog",
+            name: "Serviços Comerciais e Industriais",
+            itemListElement: [
+              {
+                "@type": "Offer",
+                itemOffered: { "@type": "Service", name: "Construção Comercial" },
+                description: "Lojas, escritórios e showrooms: 50-70% mais rápido, layouts reposicionáveis.",
+              },
+              {
+                "@type": "Offer",
+                itemOffered: { "@type": "Service", name: "Construção Industrial" },
+                description: "Galpões e centros de distribuição com fundações mais simples e modularidade.",
+              },
+              {
+                "@type": "Offer",
+                itemOffered: { "@type": "Service", name: "Construções Temporárias" },
+                description: "Estandes e canteiros: montagem rápida, 100% reciclável.",
+              },
+              {
+                "@type": "Offer",
+                itemOffered: { "@type": "Service", name: "Reformas Corporativas" },
+                description: "Ampliações de fábricas e retrofit: leveza permite ampliação sem reforço estrutural.",
+              },
+            ],
+          },
         })}
       </script>
 
