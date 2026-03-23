@@ -1,9 +1,12 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { motion } from "motion/react";
 import { BlogPost } from "@/types/blog";
 import { ArticleCard, ArticleCardMinimal } from "./ArticleCard";
 import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
+
+const POSTS_PER_PAGE = 9;
 
 interface MasonryGridProps {
   posts: BlogPost[];
@@ -11,15 +14,19 @@ interface MasonryGridProps {
 }
 
 export function MasonryGrid({ posts, variant = "masonry" }: MasonryGridProps) {
+  const [displayCount, setDisplayCount] = useState(POSTS_PER_PAGE);
+
+  // Reset pagination when posts change (e.g. category filter)
+  useEffect(() => {
+    setDisplayCount(POSTS_PER_PAGE);
+  }, [posts]);
+
   if (variant === "minimal") {
     return <MinimalGrid posts={posts} />;
   }
 
-  // Define pattern for masonry layout
-  // Pattern: Large cards at positions 0, 3, 6... (every 3rd starting from 0)
-  const getCardSize = (index: number): "small" | "large" => {
-    return index % 3 === 0 ? "large" : "small";
-  };
+  const visiblePosts = posts.slice(0, displayCount);
+  const hasMore = displayCount < posts.length;
 
   return (
     <section className="py-xl bg-white">
@@ -28,30 +35,30 @@ export function MasonryGrid({ posts, variant = "masonry" }: MasonryGridProps) {
           <div className="flex items-center justify-between mb-12">
             <h2 className="headline-sm">Mais Artigos</h2>
             <p className="text-sm text-black-50 uppercase tracking-wider">
-              {posts.length} artigos
+              {visiblePosts.length} de {posts.length} artigos
             </p>
           </div>
         </RevealOnScroll>
 
-        {/* Masonry Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-8 auto-rows-auto">
-          {posts.map((post, index) => (
+        {/* Article Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-8">
+          {visiblePosts.map((post, index) => (
             <ArticleCard
               key={post.id}
               post={post}
-              size={getCardSize(index)}
               index={index}
             />
           ))}
         </div>
 
         {/* Load More Button */}
-        {posts.length >= 6 && (
+        {hasMore && (
           <RevealOnScroll delay={0.3}>
             <div className="mt-16 text-center">
               <motion.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
+                onClick={() => setDisplayCount(prev => Math.min(prev + POSTS_PER_PAGE, posts.length))}
                 className="px-8 py-4 border border-black text-black text-sm uppercase tracking-wider font-medium hover:bg-black hover:text-white transition-colors duration-300"
               >
                 Ver Mais Artigos

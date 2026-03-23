@@ -27,10 +27,7 @@ export function ArticleCard({ post, size = "small", index = 0 }: ArticleCardProp
         delay: index * 0.1,
         ease: [0.19, 1, 0.22, 1],
       }}
-      className={cn(
-        "group relative bg-white",
-        isLarge ? "row-span-2" : "row-span-1"
-      )}
+      className="group relative bg-white"
     >
       <Link href={`/atualidades/${post.slug}`} className="block h-full">
         {/* Image Container */}
