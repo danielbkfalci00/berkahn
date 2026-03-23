@@ -160,8 +160,13 @@ function extractPlaceholders(content: string, components: PostComponents | null)
         componentData = components.tables?.find((t) => t.id === id);
         break;
       case 'STATS':
-        // Stats doesn't have individual IDs in current structure
-        componentData = components.stats;
+        // Support both formats: flat array of Stat (legacy) and array of {id, stats} wrappers
+        if (components.stats && components.stats.length > 0 && 'id' in components.stats[0]) {
+          const wrapper = (components.stats as any[]).find((s) => s.id === id);
+          componentData = wrapper?.stats;
+        } else {
+          componentData = components.stats;
+        }
         break;
       case 'CHECKLIST':
         // Checklist is a single object
