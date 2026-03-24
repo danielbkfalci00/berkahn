@@ -66,7 +66,7 @@ export const presentationProjects: (ProjectSlideProps & {
   },
   {
     number: "03",
-    title: "Vila da Mata",
+    title: "Residência Monteiro",
     location: "São Roque - SP",
     year: "2026",
     area: "520 m²",
