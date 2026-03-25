@@ -74,13 +74,38 @@ export function SlideDiferenciais() {
                   A Composição do Sistema
                 </h3>
                 <h4 className="text-lg lg:text-xl font-medium text-white/70 mb-6">
-                  Paredes de Múltiplas Camadas (Multilayer Walls)
+                  Soluções que se adaptam ao seu projeto
                 </h4>
-                <p className="text-base lg:text-lg text-white/80 leading-relaxed">
-                  A superioridade do LSF reside na sua configuração de paredes, que
-                  operam como sistemas multicamadas projetados para performance superior
-                  em estanqueidade, isolamento e acabamento, superando o desempenho da
-                  alvenaria convencional.
+
+                <div className="space-y-4">
+                  <p className="text-base lg:text-lg text-white/80 leading-relaxed">
+                    No LSF, as paredes funcionam como sistemas multicamadas que entregam
+                    estanqueidade, isolamento e acabamento superiores à alvenaria
+                    convencional.
+                  </p>
+                  <p className="text-base lg:text-lg text-white/80 leading-relaxed">
+                    Para cada tipo de projeto, desenvolvemos uma composição específica
+                    — espessuras, materiais isolantes, revestimentos e acabamentos são
+                    definidos de acordo com as necessidades técnicas e preferências de
+                    cada cliente.
+                  </p>
+                </div>
+
+                {/* Tags de tipos de projeto */}
+                <div className="flex flex-wrap gap-2 mt-6">
+                  {["Residencial", "Comercial", "Industrial", "Reformas"].map((type) => (
+                    <span
+                      key={type}
+                      className="inline-flex items-center px-3 py-1.5 rounded-full bg-white/10 text-xs font-medium text-white/70 tracking-wide"
+                    >
+                      {type}
+                    </span>
+                  ))}
+                </div>
+
+                <p className="text-sm text-white/50 mt-6 leading-relaxed">
+                  O diagrama ao lado e as camadas detalhadas abaixo ilustram uma
+                  composição padrão para projetos residenciais.
                 </p>
               </div>
             </RevealOnScroll>
