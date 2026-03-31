@@ -93,12 +93,12 @@ export function SlideProject({
             <CarouselContent className="h-full -ml-0">
               {images.map((img, i) => (
                 <CarouselItem key={i} className="h-full pl-0">
-                  <div className="relative h-full w-full">
+                  <div className="relative h-full w-full bg-black">
                     <Image
                       src={img}
                       alt={`${title} - Imagem ${i + 1} de ${images.length}`}
                       fill
-                      className="object-cover"
+                      className="object-contain"
                       sizes="(max-width: 1024px) 100vw, 50vw"
                       priority={i === 0}
                       placeholder="blur"
