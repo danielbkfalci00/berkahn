@@ -211,7 +211,7 @@ export default function ResidencialPage() {
       {/* ================================================================ */}
       <CTA
         label="LIGHT STEEL FRAME"
-        title="Quer entender o sistema construtivo a fundo?"
+        title="Quer entender o sistema construtivo?"
         description="Saiba como o Light Steel Frame funciona, suas camadas, especificações técnicas e por que é o futuro da construção."
         actionType="link"
         actionText="Conheça o Light Steel Frame"
