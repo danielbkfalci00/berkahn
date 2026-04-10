@@ -31,6 +31,9 @@ const SlideGallery = dynamic(() =>
 const SlidePartners = dynamic(() =>
   import("@/components/presentation/slides/SlidePartners").then((m) => m.SlidePartners)
 );
+const SlideServices = dynamic(() =>
+  import("@/components/presentation/slides/SlideServices").then((m) => m.SlideServices)
+);
 const SlideContact = dynamic(() =>
   import("@/components/presentation/slides/SlideContact").then((m) => m.SlideContact)
 );
@@ -60,7 +63,10 @@ export default function ApresentacaoExecutivaPage() {
       {/* Slide 5: Fundadores */}
       <SlideFounders />
 
-      {/* Slide 6: Introdução Projetos */}
+      {/* Slide 6: Soluções - O que Fazemos por Você */}
+      <SlideServices />
+
+      {/* Slide 7: Introdução Projetos */}
       <SlideProjectsIntro />
 
       {/* Slides 7-9: Projetos (dados centralizados em lib/presentation-data.ts) */}
