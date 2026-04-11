@@ -7,7 +7,14 @@ import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
 import { CountUp } from "@/components/animations/CountUp";
 import { containerVariants, itemVariants } from "@/lib/animation-variants";
 import { useInViewAnimation } from "@/hooks/useInViewAnimation";
-import { BRAZIL_MARKET_GROWTH } from "@/lib/global-steel-frame-data";
+import {
+  BRAZIL_MARKET_GROWTH,
+  BRAZIL_FACTS,
+  BRAZIL_COMPANIES,
+  MCKINSEY_INSIGHT,
+  SLIDE_SOURCES,
+} from "@/lib/global-steel-frame-data";
+import { Landmark, TrendingUp } from "lucide-react";
 
 // Recharts carregado client-only
 const BrazilGrowthChart = dynamic(
@@ -19,6 +26,8 @@ export function SlideBrazilOpportunity() {
   const { ref: statsRef, isInView: statsInView } = useInViewAnimation({ margin: "-10% 0px" });
   const { ref: chartRef, isInView: chartInView } = useInViewAnimation({ margin: "-10% 0px" });
   const { ref: compareRef, isInView: compareInView } = useInViewAnimation({ margin: "-10% 0px" });
+  const { ref: factsRef, isInView: factsInView } = useInViewAnimation({ margin: "-10% 0px" });
+  const { ref: companiesRef, isInView: companiesInView } = useInViewAnimation({ margin: "-10% 0px" });
 
   return (
     <SlideSection className="py-16 lg:py-24">
@@ -151,7 +160,7 @@ export function SlideBrazilOpportunity() {
               { label: "Construção em alvenaria", br: "88,2%", ref: "16% (Suécia)" },
               { label: "Share do mercado global LGSF", br: "2,2%", ref: "21% (EUA)" },
               { label: "Obras com métodos artesanais", br: "70%", ref: "10-30% (países desenvolvidos)" },
-              { label: "Produção LSF (crescimento)", br: "+27,7%", ref: "5,1% (média global)", highlight: true },
+              { label: "Desperdício de materiais em obra", br: "≥30%", ref: "5-10% (construção industrializada)", highlight: true },
             ].map((row, i) => (
               <motion.div
                 key={row.label}
@@ -183,6 +192,92 @@ export function SlideBrazilOpportunity() {
           </table>
         </div>
 
+        {/* Marcos & Fatos do Brasil */}
+        <RevealOnScroll className="mb-5 text-center">
+          <p className="text-xs uppercase tracking-[0.2em] text-black/30">
+            Marcos & Fatos do Brasil
+          </p>
+        </RevealOnScroll>
+
+        <motion.div
+          ref={factsRef}
+          variants={containerVariants}
+          initial="hidden"
+          animate={factsInView ? "visible" : "hidden"}
+          className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 max-w-5xl mx-auto mb-16 lg:mb-20"
+        >
+          {BRAZIL_FACTS.map((fact, i) => (
+            <motion.div
+              key={fact.label}
+              variants={itemVariants}
+              className="p-5 border border-black/5 bg-white rounded-sm hover:shadow-luxury-sm transition-shadow"
+            >
+              <div className="flex items-center gap-2 mb-2">
+                {i === 0 && <Landmark className="w-4 h-4 text-black/30" />}
+                <p className="font-heading text-2xl sm:text-3xl font-extrabold text-black tracking-tight">
+                  {fact.value}
+                </p>
+              </div>
+              <p className="text-xs sm:text-sm text-black/70 font-medium leading-tight">
+                {fact.label}
+              </p>
+              <p className="text-[10px] text-black/40 mt-1.5 leading-tight">
+                {fact.detail}
+              </p>
+            </motion.div>
+          ))}
+        </motion.div>
+
+        {/* Empresas brasileiras em ascensão */}
+        <RevealOnScroll className="mb-5 text-center">
+          <p className="text-xs uppercase tracking-[0.2em] text-black/30">
+            Empresas em Ascensão no Brasil
+          </p>
+        </RevealOnScroll>
+
+        <motion.div
+          ref={companiesRef}
+          variants={containerVariants}
+          initial="hidden"
+          animate={companiesInView ? "visible" : "hidden"}
+          className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 max-w-4xl mx-auto mb-16 lg:mb-20"
+        >
+          {BRAZIL_COMPANIES.map((company) => (
+            <motion.div
+              key={company.name}
+              variants={itemVariants}
+              className="p-6 border border-emerald-500/15 bg-emerald-50/40 rounded-sm"
+            >
+              <div className="flex items-start gap-3">
+                <TrendingUp className="w-5 h-5 text-emerald-600 flex-shrink-0 mt-1" />
+                <div>
+                  <h3 className="font-heading text-lg font-bold text-black">
+                    {company.name}
+                  </h3>
+                  <p className="text-sm text-emerald-700 font-medium mt-1">
+                    {company.highlight}
+                  </p>
+                  <p className="text-xs text-black/50 mt-1.5 leading-relaxed">
+                    {company.detail}
+                  </p>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </motion.div>
+
+        {/* McKinsey insight */}
+        <RevealOnScroll delay={0.15} className="text-center max-w-2xl mx-auto mb-12">
+          <div className="inline-block border-l-2 border-black/20 pl-5 py-2 text-left">
+            <p className="font-heading text-base sm:text-lg text-black/70 leading-relaxed italic">
+              &ldquo;{MCKINSEY_INSIGHT.quote}&rdquo;
+            </p>
+            <p className="text-[10px] text-black/30 mt-2 uppercase tracking-wider">
+              — {MCKINSEY_INSIGHT.source}
+            </p>
+          </div>
+        </RevealOnScroll>
+
         {/* Closing statement — brand font, not Caveat */}
         <RevealOnScroll delay={0.2} className="text-center max-w-2xl mx-auto">
           <p className="font-heading text-lg sm:text-xl text-black/50 leading-relaxed font-light">
@@ -200,6 +295,11 @@ export function SlideBrazilOpportunity() {
             <div className="w-16 h-px bg-black/10" />
           </div>
         </RevealOnScroll>
+
+        {/* Sources footer */}
+        <p className="text-[10px] text-black/25 text-center mt-10 max-w-2xl mx-auto leading-relaxed">
+          {SLIDE_SOURCES.brazil}
+        </p>
       </div>
     </SlideSection>
   );

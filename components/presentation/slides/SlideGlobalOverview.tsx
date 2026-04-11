@@ -4,7 +4,7 @@ import { motion } from "motion/react";
 import { SlideSection } from "../ui/SlideSection";
 import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
 import { CountUp } from "@/components/animations/CountUp";
-import { REGIONAL_SHARES, MARKET_SIZE } from "@/lib/global-steel-frame-data";
+import { REGIONAL_SHARES, MARKET_SIZE, TOP_COMPANIES, SLIDE_SOURCES } from "@/lib/global-steel-frame-data";
 import { containerVariants, itemVariants } from "@/lib/animation-variants";
 import { useInViewAnimation } from "@/hooks/useInViewAnimation";
 
@@ -124,8 +124,39 @@ export function SlideGlobalOverview() {
         <RevealOnScroll delay={0.3} className="mt-10 text-center">
           <p className="text-sm sm:text-base text-black/40 max-w-lg mx-auto leading-relaxed">
             O segmento residencial responde por 44-50% do consumo total.
-            Cinco empresas controlam cerca de 28% do mercado global.
           </p>
+        </RevealOnScroll>
+
+        {/* Top 5 Empresas Globais */}
+        <RevealOnScroll delay={0.35} className="mt-16 lg:mt-20">
+          <div className="text-center mb-6">
+            <p className="text-xs uppercase tracking-[0.2em] text-black/30 mb-2">
+              Top 5 Empresas Globais
+            </p>
+            <p className="text-sm text-black/40 max-w-md mx-auto">
+              Controlam cerca de <strong className="text-black/70">28% do mercado mundial</strong> de LGSF
+            </p>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4 max-w-5xl mx-auto">
+            {TOP_COMPANIES.map((company) => (
+              <div
+                key={company.name}
+                className="p-4 border border-black/5 bg-white rounded-sm text-center hover:border-black/15 hover:shadow-luxury-sm transition-all"
+              >
+                <div className="text-2xl mb-2" aria-hidden="true">{company.flag}</div>
+                <p className="font-heading text-xs sm:text-sm font-bold text-black leading-tight">
+                  {company.name}
+                </p>
+                <p className="text-[10px] text-black/40 mt-1">{company.country}</p>
+                {company.share && (
+                  <p className="text-[10px] text-emerald-600 font-bold mt-1.5 uppercase tracking-wider">
+                    {company.share} share
+                  </p>
+                )}
+              </div>
+            ))}
+          </div>
         </RevealOnScroll>
 
         {/* Decorative Separator */}
@@ -136,6 +167,11 @@ export function SlideGlobalOverview() {
             <div className="w-16 h-px bg-black/10" />
           </div>
         </RevealOnScroll>
+
+        {/* Sources footer */}
+        <p className="text-[10px] text-black/25 text-center mt-10 max-w-2xl mx-auto leading-relaxed">
+          {SLIDE_SOURCES.overview}
+        </p>
       </div>
     </SlideSection>
   );

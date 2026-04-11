@@ -8,10 +8,12 @@ import {
   COUNTRY_RANKING,
   SPEED_RECORDS,
   SUSTAINABILITY_STATS,
+  STRIKING_FACTS,
+  SLIDE_SOURCES,
 } from "@/lib/global-steel-frame-data";
 import { containerVariants, itemVariants } from "@/lib/animation-variants";
 import { useInViewAnimation } from "@/hooks/useInViewAnimation";
-import { Recycle, Droplets, Trash2, Building2, Timer } from "lucide-react";
+import { Recycle, Droplets, Trash2, Building2, Timer, Info } from "lucide-react";
 
 const sustainabilityIcons: Record<string, React.ComponentType<{ className?: string }>> = {
   recycle: Recycle,
@@ -25,6 +27,7 @@ export function SlideGlobalLeaders() {
   const { ref: barsRef, isInView: barsInView } = useInViewAnimation({ margin: "-10% 0px" });
   const { ref: recordsRef, isInView: recordsInView } = useInViewAnimation({ margin: "-10% 0px" });
   const { ref: sustainRef, isInView: sustainInView } = useInViewAnimation({ margin: "-10% 0px" });
+  const { ref: factsRef, isInView: factsInView } = useInViewAnimation({ margin: "-10% 0px" });
 
   const maxValue = Math.max(...COUNTRY_RANKING.map((c) => c.metricValue));
 
@@ -45,6 +48,16 @@ export function SlideGlobalLeaders() {
           </p>
         </RevealOnScroll>
 
+        {/* Methodology note */}
+        <RevealOnScroll className="max-w-3xl mx-auto mb-5 flex items-start gap-2.5 text-[11px] text-white/35 leading-relaxed">
+          <Info className="w-3.5 h-3.5 text-white/30 flex-shrink-0 mt-0.5" />
+          <p>
+            <strong className="text-white/50">Nota metodológica:</strong> as métricas variam por país
+            conforme dado disponível (estrutural, total, residencial, comercial, etc.). A tag ao lado
+            de cada barra explicita o tipo de medição.
+          </p>
+        </RevealOnScroll>
+
         {/* Horizontal Bar Chart */}
         <motion.div
           ref={barsRef}
@@ -62,14 +75,17 @@ export function SlideGlobalLeaders() {
             return (
               <motion.div key={country.id} variants={itemVariants} className="group">
                 <div className="flex items-center gap-3 sm:gap-4">
-                  {/* Name */}
-                  <div className="w-28 sm:w-36 flex-shrink-0 text-right">
+                  {/* Name + tag */}
+                  <div className="w-32 sm:w-44 flex-shrink-0 text-right">
                     <span
-                      className={`text-xs sm:text-sm font-medium ${
+                      className={`text-xs sm:text-sm font-medium block ${
                         isBrazil ? "text-emerald-400" : "text-white/70"
                       }`}
                     >
                       {country.name}
+                    </span>
+                    <span className="text-[9px] uppercase tracking-wider text-white/30 block mt-0.5">
+                      {country.metricLabel}
                     </span>
                   </div>
 
@@ -103,6 +119,42 @@ export function SlideGlobalLeaders() {
               </motion.div>
             );
           })}
+        </motion.div>
+
+        {/* Fatos Marcantes */}
+        <RevealOnScroll className="mb-5 text-center">
+          <p className="text-xs uppercase tracking-[0.2em] text-white/40">
+            Fatos Marcantes
+          </p>
+        </RevealOnScroll>
+
+        <motion.div
+          ref={factsRef}
+          variants={containerVariants}
+          initial="hidden"
+          animate={factsInView ? "visible" : "hidden"}
+          className="grid grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-4 max-w-6xl mx-auto mb-16 lg:mb-20"
+        >
+          {STRIKING_FACTS.map((fact) => (
+            <motion.div
+              key={fact.title}
+              variants={itemVariants}
+              className="p-4 border border-white/8 bg-white/[0.02] rounded-sm hover:bg-white/[0.04] transition-colors"
+            >
+              <p className="font-heading text-xl sm:text-2xl font-extrabold text-white tracking-tight">
+                {fact.stat}
+              </p>
+              <p className="text-[11px] sm:text-xs text-white/70 mt-1.5 font-medium leading-tight">
+                {fact.title}
+              </p>
+              <p className="text-[10px] text-white/40 mt-1 leading-tight">
+                {fact.detail}
+              </p>
+              <p className="text-[9px] text-white/25 mt-2 uppercase tracking-wider">
+                {fact.source}
+              </p>
+            </motion.div>
+          ))}
         </motion.div>
 
         {/* sr-only table fallback */}
@@ -224,6 +276,11 @@ export function SlideGlobalLeaders() {
             <div className="w-16 h-px bg-white/10" />
           </div>
         </RevealOnScroll>
+
+        {/* Sources footer */}
+        <p className="text-[10px] text-white/25 text-center mt-10 max-w-2xl mx-auto leading-relaxed">
+          {SLIDE_SOURCES.leaders}
+        </p>
       </div>
     </SlideSection>
   );
