@@ -9,6 +9,8 @@ interface CountUpProps {
   suffix?: string;
   className?: string;
   duration?: number;
+  /** Casas decimais (default 0) */
+  decimals?: number;
 }
 
 export function CountUp({
@@ -17,6 +19,7 @@ export function CountUp({
   suffix = "",
   className,
   duration = 2000,
+  decimals = 0,
 }: CountUpProps) {
   const [count, setCount] = useState(0);
   const ref = useRef(null);
@@ -37,7 +40,8 @@ export function CountUp({
       // ease-out-expo
       const easeOutExpo = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
 
-      setCount(Math.floor(end * easeOutExpo));
+      const raw = end * easeOutExpo;
+      setCount(decimals > 0 ? parseFloat(raw.toFixed(decimals)) : Math.floor(raw));
 
       if (progress < 1) {
         requestAnimationFrame(animate);
@@ -52,7 +56,7 @@ export function CountUp({
   return (
     <p ref={ref} className={className}>
       {prefix}
-      {count}
+      {decimals > 0 ? count.toFixed(decimals) : count}
       {suffix}
     </p>
   );
