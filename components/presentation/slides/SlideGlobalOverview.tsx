@@ -1,5 +1,6 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import Image from "next/image";
 import { motion } from "motion/react";
 import { SlideSection } from "../ui/SlideSection";
@@ -9,7 +10,14 @@ import { REGIONAL_SHARES, MARKET_SIZE, TOP_COMPANIES, SLIDE_SOURCES } from "@/li
 import { containerVariants, itemVariants } from "@/lib/animation-variants";
 import { useInViewAnimation } from "@/hooks/useInViewAnimation";
 
+// react-simple-maps carregado client-only (usa D3 que não é SSR-safe)
+const GlobalAdoptionMap = dynamic(
+  () => import("@/components/presentation/GlobalAdoptionMap"),
+  { ssr: false }
+);
+
 export function SlideGlobalOverview() {
+  const { ref: mapRef, isInView: mapInView } = useInViewAnimation({ margin: "-10% 0px" });
   const { ref: regionsRef, isInView: regionsInView } = useInViewAnimation({ margin: "-10% 0px" });
 
   return (
@@ -30,7 +38,7 @@ export function SlideGlobalOverview() {
         </RevealOnScroll>
 
         {/* Hero Market Numbers */}
-        <RevealOnScroll delay={0.15} className="mb-16 lg:mb-20">
+        <RevealOnScroll delay={0.15} className="mb-12 lg:mb-16">
           <div className="flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-10">
             {/* Current */}
             <div className="text-center">
@@ -79,57 +87,56 @@ export function SlideGlobalOverview() {
           </div>
         </RevealOnScroll>
 
-        {/* Divider */}
-        <div className="w-16 h-px bg-black/10 mx-auto mb-12 lg:mb-16" />
+        {/* Global Adoption Map */}
+        <div ref={mapRef} className="mb-4">
+          <RevealOnScroll className="mb-4 text-center">
+            <p className="text-xs uppercase tracking-[0.2em] text-black/30">
+              Adoção Global — Passe o mouse sobre os países destacados
+            </p>
+          </RevealOnScroll>
+          <GlobalAdoptionMap isInView={mapInView} />
+        </div>
 
-        {/* Regional Share Cards */}
-        <RevealOnScroll className="mb-6 text-center">
-          <p className="text-xs uppercase tracking-[0.2em] text-black/30">
-            Participação por Região
-          </p>
-        </RevealOnScroll>
-
+        {/* Regional Share Legend (inline, compact) */}
         <motion.div
           ref={regionsRef}
           variants={containerVariants}
           initial="hidden"
           animate={regionsInView ? "visible" : "hidden"}
-          className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 max-w-4xl mx-auto"
+          className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 mb-6"
         >
           {REGIONAL_SHARES.map((region) => (
             <motion.div
               key={region.name}
               variants={itemVariants}
-              className="relative overflow-hidden rounded-sm border border-black/5 bg-white p-6 sm:p-8 text-center group hover:border-black/15 transition-colors"
+              className="flex items-center gap-2"
             >
-              {/* Accent bar */}
-              <div
-                className="absolute top-0 left-0 right-0 h-1"
+              <span
+                className="w-3 h-3 rounded-sm flex-shrink-0 border border-black/10"
                 style={{ backgroundColor: region.color === "#FFFFFF" ? "#000" : region.color }}
               />
-
-              <CountUp
-                end={region.value}
-                decimals={region.value % 1 !== 0 ? 1 : 0}
-                suffix="%"
-                className="font-heading text-3xl sm:text-4xl md:text-5xl font-extrabold text-black tracking-tight"
-              />
-              <p className="text-xs sm:text-sm text-black/50 mt-2 font-medium leading-tight">
+              <span className="text-xs sm:text-sm text-black/50 font-medium">
                 {region.name}
-              </p>
+              </span>
+              <span className="text-xs sm:text-sm text-black/80 font-bold tabular-nums">
+                {region.value}%
+              </span>
             </motion.div>
           ))}
         </motion.div>
 
         {/* Context line */}
-        <RevealOnScroll delay={0.3} className="mt-10 text-center">
+        <RevealOnScroll delay={0.3} className="text-center">
           <p className="text-sm sm:text-base text-black/40 max-w-lg mx-auto leading-relaxed">
             O segmento residencial responde por 44-50% do consumo total.
           </p>
         </RevealOnScroll>
 
+        {/* Divider */}
+        <div className="w-16 h-px bg-black/10 mx-auto my-12 lg:my-16" />
+
         {/* Top 5 Empresas Globais */}
-        <RevealOnScroll delay={0.35} className="mt-16 lg:mt-20">
+        <RevealOnScroll delay={0.35}>
           <div className="text-center mb-6">
             <p className="text-xs uppercase tracking-[0.2em] text-black/30 mb-2">
               Top 5 Empresas Globais

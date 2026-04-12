@@ -25,6 +25,8 @@ export interface CountryData {
   detail: string;
   /** Posição no mapa SVG (percentual) */
   mapPosition: { x: number; y: number };
+  /** ISO 3166-1 numérico — para match com TopoJSON countries-110m */
+  isoNumeric: string;
 }
 
 export interface RegionalShare {
@@ -97,6 +99,7 @@ export const COUNTRY_DATA: CountryData[] = [
     metricLabel: "pré-fabricado",
     detail: "Referência mundial em industrialização",
     mapPosition: { x: 52, y: 18 },
+    isoNumeric: "752",
   },
   {
     id: "uk",
@@ -108,6 +111,7 @@ export const COUNTRY_DATA: CountryData[] = [
     metricLabel: "estrutural",
     detail: "65-70% em edifícios multi-pavimentos",
     mapPosition: { x: 47, y: 22 },
+    isoNumeric: "826",
   },
   {
     id: "jp",
@@ -119,6 +123,7 @@ export const COUNTRY_DATA: CountryData[] = [
     metricLabel: "total",
     detail: "Material nº 1 por valor de construção",
     mapPosition: { x: 85, y: 35 },
+    isoNumeric: "392",
   },
   {
     id: "us",
@@ -130,6 +135,7 @@ export const COUNTRY_DATA: CountryData[] = [
     metricLabel: "comercial",
     detail: "US$ 10,9B projetado para 2030",
     mapPosition: { x: 20, y: 35 },
+    isoNumeric: "840",
   },
   {
     id: "au",
@@ -141,6 +147,7 @@ export const COUNTRY_DATA: CountryData[] = [
     metricLabel: "residencial",
     detail: "Até 30% em algumas regiões",
     mapPosition: { x: 85, y: 72 },
+    isoNumeric: "036",
   },
   {
     id: "ar",
@@ -152,6 +159,7 @@ export const COUNTRY_DATA: CountryData[] = [
     metricLabel: "total",
     detail: "Crescimento de 91% entre 2005-2023",
     mapPosition: { x: 30, y: 75 },
+    isoNumeric: "032",
   },
   {
     id: "cl",
@@ -163,6 +171,7 @@ export const COUNTRY_DATA: CountryData[] = [
     metricLabel: "proxy drywall",
     detail: "Líder LatAm em construção industrializada",
     mapPosition: { x: 27, y: 72 },
+    isoNumeric: "152",
   },
   {
     id: "nz",
@@ -174,6 +183,7 @@ export const COUNTRY_DATA: CountryData[] = [
     metricLabel: "residencial",
     detail: "Norma NASH Part 2:2019 reconhecida",
     mapPosition: { x: 92, y: 78 },
+    isoNumeric: "554",
   },
   {
     id: "ca",
@@ -185,6 +195,7 @@ export const COUNTRY_DATA: CountryData[] = [
     metricLabel: "share global",
     detail: "US$ 1,96B projetado para 2030",
     mapPosition: { x: 18, y: 22 },
+    isoNumeric: "124",
   },
   {
     id: "br",
@@ -196,6 +207,7 @@ export const COUNTRY_DATA: CountryData[] = [
     metricLabel: "share global",
     detail: "27,7% de crescimento LSF em 2023",
     mapPosition: { x: 33, y: 65 },
+    isoNumeric: "076",
   },
 ];
 
