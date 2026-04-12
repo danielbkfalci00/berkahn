@@ -39,6 +39,8 @@ export interface SpeedRecord {
   prefix?: string;
   label: string;
   detail: string;
+  image?: string;       // path para imagem de fundo do card (F2)
+  imageCredit?: string; // atribuição CC/autor da imagem
 }
 
 export interface SustainabilityStat {
@@ -59,6 +61,7 @@ export interface TopCompany {
   flag: string;
   share?: string;       // "~8% market share" quando disponível
   note?: string;        // contexto adicional
+  logo?: string;        // path para logo WebP (F2)
 }
 
 export interface StrikingFact {
@@ -205,6 +208,7 @@ export const TOP_COMPANIES: TopCompany[] = [
     flag: "🇦🇺",
     share: "~8%",
     note: "Líder global; marca TRUECORE®",
+    logo: "/images/apresentacao/empresas-globais/bluescope.webp",
   },
   {
     name: "Nakayama Steel Works",
@@ -217,6 +221,7 @@ export const TOP_COMPANIES: TopCompany[] = [
     country: "Estados Unidos",
     flag: "🇺🇸",
     note: "Maior fabricante CFS dos EUA",
+    logo: "/images/apresentacao/empresas-globais/clarkdietrich.webp",
   },
   {
     name: "Jinggong Steel",
@@ -253,7 +258,32 @@ export const MARKET_SIZE = {
 
 // ─── Recordes de velocidade ─────────────────────────────────────
 
+// Ordenados narrativa e visualmente (com imagens primeiro, sem imagem depois)
 export const SPEED_RECORDS: SpeedRecord[] = [
+  {
+    stat: 13,
+    suffix: " meses",
+    label: "Empire State Building",
+    detail: "102 andares, 57.000t de aço (1931) — Nova York",
+    image: "/images/apresentacao/recordes-globais/empire-state.webp",
+    imageCredit: "dllu / Wikimedia Commons (CC BY-SA 4.0)",
+  },
+  {
+    stat: 442,
+    suffix: " m",
+    label: "Willis Tower",
+    detail: "Edifício em aço mais alto — 108 andares, 78.000t (Chicago, 1974)",
+    image: "/images/apresentacao/recordes-globais/willis-tower.webp",
+    imageCredit: "Wikimedia Commons (CC BY-SA 3.0)",
+  },
+  {
+    stat: 42,
+    suffix: " mil t",
+    label: "Bird's Nest",
+    detail: "Maior estrutura em aço do mundo — Pequim 2008",
+    image: "/images/apresentacao/recordes-globais/birds-nest.webp",
+    imageCredit: "Wikimedia Commons (CC BY-SA 3.0)",
+  },
   {
     stat: 10,
     suffix: " andares",
@@ -265,12 +295,6 @@ export const SPEED_RECORDS: SpeedRecord[] = [
     suffix: " andares",
     label: "em 19 dias",
     detail: "Mini Sky City, China (2015)",
-  },
-  {
-    stat: 13,
-    suffix: " meses",
-    label: "Empire State Building",
-    detail: "102 andares, 57.000t de aço (1931)",
   },
 ];
 

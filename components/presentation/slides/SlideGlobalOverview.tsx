@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { motion } from "motion/react";
 import { SlideSection } from "../ui/SlideSection";
 import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
@@ -142,9 +143,25 @@ export function SlideGlobalOverview() {
             {TOP_COMPANIES.map((company) => (
               <div
                 key={company.name}
-                className="p-4 border border-black/5 bg-white rounded-sm text-center hover:border-black/15 hover:shadow-luxury-sm transition-all"
+                className="p-4 border border-black/5 bg-white rounded-sm text-center hover:border-black/15 hover:shadow-luxury-sm transition-all group"
               >
-                <div className="text-2xl mb-2" aria-hidden="true">{company.flag}</div>
+                {/* Logo or flag fallback */}
+                <div className="relative h-12 sm:h-14 mb-3 flex items-center justify-center">
+                  {company.logo ? (
+                    <Image
+                      src={company.logo}
+                      alt={`Logo ${company.name}`}
+                      fill
+                      className="object-contain grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500"
+                      sizes="(max-width: 640px) 40vw, 20vw"
+                    />
+                  ) : (
+                    <div className="text-3xl opacity-60 group-hover:opacity-100 transition-opacity" aria-hidden="true">
+                      {company.flag}
+                    </div>
+                  )}
+                </div>
+
                 <p className="font-heading text-xs sm:text-sm font-bold text-black leading-tight">
                   {company.name}
                 </p>

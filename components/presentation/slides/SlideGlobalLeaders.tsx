@@ -4,6 +4,7 @@ import { motion } from "motion/react";
 import { SlideSection } from "../ui/SlideSection";
 import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
 import { CountUp } from "@/components/animations/CountUp";
+import Image from "next/image";
 import {
   COUNTRY_RANKING,
   SPEED_RECORDS,
@@ -13,7 +14,10 @@ import {
 } from "@/lib/global-steel-frame-data";
 import { containerVariants, itemVariants } from "@/lib/animation-variants";
 import { useInViewAnimation } from "@/hooks/useInViewAnimation";
-import { Recycle, Droplets, Trash2, Building2, Timer, Info } from "lucide-react";
+import { Recycle, Droplets, Trash2, Building2, Info } from "lucide-react";
+
+const shimmerPlaceholder =
+  "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMTExIi8+PC9zdmc+";
 
 const sustainabilityIcons: Record<string, React.ComponentType<{ className?: string }>> = {
   recycle: Recycle,
@@ -21,7 +25,6 @@ const sustainabilityIcons: Record<string, React.ComponentType<{ className?: stri
   "trash-2": Trash2,
 };
 
-const recordIcons = [Building2, Building2, Timer];
 
 export function SlideGlobalLeaders() {
   const { ref: barsRef, isInView: barsInView } = useInViewAnimation({ margin: "-10% 0px" });
@@ -176,97 +179,120 @@ export function SlideGlobalLeaders() {
           </table>
         </div>
 
-        {/* Two-column: Records + Sustainability */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 max-w-5xl mx-auto">
+        {/* Recordes de Velocidade — full width grid */}
+        <RevealOnScroll className="mb-5 text-center">
+          <p className="text-xs uppercase tracking-[0.2em] text-white/40">
+            Recordes de Velocidade & Escala
+          </p>
+        </RevealOnScroll>
 
-          {/* Speed Records */}
-          <div>
-            <RevealOnScroll className="mb-5">
-              <p className="text-xs uppercase tracking-[0.2em] text-white/40">
-                Recordes de Velocidade
-              </p>
-            </RevealOnScroll>
+        <motion.div
+          ref={recordsRef}
+          variants={containerVariants}
+          initial="hidden"
+          animate={recordsInView ? "visible" : "hidden"}
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 max-w-6xl mx-auto mb-12 lg:mb-16"
+        >
+          {SPEED_RECORDS.map((record) => {
+            const hasImage = !!record.image;
 
-            <motion.div
-              ref={recordsRef}
-              variants={containerVariants}
-              initial="hidden"
-              animate={recordsInView ? "visible" : "hidden"}
-              className="space-y-4"
-            >
-              {SPEED_RECORDS.map((record, i) => {
-                const Icon = recordIcons[i];
-                return (
-                  <motion.div
-                    key={record.label}
-                    variants={itemVariants}
-                    className="flex items-center gap-4 p-4 border border-white/8 bg-white/[0.02] rounded-sm"
-                  >
-                    <Icon className="w-5 h-5 text-white/25 flex-shrink-0" />
-                    <div className="flex-1">
-                      <div className="flex items-baseline gap-1.5">
-                        <CountUp
-                          end={record.stat}
-                          suffix={record.suffix}
-                          className="font-heading text-xl sm:text-2xl font-extrabold text-white tracking-tight"
-                        />
-                        <span className="text-sm text-white/50">{record.label}</span>
-                      </div>
-                      <p className="text-[10px] sm:text-xs text-white/30 mt-0.5">{record.detail}</p>
-                    </div>
-                  </motion.div>
-                );
-              })}
-            </motion.div>
-          </div>
-
-          {/* Sustainability */}
-          <div>
-            <RevealOnScroll className="mb-5">
-              <p className="text-xs uppercase tracking-[0.2em] text-white/40">
-                Sustentabilidade
-              </p>
-            </RevealOnScroll>
-
-            <motion.div
-              ref={sustainRef}
-              variants={containerVariants}
-              initial="hidden"
-              animate={sustainInView ? "visible" : "hidden"}
-              className="space-y-4"
-            >
-              {SUSTAINABILITY_STATS.map((stat) => {
-                const Icon = sustainabilityIcons[stat.icon];
-                return (
-                  <motion.div
-                    key={stat.label}
-                    variants={itemVariants}
-                    className="flex items-center gap-4 p-4 border border-white/8 bg-white/[0.02] rounded-sm"
-                  >
-                    {Icon && <Icon className="w-5 h-5 text-white/25 flex-shrink-0" />}
-                    <div>
-                      <CountUp
-                        end={stat.stat}
-                        suffix={stat.suffix}
-                        className="font-heading text-xl sm:text-2xl font-extrabold text-white tracking-tight"
-                      />
-                      <p className="text-[10px] sm:text-xs text-white/50 mt-0.5">{stat.label}</p>
-                    </div>
-                  </motion.div>
-                );
-              })}
-
-              {/* Extra: steel recyclability */}
-              <motion.p
+            return (
+              <motion.div
+                key={record.label}
                 variants={itemVariants}
-                className="text-xs text-white/30 leading-relaxed pl-9"
+                className="relative aspect-[4/3] overflow-hidden border border-white/10 rounded-sm group"
               >
-                O aço é o material mais reciclado do planeta — 92% de conteúdo reciclado
-                na América do Norte, 99% de taxa de recuperação em demolições no Reino Unido.
-              </motion.p>
-            </motion.div>
-          </div>
-        </div>
+                {/* Background image or dark fallback */}
+                {hasImage ? (
+                  <>
+                    <Image
+                      src={record.image!}
+                      alt={record.label}
+                      fill
+                      className="object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700"
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      placeholder="blur"
+                      blurDataURL={shimmerPlaceholder}
+                    />
+                    {/* Dark gradient overlay for text legibility */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-black/30" />
+                  </>
+                ) : (
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/[0.03] to-white/[0.01]">
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <Building2 className="w-20 h-20 text-white/10" />
+                    </div>
+                  </div>
+                )}
+
+                {/* Text content */}
+                <div className="absolute inset-x-0 bottom-0 p-5 lg:p-6">
+                  <div className="flex items-baseline gap-1.5 flex-wrap">
+                    <CountUp
+                      end={record.stat}
+                      suffix={record.suffix}
+                      className="font-heading text-3xl sm:text-4xl font-extrabold text-white tracking-tight drop-shadow-lg"
+                    />
+                  </div>
+                  <p className="text-sm sm:text-base text-white/90 mt-1 font-medium drop-shadow">
+                    {record.label}
+                  </p>
+                  <p className="text-[10px] sm:text-xs text-white/60 mt-1 drop-shadow leading-tight">
+                    {record.detail}
+                  </p>
+                  {record.imageCredit && (
+                    <p className="text-[9px] text-white/30 mt-2 uppercase tracking-wider">
+                      {record.imageCredit}
+                    </p>
+                  )}
+                </div>
+              </motion.div>
+            );
+          })}
+        </motion.div>
+
+        {/* Sustentabilidade — strip horizontal abaixo */}
+        <RevealOnScroll className="mb-5 text-center">
+          <p className="text-xs uppercase tracking-[0.2em] text-white/40">
+            Sustentabilidade
+          </p>
+        </RevealOnScroll>
+
+        <motion.div
+          ref={sustainRef}
+          variants={containerVariants}
+          initial="hidden"
+          animate={sustainInView ? "visible" : "hidden"}
+          className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 max-w-4xl mx-auto mb-6"
+        >
+          {SUSTAINABILITY_STATS.map((stat) => {
+            const Icon = sustainabilityIcons[stat.icon];
+            return (
+              <motion.div
+                key={stat.label}
+                variants={itemVariants}
+                className="flex items-center gap-4 p-5 border border-white/8 bg-white/[0.02] rounded-sm"
+              >
+                {Icon && <Icon className="w-6 h-6 text-white/30 flex-shrink-0" />}
+                <div>
+                  <CountUp
+                    end={stat.stat}
+                    suffix={stat.suffix}
+                    className="font-heading text-2xl sm:text-3xl font-extrabold text-white tracking-tight"
+                  />
+                  <p className="text-[10px] sm:text-xs text-white/50 mt-0.5">{stat.label}</p>
+                </div>
+              </motion.div>
+            );
+          })}
+        </motion.div>
+
+        <RevealOnScroll className="text-center max-w-3xl mx-auto">
+          <p className="text-xs text-white/30 leading-relaxed">
+            O aço é o material mais reciclado do planeta — 92% de conteúdo reciclado
+            na América do Norte, 99% de taxa de recuperação em demolições no Reino Unido.
+          </p>
+        </RevealOnScroll>
 
         {/* Decorative Separator */}
         <RevealOnScroll delay={0.4} className="mt-16">

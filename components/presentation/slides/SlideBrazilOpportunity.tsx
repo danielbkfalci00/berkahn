@@ -1,6 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import Image from "next/image";
 import { motion } from "motion/react";
 import { SlideSection } from "../ui/SlideSection";
 import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
@@ -22,12 +23,35 @@ const BrazilGrowthChart = dynamic(
   { ssr: false }
 );
 
+// Obras Berkahn que comprovam o movimento no Brasil
+const BERKAHN_WORKS = [
+  {
+    image: "/images/apresentacao/casa-santa-cristina/casa-santa-cristina-cover.webp",
+    title: "Casa Santa Cristina",
+    location: "São Paulo · 376 m²",
+  },
+  {
+    image: "/images/apresentacao/casa-laranjeiras/casa-laranjeiras-fachada-frontal.webp",
+    title: "Casa Laranjeiras",
+    location: "São Paulo · LSF premium",
+  },
+  {
+    image: "/images/apresentacao/Vila-da-mata/vila-da-mata-1.webp",
+    title: "Vila da Mata",
+    location: "Condomínio residencial",
+  },
+];
+
+const shimmerPlaceholder =
+  "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZWVlIi8+PC9zdmc+";
+
 export function SlideBrazilOpportunity() {
   const { ref: statsRef, isInView: statsInView } = useInViewAnimation({ margin: "-10% 0px" });
   const { ref: chartRef, isInView: chartInView } = useInViewAnimation({ margin: "-10% 0px" });
   const { ref: compareRef, isInView: compareInView } = useInViewAnimation({ margin: "-10% 0px" });
   const { ref: factsRef, isInView: factsInView } = useInViewAnimation({ margin: "-10% 0px" });
   const { ref: companiesRef, isInView: companiesInView } = useInViewAnimation({ margin: "-10% 0px" });
+  const { ref: worksRef, isInView: worksInView } = useInViewAnimation({ margin: "-10% 0px" });
 
   return (
     <SlideSection className="py-16 lg:py-24">
@@ -267,7 +291,7 @@ export function SlideBrazilOpportunity() {
         </motion.div>
 
         {/* McKinsey insight */}
-        <RevealOnScroll delay={0.15} className="text-center max-w-2xl mx-auto mb-12">
+        <RevealOnScroll delay={0.15} className="text-center max-w-2xl mx-auto mb-16">
           <div className="inline-block border-l-2 border-black/20 pl-5 py-2 text-left">
             <p className="font-heading text-base sm:text-lg text-black/70 leading-relaxed italic">
               &ldquo;{MCKINSEY_INSIGHT.quote}&rdquo;
@@ -277,6 +301,53 @@ export function SlideBrazilOpportunity() {
             </p>
           </div>
         </RevealOnScroll>
+
+        {/* Obras Berkahn — prova visual */}
+        <RevealOnScroll className="mb-5 text-center">
+          <p className="text-xs uppercase tracking-[0.2em] text-black/30">
+            O Brasil Berkahn Já Está Construindo
+          </p>
+          <p className="text-sm text-black/40 mt-2 max-w-xl mx-auto">
+            Obras residenciais de alto padrão em steel frame, entregues com precisão industrial.
+          </p>
+        </RevealOnScroll>
+
+        <motion.div
+          ref={worksRef}
+          variants={containerVariants}
+          initial="hidden"
+          animate={worksInView ? "visible" : "hidden"}
+          className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-5 max-w-5xl mx-auto mb-16 lg:mb-20"
+        >
+          {BERKAHN_WORKS.map((work) => (
+            <motion.div
+              key={work.title}
+              variants={itemVariants}
+              className="relative aspect-[4/3] overflow-hidden rounded-sm group"
+            >
+              <Image
+                src={work.image}
+                alt={work.title}
+                fill
+                className="object-cover group-hover:scale-105 transition-transform duration-700"
+                sizes="(max-width: 768px) 100vw, 33vw"
+                placeholder="blur"
+                blurDataURL={shimmerPlaceholder}
+              />
+              {/* Gradient overlay bottom */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+              {/* Caption */}
+              <div className="absolute inset-x-0 bottom-0 p-4">
+                <p className="font-heading text-base sm:text-lg font-bold text-white drop-shadow-lg">
+                  {work.title}
+                </p>
+                <p className="text-[11px] sm:text-xs text-white/80 mt-0.5 drop-shadow">
+                  {work.location}
+                </p>
+              </div>
+            </motion.div>
+          ))}
+        </motion.div>
 
         {/* Closing statement — brand font, not Caveat */}
         <RevealOnScroll delay={0.2} className="text-center max-w-2xl mx-auto">
