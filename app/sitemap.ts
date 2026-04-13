@@ -9,16 +9,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // 1. Static pages
   const staticPages: MetadataRoute.Sitemap = [
     { url: BASE_URL, lastModified: new Date(), changeFrequency: "weekly", priority: 1.0 },
-    { url: `${BASE_URL}/residencial`, changeFrequency: "monthly", priority: 0.9 },
-    { url: `${BASE_URL}/comercial-industrial`, changeFrequency: "monthly", priority: 0.9 },
-    { url: `${BASE_URL}/lsf`, changeFrequency: "monthly", priority: 0.8 },
-    { url: `${BASE_URL}/servicos`, changeFrequency: "monthly", priority: 0.8 },
-    { url: `${BASE_URL}/atualidades`, changeFrequency: "weekly", priority: 0.8 },
-    { url: `${BASE_URL}/portfolio`, changeFrequency: "monthly", priority: 0.7 },
-    { url: `${BASE_URL}/empresa`, changeFrequency: "monthly", priority: 0.7 },
-    { url: `${BASE_URL}/perguntas-frequentes`, changeFrequency: "monthly", priority: 0.6 },
-    { url: `${BASE_URL}/privacidade`, changeFrequency: "yearly", priority: 0.3 },
-    { url: `${BASE_URL}/termos-de-uso`, changeFrequency: "yearly", priority: 0.3 },
+    { url: `${BASE_URL}/residencial`, lastModified: new Date('2026-03-01'), changeFrequency: "monthly", priority: 0.9 },
+    { url: `${BASE_URL}/comercial-industrial`, lastModified: new Date('2026-03-01'), changeFrequency: "monthly", priority: 0.9 },
+    { url: `${BASE_URL}/lsf`, lastModified: new Date('2026-03-01'), changeFrequency: "monthly", priority: 0.8 },
+    { url: `${BASE_URL}/servicos`, lastModified: new Date('2026-03-01'), changeFrequency: "monthly", priority: 0.8 },
+    { url: `${BASE_URL}/atualidades`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.8 },
+    { url: `${BASE_URL}/portfolio`, lastModified: new Date('2026-03-01'), changeFrequency: "monthly", priority: 0.7 },
+    { url: `${BASE_URL}/empresa`, lastModified: new Date('2026-03-01'), changeFrequency: "monthly", priority: 0.7 },
+    { url: `${BASE_URL}/perguntas-frequentes`, lastModified: new Date('2026-03-01'), changeFrequency: "monthly", priority: 0.6 },
+    { url: `${BASE_URL}/privacidade`, lastModified: new Date('2025-06-01'), changeFrequency: "yearly", priority: 0.3 },
+    { url: `${BASE_URL}/termos-de-uso`, lastModified: new Date('2025-06-01'), changeFrequency: "yearly", priority: 0.3 },
   ];
 
   // 2. Dynamic articles from Supabase

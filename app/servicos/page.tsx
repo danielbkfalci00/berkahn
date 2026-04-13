@@ -22,7 +22,10 @@ export const metadata: Metadata = {
     description: "Construção residencial, comercial e industrial em Light Steel Frame.",
     images: ["/images/Compartilhamento/og-image.webp"],
   },
-  alternates: { canonical: "/servicos" },
+  alternates: {
+    canonical: "/servicos",
+    languages: { "pt-BR": "https://www.berkahn.com.br/servicos" },
+  },
 };
 import Link from "next/link";
 import { HeroPage } from "@/components/sections/HeroPage";

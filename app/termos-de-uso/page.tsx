@@ -22,7 +22,10 @@ export const metadata = {
       "Termos de Uso do site da Construtora Berkahn. Conheça as condições de acesso e utilização do nosso site.",
     images: ["/images/Compartilhamento/og-image.webp"],
   },
-  alternates: { canonical: "/termos-de-uso" },
+  alternates: {
+    canonical: "/termos-de-uso",
+    languages: { "pt-BR": "https://www.berkahn.com.br/termos-de-uso" },
+  },
 };
 
 function CheckList({ items }: { items: string[] }) {

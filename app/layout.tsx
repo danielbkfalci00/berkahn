@@ -38,6 +38,9 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "Berkahn" }],
   metadataBase: new URL("https://www.berkahn.com.br"),
+  verification: {
+    google: "Kb1EMhoRQmezUUffRNIlRcd_C-cyyepqzLpiexr71f4",
+  },
   openGraph: {
     title: "Construtora Berkahn",
     description: "Erguendo o amanhã. Construtora especializada em projetos de Steel Frame.",
@@ -91,6 +94,7 @@ export default function RootLayout({
         <link rel="preconnect" href="https://sfqaknxomxwmviarpwfy.supabase.co" />
         <link rel="preconnect" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://images.unsplash.com" />
+        <link rel="alternate" type="application/rss+xml" title="Blog Berkahn - Atualidades" href="/feed.xml" />
       </head>
       <body>
         <CookieConsentProvider>
@@ -173,8 +177,15 @@ export default function RootLayout({
                 },
                 potentialAction: {
                   "@type": "SearchAction",
-                  target: "https://www.berkahn.com.br/perguntas-frequentes?q={search_term_string}",
-                  "query-input": "required name=search_term_string",
+                  target: {
+                    "@type": "EntryPoint",
+                    urlTemplate: "https://www.berkahn.com.br/perguntas-frequentes?q={search_term_string}",
+                  },
+                  "query-input": {
+                    "@type": "PropertyValueSpecification",
+                    valueRequired: true,
+                    valueName: "search_term_string",
+                  },
                 },
               },
             ],

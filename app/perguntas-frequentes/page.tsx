@@ -34,7 +34,10 @@ export const metadata = {
       "Respostas sobre custo, prazo, financiamento, durabilidade, manutenção e processo construtivo em Light Steel Frame. Tudo o que você precisa saber antes de construir.",
     images: ["/images/Compartilhamento/og-image.webp"],
   },
-  alternates: { canonical: "/perguntas-frequentes" },
+  alternates: {
+    canonical: "/perguntas-frequentes",
+    languages: { "pt-BR": "https://www.berkahn.com.br/perguntas-frequentes" },
+  },
 };
 
 const EXPLORE_CARDS = [

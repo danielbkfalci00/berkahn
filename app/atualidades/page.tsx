@@ -22,7 +22,10 @@ export const metadata: Metadata = {
       "Artigos e guias sobre Steel Frame: custos, prazos, comparativos e tendências da construção industrializada. Blog da Berkahn.",
     type: "website",
   },
-  alternates: { canonical: "/atualidades" },
+  alternates: {
+    canonical: "/atualidades",
+    languages: { "pt-BR": "https://www.berkahn.com.br/atualidades" },
+  },
 };
 
 // Revalidate every 60 seconds to fetch new posts from Supabase
@@ -52,6 +55,34 @@ export default async function AtualidadePage() {
 
   return (
     <>
+      {/* ItemList structured data for rich snippets */}
+      <script type="application/ld+json">
+        {JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "CollectionPage",
+          name: "Atualidades | Berkahn Steel Frame",
+          description: "Artigos e guias sobre Steel Frame: custos, prazos, comparativos e tendências da construção industrializada.",
+          url: "https://www.berkahn.com.br/atualidades",
+          mainEntity: {
+            "@type": "ItemList",
+            numberOfItems: supabasePosts.length,
+            itemListElement: supabasePosts.map((post, index) => ({
+              "@type": "ListItem",
+              position: index + 1,
+              item: {
+                "@type": "BlogPosting",
+                headline: post.title,
+                description: post.excerpt,
+                url: `https://www.berkahn.com.br/atualidades/${post.slug}`,
+                image: post.cover_image || undefined,
+                datePublished: post.published_at || undefined,
+                author: { "@type": "Person", name: post.author },
+              },
+            })),
+          },
+        })}
+      </script>
+
       <div className="relative">
         <Breadcrumb
           items={[{ name: "Atualidades", href: "/atualidades" }]}

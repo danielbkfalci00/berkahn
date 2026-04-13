@@ -10,8 +10,13 @@ export default function robots(): MetadataRoute.Robots {
       },
       {
         // Block training-only crawlers (no search/citation value)
-        userAgent: "CCBot",
+        userAgent: ["CCBot", "GPTBot", "ClaudeBot", "Google-Extended"],
         disallow: "/",
+      },
+      {
+        // Explicitly allow AI search bots (contribute to citations/visibility)
+        userAgent: ["OAI-SearchBot", "Claude-SearchBot", "PerplexityBot"],
+        allow: "/",
       },
     ],
     sitemap: "https://www.berkahn.com.br/sitemap.xml",

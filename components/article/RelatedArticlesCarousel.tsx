@@ -15,13 +15,15 @@ import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
 interface RelatedArticlesCarouselProps {
   currentSlug: string;
   currentCategory: string;
+  posts?: BlogPost[];
 }
 
 export function RelatedArticlesCarousel({
   currentSlug,
   currentCategory,
+  posts,
 }: RelatedArticlesCarouselProps) {
-  // Lógica de filtro inteligente
+  // Lógica de filtro inteligente (usada apenas quando posts externos não são fornecidos)
   const getRelatedArticles = (): BlogPost[] => {
     // 1. Filtrar artigos da mesma categoria (exceto atual)
     const sameCategory = blogPosts.filter(
@@ -43,7 +45,7 @@ export function RelatedArticlesCarousel({
     return related.slice(0, 4);
   };
 
-  const relatedArticles = getRelatedArticles();
+  const relatedArticles = posts ?? getRelatedArticles();
 
   // Se não houver artigos relacionados, não renderizar
   if (relatedArticles.length === 0) return null;

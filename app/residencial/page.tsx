@@ -54,7 +54,10 @@ export const metadata = {
       "Construção residencial com velocidade e precisão industrial. Construção nova, reforma ou ampliação com Light Steel Frame: obra rápida, limpa e com orçamento previsível.",
     images: ["/images/Compartilhamento/og-image.webp"],
   },
-  alternates: { canonical: "/residencial" },
+  alternates: {
+    canonical: "/residencial",
+    languages: { "pt-BR": "https://www.berkahn.com.br/residencial" },
+  },
 };
 
 export default function ResidencialPage() {

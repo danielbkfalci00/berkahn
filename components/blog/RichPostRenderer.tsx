@@ -277,8 +277,13 @@ function renderMarkdown(content: string): string {
     .replace(/\*(.*?)\*/gim, '<em>$1</em>')
     // Inline code
     .replace(/`([^`]+)`/gim, '<code class="bg-neutral-100 px-1 py-0.5 rounded text-sm font-mono">$1</code>')
-    // Links
-    .replace(/\[([^\]]+)\]\(([^)]+)\)/gim, '<a href="$2" class="text-neutral-900 underline hover:text-neutral-600" target="_blank" rel="noopener noreferrer">$1</a>')
+    // Links (internal links stay in same tab, external links open in new tab)
+    .replace(/\[([^\]]+)\]\(([^)]+)\)/gim, (_match: string, text: string, url: string) => {
+      const isInternal = url.startsWith('/');
+      return isInternal
+        ? `<a href="${url}" class="text-neutral-900 underline hover:text-neutral-600">${text}</a>`
+        : `<a href="${url}" class="text-neutral-900 underline hover:text-neutral-600" target="_blank" rel="noopener noreferrer">${text}</a>`;
+    })
     // Images
     .replace(/!\[([^\]]*)\]\(([^)]+)\)/gim, '<figure class="my-8"><img src="$2" alt="$1" class="rounded-lg w-full" loading="lazy" /><figcaption class="text-sm text-neutral-500 mt-2 text-center">$1</figcaption></figure>')
     // Blockquotes

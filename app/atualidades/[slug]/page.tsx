@@ -9,7 +9,9 @@ import { getArticleBySlug, richArticles } from "@/data/articles/steel-frame-futu
 import { ArticleContent } from "./ArticleContent";
 import { RichPostRenderer } from "@/components/blog/RichPostRenderer";
 import { AnswerSummary } from "@/components/article/AnswerSummary";
+import { RelatedArticlesCarousel } from "@/components/article/RelatedArticlesCarousel";
 import type { Post } from "@/types/admin";
+import type { BlogPost } from "@/types/blog";
 
 interface ArticlePageProps {
   params: Promise<{ slug: string }>;
@@ -95,7 +97,10 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
         description: post.excerpt,
         images: post.cover_image ? [post.cover_image] : [],
       },
-      alternates: { canonical: `/atualidades/${slug}` },
+      alternates: {
+        canonical: `/atualidades/${slug}`,
+        languages: { "pt-BR": `https://www.berkahn.com.br/atualidades/${slug}` },
+      },
     };
   }
 
@@ -126,7 +131,10 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
       description: article.excerpt,
       images: [article.heroImage],
     },
-    alternates: { canonical: `/atualidades/${slug}` },
+    alternates: {
+      canonical: `/atualidades/${slug}`,
+      languages: { "pt-BR": `https://www.berkahn.com.br/atualidades/${slug}` },
+    },
   };
 }
 
@@ -141,6 +149,42 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
     if (post.cover_image) {
       preload(post.cover_image, { as: "image", fetchPriority: "high" });
     }
+
+    // Fetch related posts for internal linking (SEO + AEO)
+    const supabase = await createClient();
+    const { data: sameCategoryPosts } = await supabase
+      .from("posts")
+      .select("id, slug, title, excerpt, cover_image, category, author, published_at, read_time")
+      .eq("status", "published")
+      .eq("category", post.category)
+      .neq("slug", slug)
+      .order("published_at", { ascending: false })
+      .limit(4);
+
+    let relatedRaw = sameCategoryPosts ?? [];
+    if (relatedRaw.length < 3) {
+      const { data: recentPosts } = await supabase
+        .from("posts")
+        .select("id, slug, title, excerpt, cover_image, category, author, published_at, read_time")
+        .eq("status", "published")
+        .neq("slug", slug)
+        .neq("category", post.category)
+        .order("published_at", { ascending: false })
+        .limit(4 - relatedRaw.length);
+      relatedRaw = [...relatedRaw, ...(recentPosts ?? [])];
+    }
+
+    const relatedPosts: BlogPost[] = relatedRaw.map((p) => ({
+      id: p.id,
+      slug: p.slug,
+      title: p.title,
+      excerpt: p.excerpt,
+      image: p.cover_image || "/images/Compartilhamento/og-image.webp",
+      category: p.category,
+      author: p.author,
+      date: p.published_at ? new Date(p.published_at).toLocaleDateString("pt-BR") : "",
+      readTime: `${p.read_time} min`,
+    }));
 
     // Use new RichPostRenderer for Supabase posts
     return (
@@ -230,6 +274,13 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
             )}
             <RichPostRenderer post={post} />
             <AuthorBio authorName={post.author} />
+            {relatedPosts.length > 0 && (
+              <RelatedArticlesCarousel
+                currentSlug={slug}
+                currentCategory={post.category}
+                posts={relatedPosts}
+              />
+            )}
           </div>
         </section>
       </main>

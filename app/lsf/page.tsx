@@ -30,7 +30,10 @@ export const metadata = {
       "Sistema construtivo Light Steel Frame: construção industrializada com velocidade, sustentabilidade e eficiência energética. Alta performance com precisão milimétrica.",
     images: ["/images/Compartilhamento/og-image.webp"],
   },
-  alternates: { canonical: "/lsf" },
+  alternates: {
+    canonical: "/lsf",
+    languages: { "pt-BR": "https://www.berkahn.com.br/lsf" },
+  },
 };
 
 export default function LSFPage() {
