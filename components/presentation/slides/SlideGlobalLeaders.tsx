@@ -51,6 +51,8 @@ export function SlideGlobalLeaders() {
           </p>
         </RevealOnScroll>
 
+        {false && (
+        <>
         {/* Methodology note */}
         <RevealOnScroll className="max-w-3xl mx-auto mb-5 flex items-start gap-2.5 text-[11px] text-white/35 leading-relaxed">
           <Info className="w-3.5 h-3.5 text-white/30 flex-shrink-0 mt-0.5" />
@@ -159,6 +161,8 @@ export function SlideGlobalLeaders() {
             </motion.div>
           ))}
         </motion.div>
+        </>
+        )}
 
         {/* sr-only table fallback */}
         <div className="sr-only">
@@ -179,6 +183,8 @@ export function SlideGlobalLeaders() {
           </table>
         </div>
 
+        {false && (
+        <>
         {/* Recordes de Velocidade — full width grid */}
         <RevealOnScroll className="mb-5 text-center">
           <p className="text-xs uppercase tracking-[0.2em] text-white/40">
@@ -293,6 +299,8 @@ export function SlideGlobalLeaders() {
             na América do Norte, 99% de taxa de recuperação em demolições no Reino Unido.
           </p>
         </RevealOnScroll>
+        </>
+        )}
 
         {/* Decorative Separator */}
         <RevealOnScroll delay={0.4} className="mt-16">

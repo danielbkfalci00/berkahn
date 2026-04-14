@@ -103,6 +103,14 @@ Analise o conteúdo e identifique seções que podem se beneficiar de componente
    - Exemplo: artigo sobre financiamento → CTA "Consultar Financiamento" (dialog, residencial)
    - Exemplo: artigo informacional → CTA "Ver Nossos Projetos" (link, /servicos)
 
+9. **FAQSection** - Perguntas frequentes (**OBRIGATÓRIO em todo artigo**)
+   - Mínimo 3 perguntas, máximo 7
+   - Perguntas baseadas na intenção de busca real ("O que é X?", "Quanto custa X?", "X vale a pena?")
+   - Respostas assertivas de 2-4 frases — sem hedging ("pode ser", "talvez", "depende", "em alguns casos")
+   - Cobrir dúvidas NÃO respondidas no corpo do artigo (complementar, não repetir)
+   - Posicionar com `[FAQ:faq-id]` antes do `[CTA:cta-id]` final
+   - **Por quê é obrigatório**: FAQPage schema = +41% taxa de citação por IA (BrightEdge 2026); cada pergunta é um alvo independente para Google AI Overviews e Perplexity
+
 **Minhas sugestões de componentes interativos para este artigo**:
 - [Descreva aqui onde e como usar cada componente]
 
@@ -154,13 +162,23 @@ O artigo será inserido no Supabase com a seguinte estrutura:
   published_at: timestamptz, // Now
   read_time: number,
   featured: boolean,
-  meta_title: string, // Para SEO
-  meta_description: string, // Para SEO
-  components: jsonb // Objeto JSONB com arrays nomeados (charts, stats, tables, ctas, etc.)
+  meta_title: string,       // SEO: ≤60 chars, keyword-alvo nos primeiros 30 chars
+                            // ✅ Correto: "Steel Frame: Custo por m² em 2026 | Berkahn"
+                            // ❌ Errado:  "Berkahn: tudo sobre o custo do steel frame"
+  meta_description: string, // SEO: 150-160 chars, keyword + proposta de valor + CTA implícito
+                            // ✅ Exemplo: "Descubra o custo real do Steel Frame em 2026: R$ 1.800–2.400/m². Comparativo com alvenaria, cronograma e o que afeta o preço final."
+  answer_summary: string,   // AEO OBRIGATÓRIO: 80-120 palavras
+                            // - Primeira frase = resposta direta à pergunta principal do artigo
+                            // - Incluir 1-2 dados quantitativos com contexto ("40% mais rápido, segundo NBR 15253")
+                            // - Linguagem assertiva — NUNCA usar: pode, talvez, possivelmente, em alguns casos, depende
+                            // - Autossuficiente: uma IA deve conseguir citar sem precisar do restante do artigo
+                            // - NÃO começar com nome da empresa ou título do artigo
+                            // Por quê: 44.2% das citações por IA vêm dos primeiros 30% da página
+  components: jsonb // Objeto JSONB com arrays nomeados (charts, stats, tables, faqs, ctas, etc.)
 }
 ```
 
-**Exemplo de componente interativo no JSONB**:
+**Estruturas JSONB corretas por tipo de componente**:
 
 ```json
 {
@@ -170,14 +188,48 @@ O artigo será inserido no Supabase com a seguinte estrutura:
       "title": "Steel Frame em Números",
       "stats": [
         {
-          "icon": "Zap",
-          "value": "30%",
+          "value": 30,
+          "suffix": "%",
           "label": "Mais rápido que alvenaria",
           "description": "Redução no prazo de obra"
         }
       ]
     }
   ],
+```
+⚠️ STATS: `value` é sempre `number` (não string). Use `suffix` para "%", "x", "m²" etc. NÃO existe campo `icon`.
+
+```json
+  "norms": [
+    { "code": "NBR 16970", "title": "Light Steel Frame", "year": "2022", "description": "..." },
+    { "code": "NBR 15575", "title": "Desempenho Habitacional", "year": "2021", "description": "..." }
+  ],
+```
+⚠️ NORMS: array **flat** de objetos `{code, title, year, description}`. NÃO envolver em objeto com `id`. O renderer usa todo o array para qualquer placeholder `[NORMS:*]`.
+
+```json
+  "timelines": [
+    {
+      "id": "cronograma-exemplo",
+      "title": "Título da Timeline",
+      "milestones": [
+        {
+          "number": 1,
+          "title": "Título longo da etapa",
+          "shortTitle": "Label curto",
+          "description": "Descrição detalhada da etapa.",
+          "duration": "X dias"
+        }
+      ]
+    }
+  ],
+```
+⚠️ TIMELINE: usa `milestones` (não `steps`). Cada milestone requer `number` (int), `title`, `shortTitle` e `description`. `duration` é opcional.
+
+```json
+  "ctas": [
+    {
+      "id": "cta-artigo-orcamento",
   "ctas": [
     {
       "id": "cta-artigo-orcamento",
@@ -273,15 +325,25 @@ Continuação do texto...
 5. **Todo artigo DEVE ter um `[CTA:cta-id]` ao final do conteúdo** — é obrigatório para conversão
 
 - [ ] **Imagem de capa otimizada**
-  - Formato WebP para performance
-  - Tamanho adequado (1200x800px)
+  - Formato WebP — destino: `public/images/img_blog/[slug]/cover.webp`
+  - Tamanho adequado (1200x800px, aspect ratio 3:2)
   - Alt text descritivo
   - Carregamento otimizado
 
-- [ ] **Metadados SEO completos**
-  - meta_title com palavras-chave
-  - meta_description atrativa (150-160 chars)
-  - Tags relevantes para categorização
+- [ ] **Metadados SEO/AEO completos** — validar ANTES do INSERT
+  - `meta_title`: ≤60 chars, keyword nos primeiros 30 chars
+  - `meta_description`: 150-160 chars com keyword + proposta de valor
+  - `answer_summary`: 80-120 palavras, assertivo, com dado quantitativo, sem hedging
+  - `tags`: 3-5 tags preenchidas
+  - `category`: uma de [Tecnologia, Sustentabilidade, Projetos, Mercado, Guias]
+
+- [ ] **FAQ component presente** (obrigatório para FAQPage schema)
+  - Mínimo 3 perguntas com respostas assertivas
+  - `[FAQ:id]` posicionado antes do `[CTA:id]` no markdown
+
+- [ ] **Links internos inseridos no markdown**
+  - 3-5 links para outros artigos do blog Berkahn
+  - Texto âncora descritivo: `[construção em steel frame](/atualidades/slug)` — nunca "clique aqui"
 
 - [ ] **Responsividade testada**
   - Mobile (375px)

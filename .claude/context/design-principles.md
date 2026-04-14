@@ -1,126 +1,109 @@
-# Design Principles & Guidelines
+# Design Principles — Berkahn
 
-This document outlines the design standards and principles that guide all UI/UX decisions in this project.
+Princípios de design que guiam todas as decisões de UI/UX no site e materiais da Berkahn.
 
-## Core Design Principles
+## Paleta de Cores
 
-### 1. User-Centered Design
-- Always prioritize user needs and mental models over implementation convenience
-- Design for clarity and simplicity - avoid unnecessary complexity
-- Test with real users when possible and iterate based on feedback
+| Cor | Hex | Uso |
+|-----|-----|-----|
+| Preto Puro | `#000000` | Fundos principais, textos principais |
+| Branco Puro | `#FFFFFF` | Fundos claros, textos sobre preto |
+| Cinza Escuro | `#1A1A1A` | Fundos alternativos, cards |
+| Cinza Médio | `#666666` | Textos secundários, labels de seção |
+| Cinza Claro | `#999999` | Subtextos, placeholders |
+| Preto 70% | `#4D4D4D` | Textos sobre fundo branco |
+| Branco 70% | `rgba(255,255,255,0.7)` | Textos sobre fundo preto |
+| Branco 50% | `rgba(255,255,255,0.5)` | Taglines sobre preto |
+| Off-white | `#F4F2EC` | Fundo alternativo quente (LinkedIn, materiais) |
 
-### 2. Visual Hierarchy
-- Use consistent typography, spacing, and color to establish clear visual hierarchy
-- Larger, bolder, or more saturated elements should draw attention to the most important content
-- Ensure adequate contrast between interactive and non-interactive elements
-- Group related elements visually and spatially
+**Regra**: Preto e branco puros como base. Cinzas como suporte. Sem cores vibrantes. Contraste forte.
 
-### 3. Consistency & Pattern Recognition
-- Maintain consistent patterns across the application for similar interactions
-- Use consistent naming, styling, and behavior for similar components
-- Establish a design system with reusable components and tokens
-- Document deviations from established patterns
+## Tipografia
 
-### 4. Accessibility (WCAG 2.1 AA Standard)
-- All interactive elements must be keyboard navigable
-- Maintain visible focus states on all focusable elements
-- Ensure minimum color contrast ratio of 4.5:1 for text
-- Use semantic HTML and ARIA labels appropriately
-- Provide alt text for all meaningful images
-- Support screen readers and assistive technologies
+### Fonte Principal: Manrope (Google Fonts)
+Alternativas: Montserrat, Inter
 
-### 5. Responsive Design
-- Design mobile-first, then enhance for larger viewports
-- Test layouts at: 375px (mobile), 768px (tablet), 1440px (desktop)
-- Ensure touch targets are at least 44x44px for mobile
-- Avoid horizontal scrolling on any viewport
-- Use flexible layouts and relative sizing
+| Elemento | Peso | Tamanho | Espaçamento |
+|----------|------|---------|-------------|
+| Títulos grandes (BERKAHN) | ExtraBold (800) | 48-72pt | +10% tracking |
+| Tagline | Light (300) | 14-18pt | +15% tracking |
+| Títulos de seção | Medium (500) | 10-12pt | +20% tracking, UPPERCASE |
+| Texto de serviço | SemiBold (600) | 14-16pt | Normal |
+| Informações de contato | Regular (400) | 10-12pt | Normal |
+| Labels pequenos | Regular (400) | 8-9pt | +10% tracking |
 
-### 6. Performance & Perception
-- Optimize images and assets for web delivery
-- Minimize layout shifts and reflows
-- Provide loading and empty states
-- Ensure perceived performance through micro-interactions and feedback
-- Use progressive enhancement for features
+### Hierarquia no site (Tailwind)
+- H1: `text-4xl md:text-6xl font-extrabold`
+- H2: `text-3xl md:text-4xl font-bold`
+- H3: `text-xl md:text-2xl font-semibold`
+- Body: `text-base font-normal leading-relaxed`
+- Caption: `text-sm text-gray-500`
 
-### 7. Dark Mode & Color Support
-- Design should work in both light and dark modes
-- Consider color-blind users when selecting color palettes
-- Don't rely solely on color to convey information
-- Provide sufficient contrast in all color modes
+## Princípios de Design Premium
 
-## Component Standards
+1. **Espaço em branco generoso** — Não encher, deixar respirar
+2. **Menos é mais** — Remover qualquer elemento não essencial
+3. **Alinhamento perfeito** — Usar grid system consistente
+4. **Consistência** — Mesmos espaçamentos, tamanhos, cores em todo o site
+5. **Tipografia limpa** — Poucas variações de tamanho
+6. **Contraste forte** — Preto e branco puro, cinzas controlados
 
-### Buttons
-- Minimum 44x44px touch target (mobile)
-- Clear, action-oriented labels
-- Consistent styling across states (default, hover, active, disabled)
-- Provide visual feedback on interaction
+### O que transmite qualidade
+- Muito espaço em branco
+- Tipografia fina e elegante
+- Ícones minimalistas (line/outline, stroke 1-1.5px, rounded corners)
+- Contraste preto/branco
+- Hierarquia clara
+- Simplicidade extrema
 
-### Forms
-- Clear labels associated with all inputs
-- Helpful placeholder text (not substitute for labels)
-- Clear error messages that indicate what went wrong
-- Successful submission feedback
+### O que evitar
+- Ícones coloridos ou muito detalhados
+- Muitas fontes diferentes
+- Textos muito grandes
+- Elementos tocando as bordas
+- Sombras ou gradientes exagerados
+- Excesso de informação
 
-### Navigation
-- Persistent and predictable navigation patterns
-- Clear indication of current location
-- Logical information hierarchy
-- Keyboard accessible menu navigation
+## Acessibilidade (WCAG 2.1 AA)
 
-### Modals & Dialogs
-- Clear purpose and action buttons
-- Easy to dismiss (Escape key, close button)
-- Focus management to prevent user disorientation
-- Avoid nested modals when possible
+- Todos os elementos interativos navegáveis por teclado
+- Focus states visíveis em todos os elementos focáveis
+- Contraste mínimo de 4.5:1 para texto
+- HTML semântico e ARIA labels
+- Alt text em todas as imagens significativas
+- Suporte a screen readers
 
-## Typography Standards
+## Responsividade
 
-- Use 2-3 font families maximum for the entire application
-- Maintain 1.5x minimum line height for body text
-- Use font sizes that scale appropriately across devices
-- Ensure sufficient contrast between text and background
+- **Mobile-first**: 375px → 768px → 1440px
+- Touch targets mínimo 44x44px no mobile
+- Sem scroll horizontal em nenhum viewport
+- Layouts flexíveis com sizing relativo
 
-## Spacing & Layout
+## Performance
 
-- Use a consistent spacing scale (e.g., 4px, 8px, 12px, 16px, 24px, 32px...)
-- Maintain consistent margins and padding across similar components
-- Use whitespace strategically to reduce cognitive load
-- Align elements to a grid system when possible
+- Imagens otimizadas (WebP, lazy-loaded)
+- Minimizar layout shifts (CLS < 0.1)
+- Loading e empty states para feedback
+- Micro-interações para percepção de velocidade
+- LCP < 2.5s, FID < 100ms
 
-## Color Palette
+## Animações
 
-Define your project's color palette here:
-- **Primary**: [Color for main actions and branding]
-- **Secondary**: [Color for secondary actions]
-- **Success**: [Color for positive feedback]
-- **Warning**: [Color for warnings and alerts]
-- **Error**: [Color for errors and destructive actions]
-- **Neutral**: [Colors for text, borders, backgrounds]
+- Duração: 200-300ms para transições UI
+- Respeitar `prefers-reduced-motion`
+- Framer Motion como padrão (motion/react)
+- RevealOnScroll para elementos entrando na viewport
+- CountUp para números/estatísticas
 
-## Animation & Motion
+## Iconografia
 
-- Use animations to provide feedback and guide attention
-- Keep animations fast (200-300ms for most interactions)
-- Avoid autoplay of animations; let users control when motion occurs
-- Respect `prefers-reduced-motion` for accessibility
+- Estilo: Line/Outline (não preenchido)
+- Stroke: 1-1.5px
+- Corners: Rounded
+- Cor: Mesmo tom do texto adjacente
+- Biblioteca: Lucide React
 
-## Microcopy Guidelines
+## Dark Mode
 
-- Use clear, concise language
-- Avoid jargon and technical terms when possible
-- Use active voice and positive framing
-- Provide helpful hints and error messages
-- Be consistent with terminology throughout the app
-
-## Dark Mode Implementation
-
-- Ensure all colors have sufficient contrast in dark mode
-- Test dark mode on actual devices, not just in DevTools
-- Provide smooth transitions between light and dark modes
-- Respect user's system preference via `prefers-color-scheme`
-
----
-
-**Note**: Customize this file with your specific design system, brand guidelines, and component standards. Update as your design evolves and new patterns are established.
+O site usa predominantemente dark mode (fundo preto). Seções alternam entre dark (#000000, #1A1A1A) e light (#FFFFFF). Transições suaves entre seções.

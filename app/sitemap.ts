@@ -17,7 +17,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE_URL}/portfolio`, lastModified: new Date('2026-03-01'), changeFrequency: "monthly", priority: 0.7 },
     { url: `${BASE_URL}/empresa`, lastModified: new Date('2026-03-01'), changeFrequency: "monthly", priority: 0.7 },
     { url: `${BASE_URL}/perguntas-frequentes`, lastModified: new Date('2026-03-01'), changeFrequency: "monthly", priority: 0.6 },
-    { url: `${BASE_URL}/privacidade`, lastModified: new Date('2025-06-01'), changeFrequency: "yearly", priority: 0.3 },
+{ url: `${BASE_URL}/privacidade`, lastModified: new Date('2025-06-01'), changeFrequency: "yearly", priority: 0.3 },
     { url: `${BASE_URL}/termos-de-uso`, lastModified: new Date('2025-06-01'), changeFrequency: "yearly", priority: 0.3 },
   ];
 

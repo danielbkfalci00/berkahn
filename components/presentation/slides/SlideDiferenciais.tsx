@@ -181,30 +181,7 @@ export function SlideDiferenciais() {
           </p>
         </RevealOnScroll>
 
-        {/* Imagem de Impacto */}
-        <RevealOnScroll className="mb-16 lg:mb-20">
-          <div className="relative h-[40vh] lg:h-[50vh] w-full overflow-hidden">
-            <Image
-              src="/images/Lsf/lsf-hero-structure.webp"
-              alt="Estrutura Steel Frame em construção"
-              fill
-              className="object-cover"
-              sizes="(max-width: 1280px) 100vw, 1280px"
-            />
-            {/* Gradient Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
-
-            {/* Caption */}
-            <div className="absolute bottom-6 left-6 right-6">
-              <p className="text-white/70 text-sm uppercase tracking-widest">
-                Estrutura Steel Frame
-              </p>
-              <p className="text-white/50 text-xs mt-1">
-                Perfis de aço galvanizado montados com precisão milimétrica
-              </p>
-            </div>
-          </div>
-        </RevealOnScroll>
+        {/* Imagem de Impacto — movida para SlideServices */}
 
         {/* Decorative Separator */}
         <RevealOnScroll delay={0.4} className="mt-16">

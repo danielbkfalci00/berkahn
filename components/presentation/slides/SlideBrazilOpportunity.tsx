@@ -54,7 +54,7 @@ export function SlideBrazilOpportunity() {
   const { ref: worksRef, isInView: worksInView } = useInViewAnimation({ margin: "-10% 0px" });
 
   return (
-    <SlideSection className="py-16 lg:py-24">
+    <SlideSection className="py-16 lg:py-24 bg-stone-50">
       <div className="container max-w-6xl mx-auto">
         {/* Header */}
         <RevealOnScroll className="text-center mb-8 lg:mb-12">
@@ -85,7 +85,7 @@ export function SlideBrazilOpportunity() {
         {/* Divider */}
         <div className="w-16 h-px bg-black/10 mx-auto mb-12 lg:mb-16" />
 
-        {/* Two-column: Key Stats + Chart */}
+        {false && (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-start mb-16 lg:mb-20">
 
           {/* Left: Key Indicators */}
@@ -157,7 +157,10 @@ export function SlideBrazilOpportunity() {
             </motion.div>
           </div>
         </div>
+        )}
 
+        {false && (
+        <>
         {/* Comparison Table: Brasil vs Referência Global */}
         <RevealOnScroll className="mb-5 text-center">
           <p className="text-xs uppercase tracking-[0.2em] text-black/30">
@@ -202,6 +205,8 @@ export function SlideBrazilOpportunity() {
             ))}
           </div>
         </motion.div>
+        </>
+        )}
 
         {/* sr-only table fallbacks */}
         <div className="sr-only">
@@ -216,6 +221,8 @@ export function SlideBrazilOpportunity() {
           </table>
         </div>
 
+        {false && (
+        <>
         {/* Marcos & Fatos do Brasil */}
         <RevealOnScroll className="mb-5 text-center">
           <p className="text-xs uppercase tracking-[0.2em] text-black/30">
@@ -251,6 +258,8 @@ export function SlideBrazilOpportunity() {
             </motion.div>
           ))}
         </motion.div>
+        </>
+        )}
 
         {/* Empresas brasileiras em ascensão */}
         <RevealOnScroll className="mb-5 text-center">
@@ -290,6 +299,8 @@ export function SlideBrazilOpportunity() {
           ))}
         </motion.div>
 
+        {false && (
+        <>
         {/* McKinsey insight */}
         <RevealOnScroll delay={0.15} className="text-center max-w-2xl mx-auto mb-16">
           <div className="inline-block border-l-2 border-black/20 pl-5 py-2 text-left">
@@ -357,6 +368,8 @@ export function SlideBrazilOpportunity() {
           </p>
           <div className="w-16 h-px bg-black/10 mx-auto mt-8" />
         </RevealOnScroll>
+        </>
+        )}
 
         {/* Decorative Separator */}
         <RevealOnScroll delay={0.3} className="mt-12">
