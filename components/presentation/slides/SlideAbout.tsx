@@ -7,7 +7,7 @@ const paragraphs = [
   {
     text: (
       <>
-        Contando com mais de <strong>duas décadas de experiência</strong> em projetos
+        Contando com mais de <strong>duas décadas de experiência combinada</strong> em projetos
         residenciais, corporativos e de infraestrutura, nos orgulhamos de ser reconhecidos como uma
         empresa <strong>comprometida com a excelência</strong> em cada detalhe.
       </>
