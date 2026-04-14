@@ -11,6 +11,9 @@ interface ImageItem {
   alt?: string;
 }
 
+const VIDEO_EXTS = /\.(mp4|webm|mov)(\?|$)/i;
+const isVideo = (src: string) => VIDEO_EXTS.test(src);
+
 interface DomeGalleryProps {
   images?: (string | ImageItem)[];
   fit?: number;
@@ -430,9 +433,9 @@ export function DomeGallery({
       animatingOverlay.className = "enlarge-closing";
       animatingOverlay.style.cssText = `position:absolute;left:${overlayRelativeToRoot.left}px;top:${overlayRelativeToRoot.top}px;width:${overlayRelativeToRoot.width}px;height:${overlayRelativeToRoot.height}px;z-index:9999;border-radius:var(--enlarge-radius,32px);overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,.35);transition:all ${enlargeTransitionMs}ms ease-out;pointer-events:none;margin:0;transform:none;`;
 
-      const originalImg = overlay.querySelector("img");
-      if (originalImg) {
-        const img = originalImg.cloneNode() as HTMLImageElement;
+      const originalMedia = overlay.querySelector("img, video");
+      if (originalMedia) {
+        const img = originalMedia.cloneNode() as HTMLElement;
         img.style.cssText = "width:100%;height:100%;object-fit:cover;";
         animatingOverlay.appendChild(img);
       }
@@ -569,10 +572,20 @@ export function DomeGallery({
       overlay.style.transition = `transform ${enlargeTransitionMs}ms ease, opacity ${enlargeTransitionMs}ms ease`;
 
       const rawSrc =
-        parent.dataset.src || el.querySelector("img")?.src || "";
-      const img = document.createElement("img");
-      img.src = rawSrc;
-      overlay.appendChild(img);
+        parent.dataset.src || el.querySelector("img, video")?.getAttribute("src") || "";
+      if (isVideo(rawSrc)) {
+        const vid = document.createElement("video");
+        vid.src = rawSrc;
+        vid.autoplay = true;
+        vid.muted = true;
+        vid.loop = true;
+        vid.playsInline = true;
+        overlay.appendChild(vid);
+      } else {
+        const img = document.createElement("img");
+        img.src = rawSrc;
+        overlay.appendChild(img);
+      }
       viewerRef.current?.appendChild(overlay);
 
       const tx0 = tileR.left - frameR.left;
@@ -690,8 +703,20 @@ export function DomeGallery({
                   onClick={onTileClick}
                   onPointerUp={onTilePointerUp}
                 >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={it.src} draggable={false} alt={it.alt} />
+                  {isVideo(it.src) ? (
+                    <video
+                      src={it.src}
+                      autoPlay
+                      muted
+                      loop
+                      playsInline
+                      draggable={false}
+                      aria-label={it.alt}
+                    />
+                  ) : (
+                    /* eslint-disable-next-line @next/next/no-img-element */
+                    <img src={it.src} draggable={false} alt={it.alt} />
+                  )}
                 </div>
               </div>
             ))}
@@ -718,12 +743,23 @@ export function DomeGallery({
           onClick={() => setLightboxSrc(null)}
         >
           <div className="relative" onClick={(e) => e.stopPropagation()}>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={lightboxSrc}
-              alt="Projeto"
-              className="max-w-[min(600px,80vw)] max-h-[65vh] object-contain rounded-lg"
-            />
+            {isVideo(lightboxSrc) ? (
+              <video
+                src={lightboxSrc}
+                controls
+                autoPlay
+                loop
+                playsInline
+                className="max-w-[min(600px,80vw)] max-h-[65vh] object-contain rounded-lg"
+              />
+            ) : (
+              /* eslint-disable-next-line @next/next/no-img-element */
+              <img
+                src={lightboxSrc}
+                alt="Projeto"
+                className="max-w-[min(600px,80vw)] max-h-[65vh] object-contain rounded-lg"
+              />
+            )}
             <button
               type="button"
               aria-label="Fechar"

@@ -124,7 +124,8 @@ main.sphere-main {
   outline: none;
 }
 
-.item__image img {
+.item__image img,
+.item__image video {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -186,14 +187,16 @@ main.sphere-main {
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
 }
 
-.viewer .enlarge img {
+.viewer .enlarge img,
+.viewer .enlarge video {
   width: 100%;
   height: 100%;
   object-fit: cover;
   filter: var(--image-filter, none);
 }
 
-.sphere-root .enlarge-closing img {
+.sphere-root .enlarge-closing img,
+.sphere-root .enlarge-closing video {
   filter: var(--image-filter, none);
 }
 

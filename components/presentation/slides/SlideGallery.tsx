@@ -3,11 +3,18 @@
 import { SlideSection } from "../ui/SlideSection";
 import { DomeGallery } from "../DomeGallery";
 
-// Gerar array de imagens da galeria
-const galleryImages = Array.from({ length: 41 }, (_, i) => ({
-  src: `/images/galeria/projeto-${String(i + 1).padStart(2, "0")}.webp`,
-  alt: `Projeto BERKAHN ${i + 1}`,
-}));
+const SUPABASE_STORAGE = "https://sfqaknxomxwmviarpwfy.supabase.co/storage/v1/object/public/galeria";
+
+// Imagens locais + vídeos do Supabase
+const galleryImages = [
+  ...Array.from({ length: 42 }, (_, i) => ({
+    src: `/images/galeria/projeto-${String(i + 1).padStart(2, "0")}.webp`,
+    alt: `Projeto BERKAHN ${i + 1}`,
+  })),
+  { src: `${SUPABASE_STORAGE}/obra-sem-dor-de-cabeca.mp4`, alt: "Obra sem dor de cabeça" },
+  { src: `${SUPABASE_STORAGE}/expansao-jardim-europa.mp4`, alt: "Expansão Jardim Europa" },
+  { src: `${SUPABASE_STORAGE}/video-whatsapp-obra.mp4`, alt: "Obra em andamento" },
+];
 
 export function SlideGallery() {
   return (
