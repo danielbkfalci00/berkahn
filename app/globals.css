@@ -243,6 +243,23 @@
     }
   }
 
+  /* Scroll cue — linha vertical pulsante (heroes da curadoria) */
+  @keyframes scroll-cue-line {
+    0%, 100% { transform: scaleY(0.3); opacity: 0.3; }
+    50% { transform: scaleY(1); opacity: 1; }
+  }
+
+  .animate-scroll-cue {
+    transform-origin: top;
+    animation: scroll-cue-line 2.2s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .animate-scroll-cue {
+      animation: none;
+    }
+  }
+
   /* Labels pequenos */
   .hero-label {
     font-size: 0.75rem;

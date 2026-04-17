@@ -11,6 +11,8 @@ interface CountUpProps {
   duration?: number;
   /** Casas decimais (default 0) */
   decimals?: number;
+  /** Tag HTML (default "p"). Use "span" para inline. */
+  as?: "p" | "span" | "div";
 }
 
 export function CountUp({
@@ -20,6 +22,7 @@ export function CountUp({
   className,
   duration = 2000,
   decimals = 0,
+  as: Component = "p",
 }: CountUpProps) {
   const [count, setCount] = useState(0);
   const ref = useRef(null);
@@ -54,10 +57,10 @@ export function CountUp({
   }, [isInView, end, duration]);
 
   return (
-    <p ref={ref} className={className}>
+    <Component ref={ref} className={className}>
       {prefix}
       {decimals > 0 ? count.toFixed(decimals) : count}
       {suffix}
-    </p>
+    </Component>
   );
 }

@@ -1,8 +1,9 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useScroll, useTransform } from "motion/react";
+import { motion, useScroll, useTransform, useReducedMotion } from "motion/react";
 import Image from "next/image";
+import { cn } from "@/lib/utils";
 
 interface ParallaxImageProps {
   src: string;
@@ -10,6 +11,7 @@ interface ParallaxImageProps {
   speed?: number; // -1 to 1, negative = opposite direction
   className?: string;
   containerClassName?: string;
+  containerStyle?: React.CSSProperties;
   priority?: boolean;
   quality?: number;
 }
@@ -20,18 +22,20 @@ export function ParallaxImage({
   speed = 0.2,
   className = "",
   containerClassName = "",
+  containerStyle,
   priority = false,
   quality = 85,
 }: ParallaxImageProps) {
   const ref = useRef<HTMLDivElement>(null);
+  const prefersReducedMotion = useReducedMotion();
 
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start end", "end start"],
   });
 
-  // Calculate parallax range based on speed
-  const yRange = 100 * Math.abs(speed);
+  // Calculate parallax range based on speed (skip if user prefers reduced motion)
+  const yRange = prefersReducedMotion ? 0 : 100 * Math.abs(speed);
   const y = useTransform(
     scrollYProgress,
     [0, 1],
@@ -41,11 +45,12 @@ export function ParallaxImage({
   return (
     <div
       ref={ref}
-      className={`relative overflow-hidden ${containerClassName}`}
+      style={containerStyle}
+      className={cn("relative overflow-hidden", containerClassName)}
     >
       <motion.div
         style={{ y }}
-        className="absolute inset-0 scale-110" // Scale to prevent gaps during parallax
+        className={`absolute inset-0 ${prefersReducedMotion ? "" : "scale-110"}`} // Scale to prevent gaps during parallax
       >
         <Image
           src={src}
@@ -99,7 +104,7 @@ export function ParallaxFadeImage({
   return (
     <div
       ref={ref}
-      className={`relative overflow-hidden ${containerClassName}`}
+      className={cn("relative overflow-hidden", containerClassName)}
     >
       <motion.div
         style={{ y, opacity }}

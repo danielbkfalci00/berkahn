@@ -8,7 +8,9 @@ export function ConditionalFooter() {
 
   // Não renderizar footer em rotas fullscreen (ex: apresentações, orçamento)
   const isFullscreenRoute =
-    pathname?.startsWith("/apresentacao") || pathname?.startsWith("/orcamento");
+    pathname?.startsWith("/apresentacao") ||
+    pathname?.startsWith("/orcamento") ||
+    pathname?.startsWith("/curadoria-berkahn");
 
   if (isFullscreenRoute) {
     return null;

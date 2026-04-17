@@ -113,6 +113,7 @@ export function ProjectGallery({ images, projectName }: ProjectGalleryProps) {
         src={image.src}
         alt={image.alt}
         fill
+        quality={78}
         className="object-cover transition-transform duration-500 group-hover:scale-105"
         sizes={isMain
           ? "(max-width: 768px) 100vw, 50vw"
@@ -290,6 +291,7 @@ export function ProjectGallery({ images, projectName }: ProjectGalleryProps) {
                               src={image.src}
                               alt={image.alt}
                               fill
+                              quality={70}
                               className="object-cover"
                               sizes="64px"
                             />

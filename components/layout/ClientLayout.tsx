@@ -12,9 +12,10 @@ export function ClientLayout({ children }: { children: React.ReactNode }) {
   const isFullscreenRoute = pathname?.startsWith("/apresentacao");
   const isAdminRoute = pathname?.startsWith("/admin");
   const isOrcamentoRoute = pathname?.startsWith("/orcamento");
+  const isCuradoriaRoute = pathname?.startsWith("/curadoria-berkahn");
 
-  if (isFullscreenRoute || isAdminRoute || isOrcamentoRoute) {
-    return <main>{children}</main>;
+  if (isFullscreenRoute || isAdminRoute || isOrcamentoRoute || isCuradoriaRoute) {
+    return <>{children}</>;
   }
 
   return (

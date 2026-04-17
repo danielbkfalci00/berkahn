@@ -11,6 +11,7 @@ const nextConfig: NextConfig = {
     output: "export",
   }),
   images: {
+    qualities: [65, 70, 75, 78, 80, 85, 90],
     ...(BUILD_MODE === "static"
       ? { unoptimized: true }
       : {
@@ -40,6 +41,17 @@ const nextConfig: NextConfig = {
         {
           source: "/atualidade/:slug",
           destination: "/atualidades/:slug",
+          permanent: true,
+        },
+        // Antiga rota da curadoria — substituída por /curadoria-berkahn
+        {
+          source: "/arquitetos-parceiros",
+          destination: "/curadoria-berkahn",
+          permanent: true,
+        },
+        {
+          source: "/arquitetos-parceiros/:slug",
+          destination: "/curadoria-berkahn/:slug",
           permanent: true,
         },
       ];
