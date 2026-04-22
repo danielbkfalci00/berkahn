@@ -44,10 +44,10 @@ export function CTA({
   return (
     <section className="py-xl bg-white">
       <div className="container">
-        <div className="text-center max-w-3xl mx-auto bg-black p-12 md:p-16">
+        <div className="text-center max-w-3xl mx-auto bg-black p-6 sm:p-10 md:p-16">
           <RevealOnScroll>
             <p className="label-text mb-4 text-white/60">{label}</p>
-            <h2 className="headline-lg mb-6 text-white">{title}</h2>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-heading font-extrabold tracking-tight mb-6 text-white break-words hyphens-auto">{title}</h2>
             <p className="body-md mb-8 text-white/70">{description}</p>
 
             {actionType === "link" ? (
