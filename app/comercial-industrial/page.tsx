@@ -4,6 +4,7 @@ import { ParallaxHero } from "@/components/sections/ParallaxHero";
 import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
 import { CTA } from "@/components/sections/CTA";
 import { Partners } from "@/components/sections/Partners";
+import { ScopeStrip } from "@/components/sections/ScopeStrip";
 
 // Below-fold components — lazy loaded for smaller initial bundle
 const SegmentShowcase = dynamic(() =>
@@ -135,7 +136,12 @@ export default function ComercialIndustrialPage() {
       </div>
 
       {/* ================================================================ */}
-      {/* 2. Soluções por segmento */}
+      {/* 2. Construtora Completa — Scope Strip */}
+      {/* ================================================================ */}
+      <ScopeStrip />
+
+      {/* ================================================================ */}
+      {/* 3. Soluções por segmento */}
       {/* ================================================================ */}
       <section className="py-xl">
         <div className="container">

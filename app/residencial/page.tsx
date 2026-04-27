@@ -139,8 +139,11 @@ export default function ResidencialPage() {
             <h2 className="headline-md mb-6">
               A Berkahn constrói, reforma e amplia.
             </h2>
+            <p className="body-lg text-black font-medium max-w-3xl mb-6">
+              Construtora completa em Steel Frame: terraplanagem, fundação, estrutura, instalações e acabamentos com a mesma equipe.
+            </p>
             <p className="body-lg text-black-70 max-w-3xl mb-12">
-              Nos EUA, mais de 90% das casas são construídas com métodos a seco — sem tijolos, sem argamassa. O Light Steel Frame é a evolução desse conceito: mais leve, mais preciso e 100% reciclável. A Berkahn trouxe essa tecnologia para o Brasil com engenharia própria e cobre o ciclo completo da sua obra.
+              Nos EUA, mais de 90% das casas são construídas com métodos a seco — sem tijolos, sem argamassa. O Light Steel Frame é a evolução desse conceito: mais leve, mais preciso e 100% reciclável. A Berkahn trouxe essa tecnologia para o Brasil com engenharia própria.
             </p>
           </RevealOnScroll>
 

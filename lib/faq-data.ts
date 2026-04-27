@@ -143,6 +143,21 @@ export const FAQ_CATEGORIES: FAQCategory[] = [
     label: "Sobre a Berkahn",
     questions: [
       {
+        question: "Vocês fazem a obra toda ou só montam a estrutura em Steel Frame?",
+        answer:
+          "Fazemos a obra inteira. Como **construtora**, executamos desde a terraplanagem do terreno, a fundação, a estrutura, as vedações, as instalações elétricas e hidrossanitárias, até os acabamentos finais e a entrega das chaves. Você contrata uma única empresa para o ciclo completo, com um único contrato e equipe técnica coordenada.",
+      },
+      {
+        question: "Qual a diferença entre uma construtora e uma empreiteira?",
+        answer:
+          "**Empreiteira** normalmente executa apenas uma etapa da obra (só a estrutura, só o acabamento, ou só uma especialidade), e o cliente precisa coordenar várias empresas em paralelo. **Construtora** é responsável pelo ciclo completo, com um único contrato e equipe técnica integrada. A Berkahn é construtora: planejamos, executamos e entregamos a obra inteira, da terraplanagem aos acabamentos.",
+      },
+      {
+        question: "Preciso contratar outra empresa para fundação, terraplanagem ou instalações?",
+        answer:
+          "Não. A Berkahn entrega a obra pronta para uso: projeto arquitetônico e estrutural, terraplanagem, fundação, estrutura em Steel Frame, vedações, instalações elétricas, hidráulicas, climatização, acabamentos e limpeza final. Tudo é executado pela nossa equipe ou por parceiros sob nossa gestão, com um único responsável técnico pela obra.",
+      },
+      {
         question: "Onde a Berkahn atua?",
         answer:
           "A Berkahn atua principalmente no **estado de São Paulo**, com projetos na capital, região metropolitana, litoral e interior. Também avaliamos projetos em outros estados do Sudeste, dependendo do porte e localização. Para projetos fora da nossa área principal de atuação, realizamos uma **análise de viabilidade logística** antes de apresentar proposta, garantindo que possamos manter o mesmo padrão de qualidade e acompanhamento que entregamos nos projetos locais.",

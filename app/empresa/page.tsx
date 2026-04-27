@@ -9,7 +9,7 @@ import { Partners } from "@/components/sections/Partners";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { CheckIcon, Award, Lightbulb, Leaf } from "lucide-react";
+import { CheckIcon, Award, Lightbulb, Leaf, X } from "lucide-react";
 
 export const metadata = {
   title: "Empresa | Berkahn Steel Frame",
@@ -77,7 +77,7 @@ const diferenciais = [
   {
     category: "SUPORTE",
     title: "Suporte Completo",
-    desc: "Acompanhamento em todas as etapas, do projeto arquitetônico à entrega final. Consultoria técnica especializada e assistência durante todo o ciclo de vida da edificação.",
+    desc: "Acompanhamento em todas as etapas: projeto, terraplanagem, fundação, estrutura, instalações, acabamentos e suporte após a entrega. Consultoria técnica especializada durante todo o ciclo de vida da edificação.",
   },
 ];
 
@@ -170,6 +170,9 @@ export default function EmpresaPage() {
 
           {/* Texto da antiga hero */}
           <div className="space-y-6">
+            <p className="body-lg text-black font-medium">
+              Somos uma <strong>construtora</strong> especializada em Steel Frame, responsável pelo ciclo completo da obra, do estudo de viabilidade à entrega das chaves.
+            </p>
             <p className="body-lg text-black-70">
               Nossa construtora nasce da união de anos de experiência em projetos,
               gerenciamento e execução de obras. Somos especialistas em soluções
@@ -221,6 +224,83 @@ export default function EmpresaPage() {
       {/* Timeline - COMENTADO */}
       {/* <BerkahnTimeline /> */}
 
+      {/* Construtora vs Empreiteira */}
+      <section className="py-xl">
+        <div className="container max-w-5xl">
+          <RevealOnScroll>
+            <p className="label-text mb-4 text-center">CONSTRUTORA, NÃO EMPREITEIRA</p>
+            <h2 className="headline-md mb-6 text-center">
+              Por que essa diferença importa para a sua obra.
+            </h2>
+            <p className="body-lg text-black-70 text-center max-w-3xl mx-auto mb-12">
+              Empreiteira executa uma parte da obra. Construtora é responsável pelo todo. Veja como isso muda na prática.
+            </p>
+          </RevealOnScroll>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Berkahn (construtora) */}
+            <RevealOnScroll>
+              <div className="bg-black text-white rounded-2xl p-8 h-full shadow-luxury-md">
+                <Badge
+                  variant="outline"
+                  className="mb-6 border-white/30 text-white text-xs tracking-widest"
+                >
+                  BERKAHN
+                </Badge>
+                <h3 className="headline-sm text-white mb-6">
+                  Construtora completa
+                </h3>
+                <ul className="space-y-4">
+                  {[
+                    "Um contrato, uma equipe",
+                    "Responsável da terraplanagem ao acabamento",
+                    "Gestão integrada de prazo e qualidade",
+                    "Certificação técnica completa (NBR 16970, NBR 15575)",
+                  ].map((item) => (
+                    <li key={item} className="flex items-start gap-3">
+                      <CheckIcon className="w-5 h-5 mt-0.5 shrink-0 text-white" />
+                      <span className="text-sm leading-relaxed text-white/90">
+                        {item}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </RevealOnScroll>
+
+            {/* Empreiteira tradicional */}
+            <RevealOnScroll delay={0.1}>
+              <div className="bg-white border border-black-10 rounded-2xl p-8 h-full">
+                <Badge
+                  variant="outline"
+                  className="mb-6 border-black-20 text-black-50 text-xs tracking-widest"
+                >
+                  EMPREITEIRA TRADICIONAL
+                </Badge>
+                <h3 className="headline-sm text-black-50 mb-6">
+                  Executa só uma etapa
+                </h3>
+                <ul className="space-y-4">
+                  {[
+                    "Múltiplos contratos com fornecedores diferentes",
+                    "Cliente contrata empresas separadas para cada fase",
+                    "Coordenação de prazo e qualidade fica com o cliente",
+                    "Certificação técnica variável conforme o fornecedor",
+                  ].map((item) => (
+                    <li key={item} className="flex items-start gap-3">
+                      <X className="w-5 h-5 mt-0.5 shrink-0 text-black-30" />
+                      <span className="text-sm leading-relaxed text-black-70">
+                        {item}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </RevealOnScroll>
+          </div>
+        </div>
+      </section>
+
       {/* Values - Nossos Valores */}
       <section className="py-xl bg-black-5">
         <div className="container">
@@ -232,7 +312,7 @@ export default function EmpresaPage() {
               </div>
               <h3 className="headline-sm mb-4">Excelência</h3>
               <p className="body-md text-black-70">
-                Qualidade e precisão em cada detalhe, do projeto à entrega.
+                Construtora completa: da terraplanagem ao acabamento, com a mesma equipe técnica.
               </p>
             </div>
             <div className="text-center">

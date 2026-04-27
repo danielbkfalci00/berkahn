@@ -3,6 +3,7 @@ import { preload } from "react-dom";
 import { Hero } from "@/components/sections/Hero";
 import { Categories } from "@/components/sections/Categories";
 import { Expertise } from "@/components/sections/Expertise";
+import { ScopeStrip } from "@/components/sections/ScopeStrip";
 
 import { LSFIntro } from "@/components/sections/LSFIntro";
 import { BenefitsGridCompact } from "@/components/sections/BenefitsGridCompact";
@@ -29,6 +30,7 @@ export default function Home() {
       <Hero />
       <Categories />
       <Expertise />
+      <ScopeStrip />
 
       <LSFIntro />
       <BenefitsGridCompact />
