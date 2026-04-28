@@ -72,14 +72,14 @@ export default function ApresentacaoExecutivaPage() {
       {/* Slide 5: Soluções - O que Fazemos por Você */}
       <SlideServices />
 
-      {/* Slide 6: Steel Frame no Mundo - Panorama Global (dark) */}
-      <SlideGlobalOverview />
+      {/* Slide 6: Steel Frame no Mundo - Panorama Global (dark) — oculto */}
+      {false && <SlideGlobalOverview />}
 
       {/* Slide 6: Líderes Globais - Comparativo (dark) — oculto: conteúdo migrado para SlideGlobalOverview */}
       {false && <SlideGlobalLeaders />}
 
-      {/* Slide 7: A Oportunidade Brasil (dark) */}
-      <SlideBrazilOpportunity />
+      {/* Slide 7: A Oportunidade Brasil (dark) — oculto (inclui "Empresas em Ascensão no Brasil") */}
+      {false && <SlideBrazilOpportunity />}
 
       {/* Slide 8: Fundadores */}
       <SlideFounders />
