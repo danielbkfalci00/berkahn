@@ -91,7 +91,7 @@ export function TimelineSection({
 
       {/* Timeline */}
       <div className="py-8">
-        <Timeline data={timelineData} />
+        <Timeline data={timelineData} titleClassName="md:pl-20 md:text-2xl lg:text-3xl" />
       </div>
 
       {/* Progress Footer (Optional) */}

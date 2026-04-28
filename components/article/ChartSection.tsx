@@ -10,43 +10,16 @@ import {
 } from "recharts";
 import { ChartData } from "@/types/article";
 
-// Custom tick component: rotated on mobile, word-wrapped on desktop
+// Custom tick component: rotated on both mobile and desktop to prevent overlap
 function CustomXAxisTick({ x, y, payload, isMobile }: any) {
   const label = payload.value as string;
-
-  // Mobile: rotate labels -45° to prevent overlap
-  if (isMobile) {
-    return (
-      <text x={x} y={y + 8} textAnchor="end" fill="#000"
-            fontFamily="var(--font-manrope)" fontSize={9}
-            transform={`rotate(-45, ${x}, ${y + 8})`}>
-        {label}
-      </text>
-    );
-  }
-
-  // Desktop: word-wrap into multiple lines
-  const maxCharsPerLine = 20;
-  const words = label.split(' ');
-  const lines: string[] = [];
-  let currentLine = '';
-
-  for (const word of words) {
-    if ((currentLine + ' ' + word).trim().length > maxCharsPerLine && currentLine) {
-      lines.push(currentLine.trim());
-      currentLine = word;
-    } else {
-      currentLine = currentLine ? currentLine + ' ' + word : word;
-    }
-  }
-  if (currentLine) lines.push(currentLine.trim());
-
+  const angle = isMobile ? -45 : -25;
+  const fontSize = isMobile ? 10 : 11;
   return (
-    <text x={x} y={y + 12} textAnchor="middle" fill="#000"
-          fontFamily="var(--font-manrope)" fontSize={11}>
-      {lines.map((line, i) => (
-        <tspan key={i} x={x} dy={i === 0 ? 0 : 14}>{line}</tspan>
-      ))}
+    <text x={x} y={y + 10} textAnchor="end" fill="#000"
+          fontFamily="var(--font-manrope)" fontSize={fontSize}
+          transform={`rotate(${angle}, ${x}, ${y + 10})`}>
+      {label}
     </text>
   );
 }
@@ -103,7 +76,7 @@ export function ChartSection({ chart, className = "" }: ChartSectionProps) {
               tick={<CustomXAxisTick isMobile={isMobile} />}
               stroke="#000"
               interval={0}
-              height={isMobile ? 80 : 50}
+              height={isMobile ? 80 : 70}
             />
             <YAxis tick={{ fill: "#000" }} stroke="#000" />
             <Tooltip
@@ -139,7 +112,7 @@ export function ChartSection({ chart, className = "" }: ChartSectionProps) {
               tick={<CustomXAxisTick isMobile={isMobile} />}
               stroke="#000"
               interval={0}
-              height={isMobile ? 80 : 50}
+              height={isMobile ? 80 : 70}
             />
             <YAxis tick={{ fill: "#000" }} stroke="#000" />
             <Tooltip

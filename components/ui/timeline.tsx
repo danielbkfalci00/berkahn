@@ -13,7 +13,12 @@ interface TimelineEntry {
   content: React.ReactNode;
 }
 
-export const Timeline = ({ data }: { data: TimelineEntry[] }) => {
+interface TimelineProps {
+  data: TimelineEntry[];
+  titleClassName?: string;
+}
+
+export const Timeline = ({ data, titleClassName }: TimelineProps) => {
   const ref = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [height, setHeight] = useState(0);
@@ -40,7 +45,7 @@ export const Timeline = ({ data }: { data: TimelineEntry[] }) => {
     >
       <div ref={ref} className="relative max-w-7xl mx-auto pb-20">
         {data.map((item, index) => (
-          <TimelineItem key={index} item={item} />
+          <TimelineItem key={index} item={item} titleClassName={titleClassName} />
         ))}
         <div
           style={{
@@ -63,7 +68,7 @@ export const Timeline = ({ data }: { data: TimelineEntry[] }) => {
 
 /* ─── Individual Timeline Item with Active State ─── */
 
-function TimelineItem({ item }: { item: TimelineEntry }) {
+function TimelineItem({ item, titleClassName }: { item: TimelineEntry; titleClassName?: string }) {
   const itemRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(itemRef, { margin: "-40% 0px -40% 0px" });
 
@@ -85,7 +90,8 @@ function TimelineItem({ item }: { item: TimelineEntry }) {
         </div>
         <h3
           className={cn(
-            "hidden md:block text-xl md:pl-20 md:text-5xl font-heading font-bold tracking-tight transition-colors duration-500",
+            "hidden md:block font-heading font-bold tracking-tight transition-colors duration-500",
+            titleClassName ?? "text-xl md:pl-20 md:text-5xl",
             isInView ? "text-black" : "text-black-30"
           )}
         >
