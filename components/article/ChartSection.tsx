@@ -97,6 +97,7 @@ export function ChartSection({ chart, className = "" }: ChartSectionProps) {
                   chart.config?.colors?.[index] ||
                   DEFAULT_COLORS[index % DEFAULT_COLORS.length]
                 }
+                minPointSize={3}
                 animationDuration={800}
               />
             ))}
