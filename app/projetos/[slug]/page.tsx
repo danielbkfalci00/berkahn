@@ -88,8 +88,63 @@ export default async function ProjectPage({ params }: Props) {
   // Separar parágrafos da descrição
   const descriptionParagraphs = project.description.split("\n\n");
 
+  const projectUrl = `https://www.berkahn.com.br/projetos/${slug}`;
+  const heroImageUrl = project.heroImage?.startsWith("http")
+    ? project.heroImage
+    : `https://www.berkahn.com.br${project.heroImage}`;
+  const mainEntityType =
+    project.category === "residencial" ? "House" : "Building";
+
+  const projectSchema = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "@id": `${projectUrl}#webpage`,
+        url: projectUrl,
+        name: `${project.name} | Berkahn Steel Frame`,
+        description: project.tagline,
+        inLanguage: "pt-BR",
+        isPartOf: { "@id": "https://www.berkahn.com.br/#website" },
+        primaryImageOfPage: { "@type": "ImageObject", url: heroImageUrl },
+        publisher: { "@id": "https://www.berkahn.com.br/#organization" },
+        about: { "@id": `${projectUrl}#project` },
+      },
+      {
+        "@type": mainEntityType,
+        "@id": `${projectUrl}#project`,
+        name: project.name,
+        description: project.description,
+        image: heroImageUrl,
+        url: projectUrl,
+        ...(project.area?.builtArea && {
+          floorSize: {
+            "@type": "QuantitativeValue",
+            value: project.area.builtArea,
+            unitCode: "MTK",
+            unitText: "metros quadrados",
+          },
+        }),
+        ...(project.features?.bedrooms && {
+          numberOfRooms: project.features.bedrooms,
+        }),
+        ...(project.features?.bathrooms && {
+          numberOfBathroomsTotal: project.features.bathrooms,
+        }),
+        provider: { "@id": "https://www.berkahn.com.br/#organization" },
+        locationCreated: {
+          "@type": "Place",
+          address: { "@type": "PostalAddress", addressRegion: "SP", addressCountry: "BR" },
+        },
+      },
+    ],
+  };
+
   return (
     <main>
+      <script type="application/ld+json">
+        {JSON.stringify(projectSchema)}
+      </script>
       {/* 1. Hero */}
       <HeroPage
         title={project.name}

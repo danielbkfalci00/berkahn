@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import Link from "next/link";
 import {
   Accordion,
   AccordionContent,
@@ -14,7 +16,7 @@ import {
   Shield,
   Building2,
 } from "lucide-react";
-import type { FAQCategory } from "@/lib/faq-data";
+import { slugifyQuestion, type FAQCategory } from "@/lib/faq-data";
 
 function highlightText(text: string, term: string): React.ReactNode {
   if (!term) return text;
@@ -43,16 +45,44 @@ function highlightText(text: string, term: string): React.ReactNode {
   );
 }
 
-/** Parse **bold** markers and optionally apply search highlight */
-function renderFormattedText(text: string, highlightTerm?: string): React.ReactNode {
-  // Split on **bold** pattern, capturing the bold content
-  const parts = text.split(/\*\*(.+?)\*\*/g);
+function renderSegmentWithLinks(text: string, highlightTerm?: string, keyPrefix = ""): React.ReactNode {
+  const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
+  const nodes: React.ReactNode[] = [];
+  let lastIndex = 0;
+  let m: RegExpExecArray | null;
+  let i = 0;
+  while ((m = linkRegex.exec(text)) !== null) {
+    if (m.index > lastIndex) {
+      const before = text.slice(lastIndex, m.index);
+      nodes.push(<span key={`${keyPrefix}-t-${i++}`}>{highlightTerm ? highlightText(before, highlightTerm) : before}</span>);
+    }
+    const [, linkText, href] = m;
+    const isExternal = /^https?:\/\//.test(href);
+    nodes.push(
+      <Link
+        key={`${keyPrefix}-l-${i++}`}
+        href={href}
+        className="text-black underline underline-offset-2 hover:text-black-70 transition-colors"
+        {...(isExternal ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+      >
+        {highlightTerm ? highlightText(linkText, highlightTerm) : linkText}
+      </Link>
+    );
+    lastIndex = m.index + m[0].length;
+  }
+  if (lastIndex < text.length) {
+    const rest = text.slice(lastIndex);
+    nodes.push(<span key={`${keyPrefix}-t-${i++}`}>{highlightTerm ? highlightText(rest, highlightTerm) : rest}</span>);
+  }
+  return nodes.length > 0 ? nodes : (highlightTerm ? highlightText(text, highlightTerm) : text);
+}
 
-  // parts alternates: [normal, bold, normal, bold, ...]
+/** Parse **bold** markers, [text](url) links, and optionally apply search highlight */
+function renderFormattedText(text: string, highlightTerm?: string): React.ReactNode {
+  const parts = text.split(/\*\*(.+?)\*\*/g);
   const segments = parts.map((part, i) => {
     const isBold = i % 2 === 1;
-    const content = highlightTerm ? highlightText(part, highlightTerm) : part;
-
+    const content = renderSegmentWithLinks(part, highlightTerm, `s${i}`);
     if (isBold) {
       return (
         <strong key={i} className="font-semibold text-black">
@@ -62,7 +92,6 @@ function renderFormattedText(text: string, highlightTerm?: string): React.ReactN
     }
     return <span key={i}>{content}</span>;
   });
-
   return <>{segments}</>;
 }
 
@@ -80,6 +109,35 @@ interface FAQAccordionGroupProps {
 }
 
 export function FAQAccordionGroup({ categories, highlightTerm = "" }: FAQAccordionGroupProps) {
+  // Auto-abre o accordion correspondente ao hash da URL (#slug-da-pergunta).
+  // Permite que anchor links de LLMs/Google levem direto à resposta expandida.
+  const [openByCategory, setOpenByCategory] = useState<Record<string, string>>({});
+
+  useEffect(() => {
+    const applyHash = () => {
+      const hash = window.location.hash.replace("#", "");
+      if (!hash) return;
+      for (const category of categories) {
+        const index = category.questions.findIndex(
+          (q) => slugifyQuestion(q.question) === hash
+        );
+        if (index !== -1) {
+          setOpenByCategory((prev) => ({
+            ...prev,
+            [category.id]: `${category.id}-${index}`,
+          }));
+          requestAnimationFrame(() => {
+            document.getElementById(hash)?.scrollIntoView({ behavior: "smooth", block: "start" });
+          });
+          break;
+        }
+      }
+    };
+    applyHash();
+    window.addEventListener("hashchange", applyHash);
+    return () => window.removeEventListener("hashchange", applyHash);
+  }, [categories]);
+
   return (
     <div className="space-y-10">
       {categories.map((category, catIndex) => {
@@ -102,12 +160,19 @@ export function FAQAccordionGroup({ categories, highlightTerm = "" }: FAQAccordi
                 type="single"
                 collapsible
                 className="w-full space-y-4"
+                value={openByCategory[category.id]}
+                onValueChange={(v) =>
+                  setOpenByCategory((prev) => ({ ...prev, [category.id]: v }))
+                }
               >
-                {category.questions.map((item, index) => (
+                {category.questions.map((item, index) => {
+                  const slug = slugifyQuestion(item.question);
+                  return (
                   <AccordionItem
                     key={index}
+                    id={slug}
                     value={`${category.id}-${index}`}
-                    className="bg-white rounded-lg shadow-luxury-md px-4 sm:px-6 border-none"
+                    className="bg-white rounded-lg shadow-luxury-md px-4 sm:px-6 border-none scroll-mt-24"
                   >
                     <AccordionTrigger className="hover:no-underline py-6">
                       <span className="font-medium text-base text-left">
@@ -120,7 +185,8 @@ export function FAQAccordionGroup({ categories, highlightTerm = "" }: FAQAccordi
                       </p>
                     </AccordionContent>
                   </AccordionItem>
-                ))}
+                  );
+                })}
               </Accordion>
             </div>
           </RevealOnScroll>

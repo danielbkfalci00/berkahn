@@ -26,7 +26,7 @@ export const FAQ_CATEGORIES: FAQCategory[] = [
       {
         question: "O aço do Steel Frame enferruja?",
         answer:
-          "O aço utilizado no Steel Frame recebe **galvanização a quente** com camada de zinco (**mínimo Z275**, equivalente a 275 g/m² conforme NBR 15253), que cria uma barreira protetora contra umidade. Os perfis ficam dentro de uma cavidade protegida entre as placas de fechamento, sem exposição às intempéries. Estudos do IPT (Instituto de Pesquisas Tecnológicas) comprovam vida útil superior a **90 anos** em estruturas adequadamente executadas. Para regiões litorâneas (até 2 km da costa), utiliza-se **galvanização reforçada Z350**.",
+          "O aço utilizado no Steel Frame recebe **galvanização a quente** com camada de zinco (**mínimo Z275**, equivalente a 275 g/m² conforme [NBR 15253](/atualidades/normas-light-steel-frame-brasil)), que cria uma barreira protetora contra umidade. Os perfis ficam dentro de uma cavidade protegida entre as placas de fechamento, sem exposição às intempéries. Estudos do IPT (Instituto de Pesquisas Tecnológicas) comprovam vida útil superior a **90 anos** em estruturas adequadamente executadas. Para regiões litorâneas (até 2 km da costa), utiliza-se **galvanização reforçada Z350**.",
       },
       {
         question: "Uma casa em Steel Frame é segura contra incêndios?",
@@ -46,7 +46,7 @@ export const FAQ_CATEGORIES: FAQCategory[] = [
       {
         question: "Steel Frame x Wood Frame: qual a diferença?",
         answer:
-          "Ambos são sistemas construtivos industrializados com painéis estruturais, mas diferem no material principal. O Steel Frame usa **perfis de aço galvanizado**, enquanto o Wood Frame usa montantes de madeira tratada. O Steel Frame tem vantagens em durabilidade (aço galvanizado resiste a cupins, fungos e umidade), **precisão dimensional** (perfis fabricados em máquinas CNC), resistência ao fogo (aço é incombustível) e reciclabilidade (**100% do aço pode ser reciclado**). O Wood Frame pode ter custo inicial menor em regiões com madeira abundante, mas exige tratamento constante contra pragas e umidade. No Brasil, o Steel Frame tem regulamentação mais consolidada com a **NBR 16970**.",
+          "Ambos são sistemas construtivos industrializados com painéis estruturais, mas diferem no material principal. O Steel Frame usa **perfis de aço galvanizado**, enquanto o Wood Frame usa montantes de madeira tratada. O Steel Frame tem vantagens em durabilidade (aço galvanizado resiste a cupins, fungos e umidade), **precisão dimensional** (perfis fabricados em máquinas CNC), resistência ao fogo (aço é incombustível) e reciclabilidade (**100% do aço pode ser reciclado**). O Wood Frame pode ter custo inicial menor em regiões com madeira abundante, mas exige tratamento constante contra pragas e umidade. No Brasil, o Steel Frame tem regulamentação mais consolidada com a **[NBR 16970](/atualidades/normas-light-steel-frame-brasil)**.",
       },
     ],
   },
@@ -93,7 +93,7 @@ export const FAQ_CATEGORIES: FAQCategory[] = [
       {
         question: "É possível financiar uma casa em Steel Frame?",
         answer:
-          "Desde 2022, com a norma **ABNT NBR 16970**, o Steel Frame é classificado como sistema construtivo **\"convencional\"** pela Caixa Econômica Federal. A Caixa financia **até 80% do valor** da construção em até 360 meses, com possibilidade de uso do **FGTS**. Não é mais necessário Documento de Avaliação Técnica (DATec) ou laudos especiais. Outros bancos como Bradesco, Itaú e Santander também oferecem linhas de crédito para construção em Steel Frame, geralmente exigindo que a execução seja feita por construtora certificada.",
+          "Desde 2022, com a norma **[ABNT NBR 16970](/atualidades/normas-light-steel-frame-brasil)**, o Steel Frame é classificado como sistema construtivo **\"convencional\"** pela Caixa Econômica Federal. A Caixa financia **até 80% do valor** da construção em até 360 meses, com possibilidade de uso do **FGTS**. Não é mais necessário Documento de Avaliação Técnica (DATec) ou laudos especiais. Outros bancos como Bradesco, Itaú e Santander também oferecem linhas de crédito para construção em Steel Frame, geralmente exigindo que a execução seja feita por construtora certificada.",
       },
       {
         question: "Como funciona o orçamento da Berkahn?",
@@ -119,7 +119,7 @@ export const FAQ_CATEGORIES: FAQCategory[] = [
       {
         question: "Qual a garantia da construção?",
         answer:
-          "A Berkahn oferece garantia conforme a **NBR 15575** (Norma de Desempenho de Edificações), que estabelece prazos de garantia por sistema: estrutura (**mínimo 5 anos**), vedações e revestimentos (2 a 3 anos), instalações elétricas e hidráulicas (1 a 3 anos), entre outros. Além da garantia formal, mantemos um **canal de atendimento pós-obra** para orientações sobre uso e manutenção. O aço galvanizado da estrutura tem vida útil comprovada superior a **90 anos**, garantindo a solidez do investimento por gerações.",
+          "A Berkahn oferece garantia conforme a **[NBR 15575](/atualidades/normas-light-steel-frame-brasil)** (Norma de Desempenho de Edificações), que estabelece prazos de garantia por sistema: estrutura (**mínimo 5 anos**), vedações e revestimentos (2 a 3 anos), instalações elétricas e hidráulicas (1 a 3 anos), entre outros. Além da garantia formal, mantemos um **canal de atendimento pós-obra** para orientações sobre uso e manutenção. O aço galvanizado da estrutura tem vida útil comprovada superior a **90 anos**, garantindo a solidez do investimento por gerações.",
       },
       {
         question: "Como funciona a manutenção de uma casa Steel Frame?",
@@ -165,7 +165,7 @@ export const FAQ_CATEGORIES: FAQCategory[] = [
       {
         question: "Quais certificações e normas a Berkahn segue?",
         answer:
-          "Nossos projetos seguem integralmente a **ABNT NBR 16970** (norma dedicada ao Light Steel Frame, aprovada em 2022), a NBR 15253 (perfis de aço), a NBR 14762 (dimensionamento estrutural) e a NBR 15575 (desempenho de edificações). A equipe é **certificada na execução** de sistemas construtivos em Steel Frame, e todos os materiais utilizados são especificados conforme as normas técnicas vigentes. Com esse arcabouço normativo, o Steel Frame é classificado como sistema construtivo **convencional**, com acesso a financiamento bancário regular.",
+          "Nossos projetos seguem integralmente a **[ABNT NBR 16970](/atualidades/normas-light-steel-frame-brasil)** (norma dedicada ao Light Steel Frame, aprovada em 2022), a [NBR 15253](/atualidades/normas-light-steel-frame-brasil) (perfis de aço), a [NBR 14762](/atualidades/normas-light-steel-frame-brasil) (dimensionamento estrutural) e a [NBR 15575](/atualidades/normas-light-steel-frame-brasil) (desempenho de edificações). A equipe é **certificada na execução** de sistemas construtivos em Steel Frame, e todos os materiais utilizados são especificados conforme as normas técnicas vigentes. Com esse arcabouço normativo, o Steel Frame é classificado como sistema construtivo **convencional**, com acesso a financiamento bancário regular.",
       },
       {
         question: "A Berkahn trabalha com projetos comerciais e industriais?",
@@ -179,4 +179,18 @@ export const FAQ_CATEGORIES: FAQCategory[] = [
 // Helper: flatten all FAQs for JSON-LD and search
 export function getAllFAQItems(): FAQItem[] {
   return FAQ_CATEGORIES.flatMap((cat) => cat.questions);
+}
+
+// Slug derivado da pergunta — usado em anchor links (#slug) e como @id no schema FAQPage.
+// Permite que LLMs e Google citem perguntas específicas em vez da página inteira.
+export function slugifyQuestion(question: string): string {
+  return question
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .replace(/[^a-z0-9\s-]/g, "")
+    .trim()
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-")
+    .slice(0, 80);
 }

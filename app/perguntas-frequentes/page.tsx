@@ -1,11 +1,12 @@
 import { Suspense } from "react";
+import type { Metadata } from "next";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
 import { ParallaxHero } from "@/components/sections/ParallaxHero";
 import { CTA } from "@/components/sections/CTA";
 import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
-import { FAQ_CATEGORIES, getAllFAQItems } from "@/lib/faq-data";
+import { FAQ_CATEGORIES, getAllFAQItems, slugifyQuestion } from "@/lib/faq-data";
 import { ArrowRight } from "lucide-react";
 import { Breadcrumb } from "@/components/layout/Breadcrumb";
 
@@ -13,32 +14,49 @@ const FAQSearch = dynamic(() =>
   import("@/components/faq/FAQSearch").then((m) => m.FAQSearch)
 );
 
-export const metadata = {
-  title: "Perguntas Frequentes | Berkahn Steel Frame",
-  description:
-    "Respostas sobre custo, prazo, financiamento, durabilidade, manutenção e processo construtivo em Light Steel Frame. Tudo o que você precisa saber antes de construir.",
-  openGraph: {
-    title: "Perguntas Frequentes | Berkahn Steel Frame",
-    description:
-      "Respostas sobre custo, prazo, financiamento, durabilidade, manutenção e processo construtivo em Light Steel Frame. Tudo o que você precisa saber antes de construir.",
-    url: "https://www.berkahn.com.br/perguntas-frequentes",
-    siteName: "Construtora Berkahn",
-    type: "website",
-    locale: "pt_BR",
-    images: [{ url: "/images/Compartilhamento/og-image.webp", width: 1200, height: 630, alt: "Construtora Berkahn" }],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Perguntas Frequentes | Berkahn Steel Frame",
-    description:
-      "Respostas sobre custo, prazo, financiamento, durabilidade, manutenção e processo construtivo em Light Steel Frame. Tudo o que você precisa saber antes de construir.",
-    images: ["/images/Compartilhamento/og-image.webp"],
-  },
-  alternates: {
-    canonical: "/perguntas-frequentes",
-    languages: { "pt-BR": "https://www.berkahn.com.br/perguntas-frequentes" },
-  },
-};
+const PAGE_TITLE = "Perguntas Frequentes | Berkahn Steel Frame";
+const PAGE_DESCRIPTION =
+  "Respostas sobre custo, prazo, financiamento, durabilidade, manutenção e processo construtivo em Light Steel Frame. Tudo o que você precisa saber antes de construir.";
+const PAGE_URL = "https://www.berkahn.com.br/perguntas-frequentes";
+
+interface PageProps {
+  searchParams: Promise<{ q?: string }>;
+}
+
+export async function generateMetadata({ searchParams }: PageProps): Promise<Metadata> {
+  const params = await searchParams;
+  const hasQuery = typeof params?.q === "string" && params.q.length > 0;
+
+  return {
+    title: PAGE_TITLE,
+    description: PAGE_DESCRIPTION,
+    openGraph: {
+      title: PAGE_TITLE,
+      description: PAGE_DESCRIPTION,
+      url: PAGE_URL,
+      siteName: "Construtora Berkahn",
+      type: "website",
+      locale: "pt_BR",
+      images: [{ url: "/images/Compartilhamento/og-image.webp", width: 1200, height: 630, alt: "Construtora Berkahn" }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: PAGE_TITLE,
+      description: PAGE_DESCRIPTION,
+      images: ["/images/Compartilhamento/og-image.webp"],
+    },
+    alternates: {
+      canonical: "/perguntas-frequentes",
+      languages: { "pt-BR": PAGE_URL },
+    },
+    // Páginas de resultado de busca (?q=...) não devem ser indexadas.
+    // Resolve o aviso do GSC para o template SearchAction {search_term_string}
+    // e protege contra indexação de buscas reais.
+    robots: hasQuery
+      ? { index: false, follow: true, googleBot: { index: false, follow: true } }
+      : { index: true, follow: true, googleBot: { index: true, follow: true, "max-snippet": -1, "max-image-preview": "large" } },
+  };
+}
 
 const EXPLORE_CARDS = [
   {
@@ -157,12 +175,28 @@ export default function PerguntasFrequentes() {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "FAQPage",
+            "@id": `${PAGE_URL}#faqpage`,
+            url: PAGE_URL,
+            name: PAGE_TITLE,
+            description: PAGE_DESCRIPTION,
+            inLanguage: "pt-BR",
+            datePublished: "2025-08-01",
+            dateModified: new Date().toISOString().split("T")[0],
+            isPartOf: { "@id": "https://www.berkahn.com.br/#website" },
+            about: { "@type": "Thing", name: "Light Steel Frame" },
+            author: { "@id": "https://www.berkahn.com.br/#organization" },
+            publisher: { "@id": "https://www.berkahn.com.br/#organization" },
             mainEntity: allFAQs.map((item) => ({
               "@type": "Question",
+              "@id": `${PAGE_URL}#${slugifyQuestion(item.question)}`,
               name: item.question,
               acceptedAnswer: {
                 "@type": "Answer",
-                text: item.answer.replace(/\*\*/g, ""),
+                // Remove markdown markers (**bold** e [text](url)) — schema espera plain text
+                text: item.answer
+                  .replace(/\*\*/g, "")
+                  .replace(/\[([^\]]+)\]\(([^)]+)\)/g, "$1"),
+                inLanguage: "pt-BR",
               },
             })),
           }),
