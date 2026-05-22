@@ -1,15 +1,32 @@
+---
+tipo: context
+criado: 2026-04-13
+atualizado: 2026-05-21
+tags:
+  - ai/context
+  - domain/steel-frame
+  - domain/lsf
+  - domain/normas
+ai_summary: Conhecimento técnico LSF para conteúdos Berkahn. Diferença LSF (perfis leves até ~5 pavimentos) vs Steel Frame pesado (estruturas industriais). 5 normas ABNT relevantes. 8 vantagens técnicas. 5 mitos comuns a derrubar.
+status: active
+escopo: berkahn
+---
+
 # Domínio Técnico — Light Steel Frame
 
-Conhecimento técnico de LSF que serve como base para todos os conteúdos da Berkahn.
+Conhecimento técnico de LSF que serve como base para todos os conteúdos da Berkahn. Aplica em [[article-pipeline]], [[berkahn-brand]] e [[seo-aeo-strategy]].
 
 ## O que é Light Steel Frame (LSF)
 
 Sistema construtivo industrializado que utiliza perfis leves de aço galvanizado formados a frio como estrutura. Também chamado de "construção a seco" por não usar argamassa, concreto ou tijolos na estrutura.
 
 ### Diferença para Steel Frame pesado
+
 - **LSF**: perfis leves (0.8-2.5mm espessura), formados a frio, para edificações de até ~5 pavimentos
 - **Steel Frame pesado**: perfis laminados de grande porte, para edifícios altos e estruturas industriais
 - São sistemas construtivos diferentes. Usar o termo errado gera ambiguidade técnica.
+
+Regras de uso de terminologia em [[berkahn-brand]].
 
 ## Vantagens técnicas do LSF
 
@@ -64,3 +81,10 @@ Sistema construtivo industrializado que utiliza perfis leves de aço galvanizado
 6. **Cobertura** — estrutura em LSF + telhas ou laje steel deck
 7. **Instalações** — elétrica e hidráulica passam por dentro dos perfis
 8. **Acabamento** — igual construção convencional (piso, pintura, revestimento)
+
+## Referências
+
+- Brand (terminologia): [[berkahn-brand]]
+- Pipeline de artigos: [[article-pipeline]]
+- SEO/AEO: [[seo-aeo-strategy]]
+- Atomic notes técnicas: `Berkahn-Vault/70-knowledge/`

@@ -1,3 +1,17 @@
+---
+tipo: context
+criado: 2026-04-13
+atualizado: 2026-05-21
+tags:
+  - ai/context
+  - project/site
+  - project/blog
+  - project/linkedin
+ai_summary: Identidade da marca Berkahn — construtora LSF "Erguendo o amanhã". 3 pilares (leveza/previsibilidade/limpeza). Voz "engenheiro experiente". Regras rígidas contra vícios de IA. LSF ≠ Steel Frame.
+status: active
+escopo: berkahn
+---
+
 # Berkahn — Identidade de Marca
 
 ## Dados da Empresa
@@ -53,7 +67,9 @@ A Berkahn existe para trazer três coisas para a construção civil:
 - Em artigos do blog: voz impessoal no corpo, "nós" só na abertura e CTA
 
 ### Vícios de Linguagem Proibidos
-Estes padrões denunciam texto gerado por IA. Evitar sempre:
+
+Estes padrões denunciam texto gerado por IA. Evitar sempre (regra completa em [[copy-sem-travessao]]):
+
 - Travessão como recurso estilístico ("e isso muda tudo — literalmente")
 - Dois pontos como recurso estilístico em parágrafos
 - "Quase ninguém fala/sabe sobre isso"
@@ -72,6 +88,8 @@ Estes padrões denunciam texto gerado por IA. Evitar sempre:
 ## Terminologia: Light Steel Frame vs. Steel Frame
 
 A Berkahn trabalha com **Light Steel Frame (LSF)** — perfis leves de aço galvanizado formados a frio. **Steel Frame** (aço laminado pesado, perfis de grande porte) é um sistema construtivo diferente.
+
+Detalhes técnicos em [[steel-frame-domain]].
 
 ### Regras de uso
 - Primeira menção: sempre "Light Steel Frame" por extenso
@@ -103,8 +121,18 @@ A Berkahn trabalha com **Light Steel Frame (LSF)** — perfis leves de aço galv
 
 ## Visual
 
+Detalhes em [[design-principles]].
+
 - **Paleta**: Preto/Branco/Cinzas + Off-white #F4F2EC
 - **Tipografia**: Manrope (Google Fonts)
 - **Ícones**: Line/Outline, stroke 1-1.5px, rounded
 - **Estilo**: Minimalista, premium, muito espaço em branco
-- **Logo**: Variações em preto e branco (ver `Docs/brand/logos/`)
+- **Logo**: Variações em preto e branco
+
+## Referências
+
+- Design system: [[design-principles]]
+- Domínio LSF: [[steel-frame-domain]]
+- SEO/AEO: [[seo-aeo-strategy]]
+- Sistema de apresentações: [[presentation-system]]
+- Regra anti-travessão: [[copy-sem-travessao]]

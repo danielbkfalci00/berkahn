@@ -1,3 +1,16 @@
+---
+tipo: context
+criado: 2026-04-13
+atualizado: 2026-05-21
+tags:
+  - ai/context
+  - project/blog
+  - domain/lsf
+ai_summary: Pipeline técnico de artigos do blog Berkahn — 4 etapas (/brainstorm, /pesquisa, /criacao, /artigo), arquivos em Docs/publicados, 19 componentes interativos via placeholders, schema Supabase posts.
+status: active
+escopo: berkahn
+---
+
 # Pipeline de Artigos — Blog Berkahn
 
 Documenta o fluxo completo de criação e publicação de artigos em `/atualidades`.
@@ -13,53 +26,63 @@ Documenta o fluxo completo de criação e publicação de artigos em `/atualidad
 
 Após publicação: `/linkedin` para criar post de divulgação.
 
+Workflow editorial em [[workflow-conteudo]]. Regras de copy em [[copy-sem-travessao]] e [[berkahn-brand]].
+
 ## Arquivo de Publicações
 
-Todo conteúdo publicado é arquivado localmente em `Docs/publicados/`:
+Todo conteúdo publicado é arquivado em `Berkahn-Vault/40-content/blog/publicados/` (após Fase 8 da migração; antes ficava em `Docs/Conteúdo/publicados/blog/`).
 
 ```
-Docs/publicados/
+40-content/
   blog/
-    [slug]/
-      artigo.md          ← markdown final do artigo
-      capa.webp          ← imagem de capa convertida para WebP
+    publicados/
+      [slug].md          ← markdown final do artigo (com frontmatter)
+    drafts/
+      [slug].md          ← rascunho ativo
+    ideias/
+      ideas-YYYY-MM.md   ← saída de /brainstorm
+    pesquisa/
+      YYYY-MM-DD-tema.md ← saída de /pesquisa
   linkedin/
-    [YYYY-MM-DD]-[tema]/
+    YYYY-MM-DD-tema/
       post.md            ← texto pronto + hashtags
       briefing-imagem.md ← briefing visual para Canva
-      imagem-final.png   ← exportada do Canva pelo Bruno (passo manual)
+      imagem-final.png   ← exportada do Canva (manual)
 ```
 
+Capas vivem em `public/images/img_blog/[slug]/cover.webp` (consumido pelo Next.js — fora do vault).
+
 ### Passos obrigatórios no /artigo
-1. Salvar markdown final em `Docs/publicados/blog/[slug]/artigo.md`
-2. Converter imagem de capa para WebP e salvar em `Docs/publicados/blog/[slug]/capa.webp`
-3. Copiar WebP para `public/images/img_blog/[slug]/cover.webp` (caminho do site)
-4. Criar script e inserir no Supabase
+1. Salvar markdown final em `40-content/blog/publicados/[slug].md`
+2. Converter imagem de capa para WebP
+3. Copiar WebP para `public/images/img_blog/[slug]/cover.webp`
+4. Criar script `scripts/articles/add-article-[slug].mjs` e inserir no Supabase
 
 ### Passos obrigatórios no /linkedin
-1. Salvar texto em `Docs/publicados/linkedin/[YYYY-MM-DD]-[tema]/post.md`
-2. Salvar briefing em `Docs/publicados/linkedin/[YYYY-MM-DD]-[tema]/briefing-imagem.md`
-3. Informar o Bruno para exportar a imagem do Canva como `imagem-final.png` na mesma pasta
+1. Salvar texto em `40-content/linkedin/YYYY-MM-DD-tema/post.md`
+2. Salvar briefing em `40-content/linkedin/YYYY-MM-DD-tema/briefing-imagem.md`
+3. Informar Bruno para exportar Canva como `imagem-final.png` na mesma pasta
 
 ## Onde mora cada coisa
 
 | O quê | Onde |
 |-------|------|
-| Arquivo de artigos publicados | `Docs/publicados/blog/[slug]/` |
-| Arquivo de posts LinkedIn | `Docs/publicados/linkedin/[data]-[tema]/` |
-| Markdown dos artigos (legacy) | `Docs/blog/publicados/` |
-| Scripts de inserção | `scripts/articles/add-article-[slug].mjs` |
-| Dados estáticos (legacy) | `data/articles/*.ts` |
+| Markdown publicado | `Berkahn-Vault/40-content/blog/publicados/` |
+| LinkedIn arquivado | `Berkahn-Vault/40-content/linkedin/` |
+| Scripts de inserção | `scripts/articles/add-article-[slug].mjs` (gitignored) |
 | Metadados dos posts | `data/posts.ts` |
 | Componentes de artigo | `components/article/` (25 componentes) |
-| Renderizador principal | Componente em `app/atualidades/[slug]/page.tsx` |
+| Renderizador principal | `app/atualidades/[slug]/page.tsx` |
 | Tipos TypeScript | `types/article.ts`, `types/blog.ts` |
+| Capas (live) | `public/images/img_blog/[slug]/cover.webp` |
 
 ## Banco de Dados (Supabase)
 
+Detalhes em [[supabase-config]].
+
 - **Tabela**: `posts`
-- **INSERT**: `POST /rest/v1/posts` com `Prefer: return=representation` → status 201
-- **UPDATE**: `PATCH /rest/v1/posts?id=eq.{ID}` com `Prefer: return=minimal` → status 204
+- **INSERT**: `POST /rest/v1/posts` com `Prefer: return=representation` → 201
+- **UPDATE**: `PATCH /rest/v1/posts?id=eq.{ID}` com `Prefer: return=minimal` → 204
 
 ### Schema do post
 ```typescript
@@ -107,6 +130,7 @@ Docs/publicados/
 19. **CTA** — Call-to-Action (OBRIGATÓRIO em todo artigo)
 
 ### Sistema de Placeholders
+
 Componentes são intercalados no texto via placeholders no markdown:
 
 ```markdown
@@ -131,12 +155,14 @@ Mais texto após o gráfico...
 - Todo artigo DEVE ter `[CTA:id]` ao final
 
 ### CTA (Call-to-Action)
+
 - **Obrigatório** em todo artigo
 - Dois modos: `dialog` (abre formulário de contato) ou `link` (navega para página)
 - `defaultSegment`: pré-seleciona "residencial" ou "comercial"
 - Copy deve ser contextual ao tema (não genérico)
 
 ### Estrutura JSONB dos componentes
+
 ```json
 {
   "stats": [{ "id": "...", "title": "...", "stats": [...] }],
@@ -146,20 +172,22 @@ Mais texto após o gráfico...
 }
 ```
 
-## Artigos Publicados (Supabase)
+## Artigos Publicados
 
-| Slug | ID Supabase |
-|------|-------------|
-| `drywall-st-ru-rf` | `f03921da-0daf-4375-8e13-aa1fc6ad75ac` |
-| `protecao-contra-quedas-construcao-civil` | `2a1a81da-84df-461c-85c4-80ce0072319c` |
-| `steel-frame-terremoto-teste-cfs10` | `fa5f253b-2ac1-4647-8a3a-4c66cc809bce` |
-
-(+ outros posts no Supabase — verificar com `node scripts/articles/check-posts.mjs`)
+Registro atualizado em [[artigos-publicados]]. Para queries estruturadas (status, SEO, datas), ver [[artigos.base]].
 
 ## Imagens
 
 - Formato: WebP (quality 80, max width 1200px)
-- Conversão: `sharp` via scripts em `scripts/images/`
+- Conversão: `sharp` via scripts em `scripts/images/` (gitignored)
 - Caminho: `/images/img_blog/[slug]/` para imagens do artigo
 - Cover: `/images/img_blog/[slug]/cover.webp` (1200x800px, aspect 3:2)
 - Alt text descritivo em todas as imagens
+
+## Referências
+
+- Estratégia SEO/AEO: [[seo-aeo-strategy]]
+- Brand: [[berkahn-brand]]
+- Domínio técnico: [[steel-frame-domain]]
+- Workflow editorial: [[workflow-conteudo]]
+- Pipeline técnico (caminhos): [[blog-pipeline]]

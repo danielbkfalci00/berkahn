@@ -1,6 +1,18 @@
+---
+tipo: context
+criado: 2026-04-13
+atualizado: 2026-05-21
+tags:
+  - ai/context
+  - project/site
+ai_summary: Design system Berkahn — paleta preto/branco/cinza + off-white, tipografia Manrope, princípios premium (espaço branco, contraste forte, minimalismo). WCAG 2.1 AA. Dark mode predominante.
+status: active
+escopo: berkahn
+---
+
 # Design Principles — Berkahn
 
-Princípios de design que guiam todas as decisões de UI/UX no site e materiais da Berkahn.
+Princípios de design que guiam todas as decisões de UI/UX no site e materiais da Berkahn. Identidade conceitual em [[berkahn-brand]].
 
 ## Paleta de Cores
 
@@ -107,3 +119,9 @@ Alternativas: Montserrat, Inter
 ## Dark Mode
 
 O site usa predominantemente dark mode (fundo preto). Seções alternam entre dark (#000000, #1A1A1A) e light (#FFFFFF). Transições suaves entre seções.
+
+## Referências
+
+- Identidade conceitual: [[berkahn-brand]]
+- Sistema de apresentações: [[presentation-system]]
+- Brand assets (logos): `Berkahn-Vault/50-brand/logos.md`

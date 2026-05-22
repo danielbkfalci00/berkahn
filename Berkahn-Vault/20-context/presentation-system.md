@@ -1,3 +1,16 @@
+---
+tipo: context
+criado: 2026-04-13
+atualizado: 2026-05-21
+tags:
+  - ai/context
+  - project/apresentacao
+  - project/site
+ai_summary: Apresentação executiva /apresentacao-executiva — 16 slides (Cover, About, Methodology, Diferenciais, Global, Brazil, Founders, Services, Projects×3, Partners, Gallery, Contact). Lazy load + RevealOnScroll. 3 charts via Recharts.
+status: active
+escopo: berkahn
+---
+
 # Sistema de Apresentações — Berkahn
 
 Documenta a arquitetura da apresentação executiva em `/apresentacao-executiva`.
@@ -27,6 +40,8 @@ Documenta a arquitetura da apresentação executiva em `/apresentacao-executiva`
 | 14 | SlidePartners | Carrossel de parceiros (Brand 01, Lumen, Knauf, Aquapanel) | Dark |
 | 15 | SlideGallery | 41 imagens em DomeGallery 3D interativo | Dark |
 | 16 | SlideContact | "Obrigado. Vamos construir juntos?" + contatos | Dark |
+
+Identidade visual segue [[berkahn-brand]]. Padrões de design em [[design-principles]].
 
 ## Charts disponíveis
 
@@ -81,7 +96,7 @@ Definidos em `lib/presentation-data.ts` — array `presentationProjects`:
    "use client";
    import { SlideSection } from "../ui/SlideSection";
    import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
-   
+
    export function SlideNome() {
      return (
        <SlideSection dark={true}>
@@ -116,3 +131,10 @@ Definidos em `lib/presentation-data.ts` — array `presentationProjects`:
 - Estatísticas de crescimento do Brasil
 - Mix construtivo brasileiro
 - Dados podem ser usados em qualquer slide
+
+## Referências
+
+- Brand: [[berkahn-brand]]
+- Design system: [[design-principles]]
+- Domínio LSF: [[steel-frame-domain]]
+- Roteiros/notas de slides: `Berkahn-Vault/40-content/apresentacoes/`
