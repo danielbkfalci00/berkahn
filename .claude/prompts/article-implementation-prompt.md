@@ -369,8 +369,9 @@ Continuação do texto...
 // scripts/add-article-[slug].mjs
 import https from 'https';
 
-const SUPABASE_URL = 'https://sfqaknxomxwmviarpwfy.supabase.co';
-const SERVICE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNmcWFrbnhvbXh3bXZpYXJwd2Z5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2ODgzODkxMywiZXhwIjoyMDg0NDE0OTEzfQ.esE1N5hepOpbJaw1fX7Fe8jj89BCypCtaz3T81HAez8';
+const SUPABASE_URL = process.env.SUPABASE_URL || 'https://YOUR-PROJECT.supabase.co';
+const SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY || '{{SUPABASE_SERVICE_KEY}}';
+// SECRETS: ler de .env (gitignored). Nunca hardcodar service_role key — bypassa RLS.
 
 const article = {
   title: "...",
