@@ -1,0 +1,28 @@
+{
+  "types": {
+    "tipo": "text",
+    "criado": "date",
+    "atualizado": "date",
+    "tags": "tags",
+    "ai_summary": "text",
+    "status": "text",
+    "locked": "checkbox",
+    "subtipo": "text",
+    "why": "text",
+    "how_to_apply": "text",
+    "supabase_id": "text",
+    "palavras_chave": "multitext",
+    "publicado_em": "date",
+    "calibrado_em": "date",
+    "versao": "number",
+    "seo_title": "text",
+    "seo_description": "text",
+    "slug": "text",
+    "url_final": "text",
+    "relacionado": "multitext",
+    "conceitos_relacionados": "multitext",
+    "fonte": "text",
+    "escopo": "text",
+    "secrets_redacted": "date"
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "vault_id": "berkahn",
+  "scope": "berkahn-only",
+  "owner": "bruno",
+  "allowed_projects": [
+    "C:\\Users\\bruno\\Documents\\Pessoal\\Site Berkahn"
+  ],
+  "deny_cross_project_load": true,
+  "project_name": "Berkahn Site",
+  "project_lang": "pt-BR",
+  "memory": {
+    "dir": "Berkahn-Vault/10-memory",
+    "sprint_pointer": "Berkahn-Vault/00-meta/projetos/sprint-ativa.md"
+  },
+  "paths": {
+    "moc": "Berkahn-Vault/index.md",
+    "vault_root": "Berkahn-Vault",
+    "sprint_doc": "Berkahn-Vault/00-meta/projetos/sprint-ativa.md",
+    "daily_dir": "Berkahn-Vault/00-meta/standup",
+    "wrap_dir": "Berkahn-Vault/00-meta/wrap-up",
+    "prompts_dir": "Berkahn-Vault/30-prompts",
+    "context_dir": "Berkahn-Vault/20-context",
+    "content_dir": "Berkahn-Vault/40-content"
+  },
+  "validation": {
+    "required_fields": ["tipo", "criado", "atualizado", "tags", "ai_summary", "status"]
+  },
+  "version": "1.0"
+}
