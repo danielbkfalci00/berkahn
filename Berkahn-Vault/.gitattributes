@@ -1,0 +1,16 @@
+# Força LF em todos os arquivos do vault (Windows + git + Obsidian compatibility)
+*.md text eol=lf
+*.json text eol=lf
+*.canvas text eol=lf
+*.base text eol=lf
+*.yaml text eol=lf
+*.yml text eol=lf
+
+# Binários (imagens incorporadas, se houver)
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.gif binary
+*.svg binary
+*.pdf binary

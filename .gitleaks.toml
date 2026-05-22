@@ -1,0 +1,18 @@
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Allowlist for Berkahn project"
+paths = [
+  '''.gitleaks\.toml$''',
+  '''\.env\.example$''',
+  '''Berkahn-Vault/.*placeholder.*''',
+  '''.next/cache/.*''',
+  '''node_modules/.*''',
+  '''CHANGELOG\.md$''',
+]
+regexes = [
+  '''\{\{[A-Z_]+\}\}''',
+  '''YOUR-[A-Z-]+''',
+  '''process\.env\.[A-Z_]+''',
+]

@@ -1,0 +1,16 @@
+# Obsidian workspace state (per-machine, evita conflitos)
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
+.obsidian/workspaces.json
+.obsidian/cache/
+
+# Lixeira
+.trash/
+
+# Secrets defensivos (placeholders normais OK, valores reais não)
+**/secrets.md
+**/*.local.md
+
+# Backups
+*.bak
+*.backup

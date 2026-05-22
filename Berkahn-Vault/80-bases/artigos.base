@@ -1,0 +1,58 @@
+filters:
+  and:
+    - file.inFolder("40-content/blog/publicados")
+    - 'tipo == "draft-content"'
+
+formulas:
+  seo_desc_len: 'if(seo_description, seo_description.length, 0)'
+  seo_ok: 'if(seo_title && seo_desc_len >= 150, "OK", "FALTA")'
+
+properties:
+  titulo:
+    displayName: "Título"
+  publicado_em:
+    displayName: "Publicado"
+  palavras_chave:
+    displayName: "Keywords"
+  supabase_id:
+    displayName: "Supabase ID"
+  formula.seo_ok:
+    displayName: "SEO"
+
+views:
+  - type: table
+    name: "Publicados"
+    filters:
+      and:
+        - 'status == "published"'
+    order:
+      - titulo
+      - publicado_em
+      - palavras_chave
+      - supabase_id
+    sort:
+      - property: publicado_em
+        direction: DESC
+
+  - type: table
+    name: "Drafts"
+    filters:
+      and:
+        - 'status == "draft"'
+    order:
+      - titulo
+      - file.mtime
+    sort:
+      - property: file.mtime
+        direction: DESC
+
+  - type: table
+    name: "SEO incompleto"
+    filters:
+      or:
+        - '!seo_title'
+        - 'formula.seo_desc_len < 150'
+    order:
+      - titulo
+      - formula.seo_ok
+      - formula.seo_desc_len

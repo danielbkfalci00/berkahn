@@ -41,8 +41,11 @@ orcamento-*.png
 screenshot-*.png
 .dev_pid
 
-# local env files
+# local env files (NEVER commit credentials)
+.env
+.env.local
 .env*.local
+*.env
 
 # vercel
 .vercel
@@ -53,7 +56,15 @@ next-env.d.ts
 
 # claude code settings (contains sensitive tokens)
 .claude/settings.local.json
+.claude/settings.local.json.backup
+.claude/*.backup
 .playwright-mcp/
+
+# secrets (defensive — should never appear)
+**/secrets.md
+**/*.secret
+**/credentials.json
+gitleaks-*.json
 
 # scripts (migration and utility scripts, not needed in production)
 /scripts/

@@ -1,0 +1,40 @@
+filters:
+  or:
+    - file.hasTag("status/draft")
+    - file.hasTag("status/wip")
+    - file.hasTag("todo")
+
+formulas:
+  prio_num: 'if(prioridade == "alta", 1, if(prioridade == "media", 2, 3))'
+
+properties:
+  titulo:
+    displayName: "Tarefa"
+  prioridade:
+    displayName: "Prioridade"
+  due:
+    displayName: "Prazo"
+
+views:
+  - type: table
+    name: "Em aberto"
+    order:
+      - titulo
+      - prioridade
+      - due
+      - file.mtime
+    sort:
+      - property: due
+        direction: ASC
+
+  - type: table
+    name: "Por prioridade"
+    groupBy:
+      property: prioridade
+      direction: ASC
+    order:
+      - titulo
+      - due
+    sort:
+      - property: formula.prio_num
+        direction: ASC

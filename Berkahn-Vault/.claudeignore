@@ -1,0 +1,8 @@
+# Excluir da leitura defensiva do Claude Code (token-efficient)
+90-canvas/
+91-templates/
+99-archive/
+.obsidian/cache/
+.obsidian/workspace*.json
+.obsidian/plugins/
+.trash/
