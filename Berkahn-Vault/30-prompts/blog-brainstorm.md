@@ -1,6 +1,20 @@
 ---
-description: Gerar ideias de artigos sobre Light Steel Frame priorizadas por impacto
+tipo: prompt
+locked: true
+versao: 1.0
+calibrado_em: 2026-04-13
+criado: 2026-04-13
+atualizado: 2026-05-21
+tags:
+  - ai/prompt
+  - ai/locked
+  - project/blog
+status: locked
+ai_summary: Gerar ideias de artigos sobre Light Steel Frame priorizadas por impacto. Calibrado por Bruno — não alterar sem permissão. Usado por /brainstorm.
 ---
+
+> [!warning] PROMPT CALIBRADO — NÃO ALTERAR sem permissão de Bruno
+> Ver [[prompts-calibrados]] para histórico de calibragem.
 
 Preciso de ideias de artigos sobre Light Steel Frame para o blog da Berkahn.
 

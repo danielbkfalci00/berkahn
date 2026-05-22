@@ -1,6 +1,20 @@
 ---
-description: Criar post para LinkedIn da Berkahn a partir de um artigo ou tema
+tipo: prompt
+locked: true
+versao: 1.0
+calibrado_em: 2026-04-13
+criado: 2026-04-13
+atualizado: 2026-05-21
+tags:
+  - ai/prompt
+  - ai/locked
+  - project/linkedin
+status: locked
+ai_summary: Criar post LinkedIn Berkahn a partir de artigo ou tema. Calibrado por Bruno — regras específicas sobre LSF vs Steel Frame, tom engenheiro experiente, 100-180 palavras. Usado por /linkedin.
 ---
+
+> [!warning] PROMPT CALIBRADO — NÃO ALTERAR sem permissão de Bruno
+> Esse é o mais sensível: regras sobre vícios de linguagem, terminologia LSF vs Steel Frame, tom "engenheiro experiente", extensão 100-180 palavras. Ver [[prompts-calibrados]] e [[copy-sem-travessao]].
 
 Crie um post para o LinkedIn da Berkahn sobre o tema/artigo fornecido.
 

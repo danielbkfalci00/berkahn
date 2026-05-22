@@ -1,3 +1,22 @@
+---
+tipo: prompt
+locked: true
+versao: 1.0
+calibrado_em: 2026-04-13
+criado: 2026-04-13
+atualizado: 2026-05-21
+secrets_redacted: 2026-05-21
+tags:
+  - ai/prompt
+  - ai/locked
+  - project/blog
+status: locked
+ai_summary: Prompt master de implementação de artigo (22KB, +600 linhas). Transforma markdown em artigo no blog com componentes interativos + INSERT Supabase. Usado por /artigo. SECRETS REDACTED em 2026-05-21 (linha do SERVICE_KEY agora usa process.env).
+---
+
+> [!warning] PROMPT CALIBRADO + SANITIZADO — NÃO ALTERAR sem permissão
+> Este prompt foi sanitizado em 2026-05-21: Supabase service_role key removida da linha do SERVICE_KEY (agora `process.env.SUPABASE_SERVICE_KEY`). Ver [[supabase-config]] e [[prompts-calibrados]].
+
 # 📝 Prompt de Implementação de Artigo - Site Berkahn
 
 > **Objetivo**: Transformar conteúdo markdown em um artigo excepcional, interativo e memorável no blog /atualidade

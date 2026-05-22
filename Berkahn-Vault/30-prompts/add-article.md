@@ -1,3 +1,19 @@
+---
+tipo: prompt
+versao: 1.0
+calibrado_em: 2026-04-13
+criado: 2026-04-13
+atualizado: 2026-05-21
+tags:
+  - ai/prompt
+  - project/blog
+status: active
+ai_summary: Versão "prompt único" para adicionar artigo (alternativa ao /artigo). Bruno cola o prompt + markdown, IA executa todo o processo.
+---
+
+> [!info] Prompt complementar
+> Versão "tudo num só" alternativa ao [[article-implementation-prompt]]. Pode ser ajustada. Ver [[prompts-calibrados]].
+
 # 🚀 Adicionar Artigo ao Blog - Prompt Único
 
 > **Copie este prompt + seu artigo em markdown → IA faz todo o resto**

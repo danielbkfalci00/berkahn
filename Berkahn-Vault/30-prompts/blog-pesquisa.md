@@ -1,6 +1,20 @@
 ---
-description: Pesquisar tema e escrever artigo completo com elementos visuais e SEO
+tipo: prompt
+locked: true
+versao: 1.0
+calibrado_em: 2026-04-13
+criado: 2026-04-13
+atualizado: 2026-05-21
+tags:
+  - ai/prompt
+  - ai/locked
+  - project/blog
+status: locked
+ai_summary: Pesquisar tema e escrever artigo completo com elementos visuais e SEO. Etapa 2 do pipeline (após /brainstorm). Calibrado por Bruno.
 ---
+
+> [!warning] PROMPT CALIBRADO — NÃO ALTERAR sem permissão de Bruno
+> Ver [[prompts-calibrados]] para histórico de calibragem.
 
 Crie um artigo completo e aprofundado sobre "$ARGUMENTS" para o blog da Berkahn.
 

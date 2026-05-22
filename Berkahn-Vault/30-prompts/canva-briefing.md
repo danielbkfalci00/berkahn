@@ -1,8 +1,20 @@
 ---
-description: Gerar briefing detalhado de material visual para criação no Canva
+tipo: prompt
+versao: 1.0
+calibrado_em: 2026-04-13
+criado: 2026-04-13
+atualizado: 2026-05-21
+tags:
+  - ai/prompt
+  - project/material
+status: active
+ai_summary: Gerar briefing detalhado de material visual para criação no Canva (LinkedIn, posters, treinamentos). Criado por Claude — pode ser ajustado.
 ---
 
-Leia a identidade da marca em `.claude/context/berkahn-brand.md` e os princípios de design em `.claude/context/design-principles.md`.
+> [!note] Prompt criado por Claude
+> Mais flexível que prompts de Bruno (linkedin-post, blog-*). Pode ser ajustado com mais liberdade. Ver [[prompts-calibrados]].
+
+Leia a identidade da marca em [[berkahn-brand]] e os princípios de design em [[design-principles]].
 
 ## Tarefa
 

@@ -1,8 +1,20 @@
 ---
-description: Criar ou editar slide na apresentação executiva da Berkahn
+tipo: prompt
+versao: 1.0
+calibrado_em: 2026-04-13
+criado: 2026-04-13
+atualizado: 2026-05-21
+tags:
+  - ai/prompt
+  - project/apresentacao
+status: active
+ai_summary: Criar ou editar slide na apresentação executiva /apresentacao-executiva. Criado por Claude — pode ser ajustado. Usado por /apresentacao.
 ---
 
-Leia o contexto da arquitetura de apresentações em `.claude/context/presentation-system.md` e a identidade da marca em `.claude/context/berkahn-brand.md`.
+> [!note] Prompt criado por Claude
+> Pode ser ajustado com mais liberdade que prompts de Bruno. Ver [[prompts-calibrados]].
+
+Leia o contexto da arquitetura de apresentações em [[presentation-system]] e a identidade da marca em [[berkahn-brand]].
 
 ## Tarefa
 
