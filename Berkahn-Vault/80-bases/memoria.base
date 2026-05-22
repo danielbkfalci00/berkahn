@@ -1,0 +1,38 @@
+filters:
+  and:
+    - file.inFolder("10-memory")
+
+properties:
+  subtipo:
+    displayName: "Subtipo"
+  criado:
+    displayName: "Criado"
+  atualizado:
+    displayName: "Atualizado"
+
+views:
+  - type: table
+    name: "Por subtipo"
+    groupBy:
+      property: subtipo
+      direction: ASC
+    order:
+      - file.name
+      - subtipo
+      - atualizado
+    sort:
+      - property: atualizado
+        direction: DESC
+
+  - type: table
+    name: "Atualizadas últimos 30 dias"
+    filters:
+      and:
+        - 'atualizado >= today() - "30 days"'
+    order:
+      - file.name
+      - subtipo
+      - atualizado
+    sort:
+      - property: atualizado
+        direction: DESC

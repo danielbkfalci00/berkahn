@@ -1,0 +1,50 @@
+filters:
+  or:
+    - file.inFolder("40-content/blog")
+    - file.inFolder("40-content/linkedin")
+
+formulas:
+  canal: 'if(file.inFolder("40-content/blog"), "Blog", "LinkedIn")'
+
+properties:
+  titulo:
+    displayName: "Título"
+  publicado_em:
+    displayName: "Publicação"
+  formula.canal:
+    displayName: "Canal"
+
+views:
+  - type: cards
+    name: "Pipeline (cards por data)"
+    cardSize: 240
+    order:
+      - titulo
+      - publicado_em
+      - formula.canal
+    sort:
+      - property: publicado_em
+        direction: ASC
+
+  - type: table
+    name: "Próximos 30 dias"
+    filters:
+      and:
+        - 'publicado_em >= today()'
+        - 'publicado_em <= today() + "30 days"'
+    order:
+      - publicado_em
+      - titulo
+      - formula.canal
+    sort:
+      - property: publicado_em
+        direction: ASC
+
+  - type: list
+    name: "Backlog (sem data)"
+    filters:
+      and:
+        - '!publicado_em'
+    order:
+      - titulo
+      - formula.canal
