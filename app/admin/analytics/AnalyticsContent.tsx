@@ -9,6 +9,8 @@ import { TopQueriesTable } from "@/components/admin/analytics/TopQueriesTable";
 import { InsightsList } from "@/components/admin/analytics/InsightsList";
 import { ActionsPriority } from "@/components/admin/analytics/ActionsPriority";
 import { IndexationStatus } from "@/components/admin/analytics/IndexationStatus";
+import { AiTrafficSection } from "@/components/admin/analytics/AiTrafficSection";
+import { buildAiBreakdown } from "@/lib/analytics/ai-sources";
 import type { AnalyticsSnapshot, KpiCardData, TrendPoint, TopQueryWithTrend } from "@/types/analytics";
 
 interface AnalyticsContentProps {
@@ -119,6 +121,11 @@ export function AnalyticsContent({
   const ctx = snapshot.context;
   const kpis = buildKpis(snapshot, trendPoints);
 
+  // AI traffic breakdown
+  const totalSessions = ctx.ga4.topSources.reduce((s, src) => s + src.sessions, 0);
+  const totalUsers = ctx.ga4.topSources.reduce((s, src) => s + src.users, 0);
+  const aiBreakdown = buildAiBreakdown(ctx.ga4.topSources, totalUsers, totalSessions);
+
   // Top queries: sem tendência por enquanto (precisaria join multi-mês — fase 2)
   const topQueries: TopQueryWithTrend[] = ctx.gsc.topQueries.map((q) => ({ ...q }));
 
@@ -175,6 +182,7 @@ export function AnalyticsContent({
           <AreaDistributionChart data={ctx.ga4.byArea} />
           <TrafficSourcesChart data={ctx.ga4.topSources} />
         </div>
+        <AiTrafficSection breakdown={aiBreakdown} totalSessions={totalSessions} />
         <TopQueriesTable queries={topQueries} />
       </section>
 
