@@ -12,6 +12,7 @@ import {
   LogOut,
   ChevronLeft,
   Menu,
+  BarChart3,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
@@ -23,6 +24,11 @@ const navigation = [
     name: "Dashboard",
     href: "/admin",
     icon: LayoutDashboard,
+  },
+  {
+    name: "Analytics",
+    href: "/admin/analytics",
+    icon: BarChart3,
   },
   {
     name: "Posts",

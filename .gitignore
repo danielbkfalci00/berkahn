@@ -65,6 +65,8 @@ next-env.d.ts
 **/*.secret
 **/credentials.json
 gitleaks-*.json
+/secrets/
+!/secrets/.gitkeep
 
 # scripts (migration and utility scripts, not needed in production)
 /scripts/

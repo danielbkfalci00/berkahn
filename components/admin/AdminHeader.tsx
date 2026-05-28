@@ -40,7 +40,7 @@ export function AdminHeader() {
   const title = getPageTitle(pathname || "");
 
   return (
-    <header className="sticky top-0 z-30 h-16 bg-white border-b border-neutral-200 px-6 flex items-center justify-between">
+    <header data-admin-header className="sticky top-0 z-30 h-16 bg-white border-b border-neutral-200 px-6 flex items-center justify-between">
       <div className="flex items-center gap-4">
         <h1 className="text-xl font-semibold text-neutral-900 lg:ml-0 ml-12">
           {title}

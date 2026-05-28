@@ -1,0 +1,216 @@
+// Types do pipeline de analytics (GA4 + GSC) consumidos pelo /admin/analytics
+
+// ============================================
+// Raw data shapes (mirror dos scripts/analytics/fetch-*)
+// ============================================
+
+export interface Ga4Source {
+  label: string;
+  sessions: number;
+  users: number;
+  pctOfTotal: number;
+}
+
+export interface Ga4PageRow {
+  path: string;
+  slug: string;
+  pageviews: number;
+  users: number;
+  avgEngagementTime: number;
+  title?: string;
+  category?: string | null;
+  momText?: string;
+}
+
+export interface Ga4Device {
+  device: string;
+  users: number;
+  pctOfTotal: number;
+}
+
+export interface Ga4Area {
+  area: string;
+  pageviews: number;
+  pctOfTotal: number;
+}
+
+export interface Ga4Event {
+  name: string;
+  count: number;
+  topPages?: string;
+}
+
+export interface Ga4Data {
+  users: number;
+  sessions: number;
+  pageviews: number;
+  engagementRate: number; // 0-100 (pct)
+  avgSessionDuration: number; // seconds
+  topPages: Ga4PageRow[];
+  topSources: Ga4Source[];
+  byDevice: Ga4Device[];
+  byArea: Ga4Area[];
+  events: Ga4Event[];
+  period: { startDate: string; endDate: string };
+}
+
+export interface GscQuery {
+  query: string;
+  clicks: number;
+  impressions: number;
+  ctr: number; // 0-100 (pct)
+  position: number;
+}
+
+export interface GscPage {
+  page: string;
+  slug: string;
+  clicks: number;
+  impressions: number;
+  ctr: number;
+  position: number;
+  title?: string;
+  category?: string | null;
+}
+
+export interface GscDelta {
+  query: string;
+  clicksCurrent: number;
+  clicksPrevious: number;
+  clicksDelta: number;
+}
+
+export interface GscIndexation {
+  url: string;
+  slug: string;
+  title?: string;
+  verdict: string;
+  coverageState: string;
+  indexingState?: string;
+  lastCrawlTime: string | null;
+  googleCanonical?: string | null;
+  userCanonical?: string | null;
+  statusLabel?: string;
+  error?: string;
+}
+
+export interface GscData {
+  clicks: number;
+  impressions: number;
+  ctr: number;
+  position: number;
+  topQueries: GscQuery[];
+  topPages: GscPage[];
+  risingQueries: GscDelta[];
+  fallingQueries: GscDelta[];
+  indexation: GscIndexation[];
+  period: { startDate: string; endDate: string };
+}
+
+// ============================================
+// Context object (gerado pelo orquestrador)
+// ============================================
+
+export interface SummaryItem {
+  text: string;
+}
+
+export interface Insight {
+  position: number;
+  text: string;
+}
+
+export interface ActionItem {
+  text: string;
+}
+
+export interface SnapshotContext {
+  generatedDate: string;
+  generatedAt: string;
+  monthLabel: string;
+  monthSlug: string; // "YYYY-MM"
+  periodStart: string;
+  periodEnd: string;
+  ga4: Ga4Data & {
+    usersMoMText?: string;
+    usersMoMPct?: number;
+    sessionsMoMText?: string;
+    sessionsMoMPct?: number;
+    pageviewsMoMText?: string;
+    pageviewsMoMPct?: number;
+    engagementRateMoMText?: string;
+    engagementRateMoMPct?: number;
+    avgSessionDurationMoMText?: string;
+    avgSessionDurationMoMPct?: number;
+  };
+  gsc: GscData & {
+    clicksMoMText?: string;
+    clicksMoMPct?: number;
+    impressionsMoMText?: string;
+    impressionsMoMPct?: number;
+    ctrMoMText?: string;
+    ctrMoMPct?: number;
+    positionMoMText?: string;
+    positionMoMPct?: number;
+  };
+  indexation: GscIndexation[];
+  indexedCount: number;
+  totalArticles: number;
+  topArticle: { title: string; slug: string };
+  summary: SummaryItem[];
+  insights: Insight[];
+  actionsP0: ActionItem[];
+  actionsP1: ActionItem[];
+  actionsP2: ActionItem[];
+  topAction: ActionItem;
+  ga4PropertyId: string;
+  gscSiteUrl: string;
+  historicalMonths: string;
+}
+
+// ============================================
+// Supabase row shape
+// ============================================
+
+export interface AnalyticsSnapshot {
+  month: string; // "YYYY-MM-DD" (first of month)
+  ga4_data: Ga4Data;
+  gsc_data: GscData;
+  ga4_prev: Ga4Data | null;
+  gsc_prev: GscData | null;
+  context: SnapshotContext;
+  generated_at: string;
+}
+
+// ============================================
+// UI shapes (dashboard components)
+// ============================================
+
+export type DeltaDirection = "up" | "down" | "flat";
+
+export interface KpiCardData {
+  label: string;
+  value: string; // formatado
+  rawValue: number;
+  delta?: {
+    direction: DeltaDirection;
+    text: string;
+    pct: number;
+  };
+  sparkline?: number[]; // valores ao longo dos últimos N meses
+  description?: string;
+}
+
+export interface TrendPoint {
+  monthSlug: string;
+  monthLabel: string;
+  users: number;
+  sessions: number;
+  pageviews: number;
+  clicks: number;
+  impressions: number;
+}
+
+export interface TopQueryWithTrend extends GscQuery {
+  trend?: number[]; // clicks nos últimos N meses
+}

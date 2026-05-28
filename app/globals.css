@@ -553,6 +553,23 @@
     print-color-adjust: exact !important;
     background-color: #000000 !important;
   }
+
+  /* Admin layout: esconde sidebar + header em /admin/analytics print */
+  aside,
+  header.admin-header,
+  [data-admin-sidebar],
+  [data-admin-header] {
+    display: none !important;
+  }
+
+  /* Remove o padding-left do main content quando admin sidebar some */
+  .lg\:pl-64 {
+    padding-left: 0 !important;
+  }
+
+  main {
+    padding: 1.5cm !important;
+  }
 }
 
 /* ========== Masonry Component ========== */
