@@ -1,17 +1,16 @@
 "use client";
 
 import { AnalyticsHeader } from "@/components/admin/analytics/AnalyticsHeader";
-import { KpiCardGrid } from "@/components/admin/analytics/KpiCardGrid";
-import { GrowthChart } from "@/components/admin/analytics/GrowthChart";
-import { AreaDistributionChart } from "@/components/admin/analytics/AreaDistributionChart";
-import { TrafficSourcesChart } from "@/components/admin/analytics/TrafficSourcesChart";
-import { TopQueriesTable } from "@/components/admin/analytics/TopQueriesTable";
-import { InsightsList } from "@/components/admin/analytics/InsightsList";
-import { ActionsPriority } from "@/components/admin/analytics/ActionsPriority";
-import { IndexationStatus } from "@/components/admin/analytics/IndexationStatus";
-import { AiTrafficSection } from "@/components/admin/analytics/AiTrafficSection";
-import { buildAiBreakdown } from "@/lib/analytics/ai-sources";
-import type { AnalyticsSnapshot, KpiCardData, TrendPoint, TopQueryWithTrend } from "@/types/analytics";
+import { Act0Status } from "@/components/admin/analytics/acts/Act0Status";
+import { Act1Growth } from "@/components/admin/analytics/acts/Act1Growth";
+import { Act2Origin } from "@/components/admin/analytics/acts/Act2Origin";
+import { Act4Action } from "@/components/admin/analytics/acts/Act4Action";
+import type {
+  AnalyticsSnapshot,
+  KpiCardData,
+  TrendPoint,
+  TopQueryWithTrend,
+} from "@/types/analytics";
 
 interface AnalyticsContentProps {
   snapshot: AnalyticsSnapshot;
@@ -107,7 +106,9 @@ function buildKpis(snapshot: AnalyticsSnapshot, trend: TrendPoint[]): KpiCardDat
       label: "Indexados",
       rawValue: ctx.indexedCount,
       value: `${ctx.indexedCount}/${ctx.totalArticles}`,
-      description: `${ctx.totalArticles > 0 ? Math.round((ctx.indexedCount / ctx.totalArticles) * 100) : 0}% do catálogo`,
+      description: `${
+        ctx.totalArticles > 0 ? Math.round((ctx.indexedCount / ctx.totalArticles) * 100) : 0
+      }% do catálogo`,
     },
   ];
 }
@@ -121,35 +122,11 @@ export function AnalyticsContent({
   const ctx = snapshot.context;
   const kpis = buildKpis(snapshot, trendPoints);
 
-  // AI traffic breakdown
-  const totalSessions = ctx.ga4.topSources.reduce((s, src) => s + src.sessions, 0);
-  const totalUsers = ctx.ga4.topSources.reduce((s, src) => s + src.users, 0);
-  const aiBreakdown = buildAiBreakdown(ctx.ga4.topSources, totalUsers, totalSessions);
-
-  // Top queries: sem tendência por enquanto (precisaria join multi-mês — fase 2)
+  // Top queries (sem trend por enquanto — vem no Sprint 2/3)
   const topQueries: TopQueryWithTrend[] = ctx.gsc.topQueries.map((q) => ({ ...q }));
 
-  // Subtítulos dinâmicos
-  const usersMoM = ctx.ga4.usersMoMPct;
-  const clicksMoM = ctx.gsc.clicksMoMPct;
-  const growthSubtitle =
-    usersMoM !== undefined && clicksMoM !== undefined
-      ? `Tráfego ${usersMoM >= 0 ? "cresceu" : "caiu"} ${Math.abs(usersMoM).toFixed(0)}% e search ${clicksMoM >= 0 ? "subiu" : "caiu"} ${Math.abs(clicksMoM).toFixed(0)}% vs mês anterior.`
-      : "Primeiro mês registrado.";
-
-  const topSource = ctx.ga4.topSources[0];
-  const risingQuery = ctx.gsc.risingQueries[0];
-  const originSubtitle =
-    topSource && risingQuery
-      ? `${topSource.label} gera ${topSource.pctOfTotal}% das sessões; "${risingQuery.query}" ganhou ${risingQuery.clicksDelta} cliques vs mês anterior.`
-      : topSource
-        ? `${topSource.label} gera ${topSource.pctOfTotal}% das sessões.`
-        : "Sem dados de origem suficientes.";
-
-  const actionSubtitle = `${ctx.actionsP0.length} ações P0 priorizadas. Indexação ${ctx.indexedCount}/${ctx.totalArticles}.`;
-
   return (
-    <div className="space-y-10 max-w-[1400px]">
+    <div className="space-y-12 max-w-[1400px]">
       <AnalyticsHeader
         monthLabel={ctx.monthLabel}
         periodStart={ctx.periodStart}
@@ -158,52 +135,11 @@ export function AnalyticsContent({
         currentMonth={currentMonth}
       />
 
-      {/* Seção 1: Crescimento */}
-      <section className="space-y-6">
-        <div>
-          <h2 className="text-2xl font-bold text-neutral-900 tracking-tight">
-            Como estamos crescendo
-          </h2>
-          <p className="text-base text-neutral-600 mt-1">{growthSubtitle}</p>
-        </div>
-        <KpiCardGrid kpis={kpis} />
-        <GrowthChart data={trendPoints} />
-      </section>
-
-      {/* Seção 2: Origem */}
-      <section className="space-y-6">
-        <div>
-          <h2 className="text-2xl font-bold text-neutral-900 tracking-tight">
-            De onde vem o crescimento
-          </h2>
-          <p className="text-base text-neutral-600 mt-1">{originSubtitle}</p>
-        </div>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <AreaDistributionChart data={ctx.ga4.byArea} />
-          <TrafficSourcesChart data={ctx.ga4.topSources} />
-        </div>
-        <AiTrafficSection breakdown={aiBreakdown} totalSessions={totalSessions} />
-        <TopQueriesTable queries={topQueries} />
-      </section>
-
-      {/* Seção 3: Ação */}
-      <section className="space-y-6">
-        <div>
-          <h2 className="text-2xl font-bold text-neutral-900 tracking-tight">
-            Para onde direcionar esforço
-          </h2>
-          <p className="text-base text-neutral-600 mt-1">{actionSubtitle}</p>
-        </div>
-        <InsightsList insights={ctx.insights} />
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <ActionsPriority
-            p0={ctx.actionsP0}
-            p1={ctx.actionsP1}
-            p2={ctx.actionsP2}
-          />
-          <IndexationStatus indexation={ctx.indexation} />
-        </div>
-      </section>
+      <Act0Status context={ctx} trendPoints={trendPoints} />
+      <Act1Growth context={ctx} kpis={kpis} trendPoints={trendPoints} />
+      <Act2Origin context={ctx} topQueries={topQueries} />
+      {/* Act3 (Performance de Posts) entra no Sprint 2 */}
+      <Act4Action context={ctx} />
 
       <footer className="text-xs text-neutral-400 pt-8 border-t border-neutral-100 print:pt-3">
         Gerado em {ctx.generatedAt} · GA4 property {ctx.ga4PropertyId} · GSC {ctx.gscSiteUrl}
