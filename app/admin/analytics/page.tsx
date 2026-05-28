@@ -66,11 +66,26 @@ export default async function AnalyticsPage({ searchParams }: PageProps) {
     historicalBySlug
   );
 
+  // Conta posts publicados dentro do mês atual (pra detector "no-posts")
+  const monthStart = `${currentMonth}-01`;
+  const [year, monthNum] = currentMonth.split("-").map(Number);
+  const nextMonthYear = monthNum === 12 ? year + 1 : year;
+  const nextMonthNum = monthNum === 12 ? 1 : monthNum + 1;
+  const monthEnd = `${nextMonthYear}-${String(nextMonthNum).padStart(2, "0")}-01`;
+  let postsPublishedInMonth = 0;
+  for (const [, meta] of postsMap) {
+    if (meta.publishedAt && meta.publishedAt >= monthStart && meta.publishedAt < monthEnd) {
+      postsPublishedInMonth++;
+    }
+  }
+
   return (
     <AnalyticsContent
       snapshot={snapshot}
+      previousSnapshot={prevSnapshot}
       trendPoints={trendPoints}
       postPerformance={postPerformance}
+      postsPublishedInMonth={postsPublishedInMonth}
       availableMonths={availableMonths}
       currentMonth={currentMonth}
     />

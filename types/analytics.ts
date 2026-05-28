@@ -237,6 +237,15 @@ export interface KpiCardData {
   };
   sparkline?: number[]; // valores ao longo dos últimos N meses
   description?: string;
+  goal?: {
+    /** "de 421 (76%)" */
+    label: string;
+    pct: number;
+    color: string;
+    /** "meta = média 3m × 1.30" */
+    formula?: string;
+    basedOnMonths?: number;
+  };
 }
 
 export interface TrendPoint {

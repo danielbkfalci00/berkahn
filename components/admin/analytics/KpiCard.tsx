@@ -2,6 +2,7 @@ import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { ArrowUp, ArrowDown, Minus } from "lucide-react";
 import { SparklineMini } from "./SparklineMini";
+import { MetricTooltip } from "./MetricTooltip";
 import type { KpiCardData } from "@/types/analytics";
 
 interface KpiCardProps {
@@ -11,8 +12,8 @@ interface KpiCardProps {
 
 /**
  * Card de KPI compacto.
- * Layout vertical: label + delta inline, valor grande, sparkline embaixo.
- * Padding reduzido (p-4) e tipo do valor (text-3xl) pra caber mais info no grid.
+ * Layout vertical: label + delta inline, valor grande, progress bar de meta (opcional),
+ * sparkline embaixo.
  */
 export function KpiCard({ kpi, className }: KpiCardProps) {
   const direction = kpi.delta?.direction ?? "flat";
@@ -50,6 +51,47 @@ export function KpiCard({ kpi, className }: KpiCardProps) {
 
       {kpi.description && (
         <p className="text-[11px] text-neutral-500 leading-tight">{kpi.description}</p>
+      )}
+
+      {kpi.goal && (
+        <div className="flex flex-col gap-1 mt-0.5">
+          <div className="h-1.5 rounded-full bg-neutral-100 overflow-hidden">
+            <div
+              className="h-full rounded-full transition-[width]"
+              style={{
+                width: `${Math.min(100, kpi.goal.pct)}%`,
+                backgroundColor: kpi.goal.color,
+              }}
+            />
+          </div>
+          <div className="flex items-center justify-between gap-2 text-[10px] text-neutral-500">
+            <span className="tabular-nums">{kpi.goal.label}</span>
+            {kpi.goal.formula && (
+              <span className="inline-flex items-center gap-0.5">
+                <MetricTooltip
+                  iconSize={10}
+                  content={
+                    <div className="space-y-1">
+                      <p className="font-semibold text-neutral-900">Meta dinâmica</p>
+                      <p>{kpi.goal.formula}</p>
+                      {kpi.goal.basedOnMonths !== undefined && kpi.goal.basedOnMonths > 0 && (
+                        <p className="text-neutral-600">
+                          Baseada em {kpi.goal.basedOnMonths} m
+                          {kpi.goal.basedOnMonths === 1 ? "ês" : "eses"} de histórico.
+                        </p>
+                      )}
+                      {kpi.goal.basedOnMonths === 0 && (
+                        <p className="text-neutral-600">
+                          Histórico curto. A meta vai estabilizar após 3 meses.
+                        </p>
+                      )}
+                    </div>
+                  }
+                />
+              </span>
+            )}
+          </div>
+        </div>
       )}
 
       {kpi.sparkline && kpi.sparkline.length > 1 && (
