@@ -27,9 +27,9 @@ export function Act0Status({ context, trendPoints, redFlags = [] }: Act0StatusPr
   const narrative = narrativeAct0Status(context, health, win, primaryFlagText);
 
   return (
-    <section className="space-y-4">
+    <section className="space-y-4" aria-labelledby="act-0-title">
       <div>
-        <h2 className="text-2xl font-bold text-neutral-900 tracking-tight">
+        <h2 id="act-0-title" className="text-2xl font-bold text-neutral-900 tracking-tight">
           Status do mês
         </h2>
         <p className="text-base text-neutral-600 mt-1">{narrative}</p>

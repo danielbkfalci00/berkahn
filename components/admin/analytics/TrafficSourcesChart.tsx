@@ -95,7 +95,11 @@ export function TrafficSourcesChart({ data }: TrafficSourcesChartProps) {
           }
         />
       </div>
-      <div className="h-72">
+      <div
+        className="h-72"
+        role="img"
+        aria-label="Top fontes de tráfego com IAs consolidadas"
+      >
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={chartData} layout="vertical" margin={{ top: 0, right: 24, left: 0, bottom: 0 }}>
             <CartesianGrid stroke="#E5E2D9" strokeDasharray="3 3" horizontal={false} />

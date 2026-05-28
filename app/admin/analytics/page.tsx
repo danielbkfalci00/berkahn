@@ -8,6 +8,7 @@ import {
 } from "@/lib/analytics/queries";
 import { buildPostPerformance } from "@/lib/analytics/post-performance";
 import { previousMonthSlug } from "@/lib/analytics/period";
+import { buildTimelineEvents } from "@/lib/analytics/timeline-events";
 import { AnalyticsContent } from "./AnalyticsContent";
 
 export const dynamic = "force-dynamic";
@@ -66,6 +67,8 @@ export default async function AnalyticsPage({ searchParams }: PageProps) {
     historicalBySlug
   );
 
+  const timelineEvents = buildTimelineEvents(postsMap, trendPoints);
+
   // Conta posts publicados dentro do mês atual (pra detector "no-posts")
   const monthStart = `${currentMonth}-01`;
   const [year, monthNum] = currentMonth.split("-").map(Number);
@@ -88,6 +91,7 @@ export default async function AnalyticsPage({ searchParams }: PageProps) {
       postsPublishedInMonth={postsPublishedInMonth}
       availableMonths={availableMonths}
       currentMonth={currentMonth}
+      timelineEvents={timelineEvents}
     />
   );
 }

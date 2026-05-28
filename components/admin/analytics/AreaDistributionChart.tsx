@@ -16,7 +16,11 @@ export function AreaDistributionChart({ data }: AreaDistributionChartProps) {
       <h3 className="text-sm uppercase tracking-wider font-medium text-neutral-500 mb-4">
         Tráfego por área do site
       </h3>
-      <div className="h-72">
+      <div
+        className="h-72"
+        role="img"
+        aria-label="Distribuição de pageviews por área do site"
+      >
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
             <Pie

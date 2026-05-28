@@ -40,9 +40,9 @@ export function Act3Posts({ context, posts }: Act3PostsProps) {
   });
 
   return (
-    <section className="space-y-6">
+    <section className="space-y-6" aria-labelledby="act-3-title">
       <div>
-        <h2 className="text-2xl font-bold text-neutral-900 tracking-tight">
+        <h2 id="act-3-title" className="text-2xl font-bold text-neutral-900 tracking-tight">
           O que está performando
         </h2>
         <p className="text-base text-neutral-600 mt-1">{narrative}</p>

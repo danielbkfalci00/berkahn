@@ -10,6 +10,7 @@ import { Act4Action } from "@/components/admin/analytics/acts/Act4Action";
 import { ComparisonView } from "@/components/admin/analytics/ComparisonView";
 import { computeMonthlyGoals, computeGoalProgress, formatGoalLabel, formulaLabel, goalStatusColor } from "@/lib/analytics/goals";
 import { detectRedFlags } from "@/lib/analytics/red-flags";
+import type { TimelineEvent } from "@/lib/analytics/timeline-events";
 import type {
   AnalyticsSnapshot,
   KpiCardData,
@@ -26,6 +27,7 @@ interface AnalyticsContentProps {
   postsPublishedInMonth: number;
   availableMonths: string[];
   currentMonth: string;
+  timelineEvents: TimelineEvent[];
 }
 
 function deltaDirection(deltaPct?: number): "up" | "down" | "flat" {
@@ -152,6 +154,7 @@ export function AnalyticsContent({
   postsPublishedInMonth,
   availableMonths,
   currentMonth,
+  timelineEvents,
 }: AnalyticsContentProps) {
   const searchParams = useSearchParams();
   const comparisonMode = searchParams.get("compare") === "1";
@@ -179,7 +182,12 @@ export function AnalyticsContent({
       ) : (
         <>
           <Act0Status context={ctx} trendPoints={trendPoints} redFlags={redFlags} />
-          <Act1Growth context={ctx} kpis={kpis} trendPoints={trendPoints} />
+          <Act1Growth
+            context={ctx}
+            kpis={kpis}
+            trendPoints={trendPoints}
+            timelineEvents={timelineEvents}
+          />
           <Act2Origin context={ctx} topQueries={topQueries} />
           <Act3Posts context={ctx} posts={postPerformance} />
           <Act4Action context={ctx} />
