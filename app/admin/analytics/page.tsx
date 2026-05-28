@@ -3,7 +3,11 @@ import {
   getAvailableMonths,
   getSnapshot,
   getAllTrendPoints,
+  getPublishedPosts,
+  getHistoricalPageviewsBySlug,
 } from "@/lib/analytics/queries";
+import { buildPostPerformance } from "@/lib/analytics/post-performance";
+import { previousMonthSlug } from "@/lib/analytics/period";
 import { AnalyticsContent } from "./AnalyticsContent";
 
 export const dynamic = "force-dynamic";
@@ -46,12 +50,27 @@ export default async function AnalyticsPage({ searchParams }: PageProps) {
   const snapshot = await getSnapshot(currentMonth);
   if (!snapshot) notFound();
 
-  const trendPoints = await getAllTrendPoints();
+  const prevMonth = previousMonthSlug(currentMonth);
+  const prevSnapshot = prevMonth ? await getSnapshot(prevMonth) : null;
+
+  const [trendPoints, postsMap, historicalBySlug] = await Promise.all([
+    getAllTrendPoints(),
+    getPublishedPosts(),
+    getHistoricalPageviewsBySlug(),
+  ]);
+
+  const postPerformance = buildPostPerformance(
+    snapshot,
+    prevSnapshot,
+    postsMap,
+    historicalBySlug
+  );
 
   return (
     <AnalyticsContent
       snapshot={snapshot}
       trendPoints={trendPoints}
+      postPerformance={postPerformance}
       availableMonths={availableMonths}
       currentMonth={currentMonth}
     />

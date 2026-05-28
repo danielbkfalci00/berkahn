@@ -4,10 +4,12 @@ import { AnalyticsHeader } from "@/components/admin/analytics/AnalyticsHeader";
 import { Act0Status } from "@/components/admin/analytics/acts/Act0Status";
 import { Act1Growth } from "@/components/admin/analytics/acts/Act1Growth";
 import { Act2Origin } from "@/components/admin/analytics/acts/Act2Origin";
+import { Act3Posts } from "@/components/admin/analytics/acts/Act3Posts";
 import { Act4Action } from "@/components/admin/analytics/acts/Act4Action";
 import type {
   AnalyticsSnapshot,
   KpiCardData,
+  PostPerformance,
   TrendPoint,
   TopQueryWithTrend,
 } from "@/types/analytics";
@@ -15,6 +17,7 @@ import type {
 interface AnalyticsContentProps {
   snapshot: AnalyticsSnapshot;
   trendPoints: TrendPoint[];
+  postPerformance: PostPerformance[];
   availableMonths: string[];
   currentMonth: string;
 }
@@ -116,6 +119,7 @@ function buildKpis(snapshot: AnalyticsSnapshot, trend: TrendPoint[]): KpiCardDat
 export function AnalyticsContent({
   snapshot,
   trendPoints,
+  postPerformance,
   availableMonths,
   currentMonth,
 }: AnalyticsContentProps) {
@@ -138,7 +142,7 @@ export function AnalyticsContent({
       <Act0Status context={ctx} trendPoints={trendPoints} />
       <Act1Growth context={ctx} kpis={kpis} trendPoints={trendPoints} />
       <Act2Origin context={ctx} topQueries={topQueries} />
-      {/* Act3 (Performance de Posts) entra no Sprint 2 */}
+      <Act3Posts context={ctx} posts={postPerformance} />
       <Act4Action context={ctx} />
 
       <footer className="text-xs text-neutral-400 pt-8 border-t border-neutral-100 print:pt-3">

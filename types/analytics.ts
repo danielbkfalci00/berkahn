@@ -17,9 +17,47 @@ export interface Ga4PageRow {
   pageviews: number;
   users: number;
   avgEngagementTime: number;
+  // Métricas adicionadas no Sprint 2 (fetch-ga4 retorna 0 quando não disponível)
+  bounceRate?: number; // 0-100 (pct)
+  engagementRate?: number; // 0-100 (pct)
+  sessions?: number;
+  newUsers?: number;
+  // Enriched fields (preenchidos pelo client após join com Supabase)
   title?: string;
   category?: string | null;
   momText?: string;
+}
+
+// ============================================
+// Performance de post — usado pelo Ato 3
+// ============================================
+
+export type PostStatus = "engaged" | "rising" | "cold" | "abandoned" | "neutral";
+
+export interface PostMeta {
+  slug: string;
+  title: string;
+  category: string;
+  readTimeMin: number;
+  publishedAt: string | null;
+}
+
+export interface PostPerformance {
+  slug: string;
+  title: string;
+  category: string;
+  readTimeMin: number;
+  ageInDays: number | null;
+  pageviews: number;
+  pageviewsPrev: number | null;
+  pageviewsMoMPct: number | null;
+  pageviewsSparkline: number[]; // últimos N meses (cresce com o tempo)
+  users: number;
+  avgEngagementTime: number;
+  bounceRate: number | null;
+  engagementRate: number | null;
+  retentionPct: number;
+  status: PostStatus;
 }
 
 export interface Ga4Device {

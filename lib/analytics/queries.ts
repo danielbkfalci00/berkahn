@@ -1,7 +1,11 @@
 // Queries server-side para o /admin/analytics dashboard
 import "server-only";
 import { createClient } from "@/lib/supabase/server";
-import type { AnalyticsSnapshot, TrendPoint } from "@/types/analytics";
+import type {
+  AnalyticsSnapshot,
+  PostMeta,
+  TrendPoint,
+} from "@/types/analytics";
 
 /**
  * Lista os meses disponíveis no Supabase, do mais recente ao mais antigo.
@@ -55,6 +59,66 @@ export async function getMultipleSnapshots(months: string[]): Promise<AnalyticsS
 
   if (error || !data) return [];
   return data as AnalyticsSnapshot[];
+}
+
+/**
+ * Busca todos os posts publicados, retorna Map slug → metadados para join.
+ * Usado pelo Ato 3 (Performance de Posts).
+ */
+export async function getPublishedPosts(): Promise<Map<string, PostMeta>> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("posts")
+    .select("slug, title, category, read_time, published_at")
+    .eq("status", "published");
+
+  if (error || !data) return new Map();
+
+  const map = new Map<string, PostMeta>();
+  for (const row of data) {
+    const r = row as {
+      slug: string;
+      title: string;
+      category: string | null;
+      read_time: number | null;
+      published_at: string | null;
+    };
+    if (!r.slug) continue;
+    map.set(r.slug, {
+      slug: r.slug,
+      title: r.title,
+      category: r.category ?? "Geral",
+      readTimeMin: r.read_time ?? 5,
+      publishedAt: r.published_at,
+    });
+  }
+  return map;
+}
+
+/**
+ * Mapa { monthSlug → Map<slug, pageviews> } para reconstruir sparklines por post.
+ * Lê de todos os snapshots disponíveis.
+ */
+export async function getHistoricalPageviewsBySlug(): Promise<Map<string, Map<string, number>>> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("analytics_snapshots")
+    .select("month, ga4_data")
+    .order("month", { ascending: true });
+
+  if (error || !data) return new Map();
+
+  const result = new Map<string, Map<string, number>>();
+  for (const row of data) {
+    const r = row as { month: string; ga4_data: { topPages?: Array<{ slug: string; pageviews: number }> } };
+    const monthSlug = r.month.slice(0, 7);
+    const inner = new Map<string, number>();
+    for (const page of r.ga4_data?.topPages ?? []) {
+      if (page.slug) inner.set(page.slug, page.pageviews);
+    }
+    result.set(monthSlug, inner);
+  }
+  return result;
 }
 
 /**

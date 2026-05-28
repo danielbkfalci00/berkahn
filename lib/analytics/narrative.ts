@@ -72,15 +72,38 @@ export function narrativeAct2Origin(ctx: SnapshotContext): string {
   return parts.length > 0 ? parts.join(". ") + "." : "Distribuição de origem do tráfego no período.";
 }
 
-export function narrativeAct3Posts(ctx: SnapshotContext, bestPostTitle?: string, bestPostViews?: number): string {
-  if (bestPostTitle && bestPostViews) {
-    return `${bestPostTitle} foi o conteúdo mais lido com ${intFmt(bestPostViews)} pageviews.`;
+export interface Act3NarrativeInput {
+  bestPost?: { title: string; pageviews: number; retentionPct: number } | null;
+  risingCount?: number;
+  coldCount?: number;
+  engagedCount?: number;
+  abandonedCount?: number;
+}
+
+export function narrativeAct3Posts(ctx: SnapshotContext, input?: Act3NarrativeInput): string {
+  const best = input?.bestPost;
+  const parts: string[] = [];
+
+  if (best) {
+    parts.push(
+      `${best.title} liderou com ${intFmt(best.pageviews)} pageviews e ${best.retentionPct}% de retenção`
+    );
+  } else {
+    const topPage = ctx.ga4.topPages[0];
+    if (topPage) {
+      parts.push(`${topPage.title || topPage.slug} liderou com ${intFmt(topPage.pageviews)} pageviews`);
+    }
   }
-  const topPage = ctx.ga4.topPages[0];
-  if (topPage) {
-    return `${topPage.title || topPage.slug} liderou com ${intFmt(topPage.pageviews)} pageviews.`;
-  }
-  return "Análise de performance dos posts publicados.";
+
+  const counts: string[] = [];
+  if (input?.engagedCount && input.engagedCount > 0) counts.push(`${input.engagedCount} engajados`);
+  if (input?.risingCount && input.risingCount > 0) counts.push(`${input.risingCount} em alta`);
+  if (input?.coldCount && input.coldCount > 0) counts.push(`${input.coldCount} em queda`);
+  if (input?.abandonedCount && input.abandonedCount > 0)
+    counts.push(`${input.abandonedCount} abandonados`);
+  if (counts.length > 0) parts.push(counts.join(", "));
+
+  return parts.length > 0 ? parts.join(". ") + "." : "Análise de performance dos posts publicados.";
 }
 
 export function narrativeAct4Action(ctx: SnapshotContext): string {
