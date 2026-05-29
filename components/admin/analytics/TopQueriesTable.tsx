@@ -8,6 +8,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { SparklineMini } from "./SparklineMini";
+import { MetricTooltip } from "./MetricTooltip";
 import type { TopQueryWithTrend } from "@/types/analytics";
 
 interface TopQueriesTableProps {
@@ -40,10 +41,30 @@ export function TopQueriesTable({ queries, maxRows = 15 }: TopQueriesTableProps)
                 Impressões
               </TableHead>
               <TableHead className="text-right text-neutral-500 font-medium uppercase text-xs tracking-wider">
-                CTR
+                <span className="inline-flex items-center gap-1 justify-end">
+                  CTR
+                  <MetricTooltip
+                    iconSize={11}
+                    content={
+                      <p>
+                        Taxa de clique = cliques ÷ impressões. Mede o quanto o snippet no Google convence.
+                      </p>
+                    }
+                  />
+                </span>
               </TableHead>
               <TableHead className="text-right text-neutral-500 font-medium uppercase text-xs tracking-wider">
-                Posição
+                <span className="inline-flex items-center gap-1 justify-end">
+                  Posição
+                  <MetricTooltip
+                    iconSize={11}
+                    content={
+                      <p>
+                        Posição média ponderada por impressões no Google Search. Menor é melhor. 1 a 3 são o primeiro bloco da busca.
+                      </p>
+                    }
+                  />
+                </span>
               </TableHead>
               <TableHead className="text-center text-neutral-500 font-medium uppercase text-xs tracking-wider pr-6 w-24">
                 Tendência

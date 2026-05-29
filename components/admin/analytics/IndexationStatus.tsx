@@ -44,7 +44,7 @@ export function IndexationStatus({ indexation }: IndexationStatusProps) {
       {notIndexed.length > 0 ? (
         <Accordion type="single" collapsible className="mt-4">
           <AccordionItem value="not-indexed" className="border-neutral-200">
-            <AccordionTrigger className="text-sm font-medium hover:no-underline">
+            <AccordionTrigger className="text-sm font-medium hover:no-underline rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2">
               {notIndexed.length} não indexado{notIndexed.length === 1 ? "" : "s"}
             </AccordionTrigger>
             <AccordionContent>

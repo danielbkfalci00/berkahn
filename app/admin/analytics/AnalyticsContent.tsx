@@ -135,14 +135,6 @@ function buildKpis(
       sparkline: impressionsHistory,
       goal: goalProps(gsc.impressions, goals.impressions),
     },
-    {
-      label: "Indexados",
-      rawValue: ctx.indexedCount,
-      value: `${ctx.indexedCount}/${ctx.totalArticles}`,
-      description: `${
-        ctx.totalArticles > 0 ? Math.round((ctx.indexedCount / ctx.totalArticles) * 100) : 0
-      }% do catálogo`,
-    },
   ];
 }
 
@@ -190,12 +182,15 @@ export function AnalyticsContent({
           />
           <Act2Origin context={ctx} topQueries={topQueries} />
           <Act3Posts context={ctx} posts={postPerformance} />
-          <Act4Action context={ctx} />
+          <Act4Action context={ctx} posts={postPerformance} />
         </>
       )}
 
       <footer className="text-xs text-neutral-400 pt-8 border-t border-neutral-100 print:pt-3">
-        Gerado em {ctx.generatedAt} · GA4 property {ctx.ga4PropertyId} · GSC {ctx.gscSiteUrl}
+        Atualizado em {ctx.generatedAt}
+        <span className="hidden print:inline">
+          {" "}· GA4 property {ctx.ga4PropertyId} · GSC {ctx.gscSiteUrl}
+        </span>
       </footer>
     </div>
   );

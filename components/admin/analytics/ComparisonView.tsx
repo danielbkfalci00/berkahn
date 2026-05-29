@@ -3,6 +3,7 @@
 import { Card } from "@/components/ui/card";
 import { ArrowUp, ArrowDown, Minus, SplitSquareHorizontal } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { MetricTooltip } from "./MetricTooltip";
 import type { AnalyticsSnapshot, KpiCardData } from "@/types/analytics";
 
 interface ComparisonViewProps {
@@ -15,6 +16,7 @@ interface KpiPair {
   current: number;
   previous: number;
   format?: (n: number) => string;
+  tooltip?: React.ReactNode;
 }
 
 function intFmt(n: number): string {
@@ -49,6 +51,11 @@ export function ComparisonView({ current, previous }: ComparisonViewProps) {
       current: cur.ga4.engagementRate,
       previous: prev.ga4.engagementRate,
       format: pctFmt,
+      tooltip: (
+        <p>
+          Porcentagem de sessões consideradas engajadas no GA4 (mais de 10 segundos ou ao menos 1 evento). Quanto maior, mais visitantes ficam para ler.
+        </p>
+      ),
     },
   ];
 
@@ -75,7 +82,10 @@ export function ComparisonView({ current, previous }: ComparisonViewProps) {
           <div className="space-y-3">
             {pairs.map((p) => (
               <div key={p.label} className="flex items-baseline justify-between gap-3">
-                <span className="text-sm text-neutral-600">{p.label}</span>
+                <span className="inline-flex items-center gap-1 text-sm text-neutral-600">
+                  {p.label}
+                  {p.tooltip && <MetricTooltip iconSize={11} content={p.tooltip} />}
+                </span>
                 <span className="text-lg font-semibold text-neutral-700 tabular-nums">
                   {p.format ? p.format(p.previous) : intFmt(p.previous)}
                 </span>
@@ -105,7 +115,10 @@ export function ComparisonView({ current, previous }: ComparisonViewProps) {
                 delta.direction === "up" ? ArrowUp : delta.direction === "down" ? ArrowDown : Minus;
               return (
                 <div key={p.label} className="flex items-baseline justify-between gap-3">
-                  <span className="text-sm text-neutral-600">{p.label}</span>
+                  <span className="inline-flex items-center gap-1 text-sm text-neutral-600">
+                  {p.label}
+                  {p.tooltip && <MetricTooltip iconSize={11} content={p.tooltip} />}
+                </span>
                   <div className="flex items-baseline gap-2">
                     <span className="text-lg font-semibold text-neutral-900 tabular-nums">
                       {p.format ? p.format(p.current) : intFmt(p.current)}

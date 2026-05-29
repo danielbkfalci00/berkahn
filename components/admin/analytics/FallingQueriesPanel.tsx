@@ -40,7 +40,7 @@ export function FallingQueriesPanel({ queries }: FallingQueriesPanelProps) {
       ) : (
         <Accordion type="single" collapsible>
           <AccordionItem value="falling" className="border-neutral-200 border-b-0">
-            <AccordionTrigger className="text-sm font-medium hover:no-underline py-0">
+            <AccordionTrigger className="text-sm font-medium hover:no-underline py-0 rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2">
               <div className="flex items-center gap-3">
                 <TrendingDown className="h-4 w-4 text-[#B83A3A]" strokeWidth={2} />
                 <span className="text-neutral-900">
@@ -92,7 +92,7 @@ export function FallingQueriesPanel({ queries }: FallingQueriesPanelProps) {
                 <button
                   type="button"
                   onClick={() => setShowAll((v) => !v)}
-                  className="mt-3 text-xs text-neutral-600 hover:text-neutral-900 transition-colors font-medium"
+                  className="mt-3 text-xs text-neutral-600 hover:text-neutral-900 transition-colors font-medium rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2"
                 >
                   {showAll ? `Mostrar apenas top ${INITIAL_LIMIT}` : `Ver todas (${total})`}
                 </button>

@@ -126,7 +126,7 @@ export function PostPerformanceTable({
               type="button"
               onClick={() => setFilter(f.value)}
               className={cn(
-                "px-2.5 py-1 rounded-full text-xs font-medium transition-colors border",
+                "px-2.5 py-1 rounded-full text-xs font-medium transition-colors border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2",
                 filter === f.value
                   ? "bg-neutral-900 text-white border-neutral-900"
                   : "bg-white text-neutral-600 border-neutral-200 hover:bg-neutral-50"
@@ -272,7 +272,7 @@ export function PostPerformanceTable({
           <button
             type="button"
             onClick={() => setShowAll((v) => !v)}
-            className="text-xs text-neutral-600 hover:text-neutral-900 transition-colors font-medium"
+            className="text-xs text-neutral-600 hover:text-neutral-900 transition-colors font-medium rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2"
           >
             {showAll ? "Mostrar apenas top " + initialLimit : `Ver todos (${filtered.length})`}
           </button>

@@ -106,15 +106,40 @@ export function narrativeAct3Posts(ctx: SnapshotContext, input?: Act3NarrativeIn
   return parts.length > 0 ? parts.join(". ") + "." : "Análise de performance dos posts publicados.";
 }
 
-export function narrativeAct4Action(ctx: SnapshotContext): string {
+export interface Act4NarrativeInput {
+  bestPostTitle?: string | null;
+  abandonedCount?: number;
+  coldCount?: number;
+}
+
+export function narrativeAct4Action(ctx: SnapshotContext, input?: Act4NarrativeInput): string {
   const p0 = ctx.actionsP0.length;
   const p1 = ctx.actionsP1.length;
   const notIndexed = ctx.totalArticles - ctx.indexedCount;
   const parts: string[] = [];
+
+  const bridge = (() => {
+    if (input?.abandonedCount && input.abandonedCount > 0) {
+      const word = input.abandonedCount === 1 ? "post abandonado" : "posts abandonados";
+      return `${input.abandonedCount} ${word} pedem revisão`;
+    }
+    if (input?.coldCount && input.coldCount > 0) {
+      const word = input.coldCount === 1 ? "post em queda" : "posts em queda";
+      return `${input.coldCount} ${word} a investigar`;
+    }
+    if (input?.bestPostTitle) {
+      return `Após "${input.bestPostTitle}" liderar a leitura`;
+    }
+    return null;
+  })();
+
+  if (bridge) parts.push(bridge);
   if (p0 > 0) parts.push(`${p0} ${p0 === 1 ? "ação P0" : "ações P0"} esta semana`);
   if (p1 > 0) parts.push(`${p1} P1 nas próximas duas semanas`);
   if (notIndexed > 0) parts.push(`${notIndexed} artigos aguardando indexação`);
-  if (notIndexed === 0 && p0 === 0) {
+  if (parts.length === 0) {
+    parts.push("Nenhuma ação urgente. Foco em P1 e novos conteúdos");
+  } else if (notIndexed === 0 && p0 === 0 && !bridge) {
     parts.push("Nenhuma ação urgente. Foco em P1 e novos conteúdos");
   }
   return parts.length > 0 ? parts.join(". ") + "." : "Próximos passos do período.";
