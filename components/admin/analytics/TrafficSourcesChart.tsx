@@ -117,7 +117,7 @@ export function TrafficSourcesChart({ data }: TrafficSourcesChartProps) {
               fontSize={12}
               tickLine={false}
               axisLine={false}
-              width={160}
+              width={240}
             />
             <Tooltip
               contentStyle={{

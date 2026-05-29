@@ -1,7 +1,7 @@
 "use client";
 
 import type { ColumnDef, FilterFn } from "@tanstack/react-table";
-import { AlertTriangle, Minus, TrendingDown, TrendingUp, Trophy } from "lucide-react";
+import { AlertTriangle, ExternalLink, Minus, TrendingDown, TrendingUp, Trophy } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { MetricTooltip } from "@/components/admin/analytics/MetricTooltip";
 import { SortableHeader } from "@/components/admin/analytics/SortableHeader";
@@ -106,7 +106,19 @@ export const postColumns: ColumnDef<PostPerformance, unknown>[] = [
     header: ({ column }) => <SortableHeader column={column} label="Post" align="left" />,
     cell: ({ row }) => (
       <div>
-        <div className="font-medium text-neutral-900 line-clamp-1">{row.original.title}</div>
+        <a
+          href={`/atualidades/${row.original.slug}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          title={row.original.title}
+          className="group flex items-start gap-1 font-medium text-neutral-900 hover:text-neutral-600 hover:underline rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2"
+        >
+          <span className="line-clamp-2">{row.original.title}</span>
+          <ExternalLink
+            className="h-3 w-3 mt-0.5 shrink-0 text-neutral-400 opacity-0 transition-opacity group-hover:opacity-100"
+            strokeWidth={2}
+          />
+        </a>
         <Badge
           variant="outline"
           className="mt-1 text-[10px] font-normal border-neutral-200 text-neutral-500"

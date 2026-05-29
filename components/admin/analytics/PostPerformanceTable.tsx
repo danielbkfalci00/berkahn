@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import type { Table as TanstackTable } from "@tanstack/react-table";
-import { ChevronDown, X } from "lucide-react";
+import { ChevronDown, ExternalLink, X } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -261,9 +261,17 @@ function PostMobileCard({ post }: { post: PostPerformance }) {
         <StatusIconCell status={post.status} />
         <MoMBadge pct={post.pageviewsMoMPct} />
       </div>
-      <h4 className="text-sm font-semibold text-neutral-900 leading-snug mb-1 line-clamp-2">
-        {post.title}
-      </h4>
+      <a
+        href={`/atualidades/${post.slug}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="group flex items-start gap-1 mb-1"
+      >
+        <h4 className="text-sm font-semibold text-neutral-900 leading-snug group-hover:underline">
+          {post.title}
+        </h4>
+        <ExternalLink className="h-3 w-3 mt-0.5 shrink-0 text-neutral-400" strokeWidth={2} />
+      </a>
       <p className="text-[11px] text-neutral-500 mb-3">{post.category}</p>
       <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-xs">
         <div>

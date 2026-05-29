@@ -21,9 +21,9 @@ export function Act2Origin({ context, topQueries }: Act2OriginProps) {
         </h2>
         <p className="text-base text-neutral-600 mt-1">{narrativeAct2Origin(context)}</p>
       </div>
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <TrafficSourcesChart data={context.ga4.topSources} />
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <AreaDistributionChart data={context.ga4.byArea} />
-        <TrafficSourcesChart data={context.ga4.topSources} />
         <DevicesMiniChart data={context.ga4.byDevice} />
       </div>
       <TopQueriesTable queries={topQueries} />
