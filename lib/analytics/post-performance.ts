@@ -184,10 +184,38 @@ export function formatTimeMinSec(seconds: number): string {
 /**
  * Labels e cores por status.
  */
-export const STATUS_META: Record<PostStatus, { label: string; color: string; bg: string }> = {
-  engaged: { label: "Engajado", color: "#1F6F3D", bg: "#E8F3EC" },
-  rising: { label: "Em alta", color: "#1A5FB4", bg: "#E4EEF8" },
-  cold: { label: "Em queda", color: "#B8801F", bg: "#FDF4D8" },
-  abandoned: { label: "Abandonado", color: "#B83A3A", bg: "#F8E8E8" },
-  neutral: { label: "Estável", color: "#4A4A4A", bg: "#F4F2EC" },
+export const STATUS_META: Record<
+  PostStatus,
+  { label: string; color: string; bg: string; description: string }
+> = {
+  engaged: {
+    label: "Engajado",
+    color: "#1F6F3D",
+    bg: "#E8F3EC",
+    description: "Retenção de 60% ou mais do read time configurado do post.",
+  },
+  rising: {
+    label: "Em alta",
+    color: "#1A5FB4",
+    bg: "#E4EEF8",
+    description: "Pageviews subiram 30% ou mais vs o mês anterior.",
+  },
+  cold: {
+    label: "Em queda",
+    color: "#B8801F",
+    bg: "#FDF4D8",
+    description: "Pageviews caíram 30% ou mais vs o mês anterior.",
+  },
+  abandoned: {
+    label: "Abandonado",
+    color: "#B83A3A",
+    bg: "#F8E8E8",
+    description: "Tempo médio abaixo de 15s ou taxa de rejeição acima de 80%.",
+  },
+  neutral: {
+    label: "Estável",
+    color: "#4A4A4A",
+    bg: "#F4F2EC",
+    description: "Sem critério dominante de engajamento, alta ou queda.",
+  },
 };

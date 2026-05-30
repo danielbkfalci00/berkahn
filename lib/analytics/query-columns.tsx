@@ -50,6 +50,7 @@ export const queryColumns: ColumnDef<TopQueryWithTrend, unknown>[] = [
   {
     id: "query",
     accessorKey: "query",
+    size: 320,
     header: ({ column }) => <SortableHeader column={column} label="Query" align="left" />,
     cell: ({ row }) => (
       <span className="font-medium text-neutral-900">{row.original.query}</span>
@@ -60,6 +61,7 @@ export const queryColumns: ColumnDef<TopQueryWithTrend, unknown>[] = [
   {
     id: "clicks",
     accessorKey: "clicks",
+    size: 110,
     header: ({ column }) => <SortableHeader column={column} label="Cliques" align="right" />,
     cell: ({ row }) => (
       <span className="tabular-nums">{row.original.clicks.toLocaleString("pt-BR")}</span>
@@ -69,6 +71,7 @@ export const queryColumns: ColumnDef<TopQueryWithTrend, unknown>[] = [
   {
     id: "impressions",
     accessorKey: "impressions",
+    size: 130,
     header: ({ column }) => (
       <SortableHeader column={column} label="Impressões" align="right" />
     ),
@@ -82,6 +85,7 @@ export const queryColumns: ColumnDef<TopQueryWithTrend, unknown>[] = [
   {
     id: "ctr",
     accessorKey: "ctr",
+    size: 110,
     header: ({ column }) => (
       <span className="inline-flex items-center gap-1 justify-end w-full">
         <SortableHeader column={column} label="CTR" align="right" />
@@ -103,6 +107,7 @@ export const queryColumns: ColumnDef<TopQueryWithTrend, unknown>[] = [
   {
     id: "position",
     accessorKey: "position",
+    size: 120,
     header: ({ column }) => (
       <span className="inline-flex items-center gap-1 justify-end w-full">
         <SortableHeader column={column} label="Posição" align="right" />
@@ -149,7 +154,10 @@ export const queryColumns: ColumnDef<TopQueryWithTrend, unknown>[] = [
     header: () => null,
     cell: () => null,
     filterFn: opportunityFilterFn,
-    meta: { align: "left", label: "Oportunidade" },
+    size: 0,
+    minSize: 0,
+    maxSize: 0,
+    meta: { align: "left", label: "Oportunidade", filterOnly: true },
   },
 ];
 

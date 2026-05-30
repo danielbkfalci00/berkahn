@@ -3,6 +3,12 @@
 import type { ColumnDef, FilterFn } from "@tanstack/react-table";
 import { AlertTriangle, ExternalLink, Minus, TrendingDown, TrendingUp, Trophy } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { MetricTooltip } from "@/components/admin/analytics/MetricTooltip";
 import { SortableHeader } from "@/components/admin/analytics/SortableHeader";
 import { SparklineMini } from "@/components/admin/analytics/SparklineMini";
@@ -53,13 +59,25 @@ export function StatusIconCell({ status }: { status: PostStatus }) {
             ? AlertTriangle
             : Minus;
   return (
-    <span
-      className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold leading-none whitespace-nowrap"
-      style={{ background: meta.bg, color: meta.color }}
-    >
-      <Icon className="h-3 w-3" strokeWidth={2.5} />
-      {meta.label}
-    </span>
+    <TooltipProvider delayDuration={150}>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <span
+            className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold leading-none whitespace-nowrap cursor-help"
+            style={{ background: meta.bg, color: meta.color }}
+          >
+            <Icon className="h-3 w-3" strokeWidth={2.5} />
+            {meta.label}
+          </span>
+        </TooltipTrigger>
+        <TooltipContent
+          side="top"
+          className="max-w-xs bg-white border border-neutral-200 text-neutral-800 shadow-md p-3 text-xs leading-relaxed"
+        >
+          {meta.description}
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
   );
 }
 
@@ -103,6 +121,7 @@ export const postColumns: ColumnDef<PostPerformance, unknown>[] = [
   {
     id: "title",
     accessorKey: "title",
+    size: 320,
     header: ({ column }) => <SortableHeader column={column} label="Post" align="left" />,
     cell: ({ row }) => (
       <div>
@@ -137,11 +156,15 @@ export const postColumns: ColumnDef<PostPerformance, unknown>[] = [
     header: () => null,
     cell: () => null,
     filterFn: categoryFilterFn,
-    meta: { align: "left", label: "Categoria" },
+    size: 0,
+    minSize: 0,
+    maxSize: 0,
+    meta: { align: "left", label: "Categoria", filterOnly: true },
   },
   {
     id: "pageviews",
     accessorKey: "pageviews",
+    size: 110,
     header: ({ column }) => <SortableHeader column={column} label="Pageviews" align="right" />,
     cell: ({ row }) => (
       <span className="tabular-nums font-semibold">{row.original.pageviews}</span>
@@ -151,6 +174,7 @@ export const postColumns: ColumnDef<PostPerformance, unknown>[] = [
   {
     id: "retentionPct",
     accessorKey: "retentionPct",
+    size: 120,
     header: ({ column }) => (
       <span className="inline-flex items-center gap-1 justify-end w-full">
         <SortableHeader column={column} label="Retenção" align="right" />
@@ -172,6 +196,7 @@ export const postColumns: ColumnDef<PostPerformance, unknown>[] = [
   {
     id: "bounceRate",
     accessorKey: "bounceRate",
+    size: 110,
     header: ({ column }) => (
       <span className="inline-flex items-center gap-1 justify-end w-full">
         <SortableHeader column={column} label="Bounce" align="right" />
@@ -200,6 +225,7 @@ export const postColumns: ColumnDef<PostPerformance, unknown>[] = [
   {
     id: "avgEngagementTime",
     accessorKey: "avgEngagementTime",
+    size: 100,
     header: ({ column }) => <SortableHeader column={column} label="Tempo" align="right" />,
     cell: ({ row }) => (
       <span className="tabular-nums text-neutral-600">
@@ -229,6 +255,7 @@ export const postColumns: ColumnDef<PostPerformance, unknown>[] = [
   {
     id: "pageviewsMoMPct",
     accessorKey: "pageviewsMoMPct",
+    size: 100,
     header: ({ column }) => <SortableHeader column={column} label="MoM" align="right" />,
     cell: ({ row }) => <MoMBadge pct={row.original.pageviewsMoMPct} />,
     sortingFn: (a, b) => {

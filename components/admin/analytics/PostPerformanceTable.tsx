@@ -17,6 +17,7 @@ import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
+  DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
@@ -60,7 +61,7 @@ export function PostPerformanceTable({
         columns={postColumns}
         data={posts}
         initialLimit={initialLimit}
-        visibilityStorageKey="postsColumnsHidden"
+        storageKey="posts"
         initialSorting={[{ id: "pageviews", desc: true }]}
         emptyDataText="Nenhum post publicado encontrado para o período. Publique seu primeiro post para ver a performance aqui."
         emptyFilteredText="Sem resultados. Ajuste os filtros."
@@ -169,6 +170,17 @@ function PostsToolbar({ table, categories, filters }: PostsToolbarProps) {
                     </DropdownMenuCheckboxItem>
                   );
                 })}
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                className="text-xs"
+                onClick={() => {
+                  table.resetColumnSizing();
+                  table.resetColumnOrder();
+                  table.resetColumnVisibility();
+                }}
+              >
+                Resetar colunas
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>

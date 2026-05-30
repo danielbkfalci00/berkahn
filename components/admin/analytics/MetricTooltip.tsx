@@ -27,6 +27,7 @@ export function MetricTooltip({ content, className, iconSize = 13 }: MetricToolt
         <TooltipTrigger asChild>
           <button
             type="button"
+            onPointerDown={(e) => e.stopPropagation()}
             className={cn(
               "inline-flex items-center justify-center text-neutral-400 hover:text-neutral-700 transition-colors",
               "focus:outline-none focus:ring-2 focus:ring-neutral-200 rounded-full",

@@ -35,10 +35,11 @@ Plan file completo: `~/.claude/plans/conduz-a-auditoria-do-majestic-raven.md`.
 > - [x] 5.3 Link do título do post → `/atualidades/[slug]` (nova aba, ícone ExternalLink no hover)
 > - [x] 5.4 Nomes completos dos posts (`line-clamp-2` + `title` nativo no hover)
 
-> [!todo]- Sprint 6 — Tabela Notion/Sheets-like (~3h)
-> - [ ] 6.1 Redimensionar colunas (tanstack `enableColumnResizing` + persistência localStorage)
-> - [ ] 6.2 Reordenar colunas (dnd-kit, `columnOrder` + persistência)
-> - [ ] 6.3 Tooltips em status (Engajado/Em alta/Em queda/Abandonado/Estável) com metrificação
+> [!success]- Sprint 6 — Tabela Notion/Sheets-like ✅ (commit pendente)
+> - [x] 6.1 Redimensionar colunas (`table-layout: fixed` + `enableColumnResizing` + sizes em todas as colunas + persistência `{key}-sizing`)
+> - [x] 6.2 Reordenar colunas (dnd-kit `DraggableHead`, `columnOrder` + reconciliação + persistência `{key}-order`, PointerSensor distance:8 + KeyboardSensor)
+> - [x] 6.3 Tooltips em status (Engajado/Em alta/Em queda/Abandonado/Estável) com metrificação em `STATUS_META`
+> - [x] Extra: `storageKey` base no DataTable + "Resetar colunas" no menu. `MetricTooltip` com `stopPropagation` (G9).
 
 > [!todo]- Sprint 7 — Sistema de Tarefas: backend + CRUD (~3h)
 > - [ ] 7.1 Migration `005_analytics_tasks.sql` + RLS + ALTER `activity_logs` CHECK

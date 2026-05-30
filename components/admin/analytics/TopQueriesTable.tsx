@@ -17,6 +17,7 @@ import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
+  DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
@@ -49,7 +50,7 @@ export function TopQueriesTable({ queries, maxRows = 15 }: TopQueriesTableProps)
         columns={queryColumns}
         data={queries}
         initialLimit={maxRows}
-        visibilityStorageKey="queriesColumnsHidden"
+        storageKey="queries"
         initialSorting={[{ id: "clicks", desc: true }]}
         emptyDataText="Sem dados de Search Console neste período."
         emptyFilteredText="Sem resultados. Ajuste os filtros."
@@ -147,6 +148,17 @@ function QueriesToolbar({ table, filters }: QueriesToolbarProps) {
                     </DropdownMenuCheckboxItem>
                   );
                 })}
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                className="text-xs"
+                onClick={() => {
+                  table.resetColumnSizing();
+                  table.resetColumnOrder();
+                  table.resetColumnVisibility();
+                }}
+              >
+                Resetar colunas
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
