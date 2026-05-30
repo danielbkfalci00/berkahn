@@ -41,11 +41,11 @@ Plan file completo: `~/.claude/plans/conduz-a-auditoria-do-majestic-raven.md`.
 > - [x] 6.3 Tooltips em status (Engajado/Em alta/Em queda/Abandonado/Estável) com metrificação em `STATUS_META`
 > - [x] Extra: `storageKey` base no DataTable + "Resetar colunas" no menu. `MetricTooltip` com `stopPropagation` (G9).
 
-> [!todo]- Sprint 7 — Sistema de Tarefas: backend + CRUD (~3h)
-> - [ ] 7.1 Migration `005_analytics_tasks.sql` + RLS + ALTER `activity_logs` CHECK
-> - [ ] 7.2 Server Actions (create/update/complete/reopen/delete/reorder)
-> - [ ] 7.3 Tipos + `getTasks()` + integração no `page.tsx`
-> - [ ] 7.4 TaskBoard v1 (zona sugestões read-only + zona tarefas CRUD)
+> [!success]- Sprint 7 — Sistema de Tarefas: backend + CRUD ✅ (commit pendente)
+> - [x] 7.1 Migration `005_analytics_tasks.sql` aplicada no Supabase (tabela + RLS + ALTER `activity_logs` CHECK pra aceitar 'task')
+> - [x] 7.2 Server Actions (`app/admin/analytics/actions.ts`): create/update/complete(note)/reopen/delete/reorder + `activity_logs`
+> - [x] 7.3 Tipos `AnalyticsTask` + `getTasks()` (`lib/analytics/tasks-queries.ts`) + fetch no `page.tsx`
+> - [x] 7.4 `TaskBoard` no Ato 4: zona "Recomendado pelo sistema" (sugestões + "Adicionar como tarefa", dedup via origin_signal) + zona "Tarefas do time" (criar, concluir com comentário, reabrir, excluir, por prioridade)
 
 > [!todo]- Sprint 8 — Tarefas Notion-like polish (~2h30)
 > - [ ] 8.1 Drag-and-drop (dnd-kit reuso) + optimistic UI

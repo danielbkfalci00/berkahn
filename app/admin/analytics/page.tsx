@@ -9,6 +9,7 @@ import {
 import { buildPostPerformance } from "@/lib/analytics/post-performance";
 import { previousMonthSlug } from "@/lib/analytics/period";
 import { buildTimelineEvents } from "@/lib/analytics/timeline-events";
+import { getTasks } from "@/lib/analytics/tasks-queries";
 import { AnalyticsContent } from "./AnalyticsContent";
 
 export const dynamic = "force-dynamic";
@@ -54,10 +55,11 @@ export default async function AnalyticsPage({ searchParams }: PageProps) {
   const prevMonth = previousMonthSlug(currentMonth);
   const prevSnapshot = prevMonth ? await getSnapshot(prevMonth) : null;
 
-  const [trendPoints, postsMap, historicalBySlug] = await Promise.all([
+  const [trendPoints, postsMap, historicalBySlug, tasks] = await Promise.all([
     getAllTrendPoints(),
     getPublishedPosts(),
     getHistoricalPageviewsBySlug(),
+    getTasks(),
   ]);
 
   const postPerformance = buildPostPerformance(
@@ -92,6 +94,7 @@ export default async function AnalyticsPage({ searchParams }: PageProps) {
       availableMonths={availableMonths}
       currentMonth={currentMonth}
       timelineEvents={timelineEvents}
+      tasks={tasks}
     />
   );
 }

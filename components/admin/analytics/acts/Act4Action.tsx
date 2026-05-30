@@ -1,19 +1,20 @@
 "use client";
 
 import { InsightsList } from "../InsightsList";
-import { ActionsPriority } from "../ActionsPriority";
+import { TaskBoard } from "../TaskBoard";
 import { IndexationStatus } from "../IndexationStatus";
 import { FallingQueriesPanel } from "../FallingQueriesPanel";
 import { narrativeAct4Action } from "@/lib/analytics/narrative";
 import { countByStatus, findBestPost } from "@/lib/analytics/post-performance";
-import type { PostPerformance, SnapshotContext } from "@/types/analytics";
+import type { AnalyticsTask, PostPerformance, SnapshotContext } from "@/types/analytics";
 
 interface Act4ActionProps {
   context: SnapshotContext;
   posts?: PostPerformance[];
+  tasks?: AnalyticsTask[];
 }
 
-export function Act4Action({ context, posts = [] }: Act4ActionProps) {
+export function Act4Action({ context, posts = [], tasks = [] }: Act4ActionProps) {
   const counts = countByStatus(posts);
   const best = findBestPost(posts);
 
@@ -32,15 +33,18 @@ export function Act4Action({ context, posts = [] }: Act4ActionProps) {
         <p className="text-base text-neutral-600 mt-1">{narrative}</p>
       </div>
       <InsightsList insights={context.insights} />
+      <TaskBoard
+        tasks={tasks}
+        systemActions={{
+          p0: context.actionsP0,
+          p1: context.actionsP1,
+          p2: context.actionsP2,
+        }}
+      />
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <ActionsPriority
-          p0={context.actionsP0}
-          p1={context.actionsP1}
-          p2={context.actionsP2}
-        />
         <IndexationStatus indexation={context.indexation} />
+        <FallingQueriesPanel queries={context.gsc.fallingQueries} />
       </div>
-      <FallingQueriesPanel queries={context.gsc.fallingQueries} />
     </section>
   );
 }

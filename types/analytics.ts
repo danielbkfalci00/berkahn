@@ -162,6 +162,31 @@ export interface ActionItem {
   text: string;
 }
 
+// ============================================
+// Sistema de tarefas (Sprint 7) — tabela analytics_tasks
+// ============================================
+
+export type TaskPriority = "p0" | "p1" | "p2";
+export type TaskStatus = "open" | "done";
+
+/** Espelha a tabela `analytics_tasks` (snake_case direto do Supabase). */
+export interface AnalyticsTask {
+  id: string;
+  title: string;
+  description: string | null;
+  priority: TaskPriority;
+  status: TaskStatus;
+  sort_order: number;
+  source: "system" | "manual";
+  origin_signal: string | null;
+  completion_note: string | null;
+  completed_by: string | null;
+  completed_at: string | null;
+  created_by: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface SnapshotContext {
   generatedDate: string;
   generatedAt: string;

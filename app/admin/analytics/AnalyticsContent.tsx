@@ -13,6 +13,7 @@ import { detectRedFlags } from "@/lib/analytics/red-flags";
 import type { TimelineEvent } from "@/lib/analytics/timeline-events";
 import type {
   AnalyticsSnapshot,
+  AnalyticsTask,
   KpiCardData,
   PostPerformance,
   TrendPoint,
@@ -28,6 +29,7 @@ interface AnalyticsContentProps {
   availableMonths: string[];
   currentMonth: string;
   timelineEvents: TimelineEvent[];
+  tasks: AnalyticsTask[];
 }
 
 function deltaDirection(deltaPct?: number): "up" | "down" | "flat" {
@@ -147,6 +149,7 @@ export function AnalyticsContent({
   availableMonths,
   currentMonth,
   timelineEvents,
+  tasks,
 }: AnalyticsContentProps) {
   const searchParams = useSearchParams();
   const comparisonMode = searchParams.get("compare") === "1";
@@ -182,7 +185,7 @@ export function AnalyticsContent({
           />
           <Act2Origin context={ctx} topQueries={topQueries} />
           <Act3Posts context={ctx} posts={postPerformance} />
-          <Act4Action context={ctx} posts={postPerformance} />
+          <Act4Action context={ctx} posts={postPerformance} tasks={tasks} />
         </>
       )}
 
