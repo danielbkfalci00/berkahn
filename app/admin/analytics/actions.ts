@@ -148,7 +148,12 @@ export async function deleteTask(id: string): Promise<ActionResult> {
   return { data: null, error: null }
 }
 
-/** Atualiza prioridade + sort_order em lote (drag-and-drop do Sprint 8). */
+/**
+ * Atualiza prioridade + sort_order em lote (drag-and-drop do Sprint 8).
+ * Sem revalidatePath de propósito: a UI fica coberta pelo estado otimista local
+ * do TaskBoard; revalidar a cada solta re-buscaria a página inteira (snapshot +
+ * posts + trend) e causaria flicker. A ordem persiste e é relida no próximo fetch.
+ */
 export async function reorderTasks(
   updates: { id: string; sort_order: number; priority: TaskPriority }[]
 ): Promise<ActionResult> {
@@ -160,6 +165,5 @@ export async function reorderTasks(
       .eq('id', u.id)
     if (error) return { data: null, error: error.message }
   }
-  revalidatePath('/admin/analytics')
   return { data: null, error: null }
 }

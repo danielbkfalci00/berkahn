@@ -15,6 +15,8 @@ projeto: site
 
 # Roadmap — Dashboard `/admin/analytics` (Sprints 5-8)
 
+> [!success] Roadmap concluído — S5, S6, S7 e S8 entregues e no ar (deploy Vercel + Supabase). Drag-and-drop, optimistic e mobile via menu de prioridade. Evoluções futuras: realtime multi-usuário, due dates, atribuição a pessoas (todas marcadas como não-objetivo da v1).
+
 Continuação do trabalho pós-auditoria. Sessões anteriores entregaram: auditoria (7 quick wins, commit `a6fce1b`) e sort/filter interativo com tanstack/react-table (commit `103780e`). Este roadmap cobre bugs reportados em produção + tabela Notion-like + sistema de tarefas.
 
 Plan file completo: `~/.claude/plans/conduz-a-auditoria-do-majestic-raven.md`.
@@ -47,11 +49,11 @@ Plan file completo: `~/.claude/plans/conduz-a-auditoria-do-majestic-raven.md`.
 > - [x] 7.3 Tipos `AnalyticsTask` + `getTasks()` (`lib/analytics/tasks-queries.ts`) + fetch no `page.tsx`
 > - [x] 7.4 `TaskBoard` no Ato 4: zona "Recomendado pelo sistema" (sugestões + "Adicionar como tarefa", dedup via origin_signal) + zona "Tarefas do time" (criar, concluir com comentário, reabrir, excluir, por prioridade)
 
-> [!todo]- Sprint 8 — Tarefas Notion-like polish (~2h30)
-> - [ ] 8.1 Drag-and-drop (dnd-kit reuso) + optimistic UI
-> - [ ] 8.2 Edição inline + mudança de prioridade
-> - [ ] 8.3 Histórico via `activity_logs` + empty/loading/erro
-> - [ ] 8.4 Integração visual final no Ato 4
+> [!success]- Sprint 8 — Tarefas Notion-like polish ✅ (commit pendente)
+> - [x] 8.1 Drag-and-drop multi-container (dnd-kit) entre/dentro de P0/P1/P2 + optimistic (`useState`+`useEffect`, React 18.3.1). `reorderTasks` sem `revalidatePath` (evita re-fetch no drag)
+> - [x] 8.2 Edição inline do título + menu "⋯" com "Mover para P0/P1/P2" (caminho não-drag pra mobile/teclado)
+> - [x] 8.3 Conclusões em `activity_logs` (S7) + banner de erro que reverte otimista + empty/loading
+> - [x] 8.4 DragOverlay + handle de arraste + voz Berkahn nos textos
 
 ## Não-objetivos
 

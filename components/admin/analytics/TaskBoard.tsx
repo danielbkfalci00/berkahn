@@ -1,6 +1,28 @@
 "use client";
 
 import * as React from "react";
+import {
+  DndContext,
+  DragOverlay,
+  KeyboardSensor,
+  PointerSensor,
+  TouchSensor,
+  closestCorners,
+  useDroppable,
+  useSensor,
+  useSensors,
+  type DragEndEvent,
+  type DragOverEvent,
+  type DragStartEvent,
+} from "@dnd-kit/core";
+import {
+  SortableContext,
+  arrayMove,
+  sortableKeyboardCoordinates,
+  useSortable,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,12 +33,34 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Check, ChevronDown, Lightbulb, Plus, RotateCcw, Trash2, X } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  AlertCircle,
+  Check,
+  ChevronDown,
+  GripVertical,
+  Lightbulb,
+  MoreHorizontal,
+  Pencil,
+  Plus,
+  RotateCcw,
+  Trash2,
+  X,
+} from "lucide-react";
 import {
   completeTask,
   createTask,
   deleteTask,
   reopenTask,
+  reorderTasks,
+  updateTask,
 } from "@/app/admin/analytics/actions";
 import { cn } from "@/lib/utils";
 import type { ActionItem, AnalyticsTask, TaskPriority } from "@/types/analytics";
@@ -39,16 +83,31 @@ const PRIORITIES: TaskPriority[] = ["p0", "p1", "p2"];
 
 export function TaskBoard({ tasks, systemActions }: TaskBoardProps) {
   const [isPending, startTransition] = React.useTransition();
+  const [localTasks, setLocalTasks] = React.useState<AnalyticsTask[]>(tasks);
   const [newTitle, setNewTitle] = React.useState("");
   const [newPriority, setNewPriority] = React.useState<TaskPriority>("p1");
   const [completingId, setCompletingId] = React.useState<string | null>(null);
   const [note, setNote] = React.useState("");
+  const [editingId, setEditingId] = React.useState<string | null>(null);
+  const [editTitle, setEditTitle] = React.useState("");
   const [showDone, setShowDone] = React.useState(false);
+  const [activeId, setActiveId] = React.useState<string | null>(null);
+  const [errorMsg, setErrorMsg] = React.useState<string | null>(null);
 
-  // Dedup: sugestões já promovidas (origin_signal presente em alguma tarefa)
+  // Reconcilia o estado otimista quando o server revalida (create/complete/delete) ou no refresh.
+  React.useEffect(() => {
+    setLocalTasks(tasks);
+  }, [tasks]);
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
+    useSensor(TouchSensor, { activationConstraint: { delay: 200, tolerance: 6 } }),
+    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
+  );
+
   const promotedSignals = React.useMemo(
-    () => new Set(tasks.map((t) => t.origin_signal).filter(Boolean) as string[]),
-    [tasks]
+    () => new Set(localTasks.map((t) => t.origin_signal).filter(Boolean) as string[]),
+    [localTasks]
   );
 
   const systemSuggestions = React.useMemo(() => {
@@ -61,34 +120,166 @@ export function TaskBoard({ tasks, systemActions }: TaskBoardProps) {
     ].filter((s) => !promotedSignals.has(s.text));
   }, [systemActions, promotedSignals]);
 
-  const openTasks = tasks.filter((t) => t.status === "open");
-  const doneTasks = tasks.filter((t) => t.status === "done");
+  const openTasks = localTasks.filter((t) => t.status === "open");
+  const doneTasks = localTasks.filter((t) => t.status === "done");
+  const activeTask = activeId ? localTasks.find((t) => t.id === activeId) ?? null : null;
+
+  function flashError(message: string) {
+    setErrorMsg(message);
+    setLocalTasks(tasks); // reverte otimista
+    window.setTimeout(() => setErrorMsg(null), 4000);
+  }
+
+  /** Aplica mutação otimista no localTasks e persiste; reverte em erro. */
+  function runOptimistic(
+    optimistic: (prev: AnalyticsTask[]) => AnalyticsTask[],
+    action: () => Promise<{ error: string | null }>
+  ) {
+    setLocalTasks(optimistic);
+    startTransition(async () => {
+      const res = await action();
+      if (res?.error) flashError(res.error);
+    });
+  }
 
   function handleCreate() {
     const title = newTitle.trim();
     if (!title) return;
+    const priority = newPriority;
+    setNewTitle("");
     startTransition(async () => {
-      await createTask({ title, priority: newPriority });
-      setNewTitle("");
+      const res = await createTask({ title, priority });
+      if (res.error) flashError(res.error);
     });
   }
 
   function handlePromote(s: { text: string; priority: TaskPriority }) {
     startTransition(async () => {
-      await createTask({
+      const res = await createTask({
         title: s.text,
         priority: s.priority,
         source: "manual",
         origin_signal: s.text,
       });
+      if (res.error) flashError(res.error);
     });
   }
 
   function handleComplete(id: string) {
-    startTransition(async () => {
-      await completeTask(id, note);
-      setCompletingId(null);
-      setNote("");
+    const n = note;
+    setCompletingId(null);
+    setNote("");
+    runOptimistic(
+      (prev) =>
+        prev.map((t) =>
+          t.id === id
+            ? { ...t, status: "done", completion_note: n.trim() || null }
+            : t
+        ),
+      () => completeTask(id, n)
+    );
+  }
+
+  function handleReopen(id: string) {
+    runOptimistic(
+      (prev) =>
+        prev.map((t) =>
+          t.id === id ? { ...t, status: "open", completion_note: null } : t
+        ),
+      () => reopenTask(id)
+    );
+  }
+
+  function handleDelete(id: string) {
+    runOptimistic((prev) => prev.filter((t) => t.id !== id), () => deleteTask(id));
+  }
+
+  function handleSaveEdit(id: string) {
+    const title = editTitle.trim();
+    setEditingId(null);
+    if (!title) return;
+    runOptimistic(
+      (prev) => prev.map((t) => (t.id === id ? { ...t, title } : t)),
+      () => updateTask(id, { title })
+    );
+  }
+
+  function handleChangePriority(id: string, priority: TaskPriority) {
+    runOptimistic(
+      (prev) => prev.map((t) => (t.id === id ? { ...t, priority } : t)),
+      () => updateTask(id, { priority })
+    );
+  }
+
+  // ---- Drag and drop ----
+  function findContainer(id: string): TaskPriority | null {
+    if (id.startsWith("col-")) return id.slice(4) as TaskPriority;
+    const t = localTasks.find((x) => x.id === id);
+    return t ? t.priority : null;
+  }
+
+  function handleDragStart(event: DragStartEvent) {
+    setActiveId(event.active.id as string);
+  }
+
+  function handleDragOver(event: DragOverEvent) {
+    const { active, over } = event;
+    if (!over) return;
+    const activeId = active.id as string;
+    const overId = over.id as string;
+    const activeC = findContainer(activeId);
+    const overC = findContainer(overId);
+    if (!activeC || !overC || activeC === overC) return;
+
+    setLocalTasks((prev) => {
+      const next = [...prev];
+      const activeIdx = next.findIndex((t) => t.id === activeId);
+      if (activeIdx === -1) return prev;
+      const moved = { ...next[activeIdx], priority: overC };
+      next.splice(activeIdx, 1);
+      let overIdx = next.findIndex((t) => t.id === overId);
+      if (overIdx === -1) {
+        // soltou sobre o cabeçalho/área vazia do container: insere no fim do grupo
+        const lastInContainer = next
+          .map((t, i) => ({ t, i }))
+          .filter((x) => x.t.status === "open" && x.t.priority === overC)
+          .pop();
+        overIdx = lastInContainer ? lastInContainer.i + 1 : next.length;
+      }
+      next.splice(overIdx, 0, moved);
+      return next;
+    });
+  }
+
+  function handleDragEnd(event: DragEndEvent) {
+    const { active, over } = event;
+    setActiveId(null);
+    if (!over) return;
+    const activeId = active.id as string;
+    const overId = over.id as string;
+
+    setLocalTasks((prev) => {
+      const activeIdx = prev.findIndex((t) => t.id === activeId);
+      if (activeIdx === -1) return prev;
+      let overIdx = prev.findIndex((t) => t.id === overId);
+      if (overIdx === -1) overIdx = activeIdx;
+      const moved = arrayMove(prev, activeIdx, overIdx);
+
+      // Recalcula sort_order sequencial para todas as open tasks (ordem do array).
+      let order = 0;
+      const withOrder = moved.map((t) =>
+        t.status === "open" ? { ...t, sort_order: order++ } : t
+      );
+      const updates = withOrder
+        .filter((t) => t.status === "open")
+        .map((t) => ({ id: t.id, sort_order: t.sort_order, priority: t.priority }));
+
+      startTransition(async () => {
+        const res = await reorderTasks(updates);
+        if (res?.error) flashError(res.error);
+      });
+
+      return withOrder;
     });
   }
 
@@ -142,6 +333,13 @@ export function TaskBoard({ tasks, systemActions }: TaskBoardProps) {
           Tarefas do time
         </h3>
 
+        {errorMsg && (
+          <div className="flex items-center gap-2 mb-4 p-3 rounded-md bg-[#F8E8E8] text-[#B83A3A] text-sm">
+            <AlertCircle className="h-4 w-4 shrink-0" strokeWidth={2} />
+            {errorMsg}
+          </div>
+        )}
+
         {/* Form nova tarefa */}
         <div className="flex flex-wrap items-center gap-2 mb-5">
           <Input
@@ -177,106 +375,59 @@ export function TaskBoard({ tasks, systemActions }: TaskBoardProps) {
           </Button>
         </div>
 
-        {/* Lista de tarefas abertas, agrupadas por prioridade */}
+        {/* Board com drag-and-drop */}
         {openTasks.length === 0 ? (
           <p className="text-sm text-neutral-400">
             Nenhuma tarefa aberta. Crie a primeira acima ou promova uma sugestão.
           </p>
         ) : (
-          <div className="space-y-4">
-            {PRIORITIES.map((p) => {
-              const items = openTasks.filter((t) => t.priority === p);
-              if (items.length === 0) return null;
-              return (
-                <div key={p}>
-                  <div className="flex items-baseline gap-2 mb-2">
-                    <span
-                      className={cn(
-                        "inline-flex items-center px-2 py-0.5 rounded text-xs font-bold tracking-wider",
-                        PRIORITY_META[p].badge
-                      )}
-                    >
-                      {PRIORITY_META[p].label}
-                    </span>
-                    <span className="text-xs text-neutral-500">{PRIORITY_META[p].desc}</span>
-                  </div>
-                  <ul className="space-y-2">
-                    {items.map((task) => (
-                      <li
-                        key={task.id}
-                        className="p-3 bg-white rounded-md border border-neutral-200"
-                      >
-                        <div className="flex items-start justify-between gap-3">
-                          <span className="text-sm text-neutral-800 leading-snug">
-                            {task.title}
-                          </span>
-                          <div className="flex items-center gap-1 shrink-0">
-                            <button
-                              type="button"
-                              title="Concluir"
-                              aria-label="Concluir tarefa"
-                              disabled={isPending}
-                              onClick={() =>
-                                setCompletingId(completingId === task.id ? null : task.id)
-                              }
-                              className="inline-flex items-center justify-center h-7 w-7 rounded-md border border-neutral-200 text-[#1F6F3D] hover:bg-[#E8F3EC] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-1"
-                            >
-                              <Check className="h-4 w-4" strokeWidth={2.5} />
-                            </button>
-                            <button
-                              type="button"
-                              title="Excluir"
-                              aria-label="Excluir tarefa"
-                              disabled={isPending}
-                              onClick={() => startTransition(() => void deleteTask(task.id))}
-                              className="inline-flex items-center justify-center h-7 w-7 rounded-md border border-neutral-200 text-neutral-400 hover:text-[#B83A3A] hover:bg-[#F8E8E8] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-1"
-                            >
-                              <Trash2 className="h-4 w-4" strokeWidth={1.75} />
-                            </button>
-                          </div>
-                        </div>
-
-                        {/* Concluir com comentário (inline) */}
-                        {completingId === task.id && (
-                          <div className="flex flex-wrap items-center gap-2 mt-3 pt-3 border-t border-neutral-100">
-                            <Input
-                              value={note}
-                              onChange={(e) => setNote(e.target.value)}
-                              onKeyDown={(e) => {
-                                if (e.key === "Enter") handleComplete(task.id);
-                              }}
-                              placeholder="Comentário de conclusão (opcional)"
-                              aria-label="Comentário de conclusão"
-                              className="h-8 flex-1 min-w-[200px] bg-white text-sm"
-                            />
-                            <Button
-                              size="sm"
-                              className="h-8"
-                              disabled={isPending}
-                              onClick={() => handleComplete(task.id)}
-                            >
-                              Concluir
-                            </Button>
-                            <button
-                              type="button"
-                              aria-label="Cancelar"
-                              onClick={() => {
-                                setCompletingId(null);
-                                setNote("");
-                              }}
-                              className="inline-flex items-center justify-center h-8 w-8 rounded-md text-neutral-400 hover:text-neutral-700"
-                            >
-                              <X className="h-4 w-4" />
-                            </button>
-                          </div>
-                        )}
-                      </li>
-                    ))}
-                  </ul>
+          <DndContext
+            sensors={sensors}
+            collisionDetection={closestCorners}
+            onDragStart={handleDragStart}
+            onDragOver={handleDragOver}
+            onDragEnd={handleDragEnd}
+          >
+            <div className="space-y-4">
+              {PRIORITIES.map((p) => (
+                <PriorityColumn
+                  key={p}
+                  priority={p}
+                  tasks={openTasks.filter((t) => t.priority === p)}
+                  isCompleting={completingId}
+                  note={note}
+                  editingId={editingId}
+                  editTitle={editTitle}
+                  isPending={isPending}
+                  onSetNote={setNote}
+                  onStartComplete={(id) =>
+                    setCompletingId(completingId === id ? null : id)
+                  }
+                  onConfirmComplete={handleComplete}
+                  onCancelComplete={() => {
+                    setCompletingId(null);
+                    setNote("");
+                  }}
+                  onDelete={handleDelete}
+                  onStartEdit={(t) => {
+                    setEditingId(t.id);
+                    setEditTitle(t.title);
+                  }}
+                  onChangeEdit={setEditTitle}
+                  onSaveEdit={handleSaveEdit}
+                  onCancelEdit={() => setEditingId(null)}
+                  onChangePriority={handleChangePriority}
+                />
+              ))}
+            </div>
+            <DragOverlay>
+              {activeTask ? (
+                <div className="p-3 bg-white rounded-md border border-neutral-300 shadow-lg">
+                  <span className="text-sm text-neutral-800">{activeTask.title}</span>
                 </div>
-              );
-            })}
-          </div>
+              ) : null}
+            </DragOverlay>
+          </DndContext>
         )}
 
         {/* Concluídas (colapsável) */}
@@ -316,7 +467,7 @@ export function TaskBoard({ tasks, systemActions }: TaskBoardProps) {
                         title="Reabrir"
                         aria-label="Reabrir tarefa"
                         disabled={isPending}
-                        onClick={() => startTransition(() => void reopenTask(task.id))}
+                        onClick={() => handleReopen(task.id)}
                         className="inline-flex items-center justify-center h-7 w-7 rounded-md border border-neutral-200 text-neutral-400 hover:text-neutral-700 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-1"
                       >
                         <RotateCcw className="h-3.5 w-3.5" strokeWidth={1.75} />
@@ -326,7 +477,7 @@ export function TaskBoard({ tasks, systemActions }: TaskBoardProps) {
                         title="Excluir"
                         aria-label="Excluir tarefa"
                         disabled={isPending}
-                        onClick={() => startTransition(() => void deleteTask(task.id))}
+                        onClick={() => handleDelete(task.id)}
                         className="inline-flex items-center justify-center h-7 w-7 rounded-md border border-neutral-200 text-neutral-400 hover:text-[#B83A3A] hover:bg-[#F8E8E8] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-1"
                       >
                         <Trash2 className="h-3.5 w-3.5" strokeWidth={1.75} />
@@ -340,5 +491,226 @@ export function TaskBoard({ tasks, systemActions }: TaskBoardProps) {
         )}
       </Card>
     </div>
+  );
+}
+
+interface PriorityColumnProps {
+  priority: TaskPriority;
+  tasks: AnalyticsTask[];
+  isCompleting: string | null;
+  note: string;
+  editingId: string | null;
+  editTitle: string;
+  isPending: boolean;
+  onSetNote: (v: string) => void;
+  onStartComplete: (id: string) => void;
+  onConfirmComplete: (id: string) => void;
+  onCancelComplete: () => void;
+  onDelete: (id: string) => void;
+  onStartEdit: (t: AnalyticsTask) => void;
+  onChangeEdit: (v: string) => void;
+  onSaveEdit: (id: string) => void;
+  onCancelEdit: () => void;
+  onChangePriority: (id: string, p: TaskPriority) => void;
+}
+
+function PriorityColumn(props: PriorityColumnProps) {
+  const { priority, tasks } = props;
+  const { setNodeRef, isOver } = useDroppable({ id: `col-${priority}` });
+
+  return (
+    <div>
+      <div className="flex items-baseline gap-2 mb-2">
+        <span
+          className={cn(
+            "inline-flex items-center px-2 py-0.5 rounded text-xs font-bold tracking-wider",
+            PRIORITY_META[priority].badge
+          )}
+        >
+          {PRIORITY_META[priority].label}
+        </span>
+        <span className="text-xs text-neutral-500">{PRIORITY_META[priority].desc}</span>
+      </div>
+      <SortableContext
+        items={tasks.map((t) => t.id)}
+        strategy={verticalListSortingStrategy}
+      >
+        <ul
+          ref={setNodeRef}
+          className={cn(
+            "space-y-2 min-h-[8px] rounded-md transition-colors",
+            isOver && tasks.length === 0 && "min-h-[44px] bg-neutral-50 border border-dashed border-neutral-200"
+          )}
+        >
+          {tasks.length === 0 ? (
+            <li className="px-3 py-2 text-xs text-neutral-300 select-none">
+              Arraste tarefas para cá
+            </li>
+          ) : (
+            tasks.map((task) => (
+              <SortableTaskRow key={task.id} task={task} {...props} />
+            ))
+          )}
+        </ul>
+      </SortableContext>
+    </div>
+  );
+}
+
+function SortableTaskRow({
+  task,
+  isCompleting,
+  note,
+  editingId,
+  editTitle,
+  isPending,
+  onSetNote,
+  onStartComplete,
+  onConfirmComplete,
+  onCancelComplete,
+  onDelete,
+  onStartEdit,
+  onChangeEdit,
+  onSaveEdit,
+  onCancelEdit,
+  onChangePriority,
+}: PriorityColumnProps & { task: AnalyticsTask }) {
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } =
+    useSortable({ id: task.id });
+
+  const style: React.CSSProperties = {
+    transform: CSS.Translate.toString(transform),
+    transition,
+    opacity: isDragging ? 0.4 : 1,
+  };
+
+  const isEditing = editingId === task.id;
+
+  return (
+    <li
+      ref={setNodeRef}
+      style={style}
+      className="p-3 bg-white rounded-md border border-neutral-200"
+    >
+      <div className="flex items-start gap-2">
+        <button
+          type="button"
+          aria-label="Arrastar tarefa"
+          className="mt-0.5 cursor-grab touch-none text-neutral-300 hover:text-neutral-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-1 rounded"
+          {...attributes}
+          {...listeners}
+        >
+          <GripVertical className="h-4 w-4" strokeWidth={1.75} />
+        </button>
+
+        {isEditing ? (
+          <Input
+            value={editTitle}
+            autoFocus
+            onChange={(e) => onChangeEdit(e.target.value)}
+            onBlur={() => onSaveEdit(task.id)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") onSaveEdit(task.id);
+              if (e.key === "Escape") onCancelEdit();
+            }}
+            className="h-7 flex-1 text-sm bg-white"
+            aria-label="Editar título"
+          />
+        ) : (
+          <button
+            type="button"
+            onClick={() => onStartEdit(task)}
+            className="flex-1 text-left text-sm text-neutral-800 leading-snug hover:text-neutral-950 rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-1"
+          >
+            {task.title}
+          </button>
+        )}
+
+        <div className="flex items-center gap-1 shrink-0">
+          <button
+            type="button"
+            title="Concluir"
+            aria-label="Concluir tarefa"
+            disabled={isPending}
+            onClick={() => onStartComplete(task.id)}
+            className="inline-flex items-center justify-center h-7 w-7 rounded-md border border-neutral-200 text-[#1F6F3D] hover:bg-[#E8F3EC] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-1"
+          >
+            <Check className="h-4 w-4" strokeWidth={2.5} />
+          </button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button
+                type="button"
+                title="Mais ações"
+                aria-label="Mais ações"
+                className="inline-flex items-center justify-center h-7 w-7 rounded-md border border-neutral-200 text-neutral-400 hover:text-neutral-700 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-1"
+              >
+                <MoreHorizontal className="h-4 w-4" />
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-44">
+              <DropdownMenuItem className="text-xs" onClick={() => onStartEdit(task)}>
+                <Pencil className="h-3.5 w-3.5 mr-2" />
+                Editar título
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuLabel className="text-[10px] uppercase tracking-wider text-neutral-400">
+                Mover para
+              </DropdownMenuLabel>
+              {PRIORITIES.map((p) => (
+                <DropdownMenuItem
+                  key={p}
+                  className="text-xs"
+                  disabled={p === task.priority}
+                  onClick={() => onChangePriority(task.id, p)}
+                >
+                  {PRIORITY_META[p].label} · {PRIORITY_META[p].desc}
+                </DropdownMenuItem>
+              ))}
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                className="text-xs text-[#B83A3A] focus:text-[#B83A3A]"
+                onClick={() => onDelete(task.id)}
+              >
+                <Trash2 className="h-3.5 w-3.5 mr-2" />
+                Excluir
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      </div>
+
+      {/* Concluir com comentário (inline) */}
+      {isCompleting === task.id && (
+        <div className="flex flex-wrap items-center gap-2 mt-3 pt-3 border-t border-neutral-100">
+          <Input
+            value={note}
+            onChange={(e) => onSetNote(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") onConfirmComplete(task.id);
+            }}
+            placeholder="Comentário de conclusão (opcional)"
+            aria-label="Comentário de conclusão"
+            className="h-8 flex-1 min-w-[200px] bg-white text-sm"
+          />
+          <Button
+            size="sm"
+            className="h-8"
+            disabled={isPending}
+            onClick={() => onConfirmComplete(task.id)}
+          >
+            Concluir
+          </Button>
+          <button
+            type="button"
+            aria-label="Cancelar"
+            onClick={onCancelComplete}
+            className="inline-flex items-center justify-center h-8 w-8 rounded-md text-neutral-400 hover:text-neutral-700"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        </div>
+      )}
+    </li>
   );
 }
