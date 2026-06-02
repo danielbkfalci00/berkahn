@@ -108,7 +108,7 @@ export function PathChooser() {
             index="01"
             kicker="Autoral"
             title="Trabalhar com um arquiteto parceiro"
-            description="Briefing personalizado e projeto sob medida assinado por um dos quatro escritórios autorais selecionados pela Berkahn."
+            description="Briefing personalizado e projeto sob medida assinado por um dos três escritórios parceiros selecionados pela Berkahn."
             cta="Ver arquitetos"
             image="/images/apresentacao/casa-laranjeiras/casa-laranjeiras-fachada-frontal.webp"
             href="#arquitetos"

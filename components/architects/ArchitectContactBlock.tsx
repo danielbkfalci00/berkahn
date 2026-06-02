@@ -4,13 +4,14 @@ import { motion } from "motion/react";
 import { Globe, Instagram, Phone, Mail, MessageCircle, ArrowUpRight } from "lucide-react";
 import { MagneticButton } from "./MagneticButton";
 import type { Architect } from "@/lib/architects-data";
+import { trackEvent } from "@/lib/analytics";
 
 interface Props {
   architect: Architect;
 }
 
-const BERKAHN_WHATSAPP = "5511970005000"; // placeholder — substituir pelo real
-const BERKAHN_WHATSAPP_DISPLAY = "+55 11 97000-5000";
+const BERKAHN_WHATSAPP = "5511966415742"; // WhatsApp oficial Berkahn (mesmo do site / UnifiedCTA)
+const BERKAHN_WHATSAPP_DISPLAY = "+55 (11) 96641-5742";
 
 export function ArchitectContactBlock({ architect }: Props) {
   const whatsappMessage = encodeURIComponent(
@@ -59,6 +60,12 @@ export function ArchitectContactBlock({ architect }: Props) {
                 icon={<Globe className="w-4 h-4" />}
                 label="Website"
                 value={architect.contact.website.replace(/^https?:\/\/(www\.)?/, "")}
+                onClick={() =>
+                  trackEvent("architect_contact_click", {
+                    architect: architect.slug,
+                    channel: "website",
+                  })
+                }
                 external
               />
               <ContactLink
@@ -66,6 +73,12 @@ export function ArchitectContactBlock({ architect }: Props) {
                 icon={<Instagram className="w-4 h-4" />}
                 label="Instagram"
                 value={architect.contact.instagram}
+                onClick={() =>
+                  trackEvent("architect_contact_click", {
+                    architect: architect.slug,
+                    channel: "instagram",
+                  })
+                }
                 external
               />
               <ContactLink
@@ -73,6 +86,12 @@ export function ArchitectContactBlock({ architect }: Props) {
                 icon={<Phone className="w-4 h-4" />}
                 label="Telefone"
                 value={architect.contact.phone}
+                onClick={() =>
+                  trackEvent("architect_contact_click", {
+                    architect: architect.slug,
+                    channel: "phone",
+                  })
+                }
               />
               {architect.contact.email && (
                 <ContactLink
@@ -80,6 +99,12 @@ export function ArchitectContactBlock({ architect }: Props) {
                   icon={<Mail className="w-4 h-4" />}
                   label="E-mail"
                   value={architect.contact.email}
+                  onClick={() =>
+                    trackEvent("architect_contact_click", {
+                      architect: architect.slug,
+                      channel: "email",
+                    })
+                  }
                 />
               )}
             </div>
@@ -113,6 +138,11 @@ export function ArchitectContactBlock({ architect }: Props) {
                   href={`https://wa.me/${BERKAHN_WHATSAPP}?text=${whatsappMessage}`}
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={() =>
+                    trackEvent("architect_berkahn_whatsapp", {
+                      architect: architect.slug,
+                    })
+                  }
                   className="group inline-flex items-center justify-between w-full px-6 py-4 bg-white text-black hover:bg-white/90 transition-colors"
                 >
                   <span className="inline-flex items-center gap-3">
@@ -141,16 +171,19 @@ function ContactLink({
   label,
   value,
   external = false,
+  onClick,
 }: {
   href: string;
   icon: React.ReactNode;
   label: string;
   value: string;
   external?: boolean;
+  onClick?: () => void;
 }) {
   return (
     <a
       href={href}
+      onClick={onClick}
       {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
       className="group flex items-center gap-4 py-3 border-b border-black-5 last:border-b-0 hover:bg-black-5/40 -mx-2 px-2 transition-colors"
     >

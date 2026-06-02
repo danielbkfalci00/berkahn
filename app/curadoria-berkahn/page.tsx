@@ -27,7 +27,7 @@ export default function CuradoriaHub() {
         id="arquitetos"
         kicker="01 · Autoral"
         title="Arquitetos parceiros"
-        subtitle="Quatro escritórios autorais que dominam steel frame e podem assinar o projeto da sua próxima obra."
+        subtitle="Três escritórios parceiros que assinam o projeto da sua próxima obra. A Berkahn constrói em Light Steel Frame."
       />
 
       {architects.map((architect, idx) => (

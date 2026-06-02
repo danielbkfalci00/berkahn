@@ -14,6 +14,8 @@ import {
   type CarouselApi,
 } from "@/components/ui/carousel";
 import type { Architect } from "@/lib/architects-data";
+import { architects } from "@/lib/architects-data";
+import { trackEvent } from "@/lib/analytics";
 
 interface Props {
   architect: Architect;
@@ -86,7 +88,7 @@ export function ArchitectHubCardCarousel({ architect, index }: Props) {
       {/* Top bar — index + counter */}
       <div className="absolute top-0 left-0 right-0 z-10 flex items-center justify-between px-6 lg:px-12 py-8">
         <span className="font-heading text-sm tracking-[0.3em] text-white/50">
-          {String(index + 1).padStart(2, "0")} / 04
+          {String(index + 1).padStart(2, "0")} / {String(architects.length).padStart(2, "0")}
         </span>
 
         <div className="flex items-center gap-4 text-white/80">
@@ -172,6 +174,13 @@ export function ArchitectHubCardCarousel({ architect, index }: Props) {
               href={href}
               onMouseEnter={prefetch}
               onFocus={prefetch}
+              onClick={() =>
+                trackEvent("select_architect", {
+                  architect: architect.slug,
+                  studio: architect.studioName,
+                  location: "hub_card",
+                })
+              }
               className="group/cta inline-flex items-center gap-3"
             >
               <span className="text-xs uppercase tracking-[0.3em] text-white border-b border-white/40 pb-1 group-hover/cta:border-white transition-colors duration-300">

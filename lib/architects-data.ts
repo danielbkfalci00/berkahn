@@ -1,10 +1,11 @@
 /**
- * Dados mockados dos arquitetos parceiros da Berkahn.
+ * Dados dos arquitetos parceiros da Berkahn (curadoria).
  *
- * Imagens reaproveitadas de pastas existentes em /public/images/ (galeria, apresentacao,
- * Services/projetos-prontos) — substituir pelas imagens reais quando os arquitetos enviarem material.
+ * Parceiros REAIS. Imagens otimizadas em /public/images/arquitetos/{slug}/
+ * (capturadas via scripts/scrape-architects.mjs + optimize-architect-images.mjs).
  *
- * Todos os perfis (nome do escritório, fundadores, projetos, datas, métricas) são fictícios.
+ * Posicionamento: o arquiteto assina o projeto; a Berkahn constrói em Light Steel Frame.
+ * Campos marcados PROVISÓRIO aguardam confirmação — ver Berkahn-Vault/40-content/curadoria/*-revisao.md.
  */
 
 export type ArchitectProject = {
@@ -33,6 +34,8 @@ export type Architect = {
     completedProjects: number;
     areaBuilt: number; // m² total
   };
+  /** Override opcional do bloco "Em números" (ex: arquiteto emergente). Se presente, substitui `metrics` na UI. */
+  customMetrics?: { label: string; value: string }[];
   history: { year: number; milestone: string }[]; // 3-5 marcos
   contact: {
     website: string;
@@ -50,438 +53,298 @@ export type Architect = {
 };
 
 export const architects: Architect[] = [
-  // ───────────────────────────────────────────────────────────────────────
-  // 1. ATELIER MATA NORTE — São Paulo · zigzag
-  // ───────────────────────────────────────────────────────────────────────
+  // ═══════════════════════════════════════════════════════════════════════
+  // 1. ROSMARI CALEFE — Cerquilho/SP · residencial · carrossel
+  // REAL: bio, formação, áreas, contatos (fonte IMB + Google Sites).
+  // PROVISÓRIO (confirmar): métricas, nomes/anos dos projetos, headshot, timeline.
+  // ═══════════════════════════════════════════════════════════════════════
   {
-    slug: "atelier-mata-norte",
-    studioName: "Atelier Mata Norte",
-    city: "São Paulo",
+    slug: "rosmari-calefe",
+    studioName: "Rosmari Calefe Arquitetura",
+    city: "Cerquilho",
     state: "SP",
-    styleTags: ["Brutalismo Tropical", "Concreto + Madeira", "Residencial"],
+    styleTags: ["Residencial", "Comercial · Industrial", "Paisagismo"],
     shortPitch:
-      "Casas que escapam da artificialidade urbana e dialogam com a mata atlântica.",
-    bio: "Fundado em 2015 por Marina Tavares (FAU-USP), o Atelier Mata Norte projeta residências que recusam o vocabulário genérico da casa de condomínio. Cada projeto começa com uma caminhada lenta pelo terreno antes do primeiro traço — orientação solar, ventos predominantes, vegetação nativa preservada.\n\nO repertório do escritório combina o concreto aparente da escola paulista com madeira de demolição e steel frame onde a leveza estrutural é necessária. O resultado: casas térreas e amplas que envelhecem visivelmente bem.",
-    yearFounded: 2015,
+      "Projetos residenciais, comerciais e paisagismo no interior paulista, com a identidade de cada cliente no centro.",
+    bio: "Rosmari Calefe comanda seu escritório de arquitetura em Cerquilho, no interior de São Paulo, atendendo toda a região com projetos residenciais, comerciais e industriais. Formada em Arquitetura e Urbanismo pelo CEUNSP em 2005 e com especialização em Paisagismo pela Escola Paulista de Paisagismo e pelo SECOVI, soma cerca de duas décadas desenhando a identidade de cada projeto junto com o cliente.\n\nO trabalho dela une um conhecimento forte em especificação de materiais de acabamento com a administração da obra do começo ao fim. O atendimento acontece de forma presencial ou virtual, o que mantém cada etapa próxima da rotina de quem vai morar ou trabalhar no espaço.",
+    yearFounded: 2005,
     metrics: {
-      yearsActive: 10,
-      completedProjects: 35,
-      areaBuilt: 12000,
+      yearsActive: 20, // atua desde 2005
+      completedProjects: 80,
+      areaBuilt: 16000,
     },
     history: [
-      { year: 2015, milestone: "Marina Tavares funda o atelier após sete anos no Studio MK27" },
-      { year: 2018, milestone: "Primeira parceria com Berkahn na Casa do Mirante" },
-      { year: 2021, milestone: "Casa do Vale recebe menção honrosa no Prêmio APCA" },
-      { year: 2023, milestone: "Inauguração do escritório-sede em Pinheiros" },
+      { year: 2005, milestone: "Forma-se em Arquitetura e Urbanismo pelo CEUNSP" },
+      { year: 2007, milestone: "Especialização em Paisagismo (Escola Paulista de Paisagismo e SECOVI)" }, // ano PROVISÓRIO
+      { year: 2010, milestone: "Consolida o escritório em Cerquilho atendendo toda a região" }, // PROVISÓRIO
+      { year: 2026, milestone: "Entra para a curadoria de arquitetos parceiros da Berkahn" }, // confirmar
     ],
     contact: {
-      website: "https://www.ateliermatanorte.com.br",
-      instagram: "@ateliermatanorte",
-      phone: "+55 11 98765-4321",
-      email: "contato@ateliermatanorte.com.br",
+      website: "https://sites.google.com/view/rosmari-calefe", // .com.br retornou 503; usando o microsite dela (Google Sites) que está no ar
+      instagram: "@arq.rosmaricalefe",
+      phone: "+55 15 99141-2006",
+      email: "rosmaricalefe@terra.com.br",
     },
-    studioPhoto: "/images/galeria/projeto-01.webp",
-    architectPhoto:
-      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=900&auto=format&fit=crop&q=80",
-    architectName: "Marina Tavares",
-    hubLayoutVariant: "zigzag",
-    projects: [
-      {
-        id: "casa-do-vale",
-        name: "Casa do Vale",
-        area: 480,
-        year: 2023,
-        city: "Cotia, SP",
-        program: "Residencial · 4 dorms · Pavilhão único",
-        concept:
-          "Implantada num platô natural cercado por mata atlântica, a Casa do Vale dissolve a fronteira entre dentro e fora com um pavilhão único de 38 metros. Concreto bruto, madeira freijó e steel frame nas alvenarias internas viabilizaram vãos longos sem pilares intermediários.",
-        isAnchor: true,
-        images: [
-          "/images/apresentacao/casa-santa-cristina/casa-santa-cristina-cover.webp",
-          "/images/apresentacao/casa-santa-cristina/casa-santa-cristina-01.webp",
-          "/images/apresentacao/casa-santa-cristina/casa-santa-cristina-02.webp",
-          "/images/apresentacao/casa-santa-cristina/casa-santa-cristina-03.webp",
-          "/images/apresentacao/casa-santa-cristina/casa-santa-cristina-04.webp",
-          "/images/apresentacao/casa-santa-cristina/casa-santa-cristina-05.webp",
-          "/images/apresentacao/casa-santa-cristina/casa-santa-cristina-06.webp",
-          "/images/apresentacao/casa-santa-cristina/casa-santa-cristina-07.webp",
-        ],
-      },
-      {
-        id: "refugio-mantiqueira",
-        name: "Refúgio Mantiqueira",
-        area: 220,
-        year: 2022,
-        city: "Campos do Jordão, SP",
-        program: "Residencial · 3 dorms",
-        images: ["/images/galeria/projeto-02.webp", "/images/galeria/projeto-03.webp"],
-      },
-      {
-        id: "estudio-caboclo",
-        name: "Estúdio Caboclo",
-        area: 95,
-        year: 2024,
-        city: "Ubatuba, SP",
-        program: "Estúdio · 1 dorm",
-        images: ["/images/galeria/projeto-04.webp", "/images/galeria/projeto-05.webp"],
-      },
-      {
-        id: "casa-suspensa",
-        name: "Casa Suspensa",
-        area: 310,
-        year: 2021,
-        city: "Atibaia, SP",
-        program: "Residencial · 3 dorms · Steel frame elevado",
-        images: ["/images/galeria/projeto-06.webp", "/images/galeria/projeto-07.webp"],
-      },
-      {
-        id: "pavilhao-cabreuva",
-        name: "Pavilhão Cabreúva",
-        area: 180,
-        year: 2023,
-        city: "Cabreúva, SP",
-        program: "Lazer · Pavilhão único",
-        images: ["/images/galeria/projeto-08.webp", "/images/galeria/projeto-09.webp"],
-      },
-      {
-        id: "casa-do-mirante",
-        name: "Casa do Mirante",
-        area: 390,
-        year: 2018,
-        city: "Joanópolis, SP",
-        program: "Residencial · 4 dorms",
-        images: ["/images/galeria/projeto-10.webp", "/images/galeria/projeto-11.webp"],
-      },
-      {
-        id: "casa-do-lago",
-        name: "Casa do Lago",
-        area: 260,
-        year: 2020,
-        city: "Bragança Paulista, SP",
-        program: "Residencial · 3 dorms",
-        images: ["/images/galeria/projeto-12.webp", "/images/galeria/projeto-13.webp"],
-      },
-    ],
-  },
-
-  // ───────────────────────────────────────────────────────────────────────
-  // 2. STUDIO LINHA RETA — Curitiba · carrossel
-  // ───────────────────────────────────────────────────────────────────────
-  {
-    slug: "studio-linha-reta",
-    studioName: "Studio Linha Reta",
-    city: "Curitiba",
-    state: "PR",
-    styleTags: ["Minimalismo", "Compacto", "Performance Térmica"],
-    shortPitch:
-      "Casas pequenas que parecem grandes — cada metro quadrado com propósito.",
-    bio: "Pedro Wagner abriu o Studio Linha Reta em 2018, inquieto com o excesso. A premissa: projetar casas que façam sentido em 60 a 130 metros quadrados — sem perder generosidade espacial nem comprometer conforto térmico no inverno curitibano.\n\nO escritório é referência em soluções de envelope térmico para steel frame: paredes com camadas calculadas, esquadrias de alta performance e ventilação cruzada projetada com simulação computacional. Cada material é escolhido para envelhecer bem e pedir pouca manutenção.",
-    yearFounded: 2018,
-    metrics: {
-      yearsActive: 7,
-      completedProjects: 28,
-      areaBuilt: 3500,
-    },
-    history: [
-      { year: 2018, milestone: "Pedro Wagner abre o studio em uma sala de 30m² no Batel" },
-      { year: 2020, milestone: "Cabana 60 viraliza no Archdaily Brasil" },
-      { year: 2022, milestone: "Primeiro projeto certificado com selo PBE Edifica nível A" },
-      { year: 2024, milestone: "Lançamento da linha modular Cabana 60" },
-    ],
-    contact: {
-      website: "https://www.studiolinhareta.arq.br",
-      instagram: "@studiolinhareta",
-      phone: "+55 41 98765-4321",
-      email: "ola@studiolinhareta.arq.br",
-    },
-    studioPhoto: "/images/galeria/projeto-14.webp",
-    architectPhoto:
-      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=900&auto=format&fit=crop&q=80",
-    architectName: "Pedro Wagner",
+    studioPhoto: "/images/arquitetos/rosmari-calefe/rosmari-calefe-25.webp",
+    architectPhoto: "/images/arquitetos/rosmari-calefe/rosmari-calefe-01.webp", // PROVISÓRIO: trocar por headshot real
+    architectName: "Rosmari Calefe",
     hubLayoutVariant: "carousel",
     projects: [
       {
-        id: "cabana-60",
-        name: "Cabana 60",
-        area: 60,
-        year: 2024,
-        city: "Piraquara, PR",
-        program: "Residencial · 1 dorm · Modular",
+        id: "residencia-contemporanea-cerquilho",
+        name: "Residência Contemporânea", // nome descritivo — confirmar
+        area: 383, // REAL (383,33 m² construído)
+        year: 2022, // PROVISÓRIO
+        city: "Cerquilho, SP",
+        program: "Residencial · 3 suítes · 2 pavimentos · Piscina",
         concept:
-          "Protótipo de casa compacta de 60m² em steel frame com envelope térmico calculado para o inverno do Sul. Estrutura modular permite produção em galpão e montagem em 14 dias no terreno. Hoje é a base de uma linha replicável do studio.",
+          "Residência de dois pavimentos que combina concreto aparente, painéis de madeira ripada e grandes panos de vidro nas áreas sociais. O térreo abre para um deck de madeira com piscina e estar ao ar livre, enquanto o pavimento superior recolhe os dormitórios atrás dos brises de madeira. À noite, a iluminação embutida no paisagismo desenha o volume da casa.",
         isAnchor: true,
         images: [
-          "/images/Services/projetos-prontos/vila-serrana/vila-serrana-exterior-completo.webp",
-          "/images/Services/projetos-prontos/vila-serrana/vila-serrana-fachada-detalhe.webp",
-          "/images/Services/projetos-prontos/vila-serrana/vila-serrana-interior-suite.webp",
-          "/images/Services/projetos-prontos/vila-serrana/vila-serrana-construcao.webp",
+          "/images/arquitetos/rosmari-calefe/rosmari-calefe-25.webp",
+          "/images/arquitetos/rosmari-calefe/rosmari-calefe-21.webp",
+          "/images/arquitetos/rosmari-calefe/rosmari-calefe-28.webp",
+          "/images/arquitetos/rosmari-calefe/rosmari-calefe-04.webp",
         ],
       },
       {
-        id: "casa-pinhal",
-        name: "Casa Pinhal",
-        area: 110,
-        year: 2023,
-        city: "Curitiba, PR",
-        program: "Residencial · 2 dorms",
-        images: ["/images/galeria/projeto-15.webp", "/images/galeria/projeto-16.webp"],
+        id: "residencia-terrea-premium",
+        name: "Residência Térrea",
+        area: 232, // REAL (232,68 m²)
+        year: 2021, // PROVISÓRIO
+        city: "Cerquilho, SP",
+        program: "Residencial · 3 suítes",
+        images: ["/images/arquitetos/rosmari-calefe/rosmari-calefe-01.webp"],
       },
       {
-        id: "refugio-lapa",
-        name: "Refúgio Lapa",
-        area: 85,
-        year: 2022,
-        city: "Lapa, PR",
-        program: "Casa de campo · 2 dorms",
-        images: ["/images/galeria/projeto-17.webp", "/images/galeria/projeto-18.webp"],
+        id: "residencia-dois-pavimentos",
+        name: "Residência Dois Pavimentos",
+        area: 216, // REAL (216,18 m²)
+        year: 2020, // PROVISÓRIO
+        city: "Cerquilho, SP",
+        program: "Residencial · 3 dorms (1 suíte) · 2 pavimentos",
+        images: ["/images/arquitetos/rosmari-calefe/rosmari-calefe-03.webp"],
       },
       {
-        id: "cabana-inverno",
-        name: "Cabana Inverno",
-        area: 70,
-        year: 2024,
-        city: "Quatro Barras, PR",
-        program: "Residencial · 1 dorm",
-        images: ["/images/galeria/projeto-19.webp", "/images/galeria/projeto-20.webp"],
+        id: "residencia-familia",
+        name: "Residência Família",
+        area: 186, // REAL (186,49 m²)
+        year: 2019, // PROVISÓRIO
+        city: "Cerquilho, SP",
+        program: "Residencial · 2 suítes",
+        images: ["/images/arquitetos/rosmari-calefe/rosmari-calefe-20.webp"],
       },
       {
-        id: "casa-bigorrilho",
-        name: "Casa Compacta Bigorrilho",
-        area: 130,
-        year: 2021,
-        city: "Curitiba, PR",
-        program: "Residencial urbano · 3 dorms",
-        images: ["/images/galeria/projeto-21.webp", "/images/galeria/projeto-22.webp"],
-      },
-      {
-        id: "estudio-ahu",
-        name: "Estúdio Ahú",
-        area: 45,
-        year: 2023,
-        city: "Curitiba, PR",
-        program: "Estúdio profissional",
-        images: ["/images/galeria/projeto-23.webp", "/images/galeria/projeto-24.webp"],
+        id: "residencia-compacta",
+        name: "Residência Compacta",
+        area: 145, // REAL (145 m²)
+        year: 2023, // PROVISÓRIO
+        city: "Cerquilho, SP",
+        program: "Residencial · 3 dorms (1 suíte)",
+        images: ["/images/arquitetos/rosmari-calefe/rosmari-calefe-14.webp"],
       },
     ],
   },
 
-  // ───────────────────────────────────────────────────────────────────────
-  // 3. OBRA ARQUITETURA — Belo Horizonte · zigzag
-  // ───────────────────────────────────────────────────────────────────────
+  // ═══════════════════════════════════════════════════════════════════════
+  // 2. MARIA ISABEL BIANCHI — São Paulo/SP · técnica/sustentável · zigzag
+  // REAL: formação, skills, experiência, contato (currículo Wix). Projetos =
+  // obras da Are Arquitetura (equipe), apresentadas como portfólio dela COM
+  // crédito à Are. customMetrics (emergente). PROVISÓRIO: IG, anos exatos.
+  // ═══════════════════════════════════════════════════════════════════════
   {
-    slug: "obra-arquitetura",
-    studioName: "OBRA Arquitetura",
-    city: "Belo Horizonte",
-    state: "MG",
-    styleTags: ["Contemporâneo", "Pátio Interno", "Mineiro"],
+    slug: "maria-isabel-bianchi",
+    studioName: "Maria Isabel Bianchi",
+    city: "São Paulo",
+    state: "SP",
+    styleTags: ["Sustentabilidade", "Racionalização construtiva", "BIM"],
     shortPitch:
-      "Arquitetura mineira é antes de tudo sobre como o sol entra na casa.",
-    bio: "OBRA é o escritório de Camila Reis e Tiago Drumond, fundado em 2012 após uma temporada juntos no Arquipélago Arquitetos. Acreditam que arquitetura mineira é antes de tudo sobre como o sol entra na casa: pátios internos abertos ao céu, beirais profundos para o calor seco do Cerrado, materiais que envelhecem bem sob chuva e poeira vermelha.\n\nO escritório trabalha bem com steel frame em projetos de complementação — quando a obra principal é em alvenaria estrutural mas precisa de áreas íntimas leves, ampliações rápidas ou volumes suspensos sobre topografia íngreme.",
-    yearFounded: 2012,
+      "Arquiteta com foco técnico em construção sustentável e industrializada, com passagem por grandes projetos na Are Arquitetura.",
+    bio: "Maria Isabel Bianchi é arquiteta e urbanista formada pela Universidade Presbiteriana Mackenzie, hoje cursando pós-graduação em Sustentabilidade nas Construções na mesma instituição. O foco dela está no desenvolvimento técnico de projetos, na compatibilização e na racionalização construtiva, sempre com atenção a metodologias mais eficientes e à construção sustentável.\n\nDesde 2019 acumula experiência em escritórios paulistanos e hoje integra a equipe da Are Arquitetura, atuando em grandes projetos logísticos e institucionais. Trabalha com Revit, ArchiCad, SketchUp e Enscape, e transita entre português, inglês, alemão e espanhol.",
+    yearFounded: 2019, // PROVISÓRIO: início de carreira (não tem escritório próprio)
     metrics: {
-      yearsActive: 13,
-      completedProjects: 52,
-      areaBuilt: 18000,
+      // Não exibido — customMetrics abaixo substitui. Valores apenas para satisfazer o tipo.
+      yearsActive: 7,
+      completedProjects: 5,
+      areaBuilt: 500,
     },
+    customMetrics: [
+      { label: "Atuando desde", value: "2019" },
+      { label: "Foco", value: "Sustentabilidade + BIM" },
+      { label: "Idiomas", value: "PT · EN · DE · ES" },
+    ],
     history: [
-      { year: 2012, milestone: "Camila e Tiago abrem a OBRA num apartamento em Lourdes" },
-      { year: 2016, milestone: "Casa Pátio Sabará vira capa da revista AU" },
-      { year: 2019, milestone: "Primeira obra híbrida alvenaria + steel frame com Berkahn" },
-      { year: 2022, milestone: "Pavilhão Inhotim recebe Selo Casa Azul Caixa" },
-      { year: 2024, milestone: "OBRA expande para um time de 12 arquitetos" },
+      { year: 2019, milestone: "Inicia na arquitetura com assessoria em racionalização construtiva (ARCO)" },
+      { year: 2022, milestone: "Integra a equipe da S Brasil Arquitetura" },
+      { year: 2023, milestone: "Passa a desenvolver projetos na Are Arquitetura" },
+      { year: 2024, milestone: "Forma-se em Arquitetura e Urbanismo pela Mackenzie" },
+      { year: 2025, milestone: "Inicia pós-graduação em Sustentabilidade nas Construções (Mackenzie)" },
     ],
     contact: {
-      website: "https://www.obraarquitetura.com.br",
-      instagram: "@obra.arq",
-      phone: "+55 31 98765-4321",
-      email: "contato@obraarquitetura.com.br",
+      website: "https://www.linkedin.com/in/maria-isabel-bianchi-kluge-65095b171/",
+      instagram: "@misabel.arq", // PROVISÓRIO: confirmar handle real do Instagram
+      phone: "+55 11 95651-1838",
+      email: "misabelbk@gmail.com",
     },
-    studioPhoto: "/images/galeria/projeto-25.webp",
-    architectPhoto:
-      "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=900&auto=format&fit=crop&q=80",
-    architectName: "Camila Reis",
+    studioPhoto: "/images/arquitetos/maria-isabel-bianchi/maria-isabel-bianchi-58.webp",
+    architectPhoto: "/images/arquitetos/maria-isabel-bianchi/maria-isabel-bianchi-75.webp",
+    architectName: "Maria Isabel Bianchi",
     hubLayoutVariant: "zigzag",
     projects: [
       {
-        id: "casa-patio-sabara",
-        name: "Casa Pátio Sabará",
-        area: 320,
-        year: 2022,
-        city: "Sabará, MG",
-        program: "Residencial · 4 dorms · Pátio central",
+        id: "arena-pacaembu",
+        name: "Mercado Livre Arena Pacaembu",
+        area: 76000, // REAL (~76.000 m²)
+        year: 2025,
+        city: "São Paulo, SP",
+        program: "Retrofit institucional · Arena multiuso · Patrimônio tombado",
         concept:
-          "A Casa Pátio Sabará organiza-se em U ao redor de um pátio aberto de 80m² — coração térmico e social da casa. Estrutura mista: alvenaria estrutural nas alas frias e steel frame nas circulações suspensas, viabilizando vãos amplos sem pilares.",
+          "Retrofit do histórico complexo do Pacaembu, de 1940, transformado em arena multiuso com hotel, eventos, gastronomia e escritórios. Projeto desenvolvido na equipe da Are Arquitetura, onde Maria Isabel atua com modelagem BIM e compatibilização, respeitando o tombamento. Venceu o prêmio AR Future Projects, da revista The Architectural Review.",
         isAnchor: true,
         images: [
-          "/images/apresentacao/casa-laranjeiras/casa-laranjeiras-fachada-frontal.webp",
-          "/images/apresentacao/casa-laranjeiras/casa-laranjeiras-entrada-principal.webp",
-          "/images/apresentacao/casa-laranjeiras/casa-laranjeiras-fachada-lateral.webp",
-          "/images/apresentacao/casa-laranjeiras/casa-laranjeiras-living.webp",
-          "/images/apresentacao/casa-laranjeiras/casa-laranjeiras-jantar.webp",
-          "/images/apresentacao/casa-laranjeiras/casa-laranjeiras-pergola.webp",
-          "/images/apresentacao/casa-laranjeiras/casa-laranjeiras-piscina.webp",
-          "/images/apresentacao/casa-laranjeiras/casa-laranjeiras-lateral-piscina.webp",
+          "/images/arquitetos/maria-isabel-bianchi/maria-isabel-bianchi-02.webp",
+          "/images/arquitetos/maria-isabel-bianchi/maria-isabel-bianchi-07.webp",
+          "/images/arquitetos/maria-isabel-bianchi/maria-isabel-bianchi-14.webp",
+          "/images/arquitetos/maria-isabel-bianchi/maria-isabel-bianchi-08.webp",
+          "/images/arquitetos/maria-isabel-bianchi/maria-isabel-bianchi-13.webp",
         ],
       },
       {
-        id: "residencia-nova-lima",
-        name: "Residência Nova Lima",
-        area: 450,
-        year: 2023,
-        city: "Nova Lima, MG",
-        program: "Residencial · 5 dorms",
-        images: ["/images/galeria/projeto-26.webp", "/images/galeria/projeto-27.webp"],
-      },
-      {
-        id: "casa-do-poente",
-        name: "Casa do Poente",
-        area: 290,
-        year: 2021,
-        city: "Belo Horizonte, MG",
-        program: "Residencial · 3 dorms",
-        images: ["/images/galeria/projeto-28.webp", "/images/galeria/projeto-29.webp"],
-      },
-      {
-        id: "casa-lourdes",
-        name: "Casa Lourdes",
-        area: 380,
-        year: 2022,
-        city: "Belo Horizonte, MG",
-        program: "Residencial urbano · 4 dorms",
-        images: ["/images/galeria/projeto-30.webp", "/images/galeria/projeto-31.webp"],
-      },
-      {
-        id: "casa-aberta-pampulha",
-        name: "Casa Aberta Pampulha",
-        area: 510,
+        id: "retrofit-reitoria-unesp",
+        name: "Retrofit Reitoria UNESP",
+        area: 10469, // REAL (10.469 m²)
         year: 2024,
-        city: "Belo Horizonte, MG",
-        program: "Residencial · 4 dorms · Pátio + piscina",
-        images: ["/images/galeria/projeto-32.webp", "/images/galeria/projeto-33.webp"],
+        city: "São Paulo, SP",
+        program: "Retrofit institucional · Edifício histórico (Are Arquitetura)",
+        images: ["/images/arquitetos/maria-isabel-bianchi/maria-isabel-bianchi-58.webp"],
       },
       {
-        id: "pavilhao-inhotim",
-        name: "Pavilhão Inhotim",
-        area: 240,
-        year: 2020,
-        city: "Brumadinho, MG",
-        program: "Pavilhão cultural",
-        images: ["/images/galeria/projeto-34.webp"],
+        id: "prologis-raposo-39",
+        name: "Prologis Raposo 39",
+        area: 80000, // REAL (~80.000 m² construídos)
+        year: 2022,
+        city: "São Paulo, SP",
+        program: "Logística · 2 galpões · LEED Platinum (Are Arquitetura)",
+        images: ["/images/arquitetos/maria-isabel-bianchi/maria-isabel-bianchi-51.webp"],
       },
       {
-        id: "casa-mineira",
-        name: "Casa Mineira",
-        area: 340,
-        year: 2023,
-        city: "Belo Horizonte, MG",
-        program: "Residencial · 4 dorms",
-        images: ["/images/galeria/projeto-35.webp", "/images/galeria/projeto-36.webp"],
+        id: "prologis-cajamar-3500",
+        name: "Prologis Cajamar III",
+        area: 111318, // REAL (111.318 m²)
+        year: 2021,
+        city: "Cajamar, SP",
+        program: "Logística · Centro de distribuição (Are Arquitetura)",
+        images: ["/images/arquitetos/maria-isabel-bianchi/maria-isabel-bianchi-27.webp"],
+      },
+      {
+        id: "prologis-cajamar-31",
+        name: "Prologis Cajamar 31",
+        area: 42867, // REAL (42.866,98 m²)
+        year: 2022,
+        city: "Cajamar, SP",
+        program: "Logística · Condomínio · LEED Platinum (Are Arquitetura)",
+        images: ["/images/arquitetos/maria-isabel-bianchi/maria-isabel-bianchi-17.webp"],
       },
     ],
   },
 
-  // ───────────────────────────────────────────────────────────────────────
-  // 4. NÚCLEO LITORAL — Florianópolis · carrossel
-  // ───────────────────────────────────────────────────────────────────────
+  // ═══════════════════════════════════════════════════════════════════════
+  // 3. AIROS ARQUITETURA — Bragança Paulista/SP · alto padrão residencial · carrossel
+  // REAL: fundadores, bio, 6 projetos c/ specs, contato (site airos.arq.br).
+  // PROVISÓRIO (confirmar): ano de fundação, métricas, anos dos projetos, foto dos fundadores.
+  // ═══════════════════════════════════════════════════════════════════════
   {
-    slug: "nucleo-litoral",
-    studioName: "Núcleo Litoral",
-    city: "Florianópolis",
-    state: "SC",
-    styleTags: ["Praiano", "Litoral", "Resistente"],
+    slug: "airos",
+    studioName: "Airos Arquitetura",
+    city: "Bragança Paulista",
+    state: "SP",
+    styleTags: ["Alto padrão", "Residencial", "Contemporâneo"],
     shortPitch:
-      "Casas de praia que duram décadas no clima salino — para conviver com o mar, não para resisti-lo.",
-    bio: "Núcleo Litoral é dirigido por Fernanda Hahn e Lucas Steiner desde 2017. Especialistas em casas de praia que duram décadas no clima salino do Sul, projetam para conviver com o mar — não para resisti-lo. Steel frame galvanizado com tratamento anti-salino, esquadrias de alumínio com pintura eletrostática, madeiras nativas estabilizadas.\n\nA marca registrada do escritório é a ventilação cruzada projetada caso a caso, baseada na orientação de cada terreno em relação à brisa marítima. Resultado: casas que dispensam ar-condicionado boa parte do ano e exigem manutenção mínima.",
-    yearFounded: 2017,
+      "Arquitetura residencial de alto padrão que traduz a história e o estilo de vida de cada cliente, do desenho à execução.",
+    bio: "Airos Arquitetura é o escritório de Matheus Fischer e Gustavo Fernandes, dedicado a projetos residenciais de alto padrão. A visão do estúdio é somar talentos em torno de uma ideia coletiva e projetar para a experiência de morar, encontrando valor na simplicidade dos espaços.\n\nDe casas a apartamentos, o escritório acompanha o projeto do desenho à execução, com forte presença de materiais naturais como pedra e madeira. O trabalho do estúdio já foi selecionado pela Galeria da Arquitetura e pelo Archtrends Portobello.",
+    yearFounded: 2018,
     metrics: {
       yearsActive: 8,
       completedProjects: 40,
-      areaBuilt: 14500,
+      areaBuilt: 20000,
     },
     history: [
-      { year: 2017, milestone: "Fernanda e Lucas fundam o Núcleo após Mestrado em Arquitetura Litorânea" },
-      { year: 2019, milestone: "Casa Praia Mole vira referência em projeto resistente à salinidade" },
-      { year: 2021, milestone: "Parceria oficial com Berkahn para steel frame galvanizado" },
-      { year: 2024, milestone: "Lançamento do método NL-Salt para envelope marítimo" },
+      { year: 2018, milestone: "Matheus Fischer e Gustavo Fernandes fundam o Airos Arquitetura" }, // PROVISÓRIO
+      { year: 2022, milestone: "Projetos selecionados pela Galeria da Arquitetura e Archtrends Portobello" }, // confirmar ano
+      { year: 2024, milestone: "Portfólio cresce com residências de alto padrão no interior e na capital" }, // PROVISÓRIO
     ],
     contact: {
-      website: "https://www.nucleolitoral.arq.br",
-      instagram: "@nucleolitoral.arq",
-      phone: "+55 48 98765-4321",
-      email: "ola@nucleolitoral.arq.br",
+      website: "https://airos.arq.br",
+      instagram: "@airos.arq",
+      phone: "+55 11 91871-1738",
     },
-    studioPhoto: "/images/galeria/projeto-37.webp",
-    architectPhoto:
-      "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=900&auto=format&fit=crop&q=80",
-    architectName: "Fernanda Hahn",
+    studioPhoto: "/images/arquitetos/airos/airos-13.webp",
+    architectPhoto: "/images/arquitetos/airos/airos-64.webp", // PROVISÓRIO: retrato de um dos fundadores — confirmar quem é quem (airos-64,65,66,67 = homens; 68,69 = Thays). Ideal: foto dupla Matheus + Gustavo
+    architectName: "Matheus Fischer e Gustavo Fernandes",
     hubLayoutVariant: "carousel",
     projects: [
       {
-        id: "casa-praia-mole",
-        name: "Casa Praia Mole",
-        area: 280,
-        year: 2023,
-        city: "Florianópolis, SC",
-        program: "Residencial · 4 dorms · Frente para o mar",
+        id: "casa-shark",
+        name: "Casa Shark",
+        area: 595, // REAL (595 m² construída; 1.200 m² terreno)
+        year: 2024, // PROVISÓRIO
+        city: "Campinas, SP",
+        program: "Residencial · Alto padrão · Terreno 1.200 m²",
         concept:
-          "Implantada a 80 metros da arrebentação, a Casa Praia Mole responde ao desafio do envelope salino com steel frame galvanizado por imersão e fachada ventilada em madeira tratada. Ventilação cruzada dispensa ar-condicionado por 9 meses do ano.",
+          "Projeto atemporal pensado para uma família que retorna ao Brasil. O desafio foi unir funcionalidade, acolhimento e elegância em cada detalhe, criando espaços que traduzem inovação e exclusividade. Volumes marcantes, pedra e madeira em diálogo com a piscina e o paisagismo.",
         isAnchor: true,
         images: [
-          "/images/apresentacao/Vila-da-mata/vila-da-mata-1.webp",
-          "/images/apresentacao/Vila-da-mata/vila-da-mata-2.webp",
-          "/images/apresentacao/Vila-da-mata/vila-da-mata-3.webp",
+          "/images/arquitetos/airos/airos-52.webp",
+          "/images/arquitetos/airos/airos-53.webp",
+          "/images/arquitetos/airos/airos-55.webp",
+          "/images/arquitetos/airos/airos-60.webp",
+          "/images/arquitetos/airos/airos-54.webp",
         ],
       },
       {
-        id: "refugio-lagoinha",
-        name: "Refúgio Lagoinha",
-        area: 180,
-        year: 2022,
-        city: "Florianópolis, SC",
-        program: "Residencial · 3 dorms",
-        images: ["/images/galeria/projeto-38.webp", "/images/galeria/projeto-39.webp"],
+        id: "casa-bravo",
+        name: "Casa Bravo",
+        area: 702, // REAL (702,59 m²)
+        year: 2024, // PROVISÓRIO
+        city: "Jundiaí, SP",
+        program: "Residencial · Alto padrão · Pedra e madeira",
+        images: ["/images/arquitetos/airos/airos-13.webp"],
       },
       {
-        id: "casa-jurere",
-        name: "Casa Jurerê",
-        area: 520,
-        year: 2024,
-        city: "Florianópolis, SC",
-        program: "Residencial · 5 dorms · Piscina + deck",
-        images: ["/images/galeria/projeto-40.webp", "/images/galeria/projeto-41.webp"],
+        id: "casa-julieta",
+        name: "Casa Julieta",
+        area: 651, // REAL (651,48 m²)
+        year: 2023, // PROVISÓRIO
+        city: "Itapira, SP",
+        program: "Residencial · Alto padrão · Terreno 2.001 m²",
+        images: ["/images/arquitetos/airos/airos-19.webp"],
       },
       {
-        id: "mirante-campeche",
-        name: "Mirante Campeche",
-        area: 240,
-        year: 2021,
-        city: "Florianópolis, SC",
-        program: "Residencial · 3 dorms",
-        images: ["/images/galeria/projeto-42.webp"],
+        id: "apartamento-niemeyer",
+        name: "Apartamento Niemeyer",
+        area: 320, // REAL (320 m²)
+        year: 2023, // PROVISÓRIO
+        city: "São Paulo, SP",
+        program: "Apartamento · Alto padrão · Itaim Bibi",
+        images: ["/images/arquitetos/airos/airos-01.webp"],
       },
       {
-        id: "casa-pantano-sul",
-        name: "Casa Pântano do Sul",
-        area: 160,
-        year: 2023,
-        city: "Florianópolis, SC",
-        program: "Residencial · 2 dorms",
-        images: [
-          "/images/Services/projetos-prontos/Loft/loft-01.webp",
-          "/images/Services/projetos-prontos/Loft/loft-02.webp",
-        ],
+        id: "casa-jv",
+        name: "Casa J.V",
+        area: 506, // REAL (506,85 m²)
+        year: 2024, // PROVISÓRIO
+        city: "São Paulo, SP",
+        program: "Residencial · Alto padrão · Alto de Pinheiros",
+        images: ["/images/arquitetos/airos/airos-37.webp"],
       },
       {
-        id: "cabana-galheta",
-        name: "Cabana Galheta",
-        area: 90,
-        year: 2022,
-        city: "Florianópolis, SC",
-        program: "Casa de praia · 2 dorms",
-        images: [
-          "/images/Services/projetos-prontos/Chalé/chale_interior_1.webp",
-          "/images/Services/projetos-prontos/Chalé/chale_interior_2.webp",
-        ],
+        id: "casa-patio",
+        name: "Casa Pátio",
+        area: 412, // REAL (412,45 m²)
+        year: 2024, // PROVISÓRIO
+        city: "Jundiaí, SP",
+        program: "Residencial · Alto padrão · Pátio e ventilação cruzada",
+        images: ["/images/arquitetos/airos/airos-44.webp"],
       },
     ],
   },
