@@ -2,14 +2,9 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { motion, AnimatePresence } from "motion/react";
-import { X, ChevronLeft, ChevronRight } from "lucide-react";
-import {
-  Dialog,
-  DialogContent,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { motion } from "motion/react";
 import type { Architect, ArchitectProject } from "@/lib/architects-data";
+import { ArchitectImageLightbox } from "./ArchitectImageLightbox";
 
 interface Props {
   architect: Architect;
@@ -20,29 +15,6 @@ export function ArchitectProjectsGallery({ architect }: Props) {
   const galleryProjects = architect.projects.filter((p) => !p.isAnchor);
 
   const [openProject, setOpenProject] = useState<ArchitectProject | null>(null);
-  const [imageIndex, setImageIndex] = useState(0);
-
-  const handleOpen = (project: ArchitectProject) => {
-    setOpenProject(project);
-    setImageIndex(0);
-  };
-
-  const handleClose = () => {
-    setOpenProject(null);
-    setImageIndex(0);
-  };
-
-  const next = () => {
-    if (!openProject) return;
-    setImageIndex((i) => (i + 1) % openProject.images.length);
-  };
-
-  const prev = () => {
-    if (!openProject) return;
-    setImageIndex(
-      (i) => (i - 1 + openProject.images.length) % openProject.images.length
-    );
-  };
 
   return (
     <>
@@ -74,7 +46,7 @@ export function ArchitectProjectsGallery({ architect }: Props) {
             {galleryProjects.map((project, i) => (
               <motion.button
                 key={project.id}
-                onClick={() => handleOpen(project)}
+                onClick={() => setOpenProject(project)}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "0px 0px -8% 0px" }}
@@ -84,7 +56,7 @@ export function ArchitectProjectsGallery({ architect }: Props) {
                   ease: [0.19, 1, 0.22, 1],
                 }}
                 whileHover={{ y: -4 }}
-                className="group text-left bg-white overflow-hidden hover:shadow-luxury-md transition-shadow duration-500"
+                className="group text-left bg-white overflow-hidden hover:shadow-luxury-md transition-shadow duration-500 cursor-zoom-in"
               >
                 <div className="relative aspect-[4/5] overflow-hidden">
                   <Image
@@ -111,95 +83,18 @@ export function ArchitectProjectsGallery({ architect }: Props) {
         </div>
       </section>
 
-      {/* Lightbox */}
-      <Dialog open={!!openProject} onOpenChange={(open) => !open && handleClose()}>
-        <DialogContent
-          hideCloseButton
-          className="max-w-[95vw] w-[95vw] h-[90vh] p-0 bg-black border-0 overflow-hidden"
-        >
-          <DialogTitle className="sr-only">
-            {openProject?.name ?? "Projeto"}
-          </DialogTitle>
-
-          {openProject && (
-            <div className="relative w-full h-full flex flex-col">
-              {/* Top bar */}
-              <div className="flex items-center justify-between px-6 lg:px-10 py-5 text-white">
-                <div className="space-y-1">
-                  <h4 className="font-heading text-xl md:text-2xl font-light tracking-tight">
-                    {openProject.name}
-                  </h4>
-                  <p className="text-[11px] uppercase tracking-[0.25em] text-white/60">
-                    {openProject.area} m² · {openProject.year} ·{" "}
-                    {openProject.city}
-                  </p>
-                </div>
-
-                <div className="flex items-center gap-4">
-                  <span className="text-sm font-light tabular-nums text-white/70 hidden sm:inline">
-                    {String(imageIndex + 1).padStart(2, "0")} /{" "}
-                    {String(openProject.images.length).padStart(2, "0")}
-                  </span>
-                  <button
-                    onClick={handleClose}
-                    className="p-2 text-white/70 hover:text-white transition-colors"
-                    aria-label="Fechar"
-                  >
-                    <X className="w-5 h-5" />
-                  </button>
-                </div>
-              </div>
-
-              {/* Image area */}
-              <div className="flex-1 relative flex items-center justify-center px-6 lg:px-16 pb-6">
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={imageIndex}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.4 }}
-                    className="relative w-full h-full"
-                  >
-                    <Image
-                      src={openProject.images[imageIndex]}
-                      alt={`${openProject.name} — ${imageIndex + 1}`}
-                      fill
-                      className="object-contain"
-                      sizes="95vw"
-                      priority
-                    />
-                  </motion.div>
-                </AnimatePresence>
-
-                {openProject.images.length > 1 && (
-                  <>
-                    <button
-                      onClick={prev}
-                      className="absolute left-2 lg:left-6 top-1/2 -translate-y-1/2 p-3 text-white/60 hover:text-white transition-colors"
-                      aria-label="Imagem anterior"
-                    >
-                      <ChevronLeft className="w-7 h-7 lg:w-9 lg:h-9" />
-                    </button>
-                    <button
-                      onClick={next}
-                      className="absolute right-2 lg:right-6 top-1/2 -translate-y-1/2 p-3 text-white/60 hover:text-white transition-colors"
-                      aria-label="Próxima imagem"
-                    >
-                      <ChevronRight className="w-7 h-7 lg:w-9 lg:h-9" />
-                    </button>
-                  </>
-                )}
-              </div>
-
-              {/* Bottom — program */}
-              <div className="px-6 lg:px-10 py-4 border-t border-white/10 text-white/60 text-xs uppercase tracking-[0.2em]">
-                {openProject.program}
-              </div>
-            </div>
-          )}
-        </DialogContent>
-      </Dialog>
+      <ArchitectImageLightbox
+        open={!!openProject}
+        images={openProject?.images ?? []}
+        title={openProject?.name}
+        meta={
+          openProject
+            ? `${openProject.area} m² · ${openProject.year} · ${openProject.city}`
+            : undefined
+        }
+        footer={openProject?.program}
+        onClose={() => setOpenProject(null)}
+      />
     </>
   );
 }

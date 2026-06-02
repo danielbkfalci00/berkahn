@@ -1,11 +1,14 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import { motion } from "motion/react";
+import { Maximize2 } from "lucide-react";
 import { CountUp } from "@/components/animations/CountUp";
 import { ParallaxImage } from "@/components/animations/ParallaxImage";
 import { TextReveal } from "@/components/animations/TextReveal";
 import type { Architect, ArchitectProject } from "@/lib/architects-data";
+import { ArchitectImageLightbox } from "./ArchitectImageLightbox";
 
 interface Props {
   architect: Architect;
@@ -18,7 +21,10 @@ export function ArchitectAnchorProject({ architect }: Props) {
   const heroImage = anchor.images[0];
   const secondaryImages = anchor.images.slice(1, 5);
 
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+
   return (
+    <>
     <section className="relative w-full bg-white py-24 lg:py-36 px-6 lg:px-12 overflow-hidden">
       <div className="max-w-[1500px] mx-auto">
         {/* Section label */}
@@ -43,7 +49,7 @@ export function ArchitectAnchorProject({ architect }: Props) {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "0px 0px -10% 0px" }}
           transition={{ duration: 1.1, ease: [0.19, 1, 0.22, 1] }}
-          className="relative w-full aspect-[16/9] lg:aspect-[21/9]"
+          className="relative w-full aspect-[16/9] lg:aspect-[21/9] group"
         >
           <ParallaxImage
             src={heroImage}
@@ -51,6 +57,16 @@ export function ArchitectAnchorProject({ architect }: Props) {
             speed={0.15}
             containerClassName="absolute inset-0"
           />
+          <button
+            type="button"
+            onClick={() => setLightboxIndex(0)}
+            aria-label={`Ampliar ${anchor.name}`}
+            className="absolute inset-0 z-10 flex items-end justify-end p-4 lg:p-6 cursor-zoom-in"
+          >
+            <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/40 backdrop-blur-sm text-white rounded-full p-2.5">
+              <Maximize2 className="w-5 h-5" />
+            </span>
+          </button>
         </motion.div>
 
         {/* Concept narrative + stats */}
@@ -145,11 +161,32 @@ export function ArchitectAnchorProject({ architect }: Props) {
                   className="object-cover transition-transform duration-1000 ease-expo group-hover:scale-105"
                   sizes="(max-width: 1024px) 50vw, 25vw"
                 />
+                <button
+                  type="button"
+                  onClick={() => setLightboxIndex(i + 1)}
+                  aria-label={`Ampliar ${anchor.name} imagem ${i + 2}`}
+                  className="absolute inset-0 z-10 flex items-end justify-end p-3 cursor-zoom-in bg-black/0 hover:bg-black/10 transition-colors"
+                >
+                  <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/40 backdrop-blur-sm text-white rounded-full p-2">
+                    <Maximize2 className="w-4 h-4" />
+                  </span>
+                </button>
               </motion.div>
             ))}
           </div>
         )}
       </div>
     </section>
+
+      <ArchitectImageLightbox
+        open={lightboxIndex !== null}
+        images={anchor.images}
+        initialIndex={lightboxIndex ?? 0}
+        title={anchor.name}
+        meta={`${anchor.area} m² · ${anchor.year} · ${anchor.city}`}
+        footer={anchor.program}
+        onClose={() => setLightboxIndex(null)}
+      />
+    </>
   );
 }

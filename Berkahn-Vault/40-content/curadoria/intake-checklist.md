@@ -80,3 +80,8 @@ Se algum arquiteto real nao atingir o minimo, sinalizo no checkpoint pra gente d
 ## Decisoes travadas (2026-06-02)
 - **Posicionamento**: o arquiteto assina o projeto e a **Berkahn constroi em Light Steel Frame**. As bios descrevem a especialidade REAL de cada arquiteto, sem forcar discurso de steel frame. Ajustar copy do hub + PathChooser no Sprint 3.
 - **Ritmo**: piloto Rosmari validado; Bianchi + Airos adiantados em paralelo a revisao da Rosmari.
+
+## Follow-up aberto (Fase 2)
+- [ ] **Bianchi — projeto residencial**: a capa/galeria dela hoje usa obras Are (comercial/institucional), re-curada para as menos industriais (arena Pacaembu). Quando Bruno enviar imagens de um **projeto residencial real dela** (o CV cita um freelance), trocar capa + galeria. Dropar em `architects-intake/maria-isabel-bianchi/`.
+- [ ] **Rosmari — headshot** real (hoje o portrait e um render).
+- [ ] **Airos — foto dos fundadores** (confirmar qual e Matheus/Gustavo; ideal foto dupla).

@@ -202,11 +202,13 @@ export const architects: Architect[] = [
           "Retrofit do histórico complexo do Pacaembu, de 1940, transformado em arena multiuso com hotel, eventos, gastronomia e escritórios. Projeto desenvolvido na equipe da Are Arquitetura, onde Maria Isabel atua com modelagem BIM e compatibilização, respeitando o tombamento. Venceu o prêmio AR Future Projects, da revista The Architectural Review.",
         isAnchor: true,
         images: [
-          "/images/arquitetos/maria-isabel-bianchi/maria-isabel-bianchi-02.webp",
-          "/images/arquitetos/maria-isabel-bianchi/maria-isabel-bianchi-07.webp",
+          // Re-curado (Fase 2): lidera com a arena de madeira (mais arquitetônico/quente),
+          // tira os shots de construção (07/08/09) e o card de prêmio (15). Capa menos industrial.
           "/images/arquitetos/maria-isabel-bianchi/maria-isabel-bianchi-14.webp",
-          "/images/arquitetos/maria-isabel-bianchi/maria-isabel-bianchi-08.webp",
+          "/images/arquitetos/maria-isabel-bianchi/maria-isabel-bianchi-02.webp",
+          "/images/arquitetos/maria-isabel-bianchi/maria-isabel-bianchi-11.webp",
           "/images/arquitetos/maria-isabel-bianchi/maria-isabel-bianchi-13.webp",
+          "/images/arquitetos/maria-isabel-bianchi/maria-isabel-bianchi-10.webp",
         ],
       },
       {
