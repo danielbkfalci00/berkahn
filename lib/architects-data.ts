@@ -48,6 +48,8 @@ export type Architect = {
   architectPhoto: string;
   /** Nome legível para alt text do portrait */
   architectName: string;
+  /** Forma curta de tratamento no WhatsApp (ex: "Rosmari", "equipe Airos"). Fallback: architectName. */
+  contactGreeting?: string;
   hubLayoutVariant: "zigzag" | "carousel";
   projects: ArchitectProject[]; // primeiro com isAnchor:true vira projeto-âncora
 };
@@ -88,6 +90,7 @@ export const architects: Architect[] = [
     studioPhoto: "/images/arquitetos/rosmari-calefe/rosmari-calefe-25.webp",
     architectPhoto: "/images/arquitetos/rosmari-calefe/rosmari-calefe-01.webp", // PROVISÓRIO: trocar por headshot real
     architectName: "Rosmari Calefe",
+    contactGreeting: "Rosmari",
     hubLayoutVariant: "carousel",
     projects: [
       {
@@ -189,6 +192,7 @@ export const architects: Architect[] = [
     studioPhoto: "/images/arquitetos/maria-isabel-bianchi/maria-isabel-bianchi-58.webp",
     architectPhoto: "/images/arquitetos/maria-isabel-bianchi/maria-isabel-bianchi-75.webp",
     architectName: "Maria Isabel Bianchi",
+    contactGreeting: "Maria Isabel",
     hubLayoutVariant: "zigzag",
     projects: [
       {
@@ -283,6 +287,7 @@ export const architects: Architect[] = [
     studioPhoto: "/images/arquitetos/airos/airos-13.webp",
     architectPhoto: "/images/arquitetos/airos/airos-64.webp", // PROVISÓRIO: retrato de um dos fundadores — confirmar quem é quem (airos-64,65,66,67 = homens; 68,69 = Thays). Ideal: foto dupla Matheus + Gustavo
     architectName: "Matheus Fischer e Gustavo Fernandes",
+    contactGreeting: "equipe Airos",
     hubLayoutVariant: "carousel",
     projects: [
       {
