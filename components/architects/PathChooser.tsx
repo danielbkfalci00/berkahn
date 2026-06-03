@@ -14,6 +14,7 @@ interface PathProps {
   image: string;
   href: string;
   delay: number;
+  comingSoon?: boolean;
 }
 
 function PathCard({
@@ -25,16 +26,21 @@ function PathCard({
   image,
   href,
   delay,
+  comingSoon = false,
 }: PathProps) {
   return (
     <motion.a
-      href={href}
+      {...(comingSoon ? { "aria-disabled": true } : { href })}
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "0px 0px -10% 0px" }}
       transition={{ duration: 1, delay, ease: [0.19, 1, 0.22, 1] }}
-      whileHover={{ y: -6 }}
-      className="group relative block bg-white border border-black-5 hover:border-black-20 hover:shadow-luxury-lg transition-[border-color,box-shadow] duration-500"
+      whileHover={comingSoon ? undefined : { y: -6 }}
+      className={`group relative block bg-white border border-black-5 transition-[border-color,box-shadow] duration-500 ${
+        comingSoon
+          ? "cursor-not-allowed select-none"
+          : "hover:border-black-20 hover:shadow-luxury-lg"
+      }`}
     >
       {/* Image */}
       <div className="relative aspect-[5/3] overflow-hidden bg-black-5">
@@ -43,8 +49,17 @@ function PathCard({
           alt={title}
           fill
           sizes="(max-width: 768px) 100vw, 50vw"
-          className="object-cover transition-transform duration-1000 ease-expo group-hover:scale-105"
+          className={`object-cover transition-transform duration-1000 ease-expo ${
+            comingSoon ? "blur-[3px] opacity-60" : "group-hover:scale-105"
+          }`}
         />
+        {comingSoon && (
+          <div className="absolute inset-0 flex items-center justify-center">
+            <span className="px-5 py-2.5 bg-black text-white text-[11px] uppercase tracking-[0.3em]">
+              Em desenvolvimento
+            </span>
+          </div>
+        )}
       </div>
 
       {/* Content */}
@@ -68,10 +83,18 @@ function PathCard({
         </p>
 
         <div className="inline-flex items-center gap-3">
-          <span className="text-xs uppercase tracking-[0.3em] border-b border-black/30 pb-1 group-hover:border-black transition-colors duration-300">
-            {cta}
+          <span
+            className={`text-xs uppercase tracking-[0.3em] border-b pb-1 transition-colors duration-300 ${
+              comingSoon
+                ? "border-black/10 text-black-30"
+                : "border-black/30 group-hover:border-black"
+            }`}
+          >
+            {comingSoon ? "Em breve" : cta}
           </span>
-          <ArrowRight className="w-4 h-4 transition-transform duration-500 ease-expo group-hover:translate-x-1" />
+          {!comingSoon && (
+            <ArrowRight className="w-4 h-4 transition-transform duration-500 ease-expo group-hover:translate-x-1" />
+          )}
         </div>
       </div>
     </motion.a>
@@ -118,11 +141,12 @@ export function PathChooser() {
             index="02"
             kicker="Curado"
             title="Escolher um modelo engenheirado"
-            description="Linha própria Berkahn com projeto, especificações e prazo já resolvidos. Construção em 30 a 90 dias."
+            description="A linha própria Berkahn de modelos prontos, com projeto, especificações e prazo resolvidos, está em desenvolvimento."
             cta="Ver modelos"
             image="/images/Services/projetos-prontos/Loft/loft-hero.webp"
             href="#modelos"
             delay={0.3}
+            comingSoon
           />
         </div>
       </div>

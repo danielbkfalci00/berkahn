@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "motion/react";
-import { Globe, Instagram, Phone, Mail, MessageCircle, ArrowUpRight } from "lucide-react";
+import { Globe, Instagram, Mail, MessageCircle, ArrowUpRight } from "lucide-react";
 import { MagneticButton } from "./MagneticButton";
 import type { Architect } from "@/lib/architects-data";
 import { trackEvent } from "@/lib/analytics";
@@ -19,6 +19,9 @@ export function ArchitectContactBlock({ architect }: Props) {
   );
 
   const phoneClean = architect.contact.phone.replace(/\D/g, "");
+  const architectWhatsappMessage = encodeURIComponent(
+    "Olá! Vim pela curadoria de arquitetos da Berkahn e gostaria de saber mais sobre o seu trabalho."
+  );
 
   return (
     <section className="relative w-full bg-off-white py-24 lg:py-36 px-6 lg:px-12">
@@ -82,14 +85,15 @@ export function ArchitectContactBlock({ architect }: Props) {
                 external
               />
               <ContactLink
-                href={`tel:+${phoneClean}`}
-                icon={<Phone className="w-4 h-4" />}
-                label="Telefone"
+                href={`https://wa.me/${phoneClean}?text=${architectWhatsappMessage}`}
+                icon={<MessageCircle className="w-4 h-4" />}
+                label="WhatsApp"
                 value={architect.contact.phone}
+                external
                 onClick={() =>
                   trackEvent("architect_contact_click", {
                     architect: architect.slug,
-                    channel: "phone",
+                    channel: "whatsapp",
                   })
                 }
               />
