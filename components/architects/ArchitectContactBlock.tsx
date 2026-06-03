@@ -15,12 +15,12 @@ const BERKAHN_WHATSAPP_DISPLAY = "+55 (11) 96641-5742";
 
 export function ArchitectContactBlock({ architect }: Props) {
   const whatsappMessage = encodeURIComponent(
-    `Olá Berkahn, gostaria de conhecer melhor o trabalho do ${architect.studioName} para meu projeto.`
+    `Olá Berkahn! Gostaria de conhecer melhor o trabalho de ${architect.studioName} e estruturar meu projeto.`
   );
 
   const phoneClean = architect.contact.phone.replace(/\D/g, "");
   const architectWhatsappMessage = encodeURIComponent(
-    "Olá! Vim pela curadoria de arquitetos da Berkahn e gostaria de saber mais sobre o seu trabalho."
+    `Oi ${architect.contactGreeting ?? architect.architectName}, tudo bem? Vim pela parceria com a Berkahn e gostaria de saber mais sobre os seus projetos.`
   );
 
   return (
