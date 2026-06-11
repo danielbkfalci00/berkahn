@@ -1,0 +1,90 @@
+filters:
+  or:
+    - file.inFolder("00-meta/projetos")
+    - file.inFolder("40-content/auditorias-seo")
+
+formulas:
+  pct_publicados: 'if(kpi_meta_publicados_semanal, (kpi_publicados / kpi_meta_publicados_semanal) * 100, 0)'
+  pct_indexacao: 'if(kpi_meta_indexacao_total, (kpi_indexados_google / kpi_meta_indexacao_total) * 100, 0)'
+  health: 'if(kpi_atualizado_em > today() - "7 days", "fresh", "stale")'
+
+properties:
+  projeto:
+    displayName: "Projeto"
+  kpi_publicados:
+    displayName: "Publicados"
+  kpi_meta_publicados_semanal:
+    displayName: "Meta sem"
+  kpi_indexados_google:
+    displayName: "Indexados"
+  kpi_meta_indexacao_total:
+    displayName: "Meta indexação"
+  kpi_score:
+    displayName: "Score SEO"
+  kpi_atualizado_em:
+    displayName: "Atualizado"
+  formula.pct_publicados:
+    displayName: "% Publicados"
+  formula.pct_indexacao:
+    displayName: "% Indexação"
+  formula.health:
+    displayName: "Health"
+
+views:
+  - type: table
+    name: "Dashboard geral"
+    order:
+      - projeto
+      - kpi_publicados
+      - kpi_meta_publicados_semanal
+      - formula.pct_publicados
+      - kpi_indexados_google
+      - kpi_meta_indexacao_total
+      - formula.pct_indexacao
+      - formula.health
+      - kpi_atualizado_em
+    sort:
+      - property: projeto
+        direction: ASC
+
+  - type: table
+    name: "Atrasados (< 80% meta)"
+    filters:
+      or:
+        - 'formula.pct_publicados < 80'
+        - 'formula.pct_indexacao < 80'
+    order:
+      - projeto
+      - formula.pct_publicados
+      - formula.pct_indexacao
+      - kpi_atualizado_em
+    sort:
+      - property: formula.pct_indexacao
+        direction: ASC
+
+  - type: table
+    name: "Stale (> 7 dias sem update)"
+    filters:
+      and:
+        - 'formula.health == "stale"'
+    order:
+      - projeto
+      - kpi_atualizado_em
+    sort:
+      - property: kpi_atualizado_em
+        direction: ASC
+
+  - type: table
+    name: "Auditorias SEO"
+    filters:
+      and:
+        - 'tipo == "auditoria"'
+    order:
+      - file.name
+      - kpi_score
+      - kpi_paginas_indexadas
+      - kpi_paginas_total
+      - data_diagnostico
+    sort:
+      - property: data_diagnostico
+        direction: DESC

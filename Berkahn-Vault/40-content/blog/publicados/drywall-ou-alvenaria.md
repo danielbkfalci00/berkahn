@@ -1,16 +1,34 @@
 ---
+tipo: draft-content
+criado: 2026-05-01
+atualizado: 2026-05-22
+tags:
+  - domain/drywall
+  - project/blog
+  - status/published
+ai_summary: "Custo real, peso, acústica e prazo: comparativo técnico entre drywall e alvenaria com dados SINAPI 2025 e NBR 15575. Saiba quando usar cada sistema."
+status: published
+projeto: blog
+slug: drywall-ou-alvenaria
+data_publicacao: 2026-05-01
 title: "Drywall ou Alvenaria de Bloco Cerâmico: Comparativo Técnico Completo"
-slug: "drywall-ou-alvenaria"
 description: "Custo real, peso, acústica e prazo: comparativo técnico entre drywall e alvenaria com dados SINAPI 2025 e NBR 15575. Saiba quando usar cada sistema."
-keywords: ["drywall ou alvenaria", "bloco cerâmico vs drywall", "drywall vantagens", "parede drywall", "Light Steel Frame"]
-author: "Berkahn"
-date: "2026-05-01"
-readTime: "11 min"
-category: "Tecnologia"
-cover_image: "/images/blog/drywall-ou-alvenaria/cover.webp"
-featured: false
+seo_description: "Custo real, peso, acústica e prazo: comparativo técnico entre drywall e alvenaria com dados SINAPI 2025 e NBR 15575. Saiba quando usar cada sistema."
+palavras_chave:
+  - drywall ou alvenaria
+  - bloco cerâmico vs drywall
+  - drywall vantagens
+  - parede drywall
+  - Light Steel Frame
+category: Tecnologia
+read_time: 11 min
+author: Berkahn
+url_final: "https://www.berkahn.com.br/atualidades/drywall-ou-alvenaria"
+contextos_aplicados:
+  - berkahn-brand
+  - seo-aeo-strategy
+  - article-pipeline
 ---
-
 # Drywall ou Alvenaria de Bloco Cerâmico: Comparativo Técnico Completo
 
 Nos Estados Unidos, o consumo de drywall alcança 10 m² por habitante. No Brasil, esse número mal chega a 0,25 m², segundo dados da Associação Brasileira da Construção Leve e Sustentável (ABCLS). É uma diferença de 40 vezes. Essa discrepância não se explica por limitações técnicas ou normativas. O drywall atende à NBR 15575, está regulamentado por norma técnica vigente, é financiável por qualquer banco e aprovado em todas as prefeituras. O que mantém a alvenaria como padrão dominante no Brasil é, em grande parte, um hábito cultural. Na Berkahn, onde trabalhamos com Light Steel Frame (LSF), um sistema construtivo industrializado que utiliza perfis de aço galvanizado como estrutura, o drywall é o fechamento interno nativo dos nossos projetos. Conhecemos as duas tecnologias na prática e sabemos que a escolha entre elas raramente é tão simples quanto parece.
@@ -112,3 +130,11 @@ Sistemas híbridos fazem sentido em diversos cenários: edifícios multifamiliar
 Os dados técnicos e econômicos favorecem o drywall para vedação interna na maioria dos cenários. Custo 15 a 42% menor no sistema acabado, execução 2 a 4 vezes mais rápida, 90% menos consumo de água, desempenho acústico superior com tratamento adequado e peso que representa menos de 14% da alvenaria. A alvenaria mantém vantagens reais em massa térmica e robustez a impactos, o que a torna adequada em contextos específicos.
 
 [CTA:cta-drywall-orcamento]
+
+---
+
+<!-- vault-rodape-v1 -->
+**Contexto aplicado**: [[berkahn-brand]] · [[seo-aeo-strategy]] · [[article-pipeline]] · [[copy-sem-travessao]] · [[steel-frame-domain]]
+**Atomic knowledge usado**: [[lsf-vs-alvenaria]] · [[lsf-acustica]]
+**Hub**: [[blog]]
+**Workflow**: [[workflow-conteudo]]

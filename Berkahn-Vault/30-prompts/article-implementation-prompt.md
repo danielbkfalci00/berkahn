@@ -1,17 +1,17 @@
 ---
 tipo: prompt
-locked: true
-versao: 1.0
-calibrado_em: 2026-04-13
 criado: 2026-04-13
 atualizado: 2026-05-21
-secrets_redacted: 2026-05-21
 tags:
   - ai/prompt
   - ai/locked
   - project/blog
-status: locked
 ai_summary: Prompt master de implementação de artigo (22KB, +600 linhas). Transforma markdown em artigo no blog com componentes interativos + INSERT Supabase. Usado por /artigo. SECRETS REDACTED em 2026-05-21 (linha do SERVICE_KEY agora usa process.env).
+status: locked
+locked: true
+versao: 1.0
+calibrado_em: 2026-04-13
+secrets_redacted: 2026-05-21
 ---
 
 > [!warning] PROMPT CALIBRADO + SANITIZADO — NÃO ALTERAR sem permissão

@@ -1,6 +1,5 @@
 ---
 tipo: memory
-subtipo: project
 criado: 2026-04-13
 atualizado: 2026-05-21
 tags:
@@ -10,6 +9,7 @@ tags:
   - project/linkedin
 ai_summary: Pipeline de artigos tem 4 etapas (brainstorm → pesquisa → criação → produção). Cadência 1 artigo + 1 LinkedIn por semana. Notion = hub de gerenciamento (manual).
 status: active
+subtipo: project
 why: "Cada etapa tem prompt específico calibrado. Separar em etapas permite iterar em cada fase sem perder contexto das regras de qualidade."
 how_to_apply: "Seguir ordem brainstorm → pesquisa → criação → artigo. LinkedIn vem depois (referencia o artigo). Bruno copia manualmente para Notion."
 ---

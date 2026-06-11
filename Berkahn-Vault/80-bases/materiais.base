@@ -1,0 +1,78 @@
+filters:
+  and:
+    - file.inFolder("40-content/materiais")
+    - 'tipo == "indice"'
+
+formulas:
+  tem_path: 'if(path_externo, "✓", "✗")'
+  ratio_mapeados: 'if(arquivos_total, (arquivos_mapeados / arquivos_total) * 100, 0)'
+
+properties:
+  file.name:
+    displayName: "Índice"
+  projeto:
+    displayName: "Projeto"
+  arquivos_total:
+    displayName: "# arquivos"
+  arquivos_mapeados:
+    displayName: "Mapeados"
+  arquivos_orfaos:
+    displayName: "Órfãos"
+  arquivos_duplicados:
+    displayName: "Duplicados"
+  path_externo:
+    displayName: "Path externo"
+  formula.ratio_mapeados:
+    displayName: "% mapeado"
+  formula.tem_path:
+    displayName: "Path OK"
+
+views:
+  - type: table
+    name: "Por projeto"
+    order:
+      - file.name
+      - projeto
+      - arquivos_total
+      - arquivos_mapeados
+      - formula.ratio_mapeados
+      - arquivos_orfaos
+    sort:
+      - property: projeto
+        direction: ASC
+
+  - type: table
+    name: "Com órfãos (decidir descartar/criar)"
+    filters:
+      and:
+        - 'arquivos_orfaos > 0'
+    order:
+      - file.name
+      - arquivos_orfaos
+      - arquivos_total
+    sort:
+      - property: arquivos_orfaos
+        direction: DESC
+
+  - type: table
+    name: "Com duplicatas (consolidar)"
+    filters:
+      and:
+        - 'arquivos_duplicados > 0'
+    order:
+      - file.name
+      - arquivos_duplicados
+      - arquivos_total
+    sort:
+      - property: arquivos_duplicados
+        direction: DESC
+
+  - type: list
+    name: "Compact list"
+    order:
+      - file.name
+      - projeto
+      - arquivos_total
+    sort:
+      - property: file.name
+        direction: ASC

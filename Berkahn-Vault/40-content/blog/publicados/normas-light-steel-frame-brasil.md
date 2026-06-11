@@ -1,16 +1,32 @@
 ---
-title: "Principais Normas do Light Steel Frame no Brasil"
-slug: "normas-light-steel-frame-brasil"
-excerpt: "Conheça todas as normas ABNT que regulamentam o Light Steel Frame no Brasil, da NBR 16970 ao financiamento bancário. Guia técnico e prático."
-category: "Guias"
-tags: ["normas light steel frame", "NBR 16970", "normas ABNT steel frame", "regulamentação steel frame brasil", "norma de desempenho steel frame"]
-author: "Berkahn"
-publishedAt: "2026-05-10"
-readTime: 12
-featured: false
-supabaseId: "c76c4b16-7c31-45b4-9857-d369bed0a1f4"
+tipo: draft-content
+criado: 2026-05-21
+atualizado: 2026-05-22
+tags:
+  - domain/normas
+  - project/blog
+  - status/published
+ai_summary: Em maio de 2022, a ABNT publicou a NBR 16970, a primeira norma brasileira criada exclusivamente para o Light Steel Frame, um sistema construtivo industrializado que utiliza perfis de aço galvanizado como estrutura, fechados com placas cimentícias, OSB ou drywall.
+status: published
+projeto: blog
+slug: normas-light-steel-frame-brasil
+data_publicacao: 2026-05-21
+title: Principais Normas do Light Steel Frame no Brasil
+palavras_chave:
+  - NBR 16970
+  - normas light steel frame
+  - normas ABNT steel frame
+  - regulamentação steel frame brasil
+  - norma de desempenho steel frame
+category: Guias
+read_time: 12
+author: Berkahn
+url_final: "https://www.berkahn.com.br/atualidades/normas-light-steel-frame-brasil"
+contextos_aplicados:
+  - berkahn-brand
+  - seo-aeo-strategy
+  - article-pipeline
 ---
-
 # Principais Normas do Light Steel Frame no Brasil
 
 Em maio de 2022, a ABNT publicou a NBR 16970, a primeira norma brasileira criada exclusivamente para o Light Steel Frame, um sistema construtivo industrializado que utiliza perfis de aço galvanizado como estrutura, fechados com placas cimentícias, OSB ou drywall. Pode parecer só mais um número de norma técnica, mas o impacto prático foi enorme: a Caixa Econômica Federal reclassificou o LSF de "sistema inovador" para "sistema convencional", eliminando uma série de barreiras burocráticas que travavam financiamentos. Na Berkahn, acompanhamos essa evolução de perto porque ela afeta diretamente o planejamento de cada projeto que executamos em Steel Frame.
@@ -110,3 +126,11 @@ O Light Steel Frame no Brasil deixou de ser uma tecnologia sem respaldo normativ
 Se você está avaliando construir em Steel Frame e quer entender como essas normas se aplicam ao seu projeto específico, fale com a equipe da Berkahn. Trabalhamos com LSF como sistema principal e temos domínio técnico sobre cada uma dessas normas na prática, do projeto estrutural à entrega de chaves.
 
 [CTA:cta-normas-lsf-orcamento]
+
+---
+
+<!-- vault-rodape-v1 -->
+**Contexto aplicado**: [[berkahn-brand]] · [[seo-aeo-strategy]] · [[article-pipeline]] · [[copy-sem-travessao]] · [[steel-frame-domain]]
+**Atomic knowledge usado**: [[lsf-normas-nbr]]
+**Hub**: [[blog]]
+**Workflow**: [[workflow-conteudo]]

@@ -1,0 +1,69 @@
+filters:
+  and:
+    - file.inFolder("00-meta/projetos")
+    - 'tipo == "projeto"'
+
+formulas:
+  status_icon: 'if(status == "active", "🟢", if(status == "paused", "🟡", if(status == "archived", "⚫", "⚪")))'
+
+properties:
+  projeto:
+    displayName: "Projeto"
+  status:
+    displayName: "Status"
+  kpi_atualizado_em:
+    displayName: "KPIs atualizados"
+  workflow:
+    displayName: "Workflow"
+  formula.status_icon:
+    displayName: "•"
+
+views:
+  - type: table
+    name: "Ativos"
+    filters:
+      and:
+        - 'status == "active"'
+    order:
+      - formula.status_icon
+      - projeto
+      - status
+      - kpi_atualizado_em
+      - workflow
+    sort:
+      - property: kpi_atualizado_em
+        direction: DESC
+
+  - type: cards
+    name: "Cards por projeto"
+    cardSize: 240
+    order:
+      - projeto
+      - status
+      - ai_summary
+      - kpi_atualizado_em
+    sort:
+      - property: projeto
+        direction: ASC
+
+  - type: table
+    name: "Stale (sem update > 7 dias)"
+    filters:
+      and:
+        - 'kpi_atualizado_em < today() - "7 days"'
+    order:
+      - projeto
+      - kpi_atualizado_em
+      - status
+    sort:
+      - property: kpi_atualizado_em
+        direction: ASC
+
+  - type: list
+    name: "Todos (compact)"
+    order:
+      - projeto
+      - formula.status_icon
+    sort:
+      - property: projeto
+        direction: ASC

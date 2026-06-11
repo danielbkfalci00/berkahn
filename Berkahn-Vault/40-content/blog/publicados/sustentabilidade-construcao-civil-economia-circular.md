@@ -1,14 +1,34 @@
 ---
+tipo: draft-content
+criado: 2026-05-19
+atualizado: 2026-05-22
+tags:
+  - domain/sustentabilidade
+  - project/blog
+  - status/published
+ai_summary: A construção civil responde por 34% das emissões globais de CO₂. Entenda o impacto do concreto, os limites da reciclagem e como o Steel Frame muda isso.
+status: published
+projeto: blog
+slug: sustentabilidade-construcao-civil-economia-circular
+data_publicacao: 2026-05-19
 title: "Sustentabilidade na Construção Civil: O Peso Ambiental do Concreto e as Alternativas que Já Existem"
-slug: "sustentabilidade-construcao-civil-economia-circular"
-description: "A construção civil responde por 34% das emissões globais de CO₂. Entenda o impacto do concreto, os limites da reciclagem e como o Steel Frame muda isso."
-keywords: [sustentabilidade construção civil, economia circular construção, reciclagem concreto, light steel frame sustentabilidade, construção a seco]
-author: "Berkahn"
-date: "2026-05-19"
-readTime: "12 min"
-category: "Sustentabilidade"
+description: A construção civil responde por 34% das emissões globais de CO₂. Entenda o impacto do concreto, os limites da reciclagem e como o Steel Frame muda isso.
+seo_description: A construção civil responde por 34% das emissões globais de CO₂. Entenda o impacto do concreto, os limites da reciclagem e como o Steel Frame muda isso.
+palavras_chave:
+  - sustentabilidade construção civil
+  - economia circular construção
+  - reciclagem concreto
+  - light steel frame sustentabilidade
+  - construção a seco
+category: Sustentabilidade
+read_time: 12 min
+author: Berkahn
+url_final: "https://www.berkahn.com.br/atualidades/sustentabilidade-construcao-civil-economia-circular"
+contextos_aplicados:
+  - berkahn-brand
+  - seo-aeo-strategy
+  - article-pipeline
 ---
-
 A indústria da construção civil responde por 34% das emissões globais de CO₂, consome 32% de toda a energia produzida no mundo e gera cerca de um terço dos resíduos sólidos do planeta. Os números são do Global Status Report 2024-2025 do UNEP (Programa das Nações Unidas para o Meio Ambiente), o relatório mais abrangente publicado sobre o tema. No centro dessa equação está o concreto: o material mais consumido pela humanidade depois da água, com uma produção anual de 30 bilhões de toneladas.
 
 Na Berkahn, a sustentabilidade na construção civil não é discurso de vitrine. É uma variável técnica que influencia a escolha do sistema construtivo, o cálculo de fundação, a logística de obra e o custo real de um projeto. Este artigo reúne os dados que sustentam essa visão e apresenta, com fontes verificáveis, por que a forma como construímos precisa mudar.
@@ -100,3 +120,11 @@ Os dados apresentados neste artigo não existem para demonizar o concreto. O con
 Na Berkahn, trabalhamos com o Light Steel Frame como sistema principal justamente porque acreditamos que construção de alto padrão e responsabilidade ambiental são a mesma conversa. Se você está avaliando um projeto residencial, comercial ou industrial e quer entender como a construção industrializada se aplica ao seu caso, entre em contato com a nossa equipe de engenharia.
 
 [CTA:cta-sustentabilidade-orcamento]
+
+---
+
+<!-- vault-rodape-v1 -->
+**Contexto aplicado**: [[berkahn-brand]] · [[seo-aeo-strategy]] · [[article-pipeline]] · [[copy-sem-travessao]] · [[steel-frame-domain]]
+**Atomic knowledge usado**: [[lsf-sustentabilidade]]
+**Hub**: [[blog]]
+**Workflow**: [[workflow-conteudo]]

@@ -1,16 +1,31 @@
 ---
 tipo: meta
 criado: 2026-05-21
-atualizado: 2026-05-21
+atualizado: 2026-05-22
 tags:
   - status/active
-ai_summary: Map of Content visual do vault Berkahn. Expansão do index.md com seções temáticas para navegação humana. Cluster por workstream (blog, LinkedIn, apresentação, site).
+ai_summary: Map of Content visual do vault Berkahn. Expansão do index.md com seções temáticas para navegação humana. Topo destaca 7 hubs de projeto ativos (first-class entities) + bases dinâmicas. Cluster por workstream (blog, LinkedIn, apresentação, site).
 status: active
 ---
 
 # MOC — Map of Content
 
 Mapa temático do vault Berkahn. Para visão estrutural (por pasta), ver [[index]].
+
+## 🚀 Projetos Ativos (hubs first-class)
+
+| Projeto | Status | Bloqueio principal | Workflow | Atualizado |
+|---------|--------|--------------------|----------|------------|
+| [[blog]] | active | 35 artigos = ilhas (Sprint 2 resolveu) | [[workflow-conteudo]] | 2026-05-22 |
+| [[linkedin]] | active | Cadência: 1/35 artigos com post | [[workflow-conteudo]] | 2026-05-22 |
+| [[site]] | active | Bug SearchAction + Google Sheets SPOF | [[workflow-site]] | 2026-05-22 |
+| [[seo-aeo]] | active | **P0**: Indexação 6/44 + 9 posts sem meta | [[workflow-seo]] | 2026-05-22 |
+| [[apresentacoes]] | active | Roteiros não versionados (parcial) | [[workflow-comercial]] | 2026-05-22 |
+| [[materiais]] | active | 9 índices criados; 4 capas órfãs | [[workflow-material]] | 2026-05-22 |
+| [[pesquisas]] | active | 70-knowledge populado com 10 atomic notes | [[workflow-pesquisa]] | 2026-05-22 |
+
+**Dashboards dinâmicos**: [[projetos.base]] · [[kpis.base]] · [[conhecimento.base]] · [[materiais.base]]
+**Sprint atual**: [[sprint-ativa]] · **Standups**: `00-meta/standup/` · **Wrap-ups**: `00-meta/wrap-up/`
 
 ## 🧠 Memória
 
@@ -72,17 +87,27 @@ Query estruturada: [[artigos.base]] | [[calendario.base]]
 
 ## 📊 Queries (Bases)
 
-- [[artigos.base]] — Publicados / Drafts / SEO incompleto
+**Originais**:
+- [[artigos.base]] — Publicados / Drafts / SEO incompleto / **Sem ai_summary / Sem answer_summary / Sem capa / Por domínio**
 - [[memoria.base]] — Memória por subtipo / atualizadas
-- [[calendario.base]] — Pipeline / próximos 30 dias / backlog
-- [[tarefas.base]] — Em aberto / por prioridade
+- [[calendario.base]] — Pipeline / próximos 30 dias / backlog / **Por projeto**
+- [[tarefas.base]] — Em aberto / por prioridade / **Por projeto**
+
+**Novas (Sprint 3)**:
+- [[projetos.base]] — 7 hubs first-class, status, cards, stale
+- [[kpis.base]] — Dashboard cross-projeto, atrasados (<80% meta), auditorias SEO
+- [[conhecimento.base]] — 10 atomic notes LSF em 70-knowledge/, mais usados, órfãs
+- [[materiais.base]] — Índices binários, por projeto, com órfãos/duplicatas
 
 ## 🔧 Workflow
 
 - **Sprint ativa**: [[sprint-ativa]]
-- **Standup output**: `00-meta/standup/`
-- **Wrap-up output**: `00-meta/wrap-up/`
-- **Daily notes**: usar template `template-daily.md`
+- **Standup** (`/standup`): auto via scheduled-task `berkahn-standup-semanal` (segunda 9h) → escreve em `00-meta/standup/YYYY-MM-DD.md`
+- **Wrap-up** (`/wrap-up`): auto via scheduled-task `berkahn-wrapup-semanal` (sexta 17h) → escreve em `00-meta/wrap-up/YYYY-MM-DD.md`
+- **Daily notes**: usar template `template-daily.md` (linka projetos do dia)
+- **Workflows por projeto**: [[workflow-conteudo]] · [[workflow-site]] · [[workflow-seo]] · [[workflow-comercial]] · [[workflow-material]] · [[workflow-pesquisa]]
+- **Validação**: `node scripts/vault-validate.mjs` (manual ou via /standup, /wrap-up)
+- **Backfill scripts**: `scripts/vault-backfill-articles.mjs`, `scripts/vault-backfill-ai-summary.mjs`, `scripts/vault-supabase-resync.mjs` — ver `scripts/VAULT-SCRIPTS-README.md`
 
 ## 📐 Diagramas
 

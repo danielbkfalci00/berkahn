@@ -1,14 +1,14 @@
 ---
 tipo: prompt
-versao: 1.0
-calibrado_em: 2026-04-13
 criado: 2026-04-13
 atualizado: 2026-05-21
 tags:
   - ai/prompt
   - project/material
-status: active
 ai_summary: Gerar briefing detalhado de material visual para criação no Canva (LinkedIn, posters, treinamentos). Criado por Claude — pode ser ajustado.
+status: active
+versao: 1.0
+calibrado_em: 2026-04-13
 ---
 
 > [!note] Prompt criado por Claude

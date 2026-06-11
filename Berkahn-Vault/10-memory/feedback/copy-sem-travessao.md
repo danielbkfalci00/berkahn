@@ -1,6 +1,5 @@
 ---
 tipo: memory
-subtipo: feedback
 criado: 2026-04-25
 atualizado: 2026-05-21
 tags:
@@ -11,6 +10,7 @@ tags:
   - project/site
 ai_summary: Nunca usar travessão (—), travessão curto (–) ou hífen (-) como separador estilístico em copy de marketing. Bruno considera "coisa de IA". Usar vírgulas, dois pontos, parênteses, conectivos.
 status: active
+subtipo: feedback
 why: "Em 2026-04-25, durante posicionamento 'construtora vs empreiteira', Bruno rejeitou plano após ver propostas com travessões: 'não quero que nova copy tenha - em lugar algum. Isso é totalmente coisa de IA'. Preferência de tom/autenticidade."
 how_to_apply: "Aplicar em todo copy público (site, blog, LinkedIn, apresentações, ads, FAQ, e-mail marketing). Não aplica a código, comentários técnicos, docs internas, commits ou planos."
 ---

@@ -1,16 +1,16 @@
 ---
 tipo: prompt
-locked: true
-versao: 1.0
-calibrado_em: 2026-04-13
 criado: 2026-04-13
 atualizado: 2026-05-21
 tags:
   - ai/prompt
   - ai/locked
   - project/blog
-status: locked
 ai_summary: Pesquisar tema e escrever artigo completo com elementos visuais e SEO. Etapa 2 do pipeline (após /brainstorm). Calibrado por Bruno.
+status: locked
+locked: true
+versao: 1.0
+calibrado_em: 2026-04-13
 ---
 
 > [!warning] PROMPT CALIBRADO — NÃO ALTERAR sem permissão de Bruno

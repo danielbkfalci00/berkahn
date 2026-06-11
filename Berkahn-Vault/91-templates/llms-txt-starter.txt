@@ -1,0 +1,78 @@
+==================================================================
+ llms-txt-starter  ·  template + checklist de prontidão para IA
+==================================================================
+
+COMO USAR (apague este bloco antes de publicar):
+  1. Preencha o template abaixo e salve como /public/llms.txt do projeto.
+  2. Mantenha markdown puro: H1 = nome, blockquote = resumo, H2 = seções.
+  3. Lembre-se: llms.txt é nice-to-have. Ele NÃO faz a IA recomendar você.
+     O que move o ponteiro está no checklist no fim deste arquivo.
+
+------------------------------------------------------------------
+ TEMPLATE  (copie a partir daqui)
+------------------------------------------------------------------
+
+# {Nome do negócio}
+
+> {Uma frase: o que você faz + onde atua + principal diferencial}
+
+{Opcional: 1 parágrafo curto com diferenciais concretos e dados}
+
+## Serviços
+- [{Serviço A}]({url}): {descrição curta e específica}
+- [{Serviço B}]({url}): {descrição curta e específica}
+
+## Sobre
+- [{Empresa}]({url}): {fundadores, missão, história}
+- [{Página-chave}]({url}): {o que é / por que importa}
+
+## Contato
+- WhatsApp e telefone: {+55 ...}
+- E-mail: {email}
+- Atendimento: {cidade/região + horário}
+- [{Rede social}]({url})
+
+## Suporte
+- [Perguntas Frequentes]({url}): {dúvidas comuns}
+
+## Optional
+- [RSS / Feed]({url}): {feed de conteúdo, secundário}
+
+------------------------------------------------------------------
+ CHECKLIST DE PRONTIDÃO PARA IA  (o que REALMENTE importa, em ordem)
+------------------------------------------------------------------
+
+Priorize de cima para baixo. O llms.txt é o último da lista de propósito.
+
+[ ] 1. INDEXAÇÃO. Se a página não está no índice (Google/Bing), nenhuma IA
+       cita. Verifique no Search Console e solicite indexação das páginas-chave.
+
+[ ] 2. RENDER SEM JS. Crawlers de IA não executam JavaScript. Use SSR/SSG
+       (Next.js, etc.); SPA client-side é invisível para a IA.
+
+[ ] 3. ROBOTS.TXT. Libere os bots de BUSCA (OAI-SearchBot, Claude-SearchBot,
+       PerplexityBot, ChatGPT-User) para permitir citação. Bloquear bots de
+       TREINO (GPTBot, ClaudeBot, Google-Extended, CCBot) é opcional/defensável.
+
+[ ] 4. SCHEMA JSON-LD. Organization/LocalBusiness, Service, FAQPage, Article
+       (com autor). Negócio local: NAP consistente + Google Business Profile.
+
+[ ] 5. CONTEÚDO EXTRAÍVEL. Resposta direta nas primeiras ~150 palavras; cada
+       seção = passagem auto-contida de 50-150 palavras; hierarquia H1>H2>H3 sem
+       pular níveis; tabelas para comparação; FAQ com perguntas reais.
+
+[ ] 6. AUTORIDADE. Cite fontes, estatísticas e quotes (Princeton GEO: +30-40%).
+       Atualize o conteúdo (frescor pesa). Evite keyword stuffing (-10%).
+
+[ ] 7. PRESENÇA EM TERCEIROS. ~85% das menções de marca em IA vêm de fora do
+       seu site: diretórios, reviews, imprensa, LinkedIn, YouTube, Reddit.
+
+[ ] 8. GOOGLE BUSINESS PROFILE (negócio local). Perfil completo e verificado,
+       com reviews, e NAP idêntico em todo lugar.
+
+[ ] 9. SITEMAP + RSS. sitemap.xml atualizado e referenciado no robots.txt.
+
+[ ] 10. llms.txt. Baixo custo, baixo risco, benefício incerto para citação
+        (útil sobretudo para agentes de IDE). Faça por último, nunca primeiro.
+
+Antes de assumir qualquer efeito, confira a pesquisa AEO/GEO do projeto.

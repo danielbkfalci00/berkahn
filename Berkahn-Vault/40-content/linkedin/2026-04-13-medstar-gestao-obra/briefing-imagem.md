@@ -1,3 +1,22 @@
+---
+tipo: linkedin-post
+criado: 2026-04-13
+atualizado: 2026-05-22
+tags:
+  - project/linkedin
+  - project/material
+  - status/published
+ai_summary: Briefing visual para post LinkedIn 2026-04-13 (Medstar/Georgetown). Número grande "3.500" (entregas de caminhão-betoneira eliminadas) sobre fundo preto sólido. Apenas tipografia, sem foto. Manrope Black para número, Regular para contexto.
+status: published
+projeto: linkedin
+slug: briefing-imagem-medstar
+data_publicacao: 2026-04-13
+artigo_slug: construir-hospital-em-operacao
+plataforma: linkedin
+---
+
+> **Post relacionado**: [[post]] · **Artigo blog**: [[construir-hospital-em-operacao]] · **Hub**: [[linkedin]] · [[materiais]]
+
 # Briefing de Imagem — LinkedIn
 # Post: MedStar Georgetown / Gestão de Obra por Prefabricação
 # Data: 2026-04-13

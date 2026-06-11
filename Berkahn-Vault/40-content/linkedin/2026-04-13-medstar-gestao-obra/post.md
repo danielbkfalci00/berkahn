@@ -1,3 +1,32 @@
+---
+tipo: linkedin-post
+criado: 2026-04-13
+atualizado: 2026-05-22
+tags:
+  - project/linkedin
+  - status/published
+  - domain/lsf
+ai_summary: Post LinkedIn baseado no caso MedStar Georgetown Verstandig Pavilion — gestão de interferência em obra hospitalar com prefabricação + Steel Frame. Conecta caso internacional ao argumento Berkahn de construção industrializada residencial.
+status: published
+projeto: linkedin
+slug: 2026-04-13-medstar-gestao-obra
+data_publicacao: 2026-04-13
+contextos_aplicados:
+  - berkahn-brand
+  - copy-sem-travessao
+  - perfil-bruno
+artigo_slug: construir-hospital-em-operacao
+plataforma: linkedin
+hashtags:
+  - LightSteelFrame
+  - SteelFrame
+  - ConstrucaoIndustrializada
+  - GestaoDeObra
+  - Prefabricacao
+---
+
+> **Artigo blog**: [[construir-hospital-em-operacao]] · **Hub**: [[linkedin]] · **Briefing imagem**: [[briefing-imagem]]
+
 Uma obra de US$ 519 milhões ao lado de um hospital em funcionamento. Quase seis anos de canteiro, sem transferir um único paciente.
 
 O projeto Verstandig Pavilion, entregue pela Clark Construction em dezembro de 2023, foi uma aula de gestão de interferência. A estratégia foi mover trabalho para fora do canteiro. Mais de 700 elementos construtivos foram pré-fabricados. Banheiros chegavam como módulos prontos para içamento. Os tetos das salas de cirurgia saíram de fábrica com estrutura de aço já dimensionada para a carga máxima de equipamentos futuros.
