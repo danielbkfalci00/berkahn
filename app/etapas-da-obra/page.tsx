@@ -48,12 +48,7 @@ export default function EtapasDaObraPage() {
               priority
               className="h-12 w-auto lg:h-16"
             />
-            <div>
-              <p className="font-heading text-xl font-extrabold tracking-[0.18em] lg:text-2xl">BERKAHN</p>
-              <p className="text-[9px] font-semibold uppercase tracking-[0.22em] text-black/50 lg:text-[10px]">
-                Construtora de Alto Padrão
-              </p>
-            </div>
+            <p className="font-heading text-xl font-extrabold tracking-[0.18em] lg:text-2xl">BERKAHN</p>
           </div>
           <div className="text-right">
             <p className="mb-1.5 text-[10px] font-bold uppercase tracking-[0.24em] text-black/60">
@@ -72,9 +67,7 @@ export default function EtapasDaObraPage() {
 
       <footer className="mt-2 border-t border-black/10 px-6 py-8 pb-10 text-center">
         <p className="text-xs font-extrabold uppercase tracking-[0.26em]">Berkahn</p>
-        <p className="mt-1.5 text-[10.5px] font-medium text-black/40">
-          Construtora de Alto Padrão · © 2026
-        </p>
+        <p className="mt-1.5 text-[10.5px] font-medium text-black/40">© 2026</p>
         <a
           href={WHATSAPP_URL}
           target="_blank"
