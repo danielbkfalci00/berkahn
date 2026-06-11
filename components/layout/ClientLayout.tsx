@@ -13,8 +13,9 @@ export function ClientLayout({ children }: { children: React.ReactNode }) {
   const isAdminRoute = pathname?.startsWith("/admin");
   const isOrcamentoRoute = pathname?.startsWith("/orcamento");
   const isCuradoriaRoute = pathname?.startsWith("/curadoria-berkahn");
+  const isEtapasObraRoute = pathname?.startsWith("/etapas-da-obra");
 
-  if (isFullscreenRoute || isAdminRoute || isOrcamentoRoute || isCuradoriaRoute) {
+  if (isFullscreenRoute || isAdminRoute || isOrcamentoRoute || isCuradoriaRoute || isEtapasObraRoute) {
     return <>{children}</>;
   }
 

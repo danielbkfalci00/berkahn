@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 const WHATSAPP_URL =
   "https://wa.me/5511966415742?text=Ol%C3%A1!%20Gostaria%20de%20saber%20mais%20sobre%20os%20servi%C3%A7os%20da%20Berkahn.";
 
-const HIDDEN_ROUTES = ["/apresentacao", "/admin", "/orcamento"];
+const HIDDEN_ROUTES = ["/apresentacao", "/admin", "/orcamento", "/etapas-da-obra"];
 
 export function WhatsAppButton() {
   const pathname = usePathname();

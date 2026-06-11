@@ -65,6 +65,10 @@ next-env.d.ts
 **/*.secret
 **/credentials.json
 gitleaks-*.json
+tmpgitleaks*.json
+
+# imagens otimizadas geradas (artefato de script)
+/public/.optimized/
 /secrets/
 !/secrets/.gitkeep
 
