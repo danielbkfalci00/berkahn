@@ -69,16 +69,36 @@ Regras de naming, frontmatter e taxonomy em `Berkahn-Vault/CLAUDE.md`.
 
 ---
 
+## 🚀 Projetos Ativos (7 hubs first-class)
+
+Cada projeto tem nota-hub em `Berkahn-Vault/00-meta/projetos/{nome}.md` com `tipo: projeto`, KPIs (`kpi_*` FLAT), bloqueios, próximos 7 dias e links de contexto/workflow.
+
+| Projeto | Hub | Workflow | Subagents recomendados |
+|---------|-----|----------|------------------------|
+| Blog | [[blog]] | [[workflow-conteudo]] | `@pragmatic-code-review` (componentes article/) |
+| LinkedIn | [[linkedin]] | [[workflow-conteudo]] | — |
+| Site | [[site]] | [[workflow-site]] | `@pragmatic-code-review`, `@design-review`, `@security-review` |
+| SEO/AEO | [[seo-aeo]] | [[workflow-seo]] | — |
+| Apresentações | [[apresentacoes]] | [[workflow-comercial]] | `@design-review` |
+| Materiais | [[materiais]] | [[workflow-material]] | `@design-review` |
+| Pesquisas | [[pesquisas]] | [[workflow-pesquisa]] | — |
+
+**Dashboards dinâmicos**: `Berkahn-Vault/80-bases/{projetos,kpis,conhecimento,materiais}.base`
+
+**Regra**: todo novo conteúdo gera nota com `projeto: <nome>` no frontmatter (entre `status` e `slug`). Outputs devem linkar pelo menos 1 contexto via wikilink (`[[berkahn-brand]]`, `[[seo-aeo-strategy]]`, etc.).
+
+---
+
 ## Workflow semanal
 
 | Dia | Comando | Output em |
 |-----|---------|-----------|
-| Segunda 9h | `/standup` | `00-meta/standup/YYYY-MM-DD.md` |
+| Segunda 9h | `/standup` (auto via `berkahn-standup-semanal`) | `00-meta/standup/YYYY-MM-DD.md` |
 | Segunda 14h | `/brainstorm` | `40-content/blog/ideias/ideas-YYYY-MM.md` |
 | Terça | `/pesquisa` | `40-content/blog/pesquisa/YYYY-MM-DD-tema.md` |
 | Quarta | `/criacao` | `40-content/blog/drafts/[slug].md` |
 | Quinta | `/artigo` + `/linkedin` | `40-content/blog/publicados/` + `40-content/linkedin/YYYY-MM-DD-tema/` |
-| Sexta 17h | `/wrap-up` | `00-meta/wrap-up/YYYY-MM-DD.md` |
+| Sexta 17h | `/wrap-up` (auto via `berkahn-wrapup-semanal`) | `00-meta/wrap-up/YYYY-MM-DD.md` |
 | Domingo 03h | `dream` (auto, semana 2+) | `~/.claude/projects/.../memory/` (revisar segunda) |
 
 ---
@@ -96,8 +116,18 @@ Regras de naming, frontmatter e taxonomy em `Berkahn-Vault/CLAUDE.md`.
 | `/material` | Briefing material Canva |
 | `/calendario` | Pipeline editorial (lê `80-bases/calendario.base`) |
 | `/seo` | Auditoria SEO/AEO (gera `40-content/auditorias-seo/`) |
+| `/standup` | Standup semanal — atualiza sprint-ativa + 7 hubs (auto seg 9h) |
+| `/wrap-up` | Wrap-up semanal — consolida KPIs deltas + atualiza hubs (auto sex 17h) |
 
 Todos referenciam prompts em `Berkahn-Vault/30-prompts/` e contexto em `Berkahn-Vault/20-context/`.
+
+### Scheduled-tasks ativas
+
+Listáveis via skill `scheduled-tasks` (MCP) ou em `~/.claude/scheduled-tasks/`:
+- `berkahn-standup-semanal` — cron `0 9 * * 1` (segunda 9h)
+- `berkahn-wrapup-semanal` — cron `0 17 * * 5` (sexta 17h)
+
+Cada um roda em sessão fresca lendo `.claude/commands/{standup,wrap-up}.md`. Notifica Bruno ao completar.
 
 ---
 
@@ -127,6 +157,17 @@ npm run dev          # dev server (porta 3000+)
 npm run build        # build produção
 gitleaks detect      # scan secrets (auto em pre-commit)
 ```
+
+### Scripts vault (`scripts/vault-*.mjs`) — Sprint 2 e 3
+
+| Script | Uso |
+|--------|-----|
+| `vault-backfill-articles.mjs` | Normaliza frontmatter dos artigos publicados (FLAT, ordem canônica) + rename para slug canonical. Idempotente. Flags `--dry-run`, `--rename` |
+| `vault-backfill-ai-summary.mjs` | Preenche `ai_summary` (de description ou lead) + adiciona rodapé padrão com wikilinks. Detecta marker `<!-- vault-rodape-v1 -->` para idempotência |
+| `vault-supabase-resync.mjs` | Compara slugs vault ↔ Supabase (`--check`) ou faz PATCH `meta_title/meta_description/answer_summary` (`--patch=slug1,slug2`). Requer `$env:SUPABASE_SERVICE_KEY` |
+| `vault-validate.mjs` | Linter de completude vault (9 validações, exit 0/1/2, output ANSI ou `--json`). Rodado manual ou via `/standup`, `/wrap-up` |
+
+Documentação completa: `scripts/VAULT-SCRIPTS-README.md`
 
 ---
 

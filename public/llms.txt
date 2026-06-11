@@ -1,9 +1,11 @@
-# Berkahn — Construtora Steel Frame
+# Berkahn
 
-> Construtora especializada em Light Steel Frame em São Paulo. Projetos residenciais e comerciais com agilidade, sustentabilidade e acabamento premium.
+> Construtora especializada em Light Steel Frame em São Paulo. Projetos residenciais, comerciais e industriais com obra mais rápida, limpa e previsível.
+
+A Berkahn constrói em Light Steel Frame guiada por três pilares: leveza (estruturas mais ágeis), previsibilidade (prazo e orçamento cumpridos) e limpeza (obra seca, sem desperdício). Sócios com mais de 20 anos de experiência e processo completo, do projeto à entrega das chaves.
 
 ## Serviços
-- [Residencial](https://www.berkahn.com.br/residencial): Construção de casas em Light Steel Frame — projetos customizados, rápidos e sustentáveis.
+- [Residencial](https://www.berkahn.com.br/residencial): Construção de casas em Light Steel Frame, com projetos customizados, rápidos e sustentáveis.
 - [Comercial & Industrial](https://www.berkahn.com.br/comercial-industrial): Galpões, escritórios e empreendimentos comerciais em Steel Frame.
 - [Serviços](https://www.berkahn.com.br/servicos): Visão completa dos serviços oferecidos pela Berkahn.
 
@@ -12,9 +14,17 @@
 - [Light Steel Frame](https://www.berkahn.com.br/lsf): O que é o sistema construtivo Light Steel Frame e suas vantagens.
 - [Portfolio](https://www.berkahn.com.br/portfolio): Projetos realizados pela Berkahn.
 
-## Blog — Atualidades
-- [Atualidades](https://www.berkahn.com.br/atualidades): Artigos técnicos sobre Steel Frame, construção industrializada e mercado imobiliário.
-- [RSS Feed](https://www.berkahn.com.br/feed.xml): Feed RSS com todos os artigos publicados.
+## Contato
+- WhatsApp e telefone: +55 11 96641-5742
+- E-mail: contato.berkahn@gmail.com
+- Atendimento: São Paulo e região, de segunda a sexta, das 8h às 18h
+- [LinkedIn](https://www.linkedin.com/company/construtora-berkahn/)
+
+## Atualidades
+- [Blog](https://www.berkahn.com.br/atualidades): Artigos técnicos sobre Steel Frame, construção industrializada e mercado imobiliário.
 
 ## Suporte
 - [Perguntas Frequentes](https://www.berkahn.com.br/perguntas-frequentes): Respostas às dúvidas mais comuns sobre Steel Frame e a Berkahn.
+
+## Optional
+- [RSS Feed](https://www.berkahn.com.br/feed.xml): Feed RSS com todos os artigos publicados.
