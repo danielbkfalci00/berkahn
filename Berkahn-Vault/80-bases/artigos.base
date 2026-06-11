@@ -56,3 +56,52 @@ views:
       - titulo
       - formula.seo_ok
       - formula.seo_desc_len
+
+  - type: table
+    name: "Sem ai_summary (vault SKIM quebrado)"
+    filters:
+      or:
+        - '!ai_summary'
+        - 'ai_summary == ""'
+    order:
+      - titulo
+      - file.mtime
+    sort:
+      - property: file.mtime
+        direction: DESC
+
+  - type: table
+    name: "Sem answer_summary (AEO bloqueado)"
+    filters:
+      or:
+        - '!answer_summary'
+        - 'answer_summary == ""'
+    order:
+      - titulo
+      - seo_title
+    sort:
+      - property: titulo
+        direction: ASC
+
+  - type: table
+    name: "Sem material_visual_slug (capa)"
+    filters:
+      or:
+        - '!material_visual_slug'
+        - 'material_visual_slug == ""'
+    order:
+      - titulo
+      - slug
+    sort:
+      - property: titulo
+        direction: ASC
+
+  - type: table
+    name: "Por domínio"
+    groupBy:
+      property: tags
+      direction: ASC
+    order:
+      - titulo
+      - slug
+      - publicado_em

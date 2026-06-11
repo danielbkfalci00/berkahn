@@ -1,6 +1,5 @@
 ---
 tipo: memory
-subtipo: user
 criado: 2026-04-13
 atualizado: 2026-05-21
 tags:
@@ -8,6 +7,7 @@ tags:
   - status/active
 ai_summary: Bruno é o único profissional de marketing da Berkahn, gerencia site/blog/LinkedIn/apresentações/materiais sozinho. PT-BR, perfil técnico (entende Next.js/React, faz deploy).
 status: active
+subtipo: user
 ---
 
 # Perfil do Bruno

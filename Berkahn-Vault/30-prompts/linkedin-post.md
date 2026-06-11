@@ -1,16 +1,16 @@
 ---
 tipo: prompt
-locked: true
-versao: 1.0
-calibrado_em: 2026-04-13
 criado: 2026-04-13
 atualizado: 2026-05-21
 tags:
   - ai/prompt
   - ai/locked
   - project/linkedin
-status: locked
 ai_summary: Criar post LinkedIn Berkahn a partir de artigo ou tema. Calibrado por Bruno — regras específicas sobre LSF vs Steel Frame, tom engenheiro experiente, 100-180 palavras. Usado por /linkedin.
+status: locked
+locked: true
+versao: 1.0
+calibrado_em: 2026-04-13
 ---
 
 > [!warning] PROMPT CALIBRADO — NÃO ALTERAR sem permissão de Bruno

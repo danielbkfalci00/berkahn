@@ -18,21 +18,75 @@ Regras de operação dentro do vault. Para regras do projeto inteiro, ver `../CL
 Toda nota DEVE ter (mínimo):
 ```yaml
 ---
-tipo: memory | prompt | context | atomic | draft-content | meta
+tipo: memory | prompt | context | atomic | draft-content | meta | projeto | indice | auditoria | pesquisa | legal | site-copy | apresentacao | linkedin-post | daily | documentacao
 criado: YYYY-MM-DD
 atualizado: YYYY-MM-DD
 tags: [domain/X, status/Y]
 ai_summary: TL;DR 1-3 linhas para Claude fazer grep+skim.
-status: draft | active | archived | locked
+status: draft | active | review | published | archived | locked | stale
 ---
 ```
 
-Campos extras por tipo (memory, prompt, context, draft-content) em [[10-memory/MEMORY|MEMORY]] e exemplos nos templates `91-templates/`.
-
-**Regras**:
-- **Flat sempre** — nunca aninhar (`seo: {title: ...}` quebra Properties + Bases). Use prefixos: `seo_title`, `seo_description`.
+**Regras universais**:
+- **Flat sempre** — nunca aninhar (`seo: {title: ...}` quebra Properties + Bases). Use prefixos: `seo_title`, `seo_description`, `kpi_publicados`, `kpi_meta_publicados_semanal`, etc.
 - `ai_summary` em **toda** nota — habilita SKIM via grep.
-- Linter plugin padroniza automaticamente (config em `.obsidian/plugins/obsidian-linter/data.json`).
+- Linter plugin padroniza automaticamente (config em `.obsidian/plugins/obsidian-linter/data.json` — yamlKeyOrder com 95+ campos canônicos pós-Sprint 3.0).
+- Ordem canônica de keys: ver `data.json` do linter. Resumo: `tipo → criado → atualizado → tags → ai_summary → status → subtipo/locked → projeto → slug → seo_* → answer_summary → supabase_id → url_* → kpi_* → contextos_aplicados → workflow → prompts_relacionados → bases_relacionadas → subagents_uteis → projetos_relacionados → linkedin_slug/material_visual_slug/artigo_slug → usado_em → origem_pesquisa → path_externo → demais`
+
+### Campos por tipo (expandido pós-Sprint 2.4 + 3)
+
+**`tipo: projeto`** (hubs em `00-meta/projetos/`):
+```yaml
+projeto: blog | linkedin | site | seo-aeo | apresentacoes | materiais | pesquisas
+kpi_<nome>: <valor>             # FLAT, repetir por KPI (kpi_publicados, kpi_meta_publicados_semanal, etc.)
+kpi_atualizado_em: YYYY-MM-DD
+contextos_aplicados: [array de nomes sem [[]]]
+workflow: <nome do workflow em 10-memory/project/>
+prompts_relacionados: [array]
+bases_relacionadas: [array]
+subagents_uteis: [array]
+```
+
+**`tipo: draft-content`** (artigos em `40-content/blog/publicados/`):
+```yaml
+projeto: blog
+slug: <kebab-case = filename>
+data_publicacao: YYYY-MM-DD
+title, description, palavras_chave, category, read_time, author (preservados)
+seo_title (≤60 chars), seo_description (150-160 chars)
+supabase_id, url_final
+linkedin_slug: <slug LinkedIn post ou null>
+material_visual_slug: <nome.webp ou null>
+answer_summary: 80-120 palavras AEO (≠ ai_summary 1-3 linhas)
+contextos_aplicados: [berkahn-brand, seo-aeo-strategy, article-pipeline, copy-sem-travessao, steel-frame-domain]
+```
+
+**`tipo: atomic`** (notas em `70-knowledge/`):
+```yaml
+usado_em: [array de slugs de artigos que referenciam]
+origem_pesquisa: <slug pesquisa raw ou ""></code>
+```
+
+**`tipo: indice`** (índices de binaries em `40-content/materiais/indices/`):
+```yaml
+projeto: <projeto associado>
+path_externo: ../../../../Docs/<path>/
+arquivos_total: <N>
+arquivos_mapeados, arquivos_orfaos, arquivos_duplicados (opcionais)
+```
+
+**`tipo: auditoria`** (em `40-content/auditorias-seo/`):
+```yaml
+data_diagnostico: YYYY-MM-DD
+kpi_score, kpi_paginas_indexadas, kpi_paginas_total
+substitui: <slug versão anterior>  # se aplica
+```
+
+**Campo `projeto:` é obrigatório** em notas vinculadas a um projeto. Use `projetos_relacionados: [blog, site]` para cross-projeto.
+
+**Diferença crítica `ai_summary` vs `answer_summary`**:
+- `ai_summary` (vault frontmatter, 1-3 linhas): TL;DR para Claude SKIM via Grep
+- `answer_summary` (vault + Supabase, 80-120 palavras): AEO-optimized para citação por IAs (sem hedging, com dado quantitativo)
 
 ## Tag taxonomy (5 raízes, inglês)
 
@@ -116,4 +170,35 @@ Hook `validate-write` (futuro) bloqueará edits sem flag explícita.
 
 ## Workflow semanal
 
-Resumo em [[index]]. Detalhes em [[workflow-conteudo]].
+Resumo em [[index]]. Detalhes em [[workflow-conteudo]] + 5 workflows específicos: [[workflow-site]] · [[workflow-seo]] · [[workflow-comercial]] · [[workflow-material]] · [[workflow-pesquisa]].
+
+`/standup` (auto seg 9h via scheduled-task `berkahn-standup-semanal`) e `/wrap-up` (auto sex 17h via `berkahn-wrapup-semanal`) lêem 7 hubs + sprint-ativa e atualizam. Ambos rodam `node scripts/vault-validate.mjs` como sanity check final.
+
+## 🚀 Hubs canônicos (7 first-class projetos)
+
+`00-meta/projetos/{blog,linkedin,site,seo-aeo,apresentacoes,materiais,pesquisas}.md` — cada um é nota first-class com KPIs (`kpi_*`), bloqueios, próximos 7 dias, contextos aplicados, workflow, prompts/bases/subagents relacionados. **Source of truth do estado do projeto**. Atualizados semanalmente via `/standup` e `/wrap-up`.
+
+Tag `project/<nome>` segue 1:1 com nome do hub (`project/blog`, `project/linkedin`, etc.).
+
+## Subagents úteis por projeto
+
+| Projeto | Subagents recomendados |
+|---------|------------------------|
+| [[blog]] | `@pragmatic-code-review` (review components/article/) |
+| [[linkedin]] | — (outputs são markdown puro) |
+| [[site]] | `@pragmatic-code-review`, `@design-review`, `@security-review` |
+| [[seo-aeo]] | — (`/seo` cobre auditoria) |
+| [[apresentacoes]] | `@design-review` (UI/UX em live env) |
+| [[materiais]] | `@design-review` (consistência brand) |
+| [[pesquisas]] | — |
+
+## Scripts vault (`scripts/vault-*.mjs`)
+
+| Script | Uso |
+|--------|-----|
+| `vault-backfill-articles.mjs` | Normaliza frontmatter artigos publicados + rename slugs canonical |
+| `vault-backfill-ai-summary.mjs` | Preenche ai_summary + rodapé wikilinks (idempotente via marker) |
+| `vault-supabase-resync.mjs` | GET check ou PATCH meta tags Supabase (`$env:SUPABASE_SERVICE_KEY`) |
+| `vault-validate.mjs` | Linter de completude (9 validações, exit 0/1/2, ANSI ou `--json`) |
+
+Documentação: `scripts/VAULT-SCRIPTS-README.md`

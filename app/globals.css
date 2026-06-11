@@ -117,6 +117,13 @@
 
 /* Utility classes for typography */
 @layer utilities {
+  /* Grade sutil de prancheta técnica — fundo do fluxograma Etapas da Obra */
+  .fluxograma-grid-bg {
+    background-image:
+      repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.022) 0 1px, transparent 1px 48px),
+      repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.022) 0 1px, transparent 1px 48px);
+  }
+
   .headline-lg {
     @apply text-5xl md:text-6xl lg:text-7xl font-heading font-extrabold tracking-tighter;
   }

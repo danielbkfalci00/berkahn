@@ -1,6 +1,5 @@
 ---
 tipo: memory
-subtipo: reference
 criado: 2026-04-13
 atualizado: 2026-05-21
 tags:
@@ -9,6 +8,7 @@ tags:
   - project/blog
 ai_summary: Referências técnicas do blog Berkahn — slugs, placeholders de componentes, paths de scripts/capas/markdown. Comando /artigo lê markdown direto do path.
 status: active
+subtipo: reference
 ---
 
 # Blog — Pipeline técnico

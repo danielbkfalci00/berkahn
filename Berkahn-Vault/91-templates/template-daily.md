@@ -11,28 +11,46 @@ atualizado: <% hoje %>
 tags:
   - source/daily
   - status/active
-status: active
 ai_summary: ""
+status: active
+projetos_dia: []
 ---
 
 # <% hoje %> — <% diaSemana %>
 
 ← [[<% ontem %>]] | [[<% amanha %>]] →
 
-Sprint: [[sprint-ativa]]
+Sprint: [[sprint-ativa]] · Standup mais recente: navegar `00-meta/standup/` · Wrap-up mais recente: `00-meta/wrap-up/`
+
+## Projetos trabalhados hoje
+
+> Preencher com os hubs em que houve atividade hoje. Atualizar `projetos_dia` no frontmatter conforme.
+
+- [[<% tp.file.cursor(1) %>]] — <% tp.file.cursor(2) %>
 
 ## O que fiz
 
-- <% tp.file.cursor(1) %>
+- <% tp.file.cursor(3) %>
 
-## Próximos passos
+## Próximas ações por projeto
 
-- [ ] <% tp.file.cursor(2) %>
+- [[blog]]: <% tp.file.cursor(4) %>
+- [[linkedin]]: <% tp.file.cursor(5) %>
+- [[site]]: <% tp.file.cursor(6) %>
+- [[seo-aeo]]: <% tp.file.cursor(7) %>
+
+## Próximos passos (gerais)
+
+- [ ] <% tp.file.cursor(8) %>
 
 ## Ideias soltas
 
-- <% tp.file.cursor(3) %>
+- <% tp.file.cursor(9) %>
 
 ## Anotações
 
-<% tp.file.cursor(4) %>
+<% tp.file.cursor(10) %>
+
+## Hubs (acesso rápido)
+
+[[blog]] · [[linkedin]] · [[site]] · [[seo-aeo]] · [[apresentacoes]] · [[materiais]] · [[pesquisas]]

@@ -1,0 +1,72 @@
+filters:
+  and:
+    - file.inFolder("70-knowledge")
+    - 'tipo == "atomic"'
+
+formulas:
+  num_artigos: 'if(usado_em, usado_em.length, 0)'
+  orfa: 'if(usado_em && usado_em.length > 0, "✓", "⚠️")'
+
+properties:
+  file.name:
+    displayName: "Atomic note"
+  tags:
+    displayName: "Tags"
+  usado_em:
+    displayName: "Usado em"
+  origem_pesquisa:
+    displayName: "Origem pesquisa"
+  atualizado:
+    displayName: "Atualizado"
+  formula.num_artigos:
+    displayName: "# artigos"
+  formula.orfa:
+    displayName: "Status"
+
+views:
+  - type: table
+    name: "Todas (por domínio)"
+    order:
+      - file.name
+      - tags
+      - formula.num_artigos
+      - formula.orfa
+      - atualizado
+    sort:
+      - property: file.name
+        direction: ASC
+
+  - type: table
+    name: "Mais usadas (top knowledge)"
+    order:
+      - file.name
+      - formula.num_artigos
+      - usado_em
+    sort:
+      - property: formula.num_artigos
+        direction: DESC
+
+  - type: table
+    name: "Órfãs (não usadas em artigos)"
+    filters:
+      or:
+        - '!usado_em'
+        - 'formula.num_artigos == 0'
+    order:
+      - file.name
+      - origem_pesquisa
+      - atualizado
+    sort:
+      - property: atualizado
+        direction: DESC
+
+  - type: cards
+    name: "Cards (visão domínio)"
+    cardSize: 260
+    order:
+      - file.name
+      - ai_summary
+      - formula.num_artigos
+    sort:
+      - property: file.name
+        direction: ASC

@@ -1,16 +1,16 @@
 ---
 tipo: prompt
-locked: true
-versao: 1.0
-calibrado_em: 2026-04-13
 criado: 2026-04-13
 atualizado: 2026-05-21
 tags:
   - ai/prompt
   - ai/locked
   - project/blog
-status: locked
 ai_summary: Escrever artigo final para o blog com base na pesquisa anterior. Etapa 3 do pipeline (após /pesquisa). Regras rígidas de qualidade. Calibrado por Bruno.
+status: locked
+locked: true
+versao: 1.0
+calibrado_em: 2026-04-13
 ---
 
 > [!warning] PROMPT CALIBRADO — NÃO ALTERAR sem permissão de Bruno

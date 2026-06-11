@@ -1,15 +1,15 @@
 ---
 tipo: prompt
-versao: 1.0
-calibrado_em: 2026-04-13
 criado: 2026-04-13
 atualizado: 2026-05-21
 tags:
   - ai/prompt
   - project/site
   - project/blog
-status: active
 ai_summary: Auditar SEO e AEO de uma página específica do site Berkahn. Criado por Claude — pode ser ajustado. Usado por /seo. Saída em 40-content/auditorias-seo/.
+status: active
+versao: 1.0
+calibrado_em: 2026-04-13
 ---
 
 > [!note] Prompt criado por Claude

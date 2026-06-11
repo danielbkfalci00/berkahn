@@ -14,12 +14,15 @@ properties:
     displayName: "Prioridade"
   due:
     displayName: "Prazo"
+  projeto:
+    displayName: "Projeto"
 
 views:
   - type: table
     name: "Em aberto"
     order:
       - titulo
+      - projeto
       - prioridade
       - due
       - file.mtime
@@ -34,6 +37,20 @@ views:
       direction: ASC
     order:
       - titulo
+      - projeto
+      - due
+    sort:
+      - property: formula.prio_num
+        direction: ASC
+
+  - type: table
+    name: "Por projeto"
+    groupBy:
+      property: projeto
+      direction: ASC
+    order:
+      - titulo
+      - prioridade
       - due
     sort:
       - property: formula.prio_num

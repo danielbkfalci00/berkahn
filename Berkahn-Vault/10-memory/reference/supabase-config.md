@@ -1,6 +1,5 @@
 ---
 tipo: memory
-subtipo: reference
 criado: 2026-04-13
 atualizado: 2026-05-21
 tags:
@@ -9,6 +8,7 @@ tags:
   - source/manual
 ai_summary: Config Supabase do projeto Berkahn. Secrets vivem em .env (gitignored) — NUNCA hardcodar service_role key. URL e identificadores públicos podem ficar no vault.
 status: active
+subtipo: reference
 ---
 
 # Supabase — Configuração

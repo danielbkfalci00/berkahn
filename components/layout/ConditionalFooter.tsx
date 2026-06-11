@@ -11,6 +11,7 @@ export function ConditionalFooter() {
     pathname?.startsWith("/apresentacao") ||
     pathname?.startsWith("/orcamento") ||
     pathname?.startsWith("/curadoria-berkahn") ||
+    pathname?.startsWith("/etapas-da-obra") ||
     pathname?.startsWith("/admin");
 
   if (isFullscreenRoute) {

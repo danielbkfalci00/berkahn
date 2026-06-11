@@ -8,8 +8,8 @@ tags:
   - domain/integrations
 ai_summary: Integração formulário de contato Berkahn → Google Sheets via Apps Script. Captura leads do site (POST /exec) e gravar em planilha + notifica email. Sheet ID em .env (gitignored).
 status: active
-escopo: berkahn
 secrets_redacted: 2026-05-21
+escopo: berkahn
 ---
 
 # Integração Formulário de Contato → Google Sheets

@@ -1,6 +1,5 @@
 ---
 tipo: memory
-subtipo: feedback
 criado: 2026-04-13
 atualizado: 2026-05-21
 tags:
@@ -11,6 +10,7 @@ tags:
   - project/linkedin
 ai_summary: Prompts de conteúdo (LinkedIn, brainstorm, pesquisa, criação) foram calibrados por iteração e NÃO devem ser alterados sem permissão. Os de Bruno são intocáveis; os criados por Claude podem ser ajustados.
 status: active
+subtipo: feedback
 why: "Os prompts passaram por múltiplas rodadas de refinamento. Especialmente o de LinkedIn, com regras sobre vícios de linguagem, terminologia LSF vs Steel Frame, tom 'engenheiro experiente', extensão 100-180 palavras. Alterar sem entender o histórico degrada qualidade."
 how_to_apply: "Ao usar prompt de 30-prompts/, executar fielmente. Se identificar melhoria, sugerir ao Bruno antes de aplicar. Distinguir prompts de Bruno vs prompts criados por Claude."
 ---

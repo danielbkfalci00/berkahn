@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Performance Blog Berkahn — Fevereiro/2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<style>
+:root {
+  --bg: #FFFFFF;
+  --bg-soft: #F4F2EC;
+  --bg-zebra: #FAF8F2;
+  --text: #0A0A0A;
+  --text-soft: #4A4A4A;
+  --text-muted: #8A8A8A;
+  --border: #E5E2D9;
+  --border-strong: #0A0A0A;
+  --accent-up: #1F6F3D;
+  --accent-up-bg: #E8F3EC;
+  --accent-down: #B83A3A;
+  --accent-down-bg: #F8E8E8;
+  --accent-neutral: #6A6A6A;
+  --shadow: 0 1px 2px rgba(0,0,0,.04), 0 4px 12px rgba(0,0,0,.04);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { font-size: 16px; }
+
+body {
+  font-family: 'Manrope', system-ui, -apple-system, sans-serif;
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--text);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 56px 48px 96px;
+}
+
+/* Header */
+.header {
+  border-bottom: 1px solid var(--border-strong);
+  padding-bottom: 32px;
+  margin-bottom: 48px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+
+.header-brand {
+  font-weight: 800;
+  font-size: 14px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.header-tagline {
+  font-size: 12px;
+  color: var(--text-muted);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+.header-meta {
+  text-align: right;
+  font-size: 13px;
+  color: var(--text-soft);
+}
+
+.header-meta strong {
+  display: block;
+  color: var(--text);
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+}
+
+h1 {
+  font-size: 44px;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 24px 0 8px;
+}
+
+h2 {
+  font-size: 26px;
+  font-weight: 700;
+  margin: 56px 0 24px;
+  letter-spacing: -0.01em;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+h3 {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 32px 0 16px;
+  letter-spacing: -0.005em;
+  color: var(--text);
+}
+
+p {
+  margin: 12px 0;
+  color: var(--text-soft);
+}
+
+ul, ol {
+  margin: 12px 0 12px 24px;
+}
+
+li {
+  margin: 6px 0;
+  color: var(--text-soft);
+}
+
+li::marker {
+  color: var(--text-muted);
+}
+
+a {
+  color: var(--text);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+code {
+  font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.85em;
+  background: var(--bg-soft);
+  padding: 2px 6px;
+  border-radius: 3px;
+  color: var(--text);
+}
+
+strong { font-weight: 600; color: var(--text); }
+
+/* Hero summary cards */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin: 24px 0 32px;
+}
+
+.kpi-card {
+  background: var(--bg-soft);
+  padding: 20px 22px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+}
+
+.kpi-card-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.kpi-card-value {
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+
+.kpi-card-delta {
+  display: inline-block;
+  margin-top: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 3px 9px;
+  border-radius: 999px;
+  letter-spacing: -0.005em;
+}
+
+.delta-up   { background: var(--accent-up-bg);   color: var(--accent-up);   }
+.delta-down { background: var(--accent-down-bg); color: var(--accent-down); }
+.delta-flat { background: var(--bg-zebra);       color: var(--accent-neutral); }
+
+/* Tables */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0 32px;
+  font-size: 14px;
+  background: var(--bg);
+}
+
+thead th {
+  text-align: left;
+  font-weight: 600;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  padding: 10px 14px;
+  border-bottom: 2px solid var(--border-strong);
+  background: var(--bg);
+}
+
+thead th:not(:first-child) { text-align: right; }
+
+tbody td {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-soft);
+  vertical-align: top;
+}
+
+tbody td:first-child { color: var(--text); font-weight: 500; }
+tbody td:not(:first-child) { text-align: right; font-variant-numeric: tabular-nums; }
+
+tbody tr:nth-child(even) td { background: var(--bg-zebra); }
+tbody tr:last-child td { border-bottom: none; }
+
+/* Chart container */
+.chart-block {
+  background: var(--bg-soft);
+  padding: 24px;
+  border-radius: 6px;
+  margin: 24px 0;
+  border: 1px solid var(--border);
+}
+
+.chart-block canvas { max-height: 320px; }
+
+.chart-title {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+/* Insights & actions */
+.insights-list, .actions-list {
+  list-style: none;
+  margin: 16px 0;
+  padding: 0;
+}
+
+.insights-list li {
+  background: var(--bg-soft);
+  padding: 16px 20px;
+  margin: 10px 0;
+  border-radius: 4px;
+  border-left: 3px solid var(--border-strong);
+  color: var(--text);
+}
+
+.insights-list li::before {
+  content: counter(insight) ".";
+  counter-increment: insight;
+  font-weight: 700;
+  color: var(--text-muted);
+  margin-right: 10px;
+}
+
+.insights-list { counter-reset: insight; }
+
+.actions-list li {
+  padding: 14px 18px;
+  margin: 8px 0;
+  border-radius: 4px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  color: var(--text);
+}
+
+.actions-list li::before {
+  content: "□";
+  font-size: 18px;
+  line-height: 1;
+  color: var(--text-muted);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.actions-p0 li { background: var(--accent-down-bg); border-left: 3px solid var(--accent-down); }
+.actions-p1 li { background: var(--bg-soft);       border-left: 3px solid var(--text-soft);    }
+.actions-p2 li { background: var(--bg-zebra);      border-left: 3px solid var(--border-strong); }
+
+.priority-tag {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  padding: 3px 10px;
+  border-radius: 3px;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+}
+
+.priority-p0 { background: var(--accent-down); color: var(--bg); }
+.priority-p1 { background: var(--text);        color: var(--bg); }
+.priority-p2 { background: var(--text-muted);  color: var(--bg); }
+
+/* Status pills for indexation */
+.status-pill {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 999px;
+  letter-spacing: 0.04em;
+}
+
+.status-indexed     { background: var(--accent-up-bg);   color: var(--accent-up);   }
+.status-not-indexed { background: var(--accent-down-bg); color: var(--accent-down); }
+.status-pending     { background: var(--bg-zebra);       color: var(--accent-neutral); }
+
+/* Footer */
+.footer {
+  margin-top: 80px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+  font-size: 12px;
+  color: var(--text-muted);
+  text-align: center;
+  letter-spacing: 0.04em;
+}
+
+/* Print */
+@media print {
+  body { font-size: 11pt; }
+  .container { padding: 24px 32px; max-width: none; }
+  h1 { font-size: 28pt; }
+  h2 { font-size: 18pt; page-break-after: avoid; margin-top: 32px; }
+  h3 { font-size: 13pt; page-break-after: avoid; }
+  table, .chart-block, .kpi-grid { page-break-inside: avoid; }
+  .header { padding-bottom: 16px; margin-bottom: 24px; }
+  .kpi-card { box-shadow: none; }
+  .chart-block { background: var(--bg); border: 1px solid var(--border); }
+  @page { margin: 1.5cm; size: A4; }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .container { padding: 32px 20px; }
+  h1 { font-size: 32px; }
+  h2 { font-size: 22px; }
+  .header { flex-direction: column; align-items: flex-start; }
+  .header-meta { text-align: left; }
+  table { font-size: 12px; }
+  thead th, tbody td { padding: 8px 10px; }
+}
+</style>
+</head>
+<body>
+<div class="container" id="report-root">
+
+<div class="header">
+  <div>
+    <div class="header-brand">Berkahn</div>
+    <div class="header-tagline">Performance Report</div>
+  </div>
+  <div class="header-meta">
+    <strong>Fevereiro/2026</strong>
+    <div>2026-02-01 a 2026-02-28</div>
+    <div>Gerado em 2026-05-28</div>
+  </div>
+</div>
+  <h1>Performance Blog Berkahn — Fevereiro/2026</h1><div class="kpi-grid"><div class="kpi-card"><div class="kpi-card-label">Users (GA4)</div><div class="kpi-card-value">109</div><span class="kpi-card-delta delta-down">↓ 29.7%</span></div><div class="kpi-card"><div class="kpi-card-label">Sessions</div><div class="kpi-card-value">259</div><span class="kpi-card-delta delta-down">↓ 35.7%</span></div><div class="kpi-card"><div class="kpi-card-label">Clicks (GSC)</div><div class="kpi-card-value">25</div><span class="kpi-card-delta delta-up">↑ 25.0%</span></div><div class="kpi-card"><div class="kpi-card-label">Impressions</div><div class="kpi-card-value">40</div><span class="kpi-card-delta delta-up">↑ 25.0%</span></div><div class="kpi-card"><div class="kpi-card-label">CTR médio</div><div class="kpi-card-value">62.5%</div><span class="kpi-card-delta delta-flat">→ 0.0%</span></div><div class="kpi-card"><div class="kpi-card-label">Indexados</div><div class="kpi-card-value">30 / 30</div></div></div>
+<h2>Resumo executivo</h2>
+<ul>
+<li>109 usuários e 595 pageviews no GA4 (-30% MoM).</li>
+<li>25 cliques e 40 impressões no Google Search (+25% MoM), posição média 3.1.</li>
+<li>30 de 30 artigos indexados no Google.</li>
+<li>Página mais acessada: Home (261 pageviews).</li>
+</ul>
+<h2>GA4, tráfego do site</h2>
+<h3>Overall (vs mês anterior)</h3>
+<table>
+<thead>
+<tr>
+<th>Métrica</th>
+<th style="text-align:right">Valor</th>
+<th style="text-align:center">Variação MoM</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Users</td>
+<td style="text-align:right">109</td>
+<td style="text-align:center">↓ 29.7%</td>
+</tr>
+<tr>
+<td>Sessions</td>
+<td style="text-align:right">259</td>
+<td style="text-align:center">↓ 35.7%</td>
+</tr>
+<tr>
+<td>Pageviews</td>
+<td style="text-align:right">595</td>
+<td style="text-align:center">↓ 43.3%</td>
+</tr>
+<tr>
+<td>Engagement rate</td>
+<td style="text-align:right">60.6%</td>
+<td style="text-align:center">↓ 10.9%</td>
+</tr>
+<tr>
+<td>Tempo médio sessão</td>
+<td style="text-align:right">360.4s</td>
+<td style="text-align:center">↓ 30.4%</td>
+</tr>
+</tbody>
+</table>
+<h3>Top 15 páginas (por pageviews)</h3>
+<table>
+<thead>
+<tr>
+<th>Página</th>
+<th style="text-align:right">Pageviews</th>
+<th style="text-align:right">Users</th>
+<th style="text-align:right">Tempo médio</th>
+<th style="text-align:center">MoM</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Home (``)</td>
+<td style="text-align:right">261</td>
+<td style="text-align:right">99</td>
+<td style="text-align:right">52s</td>
+<td style="text-align:center">↓ 25.6%</td>
+</tr>
+<tr>
+<td>Residencial (<code>/residencial</code>)</td>
+<td style="text-align:right">112</td>
+<td style="text-align:right">15</td>
+<td style="text-align:right">526.2s</td>
+<td style="text-align:center">—</td>
+</tr>
+<tr>
+<td>Comercial e Industrial (<code>/comercial-industrial</code>)</td>
+<td style="text-align:right">50</td>
+<td style="text-align:right">9</td>
+<td style="text-align:right">298.6s</td>
+<td style="text-align:center">—</td>
+</tr>
+<tr>
+<td>Empresa (<code>/empresa</code>)</td>
+<td style="text-align:right">40</td>
+<td style="text-align:right">21</td>
+<td style="text-align:right">123.4s</td>
+<td style="text-align:center">↓ 50.0%</td>
+</tr>
+<tr>
+<td>Serviços (<code>/servicos</code>)</td>
+<td style="text-align:right">37</td>
+<td style="text-align:right">17</td>
+<td style="text-align:right">99.9s</td>
+<td style="text-align:center">↓ 61.1%</td>
+</tr>
+<tr>
+<td>Apresentação Executiva (<code>/apresentacao-executiva</code>)</td>
+<td style="text-align:right">24</td>
+<td style="text-align:right">5</td>
+<td style="text-align:right">1760.6s</td>
+<td style="text-align:center">↓ 80.6%</td>
+</tr>
+<tr>
+<td>Pillar LSF (<code>/lsf</code>)</td>
+<td style="text-align:right">18</td>
+<td style="text-align:right">9</td>
+<td style="text-align:right">221.7s</td>
+<td style="text-align:center">↓ 82.2%</td>
+</tr>
+<tr>
+<td>Atualidades (índice) (<code>/atualidade</code>)</td>
+<td style="text-align:right">14</td>
+<td style="text-align:right">8</td>
+<td style="text-align:right">54.3s</td>
+<td style="text-align:center">↓ 39.1%</td>
+</tr>
+<tr>
+<td>Política de Privacidade (<code>/privacidade</code>)</td>
+<td style="text-align:right">12</td>
+<td style="text-align:right">9</td>
+<td style="text-align:right">2.7s</td>
+<td style="text-align:center">—</td>
+</tr>
+<tr>
+<td>/atualidade/construir-ou-comprar-pronto-numeros-grande-sp (<code>/atualidade/construir-ou-comprar-pronto-numeros-grande-sp</code>)</td>
+<td style="text-align:right">10</td>
+<td style="text-align:right">5</td>
+<td style="text-align:right">43s</td>
+<td style="text-align:center">—</td>
+</tr>
+<tr>
+<td>Orçamento (<code>/orcamento</code>)</td>
+<td style="text-align:right">8</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">133s</td>
+<td style="text-align:center">↓ 95.5%</td>
+</tr>
+<tr>
+<td>FAQ (<code>/perguntas-frequentes</code>)</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">109.7s</td>
+<td style="text-align:center">—</td>
+</tr>
+<tr>
+<td>Termos de Uso (<code>/termos-de-uso</code>)</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">0s</td>
+<td style="text-align:center">—</td>
+</tr>
+<tr>
+<td>/atualidade/quanto-custa-construir-steel-frame-precos-m2-2026 (<code>/atualidade/quanto-custa-construir-steel-frame-precos-m2-2026</code>)</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">46s</td>
+<td style="text-align:center">↓ 91.7%</td>
+</tr>
+<tr>
+<td>Portfolio (<code>/portfolio</code>)</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">35s</td>
+<td style="text-align:center">—</td>
+</tr>
+<tr>
+<td>/servicos/residencial (<code>/servicos/residencial</code>)</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">2s</td>
+<td style="text-align:center">—</td>
+</tr>
+</tbody>
+</table>
+<h3>Top 10 fontes de tráfego</h3>
+<table>
+<thead>
+<tr>
+<th>Source / Medium</th>
+<th style="text-align:right">Sessions</th>
+<th style="text-align:right">Users</th>
+<th style="text-align:right">% do total</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>(direct) / (none)</td>
+<td style="text-align:right">169</td>
+<td style="text-align:right">84</td>
+<td style="text-align:right">65.3%</td>
+</tr>
+<tr>
+<td>google / organic</td>
+<td style="text-align:right">85</td>
+<td style="text-align:right">23</td>
+<td style="text-align:right">32.8%</td>
+</tr>
+<tr>
+<td><a href="http://linkedin.com">linkedin.com</a> / referral</td>
+<td style="text-align:right">5</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">1.9%</td>
+</tr>
+</tbody>
+</table>
+<h3>Distribuição por área do site</h3>
+<table>
+<thead>
+<tr>
+<th>Área</th>
+<th style="text-align:right">Pageviews</th>
+<th style="text-align:right">% do total</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Outras</td>
+<td style="text-align:right">278</td>
+<td style="text-align:right">46.7%</td>
+</tr>
+<tr>
+<td>Home</td>
+<td style="text-align:right">261</td>
+<td style="text-align:right">43.9%</td>
+</tr>
+<tr>
+<td>Serviços</td>
+<td style="text-align:right">38</td>
+<td style="text-align:right">6.4%</td>
+</tr>
+<tr>
+<td>Pillar LSF</td>
+<td style="text-align:right">18</td>
+<td style="text-align:right">3%</td>
+</tr>
+</tbody>
+</table>
+<h3>Devices</h3>
+<table>
+<thead>
+<tr>
+<th>Device</th>
+<th style="text-align:right">Users</th>
+<th style="text-align:right">% do total</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>desktop</td>
+<td style="text-align:right">84</td>
+<td style="text-align:right">76.4%</td>
+</tr>
+<tr>
+<td>mobile</td>
+<td style="text-align:right">26</td>
+<td style="text-align:right">23.6%</td>
+</tr>
+</tbody>
+</table>
+<h3>Eventos / Conversões</h3>
+<p>Nenhum evento de conversão configurado no GA4 detectado no período.</p>
+<h2>GSC, performance no Google Search</h2>
+<h3>Overall (vs mês anterior)</h3>
+<table>
+<thead>
+<tr>
+<th>Métrica</th>
+<th style="text-align:right">Valor</th>
+<th style="text-align:center">Variação MoM</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Clicks</td>
+<td style="text-align:right">25</td>
+<td style="text-align:center">↑ 25.0%</td>
+</tr>
+<tr>
+<td>Impressions</td>
+<td style="text-align:right">40</td>
+<td style="text-align:center">↑ 25.0%</td>
+</tr>
+<tr>
+<td>CTR</td>
+<td style="text-align:right">62.5%</td>
+<td style="text-align:center">→ 0.0%</td>
+</tr>
+<tr>
+<td>Posição média</td>
+<td style="text-align:right">3.1</td>
+<td style="text-align:center">↓ 34.0%</td>
+</tr>
+</tbody>
+</table>
+<h3>Top 20 queries</h3>
+<table>
+<thead>
+<tr>
+<th>Query</th>
+<th style="text-align:right">Clicks</th>
+<th style="text-align:right">Impressions</th>
+<th style="text-align:right">CTR</th>
+<th style="text-align:right">Posição</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>berkahn</td>
+<td style="text-align:right">15</td>
+<td style="text-align:right">17</td>
+<td style="text-align:right">88.24%</td>
+<td style="text-align:right">2.6</td>
+</tr>
+<tr>
+<td>aquapanel residential</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">49</td>
+</tr>
+</tbody>
+</table>
+<h3>Top 15 páginas (por clicks)</h3>
+<table>
+<thead>
+<tr>
+<th>Página</th>
+<th style="text-align:right">Clicks</th>
+<th style="text-align:right">Impressions</th>
+<th style="text-align:right">CTR</th>
+<th style="text-align:right">Posição</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Home (<code>/</code>)</td>
+<td style="text-align:right">24</td>
+<td style="text-align:right">35</td>
+<td style="text-align:right">68.57%</td>
+<td style="text-align:right">3.2</td>
+</tr>
+<tr>
+<td>Empresa (<code>/empresa</code>)</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">12</td>
+<td style="text-align:right">8.33%</td>
+<td style="text-align:right">2.3</td>
+</tr>
+<tr>
+<td>Atualidades (índice) (<code>/atualidade</code>)</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">3</td>
+</tr>
+<tr>
+<td>FAQ (<code>/perguntas-frequentes</code>)</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">1</td>
+</tr>
+</tbody>
+</table>
+<h3>Queries em alta (maior ganho de clicks MoM)</h3>
+<p>Sem variações significativas vs mês anterior.</p>
+<h3>Queries em queda</h3>
+<table>
+<thead>
+<tr>
+<th>Query</th>
+<th style="text-align:right">Clicks atual</th>
+<th style="text-align:right">Clicks anterior</th>
+<th style="text-align:right">Perda</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>berkahn</td>
+<td style="text-align:right">15</td>
+<td style="text-align:right">16</td>
+<td style="text-align:right">-1</td>
+</tr>
+</tbody>
+</table>
+<h2>Indexação no Google (30 de 30)</h2>
+<table>
+<thead>
+<tr>
+<th>Slug</th>
+<th style="text-align:center">Status</th>
+<th style="text-align:center">Último crawl</th>
+<th style="text-align:left">Observação</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Steel Frame: O Futuro da Construção Civil no Brasil (<code>steel-frame-futuro-construcao</code>)</td>
+<td style="text-align:center"><span class="status-pill status-indexed">Indexada</span></td>
+<td style="text-align:center">13/05/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Steel Frame vs Alvenaria: O Comparativo Definitivo (<code>steel-frame-vs-alvenaria</code>)</td>
+<td style="text-align:center"><span class="status-pill status-indexed">Indexada</span></td>
+<td style="text-align:center">13/04/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>5 Vantagens Definitivas do Light Steel Frame (<code>5-vantagens-decisivas-light-steel-frame</code>)</td>
+<td style="text-align:center"><span class="status-pill status-indexed">Indexada</span></td>
+<td style="text-align:center">22/05/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Fissuras no Steel Frame: Causas, Prevenção e Reparo (<code>fissuras-steel-frame</code>)</td>
+<td style="text-align:center"><span class="status-pill status-indexed">Indexada</span></td>
+<td style="text-align:center">14/05/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Proteção contra quedas na construção civil: guia técnico completo (<code>protecao-contra-quedas-construcao-civil</code>)</td>
+<td style="text-align:center"><span class="status-pill status-indexed">Indexada</span></td>
+<td style="text-align:center">14/05/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Isolamento Térmico e Acústico no Steel Frame (<code>isolamento-termico-acustico-steel-frame</code>)</td>
+<td style="text-align:center"><span class="status-pill status-indexed">Indexada</span></td>
+<td style="text-align:center">27/05/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Custo do Steel Frame por m² em 2026: Preços Atualizados (<code>custo-steel-frame-m2-2026</code>)</td>
+<td style="text-align:center"><span class="status-pill status-indexed">Indexada</span></td>
+<td style="text-align:center">24/05/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Drywall ST, RU e RF: qual usar em cada ambiente da sua obra (<code>drywall-st-ru-rf</code>)</td>
+<td style="text-align:center"><span class="status-pill status-indexed">Indexada</span></td>
+<td style="text-align:center">14/05/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Steel Frame vs Wood Frame: Qual Sistema Construtivo Escolher? (<code>steel-frame-vs-wood-frame</code>)</td>
+<td style="text-align:center"><span class="status-pill status-indexed">Indexada</span></td>
+<td style="text-align:center">10/05/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Steel Frame e Fogo: O Que Realmente Acontece em um Incêndio (<code>steel-frame-fogo-incendio</code>)</td>
+<td style="text-align:center"><span class="status-pill status-indexed">Indexada</span></td>
+<td style="text-align:center">10/05/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Quanto custa construir em Steel Frame: tabela de preços por m² 2026 (<code>quanto-custa-construir-steel-frame-precos-m2-2026</code>)</td>
+<td style="text-align:center"><span class="status-pill status-indexed">Indexada</span></td>
+<td style="text-align:center">10/05/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Steel Frame: Vantagens e Desvantagens Reais (<code>steel-frame-vantagens-desvantagens</code>)</td>
+<td style="text-align:center"><span class="status-pill status-indexed">Indexada</span></td>
+<td style="text-align:center">13/04/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Sustentabilidade: O Impacto Positivo do Steel Frame (<code>sustentabilidade-construcao-industrializada</code>)</td>
+<td style="text-align:center"><span class="status-pill status-indexed">Indexada</span></td>
+<td style="text-align:center">10/05/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Passo a Passo: Como Funciona a Construção em Steel Frame (<code>passo-passo-construcao-steel-frame</code>)</td>
+<td style="text-align:center"><span class="status-pill status-indexed">Indexada</span></td>
+<td style="text-align:center">13/04/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Como Financiar uma Construção em Light Steel Frame (<code>financiar-construcao-light-steel-frame</code>)</td>
+<td style="text-align:center"><span class="status-pill status-indexed">Indexada</span></td>
+<td style="text-align:center">16/05/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Iluminação LED Residencial: Por Que a Luz da Sua Casa Começa na Planta (<code>iluminacao-led-residencial</code>)</td>
+<td style="text-align:center"><span class="status-pill status-indexed">Indexada</span></td>
+<td style="text-align:center">10/05/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Steel Frame Resiste a Terremoto? O Teste que Provou (<code>steel-frame-terremoto-teste-cfs10</code>)</td>
+<td style="text-align:center"><span class="status-pill status-indexed">Indexada</span></td>
+<td style="text-align:center">10/05/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Patologias em Steel Frame: Como Prevenir e Como Corrigir (<code>patologias-steel-frame</code>)</td>
+<td style="text-align:center"><span class="status-pill status-indexed">Indexada</span></td>
+<td style="text-align:center">16/05/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Steel Frame no Mundo: Como Cada País Constrói com Aço (<code>steel-frame-no-mundo</code>)</td>
+<td style="text-align:center"><span class="status-pill status-indexed">Indexada</span></td>
+<td style="text-align:center">22/05/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Como Construir ao Lado de um Hospital em Operação (<code>construir-hospital-em-operacao</code>)</td>
+<td style="text-align:center"><span class="status-pill status-indexed">Indexada</span></td>
+<td style="text-align:center">23/04/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Como Financiar sua Construção em Steel Frame (<code>financiamento-construcao-steel-frame</code>)</td>
+<td style="text-align:center"><span class="status-pill status-indexed">Indexada</span></td>
+<td style="text-align:center">26/05/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Steel Frame: o guia definitivo (<code>guia-definitivo-steel-frame-brasil</code>)</td>
+<td style="text-align:center"><span class="status-pill status-indexed">Indexada</span></td>
+<td style="text-align:center">18/05/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Construir ou Comprar Pronto? Os Números na Grande SP (<code>construir-ou-comprar-pronto-numeros-grande-sp</code>)</td>
+<td style="text-align:center"><span class="status-pill status-indexed">Indexada</span></td>
+<td style="text-align:center">28/05/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Tendências em Construção Industrializada para 2025 (<code>tendencias-construcao-modular-2025</code>)</td>
+<td style="text-align:center"><span class="status-pill status-indexed">Indexada</span></td>
+<td style="text-align:center">13/05/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Certificações e normas técnicas em Steel Frame (<code>certificacoes-steel-frame</code>)</td>
+<td style="text-align:center"><span class="status-pill status-indexed">Indexada</span></td>
+<td style="text-align:center">16/05/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Consequências da reforma tributária no mercado da construção industrializada (<code>reforma-tributaria-construcao-industrializada</code>)</td>
+<td style="text-align:center"><span class="status-pill status-indexed">Indexada</span></td>
+<td style="text-align:center">28/04/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Drywall ou Alvenaria de Bloco Cerâmico: Comparativo Técnico Completo (<code>drywall-ou-alvenaria</code>)</td>
+<td style="text-align:center"><span class="status-pill status-indexed">Indexada</span></td>
+<td style="text-align:center">02/05/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Principais Normas do Light Steel Frame no Brasil (<code>normas-light-steel-frame-brasil</code>)</td>
+<td style="text-align:center"><span class="status-pill status-indexed">Indexada</span></td>
+<td style="text-align:center">12/05/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Sustentabilidade na Construção Civil: O Peso Ambiental do Concreto e as Alternativas que Já Existem (<code>sustentabilidade-construcao-civil-economia-circular</code>)</td>
+<td style="text-align:center"><span class="status-pill status-indexed">Indexada</span></td>
+<td style="text-align:center">20/05/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Fundação para Steel Frame: Guia Definitivo (<code>fundacao-steel-frame</code>)</td>
+<td style="text-align:center"><span class="status-pill status-indexed">Indexada</span></td>
+<td style="text-align:center">—</td>
+<td style="text-align:left">Discovered - currently not indexed</td>
+</tr>
+</tbody>
+</table>
+<h2>Insights</h2><ol class="insights-list">
+<li>Cliques no Google subiram 25% vs mês anterior (20 → 25).</li>
+<li>65.3% do tráfego vem de &quot;(direct) / (none)&quot;. Diversificar fontes reduz risco.</li>
+</ol>
+<h2>Ações priorizadas</h2>
+<h3>P0, urgente</h3>
+<p>Nenhuma ação P0 identificada neste período.</p>
+<h3>P1, esta semana</h3>
+<p>Nenhuma ação P1 identificada.</p>
+<h3>P2, backlog</h3>
+<p>Nenhuma ação P2 identificada.</p>
+<h2>Notas técnicas</h2>
+<ul>
+<li>Fonte GA4: property <code>516973519</code></li>
+<li>Fonte GSC: <code>sc-domain:berkahn.com.br</code></li>
+<li>Janela: 2026-02-01 a 2026-02-28 (mês fechado)</li>
+<li>Gerado em: 2026-05-28 19:38:37 via <code>/performance</code></li>
+<li>Histórico (3 meses): em breve (após 3 meses de bootstrap)</li>
+</ul>
+<hr>
+<p><strong>Contexto aplicado</strong>: [[seo-aeo-strategy]] · [[article-pipeline]] · [[blog]] · [[seo-aeo]]</p>
+
+</div>
+
+<script>
+// Charts são populados pelo render-html.mjs via dataset
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('canvas[data-chart]').forEach(canvas => {
+    try {
+      const cfg = JSON.parse(canvas.dataset.chart);
+      new Chart(canvas, cfg);
+    } catch (e) {
+      console.error('Chart config error', e);
+    }
+  });
+});
+</script>
+</body>
+</html>

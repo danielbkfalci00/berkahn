@@ -1,7 +1,7 @@
 ---
 tipo: projeto
 criado: 2026-05-22
-atualizado: 2026-05-27
+atualizado: 2026-06-03
 tags:
   - project/blog
   - status/active
@@ -10,11 +10,17 @@ status: active
 projeto: blog
 kpi_publicados: 36
 kpi_meta_publicados_semanal: 1
-kpi_indexados_google: 1
+kpi_indexados_google: 31
 kpi_meta_indexacao_total: 30
 kpi_posts_sem_meta: 9
 kpi_posts_sem_answer_summary: 3
-kpi_atualizado_em: 2026-05-27
+kpi_ga4_users_mes: 679
+kpi_ga4_sessions_mes: 855
+kpi_ga4_pageviews_mes: 1134
+kpi_gsc_clicks_mes: 347
+kpi_gsc_impressions_mes: 20196
+kpi_health_score_mes: 84
+kpi_atualizado_em: 2026-06-03
 contextos_aplicados:
   - berkahn-brand
   - seo-aeo-strategy

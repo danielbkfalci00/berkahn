@@ -11,6 +11,8 @@ properties:
     displayName: "Título"
   publicado_em:
     displayName: "Publicação"
+  projeto:
+    displayName: "Projeto"
   formula.canal:
     displayName: "Canal"
 
@@ -48,3 +50,16 @@ views:
     order:
       - titulo
       - formula.canal
+
+  - type: table
+    name: "Por projeto"
+    groupBy:
+      property: projeto
+      direction: ASC
+    order:
+      - titulo
+      - formula.canal
+      - publicado_em
+    sort:
+      - property: publicado_em
+        direction: ASC
