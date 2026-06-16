@@ -36,6 +36,8 @@ Construir com previsibilidade começa por aí, escolhendo o método pela realida
 
 Comparamos os dois caminhos, com prazo, custo e limites reais, lá no blog.
 
+https://www.berkahn.com.br/atualidades/sistema-painelizado-vs-stick-steel-frame?utm_source=linkedin&utm_medium=social&utm_campaign=post-organico
+
 #LightSteelFrame #SteelFrame #ConstruirCasa #AltoPadrao #Arquitetura
 
 ---
@@ -51,6 +53,8 @@ Em terreno urbano apertado, com rua estreita ou curva fechada, esse limite vira 
 Escolher entre painel de fábrica e montagem no canteiro é decisão de engenharia, não de bandeira. A previsibilidade que o cliente sente vem de aplicar o método certo no terreno certo, e nem sempre é o mais industrializado que vence no papel.
 
 Comparamos os dois métodos, com prazo, custo e limites reais, lá no blog.
+
+https://www.berkahn.com.br/atualidades/sistema-painelizado-vs-stick-steel-frame?utm_source=linkedin&utm_medium=social&utm_campaign=post-organico
 
 #LightSteelFrame #ConstrucaoIndustrializada #SteelFrame #Engenharia #Arquitetura
 

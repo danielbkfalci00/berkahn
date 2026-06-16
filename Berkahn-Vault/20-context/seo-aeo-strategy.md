@@ -1,7 +1,7 @@
 ---
 tipo: context
 criado: 2026-04-13
-atualizado: 2026-05-21
+atualizado: 2026-06-16
 tags:
   - ai/context
   - project/site
@@ -126,6 +126,29 @@ O site já tem: LocalBusiness, GeneralContractor, BlogPosting, FAQPage, Service,
 1. Estruturar internal linking entre posts
 2. Expandir /lsf como pillar page (3K+ palavras)
 3. Adicionar hreflang pt-BR auto-referencial
+
+## Rastreamento de links (UTM)
+
+Todo link de conteúdo distribuído fora do site (LinkedIn, Instagram, etc.) deve carregar parâmetros UTM para o GA4 atribuir o tráfego corretamente. O link vai no **corpo** do post (não nos comentários), conforme [[linkedin-post]].
+
+**Padrão (post orgânico):**
+
+```
+https://www.berkahn.com.br/atualidades/SLUG?utm_source=<canal>&utm_medium=social&utm_campaign=post-organico
+```
+
+- `utm_source`: o canal de origem (`linkedin`, `instagram`, `facebook`, etc.)
+- `utm_medium`: `social` para orgânico; `paid-social` quando for mídia paga
+- `utm_campaign`: `post-organico` (padrão fixo para posts orgânicos)
+- `utm_content` (opcional): variante, só quando houver teste A/B (ex: `cliente`, `parceiros`)
+
+Exemplo (LinkedIn):
+
+```
+https://www.berkahn.com.br/atualidades/sistema-painelizado-vs-stick-steel-frame?utm_source=linkedin&utm_medium=social&utm_campaign=post-organico
+```
+
+No GA4 isso cai no canal **Organic Social**. A capa do card de preview vem do `og:image` (a `cover.webp` do artigo), então só publicar depois do deploy da capa em produção.
 
 ## Referências
 
