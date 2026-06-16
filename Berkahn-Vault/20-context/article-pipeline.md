@@ -1,7 +1,7 @@
 ---
 tipo: context
 criado: 2026-04-13
-atualizado: 2026-05-21
+atualizado: 2026-06-16
 tags:
   - ai/context
   - project/blog
@@ -171,6 +171,15 @@ Mais texto após o gráfico...
   "ctas": [{ "id": "...", "label": "...", "title": "...", "actionType": "dialog", ... }]
 }
 ```
+
+### Gotchas de implementação (verificados em produção)
+
+Aprendizados confirmados contra o código real — evitam bugs silenciosos no `/artigo`:
+
+- **`StatHighlight` (STATS) NÃO suporta decimais.** O componente chama `<CountUp end={value} />` sem passar `decimals` (`components/article/StatHighlight.tsx`), então `CountUp` usa `Math.floor` (`components/animations/CountUp.tsx`) e trunca: `value: 2.6` renderiza **"2"**. Para números fracionados (ex.: limites em metros), use `[TABLE:]` com a string exata (`"2,60 m"`) em vez de STATS. Reserve STATS para valores **inteiros** (percentuais, contagens).
+- **Wikilinks `[[...]]` no corpo vazam para o Supabase.** O script de inserção só remove frontmatter e o rodapé `<!-- vault-rodape-v1 -->`; o corpo vai verbatim para o `content`, e o renderer não interpreta wikilinks (apareceriam como texto literal). No corpo use **só links markdown** (`[texto](/atualidades/slug)` internos; URLs externas abrem em nova aba). Wikilinks de vault ficam **só no rodapé** (`[[lsf-normas-nbr]]`, contextos) e em `contextos_aplicados`.
+- **Conteúdo renderiza 2× no DOM (responsivo).** Há variante mobile/desktop; uma fica `display:none`. Ao verificar via DOM, filtre por `offsetParent !== null` — `tables`/`h1` aparecem em dobro mas só metade é visível (não é bug).
+- **`next/image` em dev**: `naturalWidth` pode ser `0` por lazy-load no momento do eval, e `preview_screenshot` pode dar timeout. Confirme a capa pela **rede** (`/_next/image?...→200`) ou decodificando a imagem no contexto da página, não pelo screenshot.
 
 ## Artigos Publicados
 
