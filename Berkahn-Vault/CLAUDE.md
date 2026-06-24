@@ -37,7 +37,7 @@ status: draft | active | review | published | archived | locked | stale
 
 **`tipo: projeto`** (hubs em `00-meta/projetos/`):
 ```yaml
-projeto: blog | linkedin | site | seo-aeo | apresentacoes | materiais | pesquisas
+projeto: blog | linkedin | site | seo-aeo | apresentacoes | materiais | pesquisas | orcamento-automacao
 kpi_<nome>: <valor>             # FLAT, repetir por KPI (kpi_publicados, kpi_meta_publicados_semanal, etc.)
 kpi_atualizado_em: YYYY-MM-DD
 contextos_aplicados: [array de nomes sem [[]]]
@@ -172,13 +172,13 @@ Hook `validate-write` (futuro) bloqueará edits sem flag explícita.
 
 Resumo em [[index]]. Detalhes em [[workflow-conteudo]] + 5 workflows específicos: [[workflow-site]] · [[workflow-seo]] · [[workflow-comercial]] · [[workflow-material]] · [[workflow-pesquisa]].
 
-`/standup` (auto seg 9h via scheduled-task `berkahn-standup-semanal`) e `/wrap-up` (auto sex 17h via `berkahn-wrapup-semanal`) lêem 7 hubs + sprint-ativa e atualizam. Ambos rodam `node scripts/vault-validate.mjs` como sanity check final.
+`/standup` (auto seg 9h via scheduled-task `berkahn-standup-semanal`) e `/wrap-up` (auto sex 17h via `berkahn-wrapup-semanal`) lêem 8 hubs + sprint-ativa e atualizam. Ambos rodam `node scripts/vault-validate.mjs` como sanity check final.
 
-## 🚀 Hubs canônicos (7 first-class projetos)
+## 🚀 Hubs canônicos (8 first-class projetos)
 
-`00-meta/projetos/{blog,linkedin,site,seo-aeo,apresentacoes,materiais,pesquisas}.md` — cada um é nota first-class com KPIs (`kpi_*`), bloqueios, próximos 7 dias, contextos aplicados, workflow, prompts/bases/subagents relacionados. **Source of truth do estado do projeto**. Atualizados semanalmente via `/standup` e `/wrap-up`.
+`00-meta/projetos/{blog,linkedin,site,seo-aeo,apresentacoes,materiais,pesquisas,orcamento-automacao}.md` — cada um é nota first-class com KPIs (`kpi_*`), bloqueios, próximos 7 dias, contextos aplicados, workflow, prompts/bases/subagents relacionados. **Source of truth do estado do projeto**. Atualizados semanalmente via `/standup` e `/wrap-up`.
 
-Tag `project/<nome>` segue 1:1 com nome do hub (`project/blog`, `project/linkedin`, etc.).
+Tag `project/<nome>` segue 1:1 com nome do hub (`project/blog`, `project/linkedin`, `project/orcamento-automacao`, etc.).
 
 ## Subagents úteis por projeto
 
@@ -191,6 +191,7 @@ Tag `project/<nome>` segue 1:1 com nome do hub (`project/blog`, `project/linkedi
 | [[apresentacoes]] | `@design-review` (UI/UX em live env) |
 | [[materiais]] | `@design-review` (consistência brand) |
 | [[pesquisas]] | — |
+| [[orcamento-automacao]] | `@pragmatic-code-review`, `@design-review`, `@security-review` (admin + renderer PDF + gate HMAC) |
 
 ## Scripts vault (`scripts/vault-*.mjs`)
 

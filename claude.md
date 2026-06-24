@@ -69,7 +69,7 @@ Regras de naming, frontmatter e taxonomy em `Berkahn-Vault/CLAUDE.md`.
 
 ---
 
-## 🚀 Projetos Ativos (7 hubs first-class)
+## 🚀 Projetos Ativos (8 hubs first-class)
 
 Cada projeto tem nota-hub em `Berkahn-Vault/00-meta/projetos/{nome}.md` com `tipo: projeto`, KPIs (`kpi_*` FLAT), bloqueios, próximos 7 dias e links de contexto/workflow.
 
@@ -82,6 +82,7 @@ Cada projeto tem nota-hub em `Berkahn-Vault/00-meta/projetos/{nome}.md` com `tip
 | Apresentações | [[apresentacoes]] | [[workflow-comercial]] | `@design-review` |
 | Materiais | [[materiais]] | [[workflow-material]] | `@design-review` |
 | Pesquisas | [[pesquisas]] | [[workflow-pesquisa]] | — |
+| Orçamento-automação | [[orcamento-automacao]] | [[workflow-site]] | `@pragmatic-code-review`, `@design-review`, `@security-review` |
 
 **Dashboards dinâmicos**: `Berkahn-Vault/80-bases/{projetos,kpis,conhecimento,materiais}.base`
 

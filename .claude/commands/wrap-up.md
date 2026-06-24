@@ -1,5 +1,5 @@
 ---
-description: Wrap-up semanal — consolida semana, calcula deltas de KPIs vs standup, atualiza histórico dos 7 hubs e gera nota em 00-meta/wrap-up/YYYY-MM-DD.md
+description: Wrap-up semanal — consolida semana, calcula deltas de KPIs vs standup, atualiza histórico dos 8 hubs e gera nota em 00-meta/wrap-up/YYYY-MM-DD.md
 ---
 
 Wrap-up semanal Berkahn — rodado sexta-feira 17h (manual ou via scheduled-task).
@@ -8,7 +8,7 @@ Wrap-up semanal Berkahn — rodado sexta-feira 17h (manual ou via scheduled-task
 
 Leia em paralelo:
 - `Berkahn-Vault/00-meta/projetos/sprint-ativa.md`
-- Os 7 hubs em `Berkahn-Vault/00-meta/projetos/{blog,linkedin,site,seo-aeo,apresentacoes,materiais,pesquisas}.md`
+- Os 8 hubs em `Berkahn-Vault/00-meta/projetos/{blog,linkedin,site,seo-aeo,apresentacoes,materiais,pesquisas,orcamento-automacao}.md`
 - Standup da semana atual: `ls Berkahn-Vault/00-meta/standup/ | tail -1` (deve ser desta segunda)
 - Último wrap-up: `ls Berkahn-Vault/00-meta/wrap-up/ | tail -1`
 - Standups anteriores se necessário para tendência

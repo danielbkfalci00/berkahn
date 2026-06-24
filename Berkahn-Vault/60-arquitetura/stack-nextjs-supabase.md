@@ -34,15 +34,16 @@ Visão executiva da arquitetura técnica do site Berkahn.
 
 | Camada | Tecnologia |
 |--------|-----------|
-| CMS | Supabase (PostgreSQL) — tabela `posts` (schema em [[article-pipeline]]) |
+| CMS | Supabase (PostgreSQL) — tabelas `posts`, `proposals`, `presentations`, `analytics_snapshots`, `analytics_tasks`, `orcamentos` (esta última: estimativas preliminares PDF, ver [[orcamento-automacao]]) |
 | Auth | Supabase Auth (admin panel) |
-| RLS | Row Level Security ativo em `posts` |
-| API | Supabase REST (`POST/PATCH /rest/v1/posts`) |
-| Service Role | Server-side ONLY, em `.env` (ver [[supabase-config]]) |
+| RLS | Row Level Security ativo em todas as tabelas |
+| API | Supabase REST + Server Actions Next.js |
+| Service Role | Server-side ONLY, em `.env` (ver [[supabase-config]]). Helper tipado: `createServiceClient()` em `lib/supabase/admin.ts` |
+| Geração de PDF | `puppeteer-core` + `@sparticuz/chromium` serverless. Helper compartilhado em `lib/puppeteer-launch.ts` com fallback `CHROME_LOCAL_PATH` em dev. Usado por `/orcamento/pdf` (LSF) e `/orcamento/estimativa/[id]` (gated por HMAC — ver [[orcamento-automacao]]) |
 
 ## Painel Admin
 
-Painel Next.js separado para gerenciar posts, leads, dashboard. Detalhes em [[admin-setup]].
+Painel Next.js separado para gerenciar posts, leads, dashboard, **orçamentos** (`/admin/orcamentos` — wizard de 5 steps + upload de hero + geração de PDF). Detalhes em [[admin-setup]] e [[orcamento-automacao]].
 
 ## Integrações Externas
 

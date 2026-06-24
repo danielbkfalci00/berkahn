@@ -23,6 +23,7 @@ Mapa temático do vault Berkahn. Para visão estrutural (por pasta), ver [[index
 | [[apresentacoes]] | active | Roteiros não versionados (parcial) | [[workflow-comercial]] | 2026-05-22 |
 | [[materiais]] | active | 9 índices criados; 4 capas órfãs | [[workflow-material]] | 2026-05-22 |
 | [[pesquisas]] | active | 70-knowledge populado com 10 atomic notes | [[workflow-pesquisa]] | 2026-05-22 |
+| [[orcamento-automacao]] | active | Aguarda Bruno setar `CHROME_LOCAL_PATH` + smoke test E2E em prod | [[workflow-site]] | 2026-06-24 |
 
 **Dashboards dinâmicos**: [[projetos.base]] · [[kpis.base]] · [[conhecimento.base]] · [[materiais.base]]
 **Sprint atual**: [[sprint-ativa]] · **Standups**: `00-meta/standup/` · **Wrap-ups**: `00-meta/wrap-up/`
@@ -94,7 +95,7 @@ Query estruturada: [[artigos.base]] | [[calendario.base]]
 - [[tarefas.base]] — Em aberto / por prioridade / **Por projeto**
 
 **Novas (Sprint 3)**:
-- [[projetos.base]] — 7 hubs first-class, status, cards, stale
+- [[projetos.base]] — 8 hubs first-class, status, cards, stale
 - [[kpis.base]] — Dashboard cross-projeto, atrasados (<80% meta), auditorias SEO
 - [[conhecimento.base]] — 10 atomic notes LSF em 70-knowledge/, mais usados, órfãs
 - [[materiais.base]] — Índices binários, por projeto, com órfãos/duplicatas

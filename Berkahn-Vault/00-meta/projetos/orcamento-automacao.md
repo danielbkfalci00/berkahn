@@ -61,8 +61,10 @@ Reusa ~70% da infra de PDF existente — `puppeteer-core` + `@sparticuz/chromium
 
 ## Bloqueios ativos
 
-- [ ] **Dívida técnica registrada**: tabela `proposals` está no DB ([001_initial_schema.sql:91](../../../supabase/migrations/001_initial_schema.sql)) e em [types/admin.ts:261](../../../types/admin.ts) mas conceito é diferente (proposta transacional com items+descontos). Sem ação imediata — `orcamentos` nova é semanticamente separada.
-- [ ] **Hardening futuro**: gate de segurança do `/orcamento/pdf` LSF atual ([route.ts:27](../../../app/api/orcamento/pdf/route.ts)) — público sem token. Fora do escopo deste projeto. Helper `lib/puppeteer-launch.ts` criado aqui poderá ser adotado depois pelo LSF.
+- [ ] **Dívida técnica**: tabela `proposals` está no DB ([001_initial_schema.sql:91](../../../supabase/migrations/001_initial_schema.sql)) e em [types/admin.ts:261](../../../types/admin.ts) mas conceito é diferente (proposta transacional com items+descontos). Sem ação imediata — `orcamentos` nova é semanticamente separada.
+- [ ] **Hardening LSF**: gate de segurança do `/orcamento/pdf` LSF atual ([route.ts:27](../../../app/api/orcamento/pdf/route.ts)) — público sem token. Helper `lib/puppeteer-launch.ts` + pattern `assinarToken`/`validarToken` ([lib/orcamento-token.ts](../../../lib/orcamento-token.ts)) prontos para adoção quando endereçar.
+- [ ] **CookieBanner no LSF**: o pattern `evaluateOnNewDocument(() => localStorage.setItem('cookieConsent','accepted'))` aplicado em [app/api/admin/orcamentos/[id]/pdf/route.ts](../../../app/api/admin/orcamentos/%5Bid%5D/pdf/route.ts) precisa ser replicado em [app/api/orcamento/pdf/route.ts](../../../app/api/orcamento/pdf/route.ts) — provavelmente o LSF tem o banner sobrepondo a última seção do PDF (não validado).
+- [ ] **Tipos Supabase**: 3 `@ts-expect-error` em `app/api/admin/orcamentos/*/route.ts` e `app/admin/orcamentos/actions.ts` por inferência quebrada do supabase-js 2.90 (workaround com `__InternalSupabase` + `Relationships: []` em [types/supabase-db.ts](../../../types/supabase-db.ts)). Limpa rodando `supabase gen types typescript --project-id sfqaknxomxwmviarpwfy > types/supabase-gen.ts`.
 
 ## Próximos 7 dias
 
@@ -98,6 +100,8 @@ Reusa ~70% da infra de PDF existente — `puppeteer-core` + `@sparticuz/chromium
 
 ## Decisões consolidadas
 
+**Macro (Sprints 1-2)**:
+
 | # | Decisão | Escolha |
 |---|---------|---------|
 | 1 | Relação com `/orcamento/pdf` LSF | Convive (módulo separado), unificação adiada |
@@ -108,6 +112,18 @@ Reusa ~70% da infra de PDF existente — `puppeteer-core` + `@sparticuz/chromium
 | 6 | Persistência | Supabase + bucket Storage (PDFs + hero + template) |
 | 7 | Modo CSV | Pré-preenchimento 1-a-1 |
 | 8 | Tipografia | Manrope + Playfair Display |
+
+**Sprint 3 (form wizard)**:
+
+| # | Decisão | Escolha | Justificativa |
+|---|---------|---------|---------------|
+| 9 | Stack de form | `useReducer` + `useState` local (sem zod, zustand, react-hook-form) | Padrão do [PostEditor](../../../components/admin/posts/PostEditor.tsx) é `useState` puro — manter consistência |
+| 10 | Navegação | Tabs livres com indicador visual por step | Permite editar pulando pra Step N; alinha com PostEditor |
+| 11 | Validação | Inline com helpers per-step (`validarStep1..5` em [wizard-state.ts](../../../components/admin/orcamentos/wizard-state.ts)) | Sem dep nova; erros próximos ao input |
+| 12 | Persistência rascunho | Save explícito (`Salvar rascunho` / `Finalizar`) + `beforeunload` warn | Padrão PostEditor — sem auto-save |
+| 13 | Ação final | "Finalizar" → status=`finalizado` → redirect para `/admin/orcamentos/[id]` | Reusa `<HeroUpload>` e `<GerarPdfButton>` do Sprint 2, sem duplicação |
+| 14 | Currency mask | BRL formatado em `valor_min/max/m2_min/m2_max` | Ergonomia de input manual; helper local sem dep nova |
+| 15 | Modo edição | Mesmo wizard atende criar (`/novo/form`) e editar (`/[id]/edit`) via prop `orcamentoInicial?` | Sem duplicação de UI |
 
 ## Contexto aplicado
 

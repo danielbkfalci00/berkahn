@@ -1,5 +1,5 @@
 ---
-description: Standup semanal — atualiza sprint-ativa + 7 hubs de projeto e gera nota em 00-meta/standup/YYYY-MM-DD.md
+description: Standup semanal — atualiza sprint-ativa + 8 hubs de projeto e gera nota em 00-meta/standup/YYYY-MM-DD.md
 ---
 
 Standup semanal Berkahn — rodado segunda-feira 9h (manual ou via scheduled-task).
@@ -15,6 +15,7 @@ Leia em paralelo:
 - `Berkahn-Vault/00-meta/projetos/apresentacoes.md`
 - `Berkahn-Vault/00-meta/projetos/materiais.md`
 - `Berkahn-Vault/00-meta/projetos/pesquisas.md`
+- `Berkahn-Vault/00-meta/projetos/orcamento-automacao.md`
 - Último standup em `Berkahn-Vault/00-meta/standup/` (se existir): `ls Berkahn-Vault/00-meta/standup/ | tail -1`
 - Último wrap-up em `Berkahn-Vault/00-meta/wrap-up/` (se existir)
 
@@ -22,7 +23,7 @@ Leia em paralelo:
 
 ### 1. Coletar status atual de cada hub
 
-Para cada um dos 7 hubs, identifique:
+Para cada um dos 8 hubs, identifique:
 - Status atual (campo "## Status atual")
 - Bloqueios ativos (`- [ ]` em "## Bloqueios ativos")
 - KPIs no frontmatter (campos `kpi_*`)
