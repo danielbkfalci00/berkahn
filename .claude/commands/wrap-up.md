@@ -124,7 +124,7 @@ Para cada hub que teve mudança:
 ### 7. Validar completude (linter rápido)
 
 Antes de finalizar, checar:
-- Todos os 7 hubs têm `atualizado:` desta semana?
+- Todos os 8 hubs têm `atualizado:` desta semana?
 - Standup desta semana existe? (se não, alerta)
 - Algum hub não foi tocado em > 2 semanas? (flag stale)
 - Wikilinks quebrados nos novos arquivos? (`obsidian unresolved` se disponível)
