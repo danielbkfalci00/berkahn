@@ -38,7 +38,7 @@ export async function POST(request: Request, ctx: RouteContext) {
   if (error || !data) {
     return NextResponse.json({ error: "Orçamento não encontrado" }, { status: 404 })
   }
-  const orcamento = data as Orcamento
+  const orcamento = data as unknown as Orcamento
 
   const ausentes = CAMPOS_OBRIGATORIOS.filter(
     (campo) =>
@@ -89,7 +89,6 @@ export async function POST(request: Request, ctx: RouteContext) {
 
     const { error: updateError } = await supabase
       .from("orcamentos")
-      // @ts-expect-error supabase-js v2.90 não infere bem o Update genérico — fixar quando regenerar Database type via supabase gen
       .update({
         pdf_url: signedUrl,
         pdf_storage_path: path,

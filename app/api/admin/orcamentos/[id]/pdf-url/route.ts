@@ -28,7 +28,6 @@ export async function GET(_: Request, ctx: RouteContext) {
     const signedUrl = await gerarSignedUrlPdf(storagePath)
     await supabase
       .from("orcamentos")
-      // @ts-expect-error supabase-js v2.90 não infere bem o Update genérico — fixar quando regenerar Database type via supabase gen
       .update({ pdf_url: signedUrl })
       .eq("id", id)
     return NextResponse.json({ pdf_url: signedUrl })

@@ -19,10 +19,12 @@ export async function criarOrcamento(
   input: OrcamentoInsert
 ): Promise<ActionResultCreate> {
   const supabase = createServiceClient()
+  // Cast: JSONB columns (condicionantes_extras, exclusoes_extras, entrega_categorias_ativas)
+  // tipam como Json no Database gerado, mas mantemos shapes específicos no domínio.
+  const payload = { ...input, status: input.status ?? "rascunho" } as never
   const { data, error } = await supabase
     .from("orcamentos")
-    // @ts-expect-error supabase-js v2.90 não infere bem o Insert genérico — fixar quando regenerar Database type via supabase gen
-    .insert({ ...input, status: input.status ?? "rascunho" })
+    .insert(payload)
     .select("id, numero")
     .single()
 
@@ -41,8 +43,7 @@ export async function atualizarOrcamento(
   const supabase = createServiceClient()
   const { error } = await supabase
     .from("orcamentos")
-    // @ts-expect-error supabase-js v2.90 não infere bem o Update genérico — fixar quando regenerar Database type via supabase gen
-    .update(patch)
+    .update(patch as never)
     .eq("id", id)
 
   if (error) {
@@ -79,8 +80,7 @@ export async function finalizarOrcamento(
   const supabase = createServiceClient()
   const { error } = await supabase
     .from("orcamentos")
-    // @ts-expect-error supabase-js v2.90 não infere bem o Update genérico — fixar quando regenerar Database type via supabase gen
-    .update({ ...patch, status: "finalizado" })
+    .update({ ...patch, status: "finalizado" } as never)
     .eq("id", id)
 
   if (error) {

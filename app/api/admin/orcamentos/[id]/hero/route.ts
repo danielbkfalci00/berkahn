@@ -79,7 +79,6 @@ export async function POST(request: Request, ctx: RouteContext) {
 
   const { error: updateError } = await supabase
     .from("orcamentos")
-    // @ts-expect-error supabase-js v2.90 não infere bem o Update genérico — fixar quando regenerar Database type via supabase gen
     .update({ hero_image_url: path })
     .eq("id", id)
 

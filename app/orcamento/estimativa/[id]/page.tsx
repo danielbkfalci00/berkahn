@@ -56,7 +56,7 @@ export default async function EstimativaPage({ params }: PageProps) {
     notFound()
   }
 
-  const orcamento = data as Orcamento
+  const orcamento = data as unknown as Orcamento
   const heroUrl = await resolveHeroUrl(
     supabase,
     orcamento.hero_image_url

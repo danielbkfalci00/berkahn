@@ -33,7 +33,7 @@ export default async function EditarOrcamentoPage({ params }: PageProps) {
         <ArrowLeft className="h-3 w-3" />
         Voltar para detalhe
       </Link>
-      <OrcamentoWizard orcamentoInicial={data as Orcamento} />
+      <OrcamentoWizard orcamentoInicial={data as unknown as Orcamento} />
     </div>
   )
 }
