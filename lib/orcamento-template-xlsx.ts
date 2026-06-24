@@ -52,6 +52,24 @@ export async function gerarTemplateXlsx(): Promise<Buffer> {
   }))
   ws["!rows"] = [{ hpt: 22 }]
 
+  // Hint via cell comment para colunas enum (xlsx-js-style não suporta
+  // dataValidation no write path; comment é o fallback compatível).
+  const HINTS: Partial<Record<(typeof PLANILHA_COLUNAS)[number], string>> = {
+    padrao_acabamento: "Valores válidos: baixo, medio, alto, altissimo",
+    regime_recomendado:
+      "Valores válidos: administracao, fechado, pmg, indefinido",
+    data_cotacao: "Formato: YYYY-MM-DD (ou DD/MM/YYYY)",
+  }
+  PLANILHA_COLUNAS.forEach((col, idx) => {
+    const hint = HINTS[col]
+    if (!hint) return
+    const addr = XLSX.utils.encode_cell({ r: 0, c: idx })
+    const cell = ws[addr]
+    if (cell) {
+      cell.c = [{ a: "Berkahn", t: hint, T: true }]
+    }
+  })
+
   const wb = XLSX.utils.book_new()
   XLSX.utils.book_append_sheet(wb, ws, "orcamento")
 

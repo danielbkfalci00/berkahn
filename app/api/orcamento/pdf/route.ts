@@ -42,6 +42,15 @@ export async function GET(request: Request) {
     // Viewport desktop para layout consistente
     await page.setViewport({ width: 1440, height: 900 });
 
+    // Bypass do CookieBanner — evita banner sobrepondo a última seção do PDF
+    await page.evaluateOnNewDocument(() => {
+      try {
+        window.localStorage.setItem("cookieConsent", "accepted");
+      } catch {
+        // ignore
+      }
+    });
+
     // URL base - usa a URL correta para o ambiente
     const baseUrl = getBaseUrl(request.url);
     const pdfUrl = `${baseUrl}/orcamento/pdf?pacote=${pacoteId}`;
