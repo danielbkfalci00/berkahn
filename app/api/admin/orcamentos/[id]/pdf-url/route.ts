@@ -1,0 +1,44 @@
+import { NextResponse } from "next/server"
+import { createServiceClient } from "@/lib/supabase/admin"
+import { gerarSignedUrlPdf } from "@/lib/orcamento-pdf-storage"
+
+interface RouteContext {
+  params: Promise<{ id: string }>
+}
+
+export async function GET(_: Request, ctx: RouteContext) {
+  const { id } = await ctx.params
+
+  const supabase = createServiceClient()
+  const { data, error } = await supabase
+    .from("orcamentos")
+    .select("pdf_storage_path")
+    .eq("id", id)
+    .single()
+
+  const storagePath = (data as { pdf_storage_path: string | null } | null)?.pdf_storage_path
+  if (error || !storagePath) {
+    return NextResponse.json(
+      { error: "PDF ainda não gerado para este orçamento" },
+      { status: 404 }
+    )
+  }
+
+  try {
+    const signedUrl = await gerarSignedUrlPdf(storagePath)
+    await supabase
+      .from("orcamentos")
+      // @ts-expect-error supabase-js v2.90 não infere bem o Update genérico — fixar quando regenerar Database type via supabase gen
+      .update({ pdf_url: signedUrl })
+      .eq("id", id)
+    return NextResponse.json({ pdf_url: signedUrl })
+  } catch (err) {
+    return NextResponse.json(
+      {
+        error: "Falha ao gerar signed URL",
+        details: err instanceof Error ? err.message : "Erro desconhecido",
+      },
+      { status: 500 }
+    )
+  }
+}

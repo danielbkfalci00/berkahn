@@ -1,0 +1,63 @@
+@page {
+  size: A4;
+  margin: 0;
+}
+
+.root {
+  --c-off-white: #f4f2ec;
+  --c-champagne: #d9b061;
+  --c-charcoal: #1a1a1a;
+  --c-soft-gray: #666666;
+  --c-divider: rgba(0, 0, 0, 0.08);
+  --c-bg: #ffffff;
+
+  color: var(--c-charcoal);
+  font-family: var(--font-manrope), system-ui, sans-serif;
+  background: var(--c-bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.root :global(.est-display) {
+  font-family: var(--font-playfair), Georgia, serif;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.root :global(.est-eyebrow) {
+  font-size: 10pt;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-weight: 500;
+  color: var(--c-soft-gray);
+}
+
+.root :global(.est-secao) {
+  padding: 64px 72px;
+  page-break-after: always;
+  break-after: page;
+}
+
+.root :global(.est-secao-fundo-off) {
+  background: var(--c-off-white);
+}
+
+.root :global(.est-secao-fundo-escuro) {
+  background: var(--c-charcoal);
+  color: #ffffff;
+}
+
+.root :global(.est-numero-secao) {
+  font-family: var(--font-playfair), Georgia, serif;
+  font-size: 14pt;
+  color: var(--c-champagne);
+  letter-spacing: 0.04em;
+  font-weight: 700;
+}
+
+.root :global(.est-divisor-champagne) {
+  width: 56px;
+  height: 2px;
+  background: var(--c-champagne);
+  margin: 24px 0;
+}

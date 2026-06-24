@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Manrope, Caveat } from "next/font/google";
+import { Manrope, Caveat, Playfair_Display } from "next/font/google";
 import Script from "next/script";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { ClientLayout } from "@/components/layout/ClientLayout";
@@ -20,6 +20,13 @@ const caveat = Caveat({
   subsets: ["latin"],
   weight: ["400", "700"],
   variable: "--font-caveat",
+  display: "swap",
+});
+
+const playfair = Playfair_Display({
+  subsets: ["latin"],
+  weight: ["400", "600", "700", "800"],
+  variable: "--font-playfair",
   display: "swap",
 });
 
@@ -89,7 +96,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-BR" className={`${manrope.variable} ${caveat.variable}`}>
+    <html lang="pt-BR" className={`${manrope.variable} ${caveat.variable} ${playfair.variable}`}>
       <head>
         <link rel="preconnect" href="https://sfqaknxomxwmviarpwfy.supabase.co" />
         <link rel="preconnect" href="https://www.googletagmanager.com" />
