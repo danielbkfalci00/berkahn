@@ -1,20 +1,20 @@
 ---
 tipo: projeto
 criado: 2026-06-23
-atualizado: 2026-06-23
+atualizado: 2026-06-24
 tags:
   - project/orcamento-automacao
   - status/active
-ai_summary: Hub do Gerador de Estimativa Preliminar Premium — automação de PDFs de orçamento via admin Berkahn (form ou planilha-modelo). Sprints 1 e 2 entregues (fundação + renderer + 12 componentes + API generate-pdf + pipeline Sharp). Falta migration aplicar + Bruno setar CHROME_LOCAL_PATH. Plano em ~/.claude/plans/eu-preciso-seguir-com-optimized-starlight.md.
+ai_summary: Hub do Gerador de Estimativa Preliminar Premium — automação de PDFs de orçamento via admin Berkahn (form ou planilha-modelo). Sprints 1, 2 e 3 entregues (fundação + renderer + 12 componentes + form wizard 5 steps com livre navegação). Faltam Sprints 4 (planilha) e 5 (polish). Plano em ~/.claude/plans/eu-preciso-seguir-com-optimized-starlight.md.
 status: active
 projeto: orcamento-automacao
 kpi_sprints_total: 5
-kpi_sprints_completos: 2
+kpi_sprints_completos: 3
 kpi_orcamentos_gerados_mes: 0
 kpi_tempo_medio_geracao_segundos: 0
 kpi_componentes_pdf_criados: 12
 kpi_componentes_pdf_meta: 12
-kpi_atualizado_em: 2026-06-23
+kpi_atualizado_em: 2026-06-24
 contextos_aplicados:
   - stack-nextjs-supabase
   - berkahn-brand
@@ -51,9 +51,9 @@ code_paths:
 
 ## Status atual
 
-**Sprints 1 e 2 entregues** (2026-06-23): toda infra de geração de PDF pronta. Aguarda 2 ações manuais de Bruno antes do primeiro teste end-to-end: (1) rodar migration `006_create_orcamentos.sql` no Supabase SQL Editor; (2) setar `CHROME_LOCAL_PATH` em `.env.local` para dev local.
+**Sprints 1, 2 e 3 entregues** (2026-06-23 a 2026-06-24): toda infra de geração de PDF + form wizard prontos. Sprint 4 (planilha-modelo XLSX/CSV) e Sprint 5 (polish) são os próximos.
 
-Sprint 3 (form wizard) é o próximo. Sprints 4-5 (planilha + polish) seguem.
+**Sprint 3 destaques**: wizard de 5 passos (`OrcamentoWizard.tsx`) com navegação livre + indicador visual de validação por step (verde/amarelo/vazio). Sem Zod/zustand/react-hook-form (segue padrão `useState/useReducer` do PostEditor). Server actions em `app/admin/orcamentos/actions.ts`. Helpers de input próprios em `form-fields.tsx` (CurrencyField BRL, IntegerField, RadioPills, ChipsInput, TextField). Modo edição reusa o wizard via prop `orcamentoInicial`. Botão Editar no detalhe redireciona para `/admin/orcamentos/[id]/edit`. Finalizar valida tudo e redireciona pra detalhe (reusa GerarPdfButton/HeroUpload do Sprint 2).
 
 ## Visão geral
 
@@ -70,19 +70,21 @@ Reusa ~70% da infra de PDF existente — `puppeteer-core` + `@sparticuz/chromium
 - [x] Hub criado no vault
 - [x] Sprint 1 — fundação completa (migration, types, libs, API CRUD, esqueleto admin)
 - [x] Sprint 2 — renderer + 12 componentes + API generate-pdf + pipeline Sharp + página admin [id]
-- [ ] **Ação Bruno**: rodar migration 006 no Supabase SQL Editor
+- [x] Sprint 3 — form wizard 5 steps + server actions + form-fields + modo edição
+- [x] **Bruno**: migration 006 aplicada no Supabase
 - [ ] **Ação Bruno**: setar `CHROME_LOCAL_PATH` em `.env.local` para testar PDF localmente
-- [ ] Smoke test E2E (criar orçamento via API, subir hero, gerar PDF, validar visual)
-- [ ] Sprint 3 — form wizard com 5 steps + zod
+- [ ] Smoke test E2E em prod (criar orçamento via wizard, subir hero, gerar PDF, validar visual)
+- [ ] Sprint 4 — planilha-modelo XLSX/CSV (geração do template + parser strict + pré-preenchimento)
 
 ## KPIs (snapshot)
 
 | Métrica | Atual | Meta | Δ |
 |---------|-------|------|---|
-| Sprints completos | 2 | 5 | -3 |
+| Sprints completos | 3 | 5 | -2 |
 | Componentes PDF criados | 12 | 12 | ✅ |
+| Wizard steps criados | 5 | 5 | ✅ |
 | Orçamentos gerados/mês | 0 | TBD | aguarda 1º teste E2E |
-| Tempo médio geração PDF | n/d | < 30s | medir após migration |
+| Tempo médio geração PDF | n/d | < 30s | medir após teste em prod |
 
 ## Roadmap (5 sprints, 2-3 semanas full-time)
 
@@ -145,3 +147,4 @@ Reusa ~70% da infra de PDF existente — `puppeteer-core` + `@sparticuz/chromium
 ## Histórico recente
 
 - 2026-06-23: hub criado, plano aprovado, Sprint 1 entregue (DB + tipos + libs + API CRUD + esqueleto admin); Sprint 2 entregue (renderer A4 com gate HMAC, 12 componentes Playfair+Manrope, range bar SVG, API generate-pdf com viewport explícito + cookie bypass, pipeline Sharp hero, página admin [id] com `<GerarPdfButton />` e `<HeroUpload />`). TSC limpo. Falta Bruno rodar migration + setar `CHROME_LOCAL_PATH`.
+- 2026-06-24: Bruno rodou migration 006 no Supabase. Sprint 3 entregue: form wizard 5 steps (`OrcamentoWizard.tsx` + `Step1Cliente`/`Step2Obra`/`Step3ValoresRegime`/`Step4ListasEntrega`/`Step5Revisao` em `components/admin/orcamentos/steps/`), reducer + validações por step (`wizard-state.ts`), server actions (`actions.ts` com `criarOrcamento`/`atualizarOrcamento`/`finalizarOrcamento`), helpers de input (`form-fields.tsx` com CurrencyField/IntegerField/RadioPills/ChipsInput/TextField), Checkbox shadcn (`components/ui/checkbox.tsx` + `@radix-ui/react-checkbox`), páginas `/admin/orcamentos/novo/form` e `/admin/orcamentos/[id]/edit`, botão Editar no detalhe. Navegação livre com indicador visual (verde/amarelo/vazio) por step. `beforeunload` warn quando hasUnsavedChanges. Finalizar redireciona pra detalhe — reusa `<GerarPdfButton />` e `<HeroUpload />` do Sprint 2. TSC limpo.

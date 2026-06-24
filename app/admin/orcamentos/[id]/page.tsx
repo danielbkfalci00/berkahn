@@ -1,9 +1,10 @@
 import Link from "next/link"
 import { notFound } from "next/navigation"
-import { ArrowLeft, ExternalLink } from "lucide-react"
+import { ArrowLeft, ExternalLink, Pencil } from "lucide-react"
 import { createClient } from "@/lib/supabase/server"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
 import { HeroUpload } from "@/components/admin/orcamentos/HeroUpload"
 import { GerarPdfButton } from "@/components/admin/orcamentos/GerarPdfButton"
 import { PADROES_ACABAMENTO, REGIMES_COMERCIAIS } from "@/lib/orcamento-estimativa-data"
@@ -60,16 +61,24 @@ export default async function OrcamentoDetalhePage({ params }: PageProps) {
           <ArrowLeft className="h-3 w-3" />
           Voltar para lista
         </Link>
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between gap-4">
           <div>
             <h1 className="text-2xl font-semibold text-neutral-900">
               {o.cliente_nome}
             </h1>
             <p className="text-sm text-neutral-500 font-mono">{o.numero}</p>
           </div>
-          <Badge variant={o.status === "finalizado" ? "default" : "secondary"}>
-            {o.status === "rascunho" ? "Rascunho" : o.status === "finalizado" ? "Finalizado" : "Arquivado"}
-          </Badge>
+          <div className="flex items-center gap-3">
+            <Link href={`/admin/orcamentos/${o.id}/edit`}>
+              <Button variant="outline" size="sm">
+                <Pencil className="h-3.5 w-3.5 mr-1.5" />
+                Editar
+              </Button>
+            </Link>
+            <Badge variant={o.status === "finalizado" ? "default" : "secondary"}>
+              {o.status === "rascunho" ? "Rascunho" : o.status === "finalizado" ? "Finalizado" : "Arquivado"}
+            </Badge>
+          </div>
         </div>
       </div>
 
@@ -170,7 +179,7 @@ export default async function OrcamentoDetalhePage({ params }: PageProps) {
               </div>
             </dl>
             <p className="mt-4 text-xs text-neutral-400">
-              Edição plena chega no Sprint 3 (wizard).
+              Para editar qualquer campo, use o botão Editar no topo da página.
             </p>
           </Card>
         </div>
