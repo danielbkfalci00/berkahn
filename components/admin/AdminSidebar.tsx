@@ -8,6 +8,7 @@ import {
   FileText,
   Presentation,
   FileSpreadsheet,
+  Calculator,
   Settings,
   LogOut,
   ChevronLeft,
@@ -39,6 +40,11 @@ const navigation = [
     name: "Apresentações",
     href: "/admin/apresentacoes",
     icon: Presentation,
+  },
+  {
+    name: "Orçamentos",
+    href: "/admin/orcamentos",
+    icon: Calculator,
   },
   {
     name: "Propostas",
