@@ -1,12 +1,13 @@
 import Link from "next/link"
 import { notFound } from "next/navigation"
-import { ArrowLeft, ExternalLink, Pencil } from "lucide-react"
+import { ArrowLeft, ExternalLink, Pencil, Archive } from "lucide-react"
 import { createClient } from "@/lib/supabase/server"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { HeroUpload } from "@/components/admin/orcamentos/HeroUpload"
 import { GerarPdfButton } from "@/components/admin/orcamentos/GerarPdfButton"
+import { ArquivarButton } from "@/components/admin/orcamentos/ArquivarButton"
 import { PADROES_ACABAMENTO, REGIMES_COMERCIAIS } from "@/lib/orcamento-estimativa-data"
 import type { Orcamento } from "@/types/orcamento-estimativa"
 
@@ -69,18 +70,33 @@ export default async function OrcamentoDetalhePage({ params }: PageProps) {
             <p className="text-sm text-neutral-500 font-mono">{o.numero}</p>
           </div>
           <div className="flex items-center gap-3">
-            <Link href={`/admin/orcamentos/${o.id}/edit`}>
-              <Button variant="outline" size="sm">
-                <Pencil className="h-3.5 w-3.5 mr-1.5" />
-                Editar
-              </Button>
-            </Link>
+            {o.status !== "arquivado" && (
+              <Link href={`/admin/orcamentos/${o.id}/edit`}>
+                <Button variant="outline" size="sm">
+                  <Pencil className="h-3.5 w-3.5 mr-1.5" />
+                  Editar
+                </Button>
+              </Link>
+            )}
+            <ArquivarButton orcamentoId={o.id} status={o.status} />
             <Badge variant={o.status === "finalizado" ? "default" : "secondary"}>
               {o.status === "rascunho" ? "Rascunho" : o.status === "finalizado" ? "Finalizado" : "Arquivado"}
             </Badge>
           </div>
         </div>
       </div>
+
+      {o.status === "arquivado" && (
+        <Card className="p-4 border-amber-200 bg-amber-50">
+          <div className="flex items-start gap-2 text-sm text-amber-800">
+            <Archive className="h-4 w-4 flex-shrink-0 mt-0.5" />
+            <span>
+              Orçamento arquivado — desarquive para editar, atualizar hero ou
+              gerar PDF.
+            </span>
+          </div>
+        </Card>
+      )}
 
       <div className="grid gap-6 lg:grid-cols-3">
         <div className="lg:col-span-2 space-y-6">
@@ -185,25 +201,39 @@ export default async function OrcamentoDetalhePage({ params }: PageProps) {
         </div>
 
         <div className="space-y-6">
-          <HeroUpload orcamentoId={o.id} />
+          {o.status !== "arquivado" && <HeroUpload orcamentoId={o.id} />}
 
-          <Card className="p-6">
-            <h3 className="text-sm font-semibold text-neutral-900 mb-3">PDF</h3>
-            <GerarPdfButton orcamentoId={o.id} />
-            {o.pdf_url && (
-              <div className="mt-4 pt-4 border-t border-neutral-200">
-                <p className="text-xs text-neutral-500 mb-2">Última versão gerada:</p>
-                <a
-                  href={o.pdf_url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 text-sm text-neutral-900 hover:underline"
+          {(o.status !== "arquivado" || o.pdf_url) && (
+            <Card className="p-6">
+              <h3 className="text-sm font-semibold text-neutral-900 mb-3">PDF</h3>
+              {o.status !== "arquivado" && (
+                <GerarPdfButton orcamentoId={o.id} />
+              )}
+              {o.pdf_url && (
+                <div
+                  className={
+                    o.status !== "arquivado"
+                      ? "mt-4 pt-4 border-t border-neutral-200"
+                      : ""
+                  }
                 >
-                  Abrir PDF <ExternalLink className="h-3 w-3" />
-                </a>
-              </div>
-            )}
-          </Card>
+                  <p className="text-xs text-neutral-500 mb-2">
+                    {o.status === "arquivado"
+                      ? "PDF gerado antes de arquivar:"
+                      : "Última versão gerada:"}
+                  </p>
+                  <a
+                    href={o.pdf_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-sm text-neutral-900 hover:underline"
+                  >
+                    Abrir PDF <ExternalLink className="h-3 w-3" />
+                  </a>
+                </div>
+              )}
+            </Card>
+          )}
         </div>
       </div>
     </div>

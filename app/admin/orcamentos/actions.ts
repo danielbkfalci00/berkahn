@@ -60,6 +60,18 @@ export async function criarRascunhoDePlanilha(
   return criarOrcamento(insert)
 }
 
+export async function arquivarOrcamento(
+  id: string
+): Promise<ActionResultUpdate> {
+  return atualizarOrcamento(id, { status: "arquivado" })
+}
+
+export async function desarquivarOrcamento(
+  id: string
+): Promise<ActionResultUpdate> {
+  return atualizarOrcamento(id, { status: "rascunho" })
+}
+
 export async function finalizarOrcamento(
   id: string,
   patch: OrcamentoUpdate
