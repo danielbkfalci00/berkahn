@@ -2,9 +2,11 @@
 
 import { revalidatePath } from "next/cache"
 import { createServiceClient } from "@/lib/supabase/admin"
+import { rowParaInsert } from "@/lib/orcamento-planilha"
 import type {
   OrcamentoInsert,
   OrcamentoUpdate,
+  PlanilhaOrcamentoRow,
 } from "@/types/orcamento-estimativa"
 
 type ActionResultCreate =
@@ -49,6 +51,13 @@ export async function atualizarOrcamento(
   revalidatePath("/admin/orcamentos")
   revalidatePath(`/admin/orcamentos/${id}`)
   return { ok: true }
+}
+
+export async function criarRascunhoDePlanilha(
+  row: PlanilhaOrcamentoRow
+): Promise<ActionResultCreate> {
+  const insert = rowParaInsert(row)
+  return criarOrcamento(insert)
 }
 
 export async function finalizarOrcamento(

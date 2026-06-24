@@ -10,6 +10,7 @@ const nextConfig: NextConfig = {
   ...(BUILD_MODE === "static" && {
     output: "export",
   }),
+  serverExternalPackages: ["xlsx-js-style"],
   images: {
     qualities: [65, 70, 75, 78, 80, 85, 90],
     ...(BUILD_MODE === "static"

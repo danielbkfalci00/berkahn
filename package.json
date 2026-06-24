@@ -45,6 +45,7 @@
     "motion": "^12.34.0",
     "next": "^15.0.0",
     "next-view-transitions": "^0.3.5",
+    "papaparse": "^5.5.4",
     "puppeteer-core": "^24.36.1",
     "react": "^18.3.0",
     "react-dom": "^18.3.0",
@@ -53,10 +54,12 @@
     "recharts": "^3.6.0",
     "sharp": "^0.34.5",
     "tailwind-merge": "^2.2.0",
-    "topojson-client": "^3.1.0"
+    "topojson-client": "^3.1.0",
+    "xlsx-js-style": "^1.2.0"
   },
   "devDependencies": {
     "@types/node": "^20.10.0",
+    "@types/papaparse": "^5.5.2",
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",
     "@types/react-simple-maps": "^3.0.6",

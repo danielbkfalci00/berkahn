@@ -1,0 +1,26 @@
+import { NextResponse } from "next/server"
+import { gerarTemplateXlsx } from "@/lib/orcamento-template-xlsx"
+
+export const dynamic = "force-dynamic"
+
+export async function GET() {
+  try {
+    const buffer = await gerarTemplateXlsx()
+    return new NextResponse(new Uint8Array(buffer), {
+      status: 200,
+      headers: {
+        "Content-Type":
+          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        "Content-Disposition":
+          'attachment; filename="modelo-orcamento.xlsx"',
+        "Cache-Control": "public, max-age=86400, immutable",
+      },
+    })
+  } catch (err) {
+    console.error("Falha ao gerar template:", err)
+    return NextResponse.json(
+      { error: "Falha ao gerar template" },
+      { status: 500 }
+    )
+  }
+}

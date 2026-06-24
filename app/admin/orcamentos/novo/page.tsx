@@ -55,10 +55,6 @@ export default function NovoOrcamentoPage() {
           </Card>
         </Link>
       </div>
-
-      <p className="text-xs text-neutral-400">
-        Sprint 1 — formulário e upload chegam nos Sprints 3 e 4.
-      </p>
     </div>
   )
 }
