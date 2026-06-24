@@ -49,7 +49,7 @@ export function GerarPdfButton({ orcamentoId }: Props) {
       <Button
         onClick={gerar}
         disabled={state.status === "loading"}
-        className="bg-neutral-900 hover:bg-neutral-800"
+        className="bg-neutral-900 text-white hover:bg-neutral-800 disabled:bg-neutral-700 disabled:text-white/80 disabled:opacity-100"
       >
         {state.status === "loading" ? (
           <>

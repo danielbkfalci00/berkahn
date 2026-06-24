@@ -151,27 +151,37 @@ export function OrcamentoWizard({ orcamentoInicial }: Props) {
 
   const salvarRascunho = async () => {
     setSalvar({ status: "salvando", mensagem: null })
-    if (ehNovo) {
-      const res = await criarOrcamento(state.dados)
-      if (!res.ok) {
-        setSalvar({ status: "erro", mensagem: res.erro })
-        return
+    try {
+      if (ehNovo) {
+        const res = await criarOrcamento(state.dados)
+        if (!res.ok) {
+          setSalvar({ status: "erro", mensagem: res.erro })
+          return
+        }
+        setOrcamentoId(res.id)
+        dispatch({ type: "MARK_SAVED" })
+        setSalvar({
+          status: "ok",
+          mensagem: `Rascunho salvo (${res.numero})`,
+        })
+      } else {
+        const id = orcamentoId ?? orcamentoInicial!.id
+        const res = await atualizarOrcamento(id, state.dados)
+        if (!res.ok) {
+          setSalvar({ status: "erro", mensagem: res.erro })
+          return
+        }
+        dispatch({ type: "MARK_SAVED" })
+        setSalvar({ status: "ok", mensagem: "Rascunho atualizado" })
       }
-      setOrcamentoId(res.id)
-      dispatch({ type: "MARK_SAVED" })
+    } catch (err) {
       setSalvar({
-        status: "ok",
-        mensagem: `Rascunho salvo (${res.numero})`,
+        status: "erro",
+        mensagem:
+          err instanceof Error
+            ? `Falha inesperada: ${err.message}`
+            : "Falha inesperada ao salvar",
       })
-    } else {
-      const id = orcamentoId ?? orcamentoInicial!.id
-      const res = await atualizarOrcamento(id, state.dados)
-      if (!res.ok) {
-        setSalvar({ status: "erro", mensagem: res.erro })
-        return
-      }
-      dispatch({ type: "MARK_SAVED" })
-      setSalvar({ status: "ok", mensagem: "Rascunho atualizado" })
     }
   }
 
@@ -191,25 +201,35 @@ export function OrcamentoWizard({ orcamentoInicial }: Props) {
 
     setSalvar({ status: "finalizando", mensagem: null })
 
-    let id = orcamentoId
-    if (ehNovo) {
-      const criacao = await criarOrcamento(state.dados)
-      if (!criacao.ok) {
-        setSalvar({ status: "erro", mensagem: criacao.erro })
+    try {
+      let id = orcamentoId
+      if (ehNovo) {
+        const criacao = await criarOrcamento(state.dados)
+        if (!criacao.ok) {
+          setSalvar({ status: "erro", mensagem: criacao.erro })
+          return
+        }
+        id = criacao.id
+        setOrcamentoId(id)
+      }
+      const idFinal = id ?? orcamentoInicial!.id
+      const finalizacao = await finalizarOrcamento(idFinal, state.dados)
+      if (!finalizacao.ok) {
+        setSalvar({ status: "erro", mensagem: finalizacao.erro })
         return
       }
-      id = criacao.id
-      setOrcamentoId(id)
+      dispatch({ type: "MARK_SAVED" })
+      setSalvar({ status: "ok", mensagem: "Orçamento finalizado" })
+      router.push(`/admin/orcamentos/${idFinal}`)
+    } catch (err) {
+      setSalvar({
+        status: "erro",
+        mensagem:
+          err instanceof Error
+            ? `Falha inesperada: ${err.message}`
+            : "Falha inesperada ao finalizar",
+      })
     }
-    const idFinal = id ?? orcamentoInicial!.id
-    const finalizacao = await finalizarOrcamento(idFinal, state.dados)
-    if (!finalizacao.ok) {
-      setSalvar({ status: "erro", mensagem: finalizacao.erro })
-      return
-    }
-    dispatch({ type: "MARK_SAVED" })
-    setSalvar({ status: "ok", mensagem: "Orçamento finalizado" })
-    router.push(`/admin/orcamentos/${idFinal}`)
   }
 
   const erros = errosDoStep(stepAtivo, state.dados)
@@ -352,7 +372,7 @@ export function OrcamentoWizard({ orcamentoInicial }: Props) {
             disabled={
               salvar.status === "salvando" || salvar.status === "finalizando"
             }
-            className="bg-neutral-900 hover:bg-neutral-800"
+            className="bg-neutral-900 text-white hover:bg-neutral-800 disabled:bg-neutral-700 disabled:text-white/80 disabled:opacity-100"
           >
             {salvar.status === "finalizando" ? (
               <>

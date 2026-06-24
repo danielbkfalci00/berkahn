@@ -107,7 +107,7 @@ export default async function OrcamentosPage({ searchParams }: PageProps) {
           </p>
         </div>
         <Link href="/admin/orcamentos/novo">
-          <Button className="bg-neutral-900 hover:bg-neutral-800">
+          <Button className="bg-neutral-900 text-white hover:bg-neutral-800">
             <Plus className="h-4 w-4 mr-2" />
             Novo Orçamento
           </Button>

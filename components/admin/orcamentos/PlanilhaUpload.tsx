@@ -325,7 +325,7 @@ export function PlanilhaUpload() {
             <Button
               onClick={abrirNoWizard}
               disabled={!podeAbrir}
-              className="bg-neutral-900 hover:bg-neutral-800"
+              className="bg-neutral-900 text-white hover:bg-neutral-800 disabled:bg-neutral-700 disabled:text-white/80 disabled:opacity-100"
             >
               <Send className="h-4 w-4 mr-2" />
               Abrir no wizard
