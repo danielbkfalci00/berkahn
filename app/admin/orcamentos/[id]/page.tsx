@@ -47,6 +47,19 @@ export default async function OrcamentoDetalhePage({ params }: PageProps) {
   }
   const o = data as Orcamento
 
+  // Gera signed URL da hero (bucket privado) pra preview persistir entre reloads
+  let heroPreviewUrl: string | null = null
+  if (o.hero_image_url) {
+    if (o.hero_image_url.startsWith("http")) {
+      heroPreviewUrl = o.hero_image_url
+    } else {
+      const { data: signed } = await supabase.storage
+        .from("orcamento-heroes")
+        .createSignedUrl(o.hero_image_url, 60 * 60)
+      heroPreviewUrl = signed?.signedUrl ?? null
+    }
+  }
+
   const padrao = PADROES_ACABAMENTO.find((p) => p.id === o.projeto_padrao)?.nome
   const regime =
     o.regime_recomendado === "indefinido"
@@ -202,7 +215,12 @@ export default async function OrcamentoDetalhePage({ params }: PageProps) {
         </div>
 
         <div className="space-y-6">
-          {o.status !== "arquivado" && <HeroUpload orcamentoId={o.id} />}
+          {o.status !== "arquivado" && (
+            <HeroUpload
+              orcamentoId={o.id}
+              initialPreviewUrl={heroPreviewUrl}
+            />
+          )}
 
           {(o.status !== "arquivado" || o.pdf_url) && (
             <Card className="p-6">
