@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button"
 import { HeroUpload } from "@/components/admin/orcamentos/HeroUpload"
 import { GerarPdfButton } from "@/components/admin/orcamentos/GerarPdfButton"
 import { ArquivarButton } from "@/components/admin/orcamentos/ArquivarButton"
+import { BaixarPdfButton } from "@/components/admin/orcamentos/BaixarPdfButton"
 import { PADROES_ACABAMENTO, REGIMES_COMERCIAIS } from "@/lib/orcamento-estimativa-data"
 import type { Orcamento } from "@/types/orcamento-estimativa"
 
@@ -222,14 +223,20 @@ export default async function OrcamentoDetalhePage({ params }: PageProps) {
                       ? "PDF gerado antes de arquivar:"
                       : "Última versão gerada:"}
                   </p>
-                  <a
-                    href={o.pdf_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-sm text-neutral-900 hover:underline"
-                  >
-                    Abrir PDF <ExternalLink className="h-3 w-3" />
-                  </a>
+                  <div className="flex flex-wrap items-center gap-3">
+                    <BaixarPdfButton
+                      pdfUrl={o.pdf_url}
+                      filename={`Orcamento-${o.numero}.pdf`}
+                    />
+                    <a
+                      href={o.pdf_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 text-xs text-neutral-600 hover:text-neutral-900 hover:underline"
+                    >
+                      Abrir em nova aba <ExternalLink className="h-3 w-3" />
+                    </a>
+                  </div>
                 </div>
               )}
             </Card>
