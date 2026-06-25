@@ -10,6 +10,40 @@ interface Props {
   initialPreviewUrl?: string | null
 }
 
+// Comprime via Canvas pra ficar abaixo do limite de body do Vercel
+// (~4.5MB) e do nosso server (10MB). Reduz pra max 1920px no maior lado
+// + JPEG quality 0.85. Server processa via Sharp depois (resize/webp).
+async function comprimirImagem(file: File, maxDim = 1920): Promise<Blob> {
+  const url = URL.createObjectURL(file)
+  try {
+    const img = await new Promise<HTMLImageElement>((resolve, reject) => {
+      const i = new Image()
+      i.onload = () => resolve(i)
+      i.onerror = () => reject(new Error("Não consegui carregar a imagem"))
+      i.src = url
+    })
+    let { width, height } = img
+    if (width > maxDim || height > maxDim) {
+      const ratio = Math.min(maxDim / width, maxDim / height)
+      width = Math.round(width * ratio)
+      height = Math.round(height * ratio)
+    }
+    const canvas = document.createElement("canvas")
+    canvas.width = width
+    canvas.height = height
+    const ctx = canvas.getContext("2d")
+    if (!ctx) throw new Error("Canvas 2D não disponível neste navegador")
+    ctx.drawImage(img, 0, 0, width, height)
+    const blob = await new Promise<Blob | null>((resolve) =>
+      canvas.toBlob(resolve, "image/jpeg", 0.85)
+    )
+    if (!blob) throw new Error("Falha ao comprimir a imagem")
+    return blob
+  } finally {
+    URL.revokeObjectURL(url)
+  }
+}
+
 interface UploadState {
   status: "idle" | "uploading" | "success" | "error"
   previewUrl: string | null
@@ -28,26 +62,40 @@ export function HeroUpload({ orcamentoId, initialPreviewUrl }: Props) {
   const upload = useCallback(
     async (file: File) => {
       setState({ status: "uploading", previewUrl: null, message: null })
-      const fd = new FormData()
-      fd.append("file", file)
       try {
+        const payload = await comprimirImagem(file)
+        const fd = new FormData()
+        const nome = file.name.replace(/\.[^.]+$/, "") + ".jpg"
+        fd.append("file", payload, nome)
+
         const res = await fetch(`/api/admin/orcamentos/${orcamentoId}/hero`, {
           method: "POST",
           body: fd,
         })
-        const json = await res.json()
+        // Server pode retornar texto plain em erros de infra (413 do Vercel etc)
+        const texto = await res.text()
+        let json: {
+          error?: string
+          signedUrl?: string
+          sizeBytes?: number
+          path?: string
+        } = {}
+        try {
+          json = JSON.parse(texto)
+        } catch {
+          // resposta não-JSON (Vercel proxy, gateway, etc)
+        }
         if (!res.ok) {
-          setState({
-            status: "error",
-            previewUrl: null,
-            message: json.error ?? "Falha no upload",
-          })
+          const msg =
+            json.error ??
+            (texto && texto.length < 200 ? texto : `HTTP ${res.status}`)
+          setState({ status: "error", previewUrl: null, message: msg })
           return
         }
         setState({
           status: "success",
-          previewUrl: json.signedUrl,
-          message: `Imagem processada (${Math.round(json.sizeBytes / 1024)}KB)`,
+          previewUrl: json.signedUrl ?? null,
+          message: `Imagem processada (${Math.round((json.sizeBytes ?? 0) / 1024)}KB)`,
         })
       } catch (err) {
         setState({
