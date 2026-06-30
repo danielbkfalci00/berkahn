@@ -39,8 +39,8 @@ export async function GET(request: Request) {
 
     const page = await browser.newPage();
 
-    // Viewport desktop para layout consistente
-    await page.setViewport({ width: 1440, height: 900 });
+    // Viewport A4-native (794×1123 @ 96dpi) com DPR=2 — espelha o renderer admin
+    await page.setViewport({ width: 794, height: 1123, deviceScaleFactor: 2 });
 
     // Bypass do CookieBanner — evita banner sobrepondo a última seção do PDF
     await page.evaluateOnNewDocument(() => {

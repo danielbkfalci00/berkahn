@@ -3,7 +3,17 @@ import { createServiceClient } from "@/lib/supabase/admin"
 import { launchBrowser, getBaseUrl } from "@/lib/puppeteer-launch"
 import { assinarToken, ORCAMENTO_TOKEN_HEADER } from "@/lib/orcamento-token"
 import { salvarPdfOrcamento } from "@/lib/orcamento-pdf-storage"
+import { LOGO_DATA_URI } from "@/lib/orcamento-logo-data-uri"
 import type { Orcamento } from "@/types/orcamento-estimativa"
+
+function escapeHtml(s: string): string {
+  return s
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;")
+}
 
 export const maxDuration = 60
 export const dynamic = "force-dynamic"
@@ -57,7 +67,10 @@ export async function POST(request: Request, ctx: RouteContext) {
   try {
     browser = await launchBrowser()
     const page = await browser.newPage()
-    await page.setViewport({ width: 1440, height: 900 })
+    // Viewport A4-native (794×1123 @ 96dpi) com DPR=2 pra rasterização nítida.
+    // Mistura desktop viewport + preferCSSPageSize causa scale-down não-uniforme
+    // (pt vs px escalam diferente) — origem dos cards "saindo da borda".
+    await page.setViewport({ width: 794, height: 1123, deviceScaleFactor: 2 })
 
     await page.evaluateOnNewDocument(() => {
       try {
@@ -77,11 +90,18 @@ export async function POST(request: Request, ctx: RouteContext) {
     await page.evaluateHandle("document.fonts.ready")
     await new Promise((resolve) => setTimeout(resolve, 800))
 
+    const cliente = escapeHtml(orcamento.cliente_nome)
+    const numero = escapeHtml(orcamento.numero)
+    const headerTemplate = `<div style="width:100%;padding:0 15mm;display:flex;justify-content:space-between;align-items:center;font-size:8pt;color:#666;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif"><img src="${LOGO_DATA_URI}" style="height:14px"/><span style="letter-spacing:0.05em">${cliente} · ${numero}</span></div>`
+    const footerTemplate = `<div style="width:100%;padding:0 15mm;text-align:right;font-size:8pt;color:#666;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif">${numero} · Página <span class="pageNumber"></span> de <span class="totalPages"></span> · Estimativa Preliminar</div>`
+
     const pdfUint8 = await page.pdf({
       format: "A4",
       printBackground: true,
-      margin: { top: 0, right: 0, bottom: 0, left: 0 },
-      preferCSSPageSize: true,
+      displayHeaderFooter: true,
+      headerTemplate,
+      footerTemplate,
+      margin: { top: "15mm", bottom: "12mm", left: 0, right: 0 },
     })
     const pdfBuffer = Buffer.from(pdfUint8)
 

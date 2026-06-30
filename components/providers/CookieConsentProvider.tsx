@@ -14,8 +14,20 @@ import {
   useCallback,
   ReactNode,
 } from "react";
+import { usePathname } from "next/navigation";
 
 type ConsentLevel = "all" | "necessary" | null;
+
+// Renderers de PDF onde o cookie banner não deve aparecer (puppeteer rasteriza
+// e o banner ficaria gravado no PDF). Allowlist explícita — NÃO usar prefixo
+// solto `/orcamento` porque quebraria a página LSF pública.
+function ehRendererPdf(pathname: string | null): boolean {
+  if (!pathname) return false;
+  return (
+    pathname === "/orcamento/pdf" ||
+    pathname.startsWith("/orcamento/estimativa/")
+  );
+}
 
 interface CookieConsentContextType {
   consent: ConsentLevel;
@@ -41,8 +53,12 @@ interface StoredConsent {
 export function CookieConsentProvider({ children }: { children: ReactNode }) {
   const [consent, setConsent] = useState<ConsentLevel>(null);
   const [isVisible, setIsVisible] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
+    // Skip banner em renderers de PDF — puppeteer rasteriza e ficaria no PDF
+    if (ehRendererPdf(pathname)) return;
+
     const stored = localStorage.getItem(STORAGE_KEY);
     if (stored) {
       try {
@@ -57,7 +73,7 @@ export function CookieConsentProvider({ children }: { children: ReactNode }) {
     }
     const timer = setTimeout(() => setIsVisible(true), 1500);
     return () => clearTimeout(timer);
-  }, []);
+  }, [pathname]);
 
   const saveConsent = useCallback((level: ConsentLevel) => {
     const data: StoredConsent = {
