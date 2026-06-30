@@ -1,5 +1,6 @@
 import { LOGOS, TAGLINE } from "@/lib/orcamento-estimativa-data"
 import { CONTATOS } from "@/lib/orcamento-data"
+import { EstimativaImage } from "./EstimativaImage"
 
 interface Props {
   responsavelTecnico: string | null
@@ -60,6 +61,15 @@ export function ContatoFinal({ responsavelTecnico }: Props) {
           A Berkahn permanece à disposição para esclarecer qualquer ponto desta
           estimativa preliminar e avançar para a próxima etapa do empreendimento.
         </p>
+      </div>
+
+      <div style={{ margin: "0 0 32px" }}>
+        <EstimativaImage
+          src="/images/empresa/segunda-imagem.webp"
+          alt="Berkahn — construção em steel frame"
+          aspect="16:9"
+          rounded={false}
+        />
       </div>
 
       <div

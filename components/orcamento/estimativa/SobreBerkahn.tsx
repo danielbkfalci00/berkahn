@@ -1,8 +1,9 @@
 import { SOBRE_BERKAHN } from "@/lib/orcamento-estimativa-data"
+import { EstimativaImage } from "./EstimativaImage"
 
 export function SobreBerkahn() {
   return (
-    <section className="est-secao est-secao-fundo-off" style={{ minHeight: "297mm" }}>
+    <section className="est-secao est-secao-fundo-off">
       <div className="est-numero-secao">02</div>
       <h2
         className="est-display"
@@ -12,12 +13,20 @@ export function SobreBerkahn() {
       </h2>
       <div className="est-divisor-champagne" />
 
+      <div style={{ margin: "0 0 32px" }}>
+        <EstimativaImage
+          src="/images/empresa/primeira-imagem.webp"
+          alt="Equipe e canteiro Berkahn"
+          aspect="16:9"
+        />
+      </div>
+
       <div
         style={{
           display: "grid",
           gridTemplateColumns: "1.1fr 1fr",
           gap: 56,
-          marginTop: 32,
+          marginTop: 16,
         }}
       >
         <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>

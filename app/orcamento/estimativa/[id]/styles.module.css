@@ -1,6 +1,6 @@
 @page {
   size: A4;
-  margin: 0;
+  /* margem controlada pelo puppeteer page.pdf({margin}) para coordenar com headerTemplate/footerTemplate */
 }
 
 .root {
@@ -33,7 +33,8 @@
 }
 
 .root :global(.est-secao) {
-  padding: 64px 72px;
+  /* Top reduzido pra não duplicar com margin-top do headerTemplate puppeteer (15mm) */
+  padding: 36px 56px 48px;
   page-break-after: always;
   break-after: page;
 }

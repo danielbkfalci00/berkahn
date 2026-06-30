@@ -1,13 +1,23 @@
 import { PADROES_ACABAMENTO } from "@/lib/orcamento-estimativa-data"
 import type { PadraoAcabamento } from "@/types/orcamento-estimativa"
+import { EstimativaImage } from "./EstimativaImage"
 
 interface Props {
   padraoEscolhido: PadraoAcabamento
 }
 
+// Mapa de imagem por padrão. Ajustar conforme novo portfólio.
+const IMAGENS_PADRAO: Record<PadraoAcabamento, string> = {
+  baixo: "/images/galeria/projeto-08.webp",
+  medio: "/images/galeria/projeto-15.webp",
+  alto: "/images/galeria/projeto-22.webp",
+  altissimo:
+    "/images/apresentacao/casa-laranjeiras/casa-laranjeiras-living.webp",
+}
+
 export function PadroesAcabamento({ padraoEscolhido }: Props) {
   return (
-    <section className="est-secao est-secao-fundo-off" style={{ minHeight: "297mm" }}>
+    <section className="est-secao est-secao-fundo-off">
       <div className="est-numero-secao">04</div>
       <h2
         className="est-display"
@@ -95,6 +105,45 @@ export function PadroesAcabamento({ padraoEscolhido }: Props) {
             </div>
           )
         })}
+      </div>
+
+      <div style={{ marginTop: 32 }}>
+        <p
+          className="est-eyebrow"
+          style={{ marginBottom: 16 }}
+        >
+          Referências visuais
+        </p>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(2, 1fr)",
+            gap: 16,
+          }}
+        >
+          {PADROES_ACABAMENTO.map((p) => {
+            const ativo = p.id === padraoEscolhido
+            return (
+              <div
+                key={p.id}
+                style={{
+                  borderTop: ativo
+                    ? "2px solid var(--c-champagne)"
+                    : "2px solid transparent",
+                  paddingTop: 8,
+                  opacity: ativo ? 1 : 0.55,
+                }}
+              >
+                <EstimativaImage
+                  src={IMAGENS_PADRAO[p.id]}
+                  alt={`Exemplo de padrão ${p.nome}`}
+                  caption={p.nome}
+                  aspect="3:2"
+                />
+              </div>
+            )
+          })}
+        </div>
       </div>
     </section>
   )
