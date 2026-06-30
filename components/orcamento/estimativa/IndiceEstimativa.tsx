@@ -6,7 +6,7 @@ interface Props {
 
 export function IndiceEstimativa({ secoes }: Props) {
   return (
-    <section className="est-secao est-secao-fundo-off" style={{ minHeight: "297mm" }}>
+    <section className="est-secao est-secao-fundo-off">
       <div className="est-eyebrow">Índice</div>
       <h2
         className="est-display"

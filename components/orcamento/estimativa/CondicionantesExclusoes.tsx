@@ -86,7 +86,7 @@ export function CondicionantesExclusoes({
   ]
 
   return (
-    <section className="est-secao" style={{ minHeight: "297mm" }}>
+    <section className="est-secao">
       <div className="est-numero-secao">07</div>
       <h2
         className="est-display"

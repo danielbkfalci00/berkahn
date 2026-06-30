@@ -32,7 +32,7 @@ export function EstimativaInvestimento({
   const trackHeight = 14
 
   return (
-    <section className="est-secao" style={{ minHeight: "297mm" }}>
+    <section className="est-secao">
       <div className="est-numero-secao">05</div>
       <h2
         className="est-display"

@@ -7,7 +7,7 @@ interface Props {
 
 export function RegimesComerciais({ regimeRecomendado }: Props) {
   return (
-    <section className="est-secao est-secao-fundo-off" style={{ minHeight: "297mm" }}>
+    <section className="est-secao est-secao-fundo-off">
       <div className="est-numero-secao">08</div>
       <h2
         className="est-display"

@@ -1,15 +1,15 @@
 ---
 tipo: projeto
 criado: 2026-06-23
-atualizado: 2026-06-24
+atualizado: 2026-06-30
 tags:
   - project/orcamento-automacao
   - status/published
-ai_summary: Hub do Gerador de Estimativa Preliminar Premium — automação de PDFs de orçamento via admin Berkahn (form ou planilha-modelo). Sprints 1-5 entregues e tipos Supabase regenerados (6 @ts-expect-error removidos). MVP completo em produção. Plano em ~/.claude/plans/eu-preciso-seguir-com-optimized-starlight.md.
+ai_summary: Hub do Gerador de Estimativa Preliminar Premium — automação de PDFs de orçamento via admin Berkahn (form ou planilha-modelo). Sprints 1-6 entregues — Sprint 6 polish PDF profissional (cookie bypass, viewport A4-native, header/footer com paginação, imagens em Sobre/Padrões/Contato, refino tipografia). MVP completo em produção. Plano em ~/.claude/plans/sprint-4-do-projeto-stateless-pebble.md.
 status: active
 projeto: orcamento-automacao
-kpi_sprints_total: 5
-kpi_sprints_completos: 5
+kpi_sprints_total: 6
+kpi_sprints_completos: 6
 kpi_orcamentos_gerados_mes: 0
 kpi_tempo_medio_geracao_segundos: 0
 kpi_componentes_pdf_criados: 12
@@ -165,6 +165,7 @@ Reusa ~70% da infra de PDF existente — `puppeteer-core` + `@sparticuz/chromium
 
 ## Histórico recente
 
+- 2026-06-30: Sprint 6 entregue: polish profissional do PDF. Bruno gerou primeiro PDF em prod (BRK-2026-0001, 27pp, 2.6MB) e reportou cookie banner no PDF, cards saindo da borda, falta de imagens, sem header/footer. **Frente A — Cookie + viewport**: `CookieConsentProvider` (components/providers/) agora usa `usePathname()` e skip do setTimeout de visibilidade quando path é `/orcamento/pdf` ou `/orcamento/estimativa/*` (allowlist explícita — NÃO pega `/orcamento` público LSF, preserva LGPD). Viewport puppeteer trocado 1440x900 → 794x1123 DPR=2 (A4 nativo @96dpi) em 2 routes (admin + LSF). **Frente C — Header/footer + page.pdf options**: trocado `preferCSSPageSize: true + margin: 0` por `format: 'A4' + margin: {top:15mm, bottom:12mm, left:0, right:0}` (resolve conflito CSS @page × puppeteer). `displayHeaderFooter: true` com `headerTemplate` (logo + cliente·numero) e `footerTemplate` (numero · Página X de Y). Logo via constante TS build-time (`lib/orcamento-logo-data-uri.ts` gerada por `scripts/encode-orcamento-logo.mjs`) — sem fs.readFileSync runtime, sem risco ENOENT. **Frente B — Imagens**: novo `EstimativaImage.tsx` helper (`<img>` nativo + aspect ratio + caption). Imagens em: SobreBerkahn (16:9 `/images/empresa/primeira-imagem.webp`), PadroesAcabamento (grid 2x2 de 4 referências visuais com highlight do escolhido), ContatoFinal (16:9 `/images/empresa/segunda-imagem.webp`). **Frente D — Refino**: removido `minHeight: 297mm` de 9 seções (page-break do CSS já cobre, evitava páginas em branco). Cards OQueEntregamos: gap 24→16, padding interno 24px22px→16px14px, minHeight 200→160. Padding seções 64px72px → 36px56px48px (compensa margem puppeteer). pt→px wholesale e SVG range bar refino deferred pra ajuste pós-smoke visual. TSC limpo. Bruno valida visualmente o novo PDF e ajusta refinamentos finais.
 - 2026-06-23: hub criado, plano aprovado, Sprint 1 entregue (DB + tipos + libs + API CRUD + esqueleto admin); Sprint 2 entregue (renderer A4 com gate HMAC, 12 componentes Playfair+Manrope, range bar SVG, API generate-pdf com viewport explícito + cookie bypass, pipeline Sharp hero, página admin [id] com `<GerarPdfButton />` e `<HeroUpload />`). TSC limpo. Falta Bruno rodar migration + setar `CHROME_LOCAL_PATH`.
 - 2026-06-24: Bruno rodou migration 006 no Supabase. Sprint 3 entregue: form wizard 5 steps (`OrcamentoWizard.tsx` + `Step1Cliente`/`Step2Obra`/`Step3ValoresRegime`/`Step4ListasEntrega`/`Step5Revisao` em `components/admin/orcamentos/steps/`), reducer + validações por step (`wizard-state.ts`), server actions (`actions.ts` com `criarOrcamento`/`atualizarOrcamento`/`finalizarOrcamento`), helpers de input (`form-fields.tsx` com CurrencyField/IntegerField/RadioPills/ChipsInput/TextField), Checkbox shadcn (`components/ui/checkbox.tsx` + `@radix-ui/react-checkbox`), páginas `/admin/orcamentos/novo/form` e `/admin/orcamentos/[id]/edit`, botão Editar no detalhe. Navegação livre com indicador visual (verde/amarelo/vazio) por step. `beforeunload` warn quando hasUnsavedChanges. Finalizar redireciona pra detalhe — reusa `<GerarPdfButton />` e `<HeroUpload />` do Sprint 2. TSC limpo.
 - 2026-06-24: Sprint 5 frente D completa: tipos Supabase regenerados via `npx supabase gen types typescript --project-id sfqaknxomxwmviarpwfy` (7 tabelas, 584 linhas em `types/supabase-db.ts`). Removidos os 6 `@ts-expect-error supabase-js v2.90` (3 em actions.ts, 3 em routes hero/pdf-url/pdf). 3 casts `data as Orcamento` viraram `data as unknown as Orcamento` por causa de JSONB tipar como `Json` no gerado. 3 inserts/updates em actions.ts cast como `as never` pelo mesmo motivo (tech debt menor — documentado pra limpa futura via type adapter). TSC limpo.

@@ -35,7 +35,7 @@ export function OQueEntregamos({ categoriasAtivas }: Props) {
   )
 
   return (
-    <section className="est-secao" style={{ minHeight: "297mm" }}>
+    <section className="est-secao">
       <div className="est-numero-secao">03</div>
       <h2
         className="est-display"
@@ -64,7 +64,7 @@ export function OQueEntregamos({ categoriasAtivas }: Props) {
         style={{
           display: "grid",
           gridTemplateColumns: "repeat(3, 1fr)",
-          gap: 24,
+          gap: 16,
           marginTop: 8,
         }}
       >
@@ -75,13 +75,13 @@ export function OQueEntregamos({ categoriasAtivas }: Props) {
               key={card.id}
               style={{
                 background: "var(--c-off-white)",
-                padding: "24px 22px",
+                padding: "16px 14px",
                 borderRadius: 2,
                 borderTop: "2px solid var(--c-champagne)",
                 display: "flex",
                 flexDirection: "column",
-                gap: 12,
-                minHeight: 200,
+                gap: 8,
+                minHeight: 160,
               }}
             >
               <Icon

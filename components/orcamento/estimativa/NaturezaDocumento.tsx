@@ -2,7 +2,7 @@ import { NATUREZA_DOCUMENTO } from "@/lib/orcamento-estimativa-data"
 
 export function NaturezaDocumento() {
   return (
-    <section className="est-secao" style={{ minHeight: "297mm" }}>
+    <section className="est-secao">
       <div className="est-numero-secao">01</div>
       <h2
         className="est-display"

@@ -64,7 +64,7 @@ export function Premissas({
   }
 
   return (
-    <section className="est-secao est-secao-fundo-off" style={{ minHeight: "297mm" }}>
+    <section className="est-secao est-secao-fundo-off">
       <div className="est-numero-secao">06</div>
       <h2
         className="est-display"
