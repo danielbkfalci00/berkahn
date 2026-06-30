@@ -1,14 +1,14 @@
 ---
 tipo: projeto
 criado: 2026-05-22
-atualizado: 2026-06-03
+atualizado: 2026-06-30
 tags:
   - project/blog
   - status/active
-ai_summary: Hub do projeto Blog — posts semanais em /atualidades. 36 publicados, meta +1/semana. Pipeline 4 etapas (/brainstorm → /pesquisa → /criacao → /artigo). Bloqueio crítico:  indexação Google (1/35). Lido por /standup, /wrap-up, /artigo.
+ai_summary: Hub do projeto Blog — posts semanais em /atualidades. 37 publicados, meta +1/semana. Pipeline 4 etapas (/brainstorm → /pesquisa → /criacao → /artigo). Bloqueio crítico:  indexação Google (1/35). Lido por /standup, /wrap-up, /artigo.
 status: active
 projeto: blog
-kpi_publicados: 36
+kpi_publicados: 37
 kpi_meta_publicados_semanal: 1
 kpi_indexados_google: 31
 kpi_meta_indexacao_total: 30
@@ -20,7 +20,7 @@ kpi_ga4_pageviews_mes: 1134
 kpi_gsc_clicks_mes: 347
 kpi_gsc_impressions_mes: 20196
 kpi_health_score_mes: 84
-kpi_atualizado_em: 2026-06-03
+kpi_atualizado_em: 2026-06-30
 contextos_aplicados:
   - berkahn-brand
   - seo-aeo-strategy

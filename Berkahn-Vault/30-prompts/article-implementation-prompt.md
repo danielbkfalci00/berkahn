@@ -1,12 +1,12 @@
 ---
 tipo: prompt
 criado: 2026-04-13
-atualizado: 2026-05-21
+atualizado: 2026-06-17
 tags:
   - ai/prompt
   - ai/locked
   - project/blog
-ai_summary: Prompt master de implementação de artigo (22KB, +600 linhas). Transforma markdown em artigo no blog com componentes interativos + INSERT Supabase. Usado por /artigo. SECRETS REDACTED em 2026-05-21 (linha do SERVICE_KEY agora usa process.env).
+ai_summary: Prompt master de implementação de artigo (22KB, +600 linhas). Transforma markdown em artigo no blog com componentes interativos + INSERT Supabase. Usado por /artigo. SECRETS REDACTED em 2026-05-21 (linha do SERVICE_KEY agora usa process.env). 2026-06-17: passo final entrega a URL do post com UTM para LinkedIn (Fase 4.4) + URL canônica corrigida para www/atualidades.
 status: locked
 locked: true
 versao: 1.0
@@ -50,7 +50,8 @@ Este artigo faz parte do blog técnico da Berkahn, empresa especializada em Stee
 4. ✅ **EXECUTAR o script** para adicionar no Supabase
 5. ✅ Validar que o artigo foi inserido com sucesso
 6. ✅ Fornecer a URL de acesso
-7. ✅ Confirmar que aparece no grid /atualidade
+7. ✅ Confirmar que aparece no grid /atualidades
+8. ✅ **Ao final do output, entregar a URL do post já parametrizada com UTM** para colar direto no LinkedIn (ver Fase 4.4)
 
 **Não peça confirmação do usuário para executar - faça tudo automaticamente.**
 
@@ -577,14 +578,29 @@ Após executar o script, confirme:
 ```bash
 ✅ Artigo inserido com sucesso!
 📊 ID: 550e8400-e29b-41d4-a716-446655440000
-🔗 URL: https://berkahn.com.br/atualidade/nome-do-artigo
+🔗 URL: https://www.berkahn.com.br/atualidades/nome-do-artigo
+🔗 LinkedIn (UTM): https://www.berkahn.com.br/atualidades/nome-do-artigo?utm_source=linkedin&utm_medium=social&utm_campaign=post-organico
 
 📝 Próximos passos:
 1. Artigo está publicado e acessível via URL acima
-2. Aguardar 60 segundos para ISR atualizar o grid /atualidade
+2. Aguardar 60 segundos para ISR atualizar o grid /atualidades
 3. Imagens de capa: certifique-se que o arquivo existe em /public
 4. Deploy já acontece automaticamente via Vercel (push é opcional)
 ```
+
+### 4.4 Link parametrizado para LinkedIn (entregar no final do output)
+
+**SEMPRE** ao terminar, entregue a URL do post pronta para o LinkedIn, com os parâmetros UTM, em uma linha copiável.
+
+- **URL canônica do post**: `https://www.berkahn.com.br/atualidades/[slug]` (com `www` e `atualidades` no plural)
+- **Padrão UTM (post orgânico)**: `?utm_source=linkedin&utm_medium=social&utm_campaign=post-organico`
+- **Linha final a entregar**:
+
+```
+https://www.berkahn.com.br/atualidades/[slug]?utm_source=linkedin&utm_medium=social&utm_campaign=post-organico
+```
+
+Convenção completa de UTM (outros canais, mídia paga, teste A/B com `utm_content`) documentada em [[seo-aeo-strategy]] na seção "Rastreamento de links (UTM)".
 
 ---
 
@@ -696,6 +712,6 @@ Execute todo o processo seguindo `.claude/prompts/article-implementation-prompt.
 
 ---
 
-**Versão**: 1.1
-**Última atualização**: 2026-03-04
+**Versão**: 1.2
+**Última atualização**: 2026-06-17
 **Mantido por**: Equipe de Desenvolvimento Berkahn
