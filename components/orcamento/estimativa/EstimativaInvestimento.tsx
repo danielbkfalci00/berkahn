@@ -32,15 +32,17 @@ export function EstimativaInvestimento({
   const trackHeight = 14
 
   return (
-    <section className="est-secao">
-      <div className="est-numero-secao">05</div>
-      <h2
-        className="est-display"
-        style={{ fontSize: "36pt", margin: "12px 0 0", lineHeight: 1.1 }}
-      >
-        Estimativa de Custos
-      </h2>
-      <div className="est-divisor-champagne" />
+    <section className="est-secao est-secao-quebra-antes">
+      <div className="est-secao-header">
+        <div className="est-numero-secao">05</div>
+        <h2
+          className="est-display"
+          style={{ fontSize: "36pt", margin: "12px 0 0", lineHeight: 1.1 }}
+        >
+          Estimativa de Custos
+        </h2>
+        <div className="est-divisor-champagne" />
+      </div>
 
       <p
         style={{

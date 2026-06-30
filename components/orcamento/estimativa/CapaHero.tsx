@@ -32,7 +32,7 @@ export function CapaHero({
       style={{
         position: "relative",
         width: "100%",
-        height: "297mm",
+        height: "270mm",
         color: "#fff",
         overflow: "hidden",
         pageBreakAfter: "always",

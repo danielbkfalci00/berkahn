@@ -36,14 +36,16 @@ export function OQueEntregamos({ categoriasAtivas }: Props) {
 
   return (
     <section className="est-secao">
-      <div className="est-numero-secao">03</div>
-      <h2
-        className="est-display"
-        style={{ fontSize: "36pt", margin: "12px 0 0", lineHeight: 1.1 }}
-      >
-        O que entregamos
-      </h2>
-      <div className="est-divisor-champagne" />
+      <div className="est-secao-header">
+        <div className="est-numero-secao">03</div>
+        <h2
+          className="est-display"
+          style={{ fontSize: "36pt", margin: "12px 0 0", lineHeight: 1.1 }}
+        >
+          O que entregamos
+        </h2>
+        <div className="est-divisor-champagne" />
+      </div>
 
       <p
         style={{
@@ -73,6 +75,7 @@ export function OQueEntregamos({ categoriasAtivas }: Props) {
           return (
             <div
               key={card.id}
+              className="est-card"
               style={{
                 background: "var(--c-off-white)",
                 padding: "16px 14px",

@@ -35,8 +35,20 @@
 .root :global(.est-secao) {
   /* Top reduzido pra não duplicar com margin-top do headerTemplate puppeteer (15mm) */
   padding: 36px 56px 48px;
-  page-break-after: always;
-  break-after: page;
+}
+
+/* Opt-in: força quebra de página ANTES desta seção. Aplicado em seções-âncora
+   (PadroesAcabamento, EstimativaInvestimento, RegimesComerciais, ContatoFinal). */
+.root :global(.est-secao-quebra-antes) {
+  break-before: page;
+  page-break-before: always;
+}
+
+/* Opt-in: ocupa altura útil real (270mm = A4 − header 15mm − footer 12mm).
+   Aplicado inline em CapaHero/ContatoFinal pra preservar fullbleed sem
+   o overflow de 27mm que gerava página fantasma. */
+.root :global(.est-secao-fullbleed) {
+  height: 270mm;
 }
 
 .root :global(.est-secao-fundo-off) {
@@ -61,4 +73,37 @@
   height: 2px;
   background: var(--c-champagne);
   margin: 24px 0;
+}
+
+/* Guard-rails de paginação: ativados durante geração de PDF (puppeteer)
+   e em impressão direta. Evitam reflow caótico com briefing variável. */
+@media print {
+  /* Figures e wrappers de imagem nunca quebram entre páginas */
+  .root :global(figure),
+  .root :global(.est-imagem-wrap) {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  /* Título de seção (numero + h2 + divisor) sempre fica com o primeiro
+     parágrafo do corpo — evita H2 órfão no fim de uma página. */
+  .root :global(.est-secao-header) {
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+
+  /* Cards (OQueEntregamos, RegimesComerciais) e rows de tabela
+     (Premissas, PadroesAcabamento) nunca quebram no meio. */
+  .root :global(.est-card),
+  .root :global(.est-tabela-row),
+  .root :global(li) {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  /* Teto absoluto pra imagens — proteção contra explosão de altura
+     caso aspect-ratio padding-bottom falhe. 113mm ≈ 42% da página útil. */
+  .root :global(.est-imagem-wrap) {
+    max-height: 113mm;
+  }
 }

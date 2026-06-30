@@ -38,6 +38,7 @@ export function EstimativaImage({
       }}
     >
       <div
+        className="est-imagem-wrap"
         style={{
           position: "relative",
           width: "100%",
@@ -58,6 +59,7 @@ export function EstimativaImage({
             width: "100%",
             height: "100%",
             objectFit: "cover",
+            objectPosition: "center",
             display: "block",
           }}
         />

@@ -9,9 +9,9 @@ interface Props {
 export function ContatoFinal({ responsavelTecnico }: Props) {
   return (
     <section
-      className="est-secao est-secao-fundo-escuro"
+      className="est-secao est-secao-fundo-escuro est-secao-quebra-antes"
       style={{
-        minHeight: "297mm",
+        minHeight: "270mm",
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between",

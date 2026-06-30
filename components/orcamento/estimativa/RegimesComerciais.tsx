@@ -7,15 +7,17 @@ interface Props {
 
 export function RegimesComerciais({ regimeRecomendado }: Props) {
   return (
-    <section className="est-secao est-secao-fundo-off">
-      <div className="est-numero-secao">08</div>
-      <h2
-        className="est-display"
-        style={{ fontSize: "36pt", margin: "12px 0 0", lineHeight: 1.1 }}
-      >
-        Condições Comerciais
-      </h2>
-      <div className="est-divisor-champagne" />
+    <section className="est-secao est-secao-fundo-off est-secao-quebra-antes">
+      <div className="est-secao-header">
+        <div className="est-numero-secao">08</div>
+        <h2
+          className="est-display"
+          style={{ fontSize: "36pt", margin: "12px 0 0", lineHeight: 1.1 }}
+        >
+          Condições Comerciais
+        </h2>
+        <div className="est-divisor-champagne" />
+      </div>
 
       <p
         style={{
@@ -43,6 +45,7 @@ export function RegimesComerciais({ regimeRecomendado }: Props) {
           return (
             <div
               key={r.id}
+              className="est-card"
               style={{
                 background: "#fff",
                 padding: "28px 24px",

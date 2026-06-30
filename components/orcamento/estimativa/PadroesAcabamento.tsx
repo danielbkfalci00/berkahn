@@ -17,15 +17,17 @@ const IMAGENS_PADRAO: Record<PadraoAcabamento, string> = {
 
 export function PadroesAcabamento({ padraoEscolhido }: Props) {
   return (
-    <section className="est-secao est-secao-fundo-off">
-      <div className="est-numero-secao">04</div>
-      <h2
-        className="est-display"
-        style={{ fontSize: "36pt", margin: "12px 0 0", lineHeight: 1.1 }}
-      >
-        Padrões de Acabamento
-      </h2>
-      <div className="est-divisor-champagne" />
+    <section className="est-secao est-secao-fundo-off est-secao-quebra-antes">
+      <div className="est-secao-header">
+        <div className="est-numero-secao">04</div>
+        <h2
+          className="est-display"
+          style={{ fontSize: "36pt", margin: "12px 0 0", lineHeight: 1.1 }}
+        >
+          Padrões de Acabamento
+        </h2>
+        <div className="est-divisor-champagne" />
+      </div>
 
       <p
         style={{
@@ -54,6 +56,7 @@ export function PadroesAcabamento({ padraoEscolhido }: Props) {
           return (
             <div
               key={p.id}
+              className="est-tabela-row"
               style={{
                 display: "grid",
                 gridTemplateColumns: "180px 1fr 160px",

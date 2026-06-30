@@ -7,14 +7,16 @@ interface Props {
 export function IndiceEstimativa({ secoes }: Props) {
   return (
     <section className="est-secao est-secao-fundo-off">
-      <div className="est-eyebrow">Índice</div>
-      <h2
-        className="est-display"
-        style={{ fontSize: "40pt", margin: "8px 0 0", lineHeight: 1.1 }}
-      >
-        O que você vai encontrar
-      </h2>
-      <div className="est-divisor-champagne" />
+      <div className="est-secao-header">
+        <div className="est-eyebrow">Índice</div>
+        <h2
+          className="est-display"
+          style={{ fontSize: "40pt", margin: "8px 0 0", lineHeight: 1.1 }}
+        >
+          O que você vai encontrar
+        </h2>
+        <div className="est-divisor-champagne" />
+      </div>
 
       <ul
         style={{

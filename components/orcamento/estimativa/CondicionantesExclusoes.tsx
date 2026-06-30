@@ -87,14 +87,16 @@ export function CondicionantesExclusoes({
 
   return (
     <section className="est-secao">
-      <div className="est-numero-secao">07</div>
-      <h2
-        className="est-display"
-        style={{ fontSize: "36pt", margin: "12px 0 0", lineHeight: 1.1 }}
-      >
-        Condicionantes & Exclusões
-      </h2>
-      <div className="est-divisor-champagne" />
+      <div className="est-secao-header">
+        <div className="est-numero-secao">07</div>
+        <h2
+          className="est-display"
+          style={{ fontSize: "36pt", margin: "12px 0 0", lineHeight: 1.1 }}
+        >
+          Condicionantes & Exclusões
+        </h2>
+        <div className="est-divisor-champagne" />
+      </div>
 
       <div
         style={{

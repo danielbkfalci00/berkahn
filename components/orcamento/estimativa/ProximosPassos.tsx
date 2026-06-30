@@ -4,14 +4,16 @@ import { PROXIMOS_PASSOS_DEFAULT } from "@/lib/orcamento-estimativa-data"
 export function ProximosPassos() {
   return (
     <section className="est-secao">
-      <div className="est-numero-secao">09</div>
-      <h2
-        className="est-display"
-        style={{ fontSize: "36pt", margin: "12px 0 0", lineHeight: 1.1 }}
-      >
-        Próximos Passos
-      </h2>
-      <div className="est-divisor-champagne" />
+      <div className="est-secao-header">
+        <div className="est-numero-secao">09</div>
+        <h2
+          className="est-display"
+          style={{ fontSize: "36pt", margin: "12px 0 0", lineHeight: 1.1 }}
+        >
+          Próximos Passos
+        </h2>
+        <div className="est-divisor-champagne" />
+      </div>
 
       <p
         style={{

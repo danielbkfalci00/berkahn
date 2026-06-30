@@ -4,14 +4,16 @@ import { EstimativaImage } from "./EstimativaImage"
 export function SobreBerkahn() {
   return (
     <section className="est-secao est-secao-fundo-off">
-      <div className="est-numero-secao">02</div>
-      <h2
-        className="est-display"
-        style={{ fontSize: "36pt", margin: "12px 0 0", lineHeight: 1.1 }}
-      >
-        A Construtora
-      </h2>
-      <div className="est-divisor-champagne" />
+      <div className="est-secao-header">
+        <div className="est-numero-secao">02</div>
+        <h2
+          className="est-display"
+          style={{ fontSize: "36pt", margin: "12px 0 0", lineHeight: 1.1 }}
+        >
+          A Construtora
+        </h2>
+        <div className="est-divisor-champagne" />
+      </div>
 
       <div style={{ margin: "0 0 32px" }}>
         <EstimativaImage

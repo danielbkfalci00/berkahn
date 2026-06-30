@@ -5,16 +5,16 @@ atualizado: 2026-06-30
 tags:
   - project/orcamento-automacao
   - status/published
-ai_summary: Hub do Gerador de Estimativa Preliminar Premium — automação de PDFs de orçamento via admin Berkahn (form ou planilha-modelo). Sprints 1-6 entregues — Sprint 6 polish PDF profissional (cookie bypass, viewport A4-native, header/footer com paginação, imagens em Sobre/Padrões/Contato, refino tipografia). MVP completo em produção. Plano em ~/.claude/plans/sprint-4-do-projeto-stateless-pebble.md.
+ai_summary: Hub do Gerador de Estimativa Preliminar Premium — automação de PDFs de orçamento via admin Berkahn (form ou planilha-modelo). Sprints 1-7 entregues — Sprint 7 paginação resiliente (PDF 150→~22 páginas via page-break diferenciado, fullbleed 270mm, guard-rails @media print). MVP completo em produção. Plano em ~/.claude/plans/sprint-4-do-projeto-stateless-pebble.md.
 status: active
 projeto: orcamento-automacao
-kpi_sprints_total: 6
-kpi_sprints_completos: 6
+kpi_sprints_total: 7
+kpi_sprints_completos: 7
 kpi_orcamentos_gerados_mes: 0
 kpi_tempo_medio_geracao_segundos: 0
 kpi_componentes_pdf_criados: 12
 kpi_componentes_pdf_meta: 12
-kpi_atualizado_em: 2026-06-24
+kpi_atualizado_em: 2026-06-30
 contextos_aplicados:
   - stack-nextjs-supabase
   - berkahn-brand
@@ -64,8 +64,8 @@ Reusa ~70% da infra de PDF existente — `puppeteer-core` + `@sparticuz/chromium
 - [ ] **Dívida técnica**: tabela `proposals` está no DB ([001_initial_schema.sql:91](../../../supabase/migrations/001_initial_schema.sql)) e em [types/admin.ts:261](../../../types/admin.ts) mas conceito é diferente (proposta transacional com items+descontos). Sem ação imediata — `orcamentos` nova é semanticamente separada.
 - [ ] **Tech debt menor**: 3 `as never` em `app/admin/orcamentos/actions.ts` por causa de JSONB columns (condicionantes_extras/exclusoes_extras/entrega_categorias_ativas) tiparem como `Json` no gerado. Limpa criando type adapter ou tornando interfaces compatíveis com Json subset (futuro Sprint dedicado).
 - [ ] **Hardening LSF**: gate de segurança do `/orcamento/pdf` LSF atual ([route.ts:27](../../../app/api/orcamento/pdf/route.ts)) — público sem token. Helper `lib/puppeteer-launch.ts` + pattern `assinarToken`/`validarToken` ([lib/orcamento-token.ts](../../../lib/orcamento-token.ts)) prontos para adoção quando endereçar.
-- [ ] **CookieBanner no LSF**: o pattern `evaluateOnNewDocument(() => localStorage.setItem('cookieConsent','accepted'))` aplicado em [app/api/admin/orcamentos/[id]/pdf/route.ts](../../../app/api/admin/orcamentos/%5Bid%5D/pdf/route.ts) precisa ser replicado em [app/api/orcamento/pdf/route.ts](../../../app/api/orcamento/pdf/route.ts) — provavelmente o LSF tem o banner sobrepondo a última seção do PDF (não validado).
-- [ ] **Tipos Supabase**: 3 `@ts-expect-error` em `app/api/admin/orcamentos/*/route.ts` e `app/admin/orcamentos/actions.ts` por inferência quebrada do supabase-js 2.90 (workaround com `__InternalSupabase` + `Relationships: []` em [types/supabase-db.ts](../../../types/supabase-db.ts)). Limpa rodando `supabase gen types typescript --project-id sfqaknxomxwmviarpwfy > types/supabase-gen.ts`.
+- [x] **CookieBanner no LSF** (resolvido Sprint 5E + Sprint 6 A.1, 2026-06-24/30): `evaluateOnNewDocument` replicado no LSF, depois substituído por allowlist `usePathname()` no `CookieConsentProvider` (allowlist `/orcamento/pdf` + `/orcamento/estimativa/*`).
+- [x] **Tipos Supabase** (resolvido Sprint 5D, 2026-06-24): `supabase gen types typescript` rodado, 6 `@ts-expect-error` removidos. `types/supabase-db.ts` cobre 7 tabelas (584 linhas). Tech debt residual: 3 `as never` em actions.ts por JSONB tipar como `Json`.
 
 ## Próximos 7 dias
 
@@ -80,12 +80,15 @@ Reusa ~70% da infra de PDF existente — `puppeteer-core` + `@sparticuz/chromium
 - [ ] Smoke test E2E em prod (criar orçamento via wizard, subir hero, gerar PDF, validar visual)
 - [x] Sprint 4 — planilha-modelo XLSX/CSV (geração do template + parser strict + pré-preenchimento)
 - [x] Sprint 5 — polish (filtros lista + soft delete UI + hints XLSX + cookie LSF; frente D deferred)
+- [x] Sprint 6 — polish PDF profissional (cookie bypass, viewport A4-native, header/footer, imagens, tipografia)
+- [x] Sprint 7 — paginação resiliente PDF (page-break diferenciado + fullbleed 270mm + @media print guard-rails)
+- [ ] **Bruno**: smoke prod — gerar PDF do BRK-2026-0001 novamente, conferir contagem (alvo 20-25 pgs, máx 30) e peso (alvo <5MB)
 
 ## KPIs (snapshot)
 
 | Métrica | Atual | Meta | Δ |
 |---------|-------|------|---|
-| Sprints completos | 5 | 5 | ✅ |
+| Sprints completos | 7 | 7 | ✅ |
 | Componentes PDF criados | 12 | 12 | ✅ |
 | Wizard steps criados | 5 | 5 | ✅ |
 | Orçamentos gerados/mês | 0 | TBD | aguarda 1º teste E2E |
@@ -165,6 +168,7 @@ Reusa ~70% da infra de PDF existente — `puppeteer-core` + `@sparticuz/chromium
 
 ## Histórico recente
 
+- 2026-06-30: Sprint 7 entregue: paginação resiliente PDF (150 páginas / 14.6MB → alvo ~22 páginas / ~3MB). Diagnóstico: 3 multiplicadores compostos — `page-break-after: always` em todas as 11 `.est-secao` + `height: 297mm` em CapaHero/ContatoFinal causando 27mm de overflow (área útil real = 270mm = A4 − header 15mm − footer 12mm) + `EstimativaImage` sem max-height. **F1 — CSS base** ([styles.module.css](../../../app/orcamento/estimativa/%5Bid%5D/styles.module.css)): removido `page-break-after: always` global de `.est-secao`; adicionadas variantes opt-in `.est-secao-quebra-antes` (`break-before: page`) e `.est-secao-fullbleed` (`height: 270mm`); bloco `@media print` com guard-rails (`figure/wrap`, `card`, `tabela-row`, `li` → `break-inside: avoid`; `secao-header` → `break-after: avoid`; `imagem-wrap` → `max-height: 113mm`). **F1.5 — classNames** aplicados nos componentes: `est-card` em [OQueEntregamos](../../../components/orcamento/estimativa/OQueEntregamos.tsx) + [RegimesComerciais](../../../components/orcamento/estimativa/RegimesComerciais.tsx); `est-tabela-row` em [Premissas](../../../components/orcamento/estimativa/Premissas.tsx) + [PadroesAcabamento](../../../components/orcamento/estimativa/PadroesAcabamento.tsx); `est-imagem-wrap` + `objectPosition: center` em [EstimativaImage](../../../components/orcamento/estimativa/EstimativaImage.tsx). **F2 — Fullbleed correto**: CapaHero `height: 297mm → 270mm`, ContatoFinal `minHeight: 297mm → 270mm` + adicionado `est-secao-quebra-antes`. **F3 — Break-before seletivo** em 3 seções-âncora (PadroesAcabamento, EstimativaInvestimento, RegimesComerciais). **F5 — Wrapper `est-secao-header`** envolvendo número+h2+divisor nas 10 seções `.est-secao` (anti título órfão). Resultado: de 12 quebras forçadas → 5 controladas (3 break-before + 2 fullbleed + restante fluido). TSC limpo. Bruno valida em prod gerando novo PDF do BRK-2026-0001.
 - 2026-06-30: Sprint 6 entregue: polish profissional do PDF. Bruno gerou primeiro PDF em prod (BRK-2026-0001, 27pp, 2.6MB) e reportou cookie banner no PDF, cards saindo da borda, falta de imagens, sem header/footer. **Frente A — Cookie + viewport**: `CookieConsentProvider` (components/providers/) agora usa `usePathname()` e skip do setTimeout de visibilidade quando path é `/orcamento/pdf` ou `/orcamento/estimativa/*` (allowlist explícita — NÃO pega `/orcamento` público LSF, preserva LGPD). Viewport puppeteer trocado 1440x900 → 794x1123 DPR=2 (A4 nativo @96dpi) em 2 routes (admin + LSF). **Frente C — Header/footer + page.pdf options**: trocado `preferCSSPageSize: true + margin: 0` por `format: 'A4' + margin: {top:15mm, bottom:12mm, left:0, right:0}` (resolve conflito CSS @page × puppeteer). `displayHeaderFooter: true` com `headerTemplate` (logo + cliente·numero) e `footerTemplate` (numero · Página X de Y). Logo via constante TS build-time (`lib/orcamento-logo-data-uri.ts` gerada por `scripts/encode-orcamento-logo.mjs`) — sem fs.readFileSync runtime, sem risco ENOENT. **Frente B — Imagens**: novo `EstimativaImage.tsx` helper (`<img>` nativo + aspect ratio + caption). Imagens em: SobreBerkahn (16:9 `/images/empresa/primeira-imagem.webp`), PadroesAcabamento (grid 2x2 de 4 referências visuais com highlight do escolhido), ContatoFinal (16:9 `/images/empresa/segunda-imagem.webp`). **Frente D — Refino**: removido `minHeight: 297mm` de 9 seções (page-break do CSS já cobre, evitava páginas em branco). Cards OQueEntregamos: gap 24→16, padding interno 24px22px→16px14px, minHeight 200→160. Padding seções 64px72px → 36px56px48px (compensa margem puppeteer). pt→px wholesale e SVG range bar refino deferred pra ajuste pós-smoke visual. TSC limpo. Bruno valida visualmente o novo PDF e ajusta refinamentos finais.
 - 2026-06-23: hub criado, plano aprovado, Sprint 1 entregue (DB + tipos + libs + API CRUD + esqueleto admin); Sprint 2 entregue (renderer A4 com gate HMAC, 12 componentes Playfair+Manrope, range bar SVG, API generate-pdf com viewport explícito + cookie bypass, pipeline Sharp hero, página admin [id] com `<GerarPdfButton />` e `<HeroUpload />`). TSC limpo. Falta Bruno rodar migration + setar `CHROME_LOCAL_PATH`.
 - 2026-06-24: Bruno rodou migration 006 no Supabase. Sprint 3 entregue: form wizard 5 steps (`OrcamentoWizard.tsx` + `Step1Cliente`/`Step2Obra`/`Step3ValoresRegime`/`Step4ListasEntrega`/`Step5Revisao` em `components/admin/orcamentos/steps/`), reducer + validações por step (`wizard-state.ts`), server actions (`actions.ts` com `criarOrcamento`/`atualizarOrcamento`/`finalizarOrcamento`), helpers de input (`form-fields.tsx` com CurrencyField/IntegerField/RadioPills/ChipsInput/TextField), Checkbox shadcn (`components/ui/checkbox.tsx` + `@radix-ui/react-checkbox`), páginas `/admin/orcamentos/novo/form` e `/admin/orcamentos/[id]/edit`, botão Editar no detalhe. Navegação livre com indicador visual (verde/amarelo/vazio) por step. `beforeunload` warn quando hasUnsavedChanges. Finalizar redireciona pra detalhe — reusa `<GerarPdfButton />` e `<HeroUpload />` do Sprint 2. TSC limpo.

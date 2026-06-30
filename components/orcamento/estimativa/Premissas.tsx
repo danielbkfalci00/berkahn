@@ -65,14 +65,16 @@ export function Premissas({
 
   return (
     <section className="est-secao est-secao-fundo-off">
-      <div className="est-numero-secao">06</div>
-      <h2
-        className="est-display"
-        style={{ fontSize: "36pt", margin: "12px 0 0", lineHeight: 1.1 }}
-      >
-        Premissas Consideradas
-      </h2>
-      <div className="est-divisor-champagne" />
+      <div className="est-secao-header">
+        <div className="est-numero-secao">06</div>
+        <h2
+          className="est-display"
+          style={{ fontSize: "36pt", margin: "12px 0 0", lineHeight: 1.1 }}
+        >
+          Premissas Consideradas
+        </h2>
+        <div className="est-divisor-champagne" />
+      </div>
 
       <p
         style={{
@@ -97,6 +99,7 @@ export function Premissas({
         {premissas.map((p, idx) => (
           <div
             key={p.item}
+            className="est-tabela-row"
             style={{
               display: "grid",
               gridTemplateColumns: "200px 1fr",
