@@ -1,0 +1,70 @@
+filters:
+  and:
+    - file.inFolder("40-content/materiais/indices")
+    - 'tipo == "indice"'
+
+formulas:
+  ratio_mapeados: 'if(arquivos_total, (arquivos_mapeados / arquivos_total) * 100, 0)'
+  categoria: 'file.name.replace("indices-", "")'
+
+properties:
+  formula.categoria:
+    displayName: "Categoria"
+  arquivos_total:
+    displayName: "# arquivos"
+  arquivos_mapeados:
+    displayName: "Mapeados"
+  arquivos_orfaos:
+    displayName: "Órfãos"
+  arquivos_duplicados:
+    displayName: "Duplicados"
+  formula.ratio_mapeados:
+    displayName: "% mapeado"
+  path_externo:
+    displayName: "Fonte (Docs/)"
+
+views:
+  - type: table
+    name: "Categorias"
+    order:
+      - formula.categoria
+      - arquivos_total
+      - arquivos_mapeados
+      - formula.ratio_mapeados
+      - arquivos_orfaos
+      - path_externo
+    sort:
+      - property: arquivos_total
+        direction: DESC
+
+  - type: cards
+    name: "Cards"
+    cardSize: 200
+    order:
+      - formula.categoria
+      - arquivos_total
+    sort:
+      - property: arquivos_total
+        direction: DESC
+
+  - type: table
+    name: "Com órfãos (revisar)"
+    filters:
+      and:
+        - 'arquivos_orfaos > 0'
+    order:
+      - formula.categoria
+      - arquivos_orfaos
+      - arquivos_total
+    sort:
+      - property: arquivos_orfaos
+        direction: DESC
+
+  - type: list
+    name: "Índices (compact)"
+    order:
+      - file.name
+      - arquivos_total
+    sort:
+      - property: file.name
+        direction: ASC

@@ -1,35 +1,37 @@
 ---
 tipo: meta
 criado: 2026-05-21
-atualizado: 2026-05-21
+atualizado: 2026-07-01
 tags:
   - ai/context
   - project/material
   - domain/brand
-ai_summary: Inventário de logos Berkahn. Arquivos PNG vivem em Docs/brand/logos/ (não movidos para vault — assets binários pesados). Variações para fundos branco/preto, com escrita e símbolo.
+ai_summary: Inventário de logos Berkahn (10 variações, deduplicados). Fonte migrada para Docs/banco-imagens/marca/. Catálogo detalhado em [[indices-marca]], preview visual em [[galeria-marca]].
 status: active
 ---
 
 # Logos Berkahn
 
-> [!info] Assets pesados ficam fora do vault
-> Arquivos `.png` dos logos vivem em `Docs/brand/logos/` (não migrados para o vault para manter o vault leve). Vault contém este inventário + wikilinks.
+> [!info] Consolidado no banco de imagens
+> Os logos foram deduplicados (10 variações) e movidos para `Docs/banco-imagens/marca/` (fonte única). O catálogo detalhado com `uso_em` vive em [[indices-marca]] e o preview visual em [[galeria-marca]]. Esta nota mantém só o resumo de brand.
 
-## Inventário
+## Inventário (10 variações)
+
+Catálogo canônico e por-arquivo: **[[indices-marca]]**. Resumo:
 
 | Arquivo | Uso |
 |---------|-----|
-| `Logo Berkahn_branco.png` | Logo principal sobre fundo branco |
-| `Logo Berkahn_branco_preto.png` | Variação com escrita preta |
-| `escrito_preto_logo_png.png` | Apenas escrita (preta) |
-| `fundo_branco_logo_png.png` | Logo composto fundo branco |
-| `fundo_branco_logo (1).png` ... `(21).png` | Variações numeradas |
-| `logo_berkahn.png` | Logo principal |
-| `preo_liso_png.png` | Variação preta sólida |
+| `logo-berkahn.png` | Logo principal (1920×1080, master) |
+| `logo-berkahn-branco.png` | Sobre fundo escuro |
+| `logo-berkahn-branco-preto.png` | Branco com elementos pretos |
+| `escrito-preto-logo-png.png` | Apenas escrita (preta) |
+| `fundo-branco-logo-png.png` | Logo composto, fundo branco (padrão web) |
+| `fundo-branco-logo-{1,2,12,21}.png` | Variações numeradas (a consolidar) |
+| `preo-liso-png.png` | Preto liso (typo histórico `preo`) |
 
-## Path absoluto
+## Path da fonte
 
-`C:\Users\bruno\Documents\Pessoal\Site Berkahn\Docs\brand\logos\`
+`C:\Users\bruno\Documents\Pessoal\Site Berkahn\Docs\banco-imagens\marca\`
 
 ## Referências
 
