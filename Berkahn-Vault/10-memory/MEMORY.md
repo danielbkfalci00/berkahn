@@ -1,7 +1,7 @@
 ---
 tipo: meta
 criado: 2026-05-21
-atualizado: 2026-05-21
+atualizado: 2026-07-01
 tags:
   - ai/memory
   - status/active
@@ -30,6 +30,8 @@ status: active
 - [[git-remote]] — Remote git config (PAT em `.env`)
 - [[blog-pipeline]] — Slugs, placeholders, paths do blog
 - [[artigos-publicados]] — Registro de slugs + Supabase IDs
+- [[google-apis-setup]] — Setup GA4 + Search Console + troubleshooting OAuth (cron `berkahn-performance-mensal`)
+- [[analytics-methodology]] — Fórmulas dashboard `/admin/analytics` (Health Score, metas dinâmicas, red flags)
 
 ## Como Claude usa esta memória
 
