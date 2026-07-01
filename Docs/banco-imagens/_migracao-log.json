@@ -1,0 +1,820 @@
+{
+  "gerado_em": "vault-images.mjs --inventory",
+  "total_moves": 160,
+  "total_deletes": 11,
+  "moves": [
+    {
+      "from": "Docs/brand/logos/escrito_preto_logo_png.png",
+      "to": "Docs/banco-imagens/marca/escrito-preto-logo-png.png",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/brand/logos/fundo_branco_logo (1).png",
+      "to": "Docs/banco-imagens/marca/fundo-branco-logo-1.png",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/brand/logos/fundo_branco_logo (12).png",
+      "to": "Docs/banco-imagens/marca/fundo-branco-logo-12.png",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/brand/logos/fundo_branco_logo (2).png",
+      "to": "Docs/banco-imagens/marca/fundo-branco-logo-2.png",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/brand/logos/fundo_branco_logo (21).png",
+      "to": "Docs/banco-imagens/marca/fundo-branco-logo-21.png",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/brand/logos/fundo_branco_logo_png.png",
+      "to": "Docs/banco-imagens/marca/fundo-branco-logo-png.png",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/brand/logos/Logo Berkahn_branco_preto.png",
+      "to": "Docs/banco-imagens/marca/logo-berkahn-branco-preto.png",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/brand/logos/Logo Berkahn_branco.png",
+      "to": "Docs/banco-imagens/marca/logo-berkahn-branco.png",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/brand/logos/logo_berkahn.png",
+      "to": "Docs/banco-imagens/marca/logo-berkahn.png",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/brand/logos/preo_liso_png.png",
+      "to": "Docs/banco-imagens/marca/preo-liso-png.png",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Conteúdo/Capas blog/alvenaria_bloco_vedação_drywall.png",
+      "to": "Docs/banco-imagens/capas-blog/alvenaria-bloco-vedacao-drywall.png",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Conteúdo/Capas blog/drywall_st_ru.png",
+      "to": "Docs/banco-imagens/capas-blog/drywall-st-ru.png",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Conteúdo/Capas blog/energia_solar.png",
+      "to": "Docs/banco-imagens/capas-blog/energia-solar.png",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Conteúdo/Capas blog/Engenheiros testam.png",
+      "to": "Docs/banco-imagens/capas-blog/engenheiros-testam.png",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Conteúdo/Capas blog/evitar_patologias.png",
+      "to": "Docs/banco-imagens/capas-blog/evitar-patologias.png",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Conteúdo/Capas blog/financiamento.webp",
+      "to": "Docs/banco-imagens/capas-blog/financiamento.webp",
+      "em_producao": true
+    },
+    {
+      "from": "Docs/Conteúdo/Capas blog/fogo afeta estrutura.png",
+      "to": "Docs/banco-imagens/capas-blog/fogo-afeta-estrutura.png",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Conteúdo/Capas blog/fogo.webp",
+      "to": "Docs/banco-imagens/capas-blog/fogo.webp",
+      "em_producao": true
+    },
+    {
+      "from": "Docs/Conteúdo/Capas blog/Fundação para Steel Frame.png",
+      "to": "Docs/banco-imagens/capas-blog/fundacao-para-steel-frame.png",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Conteúdo/Capas blog/georgetown_2.webp",
+      "to": "Docs/banco-imagens/capas-blog/georgetown-2.webp",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Conteúdo/Capas blog/georgetown.png",
+      "to": "Docs/banco-imagens/capas-blog/georgetown.png",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Conteúdo/Capas blog/lsf_alvenaria.png",
+      "to": "Docs/banco-imagens/capas-blog/lsf-alvenaria.png",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Conteúdo/Capas blog/lsf_mundial.png",
+      "to": "Docs/banco-imagens/capas-blog/lsf-mundial.png",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Conteúdo/Capas blog/lsf_mundial.webp",
+      "to": "Docs/banco-imagens/capas-blog/lsf-mundial.webp",
+      "em_producao": true
+    },
+    {
+      "from": "Docs/Conteúdo/Capas blog/mármore.png",
+      "to": "Docs/banco-imagens/capas-blog/marmore.png",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Conteúdo/Capas blog/mito_verdade_lsf.png",
+      "to": "Docs/banco-imagens/capas-blog/mito-verdade-lsf.png",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Conteúdo/Capas blog/normas_lsf.png",
+      "to": "Docs/banco-imagens/capas-blog/normas-lsf.png",
+      "em_producao": true
+    },
+    {
+      "from": "Docs/Conteúdo/Capas blog/patologias_sistema.png",
+      "to": "Docs/banco-imagens/capas-blog/patologias-sistema.png",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Conteúdo/Capas blog/piscina_arraia.png",
+      "to": "Docs/banco-imagens/capas-blog/piscina-arraia.png",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Conteúdo/Capas blog/proteção contra queda.png",
+      "to": "Docs/banco-imagens/capas-blog/protecao-contra-queda.png",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Conteúdo/Capas blog/Reestruturando o Concreto.jpg",
+      "to": "Docs/banco-imagens/capas-blog/reestruturando-o-concreto.jpg",
+      "em_producao": true
+    },
+    {
+      "from": "Docs/Conteúdo/Capas blog/vantagesn_desnavantens_lsf.png",
+      "to": "Docs/banco-imagens/capas-blog/vantagesn-desnavantens-lsf.png",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Conteúdo/peças linkedin/patologias-13-04.png",
+      "to": "Docs/banco-imagens/materiais-marketing/patologias-13-04.png",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Imagens/29.png",
+      "to": "Docs/banco-imagens/referencia/29.png",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Imagens/31.png",
+      "to": "Docs/banco-imagens/referencia/31.png",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Imagens/32.png",
+      "to": "Docs/banco-imagens/referencia/32.png",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Imagens/33.png",
+      "to": "Docs/banco-imagens/referencia/33.png",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Imagens/Carrossel projetos-apresentacao/WhatsApp Image 2026-01-06 at 18.43.55.jpeg",
+      "to": "Docs/banco-imagens/obras-projetos/obra-carrossel-01.jpeg",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Imagens/Carrossel projetos-apresentacao/WhatsApp Image 2026-01-06 at 18.43.56 (1).jpeg",
+      "to": "Docs/banco-imagens/obras-projetos/obra-carrossel-02.jpeg",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Imagens/Carrossel projetos-apresentacao/WhatsApp Image 2026-01-06 at 18.43.56 (2).jpeg",
+      "to": "Docs/banco-imagens/obras-projetos/obra-carrossel-03.jpeg",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Imagens/Carrossel projetos-apresentacao/WhatsApp Image 2026-01-06 at 18.43.56.jpeg",
+      "to": "Docs/banco-imagens/obras-projetos/obra-carrossel-04.jpeg",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Imagens/Carrossel projetos-apresentacao/WhatsApp Image 2026-01-06 at 18.43.57 (1).jpeg",
+      "to": "Docs/banco-imagens/obras-projetos/obra-carrossel-05.jpeg",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Imagens/Carrossel projetos-apresentacao/WhatsApp Image 2026-01-06 at 18.43.57 (2).jpeg",
+      "to": "Docs/banco-imagens/obras-projetos/obra-carrossel-06.jpeg",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Imagens/Carrossel projetos-apresentacao/WhatsApp Image 2026-01-06 at 18.43.57 (3).jpeg",
+      "to": "Docs/banco-imagens/obras-projetos/obra-carrossel-07.jpeg",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Imagens/Carrossel projetos-apresentacao/WhatsApp Image 2026-01-06 at 18.43.57.jpeg",
+      "to": "Docs/banco-imagens/obras-projetos/obra-carrossel-08.jpeg",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Imagens/Carrossel projetos-apresentacao/WhatsApp Image 2026-01-06 at 18.43.58 (1).jpeg",
+      "to": "Docs/banco-imagens/obras-projetos/obra-carrossel-09.jpeg",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Imagens/Carrossel projetos-apresentacao/WhatsApp Image 2026-01-06 at 18.43.58 (2).jpeg",
+      "to": "Docs/banco-imagens/obras-projetos/obra-carrossel-10.jpeg",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Imagens/Carrossel projetos-apresentacao/WhatsApp Image 2026-01-06 at 18.43.58 (3).jpeg",
+      "to": "Docs/banco-imagens/obras-projetos/obra-carrossel-11.jpeg",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Imagens/Carrossel projetos-apresentacao/WhatsApp Image 2026-01-06 at 18.43.58.jpeg",
+      "to": "Docs/banco-imagens/obras-projetos/obra-carrossel-12.jpeg",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Imagens/Carrossel projetos-apresentacao/WhatsApp Image 2026-01-06 at 18.43.59 (1).jpeg",
+      "to": "Docs/banco-imagens/obras-projetos/obra-carrossel-13.jpeg",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Imagens/Carrossel projetos-apresentacao/WhatsApp Image 2026-01-06 at 18.43.59.jpeg",
+      "to": "Docs/banco-imagens/obras-projetos/obra-carrossel-14.jpeg",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Imagens/Carrossel projetos-apresentacao/WhatsApp Image 2026-01-06 at 18.48.57.jpeg",
+      "to": "Docs/banco-imagens/obras-projetos/obra-carrossel-15.jpeg",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Imagens/Carrossel projetos-apresentacao/WhatsApp Image 2026-01-06 at 18.48.58 (1).jpeg",
+      "to": "Docs/banco-imagens/obras-projetos/obra-carrossel-16.jpeg",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Imagens/Carrossel projetos-apresentacao/WhatsApp Image 2026-01-06 at 18.48.58 (3).jpeg",
+      "to": "Docs/banco-imagens/obras-projetos/obra-carrossel-17.jpeg",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Imagens/Carrossel projetos-apresentacao/WhatsApp Image 2026-01-06 at 18.48.58.jpeg",
+      "to": "Docs/banco-imagens/obras-projetos/obra-carrossel-18.jpeg",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Imagens/Carrossel projetos-apresentacao/WhatsApp Image 2026-01-06 at 18.48.59 (1).jpeg",
+      "to": "Docs/banco-imagens/obras-projetos/obra-carrossel-19.jpeg",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Imagens/Carrossel projetos-apresentacao/WhatsApp Image 2026-01-06 at 18.48.59 (2).jpeg",
+      "to": "Docs/banco-imagens/obras-projetos/obra-carrossel-20.jpeg",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Imagens/Carrossel projetos-apresentacao/WhatsApp Image 2026-01-06 at 18.48.59 (3).jpeg",
+      "to": "Docs/banco-imagens/obras-projetos/obra-carrossel-21.jpeg",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Imagens/Carrossel projetos-apresentacao/WhatsApp Image 2026-01-06 at 18.48.59 (4).jpeg",
+      "to": "Docs/banco-imagens/obras-projetos/obra-carrossel-22.jpeg",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Imagens/Carrossel projetos-apresentacao/WhatsApp Image 2026-01-06 at 18.48.59.jpeg",
+      "to": "Docs/banco-imagens/obras-projetos/obra-carrossel-23.jpeg",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Imagens/Carrossel projetos-apresentacao/WhatsApp Image 2026-01-06 at 18.49.00 (1).jpeg",
+      "to": "Docs/banco-imagens/obras-projetos/obra-carrossel-24.jpeg",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Imagens/Carrossel projetos-apresentacao/WhatsApp Image 2026-01-06 at 18.49.00 (2).jpeg",
+      "to": "Docs/banco-imagens/obras-projetos/obra-carrossel-25.jpeg",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Imagens/Carrossel projetos-apresentacao/WhatsApp Image 2026-01-06 at 18.49.00.jpeg",
+      "to": "Docs/banco-imagens/obras-projetos/obra-carrossel-26.jpeg",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Imagens/Carrossel projetos-apresentacao/WhatsApp Image 2026-01-06 at 18.49.01 (1).jpeg",
+      "to": "Docs/banco-imagens/obras-projetos/obra-carrossel-27.jpeg",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Imagens/Carrossel projetos-apresentacao/WhatsApp Image 2026-01-06 at 18.49.01 (2).jpeg",
+      "to": "Docs/banco-imagens/obras-projetos/obra-carrossel-28.jpeg",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Imagens/Carrossel projetos-apresentacao/WhatsApp Image 2026-01-06 at 18.49.01 (3).jpeg",
+      "to": "Docs/banco-imagens/obras-projetos/obra-carrossel-29.jpeg",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Imagens/Carrossel projetos-apresentacao/WhatsApp Image 2026-01-06 at 18.49.01.jpeg",
+      "to": "Docs/banco-imagens/obras-projetos/obra-carrossel-30.jpeg",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Imagens/Carrossel projetos-apresentacao/WhatsApp Image 2026-01-06 at 18.49.02 (1).jpeg",
+      "to": "Docs/banco-imagens/obras-projetos/obra-carrossel-31.jpeg",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Imagens/Carrossel projetos-apresentacao/WhatsApp Image 2026-01-06 at 18.49.02 (2).jpeg",
+      "to": "Docs/banco-imagens/obras-projetos/obra-carrossel-32.jpeg",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Imagens/Carrossel projetos-apresentacao/WhatsApp Image 2026-01-06 at 18.49.02 (3).jpeg",
+      "to": "Docs/banco-imagens/obras-projetos/obra-carrossel-33.jpeg",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Imagens/Carrossel projetos-apresentacao/WhatsApp Image 2026-01-06 at 18.49.02.jpeg",
+      "to": "Docs/banco-imagens/obras-projetos/obra-carrossel-34.jpeg",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Imagens/Carrossel projetos-apresentacao/WhatsApp Image 2026-01-06 at 18.49.03.jpeg",
+      "to": "Docs/banco-imagens/obras-projetos/obra-carrossel-35.jpeg",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Imagens/comercial_steel frame.webp",
+      "to": "Docs/banco-imagens/tecnico-lsf/comercial-steel-frame.webp",
+      "em_producao": true
+    },
+    {
+      "from": "Docs/Imagens/Comercial/mapa_brazil.png",
+      "to": "Docs/banco-imagens/tecnico-lsf/mapa-brazil.png",
+      "em_producao": true
+    },
+    {
+      "from": "Docs/Imagens/Empresa/daniel.png",
+      "to": "Docs/banco-imagens/equipe/daniel.png",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Imagens/Empresa/gabriel vidal.png",
+      "to": "Docs/banco-imagens/equipe/gabriel-vidal.png",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Imagens/Empresa/matheus.jpg",
+      "to": "Docs/banco-imagens/equipe/matheus.jpg",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Imagens/equipe/12.png",
+      "to": "Docs/banco-imagens/equipe/12.png",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Imagens/equipe/13.png",
+      "to": "Docs/banco-imagens/equipe/13.png",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Imagens/equipe/ChatGPT Image 25 de abr. de 2026, 16_24_21.png",
+      "to": "Docs/banco-imagens/equipe/chatgpt-image-25-de-abr-de-2026-16-24-21.png",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Imagens/equipe/ChatGPT Image 25 de abr. de 2026, 16_24_28.png",
+      "to": "Docs/banco-imagens/equipe/chatgpt-image-25-de-abr-de-2026-16-24-28.png",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Imagens/equipe/ChatGPT Image 25 de abr. de 2026, 16_24_43.png",
+      "to": "Docs/banco-imagens/equipe/chatgpt-image-25-de-abr-de-2026-16-24-43.png",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Imagens/equipe/ChatGPT Image 27 de abr. de 2026, 11_35_26.png",
+      "to": "Docs/banco-imagens/equipe/chatgpt-image-27-de-abr-de-2026-11-35-26.png",
+      "em_producao": true
+    },
+    {
+      "from": "Docs/Imagens/equipe/Post para Linkedin Tecnologia Agrícola Verde e Branco (22).png",
+      "to": "Docs/banco-imagens/equipe/post-para-linkedin-tecnologia-agricola-verde-e-branco-22.png",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Imagens/equipe/WhatsApp Image 2026-04-25 at 16.45.23.jpeg",
+      "to": "Docs/banco-imagens/equipe/whatsapp-image-2026-04-25-at-16-45-23.jpeg",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Imagens/Home/home-gallery-1.png",
+      "to": "Docs/banco-imagens/obras-projetos/home-gallery-1.png",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Imagens/Home/home-gallery-2.png",
+      "to": "Docs/banco-imagens/obras-projetos/home-gallery-2.png",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Imagens/Home/home-hero.png",
+      "to": "Docs/banco-imagens/obras-projetos/home-hero.png",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Imagens/Link/Design sem nome (32).png",
+      "to": "Docs/banco-imagens/referencia/design-sem-nome-32.png",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Imagens/LSF/lsf-hero-structure.png",
+      "to": "Docs/banco-imagens/tecnico-lsf/lsf-hero-structure.png",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Imagens/LSF/lsf-wall-layers-diagram.png",
+      "to": "Docs/banco-imagens/tecnico-lsf/lsf-wall-layers-diagram.png",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Imagens/mac_steel_frame.webp",
+      "to": "Docs/banco-imagens/tecnico-lsf/mac-steel-frame.webp",
+      "em_producao": true
+    },
+    {
+      "from": "Docs/Imagens/Novas/10ed53c15cd71936b5fa903a584384ef.jpg",
+      "to": "Docs/banco-imagens/referencia/stock/10ed53c15cd71936b5fa903a584384ef.jpg",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Imagens/Novas/22406ca4f1b838b4c5313307b64026f7.jpg",
+      "to": "Docs/banco-imagens/referencia/stock/22406ca4f1b838b4c5313307b64026f7.jpg",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Imagens/Novas/420b60cb7778dee2e297d301f6625e48.jpg",
+      "to": "Docs/banco-imagens/referencia/stock/420b60cb7778dee2e297d301f6625e48.jpg",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Imagens/Novas/4b3c7be185479f5fed63e21a4840c1fa.jpg",
+      "to": "Docs/banco-imagens/referencia/stock/4b3c7be185479f5fed63e21a4840c1fa.jpg",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Imagens/Novas/construction_02.jpg",
+      "to": "Docs/banco-imagens/referencia/stock/construction-02.jpg",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Imagens/Novas/f5ff49e9e95a65030a8f166073f6c524.jpg",
+      "to": "Docs/banco-imagens/referencia/stock/f5ff49e9e95a65030a8f166073f6c524.jpg",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Imagens/Novas/fa29b07c8b63f38c7267a34bc90afc6b.jpg",
+      "to": "Docs/banco-imagens/referencia/stock/fa29b07c8b63f38c7267a34bc90afc6b.jpg",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Imagens/Novas/Light-Gauge-Steel-House_framing-2.jpg",
+      "to": "Docs/banco-imagens/referencia/stock/light-gauge-steel-house-framing-2.jpg",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Imagens/Novas/the-future-of-building-how-offsite-light-gauge-steel-framing-is-transforming-construction.webp",
+      "to": "Docs/banco-imagens/referencia/stock/the-future-of-building-how-offsite-light-gauge-steel-framing-is-transforming-construction.webp",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Imagens/Residencial/Parceiros/aquapanel_banner.png",
+      "to": "Docs/banco-imagens/parceiros/aquapanel-banner.png",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Imagens/Residencial/Parceiros/eternit_banner.png",
+      "to": "Docs/banco-imagens/parceiros/eternit-banner.png",
+      "em_producao": true
+    },
+    {
+      "from": "Docs/Imagens/Residencial/Parceiros/knauf_banner.webp",
+      "to": "Docs/banco-imagens/parceiros/knauf-banner.webp",
+      "em_producao": true
+    },
+    {
+      "from": "Docs/Imagens/Residencial/Parceiros/sicla_banner.avif",
+      "to": "Docs/banco-imagens/parceiros/sicla-banner.avif",
+      "em_producao": true
+    },
+    {
+      "from": "Docs/Imagens/Serviços/casa_campo/Pagina inicial - parte 1 (26).png",
+      "to": "Docs/banco-imagens/obras-projetos/casa-campo-pagina-inicial-parte-1-26.png",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Imagens/Serviços/casa_campo/Pagina inicial - parte 1 (27).png",
+      "to": "Docs/banco-imagens/obras-projetos/casa-campo-pagina-inicial-parte-1-27.png",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Imagens/Serviços/chale-rustico.png",
+      "to": "Docs/banco-imagens/obras-projetos/chale-rustico.png",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Imagens/Serviços/chalé/chale_interior_1.webp",
+      "to": "Docs/banco-imagens/obras-projetos/chale-chale-interior-1.webp",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Imagens/Serviços/chalé/chale_interior_2.webp",
+      "to": "Docs/banco-imagens/obras-projetos/chale-chale-interior-2.webp",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Imagens/Serviços/chalé/chale_interior_3.webp",
+      "to": "Docs/banco-imagens/obras-projetos/chale-chale-interior-3.webp",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Imagens/Serviços/chalé/chale_interior_4.webp",
+      "to": "Docs/banco-imagens/obras-projetos/chale-chale-interior-4.webp",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Imagens/Serviços/chalé/NordicA-frame-01 (1).webp",
+      "to": "Docs/banco-imagens/obras-projetos/chale-nordica-frame-01-1.webp",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Imagens/Serviços/loft-urbano.png",
+      "to": "Docs/banco-imagens/obras-projetos/loft-urbano.png",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Imagens/Serviços/servicos-finished.png",
+      "to": "Docs/banco-imagens/obras-projetos/servicos-finished.png",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Imagens/Serviços/servicos-foundations.png",
+      "to": "Docs/banco-imagens/obras-projetos/servicos-foundations.png",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Imagens/Serviços/servicos-hero.png",
+      "to": "Docs/banco-imagens/obras-projetos/servicos-hero.png",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Imagens/Serviços/servicos-structure.png",
+      "to": "Docs/banco-imagens/obras-projetos/servicos-structure.png",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Orçamento/Imagens/Chalé-retangulo/chale-prototipo-1.jpeg",
+      "to": "Docs/banco-imagens/orcamento-prototipos/chale-retangulo/chale-prototipo-1.jpeg",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Orçamento/Imagens/Chalé-retangulo/chale-prototipo-2.jpeg",
+      "to": "Docs/banco-imagens/orcamento-prototipos/chale-retangulo/chale-prototipo-2.jpeg",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Orçamento/Imagens/Chalé-retangulo/chale-prototipo-3.jpeg",
+      "to": "Docs/banco-imagens/orcamento-prototipos/chale-retangulo/chale-prototipo-3.jpeg",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Orçamento/Imagens/Chalé-retangulo/chale-prototipo-4.jpeg",
+      "to": "Docs/banco-imagens/orcamento-prototipos/chale-retangulo/chale-prototipo-4.jpeg",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Orçamento/Imagens/Chalé-retangulo/elevacao oeste.png",
+      "to": "Docs/banco-imagens/orcamento-prototipos/chale-retangulo/elevacao-oeste.png",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Orçamento/Imagens/Chalé-retangulo/elevacao-leste.png",
+      "to": "Docs/banco-imagens/orcamento-prototipos/chale-retangulo/elevacao-leste.png",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Orçamento/Imagens/Chalé-retangulo/elevacao-norte.png",
+      "to": "Docs/banco-imagens/orcamento-prototipos/chale-retangulo/elevacao-norte.png",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Orçamento/Imagens/Chalé-retangulo/elevacao-sul.png",
+      "to": "Docs/banco-imagens/orcamento-prototipos/chale-retangulo/elevacao-sul.png",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Orçamento/Imagens/Chalé-retangulo/estrutura projeto base-1.png",
+      "to": "Docs/banco-imagens/orcamento-prototipos/chale-retangulo/estrutura-projeto-base-1.png",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Orçamento/Imagens/Chalé-retangulo/estrutura projeto base-2.png",
+      "to": "Docs/banco-imagens/orcamento-prototipos/chale-retangulo/estrutura-projeto-base-2.png",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Orçamento/Imagens/Chalé-retangulo/estrutura projeto base-3.png",
+      "to": "Docs/banco-imagens/orcamento-prototipos/chale-retangulo/estrutura-projeto-base-3.png",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Orçamento/Imagens/Chalé-retangulo/herp-chale-retangulo-rocamento.png",
+      "to": "Docs/banco-imagens/orcamento-prototipos/chale-retangulo/herp-chale-retangulo-rocamento.png",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Orçamento/Imagens/Chalé-retangulo/lsf-1.webp",
+      "to": "Docs/banco-imagens/orcamento-prototipos/chale-retangulo/lsf-1.webp",
+      "em_producao": true
+    },
+    {
+      "from": "Docs/Orçamento/Imagens/Chalé-retangulo/planta baixa 1.png",
+      "to": "Docs/banco-imagens/orcamento-prototipos/chale-retangulo/planta-baixa-1.png",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Orçamento/Imagens/Chalé-retangulo/planta baixa 2.png",
+      "to": "Docs/banco-imagens/orcamento-prototipos/chale-retangulo/planta-baixa-2.png",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Orçamento/Imagens/Chalé-retangulo/sobre_berkahn_1.webp",
+      "to": "Docs/banco-imagens/orcamento-prototipos/chale-retangulo/sobre-berkahn-1.webp",
+      "em_producao": true
+    },
+    {
+      "from": "Docs/Orçamento/Imagens/Chalé-retangulo/sobre_berkahn_2.webp",
+      "to": "Docs/banco-imagens/orcamento-prototipos/chale-retangulo/sobre-berkahn-2.webp",
+      "em_producao": true
+    },
+    {
+      "from": "Docs/Orçamento/Imagens/Chalé-triangulo/chale-02.jpeg",
+      "to": "Docs/banco-imagens/orcamento-prototipos/chale-triangulo/chale-02.jpeg",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Orçamento/Imagens/Chalé-triangulo/chale-1.jpeg",
+      "to": "Docs/banco-imagens/orcamento-prototipos/chale-triangulo/chale-1.jpeg",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Orçamento/Imagens/Chalé-triangulo/estrutura projeto base-01.png",
+      "to": "Docs/banco-imagens/orcamento-prototipos/chale-triangulo/estrutura-projeto-base-01.png",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Orçamento/Imagens/Chalé-triangulo/estrutura projeto base-02.png",
+      "to": "Docs/banco-imagens/orcamento-prototipos/chale-triangulo/estrutura-projeto-base-02.png",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Orçamento/Imagens/estrutura-lsf.webp",
+      "to": "Docs/banco-imagens/orcamento-prototipos/estrutura-lsf.webp",
+      "em_producao": true
+    },
+    {
+      "from": "Docs/REMODELAÇÃO/1.png",
+      "to": "Docs/banco-imagens/referencia/remodelacao/1.png",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/REMODELAÇÃO/2.png",
+      "to": "Docs/banco-imagens/referencia/remodelacao/2.png",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/REMODELAÇÃO/3.png",
+      "to": "Docs/banco-imagens/referencia/remodelacao/3.png",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/REMODELAÇÃO/4.png",
+      "to": "Docs/banco-imagens/referencia/remodelacao/4.png",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/REMODELAÇÃO/5.png",
+      "to": "Docs/banco-imagens/referencia/remodelacao/5.png",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/REMODELAÇÃO/6.png",
+      "to": "Docs/banco-imagens/referencia/remodelacao/6.png",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/REMODELAÇÃO/7.png",
+      "to": "Docs/banco-imagens/referencia/remodelacao/7.png",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/REMODELAÇÃO/8.png",
+      "to": "Docs/banco-imagens/referencia/remodelacao/8.png",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/REMODELAÇÃO/9.png",
+      "to": "Docs/banco-imagens/referencia/remodelacao/9.png",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/SEO & AEO/Prints/consultas_berkahn.png",
+      "to": "Docs/banco-imagens/referencia/seo-aeo/consultas-berkahn.png",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/SEO & AEO/Prints/core-web-vitals.png",
+      "to": "Docs/banco-imagens/referencia/seo-aeo/core-web-vitals.png",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/SEO & AEO/Prints/indexação-1.png",
+      "to": "Docs/banco-imagens/referencia/seo-aeo/indexacao-1.png",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/SEO & AEO/Prints/indexação-2.png",
+      "to": "Docs/banco-imagens/referencia/seo-aeo/indexacao-2.png",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/SEO & AEO/Prints/indexação-3.png",
+      "to": "Docs/banco-imagens/referencia/seo-aeo/indexacao-3.png",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/SEO & AEO/Prints/indexação-4.png",
+      "to": "Docs/banco-imagens/referencia/seo-aeo/indexacao-4.png",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Site_ref/Captura de tela 2025-12-09 184617.png",
+      "to": "Docs/banco-imagens/referencia/site-ref/captura-de-tela-2025-12-09-184617.png",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Site_ref/Captura de tela 2025-12-09 184644.png",
+      "to": "Docs/banco-imagens/referencia/site-ref/captura-de-tela-2025-12-09-184644.png",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Site_ref/Captura de tela 2025-12-09 184709.png",
+      "to": "Docs/banco-imagens/referencia/site-ref/captura-de-tela-2025-12-09-184709.png",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Site_ref/Captura de tela 2025-12-09 185001.png",
+      "to": "Docs/banco-imagens/referencia/site-ref/captura-de-tela-2025-12-09-185001.png",
+      "em_producao": false
+    },
+    {
+      "from": "Docs/Site_ref/Captura de tela 2025-12-09 185059.png",
+      "to": "Docs/banco-imagens/referencia/site-ref/captura-de-tela-2025-12-09-185059.png",
+      "em_producao": false
+    }
+  ],
+  "deletes": [
+    "Docs/Identidade Visual/escrito_preto_logo_png.png",
+    "Docs/Identidade Visual/fundo_branco_logo (1).png",
+    "Docs/Identidade Visual/fundo_branco_logo (12).png",
+    "Docs/Identidade Visual/fundo_branco_logo (2).png",
+    "Docs/Identidade Visual/fundo_branco_logo (21).png",
+    "Docs/Identidade Visual/fundo_branco_logo_png.png",
+    "Docs/Identidade Visual/Logo Berkahn_branco_preto.png",
+    "Docs/Identidade Visual/Logo Berkahn_branco.png",
+    "Docs/Identidade Visual/logo_berkahn.png",
+    "Docs/Identidade Visual/preo_liso_png.png",
+    "Docs/Imagens/equipe/edfc982d-7d12-4abd-8ca7-dbdbb0d6a421.png"
+  ]
+}

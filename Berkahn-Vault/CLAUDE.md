@@ -75,6 +75,8 @@ arquivos_total: <N>
 arquivos_mapeados, arquivos_orfaos, arquivos_duplicados (opcionais)
 ```
 
+**Banco de imagens**: fonte em `Docs/banco-imagens/` (9 categorias, ~160 arquivos). Entry-point [[banco-imagens]] (MOC) → 9 `indices-<categoria>.md` + galerias visuais `galeria-<categoria>.md` (thumbnails em `40-content/materiais/banco-imagens/thumbs/`). Dashboard [[banco-imagens.base]]. Gerido por `scripts/vault-images.mjs` (`--inventory/--dupes/--check/--thumbs`). Rodar `--check` após mexer nos binários.
+
 **`tipo: auditoria`** (em `40-content/auditorias-seo/`):
 ```yaml
 data_diagnostico: YYYY-MM-DD
