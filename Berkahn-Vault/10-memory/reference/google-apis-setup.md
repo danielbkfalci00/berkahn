@@ -1,7 +1,7 @@
 ---
 tipo: memory
 criado: 2026-05-27
-atualizado: 2026-05-27
+atualizado: 2026-07-01
 tags:
   - ai/memory
   - status/active
@@ -82,7 +82,8 @@ Listar com `mcp__scheduled-tasks__list_scheduled_tasks`.
 
 | Erro | Causa | Solução |
 |------|-------|---------|
-| `invalid_grant` | JSON key expirou | Renovar via comando acima |
+| `invalid_grant` | Refresh token OAuth invalidado (expira após ~6 meses inativo OU quando outro grant é emitido para o mesmo client) | `node scripts/analytics/oauth-login.mjs` → autorizar no browser → token novo em `secrets/oauth-tokens.json` |
+| Cron `berkahn-performance-mensal` sem output visível | Falha silenciosa (ex: `invalid_grant`). Desde 2026-07-01 o `generate-report.mjs` grava `~/.claude/scheduled-tasks/berkahn-performance-mensal/last-error.log` com stack trace | Ler o JSON no path acima; corrigir causa; re-rodar `node --env-file=.env.local scripts/analytics/generate-report.mjs` (sucesso apaga o log automaticamente) |
 | `GSC site não encontrado` | SA não tem acesso ao site GSC | GSC → Settings → Users → add SA com permission Restricted |
 | `GA4_PROPERTY_ID missing` | Var ausente em .env.local | Pegar em GA4 Admin → Property Settings (9-10 dígitos) |
 | `Caller does not have permission` no GA4 | SA não tem acesso à property | GA4 Admin → Property Access Management → add SA como Viewer |

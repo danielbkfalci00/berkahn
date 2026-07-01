@@ -1,7 +1,7 @@
 ---
 tipo: meta
 criado: 2026-05-21
-atualizado: 2026-05-22
+atualizado: 2026-07-01
 tags:
   - project/site
   - project/blog
@@ -56,6 +56,12 @@ semana_fim: 2026-05-23
 - [ ] **Fase 4 MCPs** (opcional): HubSpot leads sync · n8n KPIs · Figma tokens
 - [ ] **Consolidar 3 pares capas duplicadas** (PNG vs WEBP) em `Docs/Conteúdo/Capas blog/`
 - [ ] **Migrar slugs ambíguos** ([[blog]]): 2 TODOs no SLUG_MAP do `vault-backfill-articles.mjs`
+
+## Wins / decisões (2026-07-01)
+
+- **Cron mensal `berkahn-performance-mensal` falhou silenciosamente**: disparou 10:23 BRT mas `test-auth.mjs` retornou `invalid_grant` (2ª ocorrência — mesma raiz do incidente Maio/2026). Recuperado manualmente: `oauth-login.mjs` → novo refresh token → `generate-report.mjs` completou → snapshot Junho/2026 no Supabase + MD/HTML em `40-content/auditorias-seo/2026-06-performance-blog.*`.
+- **Hardening aplicado**: `generate-report.mjs` agora grava `~/.claude/scheduled-tasks/berkahn-performance-mensal/last-error.log` em falha e apaga em sucesso. SKILL.md do cron instrui checar esse log antes de rodar. Fim das falhas de 30 dias sem sinal.
+- Reference doc atualizada: [[google-apis-setup]] tabela troubleshooting com linha nova pro `last-error.log` e diagnóstico OAuth (não JSON key).
 
 ## Decisões da semana (2026-05-22)
 

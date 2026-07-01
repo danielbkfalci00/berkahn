@@ -1,7 +1,7 @@
 ---
 tipo: projeto
 criado: 2026-05-22
-atualizado: 2026-06-03
+atualizado: 2026-07-01
 tags:
   - project/site
   - project/blog
@@ -11,7 +11,7 @@ status: active
 projeto: seo-aeo
 kpi_posts_sem_answer_summary: 3
 kpi_score: 52
-kpi_paginas_indexadas: 31
+kpi_paginas_indexadas: 35
 kpi_paginas_total: 44
 kpi_pct_indexacao: 14
 kpi_posts_sem_meta_title: 9
@@ -20,11 +20,11 @@ kpi_trafego_cliques_90d: 41
 kpi_pct_branded: 100
 kpi_dominio_idade_meses: 3
 kpi_backlinks: 0
-kpi_trafego_cliques_30d: 347
-kpi_trafego_impressoes_30d: 20196
-kpi_ctr_medio: 1.72
-kpi_posicao_media: 5.3
-kpi_atualizado_em: 2026-06-03
+kpi_trafego_cliques_30d: 850
+kpi_trafego_impressoes_30d: 34396
+kpi_ctr_medio: 2.47
+kpi_posicao_media: 4.5
+kpi_atualizado_em: 2026-07-01
 contextos_aplicados:
   - seo-aeo-strategy
   - article-pipeline
