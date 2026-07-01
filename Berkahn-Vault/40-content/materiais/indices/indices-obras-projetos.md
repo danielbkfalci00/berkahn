@@ -70,3 +70,7 @@ ls "../../../../Docs/banco-imagens/obras-projetos/" | grep obra-carrossel
 - Ao selecionar imagem do carrossel para uso real, mover a menção para a tabela curada com o `uso_em`.
 - `arquivos_total` (51) = 16 curadas + 35 carrossel.
 - Rodar `node scripts/vault-images.mjs --check` após mudanças.
+
+## Relacionado
+
+- [[watermark-clube-quinta-dos-lagos]] — 26 imagens do Clube Quinta dos Lagos com marca d'água BERKAHN (candidatas a catalogar aqui se virarem material recorrente).
