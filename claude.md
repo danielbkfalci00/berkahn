@@ -168,6 +168,7 @@ gitleaks detect      # scan secrets (auto em pre-commit)
 | `vault-supabase-resync.mjs` | Compara slugs vault ↔ Supabase (`--check`) ou faz PATCH `meta_title/meta_description/answer_summary` (`--patch=slug1,slug2`). Requer `$env:SUPABASE_SERVICE_KEY` |
 | `vault-validate.mjs` | Linter de completude vault (9 validações, exit 0/1/2, output ANSI ou `--json`). Rodado manual ou via `/standup`, `/wrap-up` |
 | `vault-images.mjs` | Banco de imagens (`Docs/banco-imagens/`). `--inventory` (manifesto + flag `em_producao` cruzada por sha256 com `public/images/`), `--dupes` (duplicatas exatas + pares PNG/WEBP), `--check` (contagens vs índices), `--thumbs` (gera thumbnails webp). Entry-point do catálogo: `Berkahn-Vault/40-content/materiais/banco-imagens.md` |
+| `watermark-images.mjs` | Marca d'água BERKAHN em lote (Node + sharp). Isola o wordmark "BERKAHN" do logo-texto, centraliza grande com opacidade baixa e cor adaptativa por região. Flags `--src --out --frac --opacity --color --halo --pick --dry-run`. Preserva originais (escreve só em `--out`). Doc de uso: `Berkahn-Vault/40-content/materiais/watermark-clube-quinta-dos-lagos.md` |
 
 Documentação completa: `scripts/VAULT-SCRIPTS-README.md`
 
