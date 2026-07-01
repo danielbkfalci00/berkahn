@@ -7,24 +7,26 @@ tags:
   - status/active
   - source/manual
   - domain/brand
-ai_summary: "Marca d'agua BERKAHN aplicada em 19 renders/fotos do projeto Clube Quinta dos Lagos (out C:/Users/bruno/Downloads/Arquitetura/Arquitetura/com-marca-dagua). Wordmark grande e centralizado, opacidade 15% (max discreto), cor adaptativa por regiao. Script reutilizavel scripts/watermark-images.mjs."
+ai_summary: "Marca d'agua BERKAHN aplicada em 26 renders/fotos do projeto Clube Quinta dos Lagos (out C:/Users/bruno/Downloads/Arquitetura/com-marca-dagua; originais em .../originais). Wordmark grande e centralizado, opacidade 15% (max discreto), cor adaptativa por regiao. Script reutilizavel scripts/watermark-images.mjs."
 status: active
 projeto: materiais
 projetos_relacionados:
   - materiais
   - apresentacoes
-arquivos_total: 19
+arquivos_total: 26
 ---
 
 # Marca d'agua BERKAHN — Clube Quinta dos Lagos
 
-Registro da aplicacao de marca d'agua no lote de imagens de arquitetura do projeto **Clube Quinta dos Lagos** (13 renders "CLUBE QUINTA DOS LAGOS" + 6 fotos WhatsApp), para compartilhamento externo sinalizando autoria Berkahn.
+Registro da aplicacao de marca d'agua no lote de imagens de arquitetura do projeto **Clube Quinta dos Lagos** (13 renders "CLUBE QUINTA DOS LAGOS" + 13 fotos WhatsApp: 6 de 29/06 + 7 de 01/07), para compartilhamento externo sinalizando autoria Berkahn. Total **26 imagens** (lote inicial 19 + adicional 7).
 
 ## Entrega
 
-- **Origem** (intacta): `C:\Users\bruno\Downloads\Arquitetura\Arquitetura\` — 19 JPEGs.
-- **Saida**: `C:\Users\bruno\Downloads\Arquitetura\Arquitetura\com-marca-dagua\` — 19 JPEGs marcados (mesmos nomes).
-- **Zip para Drive**: `C:\Users\bruno\Downloads\clube-quinta-dos-lagos-com-marca-dagua.zip`.
+Pasta reorganizada em `C:\Users\bruno\Downloads\Arquitetura\`:
+
+- **`originais/`** — 26 JPEGs originais (intactos).
+- **`com-marca-dagua/`** — 26 JPEGs marcados (mesmos nomes).
+- **Zip para Drive**: `C:\Users\bruno\Downloads\clube-quinta-dos-lagos-com-marca-dagua.zip` (26 imagens, ~16 MB).
 
 ## Acabamento final (decisao do Bruno)
 
