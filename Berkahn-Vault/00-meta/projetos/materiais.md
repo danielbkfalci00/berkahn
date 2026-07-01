@@ -50,8 +50,8 @@ Materiais visuais vivem em `Docs/` (fora do vault) por tamanho/formato. Cataloga
 
 ## Próximos 7 dias
 
-- [ ] Criar 9 notas-índice em `40-content/materiais/indices/` (Sprint 1.7)
-- [ ] Catalogar 22 capas blog + linkar para artigos correspondentes
+- [ ] Preencher `uso_em:` restante nos índices (mapear assets → artigos/slides que os consomem)
+- [ ] Decidir catalogar entregas com marca d'água em [[indices-obras-projetos]] (ver [[watermark-clube-quinta-dos-lagos]])
 
 ## KPIs (snapshot)
 
@@ -77,9 +77,9 @@ Materiais visuais vivem em `Docs/` (fora do vault) por tamanho/formato. Cataloga
 - Prompts: [[canva-briefing]] · `/material` slash command
 - Outputs em:
   - `40-content/materiais/briefings/` — briefings gerados por `/material`
-  - `40-content/materiais/indices/` — notas-índice de binaries em `Docs/`
-  - `Docs/Conteúdo/Capas blog/` — capas exportadas do Canva (binary)
-  - `Docs/Conteúdo/peças linkedin/` — peças LinkedIn (binary)
+  - `40-content/materiais/indices/` — notas-índice de binaries em `Docs/banco-imagens/`
+  - `Docs/banco-imagens/capas-blog/` — capas exportadas do Canva (binary)
+  - `Docs/banco-imagens/materiais-marketing/` — peças LinkedIn (binary)
 
 ## Bases relacionadas
 
@@ -104,7 +104,12 @@ Entry-point: [[banco-imagens]] (MOC). Fonte: `Docs/banco-imagens/<categoria>/`.
 - [[indices-materiais-marketing]] — materiais marketing (1)
 - [[indices-referencia]] — referência (34 — não curado p/ galeria)
 
+## Entregas com marca d'água
+
+- [[watermark-clube-quinta-dos-lagos]] — 26 imagens do projeto Clube Quinta dos Lagos com wordmark BERKAHN (script `scripts/watermark-images.mjs`, reutilizável).
+
 ## Histórico recente
 
-- 2026-07-01: banco de imagens reorganizado (160 arquivos / 9 categorias em `Docs/banco-imagens/`); catálogo reescrito — MOC [[banco-imagens]] + 9 índices 1:1 com as categorias; 7 notas-índice antigas (paths defasados) removidas.
+- 2026-07-01: marca d'água BERKAHN aplicada em 26 imagens (Clube Quinta dos Lagos) via `watermark-images.mjs` — registro em [[watermark-clube-quinta-dos-lagos]].
+- 2026-07-01: banco de imagens reorganizado (160 arquivos / 9 categorias em `Docs/banco-imagens/`); catálogo reescrito — MOC [[banco-imagens]] + 9 índices 1:1 com as categorias; 7 notas-índice antigas (paths defasados) removidas; 8 galerias visuais + `banco-imagens.base`.
 - 2026-05-22: hub criado, plano de catalogação via 9 notas-índice

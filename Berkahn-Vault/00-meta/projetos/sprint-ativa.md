@@ -37,7 +37,7 @@ semana_fim: 2026-05-23
 | [[site]] | active | Bug SearchAction + Google Sheets SPOF | Validar build, monitorar CWV |
 | [[seo-aeo]] | active | **P0**: Solicitar indexação GSC top 10 | Ações P0 do diagnóstico |
 | [[apresentacoes]] | active | Roteiros não versionados (parcial) | Validar 16 slides em live env |
-| [[materiais]] | active | 4 capas órfãs + 3 duplicadas (decisão) | Bruno decidir descartar/criar |
+| [[materiais]] | active | Banco consolidado (160/9 cat.) + 26 imgs c/ marca d'água; capas órfãs a decidir | Preencher `uso_em`; catalogar obras marcadas |
 | [[pesquisas]] | active | 70-knowledge populado (10 atomics) | Inventariar mais conceitos |
 
 ## Bloqueios consolidados (cross-projeto)
@@ -48,17 +48,21 @@ semana_fim: 2026-05-23
 - [ ] **Smoke test Supabase** (Sprint 2.5): rodar `node scripts/vault-supabase-resync.mjs --check` com `$env:SUPABASE_SERVICE_KEY`
 
 ### P1 — Próximas 2 semanas
+- [ ] **4 erros de frontmatter em `40-content/curadoria/`** (vault health): `status: done` (airos/maria-isabel/rosmari-revisao) e `tipo: reference` (pipeline-arquitetos) inválidos — corrigir valores OU ampliar listas válidas em `scripts/vault-validate.mjs` + taxonomia do CLAUDE.md. Rodar `vault-validate.mjs` até 0 ERRORs. (chip de sessão: `task_abaacde6`)
 - [ ] **Google Sheets SPOF de leads** ([[site]]): backup automático Supabase (Fase 4.4 — opcional)
 - [ ] **9 posts sem meta_title/meta_description** ([[blog]] + [[seo-aeo]]): preencher via admin Supabase
 - [ ] **3 posts sem answer_summary** ([[seo-aeo]]): preencher para AEO
 
 ### P2 — 2-4 semanas
 - [ ] **Fase 4 MCPs** (opcional): HubSpot leads sync · n8n KPIs · Figma tokens
-- [ ] **Consolidar 3 pares capas duplicadas** (PNG vs WEBP) em `Docs/Conteúdo/Capas blog/`
+- [x] **Capas consolidadas** em `Docs/banco-imagens/capas-blog/` (2026-07-01): dedup por hash concluído; par PNG/WEBP `lsf-mundial` mantido de propósito (PNG master + WEBP em produção). Path antigo `Docs/Conteúdo/Capas blog/` não existe mais.
 - [ ] **Migrar slugs ambíguos** ([[blog]]): 2 TODOs no SLUG_MAP do `vault-backfill-articles.mjs`
 
 ## Wins / decisões (2026-07-01)
 
+- **Banco de imagens consolidado + catalogado** ([[materiais]]): 160 arquivos organizados em `Docs/banco-imagens/` (9 categorias, 11 duplicatas apagadas por sha256), catálogo reescrito (MOC [[banco-imagens]] + 9 índices + 8 galerias visuais + [[banco-imagens.base]]), script `vault-images.mjs`. `public/images/` intocado. PRs #5/#6.
+- **Marca d'água BERKAHN** em 26 imagens do Clube Quinta dos Lagos ([[watermark-clube-quinta-dos-lagos]]): wordmark centralizado, 15% (máx-discreto, decisão do Bruno), cor adaptativa por região; script reutilizável `watermark-images.mjs`. PRs #7/#8. Zip pronto para Drive.
+- **Achado (dívida)**: arquivo `nul` (nome reservado Windows) na raiz trava `git add -A` — commits desta sessão foram por-caminho. `scripts/` é gitignored (tools ficam locais). `claude.md` tracked em minúsculo (case-mismatch resolvido).
 - **Cron mensal `berkahn-performance-mensal` falhou silenciosamente**: disparou 10:23 BRT mas `test-auth.mjs` retornou `invalid_grant` (2ª ocorrência — mesma raiz do incidente Maio/2026). Recuperado manualmente: `oauth-login.mjs` → novo refresh token → `generate-report.mjs` completou → snapshot Junho/2026 no Supabase + MD/HTML em `40-content/auditorias-seo/2026-06-performance-blog.*`.
 - **Hardening aplicado**: `generate-report.mjs` agora grava `~/.claude/scheduled-tasks/berkahn-performance-mensal/last-error.log` em falha e apaga em sucesso. SKILL.md do cron instrui checar esse log antes de rodar. Fim das falhas de 30 dias sem sinal.
 - Reference doc atualizada: [[google-apis-setup]] tabela troubleshooting com linha nova pro `last-error.log` e diagnóstico OAuth (não JSON key).
