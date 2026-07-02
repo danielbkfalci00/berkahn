@@ -5,72 +5,69 @@ import { DomeGallery } from "../DomeGallery";
 
 const SUPABASE_STORAGE = "https://sfqaknxomxwmviarpwfy.supabase.co/storage/v1/object/public/galeria";
 
-// Helper para gerar entrada de imagem por número
-const img = (n: number) => ({
+// Helper para gerar entrada de imagem por número (alt opcional para descrição rica)
+const img = (n: number, alt?: string) => ({
   src: `/images/galeria/projeto-${String(n).padStart(2, "0")}.webp`,
-  alt: `Projeto BERKAHN ${n}`,
+  alt: alt ?? `Projeto BERKAHN ${n}`,
 });
 
 // Ordem otimizada para o dome:
-// - Índices 0-9 ocupam a coluna frontal (visível sem girar) → fachadas nobres + metal
-// - Índices 10-14 e 40-44 ocupam as colunas laterais imediatas
-// - Vídeos espaçados em 14, 28, 42 para distribuição uniforme na esfera
-// - Chalés concentrados no fundo do globo (índices 23-39)
+// - Índices 0-9 = coluna frontal (visível sem girar) → interiores acabados em destaque + fachadas nobres
+// - Índices 10-13 e 36-41 = colunas laterais imediatas
+// - Vídeos espaçados em 14, 28, 40 para distribuição uniforme na esfera
+// - Fundo (índices 23-35) = bloco "obra em LSF": chalés A-frame (mantidos 3) + detalhes estruturais
 const galleryImages = [
-  // ── Frente central (visível ao abrir o slide) ─────────────────
-  img(36), // 0  • parede ripado madeira nobre (acabamento)
-  img(13), // 1  • steel frame estrutural vertical (metal)
+  // ── Frente central (visível ao abrir o slide) — interiores acabados em destaque ──
+  img(35), // 0  • sala ampla com lareira de cimento queimado
+  img(43, "Suíte acabada com teto em vigas de madeira e saída para varanda — residência em Light Steel Frame"), // 1 ⭐ NOVO
   img(40), // 2  ⭐ fachada pedra + vidro + metal (centro absoluto)
-  img(35), // 3  • sala ampla com lareira de cimento queimado
+  img(44, "Suíte integrada ao banheiro com acabamento em madeira — residência Berkahn"), // 3 ⭐ NOVO
   img(37), // 4  • cozinha bancada granito preto
-  img(41), // 5  • escada moderna metal preto + madeira + vidro
-  img(30), // 6  • janelas pretas com céu (frame moderno)
-  img(26), // 7  • viga metálica + porta de aço (industrial)
+  img(45, "Banheiro acabado com pastilha verde e bancada de madeira — residência Berkahn"), // 5 • NOVO
+  img(41), // 6  • escada moderna metal preto + madeira + vidro
+  img(36), // 7  • parede ripado madeira nobre (acabamento)
   img(39), // 8  • banheiro porcelanato cinza
-  img(42), // 9  • vista aérea da estrutura na cidade
+  img(30), // 9  • janelas pretas com céu (frame moderno)
 
   // ── Lateral direita imediata ─────────────────────────────────
   img(38), // 10 • fachada comercial pedra cinza
-  img(14), // 11 • estrutura em obra com pessoa
-  img(17), // 12 • escada metálica estrutural
-  img(27), // 13 • estrutura interior com céu
+  img(13), // 11 • steel frame estrutural vertical (metal)
+  img(46, "Banheiro com box de vidro e revestimento em pastilha — residência Berkahn"), // 12 • NOVO
+  img(26), // 13 • viga metálica + porta de aço (industrial)
   { src: `${SUPABASE_STORAGE}/obra-sem-dor-de-cabeca.mp4`, alt: "Obra sem dor de cabeça" }, // 14 • VÍDEO 1
 
   // ── Meio (visível só ao girar) ───────────────────────────────
-  img(28), // 15 • estrutura + instalações
-  img(18), // 16 • estrutura interna com vão
-  img(33), // 17 • poço/janela com estrutura
-  img(24), // 18 • escada concreto pré-fabricada
-  img(23), // 19 • interior estrutura
-  img(31), // 20 • garagem com forro estrutural
-  img(19), // 21 • interior drywall
-  img(34), // 22 • interior estrutura escada
+  img(14), // 15 • estrutura em obra com pessoa
+  img(17), // 16 • escada metálica estrutural
+  img(27), // 17 • estrutura interior com céu
+  img(28), // 18 • estrutura + instalações
+  img(18), // 19 • estrutura interna com vão
+  img(33), // 20 • poço/janela com estrutura
+  img(24), // 21 • escada concreto pré-fabricada
+  img(23), // 22 • interior estrutura
 
-  // ── Fundo do globo (chalés começam aqui) ─────────────────────
-  img(8),  // 23 • chalé acabamento (mais visualmente interessante)
-  img(4),  // 24 • chalé madeira + metal
-  img(21), // 25 • drywall interior
-  img(29), // 26 • lã de vidro isolamento
-  img(32), // 27 • drywall com pessoa
+  // ── Fundo do globo — bloco "obra em LSF": chalés (3 mantidos) + detalhes ──
+  img(8, "Chalé A-frame em Light Steel Frame com cobertura metálica e revestimento em madeira"), // 23 • chalé (mantido)
+  img(4, "Chalé A-frame em Light Steel Frame, vista lateral ao entardecer"), // 24 • chalé (mantido)
+  img(47, "Detalhe estrutural em Light Steel Frame (perfil galvanizado SMART G90) durante a obra"), // 25 • NOVO
+  img(42), // 26 • vista aérea da estrutura na cidade
+  img(31), // 27 • garagem com forro estrutural
   { src: `${SUPABASE_STORAGE}/expansao-jardim-europa.mp4`, alt: "Expansão Jardim Europa" }, // 28 • VÍDEO 2
-  img(1),  // 29 • chalé com sol
-  img(3),  // 30 • chalé madeira
-  img(20), // 31 • lã de vidro isolamento
-  img(2),  // 32 • chalé madeira alta
-  img(5),  // 33 • chalé
-  img(6),  // 34 • chalé estrutura
-  img(7),  // 35 • chalé estrutura
-  img(11), // 36 • chalé estrutura
-  img(9),  // 37 • chalé estrutura
-  img(12), // 38 • chalé estrutura
-  img(10), // 39 • chalé estrutura
+  img(1, "Chalé A-frame em Light Steel Frame com fechamento em madeira e estrutura aparente"), // 29 • chalé (mantido)
+  img(48, "Beiral em madeira sobre estrutura de aço galvanizado — execução em Light Steel Frame"), // 30 • NOVO
+  img(19), // 31 • interior drywall
+  img(21), // 32 • drywall interior
+  img(29), // 33 • lã de vidro isolamento
+  img(32), // 34 • drywall com pessoa
+  img(20), // 35 • lã de vidro isolamento
 
   // ── Lateral esquerda imediata ────────────────────────────────
-  img(25), // 40 • forro estrutural
-  img(22), // 41 • forro estrutura
-  { src: `${SUPABASE_STORAGE}/video-whatsapp-obra.mp4`, alt: "Obra em andamento" }, // 42 • VÍDEO 3
-  img(16), // 43 • viga industrial
-  img(15), // 44 • painel interno metálico
+  img(34), // 36 • interior estrutura escada
+  img(25), // 37 • forro estrutural
+  img(22), // 38 • forro estrutura
+  img(16), // 39 • viga industrial
+  { src: `${SUPABASE_STORAGE}/video-whatsapp-obra.mp4`, alt: "Obra em andamento" }, // 40 • VÍDEO 3
+  img(15), // 41 • painel interno metálico
 ];
 
 export function SlideGallery() {

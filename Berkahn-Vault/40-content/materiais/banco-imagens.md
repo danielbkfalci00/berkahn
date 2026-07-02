@@ -1,21 +1,21 @@
 ---
 tipo: indice
 criado: 2026-07-01
-atualizado: 2026-07-01
+atualizado: 2026-07-02
 tags:
   - project/materiais
   - status/active
   - source/manual
-ai_summary: "MOC do banco de imagens Berkahn — 160 arquivos em Docs/banco-imagens/ organizados em 9 categorias. Entry-point para os 9 índices de catálogo + galerias visuais (thumbnails). Fonte binária fora do vault; catálogo aqui."
+ai_summary: "MOC do banco de imagens Berkahn — 166 arquivos em Docs/banco-imagens/ organizados em 9 categorias. Entry-point para os 9 índices de catálogo + galerias visuais (thumbnails). Fonte binária fora do vault; catálogo aqui."
 status: active
 projeto: materiais
 path_externo: "../../../Docs/banco-imagens/"
-arquivos_total: 160
+arquivos_total: 166
 ---
 
 # Banco de Imagens — MOC
 
-> **Fonte binária**: `../../../Docs/banco-imagens/` (fora do vault por tamanho — 160 arquivos, ~218 MB).
+> **Fonte binária**: `../../../Docs/banco-imagens/` (fora do vault por tamanho — 166 arquivos, ~219 MB).
 > Esta nota é o **entry-point** do catálogo. Os binários vivem em `Docs/`; o catálogo textual (para SKIM/GREP do Claude) vive aqui; as galerias visuais (thumbnails `.webp`) já estão disponíveis por categoria (`[[galeria-marca]]`, `[[galeria-obras-projetos]]`, …) e no dashboard [[banco-imagens.base]].
 
 ## Estrutura em 3 camadas
@@ -30,7 +30,7 @@ arquivos_total: 160
 |-----------|---|-------------|--------|---------|
 | **marca** | 10 | Logo Berkahn em qualquer suporte (site, deck, material, doc) | [[indices-marca]] | [[galeria-marca]] |
 | **parceiros** | 4 | Banners de parceiros (Aquapanel, Eternit, Knauf, Sicla) em SlidePartners / footer | [[indices-parceiros]] | [[galeria-parceiros]] |
-| **obras-projetos** | 51 | Fotos de obras, renders de serviços, carrossel de projetos p/ site, decks e social | [[indices-obras-projetos]] | [[galeria-obras-projetos]] |
+| **obras-projetos** | 57 | Fotos de obras, renders de serviços, carrossel de projetos p/ site, decks e social | [[indices-obras-projetos]] | [[galeria-obras-projetos]] |
 | **equipe** | 11 | Fotos institucionais (Daniel, Matheus, Gabriel) p/ /empresa, SlideFounders, LinkedIn | [[indices-equipe]] | [[galeria-equipe]] |
 | **tecnico-lsf** | 5 | Diagramas técnicos LSF, mapa Brasil — páginas /lsf, artigos técnicos | [[indices-tecnico-lsf]] | [[galeria-tecnico-lsf]] |
 | **orcamento-prototipos** | 22 | Protótipos de chalé (plantas, elevações, renders) p/ orçamento/proposta comercial | [[indices-orcamento-prototipos]] | [[galeria-orcamento-prototipos]] |
@@ -38,7 +38,7 @@ arquivos_total: 160
 | **materiais-marketing** | 1 | Peças LinkedIn finalizadas (arquivo) | [[indices-materiais-marketing]] | [[galeria-materiais-marketing]] |
 | **referencia** | 34 | Screenshots, mockups, stock e inspiração — **não curados** p/ galeria pública | [[indices-referencia]] | — |
 
-**Total**: 160 arquivos · 9 categorias · **16 já em produção** (cruzados por sha256 com `public/images/`).
+**Total**: 166 arquivos · 9 categorias · **16 já em produção** (cruzados por sha256 com `public/images/`).
 
 ## Como o catálogo é gerado/validado
 

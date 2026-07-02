@@ -1,7 +1,7 @@
 ---
 tipo: context
 criado: 2026-04-13
-atualizado: 2026-05-21
+atualizado: 2026-07-02
 tags:
   - ai/context
   - project/apresentacao
@@ -38,7 +38,7 @@ Documenta a arquitetura da apresentação executiva em `/apresentacao-executiva`
 | 10 | SlideProjectsIntro | Intro: "Obras Gerenciadas pelos Sócios" | Dark |
 | 11-13 | SlideProject ×3 | Projetos individuais (mapeados de presentationProjects) | Alterna |
 | 14 | SlidePartners | Carrossel de parceiros (Brand 01, Lumen, Knauf, Aquapanel) | Dark |
-| 15 | SlideGallery | 41 imagens em DomeGallery 3D interativo | Dark |
+| 15 | SlideGallery | 39 imagens + 3 vídeos em DomeGallery 3D interativo (obras + interiores acabados; array em `components/presentation/slides/SlideGallery.tsx`) | Dark |
 | 16 | SlideContact | "Obrigado. Vamos construir juntos?" + contatos | Dark |
 
 Identidade visual segue [[berkahn-brand]]. Padrões de design em [[design-principles]].
