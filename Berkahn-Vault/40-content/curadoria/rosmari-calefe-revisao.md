@@ -4,10 +4,10 @@ criado: 2026-06-02
 atualizado: 2026-06-02
 tags:
   - project/site
-  - status/done
+  - status/archived
 projeto: site
 ai_summary: Doc de revisao do piloto Rosmari Calefe (Sprint 1 da substituicao de arquitetos mock por reais). Separa dados REAIS extraidos (bio, formacao, areas, contatos) do que e PROVISORIO e precisa da confirmacao do Bruno/Rosmari (nomes e anos de projeto, metricas, headshot, mapeamento imagem-projeto, enquadramento da parceria vs steel frame).
-status: done
+status: archived
 ---
 
 # Revisao — Rosmari Calefe (piloto)
