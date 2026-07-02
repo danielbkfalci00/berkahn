@@ -2,8 +2,6 @@
 tipo: memory
 criado: 2026-05-28
 atualizado: 2026-05-28
-concluido: 2026-05-28
-commit: c9b5f6b
 tags:
   - ai/memory
   - status/archived
@@ -12,6 +10,8 @@ tags:
 ai_summary: Handoff do Sprint 4 do dashboard /admin/analytics, executado e mergeado em 2026-05-28 (commit c9b5f6b). Entregou Timeline de posts no GrowthChart, DevicesMiniChart em Act2, FallingQueriesPanel em Act4, TopQueriesTable mobile cards, loading.tsx skeleton e A11y básico. 3 sprints anteriores concluídos (commits 1e54351, 92aceda, 9224ed8).
 status: archived
 subtipo: project
+concluido: 2026-05-28
+commit: c9b5f6b
 ---
 
 # Sprint 4 — Dashboard `/admin/analytics`: Mobile polish + Timeline + Dados subutilizados

@@ -10,8 +10,8 @@ tags:
 ai_summary: "Performance Maio/2026 — GA4 679 users (↑ 110.9%), GSC 347 clicks (↑ 313.1%), indexação 31/31. Top: Custo do Steel Frame por m² em 2026: Preços Atualizados. P0: Revisar SERP snippet para query "steel frame valor m2" (CTR 1.52%, 722 impressões).."
 status: active
 subtipo: performance-mensal
-data_diagnostico: 2026-06-03
-periodo_analise: "2026-05-01 a 2026-05-31"
+kpi_paginas_indexadas: 31
+kpi_paginas_total: 31
 kpi_ga4_users_mes: 679
 kpi_ga4_sessions_mes: 855
 kpi_ga4_pageviews_mes: 1134
@@ -20,16 +20,16 @@ kpi_gsc_clicks_mes: 347
 kpi_gsc_impressions_mes: 20196
 kpi_gsc_ctr_mes: 1.72
 kpi_gsc_position_mes: 5.3
-kpi_paginas_indexadas: 31
-kpi_paginas_total: 31
 kpi_delta_clicks_mom_pct: 313.1
 kpi_delta_users_mom_pct: 110.9
-projetos_relacionados:
-  - blog
-  - seo-aeo
 contextos_aplicados:
   - seo-aeo-strategy
   - article-pipeline
+projetos_relacionados:
+  - blog
+  - seo-aeo
+periodo_analise: "2026-05-01 a 2026-05-31"
+data_diagnostico: 2026-06-03
 ---
 
 # Performance Blog Berkahn — Maio/2026

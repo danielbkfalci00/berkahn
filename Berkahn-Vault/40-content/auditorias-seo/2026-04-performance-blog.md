@@ -10,8 +10,8 @@ tags:
 ai_summary: "Performance Abril/2026 — GA4 322 users (↑ 168.3%), GSC 84 clicks (↑ 200.0%), indexação 30/30. Top: Home. P0: Sem ações priorizadas."
 status: active
 subtipo: performance-mensal
-data_diagnostico: 2026-05-28
-periodo_analise: "2026-04-01 a 2026-04-30"
+kpi_paginas_indexadas: 30
+kpi_paginas_total: 30
 kpi_ga4_users_mes: 322
 kpi_ga4_sessions_mes: 449
 kpi_ga4_pageviews_mes: 678
@@ -20,16 +20,16 @@ kpi_gsc_clicks_mes: 84
 kpi_gsc_impressions_mes: 5346
 kpi_gsc_ctr_mes: 1.57
 kpi_gsc_position_mes: 5.7
-kpi_paginas_indexadas: 30
-kpi_paginas_total: 30
 kpi_delta_clicks_mom_pct: 200
 kpi_delta_users_mom_pct: 168.3
-projetos_relacionados:
-  - blog
-  - seo-aeo
 contextos_aplicados:
   - seo-aeo-strategy
   - article-pipeline
+projetos_relacionados:
+  - blog
+  - seo-aeo
+periodo_analise: "2026-04-01 a 2026-04-30"
+data_diagnostico: 2026-05-28
 ---
 
 # Performance Blog Berkahn — Abril/2026

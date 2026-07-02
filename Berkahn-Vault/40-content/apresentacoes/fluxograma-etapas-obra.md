@@ -11,10 +11,10 @@ tags:
 ai_summary: Fluxograma "Etapas da Obra" — versão React canônica em components/fluxograma/ servindo a página /etapas-da-obra (limpa, noindex, para envio a clientes) e o card expansível no slide 3 da /apresentacao-executiva. 6 fases, 2 loops de decisão, 3 marcos de orçamento em preto sobre trilho lateral. HTML em Docs/ é artefato v1 de referência.
 status: active
 projeto: apresentacoes
+url_final: /etapas-da-obra
 projetos_relacionados:
   - apresentacoes
   - site
-url_final: /etapas-da-obra
 path_externo: ../../../Docs/fluxograma-etapas-obra.html
 ---
 
