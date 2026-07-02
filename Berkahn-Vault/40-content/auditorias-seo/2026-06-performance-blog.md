@@ -10,8 +10,8 @@ tags:
 ai_summary: "Performance Junho/2026 — GA4 1179 users (↑ 73.6%), GSC 850 clicks (↑ 145.0%), indexação 35/35. Top: Custo do Steel Frame por m² em 2026: Preços Atualizados. P0: Revisar SERP snippet para query "steel frame é mais barato que alvenaria" (CTR 1.86%, 269 impressões).."
 status: active
 subtipo: performance-mensal
-data_diagnostico: 2026-07-01
-periodo_analise: "2026-06-01 a 2026-06-30"
+kpi_paginas_indexadas: 35
+kpi_paginas_total: 35
 kpi_ga4_users_mes: 1179
 kpi_ga4_sessions_mes: 1498
 kpi_ga4_pageviews_mes: 1860
@@ -20,16 +20,16 @@ kpi_gsc_clicks_mes: 850
 kpi_gsc_impressions_mes: 34396
 kpi_gsc_ctr_mes: 2.47
 kpi_gsc_position_mes: 4.5
-kpi_paginas_indexadas: 35
-kpi_paginas_total: 35
 kpi_delta_clicks_mom_pct: 145
 kpi_delta_users_mom_pct: 73.6
-projetos_relacionados:
-  - blog
-  - seo-aeo
 contextos_aplicados:
   - seo-aeo-strategy
   - article-pipeline
+projetos_relacionados:
+  - blog
+  - seo-aeo
+periodo_analise: "2026-06-01 a 2026-06-30"
+data_diagnostico: 2026-07-01
 ---
 
 # Performance Blog Berkahn — Junho/2026

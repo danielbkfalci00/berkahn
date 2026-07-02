@@ -5,9 +5,9 @@ atualizado: 2026-06-02
 tags:
   - project/site
   - status/active
-projeto: site
 ai_summary: Checklist de intake para substituir os 4 arquitetos mockup da curadoria por 3 parceiros reais (Rosmari Calefe, Airos, Maria Isabel Bianchi). Define o que a automacao captura vs o que Bruno entrega manual, onde soltar os arquivos e quais campos nao-raspaveis precisam ser confirmados.
 status: active
+projeto: site
 ---
 
 # Intake — Parceiros reais da Curadoria

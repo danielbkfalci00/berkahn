@@ -10,8 +10,8 @@ tags:
 ai_summary: "Performance Fevereiro/2026 — GA4 109 users (↓ 29.7%), GSC 25 clicks (↑ 25.0%), indexação 30/30. Top: Home. P0: Sem ações priorizadas."
 status: active
 subtipo: performance-mensal
-data_diagnostico: 2026-05-28
-periodo_analise: "2026-02-01 a 2026-02-28"
+kpi_paginas_indexadas: 30
+kpi_paginas_total: 30
 kpi_ga4_users_mes: 109
 kpi_ga4_sessions_mes: 259
 kpi_ga4_pageviews_mes: 595
@@ -20,16 +20,16 @@ kpi_gsc_clicks_mes: 25
 kpi_gsc_impressions_mes: 40
 kpi_gsc_ctr_mes: 62.5
 kpi_gsc_position_mes: 3.1
-kpi_paginas_indexadas: 30
-kpi_paginas_total: 30
 kpi_delta_clicks_mom_pct: 25
 kpi_delta_users_mom_pct: -29.7
-projetos_relacionados:
-  - blog
-  - seo-aeo
 contextos_aplicados:
   - seo-aeo-strategy
   - article-pipeline
+projetos_relacionados:
+  - blog
+  - seo-aeo
+periodo_analise: "2026-02-01 a 2026-02-28"
+data_diagnostico: 2026-05-28
 ---
 
 # Performance Blog Berkahn — Fevereiro/2026

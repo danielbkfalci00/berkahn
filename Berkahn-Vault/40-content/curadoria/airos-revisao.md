@@ -5,9 +5,9 @@ atualizado: 2026-06-02
 tags:
   - project/site
   - status/archived
-projeto: site
 ai_summary: Perfil do Airos Arquitetura montado na curadoria a partir do site real airos.arq.br (fundadores Matheus Fischer + Gustavo Fernandes, alto padrao residencial). Ancora Casa Shark + 5 projetos de galeria, todos com specs reais. Substituiu a fonte pobre do Lovable.
 status: archived
+projeto: site
 ---
 
 # Revisão — Airos Arquitetura

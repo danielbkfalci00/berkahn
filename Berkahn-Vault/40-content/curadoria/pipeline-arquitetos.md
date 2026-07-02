@@ -5,9 +5,9 @@ atualizado: 2026-06-02
 tags:
   - project/site
   - status/active
-projeto: site
 ai_summary: Workflow repetível para adicionar ou atualizar um arquiteto parceiro na curadoria (/curadoria-berkahn). Documenta os scripts (scrape/optimize/contact-sheet/screenshot — que ficam em /scripts/ gitignored), o fluxo passo a passo, o contrato de dados e as regras de posicionamento/voz. Use ao onboardar um novo parceiro ou quando um parceiro mandar material novo.
 status: active
+projeto: site
 ---
 
 # Pipeline — Adicionar/atualizar arquiteto na curadoria
