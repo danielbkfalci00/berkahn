@@ -4,10 +4,10 @@ criado: 2026-06-02
 atualizado: 2026-06-02
 tags:
   - project/site
-  - status/done
+  - status/archived
 projeto: site
 ai_summary: Doc de revisao da Maria Isabel Bianchi (Sprint 2). CV extraido (rico) e retrato encontrado, mas as imagens do portfolio Wix sao fotografia arquitetonica de predios existentes, nao projetos proprios construidos. Lista o que falta (projetos academicos/autorais reais) e a decisao de enquadramento como arquiteta em inicio de carreira.
-status: done
+status: archived
 ---
 
 # Revisao — Maria Isabel Bianchi

@@ -1,5 +1,5 @@
 ---
-tipo: reference
+tipo: documentacao
 criado: 2026-06-02
 atualizado: 2026-06-02
 tags:
