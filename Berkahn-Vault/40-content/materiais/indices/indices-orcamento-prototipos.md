@@ -34,7 +34,7 @@ arquivos_duplicados: 0
 | `elevacao-norte.png`, `elevacao-sul.png`, `elevacao-leste.png`, `elevacao-oeste.png` | orçamento, propostas | 4 elevações |
 | `estrutura-projeto-base-1.png` … `-3.png` | orçamento | Estrutura projeto base (3 imagens) |
 | `herp-chale-retangulo-rocamento.png` | orçamento | Perspectiva/herp do orçamento |
-| `lsf-1.webp` | [[orcamento-automacao]], [[construir-ou-comprar]] | já em produção → `public/images/blog/construir-ou-comprar/cover.webp`, `public/images/img_blog/construir-ou-comprar/cover.webp`, `public/images/Lsf/lsf-1.webp` |
+| `lsf-1.webp` | [[orcamento-automacao]], [[construir-ou-comprar-pronto-numeros-grande-sp\|construir ou comprar]] | já em produção → `public/images/blog/construir-ou-comprar/cover.webp`, `public/images/img_blog/construir-ou-comprar/cover.webp`, `public/images/Lsf/lsf-1.webp` |
 | `sobre-berkahn-1.webp` | orçamento-PDF (Sobre), /serviços | já em produção → `public/images/orcamento/sobre_berkahn_1.webp`, `public/images/Services/hero-servicos.webp` |
 | `sobre-berkahn-2.webp` | orçamento-PDF (Sobre), /empresa | já em produção → `public/images/empresa/primeira-imagem.webp`, `public/images/orcamento/sobre_berkahn_2.webp` |
 

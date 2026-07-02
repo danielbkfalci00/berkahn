@@ -47,7 +47,7 @@ arquivos_duplicados: 3
 | `normas-lsf.png` | [[certificacoes-steel-frame]] / [[normas-lsf]] | já em produção → `public/images/img_blog/Normas LSF/normas_lsf.png` |
 | `protecao-contra-queda.png` | [[protecao-contra-quedas-construcao-civil]] | |
 | `vantagesn-desnavantens-lsf.png` | [[steel-frame-vantagens-desvantagens]] | typo histórico no nome |
-| `reestruturando-o-concreto.jpg` | [[economia-circular-construcao]] | órfã/re-purpose; já em produção → `public/images/img_blog/economia circular/economia_circular.jpg` |
+| `reestruturando-o-concreto.jpg` | [[sustentabilidade-construcao-civil-economia-circular\|economia circular]] | re-purpose; já em produção → `public/images/img_blog/economia circular/economia_circular.jpg` |
 | `energia-solar.png` | — | órfã — tema fotovoltaico (artigo "Solar + LSF" futuro) |
 | `marmore.png` | — | órfã — material premium (artigo "Mármore em LSF" futuro) |
 | `piscina-arraia.png` | — | órfã — projeto residencial específico |
