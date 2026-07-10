@@ -1,86 +1,87 @@
 import { SISTEMAS_CONSTRUTIVOS, optImg } from "@/lib/institucional-data";
-import styles from "@/app/institucional/pdf/institucional.module.css";
+import { RunHead, Eyebrow, Footer, PHOTO_BG } from "@/components/institucional/pdf/chrome";
 
-// Camadas reais da parede LSF (public/images/Lsf/Layers) — spec técnica.
-const CAMADAS_LSF = [
-  "Placa cimentícia",
-  "Manta hidrófuga",
-  "Perfil steel frame — montante 90mm",
-  "Lã de vidro — isolamento termoacústico",
-  "Placa de gesso",
-];
-
-// Página 4 — Sistemas construtivos. Página BLUEPRINT, tipográfica.
+// Página 4 — Sistemas construtivos (página escura). 3 blocos + diagrama LSF + NBRs.
 export function SistemasConstrutivosPDF() {
   const s = SISTEMAS_CONSTRUTIVOS;
-  const [linha1, linha2] = s.headline.split(". ");
 
   return (
-    <div className={`${styles.page} ${styles.blue}`}>
-      <div className={styles.gridLines} />
-      <span className={`${styles.corner} ${styles.cTL}`} />
-      <span className={`${styles.corner} ${styles.cBR}`} />
-      <div className={styles.frame}>
-        <div className={styles.runHead}>
-          <span className={styles.mono} style={{ fontWeight: 700 }}>BERKAHN — SISTEMAS CONSTRUTIVOS</span>
-          <span className={styles.mono}>FOLHA 04/09</span>
-        </div>
+    <div
+      style={{
+        position: "relative",
+        width: "100%",
+        height: "100%",
+        overflow: "hidden",
+        background: "#1A1A1A",
+        padding: "18mm 20mm",
+        display: "flex",
+        flexDirection: "column",
+        color: "#fff",
+      }}
+    >
+      <RunHead label="Sistemas Construtivos" dark />
 
-        <div style={{ paddingTop: 24 }}>
-          <span className={styles.sectionTag} style={{ marginBottom: 14 }}>
-            <span className={styles.tagBox}>S.04</span> SISTEMAS CONSTRUTIVOS
-          </span>
-          <h2 className={styles.display} style={{ fontSize: 46, marginTop: 12 }}>{linha1}.</h2>
-          <p className={styles.displaySoft} style={{ fontSize: 22, marginTop: 10, color: "var(--paper-on-blue)" }}>
-            {linha2}
-          </p>
-          <p className={styles.body} style={{ maxWidth: 500, marginTop: 16, fontSize: 11.5 }}>{s.intro}</p>
-        </div>
+      <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", padding: "12mm 0" }}>
+        <Eyebrow dark>Sistemas Construtivos</Eyebrow>
+        <h2 style={{ fontSize: 38, fontWeight: 800, letterSpacing: "-0.025em", lineHeight: 1.05, color: "#fff", margin: "0 0 20px", maxWidth: "22ch" }}>
+          {s.headline}
+        </h2>
+        <p style={{ fontSize: 14, fontWeight: 400, lineHeight: 1.6, color: "#b8b6ae", margin: "0 0 20px", maxWidth: "70ch" }}>
+          {s.intro}
+        </p>
 
-        {/* Corpo: 3 blocos + camadas */}
-        <div className={styles.grow} style={{ display: "flex", gap: 36, paddingTop: 24 }}>
-          <div style={{ flex: "1 1 58%", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
-            {s.blocos.map((b) => (
-              <div key={b.title} style={{ paddingTop: 12, borderTop: "1.5px solid rgba(238,241,244,0.35)" }}>
-                <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: 12, marginBottom: 5 }}>
-                  <h3 className={styles.h2} style={{ fontSize: 17 }}>{b.title}</h3>
-                  <span className={styles.mono}>{b.subtitle}</span>
+        <div style={{ display: "grid", gridTemplateColumns: "1.05fr 0.95fr", gap: 36, alignItems: "center" }}>
+          <div style={{ display: "flex", flexDirection: "column", borderTop: "1px solid #3a3a3a" }}>
+            {s.blocos.map((b, i) => (
+              <div key={b.title} style={{ padding: "20px 0", borderBottom: "1px solid #3a3a3a" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 8 }}>
+                  <h3 style={{ fontSize: 18, fontWeight: 600, color: "#fff", margin: 0 }}>{b.title}</h3>
+                  {i === 0 ? (
+                    <span
+                      style={{
+                        fontSize: 8.5,
+                        fontWeight: 500,
+                        letterSpacing: "0.18em",
+                        textTransform: "uppercase",
+                        color: "#fff",
+                        border: "1px solid #555",
+                        padding: "3px 8px",
+                      }}
+                    >
+                      {b.subtitle}
+                    </span>
+                  ) : (
+                    <span style={{ fontSize: 8.5, fontWeight: 500, letterSpacing: "0.18em", textTransform: "uppercase", color: "#999" }}>
+                      {b.subtitle}
+                    </span>
+                  )}
                 </div>
-                <p className={`${styles.body} ${styles.bodyMute}`} style={{ fontSize: 10.5 }}>{b.description}</p>
+                <p style={{ fontSize: 11.5, lineHeight: 1.55, color: "#999", margin: 0 }}>{b.description}</p>
               </div>
             ))}
           </div>
 
-          {/* Coluna técnica — camadas + foto */}
-          <div style={{ flex: "0 0 34%", display: "flex", flexDirection: "column", gap: 14 }}>
-            <div style={{ border: "1.5px solid var(--paper-on-blue)", padding: "16px 16px 18px" }}>
-              <p className={styles.mono} style={{ fontWeight: 700, marginBottom: 4 }}>PAREDE LSF</p>
-              <p className={`${styles.mono} ${styles.monoMute}`} style={{ marginBottom: 14 }}>CAMADAS — EXTERIOR ▸ INTERIOR</p>
-              <ol style={{ margin: 0, padding: 0, listStyle: "none" }}>
-                {CAMADAS_LSF.map((c, i) => (
-                  <li key={c} style={{ display: "flex", gap: 10, paddingBottom: 10 }}>
-                    <span className={styles.mono} style={{ fontWeight: 700, flexShrink: 0 }}>{String(i + 1).padStart(2, "0")}</span>
-                    <span className={styles.body} style={{ fontSize: 10, lineHeight: 1.35 }}>{c}</span>
-                  </li>
-                ))}
-              </ol>
-            </div>
-            <figure style={{ margin: 0, flex: 1, minHeight: 120, position: "relative", overflow: "hidden" }}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={optImg("/images/Lsf/lsf-hero-structure.webp", 384)} alt="Estrutura em Light Steel Frame" className={styles.imgCover} style={{ position: "absolute", inset: 0 }} />
-            </figure>
-          </div>
-        </div>
-
-        {/* NBRs */}
-        <div className={styles.titleBlock} style={{ marginTop: 8 }}>
-          {s.normas.map((n) => (
-            <div key={n.norma} className={styles.tbCell} style={{ flex: 1, whiteSpace: "normal" }}>
-              <span className={styles.tbKey}>{n.norma}</span>{n.descricao}
-            </div>
-          ))}
+          <figure style={{ margin: 0, aspectRatio: "3 / 4", background: PHOTO_BG, position: "relative", overflow: "hidden" }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={optImg(s.image, 640)}
+              alt={s.imageAlt}
+              style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}
+            />
+          </figure>
         </div>
       </div>
+
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 24, borderTop: "1px solid #3a3a3a", paddingTop: 16, marginBottom: 16 }}>
+        {s.normas.map((n) => (
+          <div key={n.norma}>
+            <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: "0.04em", color: "#fff", marginBottom: 5 }}>{n.norma}</div>
+            <div style={{ fontSize: 10, lineHeight: 1.5, color: "#999" }}>{n.descricao}.</div>
+          </div>
+        ))}
+      </div>
+
+      <Footer page="04 / 09" dark />
     </div>
   );
 }

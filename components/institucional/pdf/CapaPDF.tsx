@@ -1,55 +1,72 @@
 import { INSTITUCIONAL_CAPA, optImg } from "@/lib/institucional-data";
-import styles from "@/app/institucional/pdf/institucional.module.css";
 
-// Página 1 — Capa. Grotesca gigante flush-left sobre foto crua + title-block.
+// Página 1 — Capa. Foto de fachada full-bleed + gradiente + título grande.
 export function CapaPDF() {
   const c = INSTITUCIONAL_CAPA;
 
   return (
-    <div className={`${styles.page} ${styles.blue}`}>
+    <div style={{ position: "relative", width: "100%", height: "100%", overflow: "hidden", background: "#1A1A1A" }}>
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={optImg(c.heroImage, 1080)} alt="" className={`${styles.imgCover} ${styles.fill} ${styles.dim}`} />
-      <span className={`${styles.corner} ${styles.cTL}`} />
-      <span className={`${styles.corner} ${styles.cTR}`} />
-      <span className={`${styles.corner} ${styles.cBL}`} />
-      <span className={`${styles.corner} ${styles.cBR}`} />
-      <div className={`${styles.coverGradient} ${styles.fill}`} />
-
-      <div className={styles.frame} style={{ justifyContent: "space-between" }}>
-        {/* Cabeçalho técnico */}
-        <div className={styles.runHead}>
-          <span className={styles.mono} style={{ fontWeight: 700 }}>BERKAHN — CONSTRUTORA</span>
-          <span className={styles.mono}>DOC. INSTITUCIONAL / FOLHA 01/09</span>
+      <img
+        src={optImg(c.heroImage, 1080, 70)}
+        alt=""
+        style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}
+      />
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          background:
+            "linear-gradient(180deg, rgba(10,10,10,0.72) 0%, rgba(10,10,10,0.35) 42%, rgba(10,10,10,0.82) 100%)",
+        }}
+      />
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          padding: "20mm",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
+          color: "#fff",
+        }}
+      >
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+          <span style={{ fontSize: 15, fontWeight: 800, letterSpacing: "0.22em" }}>BERKAHN</span>
+          <span
+            style={{
+              fontSize: 9.5,
+              fontWeight: 500,
+              letterSpacing: "0.24em",
+              textTransform: "uppercase",
+              color: "#cfcdc6",
+            }}
+          >
+            {c.label}
+          </span>
         </div>
 
-        {/* Título gigante */}
-        <div>
-          <span className={styles.mono} style={{ display: "block", marginBottom: 18 }}>
-            ///// LIGHT STEEL FRAME
-          </span>
-          <h1 className={styles.display} style={{ fontSize: 88 }}>
-            Do conceito<br />à entrega<br />das chaves
+        <div style={{ marginBottom: "8mm" }}>
+          <div style={{ width: 52, height: 1.5, background: "#fff", marginBottom: 22 }} />
+          <h1 style={{ fontSize: 62, fontWeight: 800, letterSpacing: "-0.03em", lineHeight: 1.0, margin: 0, maxWidth: "15ch" }}>
+            {c.headline}
           </h1>
-          <div className={styles.barThick} style={{ margin: "26px 0 18px", width: 120, height: 4 }} />
-          <p className={styles.body} style={{ maxWidth: 420, fontSize: 12.5 }}>
+          <p style={{ fontSize: 16, fontWeight: 400, lineHeight: 1.55, color: "#d8d6ce", margin: "26px 0 0", maxWidth: "52ch" }}>
             {c.subtitle}
           </p>
         </div>
 
-        {/* Title-block / carimbo */}
-        <div className={styles.titleBlock}>
-          <div className={styles.tbCell}>
-            <span className={styles.tbKey}>Empresa</span>Berkahn Construtora
-          </div>
-          <div className={styles.tbCell}>
-            <span className={styles.tbKey}>Documento</span>Apresentação Institucional
-          </div>
-          <div className={styles.tbCell}>
-            <span className={styles.tbKey}>Local</span>São Paulo · BR
-          </div>
-          <div className={styles.tbCell} style={{ marginLeft: "auto" }}>
-            <span className={styles.tbKey}>Lema</span>{c.tagline}
-          </div>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "flex-end",
+            borderTop: "1px solid rgba(255,255,255,0.22)",
+            paddingTop: 16,
+          }}
+        >
+          <span style={{ fontSize: 13, fontWeight: 800, letterSpacing: "0.22em" }}>BERKAHN</span>
+          <span style={{ fontSize: 16, fontWeight: 300, letterSpacing: "0.02em", color: "#d8d6ce" }}>{c.tagline}</span>
         </div>
       </div>
     </div>

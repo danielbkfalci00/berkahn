@@ -1,69 +1,86 @@
-import { MODELOS_CONTRATACAO, optImg } from "@/lib/institucional-data";
-import styles from "@/app/institucional/pdf/institucional.module.css";
+import { MODELOS_CONTRATACAO } from "@/lib/institucional-data";
+import { RunHead, Eyebrow, Footer } from "@/components/institucional/pdf/chrome";
 
-const MODELO_IMG = [
-  "/images/Services/servicos-finished.webp",
-  "/images/Lsf/lsf-hero-structure.webp",
-];
-
-// Página 5 — Modelos de contratação. Dois blocos + foto por modelo.
+// Página 5 — Modelos de contratação. Dois blocos (obra completa em destaque + time LSF).
 export function ModelosContratacaoPDF() {
   const m = MODELOS_CONTRATACAO;
 
   return (
-    <div className={`${styles.page} ${styles.light}`}>
-      <span className={`${styles.corner} ${styles.cTL}`} />
-      <span className={`${styles.corner} ${styles.cBR}`} />
-      <div className={styles.frame}>
-        <div className={styles.runHead}>
-          <span className={styles.mono} style={{ fontWeight: 700 }}>BERKAHN — MODELOS DE CONTRATAÇÃO</span>
-          <span className={styles.mono}>FOLHA 05/09</span>
-        </div>
+    <div
+      style={{
+        position: "relative",
+        width: "100%",
+        height: "100%",
+        overflow: "hidden",
+        background: "#FFFFFF",
+        padding: "18mm 20mm",
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
+      <RunHead label="Modelos de Contratação" />
 
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", gap: 32, paddingTop: 24 }}>
-          <div>
-            <span className={styles.sectionTag} style={{ marginBottom: 14 }}>
-              <span className={styles.tagBox}>S.05</span> MODELOS DE CONTRATAÇÃO
-            </span>
-            <h2 className={styles.display} style={{ fontSize: 44, marginTop: 12 }}>
-              Dois jeitos<br />de trabalhar
-            </h2>
-          </div>
-          <p className={styles.body} style={{ maxWidth: 240, flexShrink: 0 }}>{m.intro}</p>
-        </div>
+      <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", padding: "16mm 0" }}>
+        <Eyebrow>Modelos de Contratação</Eyebrow>
+        <h2 style={{ fontSize: 46, fontWeight: 800, letterSpacing: "-0.025em", lineHeight: 1.02, color: "#1A1A1A", margin: "0 0 20px" }}>
+          {m.headline}
+        </h2>
+        <p style={{ fontSize: 16, fontWeight: 400, lineHeight: 1.55, color: "#666", margin: "0 0 44px", maxWidth: "62ch" }}>
+          {m.intro}
+        </p>
 
-        <div className={styles.barThick} style={{ marginTop: 20 }} />
-
-        <div className={styles.grow} style={{ display: "flex", gap: 36, paddingTop: 22 }}>
-          {m.modelos.map((mod, i) => (
-            <div key={mod.title} style={{ flex: 1, display: "flex", flexDirection: "column", position: "relative" }}>
-              {i === 1 && (
-                <div style={{ position: "absolute", left: -18, top: 0, bottom: 0, width: 3, background: "var(--ink)" }} />
-              )}
-              <div style={{ display: "flex", alignItems: "baseline", gap: 12, marginBottom: 10 }}>
-                <span className={styles.huge} style={{ fontSize: 56, color: mod.destaque ? "var(--blueprint-line)" : "var(--ink)" }}>
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-                <span className={styles.mono} style={{ fontWeight: 700 }}>{mod.badge}</span>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", border: "1px solid #e2e0d8" }}>
+          {m.modelos.map((mod) => {
+            const dark = mod.destaque;
+            return (
+              <div
+                key={mod.badge}
+                style={{
+                  padding: "34px 34px",
+                  borderRight: dark ? "1px solid #e2e0d8" : undefined,
+                  background: dark ? "#1A1A1A" : "#fff",
+                  color: dark ? "#fff" : undefined,
+                }}
+              >
+                <div
+                  style={{
+                    fontSize: 9.5,
+                    fontWeight: 500,
+                    letterSpacing: "0.2em",
+                    textTransform: "uppercase",
+                    color: dark ? "#888" : "#999",
+                    marginBottom: 12,
+                  }}
+                >
+                  {mod.badge}
+                </div>
+                <h3 style={{ fontSize: 24, fontWeight: 800, letterSpacing: "-0.02em", color: dark ? "#fff" : "#1A1A1A", margin: "0 0 16px" }}>
+                  {mod.title}
+                </h3>
+                <p style={{ fontSize: 12.5, lineHeight: 1.6, color: dark ? "#b8b6ae" : "#666", margin: "0 0 26px" }}>{mod.description}</p>
+                <ul style={{ listStyle: "none", margin: 0, padding: 0 }}>
+                  {mod.items.map((it) => (
+                    <li
+                      key={it}
+                      style={{
+                        fontSize: 12,
+                        fontWeight: 600,
+                        color: dark ? "#fff" : "#1A1A1A",
+                        padding: "11px 0",
+                        borderTop: `1px solid ${dark ? "#3a3a3a" : "#e2e0d8"}`,
+                      }}
+                    >
+                      {it}
+                    </li>
+                  ))}
+                </ul>
               </div>
-              <h3 className={styles.h2} style={{ fontSize: 23, marginBottom: 10 }}>{mod.title}</h3>
-              <p className={`${styles.body} ${styles.bodyMute}`} style={{ marginBottom: 14, fontSize: 10.5 }}>{mod.description}</p>
-              <ul className={styles.specList}>
-                {mod.items.map((it) => (
-                  <li key={it} className={styles.specItem} style={{ fontSize: 10.5 }}>{it}</li>
-                ))}
-              </ul>
-              <figure style={{ margin: 0, marginTop: "auto", width: "100%", height: 360, position: "relative", overflow: "hidden" }}>
-                <span className={styles.mono} style={{ position: "absolute", bottom: 8, left: 8, zIndex: 2, background: "var(--ink)", color: "var(--paper)", padding: "2px 7px", fontSize: 8 }}>
-                  {mod.destaque ? "OBRA CONCLUÍDA" : "ESTRUTURA LSF"}
-                </span>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={optImg(MODELO_IMG[i], 640)} alt={mod.title} className={styles.imgCover} style={{ position: "absolute", inset: 0 }} />
-              </figure>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
+
+      <Footer page="05 / 09" />
     </div>
   );
 }

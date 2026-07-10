@@ -1,59 +1,86 @@
 import { COMO_TRABALHAMOS, EXECUTION_PHASES, optImg } from "@/lib/institucional-data";
-import styles from "@/app/institucional/pdf/institucional.module.css";
+import { RunHead, Eyebrow, Footer, PHOTO_BG } from "@/components/institucional/pdf/chrome";
 
-// Página 6 — Como trabalhamos. Timeline como folhas de spec.
+// Texto das 4 fases conforme o design aprovado (Berkahn Institucional.dc.html).
+// A imagem de cada fase vem de EXECUTION_PHASES (mesma ordem: pré-obra → acabamentos).
+const FASES = [
+  {
+    numero: "01",
+    title: "Pré Obra",
+    duracao: "2 a 3 semanas",
+    description: "Estruturação técnica e financeira do empreendimento antes do início da construção.",
+  },
+  {
+    numero: "02",
+    title: "Terraplanagem, Fundação e Superestrutura",
+    duracao: "4 a 6 semanas",
+    description: "Implantação física do empreendimento com preparação do terreno, fundações e estrutura principal.",
+  },
+  {
+    numero: "03",
+    title: "Estrutura, Vedação e Instalações",
+    duracao: "6 a 8 semanas",
+    description: "Fechamento da edificação com vedações, cobertura e execução completa de sistemas prediais.",
+  },
+  {
+    numero: "04",
+    title: "Acabamentos",
+    duracao: "3 a 4 semanas",
+    description: "Finalização da obra com revestimentos, pinturas e instalação de todos os elementos de acabamento.",
+  },
+];
+
+// Página 6 — Como trabalhamos. Quatro fases com foto, prazo e descrição.
 export function ComoTrabalhamosPDF() {
   const c = COMO_TRABALHAMOS;
 
   return (
-    <div className={`${styles.page} ${styles.light}`}>
-      <span className={`${styles.corner} ${styles.cTL}`} />
-      <span className={`${styles.corner} ${styles.cBR}`} />
-      <div className={styles.frame}>
-        <div className={styles.runHead}>
-          <span className={styles.mono} style={{ fontWeight: 700 }}>BERKAHN — COMO TRABALHAMOS</span>
-          <span className={styles.mono}>FOLHA 06/09</span>
-        </div>
+    <div
+      style={{
+        position: "relative",
+        width: "100%",
+        height: "100%",
+        overflow: "hidden",
+        background: "#F4F2EC",
+        padding: "18mm 20mm",
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
+      <RunHead label="Como Trabalhamos" />
 
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", gap: 32, paddingTop: 26 }}>
-          <div>
-            <span className={styles.sectionTag} style={{ marginBottom: 14 }}>
-              <span className={styles.tagBox}>S.06</span> COMO TRABALHAMOS
-            </span>
-            <h2 className={styles.display} style={{ fontSize: 44, marginTop: 14 }}>
-              Do conceito<br />à entrega das chaves
-            </h2>
-          </div>
-          <p className={styles.body} style={{ maxWidth: 240, flexShrink: 0 }}>{c.intro}</p>
-        </div>
+      <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", padding: "16mm 0" }}>
+        <Eyebrow>Como Trabalhamos</Eyebrow>
+        <h2 style={{ fontSize: 46, fontWeight: 800, letterSpacing: "-0.025em", lineHeight: 1.02, color: "#1A1A1A", margin: "0 0 20px" }}>
+          {c.headline}
+        </h2>
+        <p style={{ fontSize: 16, fontWeight: 400, lineHeight: 1.55, color: "#666", margin: "0 0 40px", maxWidth: "60ch" }}>
+          {c.intro}
+        </p>
 
-        <div className={styles.barThick} style={{ marginTop: 22 }} />
-
-        <div className={styles.grow} style={{ display: "flex", flexDirection: "column" }}>
-          {EXECUTION_PHASES.map((fase) => (
-            <div
-              key={fase.id}
-              style={{ flex: 1, display: "flex", gap: 24, alignItems: "center", paddingTop: 14, paddingBottom: 14, borderBottom: "1.5px solid var(--ink)" }}
-            >
-              <div style={{ width: 92, flexShrink: 0 }}>
-                <div className={styles.mono} style={{ fontWeight: 700, marginBottom: 2 }}>FASE</div>
-                <div className={styles.huge} style={{ fontSize: 46 }}>{String(fase.number).padStart(2, "0")}</div>
-              </div>
-              <figure style={{ margin: 0, width: 118, height: 80, flexShrink: 0, position: "relative", overflow: "hidden" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: 22 }}>
+          {FASES.map((fase, i) => (
+            <div key={fase.numero} style={{ display: "flex", flexDirection: "column" }}>
+              <figure style={{ margin: "0 0 16px", aspectRatio: "3 / 4", background: PHOTO_BG, position: "relative", overflow: "hidden" }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={optImg(fase.images.primary, 384)} alt={fase.images.primaryAlt} className={styles.imgCover} style={{ position: "absolute", inset: 0 }} />
+                <img
+                  src={optImg(EXECUTION_PHASES[i].images.primary, 384)}
+                  alt={EXECUTION_PHASES[i].images.primaryAlt}
+                  style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}
+                />
               </figure>
-              <div style={{ flex: 1 }}>
-                <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: 16, marginBottom: 5 }}>
-                  <h3 className={styles.h2} style={{ fontSize: 18 }}>{fase.title}</h3>
-                  <span className={styles.mono} style={{ flexShrink: 0, border: "1.5px solid var(--ink)", padding: "2px 7px" }}>{fase.duration}</span>
-                </div>
-                <p className={`${styles.body} ${styles.bodyMute}`} style={{ fontSize: 10.5 }}>{fase.summary ?? fase.description}</p>
+              <div style={{ fontSize: 30, fontWeight: 800, letterSpacing: "-0.02em", color: "#c9c6bc", lineHeight: 1, marginBottom: 10 }}>
+                {fase.numero}
               </div>
+              <h3 style={{ fontSize: 13.5, fontWeight: 700, color: "#1A1A1A", margin: "0 0 4px", lineHeight: 1.2 }}>{fase.title}</h3>
+              <div style={{ fontSize: 10, fontWeight: 600, color: "#666", marginBottom: 10 }}>{fase.duracao}</div>
+              <p style={{ fontSize: 10.5, lineHeight: 1.55, color: "#666", margin: 0 }}>{fase.description}</p>
             </div>
           ))}
         </div>
       </div>
+
+      <Footer page="06 / 09" line="#d9d7cf" />
     </div>
   );
 }

@@ -1,67 +1,75 @@
-import { CONTATO_INSTITUCIONAL, optImg } from "@/lib/institucional-data";
-import styles from "@/app/institucional/pdf/institucional.module.css";
+import { CONTATO_INSTITUCIONAL } from "@/lib/institucional-data";
+import { RunHead, Eyebrow } from "@/components/institucional/pdf/chrome";
 
-// Página 9 — Contato. Fecho BLUEPRINT, título gigante + bloco mono.
+// Página 9 — Contato (fecho preto). Título grande + canais + carimbo institucional.
 export function ContatoPDF() {
   const c = CONTATO_INSTITUCIONAL;
 
-  const canais = [
-    { k: "E-MAIL", v: c.email },
-    { k: "TELEFONE", v: c.phone },
-    { k: "SITE", v: c.website },
-    { k: "LINKEDIN", v: c.linkedin },
+  const canais: [string, string][] = [
+    ["E-mail", c.email],
+    ["Telefone", c.phone],
+    ["Site", c.website],
+    ["LinkedIn", c.linkedin],
   ];
 
   return (
-    <div className={`${styles.page} ${styles.blue}`}>
-      <div className={styles.gridLines} />
-      <span className={`${styles.corner} ${styles.cTL}`} />
-      <span className={`${styles.corner} ${styles.cBR}`} />
-      <div className={styles.frame} style={{ justifyContent: "space-between" }}>
-        <div>
-          <div className={styles.runHead}>
-            <span className={styles.mono} style={{ fontWeight: 700 }}>BERKAHN — CONTATO</span>
-            <span className={styles.mono}>FOLHA 09/09</span>
-          </div>
-          {/* Banda de foto — obra assinatura */}
-          <figure className={styles.bleedX} style={{ margin: 0, marginTop: 24, height: 250, position: "relative", overflow: "hidden" }}>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={optImg("/images/Home/hero-4.webp", 828)} alt="Obra Berkahn" className={`${styles.imgCover} ${styles.dim}`} style={{ position: "absolute", inset: 0 }} />
-            <span className={styles.mono} style={{ position: "absolute", bottom: 12, left: "var(--edge)" }}>ERGUENDO O AMANHÃ · LIGHT STEEL FRAME</span>
-          </figure>
-        </div>
+    <div
+      style={{
+        position: "relative",
+        width: "100%",
+        height: "100%",
+        overflow: "hidden",
+        background: "#000000",
+        padding: "18mm 20mm",
+        display: "flex",
+        flexDirection: "column",
+        color: "#fff",
+      }}
+    >
+      <RunHead label="Contato" dark />
 
-        {/* Centro */}
-        <div>
-          <span className={styles.sectionTag} style={{ marginBottom: 20 }}>
-            <span className={styles.tagBox}>S.09</span> CONTATO
-          </span>
-          <h2 className={styles.display} style={{ fontSize: 62, marginTop: 14 }}>
-            Vamos construir<br />juntos?
-          </h2>
-          <p className={styles.body} style={{ maxWidth: 380, marginTop: 16, fontSize: 12 }}>{c.subtitle}</p>
-        </div>
+      <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", padding: "14mm 0" }}>
+        <Eyebrow dark>Contato</Eyebrow>
+        <div style={{ width: 52, height: 1.5, background: "#fff", marginBottom: 26 }} />
+        <h2 style={{ fontSize: 64, fontWeight: 800, letterSpacing: "-0.03em", lineHeight: 1.0, color: "#fff", margin: "0 0 22px" }}>
+          {c.headline}
+        </h2>
+        <p style={{ fontSize: 17, fontWeight: 300, lineHeight: 1.5, color: "#cfcdc6", margin: "0 0 56px", maxWidth: "44ch" }}>
+          {c.subtitle}
+        </p>
 
-        {/* Canais */}
-        <div>
-          <div className={styles.barThick} style={{ marginBottom: 18 }} />
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "18px 40px", maxWidth: 640 }}>
-            {canais.map((ch) => (
-              <div key={ch.k}>
-                <div className={`${styles.mono} ${styles.monoMute}`} style={{ marginBottom: 5 }}>{ch.k}</div>
-                <div className={styles.monoBig} style={{ fontWeight: 700, wordBreak: "break-word" }}>{ch.v}</div>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", borderTop: "1px solid #333" }}>
+          {canais.map(([k, v], i) => {
+            const col = i % 2;
+            const row = Math.floor(i / 2);
+            return (
+              <div
+                key={k}
+                style={{
+                  padding: col === 0 ? "22px 24px 22px 0" : "22px 0 22px 24px",
+                  borderRight: col === 0 ? "1px solid #333" : undefined,
+                  borderBottom: row === 0 ? "1px solid #333" : undefined,
+                }}
+              >
+                <div style={{ fontSize: 9, fontWeight: 500, letterSpacing: "0.2em", textTransform: "uppercase", color: "#888", marginBottom: 8 }}>
+                  {k}
+                </div>
+                <div style={{ fontSize: 16, fontWeight: 600, color: "#fff", wordBreak: "break-word" }}>{v}</div>
               </div>
-            ))}
-          </div>
-
-          {/* Title-block */}
-          <div className={styles.titleBlock} style={{ marginTop: 22 }}>
-            <div className={styles.tbCell}><span className={styles.tbKey}>Empresa</span>Berkahn Construtora</div>
-            <div className={styles.tbCell}><span className={styles.tbKey}>CNPJ</span>{c.cnpj}</div>
-            <div className={styles.tbCell}><span className={styles.tbKey}>Sede</span>{c.local}</div>
-            <div className={styles.tbCell} style={{ marginLeft: "auto" }}><span className={styles.tbKey}>Lema</span>Erguendo o amanhã</div>
-          </div>
+            );
+          })}
         </div>
+      </div>
+
+      <div style={{ borderTop: "1px solid #333", paddingTop: 16, display: "flex", justifyContent: "space-between", alignItems: "flex-end" }}>
+        <div style={{ fontSize: 10, fontWeight: 400, color: "#888", lineHeight: 1.7 }}>
+          <span style={{ fontWeight: 800, letterSpacing: "0.18em", color: "#fff", fontSize: 12 }}>BERKAHN</span>
+          <br />
+          CNPJ {c.cnpj}
+          <br />
+          {c.local}
+        </div>
+        <span style={{ fontSize: 17, fontWeight: 300, color: "#cfcdc6" }}>Erguendo o amanhã</span>
       </div>
     </div>
   );
