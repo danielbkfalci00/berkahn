@@ -7,6 +7,7 @@ import { ComoTrabalhamosPDF } from "@/components/institucional/pdf/ComoTrabalham
 import { PortfolioPDF } from "@/components/institucional/pdf/PortfolioPDF";
 import { FundadoresParceirosPDF } from "@/components/institucional/pdf/FundadoresParceirosPDF";
 import { ContatoPDF } from "@/components/institucional/pdf/ContatoPDF";
+import { Archivo, Space_Mono } from "next/font/google";
 import styles from "@/app/institucional/pdf/institucional.module.css";
 
 // Documento institucional em formato A4 (renderizado pelo Puppeteer via
@@ -14,8 +15,22 @@ import styles from "@/app/institucional/pdf/institucional.module.css";
 // o viewport 794×1123 da rota API é o que pagina o PDF.
 // Wrapper <div> (não <main>): a regra global `@media print main { padding: 1.5cm }`
 // do globals.css inflaria o layout na renderização de impressão.
-// Sistema visual "Monografia editorial" em institucional.module.css (.root cascateia
-// as CSS vars de fonte/paleta para todos os componentes).
+// Sistema visual v3 "Suíço-brutalista / blueprint" em institucional.module.css.
+// Fontes escopadas aqui (não tocam as globais): Archivo (grotesca) + Space Mono (técnica).
+
+const archivo = Archivo({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800", "900"],
+  variable: "--font-archivo",
+  display: "swap",
+});
+
+const spaceMono = Space_Mono({
+  subsets: ["latin"],
+  weight: ["400", "700"],
+  variable: "--font-space-mono",
+  display: "swap",
+});
 
 const PAGINAS = [
   CapaPDF,
@@ -31,7 +46,10 @@ const PAGINAS = [
 
 export default function InstitucionalPDFPage() {
   return (
-    <div className={`${styles.root} relative`} style={{ background: "#1a1a1a" }}>
+    <div
+      className={`${archivo.variable} ${spaceMono.variable} ${styles.root} relative`}
+      style={{ background: "#123A5E" }}
+    >
       {PAGINAS.map((Pagina, index) => (
         <section key={index} className="h-screen overflow-hidden">
           <Pagina />

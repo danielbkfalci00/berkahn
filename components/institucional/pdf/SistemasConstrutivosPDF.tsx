@@ -1,61 +1,76 @@
-import { SISTEMAS_CONSTRUTIVOS, optImg } from "@/lib/institucional-data";
+import { SISTEMAS_CONSTRUTIVOS } from "@/lib/institucional-data";
 import styles from "@/app/institucional/pdf/institucional.module.css";
 
-// Página 4 — Sistemas construtivos. Spread escuro: 3 blocos + diagrama LSF + normas.
+// Camadas reais da parede LSF (public/images/Lsf/Layers) — spec técnica.
+const CAMADAS_LSF = [
+  "Placa cimentícia",
+  "Manta hidrófuga",
+  "Perfil steel frame — montante 90mm",
+  "Lã de vidro — isolamento termoacústico",
+  "Placa de gesso",
+];
+
+// Página 4 — Sistemas construtivos. Página BLUEPRINT, tipográfica.
 export function SistemasConstrutivosPDF() {
   const s = SISTEMAS_CONSTRUTIVOS;
+  const [linha1, linha2] = s.headline.split(". ");
 
   return (
-    <div className={`${styles.page} ${styles.dark}`}>
+    <div className={`${styles.page} ${styles.blue}`}>
+      <div className={styles.gridLines} />
       <div className={styles.frame}>
         <div className={styles.runHead}>
-          <span className={styles.eyebrow}>Berkahn · Apresentação Institucional</span>
-          <span className={styles.eyebrow}>04 / 09</span>
+          <span className={styles.mono} style={{ fontWeight: 700 }}>BERKAHN — SISTEMAS CONSTRUTIVOS</span>
+          <span className={styles.mono}>FOLHA 04/09</span>
         </div>
 
-        {/* Cabeçalho */}
-        <div style={{ paddingTop: 28 }}>
-          <div style={{ display: "flex", alignItems: "baseline", gap: 14, marginBottom: 14 }}>
-            <span className={styles.numeralKicker}>04</span>
-            <span className={styles.eyebrow}>{s.label}</span>
-          </div>
-          <h2 className={styles.h2} style={{ fontSize: 33, maxWidth: 560 }}>{s.headline}</h2>
-          <p className={styles.lead} style={{ maxWidth: 480, marginTop: 16 }}>{s.intro}</p>
+        <div style={{ paddingTop: 24 }}>
+          <span className={styles.sectionTag} style={{ marginBottom: 14 }}>
+            <span className={styles.tagBox}>S.04</span> SISTEMAS CONSTRUTIVOS
+          </span>
+          <h2 className={styles.display} style={{ fontSize: 46, marginTop: 12 }}>{linha1}.</h2>
+          <p className={styles.displaySoft} style={{ fontSize: 22, marginTop: 10, color: "var(--paper-on-blue)" }}>
+            {linha2}
+          </p>
+          <p className={styles.body} style={{ maxWidth: 500, marginTop: 16, fontSize: 11.5 }}>{s.intro}</p>
         </div>
 
-        {/* Corpo: 3 blocos (esq) + diagrama (dir) */}
-        <div className={styles.grow} style={{ display: "flex", gap: 44, paddingTop: 30, alignItems: "stretch" }}>
-          <div style={{ flex: "0 0 52%", display: "flex", flexDirection: "column" }}>
+        {/* Corpo: 3 blocos + camadas */}
+        <div className={styles.grow} style={{ display: "flex", gap: 36, paddingTop: 24 }}>
+          <div style={{ flex: "1 1 58%", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
             {s.blocos.map((b) => (
-              <div key={b.title} style={{ flex: 1, paddingTop: 16, paddingBottom: 16, borderTop: "1px solid var(--hairline-dark)" }}>
-                <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: 12, marginBottom: 7 }}>
-                  <h3 className={styles.h3} style={{ fontSize: 20 }}>{b.title}</h3>
-                  <span className={styles.eyebrow} style={{ flexShrink: 0 }}>{b.subtitle}</span>
+              <div key={b.title} style={{ paddingTop: 12, borderTop: "1.5px solid rgba(238,241,244,0.35)" }}>
+                <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: 12, marginBottom: 5 }}>
+                  <h3 className={styles.h2} style={{ fontSize: 17 }}>{b.title}</h3>
+                  <span className={styles.mono}>{b.subtitle}</span>
                 </div>
-                <p className={`${styles.body} ${styles.bodySoft}`}>{b.description}</p>
+                <p className={`${styles.body} ${styles.bodyMute}`} style={{ fontSize: 10.5 }}>{b.description}</p>
               </div>
             ))}
           </div>
-          <figure style={{ flex: 1, margin: 0, display: "flex", flexDirection: "column", justifyContent: "center" }}>
-            <div style={{ background: "var(--paper)", padding: 18, borderRadius: 2 }}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={optImg(s.image, 1080)} alt={s.imageAlt} style={{ width: "100%", height: "auto", objectFit: "contain", display: "block" }} />
-            </div>
-            <figcaption className={styles.figCaption}>{s.imageAlt}</figcaption>
-          </figure>
+
+          {/* Camadas LSF — coluna técnica */}
+          <div style={{ flex: "0 0 34%", border: "1.5px solid var(--paper-on-blue)", padding: "16px 16px 18px", alignSelf: "flex-start" }}>
+            <p className={styles.mono} style={{ fontWeight: 700, marginBottom: 4 }}>PAREDE LSF</p>
+            <p className={`${styles.mono} ${styles.monoMute}`} style={{ marginBottom: 14 }}>CAMADAS — EXTERIOR ▸ INTERIOR</p>
+            <ol style={{ margin: 0, padding: 0, listStyle: "none" }}>
+              {CAMADAS_LSF.map((c, i) => (
+                <li key={c} style={{ display: "flex", gap: 10, paddingBottom: 10 }}>
+                  <span className={styles.mono} style={{ fontWeight: 700, flexShrink: 0 }}>{String(i + 1).padStart(2, "0")}</span>
+                  <span className={styles.body} style={{ fontSize: 10, lineHeight: 1.35 }}>{c}</span>
+                </li>
+              ))}
+            </ol>
+          </div>
         </div>
 
-        {/* Normas */}
-        <div style={{ marginTop: 12 }}>
-          <div className={styles.hairline} />
-          <div style={{ display: "flex", gap: 28, paddingTop: 16 }}>
-            {s.normas.map((n) => (
-              <div key={n.norma} style={{ flex: 1 }}>
-                <div className={styles.display} style={{ fontSize: 17, marginBottom: 5 }}>{n.norma}</div>
-                <div className={`${styles.body} ${styles.bodySoft}`} style={{ fontSize: 10 }}>{n.descricao}</div>
-              </div>
-            ))}
-          </div>
+        {/* NBRs */}
+        <div className={styles.titleBlock} style={{ marginTop: 8 }}>
+          {s.normas.map((n) => (
+            <div key={n.norma} className={styles.tbCell} style={{ flex: 1, whiteSpace: "normal" }}>
+              <span className={styles.tbKey}>{n.norma}</span>{n.descricao}
+            </div>
+          ))}
         </div>
       </div>
     </div>

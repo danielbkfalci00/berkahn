@@ -1,35 +1,35 @@
 /* ============================================================
-   Documento Institucional Berkahn — sistema visual "Monografia"
-   Direção editorial: Playfair Display + Manrope, mono estrito
-   (paleta oficial Berkahn), fotografia full-bleed, grid assimétrico,
-   numerais gigantes, fios finos. SEM cor fora da marca.
-   Cada página = uma <section> de 794×1123px (viewport do Puppeteer).
+   Documento Institucional Berkahn — v3 "Suíço-brutalista / Blueprint"
+   Grotesca GIGANTE flush-left, grid exposto, números enormes,
+   camada técnica em mono, barras grossas, acento azul blueprint.
+   Antídoto explícito aos "tells" de IA (sem serifa elegante, sem
+   eyebrow uppercase-tracked, sem fio fininho, sem cream, sem simetria).
+   Cada página = uma <section> de 794×1123px (viewport Puppeteer).
    ============================================================ */
 
 .root {
-  /* Fontes já carregadas global no <html> (app/layout.tsx) */
-  --display: var(--font-playfair), Georgia, serif;
-  --sans: var(--font-manrope), system-ui, sans-serif;
+  --display: var(--font-archivo), "Arial Narrow", Arial, sans-serif;
+  --mono: var(--font-space-mono), "Courier New", monospace;
 
-  /* Paleta MONO ESTRITO (oficial Berkahn) */
-  --paper: #f4f2ec;      /* off-white quente — base clara */
-  --paper-soft: #eceae1; /* sutil variação para blocos */
-  --ink: #1a1a1a;        /* charcoal — texto/fundo escuro */
-  --ink-deep: #141311;   /* fundo escuro mais profundo */
-  --soft: #6b6b6b;       /* texto secundário claro */
-  --soft-on-dark: rgba(244, 242, 236, 0.60);
-  --hairline: rgba(26, 26, 26, 0.16);
-  --hairline-dark: rgba(244, 242, 236, 0.22);
-  --accent: var(--ink);  /* MONO: accent = ink (fios, numerais, marcas) */
-  --accent-on-dark: var(--paper);
+  --paper: #f3f3f0;          /* branco frio — NÃO cream */
+  --ink: #131313;
+  --blueprint: #123a5e;      /* azul de planta — fundo escuro + acento */
+  --blueprint-line: #2c6291; /* azul mais claro p/ regras/anotações no claro */
+  --grid: rgba(18, 58, 94, 0.13);
+  --paper-on-blue: #eef1f4;
+  --mute: #6f6f6b;
+  --mute-on-blue: rgba(238, 241, 244, 0.62);
 
-  font-family: var(--sans);
+  --edge: 52px;              /* margem de referência (bleeds usam -52px) */
+
+  font-family: var(--display);
   color: var(--ink);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: "tnum" 1; /* numerais tabulares por padrão */
 }
 
-/* ---------- PÁGINA (canvas A4 fixo) ---------- */
+/* ---------- PÁGINA ---------- */
 .page {
   position: relative;
   width: 100%;
@@ -42,197 +42,225 @@
   background: var(--paper);
   color: var(--ink);
 }
-.dark {
-  background: var(--ink);
-  color: var(--paper);
-}
-/* Contexto de cor claro-sobre-escuro sem fundo (usado sobre foto: capa/fecho) */
-.onDark {
-  color: var(--paper);
+.blue {
+  background: var(--blueprint);
+  color: var(--paper-on-blue);
 }
 
-/* Moldura de conteúdo (páginas de texto). Full-bleed pula isto. */
+/* Grid exposto (blueprint) — 12 colunas, estrutural e sutil */
+.gridLines {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image: repeating-linear-gradient(
+    90deg,
+    var(--grid) 0,
+    var(--grid) 1px,
+    transparent 1px,
+    transparent calc(100% / 12)
+  );
+}
+
 .frame {
   position: relative;
   z-index: 2;
   height: 100%;
   display: flex;
   flex-direction: column;
-  padding: 58px 66px 50px;
+  padding: 44px var(--edge) 40px;
 }
 
-/* Cabeçalho/rodapé de monografia (dispositivo editorial) */
+/* ---------- CABEÇALHO / RODAPÉ TÉCNICO ---------- */
 .runHead {
   display: flex;
   justify-content: space-between;
-  align-items: baseline;
-  padding-bottom: 13px;
-  border-bottom: 1px solid var(--hairline);
+  align-items: center;
+  padding-bottom: 10px;
+  border-bottom: 3px solid var(--ink);
   flex-shrink: 0;
 }
-:is(.dark, .onDark) .runHead {
-  border-color: var(--hairline-dark);
+:is(.blue) .runHead {
+  border-color: var(--paper-on-blue);
 }
-.runFoot {
+
+/* Title-block estilo carimbo de prancha */
+.titleBlock {
   display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  padding-top: 13px;
-  border-top: 1px solid var(--hairline);
+  border: 1.5px solid var(--ink);
   flex-shrink: 0;
 }
-:is(.dark, .onDark) .runFoot {
-  border-color: var(--hairline-dark);
+:is(.blue) .titleBlock {
+  border-color: var(--paper-on-blue);
+}
+.tbCell {
+  padding: 7px 12px;
+  border-right: 1.5px solid var(--ink);
+  font-family: var(--mono);
+  font-size: 8.5px;
+  line-height: 1.3;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+:is(.blue) .tbCell {
+  border-color: var(--paper-on-blue);
+}
+.tbCell:last-child {
+  border-right: 0;
+}
+.tbKey {
+  color: var(--mute);
+  display: block;
+  font-size: 7.5px;
+}
+:is(.blue) .tbKey {
+  color: var(--mute-on-blue);
 }
 
 /* ---------- TIPOGRAFIA ---------- */
-.eyebrow {
-  font-family: var(--sans);
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.24em;
-  font-weight: 600;
-  color: var(--soft);
-  margin: 0;
-}
-:is(.dark, .onDark) .eyebrow {
-  color: var(--soft-on-dark);
-}
-.eyebrowInk {
-  color: var(--ink);
-}
-:is(.dark, .onDark) .eyebrowInk {
-  color: var(--paper);
-}
-
 .display {
   font-family: var(--display);
-  font-weight: 700;
-  letter-spacing: -0.018em;
-  line-height: 1.03;
+  font-weight: 900;
+  line-height: 0.9;
+  letter-spacing: -0.035em;
+  text-transform: uppercase;
+  margin: 0;
+}
+.displaySoft {
+  font-family: var(--display);
+  font-weight: 800;
+  line-height: 0.98;
+  letter-spacing: -0.02em;
   margin: 0;
 }
 .h2 {
   font-family: var(--display);
-  font-weight: 700;
-  font-size: 40px;
-  line-height: 1.07;
-  letter-spacing: -0.018em;
+  font-weight: 800;
+  font-size: 30px;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
   margin: 0;
 }
-.h3 {
+.huge {
   font-family: var(--display);
-  font-weight: 700;
-  font-size: 23px;
-  line-height: 1.12;
-  letter-spacing: -0.01em;
-  margin: 0;
-}
-.lead {
-  font-family: var(--sans);
-  font-size: 13px;
-  line-height: 1.62;
-  font-weight: 400;
-  color: var(--soft);
-  margin: 0;
-}
-:is(.dark, .onDark) .lead {
-  color: var(--soft-on-dark);
+  font-weight: 900;
+  line-height: 0.78;
+  letter-spacing: -0.04em;
+  font-feature-settings: "tnum" 1;
 }
 .body {
-  font-family: var(--sans);
-  font-size: 11.5px;
-  line-height: 1.66;
+  font-family: var(--display);
   font-weight: 400;
+  font-size: 11.5px;
+  line-height: 1.5;
   margin: 0;
 }
-.bodySoft {
-  color: var(--soft);
+.bodyMute {
+  color: var(--mute);
 }
-:is(.dark, .onDark) .bodySoft {
-  color: var(--soft-on-dark);
-}
-
-/* Numeral gigante — âncora editorial de fundo */
-.numeralGhost {
-  position: absolute;
-  font-family: var(--display);
-  font-weight: 700;
-  font-size: 260px;
-  line-height: 0.7;
-  color: var(--ink);
-  opacity: 0.05;
-  user-select: none;
-  pointer-events: none;
-  z-index: 0;
-}
-:is(.dark, .onDark) .numeralGhost {
-  color: var(--paper);
-  opacity: 0.06;
-}
-/* Numeral inline (kicker de seção) */
-.numeralKicker {
-  font-family: var(--display);
-  font-weight: 700;
-  font-size: 34px;
-  line-height: 1;
-  color: var(--accent);
-  letter-spacing: -0.01em;
-}
-:is(.dark, .onDark) .numeralKicker {
-  color: var(--accent-on-dark);
+:is(.blue) .bodyMute {
+  color: var(--mute-on-blue);
 }
 
-/* ---------- FIOS + BULLETS ---------- */
-.hairline {
-  height: 1px;
+/* Camada técnica MONO — labels, specs, numeração, captions */
+.mono {
+  font-family: var(--mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  line-height: 1.4;
+  margin: 0;
+}
+.monoMute {
+  color: var(--mute);
+}
+:is(.blue) .monoMute {
+  color: var(--mute-on-blue);
+}
+.monoBig {
+  font-family: var(--mono);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+/* Label de seção: [ S.04 ] SISTEMAS — mono, não eyebrow */
+.sectionTag {
+  font-family: var(--mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.tagBox {
+  border: 1.5px solid currentColor;
+  padding: 3px 8px;
+  font-weight: 700;
+}
+
+/* ---------- BARRAS / REGRAS (grossas, nunca hairline) ---------- */
+.barThick {
+  height: 3px;
   width: 100%;
-  background: var(--hairline);
+  background: var(--ink);
   border: 0;
+  flex-shrink: 0;
 }
-:is(.dark, .onDark) .hairline {
-  background: var(--hairline-dark);
+:is(.blue) .barThick {
+  background: var(--paper-on-blue);
 }
-.hairlineInk {
-  height: 2px;
-  width: 46px;
-  background: var(--accent);
+.barMed {
+  height: 1.5px;
+  width: 100%;
+  background: var(--ink);
   border: 0;
+  flex-shrink: 0;
 }
-:is(.dark, .onDark) .hairlineInk {
-  background: var(--accent-on-dark);
+:is(.blue) .barMed {
+  background: rgba(238, 241, 244, 0.4);
+}
+.accentBar {
+  background: var(--blueprint-line);
+}
+:is(.blue) .accentBar {
+  background: var(--paper-on-blue);
 }
 
-/* Lista com bullet-tracinho */
-.tickList {
+/* Lista técnica com marcador quadrado */
+.specList {
   list-style: none;
   margin: 0;
   padding: 0;
 }
-.tickItem {
+.specItem {
   position: relative;
-  padding-left: 24px;
-  font-family: var(--sans);
+  padding-left: 20px;
+  font-family: var(--display);
+  font-weight: 500;
   font-size: 11px;
-  line-height: 1.5;
+  line-height: 1.45;
 }
-.tickItem + .tickItem {
-  margin-top: 10px;
+.specItem + .specItem {
+  margin-top: 9px;
 }
-.tickItem::before {
+.specItem::before {
   content: "";
   position: absolute;
   left: 0;
-  top: 0.62em;
-  width: 15px;
-  height: 1px;
-  background: var(--accent);
+  top: 0.5em;
+  width: 8px;
+  height: 8px;
+  background: var(--blueprint-line);
 }
-:is(.dark, .onDark) .tickItem::before {
-  background: var(--accent-on-dark);
+:is(.blue) .specItem::before {
+  background: var(--paper-on-blue);
 }
 
-/* ---------- IMAGEM ---------- */
+/* ---------- IMAGEM (corte duro, sem raio) ---------- */
 .imgCover {
   width: 100%;
   height: 100%;
@@ -244,58 +272,31 @@
   inset: 0;
 }
 .dim {
-  filter: brightness(0.46);
+  filter: brightness(0.5) contrast(1.05);
 }
 .coverGradient {
   position: absolute;
   inset: 0;
   background: linear-gradient(
     180deg,
-    rgba(0, 0, 0, 0.5) 0%,
-    rgba(0, 0, 0, 0.12) 40%,
-    rgba(0, 0, 0, 0.82) 100%
+    rgba(18, 33, 51, 0.5) 0%,
+    rgba(18, 33, 51, 0.15) 45%,
+    rgba(10, 20, 33, 0.9) 100%
   );
 }
-.figCaption {
-  font-family: var(--sans);
-  font-size: 9px;
-  text-transform: uppercase;
-  letter-spacing: 0.18em;
-  color: var(--soft);
-  margin-top: 8px;
-}
-:is(.dark, .onDark) .figCaption {
-  color: var(--soft-on-dark);
-}
 
-/* ---------- STAT ---------- */
-.statValue {
-  font-family: var(--display);
-  font-weight: 700;
-  font-size: 46px;
-  line-height: 0.98;
-  letter-spacing: -0.02em;
-}
-.statLabel {
-  font-family: var(--sans);
-  font-size: 9.5px;
-  line-height: 1.35;
-  color: var(--soft);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  margin-top: 8px;
-}
-:is(.dark, .onDark) .statLabel {
-  color: var(--soft-on-dark);
-}
-
-/* Grid helpers */
+/* utilidades */
 .grow {
   flex: 1 1 auto;
   min-height: 0;
 }
+.bleedL {
+  margin-left: calc(-1 * var(--edge));
+}
+.bleedR {
+  margin-right: calc(-1 * var(--edge));
+}
 
-/* Guard-rails de paginação PDF (puppeteer emula print) */
 @media print {
   .page {
     break-inside: avoid;

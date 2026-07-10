@@ -1,45 +1,39 @@
 import { FUNDADORES, PARCEIROS, optImg } from "@/lib/institucional-data";
 import styles from "@/app/institucional/pdf/institucional.module.css";
 
-// Página 8 — Fundadores + parceiros. Retratos editoriais + fileira de logos.
+// Página 8 — Fundadores + parceiros. Retratos hard-edge + faixa de logos mono.
 export function FundadoresParceirosPDF() {
   return (
     <div className={`${styles.page} ${styles.light}`}>
       <div className={styles.frame}>
         <div className={styles.runHead}>
-          <span className={styles.eyebrow}>Berkahn · Apresentação Institucional</span>
-          <span className={styles.eyebrow}>08 / 09</span>
+          <span className={styles.mono} style={{ fontWeight: 700 }}>BERKAHN — FUNDADORES</span>
+          <span className={styles.mono}>FOLHA 08/09</span>
         </div>
 
-        {/* Cabeçalho */}
-        <div style={{ paddingTop: 30 }}>
-          <div style={{ display: "flex", alignItems: "baseline", gap: 14, marginBottom: 12 }}>
-            <span className={styles.numeralKicker}>08</span>
-            <span className={styles.eyebrow}>Fundadores</span>
-          </div>
-          <h2 className={styles.h2}>Experiência que constrói confiança</h2>
+        <div style={{ paddingTop: 24 }}>
+          <span className={styles.sectionTag} style={{ marginBottom: 12 }}>
+            <span className={styles.tagBox}>S.08</span> FUNDADORES
+          </span>
+          <h2 className={styles.display} style={{ fontSize: 40, marginTop: 12 }}>Experiência que<br />constrói confiança</h2>
         </div>
 
-        {/* Fundadores */}
-        <div className={styles.grow} style={{ display: "flex", gap: 32, paddingTop: 30 }}>
-          {FUNDADORES.map((f) => (
+        <div className={styles.grow} style={{ display: "flex", gap: 26, paddingTop: 24 }}>
+          {FUNDADORES.map((f, i) => (
             <div key={f.name} style={{ flex: 1, display: "flex", flexDirection: "column" }}>
-              <figure style={{ margin: 0, width: "100%", height: 420, flexShrink: 0, position: "relative", overflow: "hidden", borderRadius: 2, marginBottom: 16 }}>
+              <figure style={{ margin: 0, width: "100%", height: 415, flexShrink: 0, position: "relative", overflow: "hidden", marginBottom: 14 }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={optImg(f.image, 640)} alt={f.name} className={styles.imgCover} style={{ position: "absolute", inset: 0, objectPosition: "top" }} />
+                <span className={styles.mono} style={{ position: "absolute", top: 8, left: 8, background: "var(--ink)", color: "var(--paper)", padding: "2px 6px" }}>
+                  {String(i + 1).padStart(2, "0")}
+                </span>
               </figure>
-              <h3 className={styles.display} style={{ fontSize: 21, marginBottom: 3 }}>{f.name}</h3>
-              <span className={styles.eyebrow} style={{ marginBottom: 12 }}>{f.role}</span>
+              <div className={styles.barMed} style={{ marginBottom: 10 }} />
+              <h3 className={styles.displaySoft} style={{ fontSize: 19, marginBottom: 4 }}>{f.name}</h3>
+              <span className={`${styles.mono} ${styles.monoMute}`} style={{ marginBottom: 10 }}>{f.role}</span>
               <p
-                className={`${styles.body} ${styles.bodySoft}`}
-                style={{
-                  fontSize: 10,
-                  lineHeight: 1.6,
-                  display: "-webkit-box",
-                  WebkitLineClamp: 5,
-                  WebkitBoxOrient: "vertical",
-                  overflow: "hidden",
-                }}
+                className={`${styles.body} ${styles.bodyMute}`}
+                style={{ fontSize: 9.5, lineHeight: 1.5, display: "-webkit-box", WebkitLineClamp: 5, WebkitBoxOrient: "vertical", overflow: "hidden" }}
               >
                 {f.bio}
               </p>
@@ -48,19 +42,14 @@ export function FundadoresParceirosPDF() {
         </div>
 
         {/* Parceiros */}
-        <div style={{ marginTop: 26 }}>
-          <div className={styles.hairline} />
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", paddingTop: 18, gap: 24 }}>
-            <span className={styles.eyebrow} style={{ flexShrink: 0 }}>Marcas Parceiras</span>
+        <div style={{ marginTop: 20 }}>
+          <div className={styles.barThick} style={{ marginBottom: 14 }} />
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 24 }}>
+            <span className={styles.mono} style={{ fontWeight: 700, flexShrink: 0 }}>MARCAS PARCEIRAS</span>
             <div style={{ display: "flex", alignItems: "center", gap: 40, flex: 1, justifyContent: "flex-end" }}>
               {PARCEIROS.map((parc) => (
                 // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  key={parc.name}
-                  src={optImg(parc.logo, 256)}
-                  alt={parc.name}
-                  style={{ height: 26, width: "auto", maxWidth: 120, objectFit: "contain", opacity: 0.75 }}
-                />
+                <img key={parc.name} src={optImg(parc.logo, 256)} alt={parc.name} style={{ height: 24, width: "auto", maxWidth: 118, objectFit: "contain" }} />
               ))}
             </div>
           </div>

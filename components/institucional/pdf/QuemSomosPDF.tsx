@@ -1,7 +1,7 @@
 import { QUEM_SOMOS, optImg } from "@/lib/institucional-data";
 import styles from "@/app/institucional/pdf/institucional.module.css";
 
-// Página 2 — Quem somos. Grid assimétrico: texto estreito + foto; stats; comparativo.
+// Página 2 — Quem somos. Título gigante + números enormes + tabela mono.
 export function QuemSomosPDF() {
   const q = QUEM_SOMOS;
 
@@ -9,61 +9,63 @@ export function QuemSomosPDF() {
     <div className={`${styles.page} ${styles.light}`}>
       <div className={styles.frame}>
         <div className={styles.runHead}>
-          <span className={styles.eyebrow}>Berkahn · Apresentação Institucional</span>
-          <span className={styles.eyebrow}>02 / 09</span>
+          <span className={styles.mono} style={{ fontWeight: 700 }}>BERKAHN — QUEM SOMOS</span>
+          <span className={styles.mono}>FOLHA 02/09</span>
         </div>
 
-        {/* Bloco 1: texto (esq) + foto (dir) */}
-        <div style={{ display: "flex", gap: 40, paddingTop: 30 }}>
-          <div style={{ flex: "0 0 55%" }}>
-            <div style={{ display: "flex", alignItems: "baseline", gap: 14, marginBottom: 14 }}>
-              <span className={styles.numeralKicker}>02</span>
-              <span className={styles.eyebrow}>{q.label}</span>
-            </div>
-            <h2 className={styles.h2} style={{ maxWidth: 320 }}>{q.headline}</h2>
-            <div className={styles.hairlineInk} style={{ margin: "20px 0" }} />
-            <p className={styles.body} style={{ marginBottom: 12 }}>{q.intro}</p>
-            <p className={`${styles.body} ${styles.bodySoft}`}>{q.historia}</p>
+        {/* Título + foto */}
+        <div style={{ display: "flex", gap: 28, paddingTop: 26, alignItems: "flex-start" }}>
+          <div style={{ flex: "1 1 auto" }}>
+            <span className={styles.sectionTag} style={{ marginBottom: 16 }}>
+              <span className={styles.tagBox}>S.02</span> QUEM SOMOS
+            </span>
+            <h2 className={styles.display} style={{ fontSize: 58, marginTop: 14 }}>
+              Construtora,<br />não empreiteira
+            </h2>
           </div>
-          <figure style={{ flex: "1 1 auto", margin: 0, position: "relative", minHeight: 300 }}>
+          <figure style={{ margin: 0, width: 210, height: 168, flexShrink: 0, overflow: "hidden", position: "relative" }} className={styles.bleedR}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={optImg("/images/empresa/primeira-imagem.webp", 828)} alt="Equipe e canteiro Berkahn" className={styles.imgCover} style={{ position: "absolute", inset: 0 }} />
+            <img src={optImg("/images/empresa/primeira-imagem.webp", 640)} alt="Equipe e canteiro Berkahn" className={styles.imgCover} style={{ position: "absolute", inset: 0 }} />
           </figure>
         </div>
 
-        {/* Bloco 2: stats */}
-        <div style={{ marginTop: 26 }}>
-          <div className={styles.hairline} />
-          <div style={{ display: "flex", gap: 32, paddingTop: 18 }}>
-            {q.stats.map((s, i) => (
-              <div key={s.label} style={{ flex: i === 2 ? 1.5 : 1 }}>
-                <div className={styles.statValue}>{s.value}</div>
-                <div className={styles.statLabel}>{s.label}</div>
-              </div>
-            ))}
-          </div>
+        <div style={{ display: "flex", gap: 40, marginTop: 18 }}>
+          <p className={styles.body} style={{ flex: 1, fontSize: 12 }}>{q.intro}</p>
+          <p className={`${styles.body} ${styles.bodyMute}`} style={{ flex: 1, fontSize: 11 }}>{q.historia}</p>
         </div>
 
-        {/* Bloco 3: comparativo */}
-        <div style={{ marginTop: 26 }}>
-          <p className={styles.eyebrowInk} style={{ fontSize: 12, fontFamily: "var(--font-playfair), serif", textTransform: "none", letterSpacing: "-0.01em", fontWeight: 700, marginBottom: 18 }}>
+        {/* Números enormes */}
+        <div className={styles.barThick} style={{ marginTop: 26 }} />
+        <div style={{ display: "flex", gap: 24, paddingTop: 18 }}>
+          {q.stats.map((s, i) => (
+            <div key={s.label} style={{ flex: i === 2 ? 1.6 : 1 }}>
+              <div className={styles.huge} style={{ fontSize: i === 2 ? 48 : 72 }}>{s.value}</div>
+              <div className={styles.mono} style={{ marginTop: 10 }}>{s.label}</div>
+            </div>
+          ))}
+        </div>
+
+        {/* Comparativo — tabela mono */}
+        <div style={{ marginTop: 42 }}>
+          <p className={styles.monoBig} style={{ fontWeight: 700, marginBottom: 16, textTransform: "none", letterSpacing: "-0.01em" }}>
             {q.comparativo.subtitulo}
           </p>
-          <div style={{ display: "flex", gap: 40 }}>
+          <div style={{ display: "flex", gap: 32 }}>
             <div style={{ flex: 1 }}>
-              <p className={styles.eyebrow} style={{ marginBottom: 12 }}>Construtora Berkahn</p>
-              <ul className={styles.tickList}>
+              <div className={styles.barMed} style={{ marginBottom: 12 }} />
+              <p className={styles.mono} style={{ fontWeight: 700, marginBottom: 12 }}>CONSTRUTORA BERKAHN</p>
+              <ul className={styles.specList}>
                 {q.comparativo.construtora.map((it) => (
-                  <li key={it} className={styles.tickItem}>{it}</li>
+                  <li key={it} className={styles.specItem}>{it}</li>
                 ))}
               </ul>
             </div>
-            <div style={{ width: 1, background: "var(--hairline)", alignSelf: "stretch" }} />
             <div style={{ flex: 1 }}>
-              <p className={styles.eyebrow} style={{ marginBottom: 12 }}>Empreiteira</p>
-              <ul className={styles.tickList}>
+              <div className={styles.barMed} style={{ marginBottom: 12, opacity: 0.35 }} />
+              <p className={`${styles.mono} ${styles.monoMute}`} style={{ fontWeight: 700, marginBottom: 12 }}>EMPREITEIRA</p>
+              <ul className={styles.specList}>
                 {q.comparativo.empreiteira.map((it) => (
-                  <li key={it} className={styles.tickItem} style={{ color: "var(--soft)" }}>{it}</li>
+                  <li key={it} className={styles.specItem} style={{ color: "var(--mute)" }}>{it}</li>
                 ))}
               </ul>
             </div>
