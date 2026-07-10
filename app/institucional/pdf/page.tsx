@@ -1,3 +1,13 @@
+import { CapaPDF } from "@/components/institucional/pdf/CapaPDF";
+import { QuemSomosPDF } from "@/components/institucional/pdf/QuemSomosPDF";
+import { OQueFazemosPDF } from "@/components/institucional/pdf/OQueFazemosPDF";
+import { SistemasConstrutivosPDF } from "@/components/institucional/pdf/SistemasConstrutivosPDF";
+import { ModelosContratacaoPDF } from "@/components/institucional/pdf/ModelosContratacaoPDF";
+import { ComoTrabalhamosPDF } from "@/components/institucional/pdf/ComoTrabalhamosPDF";
+import { PortfolioPDF } from "@/components/institucional/pdf/PortfolioPDF";
+import { FundadoresParceirosPDF } from "@/components/institucional/pdf/FundadoresParceirosPDF";
+import { ContatoPDF } from "@/components/institucional/pdf/ContatoPDF";
+
 // Documento institucional em formato A4 (renderizado pelo Puppeteer via
 // /api/institucional/pdf). Cada <section className="h-screen"> vira uma página:
 // o viewport 794×1123 da rota API é o que pagina o PDF.
@@ -5,28 +15,23 @@
 // do globals.css inflaria o layout na renderização de impressão.
 
 const PAGINAS = [
-  "Capa",
-  "Quem somos",
-  "O que fazemos",
-  "Sistemas construtivos",
-  "Modelos de contratação",
-  "Como trabalhamos",
-  "Portfólio",
-  "Fundadores e parceiros",
-  "Contato",
+  CapaPDF,
+  QuemSomosPDF,
+  OQueFazemosPDF,
+  SistemasConstrutivosPDF,
+  ModelosContratacaoPDF,
+  ComoTrabalhamosPDF,
+  PortfolioPDF,
+  FundadoresParceirosPDF,
+  ContatoPDF,
 ];
 
 export default function InstitucionalPDFPage() {
   return (
     <div className="relative bg-white">
-      {PAGINAS.map((titulo) => (
-        <section
-          key={titulo}
-          className="h-screen flex flex-col justify-center overflow-hidden"
-        >
-          <p className="text-center text-black/40 text-sm uppercase tracking-[0.3em]">
-            {titulo}
-          </p>
+      {PAGINAS.map((Pagina, index) => (
+        <section key={index} className="h-screen overflow-hidden">
+          <Pagina />
         </section>
       ))}
     </div>
