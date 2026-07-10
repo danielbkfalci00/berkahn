@@ -6,7 +6,7 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "*",
         allow: "/",
-        disallow: ["/admin/", "/orcamento/pdf", "/apresentacao-executiva/", "/etapas-da-obra/"],
+        disallow: ["/admin/", "/orcamento/pdf", "/apresentacao-executiva/", "/etapas-da-obra/", "/institucional/"],
       },
       {
         // Block training-only crawlers (no search/citation value)

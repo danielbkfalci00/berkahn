@@ -12,6 +12,7 @@ export function ConditionalFooter() {
     pathname?.startsWith("/orcamento") ||
     pathname?.startsWith("/curadoria-berkahn") ||
     pathname?.startsWith("/etapas-da-obra") ||
+    pathname?.startsWith("/institucional") ||
     pathname?.startsWith("/admin");
 
   if (isFullscreenRoute) {
