@@ -1,57 +1,41 @@
-import Image from "next/image";
-import { INSTITUCIONAL_CAPA } from "@/lib/institucional-data";
+import { INSTITUCIONAL_CAPA, optImg } from "@/lib/institucional-data";
+import styles from "@/app/institucional/pdf/institucional.module.css";
 
+// Página 1 — Capa. Foto full-bleed escurecida + título editorial Playfair.
 export function CapaPDF() {
-  const capa = INSTITUCIONAL_CAPA;
+  const c = INSTITUCIONAL_CAPA;
 
   return (
-    <div className="relative h-full w-full bg-black text-white overflow-hidden">
-      <Image
-        src={capa.heroImage}
-        alt="Obra em Light Steel Frame executada pela Berkahn"
-        fill
-        priority
-        className="object-cover opacity-50"
-        sizes="794px"
-      />
-      <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/20 to-black/90" />
+    <div className={`${styles.page} ${styles.onDark}`} style={{ background: "#1a1a1a" }}>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src={optImg(c.heroImage, 1200)} alt="" className={`${styles.imgCover} ${styles.fill} ${styles.dim}`} />
+      <div className={`${styles.coverGradient} ${styles.fill}`} />
 
-      <div className="relative z-10 h-full flex flex-col justify-between px-12 py-10">
+      <div className={styles.frame} style={{ justifyContent: "space-between", padding: "56px 64px 48px" }}>
         {/* Topo: logo + label */}
-        <div className="flex items-center justify-between">
-          <Image
-            src={capa.logoBranco}
-            alt="Berkahn Construtora"
-            width={160}
-            height={48}
-            priority
-            className="h-10 w-auto"
-          />
-          <p className="text-[10px] uppercase tracking-[0.3em] text-white/60">
-            {capa.label}
-          </p>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={optImg(c.logoBranco, 384)} alt="Berkahn" style={{ height: 30, width: "auto", objectFit: "contain" }} />
+          <span className={styles.eyebrow}>{c.label}</span>
         </div>
 
-        {/* Centro: headline */}
+        {/* Bloco inferior: título */}
         <div>
-          <p className="text-xs uppercase tracking-[0.3em] text-white/50 mb-5">
-            O que fazemos
-          </p>
-          <h1 className="font-heading text-6xl font-extrabold tracking-tight leading-[1.05] mb-6">
-            Do conceito à<br />
-            entrega das chaves
+          <h1 className={styles.display} style={{ fontSize: 74, maxWidth: "88%" }}>
+            {c.headline}
           </h1>
-          <p className="text-lg text-white/70 font-light max-w-md leading-relaxed">
-            {capa.subtitle}
+          <div className={styles.hairlineInk} style={{ margin: "30px 0 22px" }} />
+          <p className={styles.lead} style={{ maxWidth: 440, color: "rgba(244,242,236,0.82)" }}>
+            {c.subtitle}
           </p>
         </div>
 
         {/* Rodapé: wordmark + tagline */}
-        <div className="flex items-end justify-between border-t border-white/20 pt-6">
-          <p className="font-heading text-xl font-bold tracking-[0.3em]">BERKAHN</p>
-          <p className="text-sm text-white/50 font-light tracking-[0.2em]">
-            {capa.tagline}
-          </p>
+        <div className={styles.runFoot} style={{ marginTop: 30 }}>
+          <span style={{ fontFamily: "var(--font-manrope), sans-serif", fontSize: 14, fontWeight: 700, letterSpacing: "0.34em", color: "#f4f2ec" }}>
+            BERKAHN
+          </span>
+          <span className={styles.eyebrow}>{c.tagline}</span>
         </div>
       </div>
     </div>

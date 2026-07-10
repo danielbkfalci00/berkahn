@@ -6,6 +6,14 @@
 export { EXECUTION_PHASES } from "@/lib/servicos-data";
 export { presentationProjects } from "@/lib/presentation-data";
 
+// Roteia imagens pelo otimizador do Next (/_next/image) para o PDF: serve versões
+// reduzidas/re-encodadas (webp/jpeg) em vez do source cheio, evitando que o
+// page.pdf() do Puppeteer embuta bitmaps enormes (v1 dpr=2 com <img> cru = 31 MB).
+// encodeURIComponent também resolve acentos e espaços nos paths (Execução/, Apresentação/).
+export function optImg(path: string, w = 1200, q = 75): string {
+  return `/_next/image?url=${encodeURIComponent(path)}&w=${w}&q=${q}`;
+}
+
 export const INSTITUCIONAL_CAPA = {
   label: "Apresentação Institucional",
   headline: "Do conceito à entrega das chaves",

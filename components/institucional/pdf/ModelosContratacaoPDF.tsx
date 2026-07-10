@@ -1,74 +1,49 @@
-import { Check } from "lucide-react";
 import { MODELOS_CONTRATACAO } from "@/lib/institucional-data";
+import styles from "@/app/institucional/pdf/institucional.module.css";
 
+// Página 5 — Modelos de contratação. Dois blocos editoriais lado a lado.
 export function ModelosContratacaoPDF() {
-  const dados = MODELOS_CONTRATACAO;
+  const m = MODELOS_CONTRATACAO;
 
   return (
-    <div className="h-full bg-white flex flex-col justify-center px-12 py-8">
-      <p className="text-sm uppercase tracking-[0.3em] text-black/50 mb-3">
-        04 — {dados.label}
-      </p>
-      <h2 className="font-heading text-4xl font-bold tracking-tight mb-4">
-        {dados.headline}
-      </h2>
-      <p className="text-base text-black/70 leading-relaxed max-w-xl mb-8">
-        {dados.intro}
-      </p>
+    <div className={`${styles.page} ${styles.light}`}>
+      <div className={styles.frame}>
+        <div className={styles.runHead}>
+          <span className={styles.eyebrow}>Berkahn · Apresentação Institucional</span>
+          <span className={styles.eyebrow}>05 / 09</span>
+        </div>
 
-      <div className="grid grid-cols-2 gap-5">
-        {dados.modelos.map((modelo) => {
-          const isDestaque = modelo.destaque;
-          return (
-            <div
-              key={modelo.badge}
-              className={
-                isDestaque
-                  ? "bg-black text-white rounded-2xl p-7"
-                  : "bg-white border border-black/10 rounded-2xl p-7"
-              }
-            >
-              <p
-                className={`inline-block text-[10px] uppercase tracking-widest rounded-full px-3 py-1 mb-4 border ${
-                  isDestaque
-                    ? "text-white border-white/30"
-                    : "text-black/60 border-black/20"
-                }`}
-              >
-                {modelo.badge}
-              </p>
-              <h3 className="font-heading text-2xl font-semibold tracking-tight mb-3">
-                {modelo.title}
-              </h3>
-              <p
-                className={`text-sm leading-relaxed mb-5 ${
-                  isDestaque ? "text-white/70" : "text-black/60"
-                }`}
-              >
-                {modelo.description}
-              </p>
-              <ul className="space-y-2.5">
-                {modelo.items.map((item) => (
-                  <li key={item} className="flex items-start gap-2">
-                    <Check
-                      className={`w-4 h-4 mt-0.5 shrink-0 ${
-                        isDestaque ? "text-white" : "text-black"
-                      }`}
-                      strokeWidth={1.5}
-                    />
-                    <span
-                      className={`text-sm leading-relaxed ${
-                        isDestaque ? "text-white/90" : "text-black/80"
-                      }`}
-                    >
-                      {item}
-                    </span>
-                  </li>
+        {/* Cabeçalho */}
+        <div style={{ paddingTop: 30, display: "flex", justifyContent: "space-between", alignItems: "flex-end", gap: 40 }}>
+          <div>
+            <div style={{ display: "flex", alignItems: "baseline", gap: 14, marginBottom: 14 }}>
+              <span className={styles.numeralKicker}>05</span>
+              <span className={styles.eyebrow}>{m.label}</span>
+            </div>
+            <h2 className={styles.h2} style={{ maxWidth: 420 }}>{m.headline}</h2>
+          </div>
+          <p className={styles.lead} style={{ maxWidth: 260, flexShrink: 0 }}>{m.intro}</p>
+        </div>
+
+        {/* Dois modelos */}
+        <div className={styles.grow} style={{ display: "flex", gap: 48, paddingTop: 34 }}>
+          {m.modelos.map((mod, i) => (
+            <div key={mod.title} style={{ flex: 1, display: "flex", flexDirection: "column", position: "relative" }}>
+              {i === 1 && (
+                <div style={{ position: "absolute", left: -24, top: 6, bottom: 6, width: 1, background: "var(--hairline)" }} />
+              )}
+              <div style={{ height: 3, width: 46, background: "var(--ink)", opacity: mod.destaque ? 1 : 0.25, marginBottom: 20 }} />
+              <span className={styles.eyebrow} style={{ marginBottom: 10 }}>{mod.badge}</span>
+              <h3 className={styles.display} style={{ fontSize: 30, marginBottom: 14 }}>{mod.title}</h3>
+              <p className={styles.body} style={{ marginBottom: 20 }}>{mod.description}</p>
+              <ul className={styles.tickList} style={{ marginTop: 26 }}>
+                {mod.items.map((it) => (
+                  <li key={it} className={styles.tickItem}>{it}</li>
                 ))}
               </ul>
             </div>
-          );
-        })}
+          ))}
+        </div>
       </div>
     </div>
   );

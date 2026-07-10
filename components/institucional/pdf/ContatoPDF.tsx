@@ -1,58 +1,51 @@
-import Image from "next/image";
-import { Mail, Phone, Globe, Linkedin } from "lucide-react";
-import { CONTATO_INSTITUCIONAL } from "@/lib/institucional-data";
+import { CONTATO_INSTITUCIONAL, optImg } from "@/lib/institucional-data";
+import styles from "@/app/institucional/pdf/institucional.module.css";
 
+// Página 9 — Contato. Fecho escuro editorial.
 export function ContatoPDF() {
-  const contato = CONTATO_INSTITUCIONAL;
+  const c = CONTATO_INSTITUCIONAL;
 
   const canais = [
-    { icon: Mail, value: contato.email },
-    { icon: Phone, value: contato.phone },
-    { icon: Globe, value: contato.website },
-    { icon: Linkedin, value: contato.linkedin },
+    { label: "E-mail", value: c.email },
+    { label: "Telefone", value: c.phone },
+    { label: "Site", value: c.website },
+    { label: "LinkedIn", value: c.linkedin },
   ];
 
   return (
-    <div className="h-full bg-black text-white flex flex-col justify-between px-12 py-12">
-      {/* Logo no topo */}
-      <div className="flex justify-center">
-        <Image
-          src={contato.logoBranco}
-          alt="Berkahn Construtora"
-          width={180}
-          height={54}
-          priority
-          className="h-11 w-auto"
-        />
-      </div>
-
-      {/* Centro: CTA + canais */}
-      <div className="text-center">
-        <h2 className="font-heading text-6xl font-extrabold tracking-tight mb-4">
-          Vamos construir
-          <br />
-          juntos?
-        </h2>
-        <p className="text-lg text-white/60 font-light mb-12">{contato.subtitle}</p>
-
-        <div className="inline-flex flex-col items-start gap-4">
-          {canais.map(({ icon: Icone, value }) => (
-            <div key={value} className="flex items-center gap-4">
-              <Icone className="w-5 h-5 text-white/50" strokeWidth={1.5} />
-              <span className="text-base text-white/80">{value}</span>
-            </div>
-          ))}
+    <div className={`${styles.page} ${styles.dark}`}>
+      <div className={styles.frame}>
+        {/* Topo: logo */}
+        <div className={styles.runHead}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={optImg(c.logoBranco, 384)} alt="Berkahn" style={{ height: 26, width: "auto", objectFit: "contain" }} />
+          <span className={styles.eyebrow}>09 / 09</span>
         </div>
-      </div>
 
-      {/* Rodapé: dados da empresa */}
-      <div className="text-center border-t border-white/15 pt-6">
-        <p className="font-heading text-lg font-bold tracking-[0.3em] text-white/40 mb-2">
-          BERKAHN
-        </p>
-        <p className="text-xs text-white/40">
-          {contato.local} · CNPJ {contato.cnpj}
-        </p>
+        {/* Centro */}
+        <div className={styles.grow} style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
+          <span className={styles.eyebrow} style={{ marginBottom: 22 }}>Contato</span>
+          <h2 className={styles.display} style={{ fontSize: 62, maxWidth: 560 }}>{c.headline}</h2>
+          <div className={styles.hairlineInk} style={{ margin: "28px 0 26px" }} />
+          <p className={styles.lead} style={{ maxWidth: 400, marginBottom: 44 }}>{c.subtitle}</p>
+
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "28px 40px", maxWidth: 620 }}>
+            {canais.map((ch) => (
+              <div key={ch.label}>
+                <div className={styles.eyebrow} style={{ marginBottom: 7 }}>{ch.label}</div>
+                <div className={styles.display} style={{ fontSize: 18, wordBreak: "break-word" }}>{ch.value}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Rodapé */}
+        <div className={styles.runFoot}>
+          <span style={{ fontFamily: "var(--font-manrope), sans-serif", fontSize: 13, fontWeight: 700, letterSpacing: "0.32em", color: "#f4f2ec" }}>
+            BERKAHN
+          </span>
+          <span className={styles.eyebrow}>CNPJ {c.cnpj} · {c.local}</span>
+        </div>
       </div>
     </div>
   );
