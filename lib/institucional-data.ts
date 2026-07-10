@@ -10,7 +10,8 @@ export { presentationProjects } from "@/lib/presentation-data";
 // reduzidas/re-encodadas (webp/jpeg) em vez do source cheio, evitando que o
 // page.pdf() do Puppeteer embuta bitmaps enormes (v1 dpr=2 com <img> cru = 31 MB).
 // encodeURIComponent também resolve acentos e espaços nos paths (Execução/, Apresentação/).
-export function optImg(path: string, w = 1200, q = 75): string {
+// q DEVE estar em next.config.ts images.qualities: [65,70,75,78,80,85,90].
+export function optImg(path: string, w = 1200, q = 65): string {
   return `/_next/image?url=${encodeURIComponent(path)}&w=${w}&q=${q}`;
 }
 

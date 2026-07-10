@@ -7,6 +7,8 @@ export function QuemSomosPDF() {
 
   return (
     <div className={`${styles.page} ${styles.light}`}>
+      <span className={`${styles.corner} ${styles.cTL}`} />
+      <span className={`${styles.corner} ${styles.cBR}`} />
       <div className={styles.frame}>
         <div className={styles.runHead}>
           <span className={styles.mono} style={{ fontWeight: 700 }}>BERKAHN — QUEM SOMOS</span>
@@ -25,7 +27,7 @@ export function QuemSomosPDF() {
           </div>
           <figure style={{ margin: 0, width: 210, height: 168, flexShrink: 0, overflow: "hidden", position: "relative" }} className={styles.bleedR}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={optImg("/images/empresa/primeira-imagem.webp", 640)} alt="Equipe e canteiro Berkahn" className={styles.imgCover} style={{ position: "absolute", inset: 0 }} />
+            <img src={optImg("/images/empresa/primeira-imagem.webp", 384)} alt="Equipe e canteiro Berkahn" className={styles.imgCover} style={{ position: "absolute", inset: 0 }} />
           </figure>
         </div>
 
@@ -71,6 +73,15 @@ export function QuemSomosPDF() {
             </div>
           </div>
         </div>
+
+        {/* Banda de foto — canteiro Berkahn */}
+        <figure className={styles.bleedX} style={{ margin: 0, marginTop: "auto", height: 210, position: "relative", overflow: "hidden" }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={optImg("/images/empresa/segunda-imagem.webp", 828)} alt="Canteiro Berkahn" className={styles.imgCover} style={{ position: "absolute", inset: 0 }} />
+          <span className={styles.mono} style={{ position: "absolute", bottom: 12, left: "var(--edge)", background: "var(--ink)", color: "var(--paper)", padding: "3px 8px" }}>
+            EQUIPE + CANTEIRO · SÃO PAULO
+          </span>
+        </figure>
       </div>
     </div>
   );

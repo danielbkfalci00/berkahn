@@ -7,6 +7,8 @@ export function ComoTrabalhamosPDF() {
 
   return (
     <div className={`${styles.page} ${styles.light}`}>
+      <span className={`${styles.corner} ${styles.cTL}`} />
+      <span className={`${styles.corner} ${styles.cBR}`} />
       <div className={styles.frame}>
         <div className={styles.runHead}>
           <span className={styles.mono} style={{ fontWeight: 700 }}>BERKAHN — COMO TRABALHAMOS</span>

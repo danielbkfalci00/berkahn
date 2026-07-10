@@ -8,6 +8,8 @@ export function PortfolioPDF() {
   return (
     <div className={`${styles.page} ${styles.blue}`}>
       <div className={styles.gridLines} />
+      <span className={`${styles.corner} ${styles.cTL}`} />
+      <span className={`${styles.corner} ${styles.cBR}`} />
       <div className={styles.frame}>
         <div className={styles.runHead}>
           <span className={styles.mono} style={{ fontWeight: 700 }}>BERKAHN — PORTFÓLIO</span>
@@ -29,7 +31,7 @@ export function PortfolioPDF() {
             >
               <figure style={{ margin: 0, flex: "0 0 42%", minHeight: 140, position: "relative", overflow: "hidden" }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={optImg(proj.images[0], 828)} alt={proj.title} className={styles.imgCover} style={{ position: "absolute", inset: 0 }} />
+                <img src={optImg(proj.images[0], 640)} alt={proj.title} className={styles.imgCover} style={{ position: "absolute", inset: 0 }} />
               </figure>
               <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
                 <div style={{ display: "flex", alignItems: "baseline", gap: 12, marginBottom: 10 }}>

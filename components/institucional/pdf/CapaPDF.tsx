@@ -8,7 +8,11 @@ export function CapaPDF() {
   return (
     <div className={`${styles.page} ${styles.blue}`}>
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={optImg(c.heroImage, 1200)} alt="" className={`${styles.imgCover} ${styles.fill} ${styles.dim}`} />
+      <img src={optImg(c.heroImage, 1080)} alt="" className={`${styles.imgCover} ${styles.fill} ${styles.dim}`} />
+      <span className={`${styles.corner} ${styles.cTL}`} />
+      <span className={`${styles.corner} ${styles.cTR}`} />
+      <span className={`${styles.corner} ${styles.cBL}`} />
+      <span className={`${styles.corner} ${styles.cBR}`} />
       <div className={`${styles.coverGradient} ${styles.fill}`} />
 
       <div className={styles.frame} style={{ justifyContent: "space-between" }}>

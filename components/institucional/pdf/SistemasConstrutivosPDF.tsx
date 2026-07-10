@@ -1,4 +1,4 @@
-import { SISTEMAS_CONSTRUTIVOS } from "@/lib/institucional-data";
+import { SISTEMAS_CONSTRUTIVOS, optImg } from "@/lib/institucional-data";
 import styles from "@/app/institucional/pdf/institucional.module.css";
 
 // Camadas reais da parede LSF (public/images/Lsf/Layers) — spec técnica.
@@ -18,6 +18,8 @@ export function SistemasConstrutivosPDF() {
   return (
     <div className={`${styles.page} ${styles.blue}`}>
       <div className={styles.gridLines} />
+      <span className={`${styles.corner} ${styles.cTL}`} />
+      <span className={`${styles.corner} ${styles.cBR}`} />
       <div className={styles.frame}>
         <div className={styles.runHead}>
           <span className={styles.mono} style={{ fontWeight: 700 }}>BERKAHN — SISTEMAS CONSTRUTIVOS</span>
@@ -49,18 +51,24 @@ export function SistemasConstrutivosPDF() {
             ))}
           </div>
 
-          {/* Camadas LSF — coluna técnica */}
-          <div style={{ flex: "0 0 34%", border: "1.5px solid var(--paper-on-blue)", padding: "16px 16px 18px", alignSelf: "flex-start" }}>
-            <p className={styles.mono} style={{ fontWeight: 700, marginBottom: 4 }}>PAREDE LSF</p>
-            <p className={`${styles.mono} ${styles.monoMute}`} style={{ marginBottom: 14 }}>CAMADAS — EXTERIOR ▸ INTERIOR</p>
-            <ol style={{ margin: 0, padding: 0, listStyle: "none" }}>
-              {CAMADAS_LSF.map((c, i) => (
-                <li key={c} style={{ display: "flex", gap: 10, paddingBottom: 10 }}>
-                  <span className={styles.mono} style={{ fontWeight: 700, flexShrink: 0 }}>{String(i + 1).padStart(2, "0")}</span>
-                  <span className={styles.body} style={{ fontSize: 10, lineHeight: 1.35 }}>{c}</span>
-                </li>
-              ))}
-            </ol>
+          {/* Coluna técnica — camadas + foto */}
+          <div style={{ flex: "0 0 34%", display: "flex", flexDirection: "column", gap: 14 }}>
+            <div style={{ border: "1.5px solid var(--paper-on-blue)", padding: "16px 16px 18px" }}>
+              <p className={styles.mono} style={{ fontWeight: 700, marginBottom: 4 }}>PAREDE LSF</p>
+              <p className={`${styles.mono} ${styles.monoMute}`} style={{ marginBottom: 14 }}>CAMADAS — EXTERIOR ▸ INTERIOR</p>
+              <ol style={{ margin: 0, padding: 0, listStyle: "none" }}>
+                {CAMADAS_LSF.map((c, i) => (
+                  <li key={c} style={{ display: "flex", gap: 10, paddingBottom: 10 }}>
+                    <span className={styles.mono} style={{ fontWeight: 700, flexShrink: 0 }}>{String(i + 1).padStart(2, "0")}</span>
+                    <span className={styles.body} style={{ fontSize: 10, lineHeight: 1.35 }}>{c}</span>
+                  </li>
+                ))}
+              </ol>
+            </div>
+            <figure style={{ margin: 0, flex: 1, minHeight: 120, position: "relative", overflow: "hidden" }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={optImg("/images/Lsf/lsf-hero-structure.webp", 384)} alt="Estrutura em Light Steel Frame" className={styles.imgCover} style={{ position: "absolute", inset: 0 }} />
+            </figure>
           </div>
         </div>
 

@@ -1,4 +1,4 @@
-import { CONTATO_INSTITUCIONAL } from "@/lib/institucional-data";
+import { CONTATO_INSTITUCIONAL, optImg } from "@/lib/institucional-data";
 import styles from "@/app/institucional/pdf/institucional.module.css";
 
 // Página 9 — Contato. Fecho BLUEPRINT, título gigante + bloco mono.
@@ -15,10 +15,20 @@ export function ContatoPDF() {
   return (
     <div className={`${styles.page} ${styles.blue}`}>
       <div className={styles.gridLines} />
+      <span className={`${styles.corner} ${styles.cTL}`} />
+      <span className={`${styles.corner} ${styles.cBR}`} />
       <div className={styles.frame} style={{ justifyContent: "space-between" }}>
-        <div className={styles.runHead}>
-          <span className={styles.mono} style={{ fontWeight: 700 }}>BERKAHN — CONTATO</span>
-          <span className={styles.mono}>FOLHA 09/09</span>
+        <div>
+          <div className={styles.runHead}>
+            <span className={styles.mono} style={{ fontWeight: 700 }}>BERKAHN — CONTATO</span>
+            <span className={styles.mono}>FOLHA 09/09</span>
+          </div>
+          {/* Banda de foto — obra assinatura */}
+          <figure className={styles.bleedX} style={{ margin: 0, marginTop: 24, height: 250, position: "relative", overflow: "hidden" }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={optImg("/images/Home/hero-4.webp", 828)} alt="Obra Berkahn" className={`${styles.imgCover} ${styles.dim}`} style={{ position: "absolute", inset: 0 }} />
+            <span className={styles.mono} style={{ position: "absolute", bottom: 12, left: "var(--edge)" }}>ERGUENDO O AMANHÃ · LIGHT STEEL FRAME</span>
+          </figure>
         </div>
 
         {/* Centro */}
@@ -26,10 +36,10 @@ export function ContatoPDF() {
           <span className={styles.sectionTag} style={{ marginBottom: 20 }}>
             <span className={styles.tagBox}>S.09</span> CONTATO
           </span>
-          <h2 className={styles.display} style={{ fontSize: 74, marginTop: 16 }}>
-            Vamos<br />construir<br />juntos?
+          <h2 className={styles.display} style={{ fontSize: 62, marginTop: 14 }}>
+            Vamos construir<br />juntos?
           </h2>
-          <p className={styles.body} style={{ maxWidth: 380, marginTop: 20, fontSize: 12 }}>{c.subtitle}</p>
+          <p className={styles.body} style={{ maxWidth: 380, marginTop: 16, fontSize: 12 }}>{c.subtitle}</p>
         </div>
 
         {/* Canais */}
