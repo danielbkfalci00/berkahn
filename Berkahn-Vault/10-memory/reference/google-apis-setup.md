@@ -77,6 +77,8 @@ Regras do modo parcial em [[analytics-methodology]].
 
 > [!warning] O pipeline não é versionado
 > `/scripts/` inteiro é gitignored por design (o cron roda local, não na Vercel). `period.mjs`, `generate-report.mjs`, `insights.mjs` e os templates existem **só na máquina do Bruno** — não há cópia no GitHub. Perder a máquina significa perder o pipeline.
+>
+> O mesmo vale para `~/.claude/scheduled-tasks/berkahn-performance-mensal/SKILL.md`, que é caminho de usuário e não de projeto. **Não foi copiado para o repo de propósito**: ~90% do conteúdo já está em `.claude/commands/performance.md`, que é versionado, e duplicar quebraria a regra de um fato em um lugar. O que se perderia é só a instrução operacional do cron ("o que fazer", "reportar ao Bruno") — reconstruível a partir do command.
 
 ## Scheduled task
 
