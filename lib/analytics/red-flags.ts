@@ -109,13 +109,16 @@ export function detectRedFlags(
     });
   }
 
-  // no-posts
+  // no-posts. Em mês parcial o texto muda mas a flag NÃO é suprimida: semanas
+  // sem publicar já são um problema real, mesmo com o mês ainda aberto.
   if (postsPublishedInMonth !== undefined && postsPublishedInMonth === NO_POSTS_THRESHOLD) {
     flags.push({
       id: "no-posts",
       severity: "warning",
       metric: "Conteúdo",
-      text: "Nenhum post novo publicado neste mês.",
+      text: context.partial && context.daysCovered
+        ? `Nenhum post publicado nos primeiros ${context.daysCovered} dias do mês.`
+        : "Nenhum post novo publicado neste mês.",
       action: "Retomar cadência semanal de publicação.",
     });
   }

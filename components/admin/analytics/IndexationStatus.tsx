@@ -15,14 +15,20 @@ interface IndexationStatusProps {
   indexation: GscIndexation[];
 }
 
+/**
+ * "Crawled - currently not indexed" e "Discovered - currently not indexed"
+ * contêm a substring "indexed", então o teste ingênuo os contava como
+ * indexadas. Precisa excluir "not indexed" explicitamente.
+ */
+function isIndexedState(coverageState: string | null | undefined): boolean {
+  const state = (coverageState || "").toLowerCase();
+  return state.includes("indexed") && !state.includes("not indexed");
+}
+
 export function IndexationStatus({ indexation }: IndexationStatusProps) {
   const total = indexation.length;
-  const indexed = indexation.filter((i) =>
-    (i.coverageState || "").toLowerCase().includes("indexed")
-  ).length;
-  const notIndexed = indexation.filter(
-    (i) => !(i.coverageState || "").toLowerCase().includes("indexed")
-  );
+  const indexed = indexation.filter((i) => isIndexedState(i.coverageState)).length;
+  const notIndexed = indexation.filter((i) => !isIndexedState(i.coverageState));
   const pct = total > 0 ? Math.round((indexed / total) * 100) : 0;
 
   return (
