@@ -23,8 +23,8 @@ semana_fim: 2026-07-31
 
 # Sprint Ativa — semana de 2026-07-27
 
-> [!warning] O `/standup` de 2026-07-27 não rodou
-> A janela foi rolada à mão em 29/07 durante a sessão de analytics, porque o frontmatter ainda apontava para a semana de 20-24/07 e alimenta as Bases. Isso **não** substitui o standup: os KPIs por projeto e o comparativo semana-a-semana não foram coletados. Rodar `/standup` para fechar direito.
+> [!info] Janela rolada à mão em 2026-07-29
+> O frontmatter ainda apontava para a semana de 20-24/07 e alimenta as Bases. O standup de 27/07 **rodou** e foi recuperado do transcript — ver [[2026-07-27]] e a seção sobre os crons abaixo.
 
 > Atualizado segunda-feira via `/standup` (auto seg 9h via scheduled-task). Referenciado em [[CLAUDE]] vault-level e em `vault-manifest.json` (`paths.sprint_doc`). Para detalhes por projeto, abrir o hub correspondente. Validação: `node scripts/vault-validate.mjs` → 0 issues.
 
@@ -73,6 +73,20 @@ Nota completa: [[2026-07-20]]. Standup de 07-13 não disparou — base de compar
 
 Primeira execução do `/standup` (ritual criado 2026-05-22, nunca disparado até hoje). Nota completa: [[2026-07-06]]. Deltas desde 2026-07-01/02: P1 curadoria resolvido (PR #11), 20 WARNs de ordem zerados (PR #12), 2 wikilinks corrigidos (PR #10), fotos do globo/DomeGallery renovadas na apresentação executiva (PR #13). Vault 151 notas / 0 issues. Foco da semana: retomar cadência editorial (blog + LinkedIn) + P0 SEO (indexação GSC — ação Bruno). KPIs externos (indexação, leads, publicados) aguardam input do Bruno.
 
+## Saúde dos crons — apurado em 2026-07-29
+
+Os três `scheduled-tasks` estão **enabled e disparando**. O problema nunca foi agendamento.
+
+| Task | Última execução | Resultado |
+|------|-----------------|-----------|
+| `berkahn-standup-semanal` | 2026-07-27 09:46 BRT | Rodou a análise inteira (86 entradas) e a sessão morreu na última chamada — o `Write` de `2026-07-27.md` não teve resultado. **Recuperado do transcript** em 29/07 |
+| `berkahn-wrapup-semanal` | 2026-07-24 17:07 BRT | **"You've hit your weekly limit · resets Jul 25, 9pm"** após 15 entradas. Perdido, não recuperável |
+| `berkahn-performance-mensal` | 2026-07-01 10:23 BRT | `invalid_grant`; recuperado à mão no mesmo dia |
+
+**Diagnóstico**: as falhas têm causas diferentes (limite de uso, morte de sessão, token OAuth), mas o mesmo sintoma — nenhum artefato e nenhum aviso. O `last-error.log` do `performance` só cobre erro lançado pelo script; não cobre sessão que morre nem limite de conta.
+
+**Onde os transcripts ficam**: `~/.claude/projects/C--Users-bruno-Documents-Pessoal-Site-Berkahn/*.jsonl`, um por sessão, com data de modificação batendo com o `lastRunAt`. É onde olhar quando um cron não deixar rastro — e de onde o standup de 27/07 foi recuperado.
+
 ## Wins / decisões (2026-07-29)
 
 **PR [#18](https://github.com/danielbkfalci00/berkahn/pull/18) merged, deploy verde nos dois projetos Vercel.**
@@ -95,9 +109,9 @@ Primeira execução do `/standup` (ritual criado 2026-05-22, nunca disparado at�
 - [ ] Classificar os 6 arquivos do vault que não estão em produção (despublicados? renomeados? nunca publicados?) — ver [[blog]]
 - [ ] Refazer metas P0/P3 de [[seo-aeo]]: três foram superadas e não foram rebaixadas, o painel só mostra verde
 - [ ] Fases 3-5 do plano (instrumentação de conversão, CTA no blog, IQS, diagnóstico): `~/.claude/plans/executa-o-sprint-4-whimsical-thimble.md` ⚠️ **fora do vault e fora do git** — 32KB só na máquina local. Se importar, promover para nota do vault
-- [ ] Rodar `/standup` — o de 2026-07-27 não disparou
-- [ ] Rodar `/wrap-up` — o último é de 2026-05-22, ou seja, **2 meses sem wrap-up**. Investigar por que `berkahn-wrapup-semanal` não gera nada
-- [ ] Blindar `berkahn-standup-semanal` e `berkahn-wrapup-semanal` com `last-error.log`, como foi feito no `berkahn-performance-mensal` em 2026-07-01. Hoje esses dois falham sem deixar sinal
+- [ ] Rodar `/wrap-up` da semana de 27-31/07 na sexta. O de 24/07 foi perdido (limite de uso) e não é recuperável
+- [ ] Avaliar mudar o horário dos crons: `berkahn-wrapup-semanal` roda sexta 17h, encavalado com uso interativo. Rodar de madrugada reduz a chance de bater no limite semanal
+- [ ] Considerar um passo de verificação nos crons de standup/wrap-up que confirme se o arquivo esperado existe ao final, já que uma sessão pode morrer entre a chamada e a escrita
 
 ## Wins / decisões (2026-07-01)
 
