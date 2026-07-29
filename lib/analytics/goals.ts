@@ -1,17 +1,20 @@
-// Sistema de metas dinâmicas: meta = média rolling N meses × multiplier.
+// Sistema de metas dinâmicas: meta = último mês fechado × multiplier.
 // Editar constantes abaixo para ajustar ambição.
 // Documentação: Berkahn-Vault/10-memory/reference/analytics-methodology.md
+//
+// Calibração 2026-07-29 (série fev-jul/2026): a média rolling de 3 meses foi
+// trocada pelo último mês fechado. Com crescimento rápido, a média de 3 meses
+// fica muito abaixo do mês mais recente e produz metas MENORES que o realizado
+// anterior — em julho a meta de users era 945 contra 1179 realizados em junho.
+// O resultado é que todo KPI marcava 150-850% de atingimento e "on-track" o
+// tempo todo, ou seja, a barra não distinguia mês bom de mês ótimo.
+// Com o último mês fechado como base, o atingimento vira 162% / 134% / 109%
+// em mai/jun/jul — informativo e refletindo a desaceleração real.
 
 import type { TrendPoint } from "@/types/analytics";
 
-/** Multiplier de crescimento aplicado sobre a média histórica. */
+/** Multiplier de crescimento aplicado sobre o último mês fechado. */
 export const MOM_GROWTH_MULTIPLIER = 1.3;
-
-/** Quantos meses olhar para trás ao calcular a média. */
-export const LOOKBACK_MONTHS = 3;
-
-/** Mínimo de meses necessários antes de ter uma média confiável. Abaixo disso, meta = current × multiplier. */
-export const MIN_LOOKBACK_MONTHS = 1;
 
 /** Meta absoluta de indexação (% do catálogo). */
 export const INDEXATION_TARGET_PCT = 100;
@@ -35,16 +38,16 @@ export interface GoalProgress {
 }
 
 /**
- * Computa metas a partir do histórico, EXCLUINDO o mês corrente.
- * Se não houver histórico suficiente, usa o próprio mês corrente como base.
+ * Computa metas a partir do último mês FECHADO anterior ao corrente.
+ * Se não houver histórico, usa o próprio mês corrente como base.
  */
 export function computeMonthlyGoals(
   allSnapshots: TrendPoint[],
   currentMonthSlug: string
 ): MonthlyGoals {
-  const past = allSnapshots
-    .filter((p) => p.monthSlug < currentMonthSlug)
-    .slice(-LOOKBACK_MONTHS);
+  // Mês parcial não serve de base: é um prefixo do fechamento e puxaria a meta
+  // do mês seguinte pra baixo.
+  const past = allSnapshots.filter((p) => p.monthSlug < currentMonthSlug && !p.partial);
 
   if (past.length === 0) {
     // Sem histórico — usa o próprio mês corrente como baseline
@@ -71,17 +74,16 @@ export function computeMonthlyGoals(
     };
   }
 
-  const avg = (key: keyof Pick<TrendPoint, "users" | "sessions" | "pageviews" | "clicks" | "impressions">) =>
-    past.reduce((sum, p) => sum + (p[key] as number), 0) / past.length;
+  const baseline = past[past.length - 1];
 
   return {
-    users: Math.round(avg("users") * MOM_GROWTH_MULTIPLIER),
-    sessions: Math.round(avg("sessions") * MOM_GROWTH_MULTIPLIER),
-    pageviews: Math.round(avg("pageviews") * MOM_GROWTH_MULTIPLIER),
-    clicks: Math.round(avg("clicks") * MOM_GROWTH_MULTIPLIER),
-    impressions: Math.round(avg("impressions") * MOM_GROWTH_MULTIPLIER),
+    users: Math.round(baseline.users * MOM_GROWTH_MULTIPLIER),
+    sessions: Math.round(baseline.sessions * MOM_GROWTH_MULTIPLIER),
+    pageviews: Math.round(baseline.pageviews * MOM_GROWTH_MULTIPLIER),
+    clicks: Math.round(baseline.clicks * MOM_GROWTH_MULTIPLIER),
+    impressions: Math.round(baseline.impressions * MOM_GROWTH_MULTIPLIER),
     indexationPct: INDEXATION_TARGET_PCT,
-    basedOnMonths: past.length,
+    basedOnMonths: 1,
   };
 }
 
@@ -109,7 +111,7 @@ export function formatGoalLabel(current: number, target: number): string {
  */
 export function formulaLabel(basedOnMonths: number): string {
   if (basedOnMonths === 0) return `meta = atual × ${MOM_GROWTH_MULTIPLIER}`;
-  return `meta = média ${basedOnMonths}m × ${MOM_GROWTH_MULTIPLIER}`;
+  return `meta = mês anterior × ${MOM_GROWTH_MULTIPLIER}`;
 }
 
 /**

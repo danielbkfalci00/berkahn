@@ -14,8 +14,14 @@ interface AnalyticsHeaderProps {
   currentMonth: string;
   /** Se true, o toggle Comparar fica desabilitado (sem mês anterior pra comparar). */
   comparisonDisabled?: boolean;
+  /** Motivo do disable, mostrado como tooltip. */
+  comparisonDisabledReason?: string;
   /** Estado atual do toggle (vem do URL ?compare=1). */
   comparisonMode: boolean;
+  /** Mês ainda aberto: os números cobrem só parte do período. */
+  isPartial?: boolean;
+  daysCovered?: number;
+  daysInMonth?: number;
 }
 
 export function AnalyticsHeader({
@@ -25,7 +31,11 @@ export function AnalyticsHeader({
   availableMonths,
   currentMonth,
   comparisonDisabled = false,
+  comparisonDisabledReason,
   comparisonMode,
+  isPartial = false,
+  daysCovered,
+  daysInMonth,
 }: AnalyticsHeaderProps) {
   const router = useRouter();
   const pathname = usePathname();
@@ -49,6 +59,11 @@ export function AnalyticsHeader({
         </p>
         <h1 className="text-3xl font-bold text-neutral-900 tracking-tight">
           {monthLabel}
+          {isPartial && (
+            <span className="align-middle ml-3 rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-amber-800">
+              Parcial
+            </span>
+          )}
           {comparisonMode && (
             <span className="text-base font-medium text-neutral-500 ml-2">
               · modo comparativo
@@ -57,6 +72,12 @@ export function AnalyticsHeader({
         </h1>
         <p className="text-sm text-neutral-500 mt-1">
           Análise de {periodStart} a {periodEnd}
+          {isPartial && daysCovered != null && daysInMonth != null && (
+            <span className="text-amber-700">
+              {" "}
+              · {daysCovered} de {daysInMonth} dias — o mês ainda não fechou
+            </span>
+          )}
         </p>
       </div>
 
@@ -68,7 +89,7 @@ export function AnalyticsHeader({
           onClick={toggleCompare}
           disabled={comparisonDisabled && !comparisonMode}
           className={cn(!comparisonMode && "bg-white")}
-          title={comparisonDisabled ? "Sem mês anterior pra comparar" : undefined}
+          title={comparisonDisabled ? (comparisonDisabledReason ?? "Sem mês anterior pra comparar") : undefined}
         >
           {comparisonMode ? (
             <>

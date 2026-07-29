@@ -1,30 +1,30 @@
 ---
 tipo: projeto
 criado: 2026-05-22
-atualizado: 2026-07-01
+atualizado: 2026-07-29
 tags:
   - project/site
   - project/blog
   - status/active
-ai_summary: Hub do projeto SEO/AEO — score 52/100 (abril 2026). Indexação CRÍTICA (6/44 páginas = 14%). P0 indexação manual GSC + meta tags faltantes + GBP + answer_summary. Estratégia teórica em 20-context, diagnóstico em 40-content/auditorias-seo.
+ai_summary: Hub do projeto SEO/AEO — indexação 34/38 artigos (89%), tráfego 98,8% NÃO-branded (meta de 40% já superada), 850 cliques/mês em junho. P0 restante — 9 posts sem meta tags, 4 sem answer_summary, 4 URLs não indexadas, 11 categorias a normalizar. Estratégia em 20-context, diagnósticos em 40-content/auditorias-seo.
 status: active
 projeto: seo-aeo
-kpi_posts_sem_answer_summary: 3
+kpi_posts_sem_answer_summary: 4
 kpi_score: 52
-kpi_paginas_indexadas: 35
-kpi_paginas_total: 44
-kpi_pct_indexacao: 14
+kpi_paginas_indexadas: 34
+kpi_paginas_total: 38
+kpi_pct_indexacao: 89
 kpi_posts_sem_meta_title: 9
 kpi_posts_sem_meta_description: 9
-kpi_trafego_cliques_90d: 41
-kpi_pct_branded: 100
-kpi_dominio_idade_meses: 3
+kpi_trafego_cliques_90d: 1281
+kpi_pct_branded: 1.2
+kpi_dominio_idade_meses: 6
 kpi_backlinks: 0
 kpi_trafego_cliques_30d: 850
 kpi_trafego_impressoes_30d: 34396
 kpi_ctr_medio: 2.47
 kpi_posicao_media: 4.5
-kpi_atualizado_em: 2026-07-01
+kpi_atualizado_em: 2026-07-29
 contextos_aplicados:
   - seo-aeo-strategy
   - article-pipeline
@@ -44,22 +44,32 @@ subagents_uteis: []
 
 ## Status atual
 
-**Score 52/100 (abril 2026)**. Indexação é o problema crítico — apenas 6 de 44 páginas indexadas (14%). Infraestrutura técnica sólida (schema.org, meta tags, ISR, canonicals) mas Google detecta e não indexa. Tráfego 100% branded ("berkahn"), 41 cliques em 90 dias. Domínio jovem (~3 meses), zero backlinks.
+Dados de 2026-07-29 (junho fechado + julho parcial 01-26).
+
+**A indexação deixou de ser o bloqueio crítico**: 34 de 38 artigos indexados (89%), contra 6/44 em abril. As 4 restantes estão em "Crawled/Discovered - currently not indexed" e viraram P0 nominal, não estrutural.
+
+**O tráfego deixou de ser branded**: 98,8% dos cliques das top queries vêm de termos genéricos ("steel frame valor m2", "casas steel frame preço m2"), contra 100% branded em abril. A meta de chegar a 40% branded foi superada com folga — o que muda a pergunta de "como ser descoberto" para "como converter quem já chega".
+
+**O que ficou**: 9 posts sem meta tags, 4 sem answer_summary, 11 categorias por normalizar, zero backlinks. E uma concentração de risco: `custo-steel-frame-m2-2026` sozinho gera 78% dos cliques do Google.
+
+> [!warning] `kpi_score: 52` é de abril e não foi recalculado
+> Não existe recomputação automática desse score — ele veio da auditoria manual [[2026-04-diagnostico-integrado]]. Rodar `/seo` para ter um número atual antes de usá-lo em qualquer decisão.
 
 ## Bloqueios ativos
 
 ### P0 — urgente (esta semana)
-- [ ] **Solicitar indexação manual** no Google Search Console para 10 páginas críticas
-- [ ] **Criar/ativar Google Business Profile** (GBP)
-- [ ] **Preencher meta_title + meta_description** nos 9 posts faltantes (script de backfill Sprint 2)
-- [ ] **Preencher answer_summary** nos 3 posts faltantes
-- [ ] **Corrigir SearchAction** gerando URL inválida (ver [[site]])
+- [ ] **Solicitar indexação manual** no GSC para as 4 URLs não indexadas: `steel-frame-vantagens-desvantagens` (Crawled), `steel-frame-aguenta-vento-forte`, `steel-frame-laje-de-concreto` (Discovered) + 1 (ver tabela no relatório de julho)
+- [ ] **Preencher meta_title + meta_description** nos 9 posts faltantes (lista verificada no Supabase em 2026-07-29)
+- [ ] **Preencher answer_summary** nos 4 posts faltantes
+- [ ] **Criar/ativar Google Business Profile** (GBP) — *não verificado nesta sessão*
+- [ ] **Corrigir SearchAction** gerando URL inválida (ver [[site]]) — *não verificado nesta sessão*
 
 ### P1 — 1-2 semanas
-- [ ] Normalizar 12 categorias → 5
+- [ ] **Resolver canibalização preço/custo**: `custo-steel-frame-m2-2026` (864 cliques, pos. 3,5) e `quanto-custa-construir-steel-frame-precos-m2-2026` (135 cliques, 10.463 impressões, CTR 1,29%, pos. 6,1) disputam a mesma intenção
+- [ ] **Pool de CTR baixo**: 3 páginas com ~3.700 impressões rendendo 47 cliques — `financiar-construcao-light-steel-frame` (1,33%), `normas-light-steel-frame-brasil` (1,25%), `fundacao-steel-frame-vs-alvenaria` (1,13%)
+- [ ] Normalizar 11 categorias → 5
 - [ ] Adicionar `lastModified` a páginas estáticas no sitemap
 - [ ] Registrar em diretórios de construção brasileiros (3-5)
-- [ ] Compartilhar 5 posts em redes sociais (LinkedIn — sinergia com [[linkedin]])
 
 ### P2 — 2-4 semanas
 - [ ] Estruturar internal linking (3-5 links por artigo)
@@ -68,21 +78,26 @@ subagents_uteis: []
 
 ## Próximos 7 dias
 
-- [ ] GSC: solicitar indexação dos 10 artigos top-views
-- [ ] Backfill meta tags via script (Sprint 2 do plano)
-- [ ] Validar `/seo` auditoria periódica
+- [ ] GSC: solicitar indexação das 4 URLs pendentes
+- [ ] Backfill meta tags nos 9 posts
+- [ ] Rodar `/seo` para recalcular `kpi_score` (o 52 é de abril)
 
 ## KPIs (snapshot)
 
-| Métrica | Atual | Meta P0 | Meta P3 | Δ |
-|---------|-------|---------|---------|---|
-| Score geral | 52/100 | 65 | 85 | -13 P0 |
-| Páginas indexadas | 6/44 | 20 | 40 | -14 ⚠️ P0 |
-| Posts sem meta tags | 9 | 0 | 0 | +9 ⚠️ |
-| Posts sem answer_summary | 3 | 0 | 0 | +3 ⚠️ |
-| Tráfego orgânico (90d) | 41 | 200 | 1000 | -159 |
-| % branded | 100% | 70% | 40% | precisa não-branded |
-| Backlinks | 0 | 5 | 30 | -5 |
+Verificados em 2026-07-29 contra Supabase e GSC.
+
+| Métrica | Atual | Meta P0 | Meta P3 | Situação |
+|---------|-------|---------|---------|----------|
+| Score geral | 52/100 (abril) | 65 | 85 | ⏳ recalcular via `/seo` |
+| Artigos indexados | 34/38 (89%) | 20 | 40 | ✅ meta P0 superada |
+| Posts sem meta tags | 9 | 0 | 0 | ⚠️ P0 |
+| Posts sem answer_summary | 4 | 0 | 0 | ⚠️ P0 |
+| Tráfego orgânico (90d) | 1.281 | 200 | 1000 | ✅ meta P3 superada |
+| % branded | 1,2% | 70% | 40% | ✅ meta P3 superada |
+| Backlinks | 0 | 5 | 30 | ⚠️ -5 |
+| Concentração top-1 | 78% dos cliques | — | — | ⚠️ risco novo |
+
+Três metas foram superadas e não foram rebaixadas ainda — **as metas P0/P3 precisam ser refeitas**, senão o painel só mostra verde. Fica para a próxima sessão, junto com a definição de tráfego qualificado.
 
 ## Contexto aplicado
 
@@ -115,5 +130,6 @@ Migrados de `Docs/SEO & AEO/` para `40-content/auditorias-seo/` (Sprint 1.6):
 
 ## Histórico recente
 
+- 2026-07-29: saneamento — KPIs de abril substituídos por valores verificados. Indexação 14%→89%, branded 100%→1,2%, cliques 90d 41→1.281. Bloqueio P0 de indexação encerrado. Corrigido bug que contava "not indexed" como indexado (inflava a contagem em 1 todo mês desde fevereiro).
 - 2026-05-22: hub criado, diagnósticos migrados de `Docs/SEO & AEO/`
 - 2026-04: diagnóstico integrado v2 — identificou 9 posts sem meta + 3 sem answer_summary + bug SearchAction
