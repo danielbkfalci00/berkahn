@@ -17,11 +17,14 @@ projetos_em_curso:
   - materiais
   - pesquisas
   - orcamento-automacao
-semana_inicio: 2026-07-20
-semana_fim: 2026-07-24
+semana_inicio: 2026-07-27
+semana_fim: 2026-07-31
 ---
 
-# Sprint Ativa — semana de 2026-07-20
+# Sprint Ativa — semana de 2026-07-27
+
+> [!warning] O `/standup` de 2026-07-27 não rodou
+> A janela foi rolada à mão em 29/07 durante a sessão de analytics, porque o frontmatter ainda apontava para a semana de 20-24/07 e alimenta as Bases. Isso **não** substitui o standup: os KPIs por projeto e o comparativo semana-a-semana não foram coletados. Rodar `/standup` para fechar direito.
 
 > Atualizado segunda-feira via `/standup` (auto seg 9h via scheduled-task). Referenciado em [[CLAUDE]] vault-level e em `vault-manifest.json` (`paths.sprint_doc`). Para detalhes por projeto, abrir o hub correspondente. Validação: `node scripts/vault-validate.mjs` → 0 issues.
 
@@ -91,7 +94,10 @@ Primeira execução do `/standup` (ritual criado 2026-05-22, nunca disparado at�
 - [ ] Resolver contradição de preço em `custo-steel-frame-m2-2026`: `answer_summary` diz R$ 2.500-4.500/m², `seo_description` diz R$ 3.015-6.091
 - [ ] Classificar os 6 arquivos do vault que não estão em produção (despublicados? renomeados? nunca publicados?) — ver [[blog]]
 - [ ] Refazer metas P0/P3 de [[seo-aeo]]: três foram superadas e não foram rebaixadas, o painel só mostra verde
-- [ ] Fases 3-5 do plano (instrumentação de conversão, CTA no blog, IQS, diagnóstico): `~/.claude/plans/executa-o-sprint-4-whimsical-thimble.md`
+- [ ] Fases 3-5 do plano (instrumentação de conversão, CTA no blog, IQS, diagnóstico): `~/.claude/plans/executa-o-sprint-4-whimsical-thimble.md` ⚠️ **fora do vault e fora do git** — 32KB só na máquina local. Se importar, promover para nota do vault
+- [ ] Rodar `/standup` — o de 2026-07-27 não disparou
+- [ ] Rodar `/wrap-up` — o último é de 2026-05-22, ou seja, **2 meses sem wrap-up**. Investigar por que `berkahn-wrapup-semanal` não gera nada
+- [ ] Blindar `berkahn-standup-semanal` e `berkahn-wrapup-semanal` com `last-error.log`, como foi feito no `berkahn-performance-mensal` em 2026-07-01. Hoje esses dois falham sem deixar sinal
 
 ## Wins / decisões (2026-07-01)
 
