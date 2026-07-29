@@ -162,8 +162,26 @@ Implementado em [`lib/analytics/timeline-events.ts`](../../../../lib/analytics/t
 - **Retention %** (Berkahn-specific): tempo médio engajado ÷ read_time configurado. Mede leitura do conteúdo, não bounce do tráfego.
 - **MoM**: Month over Month. Comparação com mês imediatamente anterior. Em relatório parcial, com a **janela equivalente** (mesma contagem de dias), não com o mês inteiro.
 - **Relatório parcial**: mês ainda aberto, com janela cortada no lag do GSC. Marcado por `periodo_parcial: true` no frontmatter e badge "Parcial" no dashboard.
-- **Indexado**: `coverageState` do GSC contém "indexed" **e não contém "not indexed"** (case-insensitive). A segunda condição é obrigatória: `Crawled - currently not indexed` e `Discovered - currently not indexed` contêm a substring "indexed" e eram contados como indexados até 2026-07-29, inflando `indexedCount` (Julho/2026 reportava 38/38 quando o real era 34/38) e, por tabela, o Health Score.
+- **Indexado**: `coverageState` do GSC contém "indexed" **e não contém "not indexed"** (case-insensitive). A segunda condição é obrigatória: `Crawled - currently not indexed` e `Discovered - currently not indexed` contêm a substring "indexed" e eram contados como indexados até 2026-07-29, inflando `indexedCount` (Julho/2026 reportava 38/38 quando o real era 34/38) e, por tabela, o Health Score. Ver ressalva sobre o histórico abaixo.
 - **Health Score**: número único 0-100 que resume saúde do projeto naquele mês. Ver fórmula acima.
+
+## Ressalva: relatórios de fev a jun/2026 têm indexação inflada
+
+O bug de contagem de indexação (ver Glossário) afetou **todos** os relatórios anteriores, sempre em +1:
+
+| Relatório | Reportado | Real |
+|-----------|----------:|-----:|
+| 2026-02 | 30/30 | 29/30 |
+| 2026-03 | 30/30 | 29/30 |
+| 2026-04 | 30/30 | 29/30 |
+| 2026-05 | 31/31 | 30/31 |
+| 2026-06 | 35/35 | 34/35 |
+
+**Esses relatórios não foram regenerados**, decisão de 2026-07-29. Regenerar reescreveria `criado:` e `data_diagnostico:` para a data da regeneração, apagando quando a análise realmente foi feita — custo maior que o benefício, já que o erro é de 1 página e move o Health Score em ~1 ponto.
+
+Consequências práticas: qualquer relatório anterior a julho/2026 que afirme "100% indexado" está errado por 1 página, e os `indexedCount` gravados em `analytics_snapshots` para esses meses seguem inflados. A série de Health Score histórica está ~1 ponto alta. **Não recalcular tendência de indexação usando fev-jun sem descontar isso.**
+
+Julho/2026 em diante está correto.
 
 ## Referências
 

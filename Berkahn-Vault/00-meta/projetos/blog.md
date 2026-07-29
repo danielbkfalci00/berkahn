@@ -92,7 +92,9 @@ Tráfego seguiu crescendo: 1.179 users em junho, 1.407 nos primeiros 26 dias de 
 
 Os 4 abaixo foram reconstruídos a partir do Supabase e agora estão em `publicados/`. Cada um traz um callout marcando que os campos curatoriais (`palavras_chave`, tags `domain/`, `linkedin_slug`, `material_visual_slug`) ficaram vazios e precisam de curadoria.
 
-`anatomia-parede-steel-frame` e `energia-solar-residencial` **já existiam em `main`, curados** — a ausência era artefato da branch `design/institucional-monografia`, cujo commit `7bd5d4f` os deletou junto com o redesign do PDF institucional. Foram restaurados de `main`, não reconstruídos. **Vale checar se essa deleção foi intencional** antes de mergear aquela branch.
+`anatomia-parede-steel-frame` e `energia-solar-residencial` **já existiam em `main`, curados**. A ausência era artefato de a sessão ter rodado na branch `design/institucional-monografia`, que está 3 commits atrás de `main` (merge-base `a149b47`) e portanto nunca teve esses arquivos. Nada foi deletado, e mergear aquela branch não apaga nada. Restaurados de `main` na working tree local.
+
+**Lição**: contar arquivos em `publicados/` só é confiável na branch certa. Para saber o que está no ar, a fonte é o Supabase, não a pasta.
 
 | Publicado | Slug | Observação |
 |---|---|---|
