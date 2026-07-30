@@ -175,9 +175,26 @@ O diagnóstico mostra a homepage convertendo a **13,18%** contra 2,98% do melhor
 
 Estes quatro itens não são pauta de blog e não cabem neste calendário. Ficam registrados porque, pelo dado, valem mais que boa parte das 44 pautas.
 
-### Bloco 6 — As 9 carcaças (decisão sua, P0)
+### Bloco 6 — As 9 carcaças ✅ escondidas em 2026-07-30
 
-Descoberto em 2026-07-30 e detalhado em [[2026-07-diagnostico-editorial]]: **9 dos 38 artigos publicados têm menos de 55 palavras**. Não é falta de meta tag, é falta de artigo. São 24% do blog.
+**9 dos 38 artigos publicados têm menos de 55 palavras** — 24% do blog. Não era falta de meta tag, era falta de artigo.
+
+> [!success] Resolvido em 2026-07-30
+> Todas receberam `robots: noindex, follow` e saíram do sitemap. **Nenhuma saiu do ar**: as URLs seguem acessíveis e os 32 links internos que apontam para elas continuam funcionando. Controle em `lib/seo/thin-content.ts`; para republicar, reescreve o artigo e apaga a linha.
+>
+> Mapa completo, com o que cada uma vale e o plano de republicação em ordem, em [[2026-07-thin-content-mapa]].
+
+**Backlog de republicação** (um por mês, sem pressa — já não sangram):
+
+| Ordem | Slug | Por quê primeiro |
+|---|---|---|
+| 1 | `guia-definitivo-steel-frame-brasil` | 395 impressões, 12 queries, **14 links internos**, sem substituto. Vira pillar page |
+| 2 | `passo-passo-construcao-steel-frame` | 184 impressões, 8 links. Provável fusão com a pauta S10 (cronograma) |
+| 3 | `isolamento-termico-acustico-steel-frame` | 10 links internos, sem substituto. Conecta com `anatomia-parede` |
+| 4 | `tendencias-construcao-modular-2025` | Já agendado como refresh em dezembro |
+| 5-9 | as outras cinco | **Avaliar 301 antes de reescrever**: todas já têm artigo melhor no ar. Reescrever criaria canibalização nova |
+
+O texto abaixo é o registro do racional original.
 
 Três opções, e a escolha é de negócio:
 
