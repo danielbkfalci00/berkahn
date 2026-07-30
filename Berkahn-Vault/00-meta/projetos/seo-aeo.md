@@ -1,7 +1,7 @@
 ---
 tipo: projeto
 criado: 2026-05-22
-atualizado: 2026-07-29
+atualizado: 2026-07-30
 tags:
   - project/site
   - project/blog
@@ -58,7 +58,18 @@ Dados de 2026-07-29 (junho fechado + julho parcial 01-26).
 ## Bloqueios ativos
 
 ### P0 — urgente (esta semana)
-- [ ] **Solicitar indexação manual** no GSC para as 4 URLs não indexadas: `steel-frame-vantagens-desvantagens` (Crawled), `steel-frame-aguenta-vento-forte`, `steel-frame-laje-de-concreto` (Discovered) + 1 (ver tabela no relatório de julho)
+- [ ] **Solicitar indexação manual** no GSC. Estado reverificado por URL Inspection API em 2026-07-30 — de 4, sobraram **3**, e uma piorou:
+
+| URL | Estado | Último crawl |
+|---|---|---|
+| `steel-frame-aguenta-vento-forte` | **URL is unknown to Google** | nunca |
+| `steel-frame-laje-de-concreto` | Discovered, currently not indexed | nunca |
+| `steel-frame-vantagens-desvantagens` | Crawled, currently not indexed | 13/04/2026 |
+| ~~`energia-solar-residencial`~~ | ✅ Submitted and indexed | 14/07/2026 |
+
+  `URL is unknown to Google` num post publicado em 30/06 é o caso mais grave: não é rejeição, é não-descoberta. **Não é problema de sitemap** — os 38 slugs publicados estão nele, sem uma URL a mais nem a menos, verificado no XML servido. A causa mais provável é orçamento de rastreamento consumido por páginas de baixa qualidade, o que conecta direto com as 9 carcaças.
+
+  Não há API pública para pedir indexação de página comum (a Indexing API só aceita `JobPosting` e `BroadcastEvent`), então isso é ação manual no GSC.
 - [ ] **Preencher meta_title + meta_description** nos 9 posts faltantes (lista verificada no Supabase em 2026-07-29)
 - [ ] **Preencher answer_summary** nos 4 posts faltantes
 - [ ] **Criar/ativar Google Business Profile** (GBP) — *não verificado nesta sessão*
