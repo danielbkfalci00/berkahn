@@ -439,7 +439,15 @@ function GallerySection({ gallery }: { gallery: NonNullable<PostComponents['gall
 /**
  * Renders a single component based on type and data
  */
-function renderComponent(type: string, data: any, key: string | number) {
+function renderComponent(
+  type: string,
+  data: any,
+  key: string | number,
+  // Slug do artigo, repassado ao CTA como `cta_location`. É o que permite
+  // responder "qual pauta gera lead" no GA4 — sem isso todo CTA de blog
+  // aparece indistinto no relatório.
+  slug?: string
+) {
   switch (type) {
     case 'CHART':
       return (
@@ -588,6 +596,7 @@ function renderComponent(type: string, data: any, key: string | number) {
             actionText={data.actionText}
             actionHref={data.actionHref}
             defaultSegment={data.defaultSegment}
+            ctaLocation={slug ? `blog:${slug}` : "blog"}
           />
         </RevealOnScroll>
       );
@@ -703,7 +712,8 @@ export function RichPostRenderer({ post, className = '' }: RichPostRendererProps
               {renderComponent(
                 segment.componentType!,
                 segment.componentData,
-                `${segment.componentType}-${segment.componentId}-${index}`
+                `${segment.componentType}-${segment.componentId}-${index}`,
+                post.slug
               )}
             </div>
           );

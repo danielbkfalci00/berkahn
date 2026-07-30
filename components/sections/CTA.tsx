@@ -10,6 +10,8 @@ interface CTAProps {
   actionText?: string;
   actionHref?: string;
   defaultSegment?: "residencial" | "comercial" | "";
+  /** Vai para o GA4 como `cta_location`. Ex: "blog:custo-steel-frame-m2-2026". */
+  ctaLocation?: string;
 }
 
 const ArrowIcon = () => (
@@ -40,6 +42,7 @@ export function CTA({
   actionText = "Fale Conosco",
   actionHref = "/",
   defaultSegment,
+  ctaLocation = "cta_secao",
 }: CTAProps = {}) {
   return (
     <section className="py-xl bg-white">
@@ -56,7 +59,7 @@ export function CTA({
                 <ArrowIcon />
               </Link>
             ) : (
-              <ContactFormDialog defaultSegment={defaultSegment}>
+              <ContactFormDialog defaultSegment={defaultSegment} ctaLocation={ctaLocation}>
                 <button className={buttonClasses}>
                   {actionText}
                   <ArrowIcon />

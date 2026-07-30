@@ -228,7 +228,7 @@ export function Sidebar() {
                 }}
                 className="mt-4 px-4"
               >
-                <ContactFormDialog>
+                <ContactFormDialog ctaLocation="menu_lateral">
                   <button className="w-full py-2.5 bg-black text-white text-sm uppercase tracking-wider hover:bg-black-90 transition-colors duration-300 border border-black">
                     Fale Conosco
                   </button>

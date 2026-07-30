@@ -121,6 +121,7 @@ export default function ContatoPage() {
           <div className="lg:sticky lg:top-28 lg:self-start">
             <div className="border border-black-10 bg-white shadow-luxury-md">
               <ContactForm
+                ctaLocation="contato_pagina"
                 header={
                   <div className="mb-5">
                     <h2 className="font-heading text-lg font-semibold tracking-tight">

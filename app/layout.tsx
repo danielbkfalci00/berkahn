@@ -7,6 +7,7 @@ import { ConditionalFooter } from "@/components/layout/ConditionalFooter";
 import { CookieConsentProvider } from "@/components/providers/CookieConsentProvider";
 import { CookieBanner } from "@/components/layout/CookieBanner";
 import { WhatsAppButton } from "@/components/layout/WhatsAppButton";
+import { CONSENT_STORAGE_KEY, CONSENT_VERSION } from "@/lib/consent";
 import "./globals.css";
 
 const manrope = Manrope({
@@ -203,6 +204,37 @@ export default function RootLayout({
           {`
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
+
+            // LGPD: nada é coletado antes da escolha do usuário. O 'default'
+            // TEM que vir antes do 'config' — o gtag.js processa a dataLayer
+            // na ordem em que foi empilhada, e sem esta linha o primeiro
+            // page_view saía com consentimento implicitamente concedido.
+            gtag('consent', 'default', {
+              analytics_storage: 'denied',
+              ad_storage: 'denied',
+              ad_user_data: 'denied',
+              ad_personalization: 'denied',
+              wait_for_update: 500
+            });
+
+            // Restaura a escolha de visitas anteriores. Sem isto, o 'update'
+            // só acontecia no clique do banner: quem já tinha aceitado voltava
+            // ao site e não era medido, e quem tinha recusado era medido assim
+            // mesmo (o provider fazia setConsent e retornava sem chamar gtag).
+            try {
+              var salvo = JSON.parse(
+                localStorage.getItem('${CONSENT_STORAGE_KEY}') || 'null'
+              );
+              if (salvo && salvo.version === '${CONSENT_VERSION}' && salvo.level === 'all') {
+                gtag('consent', 'update', {
+                  analytics_storage: 'granted',
+                  ad_storage: 'granted',
+                  ad_user_data: 'granted',
+                  ad_personalization: 'granted'
+                });
+              }
+            } catch (e) {}
+
             gtag('js', new Date());
             gtag('config', 'G-RBQJ1D6JHW');
           `}

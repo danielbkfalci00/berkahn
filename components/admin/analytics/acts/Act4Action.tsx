@@ -4,6 +4,7 @@ import { InsightsList } from "../InsightsList";
 import { TaskBoard } from "../TaskBoard";
 import { IndexationStatus } from "../IndexationStatus";
 import { FallingQueriesPanel } from "../FallingQueriesPanel";
+import { ConversionEvents } from "../ConversionEvents";
 import { narrativeAct4Action } from "@/lib/analytics/narrative";
 import { countByStatus, findBestPost } from "@/lib/analytics/post-performance";
 import type { AnalyticsTask, PostPerformance, SnapshotContext } from "@/types/analytics";
@@ -45,6 +46,10 @@ export function Act4Action({ context, posts = [], tasks = [] }: Act4ActionProps)
         <IndexationStatus indexation={context.indexation} />
         <FallingQueriesPanel queries={context.gsc.fallingQueries} />
       </div>
+      <ConversionEvents
+        events={context.ga4.events ?? []}
+        monthSlug={context.monthSlug}
+      />
     </section>
   );
 }
