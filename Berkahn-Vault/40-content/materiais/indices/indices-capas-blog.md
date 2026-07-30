@@ -44,7 +44,7 @@ arquivos_duplicados: 3
 | `lsf-mundial.webp` | [[steel-frame-no-mundo]] | canonical; já em produção → `public/images/blog/steel-frame-no-mundo/cover.webp` |
 | `lsf-mundial.png` | [[steel-frame-no-mundo]] | par PNG de `lsf-mundial.webp` (consolidar) |
 | `mito-verdade-lsf.png` | [[mitos-verdades-steel-frame]] | |
-| `normas-lsf.png` | [[certificacoes-steel-frame]] / [[normas-lsf]] | já em produção → `public/images/img_blog/Normas LSF/normas_lsf.png` |
+| `normas-lsf.png` | [[certificacoes-steel-frame]] / [[normas-light-steel-frame-brasil]] | já em produção → `public/images/img_blog/Normas LSF/normas_lsf.png` |
 | `protecao-contra-queda.png` | [[protecao-contra-quedas-construcao-civil]] | |
 | `vantagesn-desnavantens-lsf.png` | [[steel-frame-vantagens-desvantagens]] | typo histórico no nome |
 | `reestruturando-o-concreto.jpg` | [[sustentabilidade-construcao-civil-economia-circular\|economia circular]] | re-purpose; já em produção → `public/images/img_blog/economia circular/economia_circular.jpg` |

@@ -68,7 +68,8 @@ Tráfego seguiu crescendo: 1.179 users em junho, 1.407 nos primeiros 26 dias de 
 - [x] ~~**4 artigos sem answer_summary** (P1)~~ — preenchidos em 2026-07-30, 98 a 102 palavras cada, com dado quantitativo do próprio corpo
 - [x] ~~**9 artigos são carcaças (P0)**~~ — resolvidos em 2026-07-30. **4** sem substituto ficaram no ar com `noindex, follow`; **5** com substituto foram consolidadas por **301**, com 14 links internos reescritos. Backlog de reescrita em [[2026-07-thin-content-mapa]]
 - [ ] **3 artigos fora do índice** (P1): `steel-frame-aguenta-vento-forte` (URL unknown), `steel-frame-laje-de-concreto` (discovered), `steel-frame-vantagens-desvantagens` (crawled). Eram 4; ver [[seo-aeo]]
-- [ ] **`quanto-custa-construir-steel-frame-precos-m2-2026` com `published_at` nulo** (P2): quebra ordenação e a timeline do dashboard
+- [x] ~~**`quanto-custa-construir-steel-frame-precos-m2-2026` com `published_at` nulo**~~ — corrigido em 2026-07-30 para `created_at` (2026-01-26). Além da ordenação, o nulo tirava o artigo do RSS, deixava o schema Article sem `datePublished` e fazia o sitemap declarar `lastmod` = agora a cada crawl
+- [ ] **Duas séries Arquitecasa no ar ao mesmo tempo (P1, novo)**: `custo-steel-frame-m2-2026` usa dez/2025 para o Sudeste (R$ 3.015–6.091) e a tabela regional de `quanto-custa-construir-...` usa jan/2025 (R$ 2.979–5.926). Mesmo índice, mesma região, snapshots diferentes. **Precisa da série dez/2025 das outras 4 regiões** para rebasear a tabela inteira — atualizar só o Sudeste deixaria a tabela inconsistente no tempo. Ver seção abaixo
 
 ## Próximos 7 dias
 
@@ -121,7 +122,7 @@ Os 4 abaixo foram reconstruídos a partir do Supabase e agora estão em `publica
 | `normas-lsf` | `normas-light-steel-frame-brasil` | **67%** |
 | `alvenaria-vs-drywall` | `drywall-ou-alvenaria` | **63%** |
 
-O `berkahn-reforma-...` é o de frontmatter corrompido (`title: **O que efetivamente mudou**`). Arquivar os três em `99-archive/`.
+O `berkahn-reforma-...` é o de frontmatter corrompido (`title: **O que efetivamente mudou**`). ✅ **Arquivados em 2026-07-30** em `99-archive/blog-publicados-arquivados/` com sufixo `-renamed`; os 3 backlinks foram repontados para os slugs canônicos.
 
 **Artigos completos que nunca foram publicados** — similaridade máxima abaixo de 2% contra tudo que está no ar, ou seja, conteúdo único:
 
@@ -131,19 +132,30 @@ O `berkahn-reforma-...` é o de frontmatter corrompido (`title: **O que efetivam
 | ~~`mitos-verdades-steel-frame`~~ | 3.197 | ✅ **Publicado em 2026-07-30** | — |
 | `orcamento-steel-frame` | **2.961** | Custo com 8 estudos acadêmicos, CUB/SP e SINAPI | **Custo: 78,5% das impressões** |
 
-Eram **9.526 palavras prontas** enquanto o blog carregava 9 artigos de menos de 55 palavras publicados. As URLs retornam soft 404 (ver abaixo).
+Eram **9.526 palavras prontas** enquanto o blog carregava 9 artigos de menos de 55 palavras publicados. As URLs retornavam soft 404 — desde 2026-07-30 retornam **404 de verdade** (ver abaixo).
 
 ✅ **`mitos-verdades-steel-frame` foi publicado em 2026-07-30** (2.496 palavras no corpo, 4 componentes, capa gerada do banco de imagens). Restam dois.
 
 `orcamento-steel-frame` vale publicação, mas **não como está**. **Ressalva**: `orcamento-steel-frame` cita dados de 2025 e entra no cluster de custo, que já tem canibalização — precisa de revisão de números e de decisão sobre canonical antes de ir ao ar.
 
-### Bug: soft 404 em todo `/atualidades/`
+### ✅ Resolvido: soft 404 em todo `/atualidades/`
 
-Qualquer slug inexistente retorna **HTTP 200** com a página "404 Pagina nao encontrada" no corpo. Verificado em produção e reproduzido no build local com um slug inventado.
+Qualquer slug inexistente retornava **HTTP 200** com a página de erro no corpo. **Causa: os `loading.tsx`.** Um `loading.tsx` cria um boundary de Suspense sobre o segmento; o Next descarrega o shell com 200 antes de o `notFound()` ser alcançado, e o status não pode mais mudar.
 
-O `notFound()` está no lugar certo (`app/atualidades/[slug]/page.tsx:294`) e **funciona** — a página de erro renderiza. O que não muda é o status. Tentei antecipar o `notFound()` para dentro do `generateMetadata` e **não resolveu**, então a causa não é a que parecia.
+Foram necessários **os dois**: `app/atualidades/loading.tsx` envolve o segmento `[slug]` também, então remover só o filho não resolvia — foi o que me custou duas rodadas de teste.
 
-Importa porque desperdiça orçamento de rastreamento, e `steel-frame-aguenta-vento-forte` está há um mês como "URL is unknown to Google". Investigar com calma: suspeitos são a interação de `revalidate = 60` com `dynamicParams = true`.
+**Hipóteses testadas e descartadas** (registradas para ninguém repetir o caminho):
+
+| Suspeito | Teste | Veredicto |
+|---|---|---|
+| `revalidate = 60` + `dynamicParams` | build sem `revalidate` | ❌ ainda 200 |
+| `await cookies()` forçando render dinâmico | `/orcamento/estimativa/[id]` é `force-dynamic`, chama Supabase e devolve **404** | ❌ inocente |
+| `notFound()` no lugar errado | antecipar para `generateMetadata` | ❌ no Next 15 a metadata também é streamed |
+| `loading.tsx` | build sem os dois, com `revalidate` presente | ✅ **404** |
+
+O motivo está em comentário no `app/atualidades/[slug]/page.tsx` para o skeleton não voltar sem querer. Se ele for necessário de novo, precisa ficar **abaixo** do ponto que decide o `notFound` (ex.: Suspense só em volta dos relacionados).
+
+> `app/admin/analytics/loading.tsx` tem o mesmo padrão sobre um `notFound()`. Fica, porque a rota é autenticada e soft 404 lá não tem custo de crawl.
 
 ### Faixa de preço canônica (resolvido em 2026-07-30)
 

@@ -97,7 +97,7 @@ Para esses casos, alvenaria, concreto armado ou estrutura metálica convencional
 - [[5-vantagens-decisivas-light-steel-frame]] — flexibilidade entre os 5 diferenciais
 - [[steel-frame-vantagens-desvantagens]] — análise honesta de limitações
 - [[construir-hospital-em-operacao]] — caso MedStar Georgetown (versatilidade hospitalar)
-- [[berkahn-reforma-construcao-industrializada]] — reformas em LSF
+- [[reforma-tributaria-construcao-industrializada]] — reformas em LSF
 - [[lsf-fundacao]] — fundação leve viabiliza ampliações verticais
 
 ---

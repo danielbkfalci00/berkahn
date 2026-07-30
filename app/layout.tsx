@@ -182,18 +182,13 @@ export default function RootLayout({
                 publisher: {
                   "@id": "https://www.berkahn.com.br/#organization",
                 },
-                potentialAction: {
-                  "@type": "SearchAction",
-                  target: {
-                    "@type": "EntryPoint",
-                    urlTemplate: "https://www.berkahn.com.br/perguntas-frequentes?q={search_term_string}",
-                  },
-                  "query-input": {
-                    "@type": "PropertyValueSpecification",
-                    valueRequired: true,
-                    valueName: "search_term_string",
-                  },
-                },
+                // Sem potentialAction/SearchAction: o template apontava para
+                // /perguntas-frequentes?q=, mas aquela página ignora `q` e
+                // devolve a FAQ inteira. Declarar uma busca que não existe é
+                // dívida sem contrapartida — o sitelinks searchbox foi
+                // descontinuado pelo Google em nov/2024. Se a busca interna
+                // virar recurso de produto, o bloco volta com a página
+                // filtrando de fato.
               },
             ],
           })}

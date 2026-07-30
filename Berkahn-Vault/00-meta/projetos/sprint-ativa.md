@@ -1,7 +1,7 @@
 ---
 tipo: meta
 criado: 2026-05-21
-atualizado: 2026-07-29
+atualizado: 2026-07-30
 tags:
   - project/site
   - project/blog
@@ -38,17 +38,17 @@ semana_fim: 2026-07-31
 |---------|--------|--------------------|--------------|
 | [[blog]] | active | Pipeline editorial vazio (drafts/ideias/pesquisa) | Repor funil via `/brainstorm` |
 | [[linkedin]] | active | Cadência: 2 posts vs 38 artigos | Post LinkedIn da semana |
-| [[site]] | active | **PR #17 (institucional v3) pendente merge** + bug SearchAction | Validar `/institucional/pdf` em prod pós-merge |
-| [[seo-aeo]] | active | 9 posts sem meta tags; 4 URLs não indexadas | Backfill meta tags + GSC nas 4 URLs |
+| [[site]] | active | Nenhum bloqueante — PRs #15/#16/#17 mergeados em 30/07 | Validar `/institucional/pdf` em prod |
+| [[seo-aeo]] | active | 3 URLs fora do índice (ação manual no GSC) | Pedir indexação das 3 |
 | [[apresentacoes]] | active | Roteiros não versionados (parcial) | Validar 16 slides em live env |
-| [[materiais]] | active | **Institucional PDF v3** aguarda merge/distribuição | Distribuir `berkahn-institucional-v3.pdf`; preencher `usado_em` |
+| [[materiais]] | active | **Institucional PDF v4** aguarda briefing atualizado + distribuição | Atualizar briefing v3→v4; distribuir; preencher `usado_em` |
 | [[pesquisas]] | active | 70-knowledge populado (10 atomics) | Inventariar mais conceitos |
 | [[orcamento-automacao]] | published | Smoke test E2E prod pendente (Bruno) | Gerar PDF BRK-2026-0001 (checar pgs/peso) |
 
 ## Bloqueios consolidados (cross-projeto)
 
 ### P0 — Esta semana
-- [ ] **Merge PR #17** (institucional v3/v4, [[site]] + [[materiais]]): branch `design/institucional-monografia` → `main` + validar `/institucional/pdf` em prod + distribuir o PDF. A branch está 3 commits atrás de `main`; rebasear antes evita conflito
+- [x] ~~**Merge PR #17**~~ ✅ 2026-07-30 — #15, #16 e #17 mergeados. **Sobrou**: validar `/institucional/pdf` em prod, atualizar o briefing para v4 e distribuir o PDF. Ver [[site]] e [[materiais]]
 - [x] **Indexação Google** ([[seo-aeo]]): **encerrado em 2026-07-29** — 34/38 artigos (89%), contra 6/44 em abril. Restam 4 URLs em "Crawled/Discovered - currently not indexed", agora P1
 - [x] ~~**Publicar OAuth consent screen**~~ ✅ 2026-07-30 — app em produção, refresh voltou a funcionar, token reemitido. Ver [[google-apis-setup]]
 - [ ] **Decidir 4 capas órfãs** ([[materiais]]): Reestruturando Concreto, energia_solar, mármore, piscina_arraia
@@ -86,6 +86,17 @@ Os três `scheduled-tasks` estão **enabled e disparando**. O problema nunca foi
 **Diagnóstico**: as falhas têm causas diferentes (limite de uso, morte de sessão, token OAuth), mas o mesmo sintoma — nenhum artefato e nenhum aviso. O `last-error.log` do `performance` só cobre erro lançado pelo script; não cobre sessão que morre nem limite de conta.
 
 **Onde os transcripts ficam**: `~/.claude/projects/C--Users-bruno-Documents-Pessoal-Site-Berkahn/*.jsonl`, um por sessão, com data de modificação batendo com o `lastRunAt`. É onde olhar quando um cron não deixar rastro — e de onde o standup de 27/07 foi recuperado.
+
+## Wins / decisões (2026-07-30, tarde)
+
+**Quatro bugs de infraestrutura que já custavam tráfego** — todos verificados em produção ou em build de produção local, não supostos. Ver [[site]] e [[blog]].
+
+- **Soft 404 encerrado**. A causa eram os `loading.tsx` de `/atualidades` (o boundary de Suspense descarrega o shell com 200 antes de o `notFound()` rodar), e foram necessários os **dois** — o pai envolve o segmento `[slug]` também. `revalidate`, o cliente Supabase e a posição do `notFound()` foram testados e descartados um a um. A tabela de hipóteses ficou registrada em [[blog]].
+- **`/atualidades/[slug]` nunca foi ISR**. `await cookies()` em `lib/supabase/server.ts` optava a rota por render dinâmico — `revalidate = 60` e `generateStaticParams` eram código morto, e toda visita ao artigo de maior tráfego era SSR frio + round-trip ao banco. Novo `lib/supabase/public.ts` (leitura sem cookies) devolveu a rota para SSG/ISR: 39 caminhos pré-renderizados.
+- **`/contato` existia em 4 CTAs e em nenhum lugar mais**. A rota nunca foi criada; a captura de lead só vivia como modal. `ContactForm` extraído do `ContactFormDialog`, agora servindo os dois.
+- **`published_at` nulo** no artigo de 17.759 impressões: tirava ele do RSS, deixava o schema sem `datePublished` e fazia o sitemap declarar `lastmod` = agora a cada crawl.
+
+**Aberto, precisa de dado externo**: `custo-steel-frame-m2-2026` e `quanto-custa-construir-...` usam snapshots diferentes do mesmo índice Arquitecasa para o Sudeste (dez/2025 vs jan/2025). Rebasear a tabela regional exige a série dez/2025 das 5 regiões.
 
 ## Wins / decisões (2026-07-29)
 

@@ -116,7 +116,7 @@ Para terrenos com aterro, a compactação precisa ser feita em camadas controlad
 
 ## O que as normas exigem
 
-A [[normas-lsf|NBR 16970:2022]] (Light Steel Framing) é a norma brasileira de referência para o sistema LSF. Sua Parte 2 (Projeto Estrutural) estabelece requisitos para chumbadores de ancoragem, cálculos de contraventamento e deslocamentos máximos. A Parte 3 detalha as interfaces entre sistemas, incluindo a ligação fundação-parede e os requisitos de barreira de umidade. A NBR 6122:2019 (Projeto e Execução de Fundações) complementa com requisitos gerais, incluindo a obrigatoriedade de investigação geotécnica e o lastro mínimo de 5 cm sob o radier. A NBR 6118:2023 rege o dimensionamento do concreto armado, incluindo cobrimentos mínimos e critérios de durabilidade.
+A [[normas-light-steel-frame-brasil|NBR 16970:2022]] (Light Steel Framing) é a norma brasileira de referência para o sistema LSF. Sua Parte 2 (Projeto Estrutural) estabelece requisitos para chumbadores de ancoragem, cálculos de contraventamento e deslocamentos máximos. A Parte 3 detalha as interfaces entre sistemas, incluindo a ligação fundação-parede e os requisitos de barreira de umidade. A NBR 6122:2019 (Projeto e Execução de Fundações) complementa com requisitos gerais, incluindo a obrigatoriedade de investigação geotécnica e o lastro mínimo de 5 cm sob o radier. A NBR 6118:2023 rege o dimensionamento do concreto armado, incluindo cobrimentos mínimos e critérios de durabilidade.
 
 [NORMS:normas-fundacao-lsf]
 
