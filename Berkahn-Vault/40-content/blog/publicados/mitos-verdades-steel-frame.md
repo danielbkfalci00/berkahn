@@ -1,7 +1,7 @@
 ---
 tipo: draft-content
 criado: 2026-02-23
-atualizado: 2026-05-22
+atualizado: 2026-07-30
 tags:
   - domain/lsf
   - project/blog
@@ -10,7 +10,7 @@ ai_summary: Separamos os mitos e verdades do Steel Frame com dados técnicos, no
 status: published
 projeto: blog
 slug: mitos-verdades-steel-frame
-data_publicacao: 2026-02-23
+data_publicacao: 2026-07-30
 title: "Mitos e Verdades do Steel Frame: O Que Sustenta Cada Argumento"
 description: Separamos os mitos e verdades do Steel Frame com dados técnicos, normas e cases reais. Guia completo para quem quer construir com segurança.
 seo_description: Separamos os mitos e verdades do Steel Frame com dados técnicos, normas e cases reais. Guia completo para quem quer construir com segurança.
@@ -24,6 +24,7 @@ palavras_chave:
 category: Construção e Tecnologia
 read_time: 12 min
 author: Equipe Berkahn
+supabase_id: b42cbd17-5b76-446f-adab-c2cd3d188310
 url_final: "https://www.berkahn.com.br/atualidades/mitos-verdades-steel-frame"
 contextos_aplicados:
   - berkahn-brand
@@ -145,82 +146,3 @@ Os mitos sobre o Steel Frame persistem por uma combinação de desconhecimento, 
 **Consulte a Berkahn para avaliar o melhor sistema construtivo para o seu projeto.** Da fundação à entrega das chaves, com a precisão e a velocidade do Light Steel Frame.
 
 ---
-
-## ESPECIFICAÇÕES TÉCNICAS PARA IMPLEMENTAÇÃO:
-
-**Elementos visuais/interativos sugeridos:**
-
-1. **Tabela comparativa: Steel Frame vs. Alvenaria em números**
-   - Mostra lado a lado: tempo de obra, desperdício, peso estrutural, precisão dimensional, durabilidade estimada, isolamento acústico (STC)
-   - Inserir após a seção "É frágil, não aguenta peso"
-   - Relevante porque consolida os dados dispersos pelo artigo em formato escaneável, facilitando comparação rápida
-
-2. **Box de destaque: "O que a NBR 16970:2022 mudou"**
-   - Resumo visual da mudança de "sistema inovador" para "sistema convencional" e impacto no financiamento
-   - Inserir dentro da seção "Banco não financia"
-   - Destrói a objeção mais frequente do público de alto padrão com autoridade normativa
-
-3. **Infográfico: "Proteção do aço galvanizado — 3 camadas de defesa"**
-   - Mostra visualmente: (1) barreira física do zinco, (2) proteção catódica, (3) pátina de carbonato
-   - Inserir na seção "Steel Frame enferruja"
-   - Traduz conceito técnico de corrosão em linguagem visual acessível
-
-4. **Infográfico: "Resistência ao fogo — o que acontece minuto a minuto"**
-   - Timeline visual mostrando comportamento do sistema LSF durante ensaio de fogo de 90 min (dados do SCI)
-   - Inserir na seção "Pega fogo facilmente"
-   - Nenhum concorrente brasileiro tem esse tipo de visualização temporal
-
-5. **Box de destaque: "Limitações reais — checklist"**
-   - Resumo visual das 4 limitações honestas com ícones
-   - Inserir ao final da seção "As limitações reais que ninguém deveria ignorar"
-   - Reforça credibilidade e funciona como referência rápida
-
-**Internal links sugeridos:**
-- "sistema construtivo industrializado" → artigo sobre o que é Light Steel Frame e como funciona
-- "construção a seco" → artigo sobre vantagens da construção a seco
-- "conforto térmico" → artigo sobre eficiência energética em casas LSF
-- "sistemas híbridos" → artigo sobre Steel Frame híbrido (LSF + concreto armado)
-- "precisão dimensional" → página de serviços da Berkahn
-
-**External links incluídos:**
-- NAHB Research Center (ILZRO ZC-4): referência de estudo sobre durabilidade do zinco
-- SCI Publication ED016 (UK): https://steel-sci.com/assets/downloads/LSF/ED016%20Download.pdf
-- NBR 15253 (perfis de aço para LSF): referência normativa ABNT
-- NBR 16970:2022 (norma-mãe do LSF): referência normativa ABNT
-- BS EN 1993-1-2 (resistência do aço ao fogo): referência normativa europeia
-- World Steel Association (reconstrução de Christchurch): https://worldsteel.org
-- ABCEM (dados de mercado): https://www.abcem.org.br
-- FRAMECAD (desempenho em furacões): referência de indústria
-
-**Imagens necessárias:**
-1. Hero: estrutura de Steel Frame em montagem, mostrando perfis galvanizados e escala da obra
-   - Alt text: "Estrutura de Light Steel Frame em montagem com perfis de aço galvanizado"
-   - Posição: topo do artigo
-2. Detalhe de perfil galvanizado Z275 com close no acabamento
-   - Alt text: "Detalhe de perfil de aço galvanizado Z275 usado em construções Light Steel Frame"
-   - Posição: seção sobre corrosão
-3. Casa residencial de alto padrão finalizada em Steel Frame (indistinguível de alvenaria)
-   - Alt text: "Residência de alto padrão construída em Light Steel Frame com acabamento premium"
-   - Posição: seção sobre alto padrão
-
-**Schema markup recomendado:**
-- Article (principal)
-- FAQPage (seção de perguntas frequentes)
-
-**Observações para implementação:**
-- Contagem de palavras do artigo: ~2.400 palavras (dentro do limite de 2.500)
-- **Público priorizado: residencial alto padrão** (primário) e comercial (secundário). Justificativa: o tema "mitos e verdades" é pesquisado majoritariamente por pessoas físicas avaliando construir em Steel Frame, e o perfil do comprador LSF brasileiro (77% homens, 35-55 anos, renda acima de R$ 20k, gasto médio de R$ 1,2M segundo pesquisa Espaço Smart/SindusconRS) coincide exatamente com o público A/B da Berkahn. Referências de preço e exemplos foram calibrados para esse perfil.
-- Tom acessível e conversacional, mantendo autoridade técnica
-- Parágrafos curtos para leitura dinâmica em mobile
-- Sem bullets no corpo do texto (exceto FAQ, onde o formato pergunta-resposta é natural)
-- Seção de limitações reais incluída deliberadamente para gerar credibilidade e diferenciar do tom "vendedor" dos concorrentes
-- O dado sobre Lustron Houses no hook de abertura é diferencial exclusivo: nenhum artigo brasileiro sobre mitos do Steel Frame menciona esse case com esse nível de detalhe
-- CTA final direcionando para a Berkahn sem tom de vendedor
-
----
-
-<!-- vault-rodape-v1 -->
-**Contexto aplicado**: [[berkahn-brand]] · [[seo-aeo-strategy]] · [[article-pipeline]] · [[copy-sem-travessao]] · [[steel-frame-domain]]
-**Atomic knowledge usado**: [[lsf-vs-alvenaria]] · [[lsf-fogo]] · [[lsf-fundacao]]
-**Hub**: [[blog]]
-**Workflow**: [[workflow-conteudo]]
