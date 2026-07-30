@@ -129,14 +129,16 @@ export async function getAllTrendPoints(): Promise<TrendPoint[]> {
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("analytics_snapshots")
-    .select("month, ga4_data, gsc_data")
+    // partial vem de dentro do JSONB via operador do PostgREST, evitando puxar
+    // o context inteiro de todos os meses só pra ler um boolean.
+    .select("month, ga4_data, gsc_data, partial:context->>partial")
     .order("month", { ascending: true });
 
   if (error || !data) return [];
 
   const PT_BR_MONTHS = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
 
-  return data.map((row: { month: string; ga4_data: any; gsc_data: any }) => {
+  return data.map((row: { month: string; ga4_data: any; gsc_data: any; partial: string | null }) => {
     const monthSlug = row.month.slice(0, 7);
     const [year, m] = monthSlug.split("-");
     const monthIdx = parseInt(m) - 1;
@@ -148,6 +150,8 @@ export async function getAllTrendPoints(): Promise<TrendPoint[]> {
       pageviews: row.ga4_data?.pageviews ?? 0,
       clicks: row.gsc_data?.clicks ?? 0,
       impressions: row.gsc_data?.impressions ?? 0,
+      // ->> devolve texto; snapshots antigos não têm a chave e vêm null.
+      partial: row.partial === "true",
     };
   });
 }

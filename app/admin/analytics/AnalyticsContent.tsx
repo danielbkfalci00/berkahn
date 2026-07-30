@@ -160,6 +160,13 @@ export function AnalyticsContent({
 
   const redFlags = detectRedFlags(ctx, previousSnapshot, postsPublishedInMonth);
 
+  // O modo comparativo lê ga4_data/gsc_data das duas linhas, e a linha do mês
+  // anterior guarda o mês INTEIRO. Contra um mês parcial isso compara janelas
+  // de tamanhos diferentes — os deltas inline do context não têm esse problema
+  // porque são calculados contra a janela equivalente na geração do snapshot.
+  const isPartial = ctx.partial === true;
+  const comparisonDisabled = previousSnapshot === null || isPartial;
+
   return (
     <div className="space-y-12 max-w-[1400px]">
       <AnalyticsHeader
@@ -168,11 +175,19 @@ export function AnalyticsContent({
         periodEnd={ctx.periodEnd}
         availableMonths={availableMonths}
         currentMonth={currentMonth}
-        comparisonDisabled={previousSnapshot === null}
+        comparisonDisabled={comparisonDisabled}
+        comparisonDisabledReason={
+          isPartial
+            ? "Indisponível em mês parcial: o snapshot anterior guarda o mês inteiro, então a comparação mediria janelas de tamanhos diferentes"
+            : "Sem mês anterior pra comparar"
+        }
         comparisonMode={comparisonMode}
+        isPartial={isPartial}
+        daysCovered={ctx.daysCovered}
+        daysInMonth={ctx.daysInMonth}
       />
 
-      {comparisonMode && previousSnapshot ? (
+      {comparisonMode && previousSnapshot && !isPartial ? (
         <ComparisonView current={snapshot} previous={previousSnapshot} />
       ) : (
         <>

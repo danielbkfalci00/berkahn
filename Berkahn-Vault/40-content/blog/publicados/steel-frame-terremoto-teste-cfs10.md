@@ -12,8 +12,9 @@ projeto: blog
 slug: steel-frame-terremoto-teste-cfs10
 data_publicacao: 2026-02-26
 title: Steel Frame Resiste a Terremoto? O Teste que Provou
+seo_title: "Steel Frame Resiste a Terremoto? O Teste CFS10 que Provou | Berkahn"
 description: Engenheiros testaram prédio de 10 andares em Steel Frame no maior simulador de terremotos do mundo. A estrutura resistiu a 18 sismos. Entenda os resultados.
-seo_description: Engenheiros testaram prédio de 10 andares em Steel Frame no maior simulador de terremotos do mundo. A estrutura resistiu a 18 sismos. Entenda os resultados.
+seo_description: "Prédio de 10 andares em Steel Frame resistiu a 18 simulações de terremotos na UC San Diego. Entenda o teste CFS10 e o que significa para construção no Brasil."
 palavras_chave:
   - steel frame terremoto
   - steel frame resistência sísmica

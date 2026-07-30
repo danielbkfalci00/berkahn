@@ -1,7 +1,7 @@
 ---
 tipo: meta
 criado: 2026-05-21
-atualizado: 2026-05-22
+atualizado: 2026-07-29
 tags:
   - status/active
 ai_summary: Map of Content visual do vault Berkahn. Expansão do index.md com seções temáticas para navegação humana. Topo destaca 7 hubs de projeto ativos (first-class entities) + bases dinâmicas. Cluster por workstream (blog, LinkedIn, apresentação, site).
@@ -16,10 +16,10 @@ Mapa temático do vault Berkahn. Para visão estrutural (por pasta), ver [[index
 
 | Projeto | Status | Bloqueio principal | Workflow | Atualizado |
 |---------|--------|--------------------|----------|------------|
-| [[blog]] | active | 35 artigos = ilhas (Sprint 2 resolveu) | [[workflow-conteudo]] | 2026-05-22 |
-| [[linkedin]] | active | Cadência: 1/35 artigos com post | [[workflow-conteudo]] | 2026-05-22 |
+| [[blog]] | active | Pipeline editorial vazio; vault divergente de produção | [[workflow-conteudo]] | 2026-07-29 |
+| [[linkedin]] | active | Cadência: 3/38 artigos com post | [[workflow-conteudo]] | 2026-07-29 |
 | [[site]] | active | Bug SearchAction + Google Sheets SPOF | [[workflow-site]] | 2026-05-22 |
-| [[seo-aeo]] | active | **P0**: Indexação 6/44 + 9 posts sem meta | [[workflow-seo]] | 2026-05-22 |
+| [[seo-aeo]] | active | **P0**: 9 posts sem meta tags (indexação resolvida: 89%) | [[workflow-seo]] | 2026-07-29 |
 | [[apresentacoes]] | active | Roteiros não versionados (parcial) | [[workflow-comercial]] | 2026-05-22 |
 | [[materiais]] | active | 9 índices criados; 4 capas órfãs | [[workflow-material]] | 2026-05-22 |
 | [[pesquisas]] | active | 70-knowledge populado com 10 atomic notes | [[workflow-pesquisa]] | 2026-05-22 |
@@ -66,7 +66,7 @@ Por workstream:
 
 ## 📝 Conteúdo (40-content)
 
-- **Blog publicados**: 35 artigos em `40-content/blog/publicados/`
+- **Blog publicados**: 38 artigos em `40-content/blog/publicados/`
 - **Drafts**: `40-content/blog/drafts/`
 - **Ideias**: `40-content/blog/ideias/ideas-YYYY-MM.md`
 - **Pesquisa**: `40-content/blog/pesquisa/`
@@ -74,6 +74,7 @@ Por workstream:
 - **Apresentações**: `40-content/apresentacoes/`
 - **Materiais**: `40-content/materiais/`
 - **Auditorias SEO**: `40-content/auditorias-seo/`
+- **Estratégia editorial**: `40-content/estrategia/` — [[2026-07-diagnostico-editorial]] · [[2026-08-calendario-editorial]] · [[2026-08-playbook-pautas]]
 
 Query estruturada: [[artigos.base]] | [[calendario.base]]
 

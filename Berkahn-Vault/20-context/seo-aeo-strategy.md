@@ -103,9 +103,22 @@ O site já tem: LocalBusiness, GeneralContractor, BlogPosting, FAQPage, Service,
 
 ### robots.txt
 
-- Permitir Googlebot, Bingbot, DuckDuckBot
-- Bloquear bots de treinamento: GPTBot, ClaudeBot, CCBot, anthropic-ai
-- Permitir bots de busca AI: ChatGPT-User, PerplexityBot
+Estado real do arquivo, verificado em `app/robots.ts:5-21` (2026-07-29). A versão anterior desta seção descrevia uma configuração que nunca existiu.
+
+| Grupo | User-agents | Regra |
+|---|---|---|
+| Curinga | `*` | `Allow: /`, com disallow em `/admin/`, `/orcamento/pdf`, `/apresentacao-executiva/`, `/etapas-da-obra/`, `/institucional/` |
+| Bloqueados | `CCBot`, `GPTBot`, `ClaudeBot`, **`Google-Extended`** | `Disallow: /` |
+| Liberados | `OAI-SearchBot`, `Claude-SearchBot`, `PerplexityBot` | `Allow: /` |
+
+`ChatGPT-User`, `Claude-User` e `Perplexity-User` não são citados: caem no curinga e estão liberados. `anthropic-ai` nunca esteve no arquivo.
+
+**A distinção que importa**: quem governa citação é o bot de busca, não o de treino. `OAI-SearchBot` decide se o site aparece nas respostas do ChatGPT e **está liberado**; `GPTBot` é treino e, segundo a própria OpenAI, não determina aparição em busca. A estrutura da Anthropic é idêntica (`ClaudeBot` treino, `Claude-SearchBot` busca).
+
+> [!warning] `Google-Extended` bloqueado é um erro
+> O comentário em `app/robots.ts:12` diz "Block training-only crawlers (no search/citation value)". Isso é falso para o Google-Extended: bloqueá-lo **não** protege de AI Overviews (quem governa é o Googlebot) e **não** é sinal de ranking. O que ele faz é excluir o site do grounding do app Gemini e do Vertex AI, plataforma que foi de 8,9% para 27,3% de fatia do tráfego de IA em um ano. Correção registrada em [[2026-08-calendario-editorial]], Bloco 5.
+
+`public/llms.txt` existe e pode ficar, mas não vale investimento: levantamento de 137 mil domínios mostrou que 97% dos arquivos `llms.txt` nunca receberam uma única requisição, e o Google declara que não afeta visibilidade.
 
 ## Prioridades Atuais
 

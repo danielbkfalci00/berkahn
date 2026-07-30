@@ -24,7 +24,6 @@ type ConsentLevel = "all" | "necessary" | null;
 function ehRendererPdf(pathname: string | null): boolean {
   if (!pathname) return false;
   return (
-    pathname === "/orcamento/pdf" ||
     pathname.startsWith("/orcamento/estimativa/") ||
     pathname.startsWith("/institucional/")
   );

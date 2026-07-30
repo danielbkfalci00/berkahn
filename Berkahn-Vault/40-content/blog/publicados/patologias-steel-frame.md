@@ -12,8 +12,9 @@ projeto: blog
 slug: patologias-steel-frame
 data_publicacao: 2026-02-25
 title: "Patologias em Steel Frame: Como Prevenir e Corrigir"
+seo_title: "Patologias em Steel Frame: Como Prevenir e Corrigir"
 description: As patologias mais comuns em Steel Frame, por que 45% nascem no projeto e o que fazer quando aparecem. Guia técnico com dados e soluções.
-seo_description: As patologias mais comuns em Steel Frame, por que 45% nascem no projeto e o que fazer quando aparecem. Guia técnico com dados e soluções.
+seo_description: "Patologias em Steel Frame: 45% nascem no projeto. Fissuras, corrosão, infiltração — causas, prevenção e correção com base nas NBR 16970 e 15575. Guia técnico."
 palavras_chave:
   - patologias steel frame
   - problemas steel frame

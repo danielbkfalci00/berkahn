@@ -12,8 +12,9 @@ projeto: blog
 slug: steel-frame-fogo-incendio
 data_publicacao: 2026-02-20
 title: "Steel Frame e Fogo: O Que Realmente Acontece em um Incêndio"
+seo_title: "Steel Frame e Fogo: O Que Realmente Acontece em um Incêndio | Berkahn"
 description: Entenda como o fogo afeta uma estrutura em Steel Frame, quais são as proteções do sistema e por que o LSF é seguro contra incêndio. Guia técnico e acessível.
-seo_description: Entenda como o fogo afeta uma estrutura em Steel Frame, quais são as proteções do sistema e por que o LSF é seguro contra incêndio. Guia técnico e acessível.
+seo_description: "O aço não pega fogo. Entenda como o sistema LSF protege contra incêndio com TRRF de 90-120 min — 3x acima da exigência. Dados técnicos e normas."
 palavras_chave:
   - steel frame e fogo
   - steel frame incêndio

@@ -23,7 +23,7 @@ export function AdminLayoutClient({ children }: AdminLayoutClientProps) {
   }
 
   return (
-    <div className="min-h-screen bg-neutral-50">
+    <div className="admin-shell min-h-screen bg-neutral-50">
       <AdminSidebar />
       <div className="lg:pl-64">
         <AdminHeader />

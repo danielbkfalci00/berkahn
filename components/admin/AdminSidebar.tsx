@@ -14,6 +14,7 @@ import {
   ChevronLeft,
   Menu,
   BarChart3,
+  BookOpen,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
@@ -30,6 +31,11 @@ const navigation = [
     name: "Analytics",
     href: "/admin/analytics",
     icon: BarChart3,
+  },
+  {
+    name: "Documentações",
+    href: "/admin/documentacoes",
+    icon: BookOpen,
   },
   {
     name: "Posts",

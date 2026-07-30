@@ -2,6 +2,7 @@ import { MetadataRoute } from "next";
 import { createClient } from "@/lib/supabase/server";
 import { richArticles } from "@/data/articles/steel-frame-futuro";
 import { getAllProjectSlugs } from "@/data/projects";
+import { isExcludedFromSitemap } from "@/lib/seo/thin-content";
 
 const BASE_URL = "https://www.berkahn.com.br";
 
@@ -28,19 +29,26 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     .select("slug, published_at")
     .eq("status", "published");
 
-  const supabaseArticles: MetadataRoute.Sitemap = (posts ?? []).map((post) => ({
-    url: `${BASE_URL}/atualidades/${post.slug}`,
-    lastModified: post.published_at ? new Date(post.published_at) : new Date(),
-    changeFrequency: "monthly" as const,
-    priority: 0.7,
-  }));
+  // Fora do sitemap: artigos em noindex e os consolidados por 301. Anunciar
+  // uma URL que responde noindex ou redirect é sinal contraditório.
+  // Ver lib/seo/thin-content.ts.
+  const supabaseArticles: MetadataRoute.Sitemap = (posts ?? [])
+    .filter((post) => !isExcludedFromSitemap(post.slug))
+    .map((post) => ({
+      url: `${BASE_URL}/atualidades/${post.slug}`,
+      lastModified: post.published_at ? new Date(post.published_at) : new Date(),
+      changeFrequency: "monthly" as const,
+      priority: 0.7,
+    }));
 
   // 3. Legacy static articles
-  const legacyArticles: MetadataRoute.Sitemap = richArticles.map((article) => ({
-    url: `${BASE_URL}/atualidades/${article.slug}`,
-    changeFrequency: "monthly" as const,
-    priority: 0.7,
-  }));
+  const legacyArticles: MetadataRoute.Sitemap = richArticles
+    .filter((article) => !isExcludedFromSitemap(article.slug))
+    .map((article) => ({
+      url: `${BASE_URL}/atualidades/${article.slug}`,
+      changeFrequency: "monthly" as const,
+      priority: 0.7,
+    }));
 
   // 4. Project pages
   const projectSlugs = getAllProjectSlugs();
