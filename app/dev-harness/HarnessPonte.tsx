@@ -2,17 +2,26 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { useDocumentoBridge } from "@/hooks/use-documento-bridge";
+import { useAutor } from "@/hooks/use-autor";
 import { criarMotorAncoragem } from "@/lib/documentacoes/ancoragem";
-import type { Ancora } from "@/types/comentario";
+import { ComentariosRail } from "@/components/admin/documentacoes/ComentariosRail";
+import type { Ancora, Thread } from "@/types/comentario";
 import type { AncoraParaPintar, RectSelecao } from "@/lib/documentacoes/protocolo";
+import { threadsDeExemplo } from "./fixtures";
 
 type Props = { docs: string[] };
 
 type Salva = AncoraParaPintar & { rotulo: string };
 
+// Fixo: `new Date()` durante o render quebraria a hidratação.
+const AGORA = "2026-07-30T20:00:00.000Z";
+
 export function HarnessPonte({ docs }: Props) {
   const [doc, setDoc] = useState(docs[0]);
   const [colar, setColar] = useState("");
+  const [modo, setModo] = useState<"ponte" | "painel">("ponte");
+  const [fixtures, setFixtures] = useState<Thread[]>(() => threadsDeExemplo(AGORA));
+  const { nome, carregado, salvar } = useAutor();
   const [pendente, setPendente] = useState<{ ancora: Ancora; rect: RectSelecao } | null>(null);
   const [salvas, setSalvas] = useState<Salva[]>([]);
   const [orfaos, setOrfaos] = useState<string[]>([]);
@@ -75,7 +84,7 @@ export function HarnessPonte({ docs }: Props) {
     w.__adicionarAncora = adicionar;
   }, [adicionar]);
 
-  function salvar() {
+  function salvarSelecao() {
     if (!pendente) return;
     adicionar(pendente.ancora);
     setPendente(null);
@@ -104,7 +113,7 @@ export function HarnessPonte({ docs }: Props) {
         {pendente && (
           <button
             type="button"
-            onClick={salvar}
+            onClick={salvarSelecao}
             className="absolute z-10 rounded-full bg-neutral-900 px-3 py-1.5 text-xs font-medium text-white shadow-lg"
             style={{ top: pendente.rect.bottom + 8, left: pendente.rect.left }}
           >
@@ -113,6 +122,26 @@ export function HarnessPonte({ docs }: Props) {
         )}
       </div>
 
+      {modo === "painel" ? (
+        <ComentariosRail
+          threads={fixtures}
+          orfas={new Set(["fix-2"])}
+          documentoAtualizadoEm={AGORA}
+          autorNome={nome}
+          autorCarregado={carregado}
+          onSalvarAutor={salvar}
+          pendente={pendente?.ancora ?? null}
+          pendenteEnviando={false}
+          pendenteErro={null}
+          onCriar={() => registrar("criar: desabilitado no harness (sem banco)")}
+          onCancelarPendente={() => setPendente(null)}
+          threadAtiva={null}
+          onSelecionar={(id) => registrar(`selecionou thread ${id}`)}
+          onRealcar={() => {}}
+          onAtualizar={(t) => setFixtures((a) => a.map((x) => (x.id === t.id ? t : x)))}
+          onRemover={(id) => setFixtures((a) => a.filter((x) => x.id !== id))}
+        />
+      ) : (
       <aside className="flex flex-col gap-3 overflow-y-auto p-4 text-sm">
         <div>
           <h1 className="text-base font-semibold text-neutral-900">Harness da ponte</h1>
@@ -198,6 +227,15 @@ export function HarnessPonte({ docs }: Props) {
           </pre>
         </div>
       </aside>
+      )}
+
+      <button
+        type="button"
+        onClick={() => setModo((m) => (m === "ponte" ? "painel" : "ponte"))}
+        className="fixed bottom-3 right-3 z-50 rounded-full bg-neutral-900 px-3 py-1.5 text-xs text-white shadow-lg"
+      >
+        {modo === "ponte" ? "Ver painel real" : "Ver debug da ponte"}
+      </button>
     </div>
   );
 }

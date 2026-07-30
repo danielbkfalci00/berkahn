@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { getDocumentoMeta } from "@/lib/documentacoes/queries";
+import { listarThreads } from "@/lib/documentacoes/comentarios";
 import { DocumentoViewer } from "./DocumentoViewer";
 
 export const dynamic = "force-dynamic";
@@ -15,5 +16,11 @@ export default async function DocumentoPage({ params }: Props) {
   const meta = await getDocumentoMeta(slug);
   if (!meta) notFound();
 
-  return <DocumentoViewer meta={meta} />;
+  // As threads vêm do servidor já no primeiro render, para o painel não piscar
+  // vazio. Daí em diante o cliente mescla o retorno das server actions no
+  // estado local: revalidar remontaria o iframe e refaria o handshake da ponte
+  // a cada comentário.
+  const threads = await listarThreads(slug);
+
+  return <DocumentoViewer meta={meta} threadsIniciais={threads} />;
 }

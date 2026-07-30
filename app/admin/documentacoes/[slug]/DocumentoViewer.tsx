@@ -1,13 +1,29 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useCallback, useRef, useState, useTransition } from "react";
+import { createPortal } from "react-dom";
 import Link from "next/link";
-import { ArrowLeft, ExternalLink, Maximize2, Minimize2 } from "lucide-react";
+import {
+  ArrowLeft,
+  ExternalLink,
+  Maximize2,
+  MessageSquare,
+  Minimize2,
+  PanelRightClose,
+  PanelRightOpen,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ComentariosRail } from "@/components/admin/documentacoes/ComentariosRail";
+import { criarThread } from "@/app/admin/documentacoes/actions";
+import { useAutor } from "@/hooks/use-autor";
+import { useDocumentoBridge } from "@/hooks/use-documento-bridge";
+import type { RectSelecao } from "@/lib/documentacoes/protocolo";
 import { CATEGORIA_LABEL, type DocumentoMeta } from "@/types/documentacao";
+import type { Ancora, Thread, TipoComentario } from "@/types/comentario";
 
 type Props = {
   meta: DocumentoMeta;
+  threadsIniciais: Thread[];
 };
 
 function formatarDataHora(iso: string): string {
@@ -22,10 +38,58 @@ function formatarDataHora(iso: string): string {
   });
 }
 
-export function DocumentoViewer({ meta }: Props) {
+export function DocumentoViewer({ meta, threadsIniciais }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const molduraRef = useRef<HTMLDivElement>(null);
   const [emTelaCheia, setEmTelaCheia] = useState(false);
+  const [painelAberto, setPainelAberto] = useState(true);
+
+  const [threads, setThreads] = useState<Thread[]>(threadsIniciais);
+  const [orfas, setOrfas] = useState<Set<string>>(new Set());
+  const [ativa, setAtiva] = useState<string | null>(null);
+
+  const [pendente, setPendente] = useState<Ancora | null>(null);
+  const [rect, setRect] = useState<RectSelecao | null>(null);
+  const [criando, iniciarCriacao] = useTransition();
+  const [erroCriacao, setErroCriacao] = useState<string | null>(null);
+
+  const { nome, carregado, salvar } = useAutor();
   const rawUrl = `/admin/documentacoes/${meta.slug}/raw`;
+
+  const aoSelecionar = useCallback((ancora: Ancora, r: RectSelecao) => {
+    setPendente(ancora);
+    setRect(r);
+    setErroCriacao(null);
+    setPainelAberto(true);
+  }, []);
+
+  const aoCancelarSelecao = useCallback(() => setRect(null), []);
+
+  const aoClicarDestaque = useCallback((threadId: string) => {
+    setAtiva(threadId);
+    document
+      .getElementById(`thread-${threadId}`)
+      ?.scrollIntoView({ block: "center", behavior: "smooth" });
+  }, []);
+
+  const aoResolver = useCallback(
+    (r: { resolvidos: string[]; orfaos: string[] }) => setOrfas(new Set(r.orfaos)),
+    []
+  );
+
+  // Só threads abertas são pintadas: destaque de discussão encerrada polui o
+  // documento sem informar nada. Elas continuam na lista, sob o filtro.
+  const ancoras = threads
+    .filter((t) => t.status === "aberto")
+    .map((t) => ({ threadId: t.id, ancora: t.ancora }));
+
+  const { iframeRef, pronto, falhou, irPara, realcar } = useDocumentoBridge({
+    ancoras,
+    aoSelecionar,
+    aoCancelarSelecao,
+    aoClicarDestaque,
+    aoResolver,
+  });
 
   function alternarTelaCheia() {
     const el = containerRef.current;
@@ -38,6 +102,56 @@ export function DocumentoViewer({ meta }: Props) {
       setEmTelaCheia(true);
     }
   }
+
+  function criar(corpo: string, tipo: TipoComentario) {
+    if (!pendente || !nome) return;
+    setErroCriacao(null);
+    iniciarCriacao(async () => {
+      const res = await criarThread({
+        documentoSlug: meta.slug,
+        ancora: pendente,
+        corpo,
+        tipo,
+        autorNome: nome,
+        docVersao: meta.atualizadoEm,
+      });
+      if (res.error || !res.data) {
+        setErroCriacao(res.error);
+        return;
+      }
+      setThreads((atual) => [res.data!, ...atual]);
+      setPendente(null);
+      setRect(null);
+    });
+  }
+
+  function selecionarThread(threadId: string) {
+    setAtiva(threadId);
+    irPara(threadId);
+  }
+
+  // A pílula é posicionada em coordenadas de viewport do IFRAME; somar o rect
+  // da moldura traduz para o viewport da página. E ela vai por portal porque a
+  // moldura tem overflow-hidden.
+  const molduraRect = molduraRef.current?.getBoundingClientRect();
+  const pilula =
+    rect && molduraRect && typeof document !== "undefined"
+      ? createPortal(
+          <button
+            type="button"
+            onClick={() => setPainelAberto(true)}
+            style={{
+              top: molduraRect.top + rect.bottom + 8,
+              left: molduraRect.left + rect.left,
+            }}
+            className="fixed z-50 inline-flex items-center gap-1.5 rounded-full bg-neutral-900 px-3 py-1.5 text-xs font-medium text-white shadow-lg"
+          >
+            <MessageSquare className="h-3 w-3" />
+            Comentar
+          </button>,
+          document.body
+        )
+      : null;
 
   return (
     <div className="space-y-4">
@@ -57,10 +171,28 @@ export function DocumentoViewer({ meta }: Props) {
             {CATEGORIA_LABEL[meta.categoria]}
             {meta.periodoLabel ? ` · ${meta.periodoLabel}` : ""} · atualizado em{" "}
             {formatarDataHora(meta.atualizadoEm)}
+            {falhou && (
+              <span className="ml-2 text-amber-600">
+                · comentários indisponíveis (o documento não respondeu)
+              </span>
+            )}
           </p>
         </div>
 
         <div className="flex shrink-0 items-center gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setPainelAberto((v) => !v)}
+            aria-pressed={painelAberto}
+          >
+            {painelAberto ? (
+              <PanelRightClose className="h-4 w-4" />
+            ) : (
+              <PanelRightOpen className="h-4 w-4" />
+            )}
+            <span className="ml-1.5 hidden sm:inline">Comentários</span>
+          </Button>
           <Button variant="outline" size="sm" onClick={alternarTelaCheia}>
             {emTelaCheia ? (
               <Minimize2 className="h-4 w-4" />
@@ -84,19 +216,65 @@ export function DocumentoViewer({ meta }: Props) {
         rodaria; e o <style> do documento é global (traz `* { margin: 0 }`) e
         sobrescreveria o layout do admin.
         sandbox sem allow-same-origin: os scripts do documento rodam, mas em
-        origem opaca, sem acesso a cookies nem ao DOM do admin.
+        origem opaca, sem acesso a cookies nem ao DOM do admin. É por isso que
+        os comentários falam com o documento por postMessage (a ponte injetada
+        em lib/documentacoes/bridge.ts) em vez de manipular o DOM dele.
       */}
       <div
         ref={containerRef}
-        className="overflow-hidden rounded-lg border border-neutral-200 bg-white"
+        className={`relative grid h-[calc(100vh-11rem)] overflow-hidden rounded-lg border border-neutral-200 bg-white ${
+          painelAberto ? "grid-cols-1 lg:grid-cols-[1fr_340px]" : "grid-cols-1"
+        }`}
       >
-        <iframe
-          src={rawUrl}
-          title={meta.titulo}
-          sandbox="allow-scripts"
-          className="h-[calc(100vh-11rem)] w-full border-0"
-        />
+        <div ref={molduraRef} className="relative min-w-0 overflow-hidden">
+          <iframe
+            ref={iframeRef}
+            src={rawUrl}
+            title={meta.titulo}
+            sandbox="allow-scripts"
+            className="h-full w-full border-0"
+          />
+          {!pronto && !falhou && (
+            <span className="pointer-events-none absolute bottom-2 right-2 rounded bg-neutral-900/70 px-1.5 py-0.5 text-[10px] text-white">
+              conectando…
+            </span>
+          )}
+        </div>
+
+        {painelAberto && (
+          // Abaixo de lg o painel cobre o documento em vez de espremer os dois
+          // numa coluna de 340px que não caberia. Acima, é a segunda coluna.
+          <div className="absolute inset-0 z-20 min-h-0 lg:static lg:z-auto">
+            <ComentariosRail
+              threads={threads}
+              orfas={orfas}
+              documentoAtualizadoEm={meta.atualizadoEm}
+              autorNome={nome}
+              autorCarregado={carregado}
+              onSalvarAutor={salvar}
+              pendente={pendente}
+              pendenteEnviando={criando}
+              pendenteErro={erroCriacao}
+              onCriar={criar}
+              onCancelarPendente={() => {
+                setPendente(null);
+                setRect(null);
+              }}
+              threadAtiva={ativa}
+              onSelecionar={selecionarThread}
+              onRealcar={realcar}
+              onAtualizar={(t) =>
+                setThreads((atual) => atual.map((x) => (x.id === t.id ? t : x)))
+              }
+              onRemover={(id) =>
+                setThreads((atual) => atual.filter((x) => x.id !== id))
+              }
+            />
+          </div>
+        )}
       </div>
+
+      {pilula}
     </div>
   );
 }
