@@ -12,6 +12,7 @@ projeto: blog
 slug: drywall-ou-alvenaria
 data_publicacao: 2026-05-01
 title: "Drywall ou Alvenaria de Bloco Cerâmico: Comparativo Técnico Completo"
+seo_title: "Drywall ou Alvenaria: Comparativo Técnico SINAPI 2025"
 description: "Custo real, peso, acústica e prazo: comparativo técnico entre drywall e alvenaria com dados SINAPI 2025 e NBR 15575. Saiba quando usar cada sistema."
 seo_description: "Custo real, peso, acústica e prazo: comparativo técnico entre drywall e alvenaria com dados SINAPI 2025 e NBR 15575. Saiba quando usar cada sistema."
 palavras_chave:

@@ -12,6 +12,7 @@ projeto: blog
 slug: steel-frame-vantagens-desvantagens
 data_publicacao: 2026-02-26
 title: "Steel Frame: Vantagens e Desvantagens Reais"
+seo_title: "Steel Frame: Vantagens e Desvantagens Reais - Dados Técnicos 2025"
 description: Guia completo sobre os prós e contras reais do Steel Frame, com dados de custo, prazo e desempenho. Sem marketing, só informação técnica.
 seo_description: "Prós e contras reais do Steel Frame com dados de estudos acadêmicos brasileiros. Custo, prazo, sustentabilidade e limitações sem viés comercial."
 palavras_chave:

@@ -12,6 +12,7 @@ projeto: blog
 slug: sustentabilidade-construcao-civil-economia-circular
 data_publicacao: 2026-05-19
 title: "Sustentabilidade na Construção Civil: O Peso Ambiental do Concreto e as Alternativas que Já Existem"
+seo_title: "Sustentabilidade na Construção Civil e Economia Circular"
 description: A construção civil responde por 34% das emissões globais de CO₂. Entenda o impacto do concreto, os limites da reciclagem e como o Steel Frame muda isso.
 seo_description: "A construção civil responde por 34% das emissões globais de CO₂. Entenda o impacto do concreto, os limites da reciclagem e como o Steel Frame muda isso."
 palavras_chave:

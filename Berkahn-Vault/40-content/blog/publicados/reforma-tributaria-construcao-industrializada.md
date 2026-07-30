@@ -18,7 +18,7 @@ palavras_chave: []
 category: "Mercado"
 read_time: "12 min"
 author: "Berkahn"
-answer_summary: null
+answer_summary: "A Emenda Constitucional 132, promulgada em dezembro de 2023, substitui PIS, Cofins, IPI, ICMS e ISS por um IVA dual composto por CBS federal e IBS estadual e municipal. Para a construção civil a mudança é estrutural: o novo modelo dá crédito integral sobre insumos adquiridos com nota fiscal, o que favorece quem produz com método industrial e compra material industrializado. Sistemas como Light Steel Frame, pré-moldado e wood frame aproveitam esse crédito melhor que a obra convencional, que concentra custo em mão de obra frequentemente informal. A transição corre de 2026 a 2033, e abre uma janela competitiva para construção industrializada."
 supabase_id: c5d0b565-55e7-49be-a25b-f52ea8b40514
 url_final: "https://www.berkahn.com.br/atualidades/reforma-tributaria-construcao-industrializada"
 contextos_aplicados:

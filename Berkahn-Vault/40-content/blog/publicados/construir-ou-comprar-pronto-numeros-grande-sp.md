@@ -12,6 +12,7 @@ projeto: blog
 slug: construir-ou-comprar-pronto-numeros-grande-sp
 data_publicacao: 2026-02-23
 title: Construir ou Comprar Pronto? Os Números na Grande SP
+seo_title: "Construir ou Comprar Casa na Grande SP? Comparativo 2026 | Berkahn"
 description: Comparativo real de custo/m² entre construir casa sob medida e comprar imóvel pronto na Grande SP. Dados de 2025/2026 com valores por região.
 seo_description: "Análise completa: construir casa alto padrão custa R$ 4.500-6.100/m² vs R$ 8.000-15.000/m² para comprar pronto. Economia pode ultrapassar 50% na Grande SP."
 palavras_chave:

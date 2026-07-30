@@ -175,6 +175,22 @@ O diagnóstico mostra a homepage convertendo a **13,18%** contra 2,98% do melhor
 
 Estes quatro itens não são pauta de blog e não cabem neste calendário. Ficam registrados porque, pelo dado, valem mais que boa parte das 44 pautas.
 
+### Bloco 6 — As 9 carcaças (decisão sua, P0)
+
+Descoberto em 2026-07-30 e detalhado em [[2026-07-diagnostico-editorial]]: **9 dos 38 artigos publicados têm menos de 55 palavras**. Não é falta de meta tag, é falta de artigo. São 24% do blog.
+
+Três opções, e a escolha é de negócio:
+
+| Opção | O que faz | Quando faz sentido |
+|---|---|---|
+| **`noindex` + manter no ar** | Tira do índice sem quebrar link interno nem URL | Recomendada como primeiro passo. Reversível, imediata, para o sangramento de qualidade |
+| **301 para o artigo bom** | Consolida em quem já cobre o tema | Para as 3 que **já têm substituto melhor no ar**: `financiamento-construcao-steel-frame` → `financiar-construcao-light-steel-frame`; `sustentabilidade-construcao-industrializada` → `...-economia-circular`; `certificacoes-steel-frame` → `normas-light-steel-frame-brasil` |
+| **Reescrever** | Vira artigo de verdade | Só para as que têm keyword própria e valem a pauta: `passo-passo-construcao-steel-frame` e `isolamento-termico-acustico-steel-frame` já aparecem no calendário como tema |
+
+**Não escrever meta tag para elas enquanto estiverem assim.** Meta tag boa em página vazia aumenta impressão e decepção ao mesmo tempo, e pogo-sticking é sinal negativo.
+
+`tendencias-construcao-modular-2025` (11 palavras, publicado em 2024) já está no calendário de dezembro como refresh. É a única com data marcada.
+
 ### Bloco 5 — Configuração de IA e frescor (custo quase zero)
 
 Sai da revisão de AEO em [[2026-07-diagnostico-editorial]]. Nada aqui exige escrever conteúdo.
