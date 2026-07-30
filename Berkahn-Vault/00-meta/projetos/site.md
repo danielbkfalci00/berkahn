@@ -1,7 +1,7 @@
 ---
 tipo: projeto
 criado: 2026-05-22
-atualizado: 2026-07-29
+atualizado: 2026-07-30
 tags:
   - project/site
   - status/active
@@ -50,15 +50,17 @@ Site em produção (Next.js App Router + Supabase + Vercel + Tailwind + shadcn/u
 
 ## Bloqueios ativos
 
-- [ ] **PR #17 (institucional v3) pendente merge**: branch `design/institucional-monografia` (rota `/institucional/pdf` + API + 9 componentes). Validar geração do PDF em prod após merge. Ver [[materiais]] + `40-content/materiais/2026-07-09-pdf-institucional/`
+- [x] ~~**PR #17 (institucional v3) pendente merge**~~ — mergeado em 2026-07-30, junto com #15 e #16. **O que sobrou**: validar `/institucional/pdf` em produção, atualizar o briefing para v4 e distribuir o PDF (ver "Próximos 7 dias")
 - [x] **Indexação Google** (delegado a [[seo-aeo]]): resolvido em 2026-07-29 — 34/38 artigos (89%), contra 6/44 em abril
-- [ ] **Bug SearchAction**: gera URL inválida — corrigir
+- [x] ~~**Bug SearchAction**~~ — resolvido em 2026-07-30 **removendo** o bloco. Não era URL inválida: o `urlTemplate` apontava para `/perguntas-frequentes?q=`, e aquela página ignora o parâmetro (o componente não recebe props) e devolve a FAQ inteira. Como o sitelinks searchbox foi descontinuado pelo Google em nov/2024, declarar a busca não tinha contrapartida
+- [x] ~~**Quatro CTAs apontando para `/contato`, que respondia 404**~~ — resolvido em 2026-07-30. `app/portfolio/page.tsx:153`, `ProjectModels.tsx:180`, `ProjectSpecs.tsx:72` e `ProjectsGrid.tsx:41` linkavam para uma rota que **nunca existiu**: a captura de lead só existia como modal. O `ContactForm` foi extraído do `ContactFormDialog` e agora serve os dois — o modal e a página `/contato`, indexável e linkável. Fecha o item 7 do diagnóstico ("não existe caminho público para pedir orçamento")
 - [ ] **Google Sheets SPOF**: leads sem backup automático em Supabase (mitigado em Fase 4 do plano)
-- [ ] **Core Web Vitals**: monitorar LCP < 2.5s, FID < 100ms, CLS < 0.1
+- [ ] **Core Web Vitals**: monitorar LCP < 2.5s, FID < 100ms, CLS < 0.1. **Mudança relevante em 2026-07-30**: `/atualidades/[slug]` era renderizada dinamicamente a cada visita (`await cookies()` em `lib/supabase/server.ts` optava a rota por dynamic) e agora é SSG/ISR servida da CDN. Medir de novo — é a rota de maior tráfego
 
 ## Próximos 7 dias
 
-- [ ] **Merge PR #17** (institucional v3) + validar `/institucional/pdf` gerando PDF em prod
+- [ ] Validar `/institucional/pdf` gerando PDF em produção (pós-merge do #17)
+- [ ] Atualizar o briefing do institucional para **v4** antes de distribuir — o código está em v4, a documentação em v3
 - [ ] Validar build (`npm run build`) sem warnings críticos
 - [ ] gitleaks scan pre-commit ativo
 

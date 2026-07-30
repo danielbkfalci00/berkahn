@@ -73,7 +73,7 @@ Dados de 2026-07-29 (junho fechado + julho parcial 01-26).
 - [x] ~~**Preencher meta_title + meta_description** nos 9 posts~~ — encerrado em 2026-07-30 por outro caminho: os 9 são exatamente os artigos com menos de 55 palavras. 5 foram consolidados por 301 e 4 estão em `noindex`. Meta tag em página vazia aumentaria impressão e decepção ao mesmo tempo. Reabrir só quando forem reescritos, um a um
 - [x] ~~**Preencher answer_summary** nos 4 posts~~ — feito em 2026-07-30. **Zero** posts publicados sem `answer_summary`
 - [ ] **Criar/ativar Google Business Profile** (GBP) — *não verificado nesta sessão*
-- [ ] **Corrigir SearchAction** gerando URL inválida (ver [[site]]) — *não verificado nesta sessão*
+- [x] ~~**Corrigir SearchAction**~~ — resolvido em 2026-07-30 removendo o bloco do `app/layout.tsx`. O diagnóstico "URL inválida" estava errado: o template era válido, mas `/perguntas-frequentes` ignora `?q=` e devolve a FAQ inteira. Ver [[site]]
 
 - [x] ~~**Desbloquear `Google-Extended`**~~ — feito em 2026-07-30. `ChatGPT-User`, `Claude-User` e `Perplexity-User` também ganharam allow explícito. `GPTBot` e `ClaudeBot` seguem bloqueados por escolha editorial, não por engano
 
@@ -84,7 +84,7 @@ Dados de 2026-07-29 (junho fechado + julho parcial 01-26).
 - [ ] **Reposicionar `quanto-custa-construir-...` para metragem** (decisão pendente): hoje as duas páginas de custo disputam a mesma intenção. Reavaliar em 60 dias — se o CTR não subir de 1,15%, aí vale 301 para a página-mãe
 - [ ] **Lacunas com demanda medida e zero clique**: `telhado steel frame preço m2` (163 imp), queries por metragem (70/100/150 m²), e 682 impressões em queries com **"2023"** que o artigo de 2026 não atende
 - [ ] Normalizar 11 categorias → 5
-- [ ] Adicionar `lastModified` a páginas estáticas no sitemap
+- [x] ~~Adicionar `lastModified` a páginas estáticas no sitemap~~ — revisto em 2026-07-30. O problema não era ausência: home e `/atualidades` usavam `new Date()`, ou seja, declaravam "modificado agora" a cada crawl, o que ensina o Google a ignorar o campo. Agora a listagem usa a data do artigo mais recente e a home omite; artigos sem `published_at` omitem em vez de inventar
 - [ ] Registrar em diretórios de construção brasileiros (3-5)
 
 ### P2 — 2-4 semanas

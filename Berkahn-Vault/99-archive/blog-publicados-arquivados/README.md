@@ -1,7 +1,7 @@
 ---
 tipo: meta
 criado: 2026-05-22
-atualizado: 2026-05-22
+atualizado: 2026-07-30
 tags:
   - project/blog
   - status/archived
@@ -18,6 +18,8 @@ status: archived
 1. **Draft com placeholders editoriais** (não finalizado para publicação)
 2. **Versão duplicada/superseded** de artigo ainda ativo
 3. **Off-topic confirmado** sem conexão com domínio Berkahn
+4. **Renomeação** — o conteúdo está no ar sob outro slug, e a nota do vault
+   é a versão antiga do nome (sufixo `-renamed`)
 
 ## Artigos arquivados
 
@@ -43,6 +45,29 @@ status: archived
   - Linha 91: "Conclusão" levemente reescrita
 - **Mantido por**: rastreabilidade da evolução do artigo + caso o LinkedIn original (2026-04-13-medstar-gestao-obra) tenha sido escrito baseado nesta versão
 - **Cross-reference**: Post LinkedIn `40-content/linkedin/2026-04-13-medstar-gestao-obra/` linka para o tema (Medstar/Georgetown) → durante Sprint 2.4 bidirecional, o post deve linkar para [[artigo-construir-hospital-em-operacao]] (versão final), não esta superseded
+
+## Renomeações — lote de 2026-07-30
+
+Os três abaixo tinham `status: published` e `url_final` preenchida, mas o
+slug não existia em produção. A comparação de similaridade de trigramas
+contra todos os posts no ar mostrou que **não eram artigos perdidos: eram os
+mesmos artigos sob outro nome**. Arquivados porque manter as duas versões
+convida a editar a errada.
+
+| Arquivo arquivado | Está no ar como | Similaridade |
+|---|---|---:|
+| `berkahn-reforma-construcao-industrializada-renamed.md` | [[reforma-tributaria-construcao-industrializada]] | **92%** |
+| `normas-lsf-renamed.md` | [[normas-light-steel-frame-brasil]] | **67%** |
+| `alvenaria-vs-drywall-renamed.md` | [[drywall-ou-alvenaria]] | **63%** |
+
+O `berkahn-reforma-...` é também o de frontmatter corrompido
+(`title: **O que efetivamente mudou**`), o que reforça a leitura de que era
+um arquivo de trabalho, não a versão final.
+
+Os 3 backlinks que apontavam para estas notas foram repontados para os slugs
+canônicos: `70-knowledge/lsf-versatilidade-arquitetonica.md`,
+`40-content/blog/publicados/fundacao-steel-frame.md` e
+`40-content/materiais/indices/indices-capas-blog.md`.
 
 ## Restauração
 
