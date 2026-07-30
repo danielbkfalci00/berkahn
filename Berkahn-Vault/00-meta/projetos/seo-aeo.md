@@ -64,9 +64,13 @@ Dados de 2026-07-29 (junho fechado + julho parcial 01-26).
 - [ ] **Criar/ativar Google Business Profile** (GBP) — *não verificado nesta sessão*
 - [ ] **Corrigir SearchAction** gerando URL inválida (ver [[site]]) — *não verificado nesta sessão*
 
+- [ ] **Desbloquear `Google-Extended`** em `app/robots.ts:13`. Bloqueá-lo não protege de AI Overviews e exclui o site do grounding do Gemini, que foi de 8,9% para 27,3% de fatia do tráfego de IA. Custo zero. Ver [[2026-07-diagnostico-editorial]]
+
 ### P1 — 1-2 semanas
-- [ ] **Resolver canibalização preço/custo**: `custo-steel-frame-m2-2026` (864 cliques, pos. 3,5) e `quanto-custa-construir-steel-frame-precos-m2-2026` (135 cliques, 10.463 impressões, CTR 1,29%, pos. 6,1) disputam a mesma intenção
-- [ ] **Pool de CTR baixo**: 3 páginas com ~3.700 impressões rendendo 47 cliques — `financiar-construcao-light-steel-frame` (1,33%), `normas-light-steel-frame-brasil` (1,25%), `fundacao-steel-frame-vs-alvenaria` (1,13%)
+- [ ] **Canibalização de preço, agora medida em query × página**: em *todas* as queries de preço, `quanto-custa-construir-...` aparece 5 a 20 posições abaixo da página-mãe. Acumula **17.759 impressões e CTR de 1,15%** em 90 dias, contra 2,98% de `custo-steel-frame-m2-2026`. Decisão recomendada é **reposicionar para metragem**, não redirecionar. Ver [[2026-08-calendario-editorial]], Bloco 1
+- [ ] **Pool de CTR baixo, agora 8 páginas** (90 dias): `financiar-construcao-...` (5.316 imp, **0,75%**), `normas-light-steel-frame-brasil` (4.010 imp, 0,85%), `fundacao-steel-frame-vs-alvenaria` (1.539 imp, 0,97%), `drywall-st-ru-rf` (949 imp, **0,21%**), `steel-frame-vs-wood-frame` (0,55%), `protecao-contra-quedas-...` (463 imp, **0%**). Correções por página no Bloco 2 do calendário
+- [ ] **Título truncado na SERP**: `quanto-custa-construir-...` rankeia em **1º** para "quanto custa construir em steel frame" e o Google exibe o H1 cortado. Encurtar H1 e title para menos de 60 caracteres
+- [ ] **Lacunas com demanda medida e zero clique**: `telhado steel frame preço m2` (163 imp), queries por metragem (70/100/150 m²), e 682 impressões em queries com **"2023"** que o artigo de 2026 não atende
 - [ ] Normalizar 11 categorias → 5
 - [ ] Adicionar `lastModified` a páginas estáticas no sitemap
 - [ ] Registrar em diretórios de construção brasileiros (3-5)

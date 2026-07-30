@@ -20,7 +20,7 @@ status: active
 | 10 | [[10-memory/MEMORY]] | Memória persistente (user, feedback, project, reference) |
 | 20 | [[article-pipeline]] | Contexto de domínio (pipeline, brand, SEO, design, presentation, LSF) |
 | 30 | [[30-prompts/README]] | Prompts calibrados (locked — não alterar sem permissão) |
-| 40 | `40-content/` | Blog (publicados, drafts, ideias, pesquisa), LinkedIn, apresentações, materiais, auditorias SEO |
+| 40 | `40-content/` | Blog (publicados, drafts, ideias, pesquisa), LinkedIn, apresentações, materiais, auditorias SEO, [[2026-08-calendario-editorial\|estratégia editorial]] |
 | 50 | [[guia-design-berkahn]] | Brand assets (guia design, logos) |
 | 60 | [[stack-nextjs-supabase]] | Arquitetura (stack, admin, integrações, blog infra) |
 | 70 | `70-knowledge/` | Atomic notes (conceitos LSF, normas, etc.) |

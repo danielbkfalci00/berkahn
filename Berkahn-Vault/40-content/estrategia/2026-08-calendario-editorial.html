@@ -1,0 +1,1435 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calendário editorial ago–dez/2026 — Berkahn</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<style>
+:root {
+  --bg: #FFFFFF;
+  --bg-soft: #F4F2EC;
+  --bg-zebra: #FAF8F2;
+  --text: #0A0A0A;
+  --text-soft: #4A4A4A;
+  --text-muted: #8A8A8A;
+  --border: #E5E2D9;
+  --border-strong: #0A0A0A;
+  --accent-up: #1F6F3D;
+  --accent-up-bg: #E8F3EC;
+  --accent-down: #B83A3A;
+  --accent-down-bg: #F8E8E8;
+  --accent-neutral: #6A6A6A;
+  --accent-warn: #8A5A00;
+  --accent-warn-bg: #FDF3E0;
+  --shadow: 0 1px 2px rgba(0,0,0,.04), 0 4px 12px rgba(0,0,0,.04);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { font-size: 16px; }
+
+body {
+  font-family: 'Manrope', system-ui, -apple-system, sans-serif;
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--text);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 56px 48px 96px;
+}
+
+/* Header */
+.header {
+  border-bottom: 1px solid var(--border-strong);
+  padding-bottom: 32px;
+  margin-bottom: 48px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+
+.header-brand {
+  font-weight: 800;
+  font-size: 14px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.header-tagline {
+  font-size: 12px;
+  color: var(--text-muted);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+.header-meta {
+  text-align: right;
+  font-size: 13px;
+  color: var(--text-soft);
+}
+
+.header-meta strong {
+  display: block;
+  color: var(--text);
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+}
+
+h1 {
+  font-size: 44px;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 24px 0 8px;
+}
+
+h2 {
+  font-size: 26px;
+  font-weight: 700;
+  margin: 56px 0 24px;
+  letter-spacing: -0.01em;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+h3 {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 32px 0 16px;
+  letter-spacing: -0.005em;
+  color: var(--text);
+}
+
+p {
+  margin: 12px 0;
+  color: var(--text-soft);
+}
+
+ul, ol {
+  margin: 12px 0 12px 24px;
+}
+
+li {
+  margin: 6px 0;
+  color: var(--text-soft);
+}
+
+li::marker {
+  color: var(--text-muted);
+}
+
+a {
+  color: var(--text);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+code {
+  font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.85em;
+  background: var(--bg-soft);
+  padding: 2px 6px;
+  border-radius: 3px;
+  color: var(--text);
+}
+
+strong { font-weight: 600; color: var(--text); }
+
+/* Hero summary cards */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin: 24px 0 32px;
+}
+
+.kpi-card {
+  background: var(--bg-soft);
+  padding: 20px 22px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+}
+
+.kpi-card-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.kpi-card-value {
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+
+.kpi-card-delta {
+  display: inline-block;
+  margin-top: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 3px 9px;
+  border-radius: 999px;
+  letter-spacing: -0.005em;
+}
+
+.delta-up   { background: var(--accent-up-bg);   color: var(--accent-up);   }
+.delta-down { background: var(--accent-down-bg); color: var(--accent-down); }
+.delta-flat { background: var(--bg-zebra);       color: var(--accent-neutral); }
+
+/* Tables */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0 32px;
+  font-size: 14px;
+  background: var(--bg);
+}
+
+thead th {
+  text-align: left;
+  font-weight: 600;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  padding: 10px 14px;
+  border-bottom: 2px solid var(--border-strong);
+  background: var(--bg);
+}
+
+thead th:not(:first-child) { text-align: right; }
+
+tbody td {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-soft);
+  vertical-align: top;
+}
+
+tbody td:first-child { color: var(--text); font-weight: 500; }
+tbody td:not(:first-child) { text-align: right; font-variant-numeric: tabular-nums; }
+
+tbody tr:nth-child(even) td { background: var(--bg-zebra); }
+tbody tr:last-child td { border-bottom: none; }
+
+/* Chart container */
+.chart-block {
+  background: var(--bg-soft);
+  padding: 24px;
+  border-radius: 6px;
+  margin: 24px 0;
+  border: 1px solid var(--border);
+}
+
+.chart-block canvas { max-height: 320px; }
+
+.chart-title {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+/* Insights & actions */
+.insights-list, .actions-list {
+  list-style: none;
+  margin: 16px 0;
+  padding: 0;
+}
+
+.insights-list li {
+  background: var(--bg-soft);
+  padding: 16px 20px;
+  margin: 10px 0;
+  border-radius: 4px;
+  border-left: 3px solid var(--border-strong);
+  color: var(--text);
+}
+
+.insights-list li::before {
+  content: counter(insight) ".";
+  counter-increment: insight;
+  font-weight: 700;
+  color: var(--text-muted);
+  margin-right: 10px;
+}
+
+.insights-list { counter-reset: insight; }
+
+.actions-list li {
+  padding: 14px 18px;
+  margin: 8px 0;
+  border-radius: 4px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  color: var(--text);
+}
+
+.actions-list li::before {
+  content: "□";
+  font-size: 18px;
+  line-height: 1;
+  color: var(--text-muted);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.actions-p0 li { background: var(--accent-down-bg); border-left: 3px solid var(--accent-down); }
+.actions-p1 li { background: var(--bg-soft);       border-left: 3px solid var(--text-soft);    }
+.actions-p2 li { background: var(--bg-zebra);      border-left: 3px solid var(--border-strong); }
+
+.priority-tag {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  padding: 3px 10px;
+  border-radius: 3px;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+}
+
+.priority-p0 { background: var(--accent-down); color: var(--bg); }
+.priority-p1 { background: var(--text);        color: var(--bg); }
+.priority-p2 { background: var(--text-muted);  color: var(--bg); }
+
+/* Status pills for indexation */
+.status-pill {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 999px;
+  letter-spacing: 0.04em;
+}
+
+.status-indexed     { background: var(--accent-up-bg);   color: var(--accent-up);   }
+.status-not-indexed { background: var(--accent-down-bg); color: var(--accent-down); }
+.status-pending     { background: var(--bg-zebra);       color: var(--accent-neutral); }
+.status-partial     { background: var(--accent-warn-bg); color: var(--accent-warn); }
+
+/* Banner de relatório parcial */
+.partial-banner {
+  background: var(--accent-warn-bg);
+  border-left: 3px solid var(--accent-warn);
+  color: var(--accent-warn);
+  padding: 14px 18px;
+  margin: 20px 0;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.partial-banner-title {
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  font-size: 12px;
+}
+
+/* Footer */
+.footer {
+  margin-top: 80px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+  font-size: 12px;
+  color: var(--text-muted);
+  text-align: center;
+  letter-spacing: 0.04em;
+}
+
+/* Índice — só documentos longos (build-doc.mjs) emitem este bloco */
+.doc-toc {
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 24px 28px;
+  margin: 40px 0 56px;
+}
+.doc-toc-title {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+}
+.doc-toc ol { list-style: none; counter-reset: toc; margin: 0; padding: 0; }
+.doc-toc li { counter-increment: toc; margin: 0 0 8px; padding-left: 32px; position: relative; }
+.doc-toc li::before {
+  content: counter(toc, decimal-leading-zero);
+  position: absolute;
+  left: 0;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-muted);
+  top: 3px;
+}
+.doc-toc a { color: var(--text); text-decoration: none; border-bottom: 1px solid transparent; }
+.doc-toc a:hover { border-bottom-color: var(--text); }
+
+/* Âncora de heading: o offset evita que o título fique sob a borda ao pular */
+h2[id], h3[id] { scroll-margin-top: 24px; }
+
+/* Print */
+@media print {
+  body { font-size: 11pt; }
+  .doc-toc { page-break-inside: avoid; background: none; }
+  .container { padding: 24px 32px; max-width: none; }
+  h1 { font-size: 28pt; }
+  h2 { font-size: 18pt; page-break-after: avoid; margin-top: 32px; }
+  h3 { font-size: 13pt; page-break-after: avoid; }
+  table, .chart-block, .kpi-grid { page-break-inside: avoid; }
+  .header { padding-bottom: 16px; margin-bottom: 24px; }
+  .kpi-card { box-shadow: none; }
+  .chart-block { background: var(--bg); border: 1px solid var(--border); }
+  @page { margin: 1.5cm; size: A4; }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .container { padding: 32px 20px; }
+  h1 { font-size: 32px; }
+  h2 { font-size: 22px; }
+  .header { flex-direction: column; align-items: flex-start; }
+  .header-meta { text-align: left; }
+  table { font-size: 12px; }
+  thead th, tbody td { padding: 8px 10px; }
+}
+</style>
+</head>
+<body>
+<div class="container" id="report-root">
+
+<div class="header">
+  <div>
+    <div class="header-brand">Berkahn</div>
+    <div class="header-tagline">Estratégia de Conteúdo</div>
+  </div>
+  <div class="header-meta">
+    <strong>agosto a dezembro de 2026</strong>
+    <div>Atualizado em 29/07/2026</div>
+  </div>
+</div>
+  <h1>Calendário editorial ago–dez/2026</h1><nav class="doc-toc"><div class="doc-toc-title">Neste documento</div><ol><li><a href="#como-este-calendario-foi-construido">Como este calendário foi construído</a></li><li><a href="#duas-trilhas">Duas trilhas</a></li><li><a href="#distribuicao-por-eixo-60-40">Distribuição por eixo (60/40)</a></li><li><a href="#agosto-9-pautas">Agosto — 9 pautas</a></li><li><a href="#setembro-9-pautas">Setembro — 9 pautas</a></li><li><a href="#outubro-9-pautas">Outubro — 9 pautas</a></li><li><a href="#novembro-9-pautas">Novembro — 9 pautas</a></li><li><a href="#dezembro-8-pautas">Dezembro — 8 pautas</a></li><li><a href="#trilha-paralela-saneamento-do-acervo">Trilha paralela: saneamento do acervo</a></li><li><a href="#linkedin-44-briefings">LinkedIn — 44 briefings</a></li><li><a href="#metrica-de-sucesso">Métrica de sucesso</a></li></ol></nav>
+<p>Base factual em [[2026-07-diagnostico-editorial]]. Briefing por pauta em [[2026-08-playbook-pautas]].</p>
+<h2 id="como-este-calendario-foi-construido">Como este calendário foi construído</h2>
+<p>Três regras saíram direto do diagnóstico e explicam por que ele não se parece com o histórico do blog:</p>
+<ol>
+<li><strong>Conteúdo técnico puro deixa de ser pauta.</strong> 139 queries técnicas geraram 3 cliques em 90 dias. Técnico agora entra como profundidade dentro de pauta com demanda, não como tema.</li>
+<li><strong>Toda pauta nova precisa de demanda medida ou de janela temporal.</strong> Nada entra por &quot;seria bom ter&quot;.</li>
+<li><strong>Ninguém escreve nada até a canibalização ser resolvida.</strong> A trilha de saneamento vale 17.759 impressões represadas, mais que qualquer artigo novo do semestre.</li>
+</ol>
+<h2 id="duas-trilhas">Duas trilhas</h2>
+<table>
+<thead>
+<tr>
+<th>Trilha</th>
+<th>Volume</th>
+<th>Regra</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Core</strong></td>
+<td>22 pautas, 1 por semana</td>
+<td>Inegociável. Demanda medida ou janela com data. Se a semana apertar, é esta que sobrevive</td>
+</tr>
+<tr>
+<td><strong>Expansão</strong></td>
+<td>22 pautas, 1 por semana</td>
+<td>Aprofunda cluster e cobre cauda. Atrasa sem quebrar a estratégia</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>[!warning] O volume é 2x a cadência observada
+O último post saiu em 20/07 e o funil está vazio desde 21/05. Publicar 2 artigos por semana exige mudança de operação, não só de planejamento. A separação Core/Expansão existe para que um atraso reduza volume sem destruir a sequência: <strong>corte Expansão, nunca Core</strong>.</p>
+</blockquote>
+<h2 id="distribuicao-por-eixo-60-40">Distribuição por eixo (60/40)</h2>
+<table>
+<thead>
+<tr>
+<th>Eixo</th>
+<th style="text-align:right">Pautas</th>
+<th>Racional</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Econômico: custo, metragem, financiamento, viabilidade</td>
+<td style="text-align:right">26 (59%)</td>
+<td>Onde está 78,5% das impressões e a única intenção com CTR acima de 4%</td>
+</tr>
+<tr>
+<td>Clusters novos: objeção, execução, local, comercial, regulatório</td>
+<td style="text-align:right">18 (41%)</td>
+<td>Reduz a dependência de um ativo único e ataca decisão, não curiosidade</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="agosto-9-pautas">Agosto — 9 pautas</h2>
+<table>
+<thead>
+<tr>
+<th>Sem</th>
+<th>Trilha</th>
+<th>Título de trabalho</th>
+<th>Keyword principal</th>
+<th>Intenção</th>
+<th>Funil</th>
+<th>P</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>S1 03-07</td>
+<td><strong>Core</strong></td>
+<td>ICMS solar em SP acaba em 31/12 e o Fio B sobe para 75%: a conta de quem instala agora</td>
+<td>isenção icms energia solar sp 2026</td>
+<td>transacional</td>
+<td>fundo</td>
+<td>5</td>
+</tr>
+<tr>
+<td>S1</td>
+<td>Exp</td>
+<td>Custos ocultos da obra em steel frame que ninguém coloca no orçamento</td>
+<td>custos ocultos construção</td>
+<td>informacional</td>
+<td>meio</td>
+<td>3</td>
+</tr>
+<tr>
+<td>S2 10-14</td>
+<td><strong>Core</strong></td>
+<td>Quanto custa uma casa de 100m² em steel frame em 2026</td>
+<td>casa steel frame 100m2 preço</td>
+<td>transacional</td>
+<td>fundo</td>
+<td>5</td>
+</tr>
+<tr>
+<td>S2</td>
+<td>Exp</td>
+<td>Quanto custa o projeto: arquitetônico, estrutural e complementares</td>
+<td>quanto custa projeto casa</td>
+<td>transacional</td>
+<td>meio</td>
+<td>3</td>
+</tr>
+<tr>
+<td>S3 17-21</td>
+<td><strong>Core</strong></td>
+<td>Steel frame é mais barato que alvenaria? A conta completa, não só o m²</td>
+<td>steel frame é mais barato que alvenaria</td>
+<td>comparativa</td>
+<td>meio</td>
+<td>5</td>
+</tr>
+<tr>
+<td>S3</td>
+<td>Exp</td>
+<td>Terreno em declive: quanto encarece e o que muda no projeto</td>
+<td>casa steel frame terreno declive</td>
+<td>informacional</td>
+<td>meio</td>
+<td>4</td>
+</tr>
+<tr>
+<td>S4 24-28</td>
+<td><strong>Core</strong></td>
+<td>Aprovar projeto em São Paulo mudou: autodeclaração eletrônica em 30 dias</td>
+<td>aprovar projeto prefeitura sp steel frame</td>
+<td>informacional</td>
+<td>meio</td>
+<td>5</td>
+</tr>
+<tr>
+<td>S4</td>
+<td>Exp</td>
+<td>Steel frame no litoral: o que a maresia realmente faz com o aço</td>
+<td>steel frame litoral maresia</td>
+<td>objeção</td>
+<td>meio</td>
+<td>4</td>
+</tr>
+<tr>
+<td>S5 31/08</td>
+<td><strong>Core</strong></td>
+<td>Pode pendurar TV na parede de steel frame? Quanto peso ela aguenta</td>
+<td>pendurar tv parede steel frame</td>
+<td>objeção</td>
+<td>fundo</td>
+<td>5</td>
+</tr>
+</tbody>
+</table>
+<h2 id="setembro-9-pautas">Setembro — 9 pautas</h2>
+<table>
+<thead>
+<tr>
+<th>Sem</th>
+<th>Trilha</th>
+<th>Título de trabalho</th>
+<th>Keyword principal</th>
+<th>Intenção</th>
+<th>Funil</th>
+<th>P</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>S5</td>
+<td>Exp</td>
+<td>Steel frame esquenta? Conforto térmico com número, não com marketing</td>
+<td>steel frame esquenta calor</td>
+<td>objeção</td>
+<td>meio</td>
+<td>4</td>
+</tr>
+<tr>
+<td>S6 07-11</td>
+<td><strong>Core</strong></td>
+<td>Caixa financia steel frame? O que mudou com o novo MCMV Faixa 4</td>
+<td>caixa financia steel frame</td>
+<td>transacional</td>
+<td>fundo</td>
+<td>5</td>
+</tr>
+<tr>
+<td>S6</td>
+<td>Exp</td>
+<td>Home equity ou crédito de construção: qual sai mais barato</td>
+<td>home equity construção</td>
+<td>transacional</td>
+<td>fundo</td>
+<td>3</td>
+</tr>
+<tr>
+<td>S7 14-18</td>
+<td><strong>Core</strong></td>
+<td>Telhado em steel frame: tipos, execução e quanto custa por m²</td>
+<td>telhado steel frame preço m2</td>
+<td>transacional</td>
+<td>meio</td>
+<td>5</td>
+</tr>
+<tr>
+<td>S7</td>
+<td>Exp</td>
+<td>Quanto de entrada você precisa ter para começar a obra</td>
+<td>entrada financiamento construção</td>
+<td>transacional</td>
+<td>fundo</td>
+<td>3</td>
+</tr>
+<tr>
+<td>S8 21-25</td>
+<td><strong>Core</strong></td>
+<td>Banheiro em steel frame: como se impermeabiliza uma área molhada</td>
+<td>impermeabilização banheiro steel frame</td>
+<td>objeção</td>
+<td>meio</td>
+<td>5</td>
+</tr>
+<tr>
+<td>S8</td>
+<td>Exp</td>
+<td>Novo zoneamento bioclimático: o que mudou no cálculo térmico do seu projeto</td>
+<td>nbr 15220-3 zoneamento bioclimático</td>
+<td>informacional</td>
+<td>topo</td>
+<td>3</td>
+</tr>
+<tr>
+<td>S9 28/09</td>
+<td><strong>Core</strong></td>
+<td>Casa de 70m² em steel frame: o projeto compacto que fecha a conta</td>
+<td>casa steel frame 70m2</td>
+<td>transacional</td>
+<td>fundo</td>
+<td>4</td>
+</tr>
+<tr>
+<td>S9</td>
+<td>Exp</td>
+<td>Manutenção de casa em steel frame: o que fazer em cada ano</td>
+<td>manutenção casa steel frame</td>
+<td>informacional</td>
+<td>pós-venda</td>
+<td>3</td>
+</tr>
+</tbody>
+</table>
+<h2 id="outubro-9-pautas">Outubro — 9 pautas</h2>
+<table>
+<thead>
+<tr>
+<th>Sem</th>
+<th>Trilha</th>
+<th>Título de trabalho</th>
+<th>Keyword principal</th>
+<th>Intenção</th>
+<th>Funil</th>
+<th>P</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>S10 05-09</td>
+<td><strong>Core</strong></td>
+<td>Cronograma real de uma obra em steel frame, semana a semana</td>
+<td>quanto tempo constrói casa steel frame</td>
+<td>informacional</td>
+<td>meio</td>
+<td>5</td>
+</tr>
+<tr>
+<td>S10</td>
+<td>Exp</td>
+<td>Quanto dura uma casa de steel frame: separando a vida útil do aço da edificação</td>
+<td>vida útil casa steel frame</td>
+<td>objeção</td>
+<td>meio</td>
+<td>4</td>
+</tr>
+<tr>
+<td>S11 12-16</td>
+<td><strong>Core</strong></td>
+<td>Casa de steel frame valoriza? Revenda e avaliação bancária</td>
+<td>casa steel frame valoriza revenda</td>
+<td>objeção</td>
+<td>fundo</td>
+<td>5</td>
+</tr>
+<tr>
+<td>S11</td>
+<td>Exp</td>
+<td>Galpão em steel frame ou estrutura metálica: não é a mesma coisa</td>
+<td>galpão steel frame</td>
+<td>comparativa</td>
+<td>meio</td>
+<td>3</td>
+</tr>
+<tr>
+<td>S12 19-23</td>
+<td><strong>Core</strong></td>
+<td>Fundação radier para steel frame: execução, espessura e preço</td>
+<td>fundação radier steel frame preço</td>
+<td>transacional</td>
+<td>meio</td>
+<td>5</td>
+</tr>
+<tr>
+<td>S12</td>
+<td>Exp</td>
+<td>Barulho de passos no andar de cima: acústica de entrepiso</td>
+<td>acústica entrepiso steel frame</td>
+<td>objeção</td>
+<td>meio</td>
+<td>3</td>
+</tr>
+<tr>
+<td>S13 26-30</td>
+<td><strong>Core</strong></td>
+<td>Desvantagens reais do steel frame: o que a gente não resolve</td>
+<td>desvantagens steel frame</td>
+<td>objeção</td>
+<td>fundo</td>
+<td>5</td>
+</tr>
+<tr>
+<td>S13</td>
+<td>Exp</td>
+<td>Reforma tributária: por que empreitada e incorporação não pagam igual</td>
+<td>reforma tributária construção civil</td>
+<td>informacional</td>
+<td>meio</td>
+<td>4</td>
+</tr>
+<tr>
+<td>S13</td>
+<td>Exp</td>
+<td>Loja e escritório em steel frame: prazo, custo e o argumento do aluguel</td>
+<td>steel frame comercial loja</td>
+<td>transacional</td>
+<td>meio</td>
+<td>3</td>
+</tr>
+</tbody>
+</table>
+<h2 id="novembro-9-pautas">Novembro — 9 pautas</h2>
+<table>
+<thead>
+<tr>
+<th>Sem</th>
+<th>Trilha</th>
+<th>Título de trabalho</th>
+<th>Keyword principal</th>
+<th>Intenção</th>
+<th>Funil</th>
+<th>P</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>S14 02-06</td>
+<td><strong>Core</strong></td>
+<td>Fachada em steel frame: EIFS, placa cimentícia e siding lado a lado, com preço</td>
+<td>revestimento externo steel frame</td>
+<td>transacional</td>
+<td>meio</td>
+<td>5</td>
+</tr>
+<tr>
+<td>S14</td>
+<td>Exp</td>
+<td>O que exigir no contrato da sua construtora: ART, RRT e cronograma</td>
+<td>contrato construtora art rrt</td>
+<td>transacional</td>
+<td>fundo</td>
+<td>4</td>
+</tr>
+<tr>
+<td>S15 09-13</td>
+<td><strong>Core</strong></td>
+<td>Checklist de 20 pontos para fiscalizar sua obra em steel frame</td>
+<td>como fiscalizar obra steel frame</td>
+<td>informacional</td>
+<td>fundo</td>
+<td>5</td>
+</tr>
+<tr>
+<td>S15</td>
+<td>Exp</td>
+<td>Custo total em 10 anos: steel frame contra alvenaria, com energia e manutenção</td>
+<td>custo total propriedade steel frame</td>
+<td>comparativa</td>
+<td>meio</td>
+<td>4</td>
+</tr>
+<tr>
+<td>S16 16-20</td>
+<td><strong>Core</strong></td>
+<td>Instalações elétricas e hidráulicas no steel frame: como passam e como se mexe depois</td>
+<td>instalação elétrica hidráulica steel frame</td>
+<td>informacional</td>
+<td>meio</td>
+<td>4</td>
+</tr>
+<tr>
+<td>S16</td>
+<td>Exp</td>
+<td>IPTU 2027 da casa nova: como a nova Planta Genérica de Valores atinge quem construiu</td>
+<td>iptu 2027 sp casa nova</td>
+<td>informacional</td>
+<td>pós-venda</td>
+<td>3</td>
+</tr>
+<tr>
+<td>S17 23-27</td>
+<td><strong>Core</strong></td>
+<td>Construtora de steel frame em São Paulo: como escolher sem se arrepender</td>
+<td>construtora steel frame sp</td>
+<td>transacional</td>
+<td>fundo</td>
+<td>5</td>
+</tr>
+<tr>
+<td>S17</td>
+<td>Exp</td>
+<td>Casa de 150m² em steel frame: onde o custo por m² começa a cair</td>
+<td>casa steel frame 150m2</td>
+<td>transacional</td>
+<td>fundo</td>
+<td>3</td>
+</tr>
+<tr>
+<td>S18 30/11</td>
+<td><strong>Core</strong></td>
+<td>Subir um andar sobre a laje existente: ampliação vertical em steel frame</td>
+<td>segundo andar steel frame sobre alvenaria</td>
+<td>transacional</td>
+<td>fundo</td>
+<td>5</td>
+</tr>
+</tbody>
+</table>
+<h2 id="dezembro-8-pautas">Dezembro — 8 pautas</h2>
+<table>
+<thead>
+<tr>
+<th>Sem</th>
+<th>Trilha</th>
+<th>Título de trabalho</th>
+<th>Keyword principal</th>
+<th>Intenção</th>
+<th>Funil</th>
+<th>P</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>S18</td>
+<td>Exp</td>
+<td>Steel frame no litoral norte de SP: casa de praia sem surpresa</td>
+<td>casa praia steel frame sp</td>
+<td>transacional</td>
+<td>fundo</td>
+<td>3</td>
+</tr>
+<tr>
+<td>S19 07-11</td>
+<td><strong>Core</strong></td>
+<td>O preço do steel frame de 2023 a 2026: a série que ninguém publica</td>
+<td>steel frame valor m2 2023</td>
+<td>informacional</td>
+<td>meio</td>
+<td>5</td>
+</tr>
+<tr>
+<td>S19</td>
+<td>Exp</td>
+<td>Etiqueta ENCE obrigatória em 2028: o que seu projeto precisa desde já</td>
+<td>etiqueta ence obrigatória edificações</td>
+<td>informacional</td>
+<td>meio</td>
+<td>4</td>
+</tr>
+<tr>
+<td>S20 14-18</td>
+<td><strong>Core</strong></td>
+<td>Laje em steel frame: seca, mista ou steel deck, e quanto custa cada uma</td>
+<td>laje steel frame preço</td>
+<td>transacional</td>
+<td>meio</td>
+<td>4</td>
+</tr>
+<tr>
+<td>S20</td>
+<td>Exp</td>
+<td>Casa de 200m² ou mais: o que muda no alto padrão</td>
+<td>casa alto padrão steel frame</td>
+<td>transacional</td>
+<td>fundo</td>
+<td>3</td>
+</tr>
+<tr>
+<td>S21 21-25</td>
+<td><strong>Core</strong></td>
+<td>Vale a pena começar a obra em 2027? O cenário de custo do próximo ano</td>
+<td>construir 2027 vale a pena</td>
+<td>informacional</td>
+<td>meio</td>
+<td>4</td>
+</tr>
+<tr>
+<td>S22 28-31</td>
+<td>Exp</td>
+<td>Retrospectiva: o que mudou na construção industrializada em 2026</td>
+<td>construção industrializada 2026</td>
+<td>informacional</td>
+<td>topo</td>
+<td>2</td>
+</tr>
+<tr>
+<td>S22</td>
+<td>Exp</td>
+<td>Tendências 2027 (refresh do artigo de 2024, ver saneamento)</td>
+<td>tendências construção 2027</td>
+<td>informacional</td>
+<td>topo</td>
+<td>2</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="trilha-paralela-saneamento-do-acervo">Trilha paralela: saneamento do acervo</h2>
+<p>Não escreve artigo. É a parte do plano com maior retorno por hora investida.</p>
+<h3>Bloco 1 — Canibalização (fazer antes de qualquer pauta nova)</h3>
+<table>
+<thead>
+<tr>
+<th>Grupo</th>
+<th>Decisão recomendada</th>
+<th>Risco</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Custo (2 slugs)</strong></td>
+<td><code>custo-steel-frame-m2-2026</code> vira a página-mãe. <code>quanto-custa-construir-...</code> é <strong>reposicionada para metragem</strong> (H1, title e URL em torno de &quot;casa de 100m²&quot;), não redirecionada</td>
+<td>Redirect numa página com 17.759 impressões é reversível, mas reposicionar preserva o histórico. Reavaliar em 60 dias: se o CTR não subir de 1,15%, aí sim 301</td>
+</tr>
+<tr>
+<td>Fundação (2)</td>
+<td><code>fundacao-steel-frame</code> absorve &quot;radier&quot;; <code>...-vs-alvenaria</code> mantém a intenção comparativa</td>
+<td>baixo</td>
+</tr>
+<tr>
+<td>Financiamento (2)</td>
+<td>301 de <code>financiamento-construcao-steel-frame</code> (480 imp) para <code>financiar-construcao-light-steel-frame</code> (5.316 imp)</td>
+<td>baixo</td>
+</tr>
+<tr>
+<td>Vantagens (4)</td>
+<td>Consolidar em <code>guia-definitivo-steel-frame-brasil</code>; 301 dos demais</td>
+<td>médio, um deles está sendo desindexado</td>
+</tr>
+<tr>
+<td>Drywall (3)</td>
+<td><code>drywall-ou-alvenaria</code> e <code>alvenaria-vs-drywall</code> são quase idênticos: manter um</td>
+<td>baixo</td>
+</tr>
+<tr>
+<td>Sustentabilidade (2)</td>
+<td><strong>Títulos H1 idênticos.</strong> Manter <code>...-economia-circular</code>, arquivar o outro</td>
+<td>baixo</td>
+</tr>
+<tr>
+<td>Normas (3)</td>
+<td><code>normas-light-steel-frame-brasil</code> absorve <code>certificacoes-steel-frame</code></td>
+<td>baixo</td>
+</tr>
+<tr>
+<td>Reforma tributária (2)</td>
+<td>Mantêm-se: recortes diferentes (tributo vs eficiência energética)</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<h3>Bloco 2 — Título e meta (maior ROI imediato)</h3>
+<p>Reescrever <code>meta_title</code> e <code>meta_description</code> de 8 páginas. Números de referência de julho registrados para medir o efeito no relatório de 01/09.</p>
+<table>
+<thead>
+<tr>
+<th>Página</th>
+<th style="text-align:right">Impr 90d</th>
+<th style="text-align:right">CTR</th>
+<th>Correção</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>quanto-custa-construir-...</code></td>
+<td style="text-align:right">17.759</td>
+<td style="text-align:right">1,15%</td>
+<td><strong>H1 está sendo truncado na SERP.</strong> Encurtar H1 e title para menos de 60 caracteres e alinhá-los</td>
+</tr>
+<tr>
+<td><code>financiar-construcao-...</code></td>
+<td style="text-align:right">5.316</td>
+<td style="text-align:right">0,75%</td>
+<td>Colocar <strong>&quot;Caixa&quot;</strong> no título; é a entidade que o usuário busca</td>
+</tr>
+<tr>
+<td><code>normas-light-steel-frame-brasil</code></td>
+<td style="text-align:right">4.010</td>
+<td style="text-align:right">0,85%</td>
+<td>Colocar <strong>NBR 16970</strong> no título</td>
+</tr>
+<tr>
+<td><code>fundacao-steel-frame-vs-alvenaria</code></td>
+<td style="text-align:right">1.539</td>
+<td style="text-align:right">0,97%</td>
+<td>Incluir <strong>&quot;radier&quot;</strong>: é a palavra da query</td>
+</tr>
+<tr>
+<td><code>drywall-st-ru-rf</code></td>
+<td style="text-align:right">949</td>
+<td style="text-align:right"><strong>0,21%</strong></td>
+<td>Título é jargão. Traduzir para &quot;qual placa usar em cada cômodo&quot;</td>
+</tr>
+<tr>
+<td><code>steel-frame-no-mundo</code></td>
+<td style="text-align:right">920</td>
+<td style="text-align:right">2,5%</td>
+<td>ok, prioridade menor</td>
+</tr>
+<tr>
+<td><code>steel-frame-vs-wood-frame</code></td>
+<td style="text-align:right">548</td>
+<td style="text-align:right">0,55%</td>
+<td>Formato pergunta, sem ano</td>
+</tr>
+<tr>
+<td><code>protecao-contra-quedas-...</code></td>
+<td style="text-align:right">463</td>
+<td style="text-align:right"><strong>0%</strong></td>
+<td>Tema fora do funil. Avaliar arquivar</td>
+</tr>
+</tbody>
+</table>
+<h3>Bloco 3 — Correções pontuais</h3>
+<ul>
+<li>[ ] <strong>Contradição de preço</strong> em <code>custo-steel-frame-m2-2026</code>: <code>answer_summary</code> diz R$ 2.500-4.500/m² e <code>seo_description</code> diz R$ 3.015-6.091. Definir a faixa correta e alinhar os dois campos, mais a tabela do artigo irmão. <strong>Trava toda pauta que cite preço</strong></li>
+<li>[ ] Atualizar o índice de referência de preço: as duas páginas usam base mais antiga que a do concorrente que as supera</li>
+<li>[ ] Adicionar seção <strong>&quot;Desvantagens e pontos de atenção&quot;</strong> nas páginas de preço. Nenhuma delas admite uma limitação, e o líder da SERP tem essa seção</li>
+<li>[ ] Adicionar <strong>série histórica de preço (2023-2026)</strong> dentro da página-mãe: resolve 682 impressões em queries com &quot;2023&quot; sem criar página</li>
+<li>[ ] 4 artigos não indexados: pedir indexação e investigar <code>steel-frame-vantagens-desvantagens</code>, que está sendo <strong>desindexado ativamente</strong></li>
+<li>[ ] 6 fantasmas do vault com <code>status: published</code> e sem URL no ar, um com frontmatter corrompido</li>
+<li>[ ] 9 artigos sem <code>meta_title</code>/<code>meta_description</code> e 4 sem <code>answer_summary</code></li>
+</ul>
+<h3>Bloco 4 — Fora do blog, mas é onde está o dinheiro</h3>
+<p>O diagnóstico mostra a homepage convertendo a <strong>13,18%</strong> contra 2,98% do melhor artigo, e a Berkahn ausente de &quot;construtora steel frame sp&quot;, onde nenhum vencedor rankeia com artigo.</p>
+<ul>
+<li>[ ] Página de serviço geolocalizada fora de <code>/atualidades</code> (ex.: <code>/construtora-steel-frame-sao-paulo</code>)</li>
+<li>[ ] Perfil Google Business como construtora em SP</li>
+<li>[ ] Calculadora de custo por metragem, padrão e região: nenhuma construtora da SERP tem uma, e a Berkahn já tem todos os dados</li>
+<li>[ ] Caminho público para pedir orçamento (pendência anterior, ainda aberta)</li>
+</ul>
+<p>Estes quatro itens não são pauta de blog e não cabem neste calendário. Ficam registrados porque, pelo dado, valem mais que boa parte das 44 pautas.</p>
+<h3>Bloco 5 — Configuração de IA e frescor (custo quase zero)</h3>
+<p>Sai da revisão de AEO em [[2026-07-diagnostico-editorial]]. Nada aqui exige escrever conteúdo.</p>
+<ul>
+<li>[ ] <strong>Desbloquear <code>Google-Extended</code> em <code>app/robots.ts:13</code>.</strong> O comentário do código diz &quot;no search/citation value&quot;, o que é falso: bloquear não protege de AI Overviews e exclui o site do grounding do Gemini e do Vertex AI, a plataforma que foi de 8,9% para 27,3% de fatia em um ano. Maior impacto do bloco, custo zero</li>
+<li>[ ] Desbloquear <code>ClaudeBot</code> e <code>GPTBot</code>. A Berkahn não é publisher e não tem conteúdo a proteger; o bloqueio só remove variáveis do diagnóstico sem trazer benefício</li>
+<li>[ ] Tornar explícito o allow de <code>ChatGPT-User</code>, <code>Claude-User</code> e <code>Perplexity-User</code>, que hoje dependem do grupo curinga</li>
+<li>[ ] Verificar o <strong>Search generative AI control</strong> no Search Console (existe desde 03/06/2026) e confirmar que a propriedade está em <em>Include</em></li>
+<li>[ ] Revisar <code>Disallow: /institucional/</code>: a rota retorna 404 hoje, então não há dano, mas se a página for ao ar bloqueada de todo crawler é decisão a tomar de propósito</li>
+<li>[ ] <strong>Ciclo trimestral de atualização</strong> das páginas de custo, preço e norma, com <code>dateModified</code> real. <code>custo-steel-frame-m2-2026</code> está com 13/04/2026 num artigo que promete &quot;2026&quot; e carrega 78% dos cliques. Frescor é o único fator estrutural com evidência causal unânime, e atualizar bate publicar novo</li>
+<li>[ ] Corrigir a descrição do robots.txt em [[seo-aeo-strategy]], que hoje não corresponde ao arquivo real</li>
+<li>[ ] Parar de reportar &quot;% de tráfego de IA&quot; nos relatórios. Com o orgânico crescendo, esse número cai mesmo quando a IA cresce. Trocar por sessões absolutas em média móvel de 3 meses</li>
+</ul>
+<hr>
+<h2 id="linkedin-44-briefings">LinkedIn — 44 briefings</h2>
+<p>Cada linha é ângulo + dado-âncora + origem. O texto final sai de <code>/linkedin</code>, que aplica o prompt calibrado (100-180 palavras, versões A e B, sem travessão, fechamento em leveza/previsibilidade/limpeza).</p>
+<p><strong>Duas fontes</strong>: 22 posts derivam das pautas Core da semana; 22 vêm do acervo de artigos publicados que nunca viraram post. Hoje só 3 dos 38 artigos no ar têm post correspondente.</p>
+<h3>Derivados das pautas Core (1 por semana)</h3>
+<table>
+<thead>
+<tr>
+<th>Sem</th>
+<th>Ângulo do post</th>
+<th>Dado-âncora</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>S1</td>
+<td>A isenção de ICMS solar em SP vence em 31/12 e quase ninguém está contando</td>
+<td>Fio B vai de 60% para 75% em 2027</td>
+</tr>
+<tr>
+<td>S2</td>
+<td>O custo por m² cai conforme a metragem sobe, e quase ninguém explica por quê</td>
+<td>faixa fechada para 100m²</td>
+</tr>
+<tr>
+<td>S3</td>
+<td>&quot;Mais barato&quot; depende de quando você para de contar</td>
+<td>custo inicial vs 10 anos</td>
+</tr>
+<tr>
+<td>S4</td>
+<td>Aprovar projeto em SP virou processo de 30 dias</td>
+<td>Lei 18.375/2025 + Decreto 65.100/2026</td>
+</tr>
+<tr>
+<td>S5</td>
+<td>O medo de pendurar uma TV é a objeção mais comum e a mais fácil de derrubar</td>
+<td>carga por tipo de fixação</td>
+</tr>
+<tr>
+<td>S6</td>
+<td>Steel frame deixou de ser &quot;sistema inovador&quot; para a Caixa</td>
+<td>NBR 16970, mai/2022</td>
+</tr>
+<tr>
+<td>S7</td>
+<td>O telhado é onde mais se erra orçamento em obra industrializada</td>
+<td>preço por m² por tipo</td>
+</tr>
+<tr>
+<td>S8</td>
+<td>Área molhada em construção a seco: o detalhe que separa obra boa de obra ruim</td>
+<td>camadas de impermeabilização</td>
+</tr>
+<tr>
+<td>S9</td>
+<td>Projeto compacto não é projeto pobre</td>
+<td>70m² bem resolvido</td>
+</tr>
+<tr>
+<td>S10</td>
+<td>Cronograma real, semana a semana, sem &quot;de 4 a 6 meses&quot;</td>
+<td>marcos datados de obra</td>
+</tr>
+<tr>
+<td>S11</td>
+<td>O banco avalia sua casa de steel frame do mesmo jeito que uma de alvenaria</td>
+<td>critério de avaliação</td>
+</tr>
+<tr>
+<td>S12</td>
+<td>O radier não é economia, é engenharia</td>
+<td>250 kg/m² vs 1.250</td>
+</tr>
+<tr>
+<td>S13</td>
+<td>O que a gente não resolve com steel frame</td>
+<td>limitação honesta</td>
+</tr>
+<tr>
+<td>S14</td>
+<td>Três fachadas, três custos, três manutenções</td>
+<td>comparativo por m²</td>
+</tr>
+<tr>
+<td>S15</td>
+<td>20 pontos para fiscalizar sua obra mesmo sem ser engenheiro</td>
+<td>checklist por etapa</td>
+</tr>
+<tr>
+<td>S16</td>
+<td>A tubulação passa por dentro do perfil, e dá para mexer depois</td>
+<td>detalhe de execução</td>
+</tr>
+<tr>
+<td>S17</td>
+<td>Como escolher construtora sem se arrepender</td>
+<td>critérios verificáveis</td>
+</tr>
+<tr>
+<td>S18</td>
+<td>Subir um andar sem demolir o que existe</td>
+<td>carga sobre laje existente</td>
+</tr>
+<tr>
+<td>S19</td>
+<td>O que aconteceu com o preço do m² de 2023 para cá</td>
+<td>série de 4 anos</td>
+</tr>
+<tr>
+<td>S20</td>
+<td>Laje seca, mista ou steel deck</td>
+<td>comparativo de custo</td>
+</tr>
+<tr>
+<td>S21</td>
+<td>O que esperar do custo de construir em 2027</td>
+<td>cenário tributário</td>
+</tr>
+<tr>
+<td>S22</td>
+<td>O que mudou na construção industrializada em 2026</td>
+<td>retrospectiva</td>
+</tr>
+</tbody>
+</table>
+<h3>Do acervo, sem escrever artigo novo (1 por semana)</h3>
+<p>Distribuir um por semana, na ordem de tráfego do artigo de origem. Cada post recebe <code>artigo_slug</code> no frontmatter, fechando o rastreamento bidirecional que hoje não existe.</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Artigo de origem</th>
+<th>Ângulo do post</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><code>custo-steel-frame-m2-2026</code></td>
+<td>O intervalo de preço que a maioria dos orçamentos esconde</td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>anatomia-parede-steel-frame</code></td>
+<td>Seis camadas entre você e a rua</td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>steel-frame-fogo-incendio</code></td>
+<td>O aço não pega fogo, mas essa não é a pergunta certa</td>
+</tr>
+<tr>
+<td>4</td>
+<td><code>steel-frame-aguenta-vento-forte</code></td>
+<td>A resistência vem da amarração, não do peso</td>
+</tr>
+<tr>
+<td>5</td>
+<td><code>patologias-steel-frame</code></td>
+<td>45% das patologias nascem no projeto</td>
+</tr>
+<tr>
+<td>6</td>
+<td><code>fissuras-steel-frame</code></td>
+<td>Fissura em construção a seco tem causa diferente</td>
+</tr>
+<tr>
+<td>7</td>
+<td><code>steel-frame-laje-de-concreto</code></td>
+<td>Sim, pode ter laje de concreto</td>
+</tr>
+<tr>
+<td>8</td>
+<td><code>sistema-painelizado-vs-stick-steel-frame</code></td>
+<td>Mesma norma, mesma casa, prazos diferentes</td>
+</tr>
+<tr>
+<td>9</td>
+<td><code>steel-frame-terremoto-teste-cfs10</code></td>
+<td>Um prédio de 10 andares e 18 sismos</td>
+</tr>
+<tr>
+<td>10</td>
+<td><code>energia-solar-residencial</code></td>
+<td>O payback mudou e a maioria não recalculou</td>
+</tr>
+<tr>
+<td>11</td>
+<td><code>normas-light-steel-frame-brasil</code></td>
+<td>A norma que destravou o financiamento</td>
+</tr>
+<tr>
+<td>12</td>
+<td><code>construir-ou-comprar-pronto-numeros-grande-sp</code></td>
+<td>Construir ou comprar pronto na Grande SP</td>
+</tr>
+<tr>
+<td>13</td>
+<td><code>steel-frame-no-mundo</code></td>
+<td>O que o Brasil ainda não copiou</td>
+</tr>
+<tr>
+<td>14</td>
+<td><code>sustentabilidade-construcao-civil-economia-circular</code></td>
+<td>34% das emissões globais vêm daqui</td>
+</tr>
+<tr>
+<td>15</td>
+<td><code>eficiencia-energetica-reforma-tributaria</code></td>
+<td>A etiqueta que vai virar exigência</td>
+</tr>
+<tr>
+<td>16</td>
+<td><code>drywall-st-ru-rf</code></td>
+<td>ST, RU ou RF: a placa errada custa caro depois</td>
+</tr>
+<tr>
+<td>17</td>
+<td><code>passo-passo-construcao-steel-frame</code></td>
+<td>Onde a obra a seco realmente ganha tempo</td>
+</tr>
+<tr>
+<td>18</td>
+<td><code>construcao-industrializada-casa-montada-como-carro</code></td>
+<td>A construção civil está em 1913</td>
+</tr>
+<tr>
+<td>19</td>
+<td><code>reforma-tributaria-construcao-industrializada</code></td>
+<td>A janela competitiva do IVA dual</td>
+</tr>
+<tr>
+<td>20</td>
+<td><code>guia-definitivo-steel-frame-brasil</code></td>
+<td>O guia, em um parágrafo</td>
+</tr>
+<tr>
+<td>21</td>
+<td><code>isolamento-termico-acustico-steel-frame</code></td>
+<td>Desempenho térmico com número</td>
+</tr>
+<tr>
+<td>22</td>
+<td><code>construir-hospital-em-operacao</code></td>
+<td>Obra ao lado de hospital em operação</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="metrica-de-sucesso">Métrica de sucesso</h2>
+<p>Medida pelo relatório automático de 01/09, 01/10, 01/11, 01/12 e 01/01.</p>
+<table>
+<thead>
+<tr>
+<th>Indicador</th>
+<th>Base jul/2026</th>
+<th>Meta dez/2026</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CTR de <code>quanto-custa-construir-...</code></td>
+<td>1,15%</td>
+<td>acima de 3%</td>
+</tr>
+<tr>
+<td>Cliques em queries não relacionadas a preço</td>
+<td>94 (13% do total)</td>
+<td>30% do total</td>
+</tr>
+<tr>
+<td>Páginas com mais de 100 cliques/mês</td>
+<td>1</td>
+<td>4</td>
+</tr>
+<tr>
+<td>Concentração do artigo #1</td>
+<td>78% dos cliques</td>
+<td>abaixo de 55%</td>
+</tr>
+<tr>
+<td>Artigos publicados no período</td>
+<td>—</td>
+<td>22 Core garantidos</td>
+</tr>
+<tr>
+<td>Artigos com post de LinkedIn</td>
+<td>3 de 38</td>
+<td>40</td>
+</tr>
+</tbody>
+</table>
+<p>A concentração cai por diluição, não por perda: a meta não é <code>custo-steel-frame-m2-2026</code> render menos, é o resto render mais.</p>
+<blockquote>
+<p>[!warning] O que este calendário não consegue provar
+Sem instrumentação de conversão (<code>ga4.events</code> está vazio em todos os meses), nenhuma métrica acima mede lead. Todas usam tráfego como proxy. A instrumentação é pré-requisito para responder &quot;qual pauta traz cliente&quot;, e continua pendente.</p>
+</blockquote>
+<hr>
+<p><strong>Relacionado</strong>: [[2026-07-diagnostico-editorial]] · [[2026-08-playbook-pautas]] · [[blog]] · [[linkedin]] · [[seo-aeo]]</p>
+<p><strong>Contexto aplicado</strong>: [[berkahn-brand]] · [[seo-aeo-strategy]] · [[article-pipeline]] · [[copy-sem-travessao]] · [[steel-frame-domain]]</p>
+
+</div>
+
+<script>
+// Charts são populados pelo render-html.mjs via dataset
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('canvas[data-chart]').forEach(canvas => {
+    try {
+      const cfg = JSON.parse(canvas.dataset.chart);
+      new Chart(canvas, cfg);
+    } catch (e) {
+      console.error('Chart config error', e);
+    }
+  });
+});
+</script>
+</body>
+</html>

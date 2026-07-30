@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diagnóstico editorial: o que funciona, o que não funciona e por quê — Berkahn</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<style>
+:root {
+  --bg: #FFFFFF;
+  --bg-soft: #F4F2EC;
+  --bg-zebra: #FAF8F2;
+  --text: #0A0A0A;
+  --text-soft: #4A4A4A;
+  --text-muted: #8A8A8A;
+  --border: #E5E2D9;
+  --border-strong: #0A0A0A;
+  --accent-up: #1F6F3D;
+  --accent-up-bg: #E8F3EC;
+  --accent-down: #B83A3A;
+  --accent-down-bg: #F8E8E8;
+  --accent-neutral: #6A6A6A;
+  --accent-warn: #8A5A00;
+  --accent-warn-bg: #FDF3E0;
+  --shadow: 0 1px 2px rgba(0,0,0,.04), 0 4px 12px rgba(0,0,0,.04);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { font-size: 16px; }
+
+body {
+  font-family: 'Manrope', system-ui, -apple-system, sans-serif;
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--text);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 56px 48px 96px;
+}
+
+/* Header */
+.header {
+  border-bottom: 1px solid var(--border-strong);
+  padding-bottom: 32px;
+  margin-bottom: 48px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+
+.header-brand {
+  font-weight: 800;
+  font-size: 14px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.header-tagline {
+  font-size: 12px;
+  color: var(--text-muted);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+.header-meta {
+  text-align: right;
+  font-size: 13px;
+  color: var(--text-soft);
+}
+
+.header-meta strong {
+  display: block;
+  color: var(--text);
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+}
+
+h1 {
+  font-size: 44px;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 24px 0 8px;
+}
+
+h2 {
+  font-size: 26px;
+  font-weight: 700;
+  margin: 56px 0 24px;
+  letter-spacing: -0.01em;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+h3 {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 32px 0 16px;
+  letter-spacing: -0.005em;
+  color: var(--text);
+}
+
+p {
+  margin: 12px 0;
+  color: var(--text-soft);
+}
+
+ul, ol {
+  margin: 12px 0 12px 24px;
+}
+
+li {
+  margin: 6px 0;
+  color: var(--text-soft);
+}
+
+li::marker {
+  color: var(--text-muted);
+}
+
+a {
+  color: var(--text);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+code {
+  font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.85em;
+  background: var(--bg-soft);
+  padding: 2px 6px;
+  border-radius: 3px;
+  color: var(--text);
+}
+
+strong { font-weight: 600; color: var(--text); }
+
+/* Hero summary cards */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin: 24px 0 32px;
+}
+
+.kpi-card {
+  background: var(--bg-soft);
+  padding: 20px 22px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+}
+
+.kpi-card-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.kpi-card-value {
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+
+.kpi-card-delta {
+  display: inline-block;
+  margin-top: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 3px 9px;
+  border-radius: 999px;
+  letter-spacing: -0.005em;
+}
+
+.delta-up   { background: var(--accent-up-bg);   color: var(--accent-up);   }
+.delta-down { background: var(--accent-down-bg); color: var(--accent-down); }
+.delta-flat { background: var(--bg-zebra);       color: var(--accent-neutral); }
+
+/* Tables */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0 32px;
+  font-size: 14px;
+  background: var(--bg);
+}
+
+thead th {
+  text-align: left;
+  font-weight: 600;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  padding: 10px 14px;
+  border-bottom: 2px solid var(--border-strong);
+  background: var(--bg);
+}
+
+thead th:not(:first-child) { text-align: right; }
+
+tbody td {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-soft);
+  vertical-align: top;
+}
+
+tbody td:first-child { color: var(--text); font-weight: 500; }
+tbody td:not(:first-child) { text-align: right; font-variant-numeric: tabular-nums; }
+
+tbody tr:nth-child(even) td { background: var(--bg-zebra); }
+tbody tr:last-child td { border-bottom: none; }
+
+/* Chart container */
+.chart-block {
+  background: var(--bg-soft);
+  padding: 24px;
+  border-radius: 6px;
+  margin: 24px 0;
+  border: 1px solid var(--border);
+}
+
+.chart-block canvas { max-height: 320px; }
+
+.chart-title {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+/* Insights & actions */
+.insights-list, .actions-list {
+  list-style: none;
+  margin: 16px 0;
+  padding: 0;
+}
+
+.insights-list li {
+  background: var(--bg-soft);
+  padding: 16px 20px;
+  margin: 10px 0;
+  border-radius: 4px;
+  border-left: 3px solid var(--border-strong);
+  color: var(--text);
+}
+
+.insights-list li::before {
+  content: counter(insight) ".";
+  counter-increment: insight;
+  font-weight: 700;
+  color: var(--text-muted);
+  margin-right: 10px;
+}
+
+.insights-list { counter-reset: insight; }
+
+.actions-list li {
+  padding: 14px 18px;
+  margin: 8px 0;
+  border-radius: 4px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  color: var(--text);
+}
+
+.actions-list li::before {
+  content: "□";
+  font-size: 18px;
+  line-height: 1;
+  color: var(--text-muted);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.actions-p0 li { background: var(--accent-down-bg); border-left: 3px solid var(--accent-down); }
+.actions-p1 li { background: var(--bg-soft);       border-left: 3px solid var(--text-soft);    }
+.actions-p2 li { background: var(--bg-zebra);      border-left: 3px solid var(--border-strong); }
+
+.priority-tag {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  padding: 3px 10px;
+  border-radius: 3px;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+}
+
+.priority-p0 { background: var(--accent-down); color: var(--bg); }
+.priority-p1 { background: var(--text);        color: var(--bg); }
+.priority-p2 { background: var(--text-muted);  color: var(--bg); }
+
+/* Status pills for indexation */
+.status-pill {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 999px;
+  letter-spacing: 0.04em;
+}
+
+.status-indexed     { background: var(--accent-up-bg);   color: var(--accent-up);   }
+.status-not-indexed { background: var(--accent-down-bg); color: var(--accent-down); }
+.status-pending     { background: var(--bg-zebra);       color: var(--accent-neutral); }
+.status-partial     { background: var(--accent-warn-bg); color: var(--accent-warn); }
+
+/* Banner de relatório parcial */
+.partial-banner {
+  background: var(--accent-warn-bg);
+  border-left: 3px solid var(--accent-warn);
+  color: var(--accent-warn);
+  padding: 14px 18px;
+  margin: 20px 0;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.partial-banner-title {
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  font-size: 12px;
+}
+
+/* Footer */
+.footer {
+  margin-top: 80px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+  font-size: 12px;
+  color: var(--text-muted);
+  text-align: center;
+  letter-spacing: 0.04em;
+}
+
+/* Índice — só documentos longos (build-doc.mjs) emitem este bloco */
+.doc-toc {
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 24px 28px;
+  margin: 40px 0 56px;
+}
+.doc-toc-title {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+}
+.doc-toc ol { list-style: none; counter-reset: toc; margin: 0; padding: 0; }
+.doc-toc li { counter-increment: toc; margin: 0 0 8px; padding-left: 32px; position: relative; }
+.doc-toc li::before {
+  content: counter(toc, decimal-leading-zero);
+  position: absolute;
+  left: 0;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-muted);
+  top: 3px;
+}
+.doc-toc a { color: var(--text); text-decoration: none; border-bottom: 1px solid transparent; }
+.doc-toc a:hover { border-bottom-color: var(--text); }
+
+/* Âncora de heading: o offset evita que o título fique sob a borda ao pular */
+h2[id], h3[id] { scroll-margin-top: 24px; }
+
+/* Print */
+@media print {
+  body { font-size: 11pt; }
+  .doc-toc { page-break-inside: avoid; background: none; }
+  .container { padding: 24px 32px; max-width: none; }
+  h1 { font-size: 28pt; }
+  h2 { font-size: 18pt; page-break-after: avoid; margin-top: 32px; }
+  h3 { font-size: 13pt; page-break-after: avoid; }
+  table, .chart-block, .kpi-grid { page-break-inside: avoid; }
+  .header { padding-bottom: 16px; margin-bottom: 24px; }
+  .kpi-card { box-shadow: none; }
+  .chart-block { background: var(--bg); border: 1px solid var(--border); }
+  @page { margin: 1.5cm; size: A4; }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .container { padding: 32px 20px; }
+  h1 { font-size: 32px; }
+  h2 { font-size: 22px; }
+  .header { flex-direction: column; align-items: flex-start; }
+  .header-meta { text-align: left; }
+  table { font-size: 12px; }
+  thead th, tbody td { padding: 8px 10px; }
+}
+</style>
+</head>
+<body>
+<div class="container" id="report-root">
+
+<div class="header">
+  <div>
+    <div class="header-brand">Berkahn</div>
+    <div class="header-tagline">Estratégia de Conteúdo</div>
+  </div>
+  <div class="header-meta">
+    <strong>2026-04-29 a 2026-07-27 (90 dias)</strong>
+    <div>Atualizado em 29/07/2026</div>
+  </div>
+</div>
+  <h1>Diagnóstico editorial: o que funciona, o que não funciona e por quê</h1><nav class="doc-toc"><div class="doc-toc-title">Neste documento</div><ol><li><a href="#o-erro-de-medicao-que-contaminava-tudo">O erro de medição que contaminava tudo</a></li><li><a href="#distribuicao-real-por-intencao">Distribuição real por intenção</a></li><li><a href="#o-maior-desperdicio-canibalizacao-medida-nao-suposta">O maior desperdício: canibalização medida, não suposta</a></li><li><a href="#demanda-medida-zero-clique">Demanda medida, zero clique</a></li><li><a href="#onde-o-acervo-perde">Onde o acervo perde</a></li><li><a href="#o-que-a-concorrencia-faz-melhor">O que a concorrência faz melhor</a></li><li><a href="#a-queda-do-trafego-de-ia-e-aritmetica-nao-problema">A queda do tráfego de IA é aritmética, não problema</a></li><li><a href="#implicacoes-para-o-calendario">Implicações para o calendário</a></li><li><a href="#ressalvas-de-metodo">Ressalvas de método</a></li></ol></nav>
+<p>Este documento sustenta o [[2026-08-calendario-editorial]]. Ele existe porque toda análise anterior de SEO da Berkahn foi feita sobre uma amostra truncada, e a amostra completa muda a conclusão.</p>
+<h2 id="o-erro-de-medicao-que-contaminava-tudo">O erro de medição que contaminava tudo</h2>
+<p>O pipeline de analytics pede ao Google Search Console as <strong>20 queries de maior clique por mês</strong> (<code>fetch-gsc.mjs:34</code>, <code>rowLimit: 20</code>). Todo relatório de fevereiro a julho enxergou só isso.</p>
+<p>A API aceita até 25.000 linhas. Ao pedir tudo, a janela de 90 dias (29/04 a 27/07) devolve:</p>
+<table>
+<thead>
+<tr>
+<th>Medida</th>
+<th>Amostra antiga (20 queries)</th>
+<th>Real</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Queries distintas</td>
+<td>20</td>
+<td><strong>1.270</strong></td>
+</tr>
+<tr>
+<td>Queries com zero clique</td>
+<td>não visíveis</td>
+<td><strong>1.135 (89%)</strong></td>
+</tr>
+<tr>
+<td>Impressões nessas queries mudas</td>
+<td>0</td>
+<td><strong>4.516 (24,7%)</strong></td>
+</tr>
+</tbody>
+</table>
+<p>A leitura de que &quot;o tráfego é 100% de preço&quot; vinha de olhar apenas o topo de uma distribuição. Com a cauda inteira, o quadro é outro: preço domina, mas há 1.135 buscas em que a Berkahn aparece e ninguém clica.</p>
+<h2 id="distribuicao-real-por-intencao">Distribuição real por intenção</h2>
+<table>
+<thead>
+<tr>
+<th>Intenção</th>
+<th style="text-align:right">Queries</th>
+<th style="text-align:right">Impressões</th>
+<th style="text-align:right">%</th>
+<th style="text-align:right">Cliques</th>
+<th style="text-align:right">CTR</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Preço e custo</td>
+<td style="text-align:right">403</td>
+<td style="text-align:right">14.323</td>
+<td style="text-align:right">78,5%</td>
+<td style="text-align:right">627</td>
+<td style="text-align:right">4,38%</td>
+</tr>
+<tr>
+<td>Genéricas e institucionais</td>
+<td style="text-align:right">635</td>
+<td style="text-align:right">3.060</td>
+<td style="text-align:right">16,8%</td>
+<td style="text-align:right">60</td>
+<td style="text-align:right">1,96%</td>
+</tr>
+<tr>
+<td><strong>Técnicas</strong></td>
+<td style="text-align:right">139</td>
+<td style="text-align:right">346</td>
+<td style="text-align:right">1,9%</td>
+<td style="text-align:right"><strong>3</strong></td>
+<td style="text-align:right"><strong>0,87%</strong></td>
+</tr>
+<tr>
+<td>Local e comercial</td>
+<td style="text-align:right">47</td>
+<td style="text-align:right">233</td>
+<td style="text-align:right">1,3%</td>
+<td style="text-align:right">11</td>
+<td style="text-align:right">4,72%</td>
+</tr>
+<tr>
+<td>Marca</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">116</td>
+<td style="text-align:right">0,6%</td>
+<td style="text-align:right">19</td>
+<td style="text-align:right">16,38%</td>
+</tr>
+<tr>
+<td><strong>Financiamento</strong></td>
+<td style="text-align:right">16</td>
+<td style="text-align:right">85</td>
+<td style="text-align:right">0,5%</td>
+<td style="text-align:right"><strong>0</strong></td>
+<td style="text-align:right"><strong>0%</strong></td>
+</tr>
+<tr>
+<td>Comparativas</td>
+<td style="text-align:right">18</td>
+<td style="text-align:right">54</td>
+<td style="text-align:right">0,3%</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">1,85%</td>
+</tr>
+<tr>
+<td><strong>Objeção</strong></td>
+<td style="text-align:right">10</td>
+<td style="text-align:right">31</td>
+<td style="text-align:right">0,2%</td>
+<td style="text-align:right"><strong>0</strong></td>
+<td style="text-align:right"><strong>0%</strong></td>
+</tr>
+</tbody>
+</table>
+<p><canvas data-chart='{"type":"bar","data":{"labels":["Preço/custo","Genéricas","Técnicas","Local","Marca","Financ.","Comparativo","Objeção"],"datasets":[{"label":"Impressões (90d)","data":[14323,3060,346,233,116,85,54,31],"backgroundColor":"#0A0A0A"}]},"options":{"indexAxis":"y","plugins":{"legend":{"display":false}},"scales":{"x":{"type":"logarithmic"}}}}' height="220"></canvas></p>
+<p>Três leituras que mudam a estratégia:</p>
+<p><strong>O conteúdo técnico não captura busca.</strong> 139 queries técnicas produziram <strong>3 cliques em 90 dias</strong>. Os artigos de norma, fundação, fogo, isolamento e patologia existem, rankeiam por volta da posição 5 e não são clicados. A hipótese de &quot;autoridade técnica atrai tráfego&quot; está refutada pelo dado. Isso não significa que o conteúdo técnico seja inútil, significa que ele <strong>não é canal de aquisição</strong> e não deve ocupar 40% do calendário.</p>
+<p><strong>Intenção local converte 5x melhor que a média.</strong> 4,72% de CTR contra 1,96% das genéricas, com apenas 233 impressões. Existe demanda comercial que o site quase não alcança.</p>
+<p><strong>A marca converte a 16,38%</strong> e tem só 116 impressões. Quem já conhece a Berkahn clica; quase ninguém a conhece.</p>
+<h2 id="o-maior-desperdicio-canibalizacao-medida-nao-suposta">O maior desperdício: canibalização medida, não suposta</h2>
+<p>O relatório anterior levantou a suspeita. O dado de query × página confirma e quantifica.</p>
+<p>Em <strong>todas</strong> as queries de preço, as duas páginas aparecem juntas, e a segunda aparece muito abaixo:</p>
+<table>
+<thead>
+<tr>
+<th>Query</th>
+<th><code>custo-steel-frame-m2-2026</code></th>
+<th><code>quanto-custa-construir-...</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>steel frame valor m2</td>
+<td>2.268 imp · 111 clk · <strong>pos 3,5</strong></td>
+<td>328 imp · 2 clk · <strong>pos 10,5</strong></td>
+</tr>
+<tr>
+<td>casas steel frame preço m2</td>
+<td>1.301 imp · 85 clk · pos 3,4</td>
+<td>48 imp · 1 clk · pos 10,4</td>
+</tr>
+<tr>
+<td>steel frame preço</td>
+<td>1.234 imp · 34 clk · pos 5,0</td>
+<td>19 imp · 0 clk · pos 15,8</td>
+</tr>
+<tr>
+<td>light steel frame preço m2</td>
+<td>527 imp · 20 clk · pos 5,9</td>
+<td>91 imp · 0 clk · <strong>pos 25,3</strong></td>
+</tr>
+<tr>
+<td>casa steel frame 100m2 preço</td>
+<td>474 imp · 27 clk · pos 3,1</td>
+<td>57 imp · 0 clk · pos 9,9</td>
+</tr>
+<tr>
+<td>steel frame é mais barato que alvenaria</td>
+<td>612 imp · 17 clk · pos 5,8</td>
+<td>4 imp · 0 clk · pos 2,8</td>
+</tr>
+</tbody>
+</table>
+<p>O padrão é consistente demais para ser coincidência: onde a página-mãe está em 3, a segunda está em 10; onde a mãe está em 6, a segunda está em 25.</p>
+<p><strong>Resultado acumulado em 90 dias</strong>: <code>quanto-custa-construir-steel-frame-precos-m2-2026</code> tem <strong>17.759 impressões e 204 cliques — CTR de 1,15%</strong>, contra 2,98% da página-mãe. Não é uma página que compete: é uma página sendo suprimida pelo próprio site.</p>
+<blockquote>
+<p>[!warning] As duas páginas ainda se contradizem
+Para Sudeste padrão médio, uma diz R$ 4.395 e a outra apresenta faixa de R$ 4.000 a R$ 5.200. O concorrente que está acima nas duas usa índice de fev/2026, mais recente que o de ambas. Isso é dano de credibilidade direto numa query onde o usuário compara valores entre abas, e é exatamente o tipo de inconsistência que faz um modelo de IA escolher outra fonte para citar.</p>
+</blockquote>
+<h2 id="demanda-medida-zero-clique">Demanda medida, zero clique</h2>
+<p>Estas queries têm impressão real e <strong>nenhum clique</strong> em 90 dias. São lacunas, não fracassos de ranking.</p>
+<table>
+<thead>
+<tr>
+<th>Query</th>
+<th style="text-align:right">Impressões</th>
+<th style="text-align:right">Posição</th>
+<th>Existe artigo?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>steel frame valor m2 <strong>2023</strong></td>
+<td style="text-align:right">357</td>
+<td style="text-align:right">5,7</td>
+<td>não, e o artigo diz &quot;2026&quot;</td>
+</tr>
+<tr>
+<td>steel frame preço m2 <strong>2023</strong></td>
+<td style="text-align:right">325</td>
+<td style="text-align:right">6,3</td>
+<td>idem</td>
+</tr>
+<tr>
+<td>light steel framing preço m2</td>
+<td style="text-align:right">331</td>
+<td style="text-align:right">8,4</td>
+<td>grafia &quot;framing&quot; não coberta</td>
+</tr>
+<tr>
+<td><strong>telhado steel frame preço m2</strong></td>
+<td style="text-align:right">163</td>
+<td style="text-align:right">5,9</td>
+<td><strong>não existe artigo de cobertura</strong></td>
+</tr>
+<tr>
+<td>casa em steel frame é mais barata</td>
+<td style="text-align:right">47</td>
+<td style="text-align:right">4,6</td>
+<td>não dedicado</td>
+</tr>
+<tr>
+<td>laje steel frame preço</td>
+<td style="text-align:right">44</td>
+<td style="text-align:right">6,8</td>
+<td>existe artigo, sem preço</td>
+</tr>
+<tr>
+<td>casa steel frame <strong>70m2</strong></td>
+<td style="text-align:right">36</td>
+<td style="text-align:right">6,7</td>
+<td>não</td>
+</tr>
+<tr>
+<td>cobertura steel frame preço m2</td>
+<td style="text-align:right">31</td>
+<td style="text-align:right">3,3</td>
+<td>não</td>
+</tr>
+<tr>
+<td>casa steel frame <strong>100m2</strong></td>
+<td style="text-align:right">24</td>
+<td style="text-align:right">7,7</td>
+<td>não dedicado</td>
+</tr>
+<tr>
+<td>casa steel frame <strong>150m2</strong></td>
+<td style="text-align:right">22</td>
+<td style="text-align:right">6,7</td>
+<td>não</td>
+</tr>
+<tr>
+<td>construtora steel frame</td>
+<td style="text-align:right">32</td>
+<td style="text-align:right">6,3</td>
+<td>não há página comercial</td>
+</tr>
+</tbody>
+</table>
+<p>Dois padrões acionáveis:</p>
+<p><strong>O ano na query não é o ano do artigo.</strong> Somadas, as buscas com &quot;2023&quot; valem <strong>682 impressões e 1 clique</strong>. O artigo grita 2026; quem busca 2023 não reconhece a resposta. Um bloco de série histórica de preço dentro da página-mãe resolve sem criar página nova.</p>
+<p><strong>Metragem é intenção própria e não tem página.</strong> 70m², 100m² e 150m² aparecem separadamente. A Berkahn tem a melhor resposta do mercado para isso (faixas fechadas por metragem) e não sinaliza em título nem em URL.</p>
+<h2 id="onde-o-acervo-perde">Onde o acervo perde</h2>
+<table>
+<thead>
+<tr>
+<th>Página</th>
+<th style="text-align:right">Impressões</th>
+<th style="text-align:right">Cliques</th>
+<th style="text-align:right">CTR</th>
+<th>Leitura</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>custo-steel-frame-m2-2026</code></td>
+<td style="text-align:right">63.757</td>
+<td style="text-align:right">1.903</td>
+<td style="text-align:right">2,98%</td>
+<td>o ativo</td>
+</tr>
+<tr>
+<td><code>quanto-custa-construir-...</code></td>
+<td style="text-align:right">17.759</td>
+<td style="text-align:right">204</td>
+<td style="text-align:right">1,15%</td>
+<td>canibalizada</td>
+</tr>
+<tr>
+<td><code>financiar-construcao-light-steel-frame</code></td>
+<td style="text-align:right">5.316</td>
+<td style="text-align:right">40</td>
+<td style="text-align:right"><strong>0,75%</strong></td>
+<td>pior relação do acervo</td>
+</tr>
+<tr>
+<td><code>normas-light-steel-frame-brasil</code></td>
+<td style="text-align:right">4.010</td>
+<td style="text-align:right">34</td>
+<td style="text-align:right">0,85%</td>
+<td></td>
+</tr>
+<tr>
+<td><code>fundacao-steel-frame-vs-alvenaria</code></td>
+<td style="text-align:right">1.539</td>
+<td style="text-align:right">15</td>
+<td style="text-align:right">0,97%</td>
+<td>query pede &quot;radier&quot;, título diz &quot;vs alvenaria&quot;</td>
+</tr>
+<tr>
+<td><code>drywall-st-ru-rf</code></td>
+<td style="text-align:right">949</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right"><strong>0,21%</strong></td>
+<td></td>
+</tr>
+<tr>
+<td><code>protecao-contra-quedas-construcao-civil</code></td>
+<td style="text-align:right">463</td>
+<td style="text-align:right"><strong>0</strong></td>
+<td style="text-align:right"><strong>0%</strong></td>
+<td>tema fora do funil</td>
+</tr>
+<tr>
+<td><code>steel-frame-vantagens-desvantagens</code></td>
+<td style="text-align:right">141</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">0%</td>
+<td>não indexada</td>
+</tr>
+<tr>
+<td><code>isolamento-termico-acustico-steel-frame</code></td>
+<td style="text-align:right">110</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">0%</td>
+<td></td>
+</tr>
+<tr>
+<td><strong><code>/</code> (homepage)</strong></td>
+<td style="text-align:right">645</td>
+<td style="text-align:right">85</td>
+<td style="text-align:right"><strong>13,18%</strong></td>
+<td>converte 4x melhor que qualquer artigo</td>
+</tr>
+</tbody>
+</table>
+<p>A homepage é o item mais informativo da tabela. Com 1% das impressões do artigo campeão, ela tem CTR quatro vezes maior. O que falta não é conteúdo, é <strong>página que responda intenção comercial</strong>.</p>
+<h2 id="o-que-a-concorrencia-faz-melhor">O que a concorrência faz melhor</h2>
+<p>Levantamento de SERP em 8 queries que a Berkahn já disputa:</p>
+<ol>
+<li><strong>O título exibido está mutilado.</strong> Em &quot;quanto custa construir em steel frame&quot; a Berkahn é <strong>posição 1</strong>, e o Google descarta a title tag e exibe o H1 cortado em &quot;...tabela de preços ...&quot;. O usuário nunca vê &quot;2026&quot; nem &quot;por m²&quot;. Rankear em primeiro e ser truncado explica boa parte do CTR de 1,15%.</li>
+<li><strong>Ninguém coloca faixa de preço no título.</strong> Espaço aberto numa SERP inteiramente de preço.</li>
+<li><strong>Entidade no título decide.</strong> Em financiamento, o primeiro colocado lidera com &quot;Caixa&quot;. O título da Berkahn é o mais genérico da SERP.</li>
+<li><strong>Ano só ajuda onde a query tem tempo.</strong> Em &quot;é mais barato que alvenaria&quot;, os quatro vencedores usam formato pergunta e nenhum usa ano. A Berkahn responde com a página que grita 2026.</li>
+<li><strong>A query comercial mais valiosa não tem a Berkahn.</strong> Em &quot;construtora steel frame sp&quot; nenhum vencedor rankeia com artigo: são homepages e páginas de serviço geolocalizadas. Um concorrente ocupa 4 posições com um cluster de páginas comerciais.</li>
+<li><strong>O líder de preço ganha sem escrever mais.</strong> 2.800 palavras contra 3.200-3.800 da Berkahn. Ganha por dado mais fresco, autor nomeado e uma seção de <strong>desvantagens</strong> que a Berkahn não tem em nenhuma página de preço.</li>
+<li><strong>A fonte que todos citam tem 850 palavras.</strong> Um índice mensal de custo, sem metodologia declarada, rankeia acima da Berkahn porque é a série temporal que todo mundo referencia.</li>
+</ol>
+<h2 id="a-queda-do-trafego-de-ia-e-aritmetica-nao-problema">A queda do tráfego de IA é aritmética, não problema</h2>
+<p>O relatório de julho registra o tráfego de assistentes de IA caindo de 14,0% (maio) para 4,6%. Isso levou à leitura de que &quot;a estratégia AEO parou de funcionar&quot;. <strong>A leitura está errada.</strong></p>
+<p>Decompondo maio → julho: se o ChatGPT tivesse ficado parado nas 120 sessões de maio, a fatia cairia sozinha para 6,0%, só porque o tráfego total mais que dobrou. <strong>Cerca de 8 dos 10 pontos percentuais de queda são efeito de denominador.</strong> As ~40 sessões restantes (120 → ~80) ficam dentro da variação normal de um canal desse tamanho, e maio foi um pico isolado numa série 39 → 120 → 101 → 80.</p>
+<p>Nenhuma fonte de mercado reporta queda de referrals do ChatGPT em jun-jul/2026; os levantamentos grandes mostram crescimento. O que mudou foi a <strong>composição</strong>: a fatia do ChatGPT no mercado de IA caiu de 76,4% para 52,7% em um ano, enquanto Gemini foi de 8,9% para 27,3% e Claude de 1,6% para 8,9%.</p>
+<p><strong>Consequência prática</strong>: pare de reportar &quot;% de tráfego de IA&quot;. Com o orgânico crescendo 40% ao mês, esse número cai mesmo quando a IA cresce. A métrica honesta é <strong>sessões absolutas de IA em média móvel de 3 meses</strong>.</p>
+<h3>Mas há um erro de configuração real, que não causou a queda</h3>
+<p><code>app/robots.ts:13</code> bloqueia <code>CCBot, GPTBot, ClaudeBot, Google-Extended</code>, com o comentário &quot;Block training-only crawlers (no search/citation value)&quot;.</p>
+<p><strong>Esse comentário é falso para o Google-Extended.</strong> Ele não protege de AI Overviews (quem governa isso é o Googlebot) e não é sinal de ranking. O que ele faz é excluir o site do <strong>grounding do app Gemini e do Vertex AI</strong> — justamente a plataforma que triplicou de fatia. A Berkahn paga o custo sem receber o benefício.</p>
+<p>O bloqueio entrou em 13/04/2026, e o tráfego do ChatGPT triplicou <strong>depois</strong> disso (39 sessões em abril → 120 em maio). O timing sozinho refuta a hipótese de que o robots.txt causou a queda. São dois assuntos diferentes: a queda é ruído, o bloqueio do Google-Extended é um erro a corrigir por mérito próprio.</p>
+<blockquote>
+<p>[!warning] <code>seo-aeo-strategy.md</code> descreve o robots.txt errado
+A nota de contexto afirma que o site &quot;permite ChatGPT-User/PerplexityBot e bloqueia GPTBot, ClaudeBot, CCBot, anthropic-ai&quot;. O arquivo real (<code>app/robots.ts:11-20</code>) libera <strong>OAI-SearchBot, Claude-SearchBot e PerplexityBot</strong>, bloqueia <strong>Google-Extended</strong> (não mencionado na nota) e nunca cita <code>anthropic-ai</code>. Corrigir a nota.</p>
+</blockquote>
+<h3>O que a evidência de 2025-2026 diz sobre formato</h3>
+<p>Isto muda o desenho das pautas mais do que qualquer keyword:</p>
+<ul>
+<li><strong>Frescor é o único fator estrutural com evidência causal unânime.</strong> Atualizar página existente supera publicar página nova. <code>custo-steel-frame-m2-2026</code> tem <code>dateModified</code> de <strong>13/04/2026</strong> — 3,5 meses de defasagem numa página cujo título promete &quot;2026&quot; e que carrega 78% dos cliques.</li>
+<li><strong>O que faz citar é afirmação autocontida com número, unidade, data e fonte nomeada</strong> no corpo visível. Estatísticas, comparações e definições têm o maior uplift medido.</li>
+<li><strong>FAQ e H2 em forma de pergunta não aumentam citação por IA.</strong> As duas medições diretas do efeito são negativas. Continuam valendo porque funcionam no Google, não por AEO.</li>
+<li><strong>Schema não é alavanca de citação.</strong> O próprio Google diz que não é necessário para IA generativa. Manter pelo rich result.</li>
+<li><strong><code>llms.txt</code> é cargo cult</strong>: 97% dos arquivos publicados nunca receberam uma requisição. O arquivo já existe e custa nada; não investir mais tempo nele.</li>
+<li><strong>98% do conteúdo citado por IA é de terceiros.</strong> A maior alavanca não está no blog: está em menção de marca fora do site.</li>
+</ul>
+<blockquote>
+<p>[!warning] Bug do Search Console contamina os relatórios de fev a abr/2026
+O Google registra um erro de logging que <strong>super-reportou impressões de 13/05/2025 até 27/04/2026</strong>, sem afetar cliques. Isso produz exatamente a assinatura &quot;impressões sobem, CTR cai&quot; — e os relatórios de fevereiro a abril da Berkahn caem dentro dessa janela. Os dados de maio a julho já são pós-correção e são os únicos confiáveis para leitura de CTR.</p>
+</blockquote>
+<h2 id="implicacoes-para-o-calendario">Implicações para o calendário</h2>
+<ol>
+<li><strong>Escrever mais artigo longo é o movimento que comprovadamente não move o ponteiro.</strong> A Berkahn já escreve mais que todos os concorrentes e perde em CTR. O gargalo é embalagem, canibalização e ausência de página comercial.</li>
+<li><strong>Resolver a canibalização vale mais que qualquer pauta nova</strong>: 17.759 impressões represadas.</li>
+<li><strong>Reduzir o peso do conteúdo técnico puro.</strong> 3 cliques em 90 dias não justifica 40% do calendário. Técnico entra como profundidade dentro de pauta com demanda, não como pauta.</li>
+<li><strong>Metragem, cobertura e comparativo de custo</strong> são as três lacunas com demanda medida e zero concorrência interna.</li>
+<li><strong>A intenção local é a maior alavanca de conversão não explorada</strong> — e não se resolve com blog.</li>
+</ol>
+<h2 id="ressalvas-de-metodo">Ressalvas de método</h2>
+<ul>
+<li>A janela é de 90 dias e agrega meses com volume muito diferente. Serve para intenção e lacuna, não para tendência mensal.</li>
+<li>As impressões somadas por query (18.248) são menores que o total agregado do site porque o GSC omite queries raras por anonimização. A cauda real é maior que a medida.</li>
+<li>Volume absoluto de busca não foi medido: não há ferramenta de keyword volume conectada. Toda leitura de demanda vem de impressão real da Berkahn, o que subestima temas onde ela ainda não rankeia.</li>
+<li><code>www.berkahn.com.br</code> aparece com 415 impressões em 47 páginas e zero cliques na posição 25,3. O padrão sugere rastreador automatizado, não usuário. Não foi usado como sinal.</li>
+<li>Sem instrumentação de conversão (<code>ga4.events</code> vazio em todos os meses), &quot;qual pauta gera cliente&quot; continua não mensurável. Tudo aqui usa tráfego como proxy.</li>
+</ul>
+<hr>
+<p><strong>Fonte dos dados</strong>: Search Console API, query e query×page, 2026-04-29 a 2026-07-27, via <code>scripts/analytics/adhoc-cauda-longa.mjs</code>. Levantamento de SERP e concorrência por pesquisa manual em 29/07/2026.</p>
+<p><strong>Relacionado</strong>: [[2026-08-calendario-editorial]] · [[2026-08-playbook-pautas]] · [[2026-07-performance-blog]]</p>
+<p><strong>Contexto aplicado</strong>: [[berkahn-brand]] · [[seo-aeo-strategy]] · [[article-pipeline]] · [[analytics-methodology]]</p>
+
+</div>
+
+<script>
+// Charts são populados pelo render-html.mjs via dataset
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('canvas[data-chart]').forEach(canvas => {
+    try {
+      const cfg = JSON.parse(canvas.dataset.chart);
+      new Chart(canvas, cfg);
+    } catch (e) {
+      console.error('Chart config error', e);
+    }
+  });
+});
+</script>
+</body>
+</html>

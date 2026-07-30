@@ -47,6 +47,16 @@ Contagem verificada em 2026-07-29 contra `main` — o `kpi_publicados: 1` anteri
 
 - [ ] Post LinkedIn da semana referenciando artigo recente (`/linkedin`)
 - [ ] Exportar imagem do Canva conforme briefing
+- [ ] Começar o backlog de distribuição: 22 posts derivam de artigos **já publicados** e não exigem escrever artigo nenhum
+
+## Backlog planejado (2026-07-29)
+
+44 briefings até dezembro em [[2026-08-calendario-editorial]], em duas fontes:
+
+- **22 derivados** das pautas Core da semana, um por semana
+- **22 do acervo**: artigos já no ar que nunca viraram post. Hoje só 3 dos 38 têm post correspondente
+
+Cada post recebe `artigo_slug` no frontmatter, fechando o rastreamento bidirecional que hoje não existe. O texto final sai de `/linkedin`; o calendário entrega ângulo, dado-âncora e artigo de origem, não o post pronto.
 
 ## KPIs (snapshot)
 
