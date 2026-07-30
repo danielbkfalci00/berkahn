@@ -50,15 +50,15 @@ semana_fim: 2026-07-31
 ### P0 — Esta semana
 - [ ] **Merge PR #17** (institucional v3/v4, [[site]] + [[materiais]]): branch `design/institucional-monografia` → `main` + validar `/institucional/pdf` em prod + distribuir o PDF. A branch está 3 commits atrás de `main`; rebasear antes evita conflito
 - [x] **Indexação Google** ([[seo-aeo]]): **encerrado em 2026-07-29** — 34/38 artigos (89%), contra 6/44 em abril. Restam 4 URLs em "Crawled/Discovered - currently not indexed", agora P1
-- [ ] **Publicar OAuth consent screen** ([[google-apis-setup]]): consent em modo Testing expira o refresh token em 7 dias. Sem isso o cron `berkahn-performance-mensal` falha em 01/09 (ação Bruno)
+- [x] ~~**Publicar OAuth consent screen**~~ ✅ 2026-07-30 — app em produção, refresh voltou a funcionar, token reemitido. Ver [[google-apis-setup]]
 - [ ] **Decidir 4 capas órfãs** ([[materiais]]): Reestruturando Concreto, energia_solar, mármore, piscina_arraia
-- [ ] **Smoke test Supabase** (Sprint 2.5): rodar `node scripts/vault-supabase-resync.mjs --check` com `$env:SUPABASE_SERVICE_KEY`
+- [x] ~~**Smoke test Supabase**~~ ✅ 2026-07-30 — rodado, 6 slugs vault-only confirmados
 
 ### P1 — Próximas 2 semanas
 - [x] **4 erros de frontmatter em `40-content/curadoria/`** (vault health): corrigidos em 2026-07-02 (PR #11) — `status`/`tipo` inválidos normalizados. `vault-validate.mjs` → 0 issues. Chip `task_abaacde6` fechado.
 - [ ] **Google Sheets SPOF de leads** ([[site]]): backup automático Supabase (Fase 4.4 — opcional)
-- [ ] **9 posts sem meta_title/meta_description** ([[blog]] + [[seo-aeo]]): preencher via admin Supabase
-- [ ] **4 posts sem answer_summary** ([[seo-aeo]]): preencher para AEO. Verificado no Supabase em 2026-07-29
+- [x] ~~**9 posts sem meta_title/meta_description**~~ ✅ 2026-07-30 — eram os 9 artigos com menos de 55 palavras. 5 em 301, 4 em noindex. Ver [[2026-07-thin-content-mapa]]
+- [x] ~~**4 posts sem answer_summary**~~ ✅ 2026-07-30 — preenchidos, 98 a 102 palavras cada
 
 ### P2 — 2-4 semanas
 - [ ] **Fase 4 MCPs** (opcional): HubSpot leads sync · n8n KPIs · Figma tokens
@@ -128,16 +128,16 @@ A linha de base de CTR de cada página ficou registrada em [[2026-08-calendario-
 
 ### Pendências abertas desta sessão
 
-- [ ] **Aplicar `supabase/migrations/008_documentacoes.sql`** no SQL Editor do Supabase. `SUPABASE_DB_PASSWORD` não está no `.env.local`, então `apply-migration.mjs` não roda. Depois: `node --env-file=.env.local scripts/documentacoes/seed-documentos.mjs`
+- [x] ~~**Aplicar migration 008**~~ ✅ 2026-07-30 — aplicada pelo Bruno, 10 documentos semeados
 - [ ] Conferir `/admin/documentacoes` logado: lista, filtro, viewer e gráficos dentro do iframe
-- [ ] Desbloquear `Google-Extended` em `app/robots.ts:13` e corrigir o comentário enganoso
-- [ ] Corrigir a descrição do robots.txt em [[seo-aeo-strategy]], que não corresponde ao arquivo real
+- [x] ~~Desbloquear `Google-Extended`~~ ✅ 2026-07-30 — liberado, verificado no robots.txt de produção
+- [x] ~~Corrigir a descrição do robots.txt em [[seo-aeo-strategy]]~~ ✅ 2026-07-30
 - [x] ~~Publicar o OAuth consent screen~~ — feito em 2026-07-30. App em produção, refresh voltou a funcionar e token reemitido sob o novo regime. Detalhes em [[google-apis-setup]]
-- [ ] Registrar custom dimensions no GA4 (`cta_location`, `channel`, `segment`) e marcar `generate_lead`/`contact_click` como Key Events — **não são retroativas**, precisam existir antes da Fase 3
+- [x] ~~Registrar custom dimensions no GA4~~ ✅ 2026-07-30 — `cta_location`, `channel` e `segment` criadas com escopo Evento. Falta marcar `generate_lead`/`contact_click` como Evento principal, o que só é possível depois da Fase 3
 - [ ] Conferir visualmente `/admin/analytics` (badge, tooltip do Comparar, ponto vazado) — não verificável sem login
-- [ ] Resolver contradição de preço em `custo-steel-frame-m2-2026`: `answer_summary` diz R$ 2.500-4.500/m², `seo_description` diz R$ 3.015-6.091
+- [x] ~~Resolver contradição de preço~~ ✅ 2026-07-30 — faixa canônica **R$ 3.015 a R$ 6.091/m²** (Sudeste). Só o `answer_summary` divergia
 - [ ] Classificar os 6 arquivos do vault que não estão em produção (despublicados? renomeados? nunca publicados?) — ver [[blog]]
-- [ ] Refazer metas P0/P3 de [[seo-aeo]]: três foram superadas e não foram rebaixadas, o painel só mostra verde
+- [x] ~~Refazer metas P0/P3 de [[seo-aeo]]~~ ✅ 2026-07-30 — as antigas mediam "existir no Google", fase encerrada. As novas medem concentração, diversificação de intenção e conversão
 - [ ] Fases 3-5 do plano (instrumentação de conversão, CTA no blog, IQS, diagnóstico): `~/.claude/plans/executa-o-sprint-4-whimsical-thimble.md` ⚠️ **fora do vault e fora do git** — 32KB só na máquina local. Se importar, promover para nota do vault
 - [ ] Rodar `/wrap-up` da semana de 27-31/07 na sexta. O de 24/07 foi perdido (limite de uso) e não é recuperável
 - [ ] Avaliar mudar o horário dos crons: `berkahn-wrapup-semanal` roda sexta 17h, encavalado com uso interativo. Rodar de madrugada reduz a chance de bater no limite semanal
