@@ -74,3 +74,9 @@ tmpgitleaks*.json
 
 # scripts (migration and utility scripts, not needed in production)
 /scripts/
+
+# Transcripts de sessao do Claude Code. Contem output de comandos, e por isso
+# ja carregaram service key do Supabase e token assinado de PDF em texto claro.
+# Nunca versionar: um `git add -A` distraido vaza credencial de producao.
+.claude/sessions/
+.agents/
