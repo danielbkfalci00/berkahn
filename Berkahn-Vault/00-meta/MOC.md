@@ -74,7 +74,7 @@ Por workstream:
 - **Apresentações**: `40-content/apresentacoes/`
 - **Materiais**: `40-content/materiais/`
 - **Auditorias SEO**: `40-content/auditorias-seo/`
-- **Estratégia editorial**: `40-content/estrategia/` — [[2026-07-diagnostico-editorial]] · [[2026-08-calendario-editorial]] · [[2026-08-playbook-pautas]]
+- **Estratégia editorial**: `40-content/estrategia/` — [[2026-07-diagnostico-editorial]] · [[2026-08-calendario-editorial]] · [[2026-08-playbook-pautas]] · [[2026-07-thin-content-mapa]]
 
 Query estruturada: [[artigos.base]] | [[calendario.base]]
 

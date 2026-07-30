@@ -70,8 +70,8 @@ Dados de 2026-07-29 (junho fechado + julho parcial 01-26).
   `URL is unknown to Google` num post publicado em 30/06 é o caso mais grave: não é rejeição, é não-descoberta. **Não é problema de sitemap** — os 38 slugs publicados estão nele, sem uma URL a mais nem a menos, verificado no XML servido. A causa mais provável é orçamento de rastreamento consumido por páginas de baixa qualidade, o que conecta direto com as 9 carcaças.
 
   Não há API pública para pedir indexação de página comum (a Indexing API só aceita `JobPosting` e `BroadcastEvent`), então isso é ação manual no GSC.
-- [ ] **Preencher meta_title + meta_description** nos 9 posts faltantes (lista verificada no Supabase em 2026-07-29)
-- [ ] **Preencher answer_summary** nos 4 posts faltantes
+- [x] ~~**Preencher meta_title + meta_description** nos 9 posts~~ — encerrado em 2026-07-30 por outro caminho: os 9 são exatamente os artigos com menos de 55 palavras. 5 foram consolidados por 301 e 4 estão em `noindex`. Meta tag em página vazia aumentaria impressão e decepção ao mesmo tempo. Reabrir só quando forem reescritos, um a um
+- [x] ~~**Preencher answer_summary** nos 4 posts~~ — feito em 2026-07-30. **Zero** posts publicados sem `answer_summary`
 - [ ] **Criar/ativar Google Business Profile** (GBP) — *não verificado nesta sessão*
 - [ ] **Corrigir SearchAction** gerando URL inválida (ver [[site]]) — *não verificado nesta sessão*
 
@@ -94,7 +94,7 @@ Dados de 2026-07-29 (junho fechado + julho parcial 01-26).
 
 ## Próximos 7 dias
 
-- [ ] GSC: solicitar indexação das 4 URLs pendentes
+- [ ] GSC: solicitar indexação das **3** URLs fora do índice (eram 4; `energia-solar-residencial` entrou sozinha em 14/07)
 - [x] ~~Backfill meta tags nos 9 posts~~ — resolvido em 2026-07-30 por outro caminho: os 9 sem meta tag eram exatamente os 9 artigos com menos de 55 palavras. 5 foram consolidados por 301 e 4 estão em `noindex` até serem reescritos. Meta tag em página vazia só aumentaria impressão e decepção
 - [ ] Rodar `/seo` para recalcular `kpi_score` (o 52 é de abril)
 

@@ -60,21 +60,19 @@ Tráfego seguiu crescendo: 1.179 users em junho, 1.407 nos primeiros 26 dias de 
 
 ## Bloqueios ativos
 
-- [ ] **Vault divergente da produção (P0)**: 6 slugs no ar sem arquivo no vault e 6 arquivos no vault fora do ar. Ver seção abaixo
+- [x] ~~**Vault divergente da produção (P0)**~~ — encerrado em 2026-07-30. Os 6 do vault fora do ar foram classificados por similaridade de conteúdo: 3 são renomeações (arquivar) e 3 são artigos completos nunca publicados, dos quais `mitos-verdades-steel-frame` já foi ao ar. Ver seção abaixo
 - [x] ~~**Pipeline vazio (P0)**~~: resolvido em 2026-07-29. 44 pautas planejadas até dez/2026 em [[2026-08-calendario-editorial]], serializadas em `ideias/ideas-2026-{08..12}.md`. Briefing executável em [[2026-08-playbook-pautas]]
 - [ ] **Canibalização de custo (P0, novo)**: `quanto-custa-construir-steel-frame-precos-m2-2026` é suprimida pela página-mãe em **todas** as queries de preço. 17.759 impressões e CTR 1,15% em 90 dias. Ver [[2026-07-diagnostico-editorial]]
 - [x] ~~**CTR de 8 páginas com impressão alta (P0)**~~ — meta tags reescritas em produção em 2026-07-30. Linha de base registrada em [[2026-08-calendario-editorial]]; o relatório do cron de 01/09 mede o efeito
 - [x] ~~**Contradição de preço** em `custo-steel-frame-m2-2026`~~ — resolvida em 2026-07-30. Faixa canônica: **R$ 3.015 a R$ 6.091/m²** (Sudeste)
 - [x] ~~**4 artigos sem answer_summary** (P1)~~ — preenchidos em 2026-07-30, 98 a 102 palavras cada, com dado quantitativo do próprio corpo
 - [x] ~~**9 artigos são carcaças (P0)**~~ — resolvidos em 2026-07-30. **4** sem substituto ficaram no ar com `noindex, follow`; **5** com substituto foram consolidadas por **301**, com 14 links internos reescritos. Backlog de reescrita em [[2026-07-thin-content-mapa]]
-- [ ] **4 artigos não indexados** (P1): ver lista em [[seo-aeo]]
+- [ ] **3 artigos fora do índice** (P1): `steel-frame-aguenta-vento-forte` (URL unknown), `steel-frame-laje-de-concreto` (discovered), `steel-frame-vantagens-desvantagens` (crawled). Eram 4; ver [[seo-aeo]]
 - [ ] **`quanto-custa-construir-steel-frame-precos-m2-2026` com `published_at` nulo** (P2): quebra ordenação e a timeline do dashboard
 
 ## Próximos 7 dias
 
 - [ ] Semana S1: `/pesquisa` → `/criacao` → `/artigo` do ICMS solar (janela vence 31/12, e homologação leva meses). **Já destravado** — a faixa de preço canônica está definida
-- [ ] Backfill de meta tags nos posts que seguem sem `meta_title`/`meta_description` (os 9 de CTR baixo já foram)
-- [ ] Pedir indexação no GSC das 4 URLs fora do índice
 
 ## KPIs (snapshot)
 
