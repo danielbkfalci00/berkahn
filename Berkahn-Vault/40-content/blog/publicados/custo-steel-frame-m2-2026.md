@@ -134,7 +134,7 @@ O custo total estimado fica entre **R$ 600.000 e R$ 780.000**, dependendo das es
 
 - [Quanto custa construir em Steel Frame: tabela de preços 2026](/atualidades/quanto-custa-construir-steel-frame-precos-m2-2026)
 - [Construir ou Comprar Pronto? Os Números na Grande SP](/atualidades/construir-ou-comprar-pronto-numeros-grande-sp)
-- [Como Financiar sua Construção em Steel Frame](/atualidades/financiamento-construcao-steel-frame)
+- [Como Financiar uma Construção em Light Steel Frame](/atualidades/financiar-construcao-light-steel-frame)
 ---
 
 > [!info] Importado da produção em 2026-07-29

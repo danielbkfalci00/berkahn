@@ -192,7 +192,7 @@ Estes quatro itens não são pauta de blog e não cabem neste calendário. Ficam
 | 2 | `passo-passo-construcao-steel-frame` | 184 impressões, 8 links. Provável fusão com a pauta S10 (cronograma) |
 | 3 | `isolamento-termico-acustico-steel-frame` | 10 links internos, sem substituto. Conecta com `anatomia-parede` |
 | 4 | `tendencias-construcao-modular-2025` | Já agendado como refresh em dezembro |
-| 5-9 | as outras cinco | **Avaliar 301 antes de reescrever**: todas já têm artigo melhor no ar. Reescrever criaria canibalização nova |
+| ~~5-9~~ | ~~as outras cinco~~ | ✅ **Consolidadas por 301 em 2026-07-30.** Saem do backlog: todas tinham artigo melhor no ar, e 14 links internos foram reescritos para o destino final |
 
 O texto abaixo é o registro do racional original.
 

@@ -435,7 +435,11 @@ h2[id], h3[id] { scroll-margin-top: 24px; }
   <h1>Mapa dos artigos vazios e plano de republicação</h1><nav class="doc-toc"><div class="doc-toc-title">Neste documento</div><ol><li><a href="#o-que-foi-feito-em-2026-07-30">O que foi feito em 2026-07-30</a></li><li><a href="#o-acervo-escondido">O acervo escondido</a></li><li><a href="#plano-de-republicacao-em-ordem">Plano de republicação, em ordem</a></li><li><a href="#como-medir-se-funcionou">Como medir se funcionou</a></li></ol></nav>
 <p>Diagnóstico em [[2026-07-diagnostico-editorial]]. Calendário em [[2026-08-calendario-editorial]].</p>
 <h2 id="o-que-foi-feito-em-2026-07-30">O que foi feito em 2026-07-30</h2>
-<p>Os 9 artigos abaixo receberam <code>robots: noindex, follow</code> e saíram do sitemap. <strong>Nada saiu do ar</strong>: as URLs continuam acessíveis e todos os links internos seguem funcionando.</p>
+<p>Os 9 artigos foram divididos conforme já existisse ou não outro artigo cobrindo o tema:</p>
+<ul>
+<li><strong>4 sem substituto</strong> receberam <code>robots: noindex, follow</code> e saíram do sitemap. <strong>Não saíram do ar</strong>: as URLs continuam acessíveis e os links internos seguem funcionando.</li>
+<li><strong>5 com substituto</strong> foram consolidadas por <strong>301</strong> para o artigo bom (ver seção &quot;5 a 9&quot; adiante).</li>
+</ul>
 <p>A escolha de <code>noindex</code> em vez de 404 ou 301 não foi conservadorismo. Três desses artigos são <strong>hubs de link interno</strong> — <code>guia-definitivo</code> recebe 14 links de outros artigos, <code>isolamento-termico</code> recebe 10 e <code>passo-passo</code> recebe 8. Removê-los quebraria 32 links dentro de artigos bons. E <code>follow: true</code> garante que o Google continue percorrendo esses links, então a autoridade não fica presa numa página morta.</p>
 <p>Controle em <code>lib/seo/thin-content.ts</code>. <strong>Para republicar, basta reescrever o artigo e apagar a linha correspondente da lista.</strong></p>
 <h2 id="o-acervo-escondido">O acervo escondido</h2>
@@ -557,10 +561,50 @@ h2[id], h3[id] { scroll-margin-top: 24px; }
 <p>10 links internos e demanda real, sem substituto. Conecta com <code>anatomia-parede-steel-frame</code>, que já é bom. Reescrever com números de transmitância e dB, que é o que falta na SERP inteira.</p>
 <h3>4. <code>tendencias-construcao-modular-2025</code></h3>
 <p>Já agendado como refresh em <strong>dezembro</strong> no calendário. Republicar como &quot;Tendências 2027&quot;.</p>
-<h3>5 a 9 — avaliar consolidação antes de reescrever</h3>
-<p><code>financiamento-construcao-steel-frame</code>, <code>certificacoes-steel-frame</code>, <code>5-vantagens-decisivas</code>, <code>sustentabilidade-construcao-industrializada</code> e <code>steel-frame-futuro-construcao</code> <strong>já têm artigo melhor no ar cobrindo o mesmo tema</strong>. Reescrever os cinco criaria canibalização nova, que é exatamente o problema que estamos resolvendo nas páginas de custo.</p>
-<p>Para esses, o movimento mais provável é <strong>301 para o artigo bom</strong>, não reescrita. Fica como decisão a tomar quando chegar a vez de cada um — enquanto estiverem em <code>noindex</code>, não custam nada.</p>
-<p><code>steel-frame-futuro-construcao</code> é o caso mais simples: 14 palavras, <strong>zero links internos</strong> apontando para ele. Não há nada a preservar.</p>
+<h3>5 a 9 — consolidadas por 301 em 2026-07-30 ✅</h3>
+<p>As cinco já tinham artigo melhor no ar cobrindo o mesmo tema. Reescrevê-las criaria canibalização nova, que é exatamente o problema que estamos resolvendo nas páginas de custo. Foram consolidadas com 301 (declarados em <code>next.config.ts</code>), e <strong>saem do backlog de republicação</strong>.</p>
+<table>
+<thead>
+<tr>
+<th>De</th>
+<th>Para</th>
+<th style="text-align:right">Impressões consolidadas</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>financiamento-construcao-steel-frame</code></td>
+<td><code>financiar-construcao-light-steel-frame</code></td>
+<td style="text-align:right">480</td>
+</tr>
+<tr>
+<td><code>certificacoes-steel-frame</code></td>
+<td><code>normas-light-steel-frame-brasil</code></td>
+<td style="text-align:right">149</td>
+</tr>
+<tr>
+<td><code>steel-frame-futuro-construcao</code></td>
+<td><code>construcao-industrializada-casa-montada-como-carro</code></td>
+<td style="text-align:right">74</td>
+</tr>
+<tr>
+<td><code>5-vantagens-decisivas-light-steel-frame</code></td>
+<td><code>steel-frame-vs-alvenaria</code></td>
+<td style="text-align:right">51</td>
+</tr>
+<tr>
+<td><code>sustentabilidade-construcao-industrializada</code></td>
+<td><code>...-economia-circular</code></td>
+<td style="text-align:right">23</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Todos os destinos foram verificados pela URL Inspection API antes de apontar</strong>, e dois mudaram por causa disso:</p>
+<ul>
+<li><code>5-vantagens-decisivas</code> iria para <code>steel-frame-vantagens-desvantagens</code>, que está <strong>&quot;Crawled, currently not indexed&quot;</strong> desde 13/04. Redirecionar para página fora do índice não consolidaria nada. Foi para <code>steel-frame-vs-alvenaria</code>.</li>
+<li><code>steel-frame-futuro-construcao</code> iria para <code>guia-definitivo</code>, que está em <code>noindex</code> na mesma mudança. Foi para o artigo de construção industrializada, que cobre o mesmo ângulo de transformação do setor.</li>
+</ul>
+<p><strong>14 links internos</strong> que apontavam para as URLs antigas foram reescritos para o destino final, no Supabase e no vault. Um redirect interno funciona, mas adiciona um salto e dilui sinal. O texto da âncora também foi trocado — manter a âncora antiga apontando para outro artigo produziria link enganoso.</p>
 <h2 id="como-medir-se-funcionou">Como medir se funcionou</h2>
 <p>O relatório do cron de 01/09 e 01/10 responde:</p>
 <ul>

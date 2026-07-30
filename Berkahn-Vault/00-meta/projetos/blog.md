@@ -66,7 +66,7 @@ Tráfego seguiu crescendo: 1.179 users em junho, 1.407 nos primeiros 26 dias de 
 - [x] ~~**CTR de 8 páginas com impressão alta (P0)**~~ — meta tags reescritas em produção em 2026-07-30. Linha de base registrada em [[2026-08-calendario-editorial]]; o relatório do cron de 01/09 mede o efeito
 - [x] ~~**Contradição de preço** em `custo-steel-frame-m2-2026`~~ — resolvida em 2026-07-30. Faixa canônica: **R$ 3.015 a R$ 6.091/m²** (Sudeste)
 - [x] ~~**4 artigos sem answer_summary** (P1)~~ — preenchidos em 2026-07-30, 98 a 102 palavras cada, com dado quantitativo do próprio corpo
-- [x] ~~**9 artigos são carcaças (P0)**~~ — escondidos em 2026-07-30 com `noindex, follow` e retirados do sitemap, sem sair do ar. Backlog de republicação em [[2026-07-thin-content-mapa]]
+- [x] ~~**9 artigos são carcaças (P0)**~~ — resolvidos em 2026-07-30. **4** sem substituto ficaram no ar com `noindex, follow`; **5** com substituto foram consolidadas por **301**, com 14 links internos reescritos. Backlog de reescrita em [[2026-07-thin-content-mapa]]
 - [ ] **4 artigos não indexados** (P1): ver lista em [[seo-aeo]]
 - [ ] **`quanto-custa-construir-steel-frame-precos-m2-2026` com `published_at` nulo** (P2): quebra ordenação e a timeline do dashboard
 
@@ -84,8 +84,8 @@ Tráfego seguiu crescendo: 1.179 users em junho, 1.407 nos primeiros 26 dias de 
 | Indexados Google | 34/38 (89%) | 38 | -4 |
 | Dias desde o último post | 9 | 7 | +2 |
 | Slugs divergentes vault ↔ produção | 12 (6+6) | 0 | ⚠️ P0 |
-| Posts carcaça (<55 palavras) | 9 | 0 | escondidos ✅ |
-| Artigos indexáveis (com conteúdo) | 29 | 38 | republicar 9 |
+| Posts carcaça (<55 palavras) | 9 | 0 | 4 noindex + 5 em 301 ✅ |
+| Artigos indexáveis (com conteúdo) | 29 | 33 | reescrever 4 |
 | Posts sem answer_summary | 0 | 0 | ✅ |
 | Páginas de CTR baixo corrigidas | 9 | — | ✅ 2026-07-30 |
 | Artigos no funil (drafts+ideias+pesquisa) | 44 planejados | ≥2 | ✅ |

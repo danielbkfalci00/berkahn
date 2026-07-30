@@ -55,6 +55,38 @@ const nextConfig: NextConfig = {
           destination: "/curadoria-berkahn/:slug",
           permanent: true,
         },
+        // Artigos que nasceram como stub e nunca receberam conteúdo, e cujo
+        // tema já é coberto por um artigo publicado. O 301 consolida o sinal
+        // em vez de dispersá-lo; reescrevê-los criaria canibalização nova.
+        // Destinos verificados como "Submitted and indexed" antes de apontar.
+        // Lista espelhada em lib/seo/thin-content.ts (REDIRECTED_SLUGS).
+        {
+          source: "/atualidades/financiamento-construcao-steel-frame",
+          destination: "/atualidades/financiar-construcao-light-steel-frame",
+          permanent: true,
+        },
+        {
+          source: "/atualidades/certificacoes-steel-frame",
+          destination: "/atualidades/normas-light-steel-frame-brasil",
+          permanent: true,
+        },
+        {
+          source: "/atualidades/sustentabilidade-construcao-industrializada",
+          destination:
+            "/atualidades/sustentabilidade-construcao-civil-economia-circular",
+          permanent: true,
+        },
+        {
+          source: "/atualidades/5-vantagens-decisivas-light-steel-frame",
+          destination: "/atualidades/steel-frame-vs-alvenaria",
+          permanent: true,
+        },
+        {
+          source: "/atualidades/steel-frame-futuro-construcao",
+          destination:
+            "/atualidades/construcao-industrializada-casa-montada-como-carro",
+          permanent: true,
+        },
       ];
     },
     async headers() {
