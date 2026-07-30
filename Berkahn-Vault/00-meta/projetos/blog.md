@@ -5,7 +5,7 @@ atualizado: 2026-07-29
 tags:
   - project/blog
   - status/active
-ai_summary: Hub do projeto Blog — posts semanais em /atualidades. 38 publicados, 34 indexados (89%), meta +1/semana. Pipeline 4 etapas (/brainstorm → /pesquisa → /criacao → /artigo). Bloqueio atual — cadência parada há 3 semanas e pipeline vazio, não mais indexação. Lido por /standup, /wrap-up, /artigo.
+ai_summary: Hub do projeto Blog — posts semanais em /atualidades. 38 publicados, 34 indexados (89%). Pipeline 4 etapas (/brainstorm → /pesquisa → /criacao → /artigo). Funil reposto em 2026-07-29 com 44 pautas até dezembro. Bloqueio atual é canibalização entre as duas páginas de custo e CTR baixo em 8 páginas, não mais indexação nem pipeline. Lido por /standup, /wrap-up, /artigo.
 status: active
 projeto: blog
 kpi_publicados: 38
@@ -60,7 +60,9 @@ Tráfego seguiu crescendo: 1.179 users em junho, 1.407 nos primeiros 26 dias de 
 ## Bloqueios ativos
 
 - [ ] **Vault divergente da produção (P0)**: 6 slugs no ar sem arquivo no vault e 6 arquivos no vault fora do ar. Ver seção abaixo
-- [ ] **Pipeline vazio (P0)**: `drafts/`, `ideias/`, `pesquisa/` sem nenhum arquivo desde 21/05. Rodar `/brainstorm` para repor o funil
+- [x] ~~**Pipeline vazio (P0)**~~: resolvido em 2026-07-29. 44 pautas planejadas até dez/2026 em [[2026-08-calendario-editorial]], serializadas em `ideias/ideas-2026-{08..12}.md`. Briefing executável em [[2026-08-playbook-pautas]]
+- [ ] **Canibalização de custo (P0, novo)**: `quanto-custa-construir-steel-frame-precos-m2-2026` é suprimida pela página-mãe em **todas** as queries de preço. 17.759 impressões e CTR 1,15% em 90 dias. Ver [[2026-07-diagnostico-editorial]]
+- [ ] **CTR de 8 páginas com impressão alta (P0, novo)**: começa por `financiar-construcao-...` (0,75%) e `drywall-st-ru-rf` (0,21%)
 - [ ] **9 artigos sem meta_title/meta_description** (P0): lista verificada no Supabase. Ver [[seo-aeo]]
 - [ ] **4 artigos sem answer_summary** (P1): bloqueia AEO. `financiar-construcao-light-steel-frame`, `steel-frame-no-mundo`, `construir-hospital-em-operacao`, `reforma-tributaria-construcao-industrializada`
 - [ ] **4 artigos não indexados** (P1): ver lista em [[seo-aeo]]
@@ -68,9 +70,10 @@ Tráfego seguiu crescendo: 1.179 users em junho, 1.407 nos primeiros 26 dias de 
 
 ## Próximos 7 dias
 
-- [ ] Repor o funil: `/brainstorm` (pipeline está vazio)
-- [ ] `/pesquisa` → `/criacao` → `/artigo` para retomar a cadência
+- [ ] **Resolver a contradição de preço** em `custo-steel-frame-m2-2026` (R$ 2.500-4.500 vs R$ 3.015-6.091). Trava toda pauta de custo de agosto
+- [ ] Semana S1: `/pesquisa` → `/criacao` → `/artigo` do ICMS solar (janela vence 31/12, e homologação leva meses)
 - [ ] Backfill de meta tags nos 9 posts
+- [ ] Desbloquear `Google-Extended` em `app/robots.ts:13` (custo zero, exclui o site do grounding do Gemini)
 
 ## KPIs (snapshot)
 
@@ -82,7 +85,9 @@ Tráfego seguiu crescendo: 1.179 users em junho, 1.407 nos primeiros 26 dias de 
 | Slugs divergentes vault ↔ produção | 12 (6+6) | 0 | ⚠️ P0 |
 | Posts sem meta tags | 9 | 0 | +9 ⚠️ P0 |
 | Posts sem answer_summary | 4 | 0 | +4 ⚠️ P1 |
-| Artigos no funil (drafts+ideias+pesquisa) | 0 | ≥2 | ⚠️ P0 |
+| Artigos no funil (drafts+ideias+pesquisa) | 44 planejados | ≥2 | ✅ |
+| CTR de `quanto-custa-construir-...` | 1,15% | >3% | ⚠️ P0 |
+| Concentração de cliques no artigo #1 | 78% | <55% | ⚠️ |
 
 ## Divergência vault ↔ produção (2026-07-29)
 

@@ -100,8 +100,25 @@ Os três `scheduled-tasks` estão **enabled e disparando**. O problema nunca foi
 - **Causa raiz do `invalid_grant` identificada** (3ª ocorrência): consent screen provavelmente em modo Testing, onde o refresh token morre em 7 dias. Passo a passo para publicar em [[google-apis-setup]]. **Ação manual pendente do Bruno** — sem isso o cron falha de novo em 01/09.
 - **A branch `design/institucional-monografia` está 3 commits atrás de `main`** (merge-base `a149b47`): faltam `02a7709`, `7597ecd` e `2ef61a2`, que adicionam os artigos `energia-solar-residencial` e `anatomia-parede-steel-frame` mais o post LinkedIn de energia solar. Nada foi deletado e o merge não apaga nada — mas contar arquivos em `publicados/` estando nela dá resultado errado. Vale rebasear antes de mergear.
 
+## Wins / decisões (2026-07-29, sessão 2 — estratégia editorial)
+
+**Seção `/admin/documentacoes` criada e calendário editorial até dezembro fechado.**
+
+- **O pipeline de analytics enxergava 20 queries por mês.** `fetch-gsc.mjs:34` pede `rowLimit: 20`; a API aceita 25.000. Toda análise de SEO de fev a jul foi feita sobre o topo de uma distribuição truncada. O real são **1.270 queries em 90 dias, 1.135 delas com zero clique**. Levantado por `scripts/analytics/adhoc-cauda-longa.mjs` (ad-hoc, não altera o pipeline).
+- **Canibalização deixou de ser suspeita e virou medida**: em **todas** as queries de preço, `quanto-custa-construir-...` aparece 5 a 20 posições abaixo da página-mãe. 17.759 impressões e CTR de 1,15% contra 2,98%. É a maior perda isolada do acervo.
+- **Conteúdo técnico não captura busca**: 139 queries técnicas geraram **3 cliques em 90 dias**. A hipótese de que autoridade técnica traz tráfego está refutada pelo dado, e o calendário foi redesenhado por causa disso.
+- **A queda do tráfego de IA (14% → 4,6%) é aritmética, não problema.** ~8 dos 10 pontos são efeito de denominador: o tráfego total dobrou. Mas existe um erro real e separado — `app/robots.ts:13` bloqueia `Google-Extended` com o comentário "no search/citation value", que é **falso**: não protege de AI Overviews e exclui o site do grounding do Gemini, plataforma que foi de 8,9% para 27,3% de fatia.
+- **Bug do Search Console contamina fev-abr/2026**: o Google super-reportou impressões de 13/05/2025 a 27/04/2026, sem afetar cliques. Só maio-julho é confiável para leitura de CTR.
+- **44 pautas + 44 briefings de LinkedIn** até dezembro, em [[2026-08-calendario-editorial]], com briefing executável em [[2026-08-playbook-pautas]] e base factual em [[2026-07-diagnostico-editorial]]. Serializadas em `ideias/ideas-2026-{08..12}.md` para que `/brainstorm` e `/calendario` enxerguem o funil. **O P0 "pipeline vazio" de [[blog]] está encerrado.**
+- **Seção `/admin/documentacoes`**: tabela `documentos` no Supabase com o HTML inline, servido por `/admin/documentacoes/[slug]/raw` dentro de um iframe. Escolha de arquitetura: a Vercel **não sobe o repositório para a Lambda**, então `fs.readFile` do vault funciona em dev e falha com ENOENT em produção. O cron já escreve no Supabase no mesmo run em que renderiza o HTML, então persistir ali não adiciona superfície nova. A rota fica sob `/admin/` e não sob `/api/` porque o matcher do middleware é `['/', '/admin/:path*']` — em `/api/` ficaria pública.
+- **Dois bugs de plataforma corrigidos de passagem**: `build:static` nunca rodou no Windows (usa sintaxe POSIX de env var, que o cmd.exe não entende) e a detecção de CLI em `render-html.mjs` e `build-doc.mjs` comparava `import.meta.url` com uma string montada à mão, que no Windows nunca casa (`file:///C:/` tem três barras).
+
 ### Pendências abertas desta sessão
 
+- [ ] **Aplicar `supabase/migrations/008_documentacoes.sql`** no SQL Editor do Supabase. `SUPABASE_DB_PASSWORD` não está no `.env.local`, então `apply-migration.mjs` não roda. Depois: `node --env-file=.env.local scripts/documentacoes/seed-documentos.mjs`
+- [ ] Conferir `/admin/documentacoes` logado: lista, filtro, viewer e gráficos dentro do iframe
+- [ ] Desbloquear `Google-Extended` em `app/robots.ts:13` e corrigir o comentário enganoso
+- [ ] Corrigir a descrição do robots.txt em [[seo-aeo-strategy]], que não corresponde ao arquivo real
 - [ ] Publicar o OAuth consent screen no Google Cloud Console (passo a passo em [[google-apis-setup]]) — trava o cron de 01/09
 - [ ] Registrar custom dimensions no GA4 (`cta_location`, `channel`, `segment`) e marcar `generate_lead`/`contact_click` como Key Events — **não são retroativas**, precisam existir antes da Fase 3
 - [ ] Conferir visualmente `/admin/analytics` (badge, tooltip do Comparar, ponto vazado) — não verificável sem login
