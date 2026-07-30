@@ -44,7 +44,7 @@ status: archived
   - Linha 14: redação ligeiramente diferente ("entregam ganhos claros de eficiência" vs "não são apenas eficientes, são mais seguros")
   - Linha 91: "Conclusão" levemente reescrita
 - **Mantido por**: rastreabilidade da evolução do artigo + caso o LinkedIn original (2026-04-13-medstar-gestao-obra) tenha sido escrito baseado nesta versão
-- **Cross-reference**: Post LinkedIn `40-content/linkedin/2026-04-13-medstar-gestao-obra/` linka para o tema (Medstar/Georgetown) → durante Sprint 2.4 bidirecional, o post deve linkar para [[artigo-construir-hospital-em-operacao]] (versão final), não esta superseded
+- **Cross-reference**: Post LinkedIn `40-content/linkedin/2026-04-13-medstar-gestao-obra/` linka para o tema (Medstar/Georgetown) → durante Sprint 2.4 bidirecional, o post deve linkar para [[construir-hospital-em-operacao]] (versão final), não esta superseded
 
 ## Renomeações — lote de 2026-07-30
 

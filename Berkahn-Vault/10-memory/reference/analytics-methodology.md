@@ -9,7 +9,7 @@ tags:
   - project/site
   - project/blog
   - project/seo-aeo
-ai_summary: Metodologia do dashboard /admin/analytics. Fórmulas, thresholds e critérios usados em Health Score, classificação de posts, metas dinâmicas e red flags. Atualizar quando ajustar pesos.
+ai_summary: "Metodologia do dashboard /admin/analytics — Health Score, classificação de posts, metas dinâmicas, red flags e mês parcial. LEIA ANTES DE INTERPRETAR AGOSTO/2026: em 2026-07-30 o consentimento passou a ser respeitado (consent default denied), então users/sessions caem por construção e o detector users-drop dispara em falso. Eventos de conversão só existem a partir dessa data. Atualizar quando ajustar pesos ou cortar série."
 status: active
 subtipo: reference
 ---

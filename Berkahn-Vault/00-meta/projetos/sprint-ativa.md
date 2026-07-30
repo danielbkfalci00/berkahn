@@ -101,7 +101,7 @@ Os três `scheduled-tasks` estão **enabled e disparando**. O problema nunca foi
 > [!warning] Os números de agosto vão cair, e isso é o comportamento certo
 > O consentimento passou a ser respeitado de fato: `consent default denied` antes do `config`, e replay da escolha salva. Antes disso o primeiro `page_view` saía com consentimento presumido e quem recusou era medido assim mesmo. `red-flags.ts` vai disparar `users-drop` no relatório de 01/09 — **é falso positivo desta mudança**. O GSC não é afetado (não depende de cookie): se `users` cair e `clicks` não, é este corte. Detalhes em [[analytics-methodology]].
 
-**Aberto, precisa de dado externo**: `custo-steel-frame-m2-2026` e `quanto-custa-construir-...` usam snapshots diferentes do mesmo índice Arquitecasa para o Sudeste (dez/2025 vs jan/2025). Rebasear a tabela regional exige a série dez/2025 das 5 regiões.
+**Aberto, precisa de dado externo**: `custo-steel-frame-m2-2026` e `quanto-custa-construir-...` usam snapshots diferentes do mesmo índice Arquitecasa para o Sudeste (dez/2025 vs jan/2025). Rebasear a tabela regional exige a série dez/2025 das 5 regiões. **A mesma falta de dado** mantém `orcamento-steel-frame` em backlog — ver [[blog]].
 
 **Precisa do Bruno**: marcar `generate_lead` e `whatsapp_click` como **Key Events** no GA4 Admin (Admin → Eventos). Só faz sentido agora que os eventos existem — antes não havia o que marcar.
 

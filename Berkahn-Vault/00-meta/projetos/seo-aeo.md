@@ -144,7 +144,7 @@ O **Score geral (52/100)** é de abril e nunca foi recomputado. Não vale como m
 
 Migrados de `Docs/SEO & AEO/` para `40-content/auditorias-seo/` (Sprint 1.6):
 - [[2026-04-diagnostico-integrado]] — score 52/100, 9 posts sem meta, plano P0/P1/P2
-- [[2026-04-diagnostico-base]] — diagnóstico inicial
+- [[2026-04-diagnostico-integrado]] — diagnóstico inicial (substitui [[2026-03-diagnostico-base]])
 - [[research-seo-aeo]] — pesquisa de fundamentos (passage-level, ski ramp, AEO)
 
 ## Histórico recente

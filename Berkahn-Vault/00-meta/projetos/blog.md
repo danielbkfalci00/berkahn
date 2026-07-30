@@ -5,7 +5,7 @@ atualizado: 2026-07-30
 tags:
   - project/blog
   - status/active
-ai_summary: Hub do projeto Blog — posts semanais em /atualidades. 38 publicados, 34 indexados (89%). Pipeline 4 etapas (/brainstorm → /pesquisa → /criacao → /artigo). Funil reposto em 2026-07-29 com 44 pautas até dezembro; meta tags e answer_summary saneados em 2026-07-30. Bloqueio atual é thin content — 9 artigos com menos de 55 palavras, 24% do blog — mais a canibalização entre as duas páginas de custo. Lido por /standup, /wrap-up, /artigo.
+ai_summary: Hub do projeto Blog — posts semanais em /atualidades. 39 publicados, 34 indexados. Pipeline 4 etapas (/brainstorm → /pesquisa → /criacao → /artigo). Funil reposto em 2026-07-29 com 44 pautas até dezembro. Thin content e soft 404 resolvidos em 2026-07-30. Bloqueios restantes - canibalização entre as duas páginas de custo, e duas séries Arquitecasa diferentes no ar para o mesmo Sudeste. orcamento-steel-frame e hold-downs-ancoragens em backlog sem data, cada um com bloqueio nomeado. Lido por /standup, /wrap-up, /artigo.
 status: active
 projeto: blog
 kpi_publicados: 39
@@ -21,7 +21,7 @@ kpi_ga4_pageviews_mes: 1860
 kpi_gsc_clicks_mes: 850
 kpi_gsc_impressions_mes: 34396
 kpi_health_score_mes: 83
-kpi_atualizado_em: 2026-07-20
+kpi_atualizado_em: 2026-07-30
 contextos_aplicados:
   - berkahn-brand
   - seo-aeo-strategy
@@ -48,11 +48,13 @@ subagents_uteis:
 
 ## Status atual
 
-Dados verificados em 2026-07-29 contra Supabase e GSC.
+Dados verificados em 2026-07-30 contra Supabase e GSC.
 
-**38 artigos publicados, 34 indexados (89%)**. O bloqueio P0 de indexação que dominava este hub desde abril **está encerrado** — o texto anterior dizia "1 de 35 indexados", número que já estava errado quando foi escrito.
+**39 artigos publicados** (contagem conferida na tabela `posts`), 34 indexados. O bloqueio P0 de indexação que dominava este hub desde abril **está encerrado** — o texto anterior dizia "1 de 35 indexados", número que já estava errado quando foi escrito.
 
-**O gargalo mudou de lugar**: o problema agora é o vault divergir da produção, não a indexação. Último post real é `anatomia-parede-steel-frame` (2026-07-20, 9 dias atrás) — a cadência está quase em dia, mas **esse post não existe no vault**. Ler `40-content/blog/publicados/` daria a resposta errada de que o último post foi 08/07.
+Último post: `mitos-verdades-steel-frame`, publicado em 2026-07-30 — tirado do próprio vault, onde estava pronto e nunca tinha ido ao ar.
+
+**A divergência vault ↔ produção foi encerrada em 2026-07-30**: dos 6 arquivos do vault fora do ar, 3 eram renomeações (arquivadas) e 3 eram artigos inéditos, dos quais 1 foi publicado e 2 foram para backlog. A seção histórica abaixo fica como registro de como o descompasso foi diagnosticado.
 
 `ideias/` foi reposta em 2026-07-29 com 44 pautas até dezembro (`ideas-2026-{08..12}.md`). `drafts/` e `pesquisa/` seguem vazias: enchem conforme o ciclo semanal roda.
 
@@ -75,14 +77,18 @@ Tráfego seguiu crescendo: 1.179 users em junho, 1.407 nos primeiros 26 dias de 
 
 - [ ] Semana S1: `/pesquisa` → `/criacao` → `/artigo` do ICMS solar (janela vence 31/12, e homologação leva meses). **Já destravado** — a faixa de preço canônica está definida
 
+> [!note] `orcamento-steel-frame` e `hold-downs-ancoragens` saíram do fluxo semanal
+> Foram para backlog sem data em 2026-07-30, cada um com bloqueio nomeado. Ver "Backlog: os 2 artigos prontos que não vão ao ar agora" abaixo. **Não puxar para a semana sem antes ter os números** — publicar `orcamento-steel-frame` como está adiciona uma terceira faixa de preço ao acervo.
+
 ## KPIs (snapshot)
 
 | Métrica | Atual | Meta | Δ |
 |---------|-------|------|---|
-| Posts publicados (total) | 38 | — | ✅ |
-| Indexados Google | 34/38 (89%) | 38 | -4 |
-| Dias desde o último post | 9 | 7 | +2 |
-| Slugs divergentes vault ↔ produção | 12 (6+6) | 0 | ⚠️ P0 |
+| Posts publicados (total) | 39 | — | ✅ |
+| Indexados Google | 34/39 | 39 | -5 |
+| Dias desde o último post | 0 | 7 | ✅ |
+| Slugs divergentes vault ↔ produção | 0 | 0 | ✅ 2026-07-30 |
+| Soft 404 em `/atualidades/` | resolvido | — | ✅ 2026-07-30 |
 | Posts carcaça (<55 palavras) | 9 | 0 | 4 noindex + 5 em 301 ✅ |
 | Artigos indexáveis (com conteúdo) | 29 | 33 | reescrever 4 |
 | Posts sem answer_summary | 0 | 0 | ✅ |
@@ -126,17 +132,34 @@ O `berkahn-reforma-...` é o de frontmatter corrompido (`title: **O que efetivam
 
 **Artigos completos que nunca foram publicados** — similaridade máxima abaixo de 2% contra tudo que está no ar, ou seja, conteúdo único:
 
-| Arquivo | Palavras | Tema | Demanda |
+Contagens de **corpo publicável** (sem frontmatter e sem o bloco "ESPECIFICAÇÕES TÉCNICAS", que é instrução de produção). O arquivo inteiro tem ~400 a 900 palavras a mais.
+
+| Arquivo | Corpo | Tema | Demanda |
 |---|---:|---|---|
-| `hold-downs-ancoragens` | **3.368** | Caminho de cargas, hold-downs, ancoragem | Técnica: baixa por si só |
-| ~~`mitos-verdades-steel-frame`~~ | 3.197 | ✅ **Publicado em 2026-07-30** | — |
-| `orcamento-steel-frame` | **2.961** | Custo com 8 estudos acadêmicos, CUB/SP e SINAPI | **Custo: 78,5% das impressões** |
+| `hold-downs-ancoragens` | **2.490** | Caminho de cargas, hold-downs, ancoragem | Técnica: baixa por si só |
+| ~~`mitos-verdades-steel-frame`~~ | 2.496 | ✅ **Publicado em 2026-07-30** | — |
+| `orcamento-steel-frame` | **2.354** | Custo com 8 estudos acadêmicos, CUB/SP e SINAPI | **Custo: 78,5% das impressões** |
 
-Eram **9.526 palavras prontas** enquanto o blog carregava 9 artigos de menos de 55 palavras publicados. As URLs retornavam soft 404 — desde 2026-07-30 retornam **404 de verdade** (ver abaixo).
+Eram ~7.300 palavras de corpo prontas enquanto o blog carregava 9 artigos de menos de 55 palavras publicados. As URLs retornavam soft 404 — desde 2026-07-30 retornam **404 de verdade** (ver abaixo).
 
-✅ **`mitos-verdades-steel-frame` foi publicado em 2026-07-30** (2.496 palavras no corpo, 4 componentes, capa gerada do banco de imagens). Restam dois.
+✅ **`mitos-verdades-steel-frame` foi publicado em 2026-07-30** (4 componentes, capa gerada do banco de imagens). Restam dois, ambos em backlog.
 
-`orcamento-steel-frame` vale publicação, mas **não como está**. **Ressalva**: `orcamento-steel-frame` cita dados de 2025 e entra no cluster de custo, que já tem canibalização — precisa de revisão de números e de decisão sobre canonical antes de ir ao ar.
+### Backlog: os 2 artigos prontos que não vão ao ar agora
+
+**Decisão de 2026-07-30: ambos para backlog, sem data.** Não é adiamento por falta de tempo — cada um tem um bloqueio nomeado, e publicar sem resolvê-lo piora o acervo em vez de melhorar.
+
+**`orcamento-steel-frame`** (2.354 palavras de corpo). Bloqueio: **todo o eixo de preço está um ano defasado e conflita com o que já está no ar.**
+
+- Ancora no Índice Arquitecasa de **janeiro/2025** (R$ 2.979 a 5.926/m² no Sudeste). O canônico é **dezembro/2025** (R$ 3.015 a 6.091/m²), e a fonte disso é [[financiar-construcao-light-steel-frame]]
+- Selic e taxa da Caixa são de 2025 — o dado mais perecível do texto
+- Preços unitários de 2025: placa cimentícia, basecoat, tarifa de energia, caçamba, terreno
+- Diz LSF a 250 kg/m² e vida útil de 90 anos; [[mitos-verdades-steel-frame]], **publicado**, diz 60 a 100 kg/m² e "acima de 100 anos". O corpus publicado manda
+
+**Para destravar**: a série Arquitecasa dez/2025 e a Selic/taxa Caixa vigentes. Sem os números, a revisão vira invenção.
+
+**Decisão de canonical, quando for publicado**: `custo-steel-frame-m2-2026` continua sendo a página de "quanto custa o m²" — é o maior ativo do site. `orcamento-steel-frame` entra pelo ângulo que nenhuma outra página tem (comparação LSF × alvenaria com 8 estudos acadêmicos, breakdown por etapa, TCO de 20 anos), mirando "steel frame é mais barato que alvenaria" (480 impressões/mês em 3 variantes, sem post dedicado). Na prática: sai o "2025" do título, sai a tabela de preço/m² do FAQ, e a pergunta de preço linka para a página-mãe em vez de responder com uma terceira faixa.
+
+**`hold-downs-ancoragens`** (2.490 palavras). Sem bloqueio de dado — não tem número perecível nem sobreposição de cluster. Bloqueio é de custo/benefício: conteúdo técnico rendeu **3 cliques em 90 dias** ([[2026-07-diagnostico-editorial]]), e ele depende de 4 ilustrações técnicas a produzir. Publicável a qualquer momento que sobrar folga.
 
 ### ✅ Resolvido: soft 404 em todo `/atualidades/`
 

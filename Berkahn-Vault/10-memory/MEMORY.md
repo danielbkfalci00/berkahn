@@ -31,7 +31,7 @@ status: active
 - [[blog-pipeline]] — Slugs, placeholders, paths do blog
 - [[artigos-publicados]] — Registro de slugs + Supabase IDs
 - [[google-apis-setup]] — Setup GA4 + Search Console + troubleshooting OAuth (cron `berkahn-performance-mensal`)
-- [[analytics-methodology]] — Fórmulas dashboard `/admin/analytics` (Health Score, metas dinâmicas, red flags)
+- [[analytics-methodology]] — Fórmulas dashboard `/admin/analytics` (Health Score, metas dinâmicas, red flags) + **corte de série em 30/07/2026: consentimento passou a valer, agosto cai de propósito**
 
 ## Como Claude usa esta memória
 

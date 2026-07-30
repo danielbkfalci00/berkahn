@@ -5,7 +5,7 @@ atualizado: 2026-07-30
 tags:
   - project/site
   - status/active
-ai_summary: Hub do projeto Site — Next.js 15 + Supabase + Vercel em produção (berkahn.com.br). Indexação dos artigos resolvida em 2026-07-29 (34/38); páginas institucionais nunca foram medidas. Ajustes contínuos, novas páginas, refactors, integração admin/Supabase. Code paths em app/, lib/, components/.
+ai_summary: Hub do projeto Site — Next.js 15 + Supabase + Vercel em produção (berkahn.com.br). Indexação dos artigos resolvida em 2026-07-29; páginas institucionais nunca foram medidas. Em 2026-07-30 - soft 404 de /atualidades corrigido (era loading.tsx, não revalidate), ISR restaurado com lib/supabase/public.ts (a rota renderizava dinâmico a cada visita), /contato criado (4 CTAs apontavam para 404) e SearchAction removido. Ajustes contínuos, novas páginas, refactors, integração admin/Supabase. Code paths em app/, lib/, components/.
 status: active
 projeto: site
 kpi_paginas_indexadas: 34
@@ -110,7 +110,7 @@ Site em produção (Next.js App Router + Supabase + Vercel + Tailwind + shadcn/u
 
 ## Materiais de apoio
 
-- [[indices-mockups-remodelacao]] — mockups de redesign em `Docs/REMODELAÇÃO/`
+- ~~`indices-mockups-remodelacao`~~ — a nota e a pasta `Docs/REMODELAÇÃO/` não existem mais (link órfão desde a consolidação do banco de imagens). Mockups vivos: [[banco-imagens]]
 - [[paginas-conteudo-v2]] — estratégia de páginas (migrado de Docs/)
 
 ## Histórico recente
