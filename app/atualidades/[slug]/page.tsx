@@ -4,7 +4,7 @@ import Image from "next/image";
 import { preload } from "react-dom";
 import { Breadcrumb } from "@/components/layout/Breadcrumb";
 import { AuthorBio } from "@/components/article/AuthorBio";
-import { createClient } from "@/lib/supabase/server";
+import { createPublicClient } from "@/lib/supabase/public";
 import { getArticleBySlug, richArticles } from "@/data/articles/steel-frame-futuro";
 import { ArticleContent } from "./ArticleContent";
 import { RichPostRenderer } from "@/components/blog/RichPostRenderer";
@@ -24,9 +24,24 @@ export const dynamicParams = true;
 // Revalidate pages every 60 seconds (ISR)
 export const revalidate = 60;
 
+// ⚠️ NÃO adicionar loading.tsx aqui nem em app/atualidades/.
+//
+// Um loading.tsx cria um boundary de Suspense sobre o segmento (e sobre os
+// segmentos filhos, no caso do pai). O Next descarrega o shell com HTTP 200
+// antes de o `notFound()` lá embaixo ser alcançado, e o status não pode mais
+// mudar: slug inexistente passa a responder 200 com o corpo da página de erro.
+// Isso é soft 404 — o Google trata como página válida e desperdiça crawl.
+//
+// Verificado em 2026-07-30 com build de produção local: com loading.tsx,
+// /atualidades/slug-falso responde 200; sem, responde 404. `revalidate` e o
+// cliente Supabase foram testados e descartados como causa.
+//
+// Se o skeleton voltar a ser necessário, ele precisa ficar ABAIXO do ponto que
+// decide o notFound (ex.: Suspense em volta só dos artigos relacionados).
+
 // Fetch post from Supabase
 async function getPostBySlug(slug: string): Promise<Post | null> {
-  const supabase = await createClient();
+  const supabase = createPublicClient();
 
   const { data, error } = await supabase
     .from('posts')
@@ -51,7 +66,7 @@ export async function generateStaticParams() {
 
   // Try to get published posts from Supabase
   try {
-    const supabase = await createClient();
+    const supabase = createPublicClient();
     const { data: posts } = await supabase
       .from('posts')
       .select('slug')
@@ -156,7 +171,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
     }
 
     // Fetch related posts for internal linking (SEO + AEO)
-    const supabase = await createClient();
+    const supabase = createPublicClient();
     const { data: sameCategoryPosts } = await supabase
       .from("posts")
       .select("id, slug, title, excerpt, cover_image, category, author, published_at, read_time")

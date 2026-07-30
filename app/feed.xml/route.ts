@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+import { createPublicClient } from "@/lib/supabase/public";
 
 const BASE_URL = "https://www.berkahn.com.br";
 
@@ -18,7 +18,7 @@ function toRFC822(date: string): string {
 }
 
 export async function GET() {
-  const supabase = await createClient();
+  const supabase = createPublicClient();
 
   const { data: posts } = await supabase
     .from("posts")
@@ -27,7 +27,15 @@ export async function GET() {
     .not("published_at", "is", null)
     .order("published_at", { ascending: false });
 
-  const items = (posts ?? [])
+  // O `.not(...)` acima já exclui published_at nulo no banco, mas o tipo
+  // gerado do schema mantém `string | null`. Estreitar aqui evita depender
+  // do filtro remoto para a garantia de tipo.
+  const publicados = (posts ?? []).filter(
+    (post): post is typeof post & { published_at: string } =>
+      Boolean(post.published_at)
+  );
+
+  const items = publicados
     .map(
       (post) => `    <item>
       <title>${escapeXml(post.title)}</title>
@@ -42,8 +50,8 @@ export async function GET() {
     .join("\n");
 
   const lastBuildDate =
-    posts && posts.length > 0
-      ? toRFC822(posts[0].published_at)
+    publicados.length > 0
+      ? toRFC822(publicados[0].published_at)
       : new Date().toUTCString();
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>

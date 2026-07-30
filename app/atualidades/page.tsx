@@ -31,11 +31,11 @@ export const metadata: Metadata = {
 // Revalidate every 60 seconds to fetch new posts from Supabase
 export const revalidate = 60;
 
-import { createClient } from "@/lib/supabase/server";
+import { createPublicClient } from "@/lib/supabase/public";
 import type { Post } from "@/types/admin";
 
 export default async function AtualidadePage() {
-  const supabase = await createClient();
+  const supabase = createPublicClient();
 
   // Buscar posts publicados do Supabase
   let supabasePosts: Post[] = [];

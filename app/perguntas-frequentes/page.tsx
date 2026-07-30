@@ -49,9 +49,11 @@ export async function generateMetadata({ searchParams }: PageProps): Promise<Met
       canonical: "/perguntas-frequentes",
       languages: { "pt-BR": PAGE_URL },
     },
-    // Páginas de resultado de busca (?q=...) não devem ser indexadas.
-    // Resolve o aviso do GSC para o template SearchAction {search_term_string}
-    // e protege contra indexação de buscas reais.
+    // URLs com ?q=... não devem ser indexadas. Esta página ignora o parâmetro
+    // e renderiza a FAQ inteira, então cada ?q= seria conteúdo duplicado da
+    // canônica. O SearchAction que gerava esses links foi removido do
+    // app/layout.tsx, mas o noindex fica: links externos com ?q= continuam
+    // possíveis.
     robots: hasQuery
       ? { index: false, follow: true, googleBot: { index: false, follow: true } }
       : { index: true, follow: true, googleBot: { index: true, follow: true, "max-snippet": -1, "max-image-preview": "large" } },
