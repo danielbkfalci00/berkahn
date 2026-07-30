@@ -1,14 +1,14 @@
 ---
 tipo: memory
 criado: 2026-05-27
-atualizado: 2026-07-29
+atualizado: 2026-07-30
 tags:
   - ai/memory
   - status/active
   - source/manual
   - project/blog
   - project/seo-aeo
-ai_summary: "Setup Google APIs (GA4 Data API + Search Console API) para o relatório mensal. Auth por OAuth refresh token em secrets/oauth-tokens.json. ATENÇÃO: invalid_grant recorrente porque o consent screen está em modo Testing (token morre em 7 dias) — passo a passo para publicar o app está nesta nota. Comando /performance gera MD+HTML."
+ai_summary: "Setup Google APIs (GA4 Data API + Search Console API) para o relatório mensal. Auth por OAuth refresh token em secrets/oauth-tokens.json. invalid_grant recorrente foi RESOLVIDO em 2026-07-30 publicando o consent screen (em Testing o token morre em 7 dias). Histórico e procedimento nesta nota. Comando /performance gera MD+HTML."
 status: active
 subtipo: reference
 ---
@@ -116,14 +116,22 @@ A tela "app não verificado" pode continuar aparecendo em reautorizações futur
 
 **Como confirmar que resolveu**: o cron de 2026-09-01 rodar sozinho e gerar o relatório de agosto sem intervenção. Sinal antecipado: rodar `test-auth.mjs` ~10 dias após publicar e passar.
 
-> [!warning] Hipótese forte, não confirmada
-> Não é possível ler o publishing status pela API — só pelo Console. O diagnóstico se apoia no sintoma (7 dias bate exatamente) e na tela de app não verificado. Se após publicar o problema voltar em 01/10, a causa é outra e vale investigar revogação em myaccount.google.com/permissions.
+> [!success] Confirmado e resolvido em 2026-07-30
+> O app foi publicado (**Publishing status: Em produção**, tipo Externo) e a hipótese se sustentou com evidência direta:
+>
+> 1. **Um refresh aconteceu sozinho às 10:48**, reescrevendo `secrets/oauth-tokens.json` pela primeira vez desde 01/07. O listener `on('tokens')` só grava quando o refresh dá certo, então esse arquivo parado por 29 dias era o sintoma, e o arquivo voltar a ser escrito é a cura.
+> 2. Reautorização feita às **11:32**, já sob regime de produção, emitindo um refresh token que não carrega o prazo de 7 dias do modo Testing.
+> 3. `test-auth.mjs` passa em GA4 e GSC.
+>
+> Reautorizar após publicar não é opcional: tokens emitidos em Testing mantêm o prazo curto mesmo depois de o app ir para produção. O token anterior era de 29-30/07 e teria morrido por volta de 05/08, antes do cron de 01/09.
+>
+> **Confirmação final**: o cron de 01/09 rodar sozinho. Se falhar, a causa é outra e vale investigar revogação em myaccount.google.com/permissions.
 
 ## Troubleshooting
 
 | Erro | Causa | Solução |
 |------|-------|---------|
-| `invalid_grant` | **Causa provável: consent screen em modo Testing** — nesse modo o Google expira refresh tokens em **7 dias**, não em 6 meses | Curto prazo: `node scripts/analytics/oauth-login.mjs` → autorizar no browser. Definitivo: publicar o app (seção "`invalid_grant` recorrente" acima) |
+| `invalid_grant` | **Confirmado: consent screen em modo Testing** expira refresh tokens em **7 dias**. Resolvido em 2026-07-30 com a publicação do app | Se voltar: `node --env-file=.env.local scripts/analytics/oauth-login.mjs`. Conferir antes se o Publishing status continua "Em produção" |
 | Cron `berkahn-performance-mensal` sem output visível | Falha silenciosa (ex: `invalid_grant`). Desde 2026-07-01 o `generate-report.mjs` grava `~/.claude/scheduled-tasks/berkahn-performance-mensal/last-error.log` com stack trace | Ler o JSON no path acima; corrigir causa; re-rodar `node --env-file=.env.local scripts/analytics/generate-report.mjs` (sucesso apaga o log automaticamente) |
 | `GSC site não encontrado` | SA não tem acesso ao site GSC | GSC → Settings → Users → add SA com permission Restricted |
 | `GA4_PROPERTY_ID missing` | Var ausente em .env.local | Pegar em GA4 Admin → Property Settings (9-10 dígitos) |

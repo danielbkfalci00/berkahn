@@ -132,7 +132,7 @@ A linha de base de CTR de cada página ficou registrada em [[2026-08-calendario-
 - [ ] Conferir `/admin/documentacoes` logado: lista, filtro, viewer e gráficos dentro do iframe
 - [ ] Desbloquear `Google-Extended` em `app/robots.ts:13` e corrigir o comentário enganoso
 - [ ] Corrigir a descrição do robots.txt em [[seo-aeo-strategy]], que não corresponde ao arquivo real
-- [ ] Publicar o OAuth consent screen no Google Cloud Console (passo a passo em [[google-apis-setup]]) — trava o cron de 01/09
+- [x] ~~Publicar o OAuth consent screen~~ — feito em 2026-07-30. App em produção, refresh voltou a funcionar e token reemitido sob o novo regime. Detalhes em [[google-apis-setup]]
 - [ ] Registrar custom dimensions no GA4 (`cta_location`, `channel`, `segment`) e marcar `generate_lead`/`contact_click` como Key Events — **não são retroativas**, precisam existir antes da Fase 3
 - [ ] Conferir visualmente `/admin/analytics` (badge, tooltip do Comparar, ponto vazado) — não verificável sem login
 - [ ] Resolver contradição de preço em `custo-steel-frame-m2-2026`: `answer_summary` diz R$ 2.500-4.500/m², `seo_description` diz R$ 3.015-6.091
