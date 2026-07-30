@@ -8,7 +8,7 @@ tags:
 ai_summary: Hub do projeto Blog — posts semanais em /atualidades. 38 publicados, 34 indexados (89%). Pipeline 4 etapas (/brainstorm → /pesquisa → /criacao → /artigo). Funil reposto em 2026-07-29 com 44 pautas até dezembro; meta tags e answer_summary saneados em 2026-07-30. Bloqueio atual é thin content — 9 artigos com menos de 55 palavras, 24% do blog — mais a canibalização entre as duas páginas de custo. Lido por /standup, /wrap-up, /artigo.
 status: active
 projeto: blog
-kpi_publicados: 38
+kpi_publicados: 39
 kpi_meta_publicados_semanal: 1
 kpi_indexados_google: 34
 kpi_meta_indexacao_total: 38
@@ -130,12 +130,14 @@ O `berkahn-reforma-...` é o de frontmatter corrompido (`title: **O que efetivam
 | Arquivo | Palavras | Tema | Demanda |
 |---|---:|---|---|
 | `hold-downs-ancoragens` | **3.368** | Caminho de cargas, hold-downs, ancoragem | Técnica: baixa por si só |
-| `mitos-verdades-steel-frame` | **3.197** | "Enferruja", "pega fogo", "é frágil", "é barulhento" | **Objeção: alta.** Cluster que o diagnóstico aponta como não atendido |
+| ~~`mitos-verdades-steel-frame`~~ | 3.197 | ✅ **Publicado em 2026-07-30** | — |
 | `orcamento-steel-frame` | **2.961** | Custo com 8 estudos acadêmicos, CUB/SP e SINAPI | **Custo: 78,5% das impressões** |
 
-São **9.526 palavras prontas** enquanto o blog carregava 9 artigos de menos de 55 palavras publicados. As URLs retornam soft 404 (ver abaixo).
+Eram **9.526 palavras prontas** enquanto o blog carregava 9 artigos de menos de 55 palavras publicados. As URLs retornam soft 404 (ver abaixo).
 
-`mitos-verdades-steel-frame` e `orcamento-steel-frame` valem publicação antes de qualquer pauta nova. **Ressalva**: `orcamento-steel-frame` cita dados de 2025 e entra no cluster de custo, que já tem canibalização — precisa de revisão de números e de decisão sobre canonical antes de ir ao ar.
+✅ **`mitos-verdades-steel-frame` foi publicado em 2026-07-30** (2.496 palavras no corpo, 4 componentes, capa gerada do banco de imagens). Restam dois.
+
+`orcamento-steel-frame` vale publicação, mas **não como está**. **Ressalva**: `orcamento-steel-frame` cita dados de 2025 e entra no cluster de custo, que já tem canibalização — precisa de revisão de números e de decisão sobre canonical antes de ir ao ar.
 
 ### Bug: soft 404 em todo `/atualidades/`
 
