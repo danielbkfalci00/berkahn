@@ -8,7 +8,7 @@ tags:
   - status/active
   - source/manual
   - domain/lsf
-ai_summary: "Mapa dos 9 artigos publicados com menos de 55 palavras (24% do acervo). Todos receberam noindex e saíram do sitemap em 2026-07-30, sem sair do ar. Traz, por artigo, o que existe hoje, quanto vale, quantos links internos recebe e o plano de republicação, em ordem de prioridade."
+ai_summary: "Mapa dos 9 artigos publicados com menos de 55 palavras (24% do acervo), resolvido em 2026-07-30: 4 sem substituto ficaram no ar com noindex e entram no backlog de reescrita; 5 com substituto foram consolidadas por 301, com destinos verificados como indexados antes de apontar. 14 links internos reescritos para o destino final."
 status: active
 subtipo: mapa-thin-content
 periodo_analise: "2026-04-29 a 2026-07-27 (90 dias)"
@@ -20,7 +20,10 @@ Diagnóstico em [[2026-07-diagnostico-editorial]]. Calendário em [[2026-08-cale
 
 ## O que foi feito em 2026-07-30
 
-Os 9 artigos abaixo receberam `robots: noindex, follow` e saíram do sitemap. **Nada saiu do ar**: as URLs continuam acessíveis e todos os links internos seguem funcionando.
+Os 9 artigos foram divididos conforme já existisse ou não outro artigo cobrindo o tema:
+
+- **4 sem substituto** receberam `robots: noindex, follow` e saíram do sitemap. **Não saíram do ar**: as URLs continuam acessíveis e os links internos seguem funcionando.
+- **5 com substituto** foram consolidadas por **301** para o artigo bom (ver seção "5 a 9" adiante).
 
 A escolha de `noindex` em vez de 404 ou 301 não foi conservadorismo. Três desses artigos são **hubs de link interno** — `guia-definitivo` recebe 14 links de outros artigos, `isolamento-termico` recebe 10 e `passo-passo` recebe 8. Removê-los quebraria 32 links dentro de artigos bons. E `follow: true` garante que o Google continue percorrendo esses links, então a autoridade não fica presa numa página morta.
 
@@ -64,13 +67,24 @@ A ordem combina demanda latente (impressões), valor estrutural (links internos 
 
 Já agendado como refresh em **dezembro** no calendário. Republicar como "Tendências 2027".
 
-### 5 a 9 — avaliar consolidação antes de reescrever
+### 5 a 9 — consolidadas por 301 em 2026-07-30 ✅
 
-`financiamento-construcao-steel-frame`, `certificacoes-steel-frame`, `5-vantagens-decisivas`, `sustentabilidade-construcao-industrializada` e `steel-frame-futuro-construcao` **já têm artigo melhor no ar cobrindo o mesmo tema**. Reescrever os cinco criaria canibalização nova, que é exatamente o problema que estamos resolvendo nas páginas de custo.
+As cinco já tinham artigo melhor no ar cobrindo o mesmo tema. Reescrevê-las criaria canibalização nova, que é exatamente o problema que estamos resolvendo nas páginas de custo. Foram consolidadas com 301 (declarados em `next.config.ts`), e **saem do backlog de republicação**.
 
-Para esses, o movimento mais provável é **301 para o artigo bom**, não reescrita. Fica como decisão a tomar quando chegar a vez de cada um — enquanto estiverem em `noindex`, não custam nada.
+| De | Para | Impressões consolidadas |
+|---|---|---:|
+| `financiamento-construcao-steel-frame` | `financiar-construcao-light-steel-frame` | 480 |
+| `certificacoes-steel-frame` | `normas-light-steel-frame-brasil` | 149 |
+| `steel-frame-futuro-construcao` | `construcao-industrializada-casa-montada-como-carro` | 74 |
+| `5-vantagens-decisivas-light-steel-frame` | `steel-frame-vs-alvenaria` | 51 |
+| `sustentabilidade-construcao-industrializada` | `...-economia-circular` | 23 |
 
-`steel-frame-futuro-construcao` é o caso mais simples: 14 palavras, **zero links internos** apontando para ele. Não há nada a preservar.
+**Todos os destinos foram verificados pela URL Inspection API antes de apontar**, e dois mudaram por causa disso:
+
+- `5-vantagens-decisivas` iria para `steel-frame-vantagens-desvantagens`, que está **"Crawled, currently not indexed"** desde 13/04. Redirecionar para página fora do índice não consolidaria nada. Foi para `steel-frame-vs-alvenaria`.
+- `steel-frame-futuro-construcao` iria para `guia-definitivo`, que está em `noindex` na mesma mudança. Foi para o artigo de construção industrializada, que cobre o mesmo ângulo de transformação do setor.
+
+**14 links internos** que apontavam para as URLs antigas foram reescritos para o destino final, no Supabase e no vault. Um redirect interno funciona, mas adiciona um salto e dilui sinal. O texto da âncora também foi trocado — manter a âncora antiga apontando para outro artigo produziria link enganoso.
 
 ## Como medir se funcionou
 

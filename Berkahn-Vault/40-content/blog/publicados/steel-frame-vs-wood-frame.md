@@ -125,7 +125,7 @@ O Wood Frame pode ser a escolha quando:
 
 - [Steel Frame vs Alvenaria: O Comparativo Definitivo](/atualidades/steel-frame-vs-alvenaria)
 - [Steel Frame: Vantagens e Desvantagens Reais](/atualidades/steel-frame-vantagens-desvantagens)
-- [5 Vantagens Decisivas do Light Steel Frame](/atualidades/5-vantagens-decisivas-light-steel-frame)
+- [Steel Frame vs Alvenaria: o comparativo definitivo](/atualidades/steel-frame-vs-alvenaria)
 ---
 
 > [!info] Importado da produção em 2026-07-29
