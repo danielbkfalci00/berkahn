@@ -6,7 +6,7 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "*",
         allow: "/",
-        disallow: ["/admin/", "/orcamento/pdf", "/apresentacao-executiva/", "/etapas-da-obra/", "/institucional/"],
+        disallow: ["/admin/", "/apresentacao-executiva/", "/etapas-da-obra/", "/institucional/"],
       },
       {
         // Crawlers de treino. Bloqueados por escolha editorial, não por

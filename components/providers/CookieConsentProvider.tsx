@@ -23,10 +23,7 @@ type ConsentLevel = "all" | "necessary" | null;
 // solto `/orcamento` porque quebraria a página LSF pública.
 function ehRendererPdf(pathname: string | null): boolean {
   if (!pathname) return false;
-  return (
-    pathname === "/orcamento/pdf" ||
-    pathname.startsWith("/orcamento/estimativa/")
-  );
+  return pathname.startsWith("/orcamento/estimativa/");
 }
 
 interface CookieConsentContextType {
