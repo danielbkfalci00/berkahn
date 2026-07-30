@@ -432,7 +432,7 @@ h2[id], h3[id] { scroll-margin-top: 24px; }
     <div>Atualizado em 29/07/2026</div>
   </div>
 </div>
-  <h1>Diagnóstico editorial: o que funciona, o que não funciona e por quê</h1><nav class="doc-toc"><div class="doc-toc-title">Neste documento</div><ol><li><a href="#o-erro-de-medicao-que-contaminava-tudo">O erro de medição que contaminava tudo</a></li><li><a href="#distribuicao-real-por-intencao">Distribuição real por intenção</a></li><li><a href="#o-maior-desperdicio-canibalizacao-medida-nao-suposta">O maior desperdício: canibalização medida, não suposta</a></li><li><a href="#demanda-medida-zero-clique">Demanda medida, zero clique</a></li><li><a href="#onde-o-acervo-perde">Onde o acervo perde</a></li><li><a href="#o-que-a-concorrencia-faz-melhor">O que a concorrência faz melhor</a></li><li><a href="#a-queda-do-trafego-de-ia-e-aritmetica-nao-problema">A queda do tráfego de IA é aritmética, não problema</a></li><li><a href="#implicacoes-para-o-calendario">Implicações para o calendário</a></li><li><a href="#ressalvas-de-metodo">Ressalvas de método</a></li></ol></nav>
+  <h1>Diagnóstico editorial: o que funciona, o que não funciona e por quê</h1><nav class="doc-toc"><div class="doc-toc-title">Neste documento</div><ol><li><a href="#o-erro-de-medicao-que-contaminava-tudo">O erro de medição que contaminava tudo</a></li><li><a href="#distribuicao-real-por-intencao">Distribuição real por intenção</a></li><li><a href="#o-maior-desperdicio-canibalizacao-medida-nao-suposta">O maior desperdício: canibalização medida, não suposta</a></li><li><a href="#demanda-medida-zero-clique">Demanda medida, zero clique</a></li><li><a href="#onde-o-acervo-perde">Onde o acervo perde</a></li><li><a href="#o-que-a-concorrencia-faz-melhor">O que a concorrência faz melhor</a></li><li><a href="#9-dos-38-artigos-publicados-sao-carcacas">9 dos 38 artigos publicados são carcaças</a></li><li><a href="#a-queda-do-trafego-de-ia-e-aritmetica-nao-problema">A queda do tráfego de IA é aritmética, não problema</a></li><li><a href="#implicacoes-para-o-calendario">Implicações para o calendário</a></li><li><a href="#ressalvas-de-metodo">Ressalvas de método</a></li></ol></nav>
 <p>Este documento sustenta o [[2026-08-calendario-editorial]]. Ele existe porque toda análise anterior de SEO da Berkahn foi feita sobre uma amostra truncada, e a amostra completa muda a conclusão.</p>
 <h2 id="o-erro-de-medicao-que-contaminava-tudo">O erro de medição que contaminava tudo</h2>
 <p>O pipeline de analytics pede ao Google Search Console as <strong>20 queries de maior clique por mês</strong> (<code>fetch-gsc.mjs:34</code>, <code>rowLimit: 20</code>). Todo relatório de fevereiro a julho enxergou só isso.</p>
@@ -777,6 +777,74 @@ Para Sudeste padrão médio, uma diz R$ 4.395 e a outra apresenta faixa de R$ 4.
 <li><strong>O líder de preço ganha sem escrever mais.</strong> 2.800 palavras contra 3.200-3.800 da Berkahn. Ganha por dado mais fresco, autor nomeado e uma seção de <strong>desvantagens</strong> que a Berkahn não tem em nenhuma página de preço.</li>
 <li><strong>A fonte que todos citam tem 850 palavras.</strong> Um índice mensal de custo, sem metodologia declarada, rankeia acima da Berkahn porque é a série temporal que todo mundo referencia.</li>
 </ol>
+<h2 id="9-dos-38-artigos-publicados-sao-carcacas">9 dos 38 artigos publicados são carcaças</h2>
+<p>Achado de 2026-07-30, ao tentar preencher as meta tags faltantes. A correlação é perfeita e não tem zona cinzenta:</p>
+<p><strong>Os 9 artigos sem <code>meta_title</code> são exatamente os 9 artigos com menos de 55 palavras.</strong> O décimo colocado tem 718. A mediana do acervo é 1.767.</p>
+<table>
+<thead>
+<tr>
+<th>Slug</th>
+<th style="text-align:right">Palavras</th>
+<th>Conteúdo real</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tendencias-construcao-modular-2025</code></td>
+<td style="text-align:right"><strong>11</strong></td>
+<td>&quot;O setor de construção industrializada está em constante evolução.&quot;</td>
+</tr>
+<tr>
+<td><code>steel-frame-futuro-construcao</code></td>
+<td style="text-align:right"><strong>14</strong></td>
+<td>&quot;O Light Steel Frame está transformando a forma como construímos.&quot;</td>
+</tr>
+<tr>
+<td><code>5-vantagens-decisivas-light-steel-frame</code></td>
+<td style="text-align:right">38</td>
+<td>&quot;O Light Steel Frame oferece benefícios inigualáveis.&quot;</td>
+</tr>
+<tr>
+<td><code>isolamento-termico-acustico-steel-frame</code></td>
+<td style="text-align:right">40</td>
+<td>&quot;O Steel Frame oferece performance superior em isolamento.&quot;</td>
+</tr>
+<tr>
+<td><code>passo-passo-construcao-steel-frame</code></td>
+<td style="text-align:right">43</td>
+<td>&quot;Entenda cada etapa do processo construtivo em Steel Frame.&quot;</td>
+</tr>
+<tr>
+<td><code>sustentabilidade-construcao-industrializada</code></td>
+<td style="text-align:right">45</td>
+<td>&quot;O Steel Frame é líder em sustentabilidade na construção civil.&quot;</td>
+</tr>
+<tr>
+<td><code>financiamento-construcao-steel-frame</code></td>
+<td style="text-align:right">45</td>
+<td>&quot;Conheça as opções de financiamento para sua construção.&quot;</td>
+</tr>
+<tr>
+<td><code>certificacoes-steel-frame</code></td>
+<td style="text-align:right">49</td>
+<td>&quot;Guia completo sobre as certificações e normas.&quot;</td>
+</tr>
+<tr>
+<td><code>guia-definitivo-steel-frame-brasil</code></td>
+<td style="text-align:right">53</td>
+<td>&quot;O guia mais completo sobre Light Steel Frame.&quot;</td>
+</tr>
+</tbody>
+</table>
+<p>Contagem feita sobre o corpo <strong>sem</strong> o bloco &quot;Leia também&quot;, que em vários casos é maior que o artigo.</p>
+<p>Isso reenquadra três coisas que o diagnóstico anterior tratava como fenômenos separados:</p>
+<ol>
+<li><strong>Não é &quot;falta meta tag&quot;, é falta artigo.</strong> Escrever <code>meta_title</code> para essas páginas seria contraprodutivo: geraria mais impressão para páginas que decepcionam, e pogo-sticking é sinal negativo.</li>
+<li><strong>Explica os zumbis.</strong> <code>5-vantagens-decisivas</code> com 62 impressões na posição <strong>39,5</strong> e zero clique não é mistério de ranqueamento: é uma página de 38 palavras. O mesmo vale para <code>sustentabilidade-construcao-industrializada</code> (zero impressão em 6 meses) e para o CTR de 0,76% do <code>guia-definitivo</code>.</li>
+<li><strong>É 24% do blog.</strong> Thin content nessa proporção é risco de qualidade para o domínio inteiro, não só para as páginas afetadas.</li>
+</ol>
+<p>Todas as 9 são do lote de 2026-05-21 e <strong>três delas já têm substituto melhor no ar</strong>: <code>financiamento-construcao-steel-frame</code> (45 palavras) contra <code>financiar-construcao-light-steel-frame</code> (2.169); <code>sustentabilidade-construcao-industrializada</code> (45) contra <code>sustentabilidade-construcao-civil-economia-circular</code>; e <code>certificacoes-steel-frame</code> (49) contra <code>normas-light-steel-frame-brasil</code>.</p>
+<p><strong>Nenhuma ação foi tomada sobre elas.</strong> Despublicar ou aplicar <code>noindex</code> a 24% do blog é decisão de negócio, não efeito colateral de uma sessão de saneamento. A recomendação está no Bloco 6 de [[2026-08-calendario-editorial]].</p>
 <h2 id="a-queda-do-trafego-de-ia-e-aritmetica-nao-problema">A queda do tráfego de IA é aritmética, não problema</h2>
 <p>O relatório de julho registra o tráfego de assistentes de IA caindo de 14,0% (maio) para 4,6%. Isso levou à leitura de que &quot;a estratégia AEO parou de funcionar&quot;. <strong>A leitura está errada.</strong></p>
 <p>Decompondo maio → julho: se o ChatGPT tivesse ficado parado nas 120 sessões de maio, a fatia cairia sozinha para 6,0%, só porque o tráfego total mais que dobrou. <strong>Cerca de 8 dos 10 pontos percentuais de queda são efeito de denominador.</strong> As ~40 sessões restantes (120 → ~80) ficam dentro da variação normal de um canal desse tamanho, e maio foi um pico isolado numa série 39 → 120 → 101 → 80.</p>

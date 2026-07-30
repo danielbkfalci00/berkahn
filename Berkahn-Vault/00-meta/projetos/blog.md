@@ -1,19 +1,20 @@
 ---
 tipo: projeto
 criado: 2026-05-22
-atualizado: 2026-07-29
+atualizado: 2026-07-30
 tags:
   - project/blog
   - status/active
-ai_summary: Hub do projeto Blog — posts semanais em /atualidades. 38 publicados, 34 indexados (89%). Pipeline 4 etapas (/brainstorm → /pesquisa → /criacao → /artigo). Funil reposto em 2026-07-29 com 44 pautas até dezembro. Bloqueio atual é canibalização entre as duas páginas de custo e CTR baixo em 8 páginas, não mais indexação nem pipeline. Lido por /standup, /wrap-up, /artigo.
+ai_summary: Hub do projeto Blog — posts semanais em /atualidades. 38 publicados, 34 indexados (89%). Pipeline 4 etapas (/brainstorm → /pesquisa → /criacao → /artigo). Funil reposto em 2026-07-29 com 44 pautas até dezembro; meta tags e answer_summary saneados em 2026-07-30. Bloqueio atual é thin content — 9 artigos com menos de 55 palavras, 24% do blog — mais a canibalização entre as duas páginas de custo. Lido por /standup, /wrap-up, /artigo.
 status: active
 projeto: blog
 kpi_publicados: 38
 kpi_meta_publicados_semanal: 1
 kpi_indexados_google: 34
 kpi_meta_indexacao_total: 38
+kpi_posts_carcaca: 9
 kpi_posts_sem_meta: 9
-kpi_posts_sem_answer_summary: 4
+kpi_posts_sem_answer_summary: 0
 kpi_ga4_users_mes: 1179
 kpi_ga4_sessions_mes: 1498
 kpi_ga4_pageviews_mes: 1860
@@ -53,7 +54,7 @@ Dados verificados em 2026-07-29 contra Supabase e GSC.
 
 **O gargalo mudou de lugar**: o problema agora é o vault divergir da produção, não a indexação. Último post real é `anatomia-parede-steel-frame` (2026-07-20, 9 dias atrás) — a cadência está quase em dia, mas **esse post não existe no vault**. Ler `40-content/blog/publicados/` daria a resposta errada de que o último post foi 08/07.
 
-`drafts/`, `ideias/` e `pesquisa/` estão os três vazios desde 21/05 — não há nada no funil para a próxima semana, ainda que a publicação esteja acontecendo.
+`ideias/` foi reposta em 2026-07-29 com 44 pautas até dezembro (`ideas-2026-{08..12}.md`). `drafts/` e `pesquisa/` seguem vazias: enchem conforme o ciclo semanal roda.
 
 Tráfego seguiu crescendo: 1.179 users em junho, 1.407 nos primeiros 26 dias de julho. Mas o crescimento vem de um ativo só (`custo-steel-frame-m2-2026` = 52% dos pageviews), não da cadência.
 
@@ -64,8 +65,8 @@ Tráfego seguiu crescendo: 1.179 users em junho, 1.407 nos primeiros 26 dias de 
 - [ ] **Canibalização de custo (P0, novo)**: `quanto-custa-construir-steel-frame-precos-m2-2026` é suprimida pela página-mãe em **todas** as queries de preço. 17.759 impressões e CTR 1,15% em 90 dias. Ver [[2026-07-diagnostico-editorial]]
 - [x] ~~**CTR de 8 páginas com impressão alta (P0)**~~ — meta tags reescritas em produção em 2026-07-30. Linha de base registrada em [[2026-08-calendario-editorial]]; o relatório do cron de 01/09 mede o efeito
 - [x] ~~**Contradição de preço** em `custo-steel-frame-m2-2026`~~ — resolvida em 2026-07-30. Faixa canônica: **R$ 3.015 a R$ 6.091/m²** (Sudeste)
-- [ ] **9 artigos sem meta_title/meta_description** (P0): lista verificada no Supabase. Ver [[seo-aeo]]
-- [ ] **4 artigos sem answer_summary** (P1): bloqueia AEO. `financiar-construcao-light-steel-frame`, `steel-frame-no-mundo`, `construir-hospital-em-operacao`, `reforma-tributaria-construcao-industrializada`
+- [x] ~~**4 artigos sem answer_summary** (P1)~~ — preenchidos em 2026-07-30, 98 a 102 palavras cada, com dado quantitativo do próprio corpo
+- [ ] **9 artigos são carcaças (P0, novo)**: têm menos de 55 palavras de conteúdo, contra mediana de 1.767 do acervo. São 24% do blog. São exatamente os mesmos 9 que estavam "sem meta tag" — o problema nunca foi a meta tag. Decisão em [[2026-08-calendario-editorial]], Bloco 6
 - [ ] **4 artigos não indexados** (P1): ver lista em [[seo-aeo]]
 - [ ] **`quanto-custa-construir-steel-frame-precos-m2-2026` com `published_at` nulo** (P2): quebra ordenação e a timeline do dashboard
 
@@ -83,8 +84,9 @@ Tráfego seguiu crescendo: 1.179 users em junho, 1.407 nos primeiros 26 dias de 
 | Indexados Google | 34/38 (89%) | 38 | -4 |
 | Dias desde o último post | 9 | 7 | +2 |
 | Slugs divergentes vault ↔ produção | 12 (6+6) | 0 | ⚠️ P0 |
-| Posts sem meta tags | 9 | 0 | +9 ⚠️ P0 |
-| Posts sem answer_summary | 4 | 0 | +4 ⚠️ P1 |
+| Posts carcaça (<55 palavras) | 9 | 0 | +9 ⚠️ P0 |
+| Posts sem answer_summary | 0 | 0 | ✅ |
+| Páginas de CTR baixo corrigidas | 9 | — | ✅ 2026-07-30 |
 | Artigos no funil (drafts+ideias+pesquisa) | 44 planejados | ≥2 | ✅ |
 | CTR de `quanto-custa-construir-...` | 1,15% | >3% | ⚠️ P0 |
 | Concentração de cliques no artigo #1 | 78% | <55% | ⚠️ |
@@ -114,9 +116,11 @@ Os 4 abaixo foram reconstruídos a partir do Supabase e agora estão em `publica
 
 Não dá para resolver isso por dedução: cada um pode ter sido despublicado de propósito, renomeado (vários têm nome próximo de slugs que estão no ar, ex. `normas-lsf` vs `normas-light-steel-frame-brasil`), ou nunca ter chegado a publicar. Precisam ser classificados um a um antes de arquivar ou republicar.
 
-### Inconsistência de dado no maior ativo
+### Faixa de preço canônica (resolvido em 2026-07-30)
 
-`custo-steel-frame-m2-2026` tem `answer_summary` dizendo **R$ 2.500 a R$ 4.500/m²** e `seo_description` dizendo **R$ 3.015 a R$ 6.091**. A página que responde por 78% dos cliques do Google se contradiz justamente sobre preço, que é a intenção da query. Definir qual faixa está certa e alinhar os dois campos.
+`custo-steel-frame-m2-2026` contradizia a si mesma sobre preço. O corpo, os componentes e a `meta_description` diziam **R$ 3.015 a R$ 6.091/m²** (Sudeste); só o `answer_summary` dizia R$ 2.500 a R$ 4.500. Foi ele o corrigido.
+
+**Toda pauta que citar preço usa R$ 3.015 a R$ 6.091/m² e nenhuma outra faixa.**
 
 > KPIs FLAT no frontmatter (`kpi_*`). Agregados por [[kpis.base]].
 

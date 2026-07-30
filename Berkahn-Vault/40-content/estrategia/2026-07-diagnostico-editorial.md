@@ -130,6 +130,36 @@ Levantamento de SERP em 8 queries que a Berkahn já disputa:
 6. **O líder de preço ganha sem escrever mais.** 2.800 palavras contra 3.200-3.800 da Berkahn. Ganha por dado mais fresco, autor nomeado e uma seção de **desvantagens** que a Berkahn não tem em nenhuma página de preço.
 7. **A fonte que todos citam tem 850 palavras.** Um índice mensal de custo, sem metodologia declarada, rankeia acima da Berkahn porque é a série temporal que todo mundo referencia.
 
+## 9 dos 38 artigos publicados são carcaças
+
+Achado de 2026-07-30, ao tentar preencher as meta tags faltantes. A correlação é perfeita e não tem zona cinzenta:
+
+**Os 9 artigos sem `meta_title` são exatamente os 9 artigos com menos de 55 palavras.** O décimo colocado tem 718. A mediana do acervo é 1.767.
+
+| Slug | Palavras | Conteúdo real |
+|---|---:|---|
+| `tendencias-construcao-modular-2025` | **11** | "O setor de construção industrializada está em constante evolução." |
+| `steel-frame-futuro-construcao` | **14** | "O Light Steel Frame está transformando a forma como construímos." |
+| `5-vantagens-decisivas-light-steel-frame` | 38 | "O Light Steel Frame oferece benefícios inigualáveis." |
+| `isolamento-termico-acustico-steel-frame` | 40 | "O Steel Frame oferece performance superior em isolamento." |
+| `passo-passo-construcao-steel-frame` | 43 | "Entenda cada etapa do processo construtivo em Steel Frame." |
+| `sustentabilidade-construcao-industrializada` | 45 | "O Steel Frame é líder em sustentabilidade na construção civil." |
+| `financiamento-construcao-steel-frame` | 45 | "Conheça as opções de financiamento para sua construção." |
+| `certificacoes-steel-frame` | 49 | "Guia completo sobre as certificações e normas." |
+| `guia-definitivo-steel-frame-brasil` | 53 | "O guia mais completo sobre Light Steel Frame." |
+
+Contagem feita sobre o corpo **sem** o bloco "Leia também", que em vários casos é maior que o artigo.
+
+Isso reenquadra três coisas que o diagnóstico anterior tratava como fenômenos separados:
+
+1. **Não é "falta meta tag", é falta artigo.** Escrever `meta_title` para essas páginas seria contraprodutivo: geraria mais impressão para páginas que decepcionam, e pogo-sticking é sinal negativo.
+2. **Explica os zumbis.** `5-vantagens-decisivas` com 62 impressões na posição **39,5** e zero clique não é mistério de ranqueamento: é uma página de 38 palavras. O mesmo vale para `sustentabilidade-construcao-industrializada` (zero impressão em 6 meses) e para o CTR de 0,76% do `guia-definitivo`.
+3. **É 24% do blog.** Thin content nessa proporção é risco de qualidade para o domínio inteiro, não só para as páginas afetadas.
+
+Todas as 9 são do lote de 2026-05-21 e **três delas já têm substituto melhor no ar**: `financiamento-construcao-steel-frame` (45 palavras) contra `financiar-construcao-light-steel-frame` (2.169); `sustentabilidade-construcao-industrializada` (45) contra `sustentabilidade-construcao-civil-economia-circular`; e `certificacoes-steel-frame` (49) contra `normas-light-steel-frame-brasil`.
+
+**Nenhuma ação foi tomada sobre elas.** Despublicar ou aplicar `noindex` a 24% do blog é decisão de negócio, não efeito colateral de uma sessão de saneamento. A recomendação está no Bloco 6 de [[2026-08-calendario-editorial]].
+
 ## A queda do tráfego de IA é aritmética, não problema
 
 O relatório de julho registra o tráfego de assistentes de IA caindo de 14,0% (maio) para 4,6%. Isso levou à leitura de que "a estratégia AEO parou de funcionar". **A leitura está errada.**

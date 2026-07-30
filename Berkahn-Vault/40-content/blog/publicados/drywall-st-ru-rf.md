@@ -12,6 +12,7 @@ projeto: blog
 slug: drywall-st-ru-rf
 data_publicacao: 2025-02-20
 title: "Drywall ST, RU e RF: qual usar em cada ambiente da sua obra"
+seo_title: "Drywall ST, RU ou RF: qual placa usar em cada cômodo"
 description: Guia técnico completo sobre os tipos de drywall ST, RU e RF. Descubra qual placa usar em cada cômodo, dados de desempenho, preços e erros que comprometem sua obra.
 seo_description: "Placa branca, verde ou rosa: qual usar em quarto, banheiro e área de serviço. Diferença entre ST, RU e RF, preços e os 5 erros mais comuns de especificação."
 palavras_chave:
