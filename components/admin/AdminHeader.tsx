@@ -13,6 +13,7 @@ const pageTitles: Record<string, string> = {
   "/admin/propostas": "Propostas",
   "/admin/propostas/new": "Nova Proposta",
   "/admin/configuracoes": "Configurações",
+  "/admin/documentacoes": "Documentações",
 };
 
 function getPageTitle(pathname: string): string {
@@ -30,6 +31,9 @@ function getPageTitle(pathname: string): string {
   }
   if (pathname.match(/\/admin\/propostas\/[^/]+$/)) {
     return "Editar Proposta";
+  }
+  if (pathname.match(/\/admin\/documentacoes\/[^/]+$/)) {
+    return "Documento";
   }
 
   return "Admin";

@@ -1,12 +1,12 @@
 ---
 tipo: meta
 criado: 2026-05-21
-atualizado: 2026-07-01
+atualizado: 2026-07-29
 tags:
   - project/site
   - project/blog
   - status/active
-ai_summary: "Sprint ativa de marketing/dev Berkahn (semana 2026-05-19 a 2026-05-23). Projeto de reorganização do vault concluído (Sprint 1+2+3+P1+P2). Próxima fase: retomar cadência editorial regular (blog/linkedin semanal) + tratar P0 SEO (indexação Google). Atualizado segunda-feira via /standup. Source of truth do estado semanal."
+ai_summary: "Sprint ativa de marketing/dev Berkahn (semana 2026-07-20 a 2026-07-24). Institucional PDF v4 na branch design/institucional-monografia, pendente merge. Analytics: PR #18 merged em 29/07 (mês parcial + 3 bugs de métrica). P0 de indexação ENCERRADO (89%). Fase atual: fechar institucional + publicar OAuth consent screen (trava o cron de 01/09) + instrumentar conversão. Atualizado segunda via /standup. Source of truth do estado semanal."
 status: active
 projetos_em_curso:
   - blog
@@ -16,47 +16,132 @@ projetos_em_curso:
   - apresentacoes
   - materiais
   - pesquisas
-semana_inicio: 2026-05-19
-semana_fim: 2026-05-23
+  - orcamento-automacao
+semana_inicio: 2026-07-27
+semana_fim: 2026-07-31
 ---
 
-# Sprint Ativa — semana de 2026-05-19
+# Sprint Ativa — semana de 2026-07-27
+
+> [!info] Janela rolada à mão em 2026-07-29
+> O frontmatter ainda apontava para a semana de 20-24/07 e alimenta as Bases. O standup de 27/07 **rodou** e foi recuperado do transcript — ver [[2026-07-27]] e a seção sobre os crons abaixo.
 
 > Atualizado segunda-feira via `/standup` (auto seg 9h via scheduled-task). Referenciado em [[CLAUDE]] vault-level e em `vault-manifest.json` (`paths.sprint_doc`). Para detalhes por projeto, abrir o hub correspondente. Validação: `node scripts/vault-validate.mjs` → 0 issues.
 
 ## Objetivo da semana
 
-**Reorganização completa do vault**: 7 hubs first-class + densificação grafo + unificação Docs/ + automação rituais + linter qualidade. ✅ **ENTREGUE TODOS 3 SPRINTS + P1 (95→0 WARNs) + P2 (20 arquivos Docs/ deletados)**. Próxima fase: retomar cadência editorial regular + tratar P0 SEO (indexação Google).
+**Fechar o Documento Institucional PDF** (merge PR #17 v3 + validar geração em prod + distribuir) e **retomar cadência editorial** (blog + LinkedIn semanal). Manter pressão no **P0 SEO** (indexação Google — ação Bruno). Reorganização do vault permanece concluída (3 sprints + P1 + P2).
 
 ## Status por projeto
 
 | Projeto | Status | Bloqueio principal | Próxima ação |
 |---------|--------|--------------------|--------------|
-| [[blog]] | active | 1/35 indexados Google (P0 SEO) | Post da semana via `/brainstorm` |
-| [[linkedin]] | active | Cadência: 1/35 artigos com post | Post LinkedIn da semana |
-| [[site]] | active | Bug SearchAction + Google Sheets SPOF | Validar build, monitorar CWV |
-| [[seo-aeo]] | active | **P0**: Solicitar indexação GSC top 10 | Ações P0 do diagnóstico |
+| [[blog]] | active | Pipeline editorial vazio (drafts/ideias/pesquisa) | Repor funil via `/brainstorm` |
+| [[linkedin]] | active | Cadência: 2 posts vs 38 artigos | Post LinkedIn da semana |
+| [[site]] | active | **PR #17 (institucional v3) pendente merge** + bug SearchAction | Validar `/institucional/pdf` em prod pós-merge |
+| [[seo-aeo]] | active | 9 posts sem meta tags; 4 URLs não indexadas | Backfill meta tags + GSC nas 4 URLs |
 | [[apresentacoes]] | active | Roteiros não versionados (parcial) | Validar 16 slides em live env |
-| [[materiais]] | active | Banco consolidado (160/9 cat.) + 26 imgs c/ marca d'água; capas órfãs a decidir | Preencher `uso_em`; catalogar obras marcadas |
+| [[materiais]] | active | **Institucional PDF v3** aguarda merge/distribuição | Distribuir `berkahn-institucional-v3.pdf`; preencher `usado_em` |
 | [[pesquisas]] | active | 70-knowledge populado (10 atomics) | Inventariar mais conceitos |
+| [[orcamento-automacao]] | published | Smoke test E2E prod pendente (Bruno) | Gerar PDF BRK-2026-0001 (checar pgs/peso) |
 
 ## Bloqueios consolidados (cross-projeto)
 
 ### P0 — Esta semana
-- [ ] **Indexação Google** ([[seo-aeo]]): 6/44 páginas — solicitar indexação manual para top 10 (ação Bruno)
+- [ ] **Merge PR #17** (institucional v3/v4, [[site]] + [[materiais]]): branch `design/institucional-monografia` → `main` + validar `/institucional/pdf` em prod + distribuir o PDF. A branch está 3 commits atrás de `main`; rebasear antes evita conflito
+- [x] **Indexação Google** ([[seo-aeo]]): **encerrado em 2026-07-29** — 34/38 artigos (89%), contra 6/44 em abril. Restam 4 URLs em "Crawled/Discovered - currently not indexed", agora P1
+- [x] ~~**Publicar OAuth consent screen**~~ ✅ 2026-07-30 — app em produção, refresh voltou a funcionar, token reemitido. Ver [[google-apis-setup]]
 - [ ] **Decidir 4 capas órfãs** ([[materiais]]): Reestruturando Concreto, energia_solar, mármore, piscina_arraia
-- [ ] **Smoke test Supabase** (Sprint 2.5): rodar `node scripts/vault-supabase-resync.mjs --check` com `$env:SUPABASE_SERVICE_KEY`
+- [x] ~~**Smoke test Supabase**~~ ✅ 2026-07-30 — rodado, 6 slugs vault-only confirmados
 
 ### P1 — Próximas 2 semanas
-- [ ] **4 erros de frontmatter em `40-content/curadoria/`** (vault health): `status: done` (airos/maria-isabel/rosmari-revisao) e `tipo: reference` (pipeline-arquitetos) inválidos — corrigir valores OU ampliar listas válidas em `scripts/vault-validate.mjs` + taxonomia do CLAUDE.md. Rodar `vault-validate.mjs` até 0 ERRORs. (chip de sessão: `task_abaacde6`)
+- [x] **4 erros de frontmatter em `40-content/curadoria/`** (vault health): corrigidos em 2026-07-02 (PR #11) — `status`/`tipo` inválidos normalizados. `vault-validate.mjs` → 0 issues. Chip `task_abaacde6` fechado.
 - [ ] **Google Sheets SPOF de leads** ([[site]]): backup automático Supabase (Fase 4.4 — opcional)
-- [ ] **9 posts sem meta_title/meta_description** ([[blog]] + [[seo-aeo]]): preencher via admin Supabase
-- [ ] **3 posts sem answer_summary** ([[seo-aeo]]): preencher para AEO
+- [x] ~~**9 posts sem meta_title/meta_description**~~ ✅ 2026-07-30 — eram os 9 artigos com menos de 55 palavras. 5 em 301, 4 em noindex. Ver [[2026-07-thin-content-mapa]]
+- [x] ~~**4 posts sem answer_summary**~~ ✅ 2026-07-30 — preenchidos, 98 a 102 palavras cada
 
 ### P2 — 2-4 semanas
 - [ ] **Fase 4 MCPs** (opcional): HubSpot leads sync · n8n KPIs · Figma tokens
 - [x] **Capas consolidadas** em `Docs/banco-imagens/capas-blog/` (2026-07-01): dedup por hash concluído; par PNG/WEBP `lsf-mundial` mantido de propósito (PNG master + WEBP em produção). Path antigo `Docs/Conteúdo/Capas blog/` não existe mais.
 - [ ] **Migrar slugs ambíguos** ([[blog]]): 2 TODOs no SLUG_MAP do `vault-backfill-articles.mjs`
+
+## Standup 2026-07-20
+
+Nota completa: [[2026-07-20]]. Standup de 07-13 não disparou — base de comparação é 2026-07-06 (~2 semanas). **Delta principal**: novo deliverable **Documento Institucional PDF "O que fazemos"** (9 páginas, v1 PR #14 → v2 rejeitado "muito Claude" → **v3 blueprint suíço-brutalista**, branch `design/institucional-monografia` → PR #17 pendente merge; artefato `Docs/berkahn-institucional-v3.pdf` 6.7MB; infra em `app/institucional/pdf/` + `lib/institucional-data.ts`). Blog: `kpi_publicados` 37 → 38 (`steel-frame-laje-de-concreto`, 07-08). [[article-pipeline]] +3 aprendizados. Bloqueios P0 SEO (indexação GSC, meta tags, answer_summary) e smoke test orçamento arrastados — aguardam Bruno. KPIs externos não coletados nesta execução automática.
+
+## Standup 2026-07-06 (primeiro standup formal)
+
+Primeira execução do `/standup` (ritual criado 2026-05-22, nunca disparado até hoje). Nota completa: [[2026-07-06]]. Deltas desde 2026-07-01/02: P1 curadoria resolvido (PR #11), 20 WARNs de ordem zerados (PR #12), 2 wikilinks corrigidos (PR #10), fotos do globo/DomeGallery renovadas na apresentação executiva (PR #13). Vault 151 notas / 0 issues. Foco da semana: retomar cadência editorial (blog + LinkedIn) + P0 SEO (indexação GSC — ação Bruno). KPIs externos (indexação, leads, publicados) aguardam input do Bruno.
+
+## Saúde dos crons — apurado em 2026-07-29
+
+Os três `scheduled-tasks` estão **enabled e disparando**. O problema nunca foi agendamento.
+
+| Task | Última execução | Resultado |
+|------|-----------------|-----------|
+| `berkahn-standup-semanal` | 2026-07-27 09:46 BRT | Rodou a análise inteira (86 entradas) e a sessão morreu na última chamada — o `Write` de `2026-07-27.md` não teve resultado. **Recuperado do transcript** em 29/07 |
+| `berkahn-wrapup-semanal` | 2026-07-24 17:07 BRT | **"You've hit your weekly limit · resets Jul 25, 9pm"** após 15 entradas. Perdido, não recuperável |
+| `berkahn-performance-mensal` | 2026-07-01 10:23 BRT | `invalid_grant`; recuperado à mão no mesmo dia |
+
+**Diagnóstico**: as falhas têm causas diferentes (limite de uso, morte de sessão, token OAuth), mas o mesmo sintoma — nenhum artefato e nenhum aviso. O `last-error.log` do `performance` só cobre erro lançado pelo script; não cobre sessão que morre nem limite de conta.
+
+**Onde os transcripts ficam**: `~/.claude/projects/C--Users-bruno-Documents-Pessoal-Site-Berkahn/*.jsonl`, um por sessão, com data de modificação batendo com o `lastRunAt`. É onde olhar quando um cron não deixar rastro — e de onde o standup de 27/07 foi recuperado.
+
+## Wins / decisões (2026-07-29)
+
+**PR [#18](https://github.com/danielbkfalci00/berkahn/pull/18) merged, deploy verde nos dois projetos Vercel.**
+
+- **Mês parcial no dashboard**: `/admin/analytics` passa a mostrar o mês corrente com janela cortada no lag do GSC (3 dias) e MoM contra a **mesma contagem de dias** do mês anterior. Badge "Parcial", Comparar desabilitado, ponto vazado no gráfico. Run parcial **não** atualiza os hubs — valores parciais fariam `/standup` narrar queda inexistente. O run do dia 1 sobrescreve automaticamente. Regras em [[analytics-methodology]], operação em `.claude/commands/performance.md`.
+- **Julho/2026 (01-26, parcial)**: 1.407 users (↑43,1%), 1.107 cliques (↑54,4%), CTR 3,32% (↑38,3%), posição 4,2. 26 dias já superaram junho inteiro.
+- **3 bugs de métrica corrigidos**: (1) indexação contava "not indexed" como indexado — inflava em 1 todo mês desde fevereiro e, na negação, suprimia as ações P0 dessas páginas, o que explica os relatórios com "nenhuma ação P0"; (2) meta usava média de 3 meses, produzindo alvo menor que o mês anterior — atingimento de 150-850% sempre, barra sempre verde; base passou a ser o último mês fechado; (3) `generatedDate` em UTC saía um dia à frente após as 21h.
+- **Descoberta que muda a estratégia**: o tráfego virou **98,8% não-branded** (era 100% branded em abril). A meta de chegar a 40% foi superada. A pergunta deixou de ser "como ser descoberto" e passou a ser "como converter quem já chega" — o que conecta com a Fase 3 do plano (não existe CTA no fim dos artigos, e 72% dos pageviews estão lá).
+- **Hubs saneados**: [[blog]] e [[seo-aeo]] carregavam KPIs de abril, alguns internamente contraditórios. Tudo reverificado contra Supabase e GSC. Bloqueio P0 de indexação **encerrado** (14% → 89%).
+- **Vault reconciliado com produção**: 4 artigos no ar sem contraparte no vault foram reconstruídos do Supabase, incluindo `custo-steel-frame-m2-2026` (78% dos cliques do Google), antes não editável pelo fluxo `/artigo`.
+- **Causa raiz do `invalid_grant` identificada** (3ª ocorrência): consent screen provavelmente em modo Testing, onde o refresh token morre em 7 dias. Passo a passo para publicar em [[google-apis-setup]]. **Ação manual pendente do Bruno** — sem isso o cron falha de novo em 01/09.
+- **A branch `design/institucional-monografia` está 3 commits atrás de `main`** (merge-base `a149b47`): faltam `02a7709`, `7597ecd` e `2ef61a2`, que adicionam os artigos `energia-solar-residencial` e `anatomia-parede-steel-frame` mais o post LinkedIn de energia solar. Nada foi deletado e o merge não apaga nada — mas contar arquivos em `publicados/` estando nela dá resultado errado. Vale rebasear antes de mergear.
+
+## Wins / decisões (2026-07-29, sessão 2 — estratégia editorial)
+
+**Seção `/admin/documentacoes` criada e calendário editorial até dezembro fechado.**
+
+- **O pipeline de analytics enxergava 20 queries por mês.** `fetch-gsc.mjs:34` pede `rowLimit: 20`; a API aceita 25.000. Toda análise de SEO de fev a jul foi feita sobre o topo de uma distribuição truncada. O real são **1.270 queries em 90 dias, 1.135 delas com zero clique**. Levantado por `scripts/analytics/adhoc-cauda-longa.mjs` (ad-hoc, não altera o pipeline).
+- **Canibalização deixou de ser suspeita e virou medida**: em **todas** as queries de preço, `quanto-custa-construir-...` aparece 5 a 20 posições abaixo da página-mãe. 17.759 impressões e CTR de 1,15% contra 2,98%. É a maior perda isolada do acervo.
+- **Conteúdo técnico não captura busca**: 139 queries técnicas geraram **3 cliques em 90 dias**. A hipótese de que autoridade técnica traz tráfego está refutada pelo dado, e o calendário foi redesenhado por causa disso.
+- **A queda do tráfego de IA (14% → 4,6%) é aritmética, não problema.** ~8 dos 10 pontos são efeito de denominador: o tráfego total dobrou. Mas existe um erro real e separado — `app/robots.ts:13` bloqueia `Google-Extended` com o comentário "no search/citation value", que é **falso**: não protege de AI Overviews e exclui o site do grounding do Gemini, plataforma que foi de 8,9% para 27,3% de fatia.
+- **Bug do Search Console contamina fev-abr/2026**: o Google super-reportou impressões de 13/05/2025 a 27/04/2026, sem afetar cliques. Só maio-julho é confiável para leitura de CTR.
+- **44 pautas + 44 briefings de LinkedIn** até dezembro, em [[2026-08-calendario-editorial]], com briefing executável em [[2026-08-playbook-pautas]] e base factual em [[2026-07-diagnostico-editorial]]. Serializadas em `ideias/ideas-2026-{08..12}.md` para que `/brainstorm` e `/calendario` enxerguem o funil. **O P0 "pipeline vazio" de [[blog]] está encerrado.**
+- **Seção `/admin/documentacoes`**: tabela `documentos` no Supabase com o HTML inline, servido por `/admin/documentacoes/[slug]/raw` dentro de um iframe. Escolha de arquitetura: a Vercel **não sobe o repositório para a Lambda**, então `fs.readFile` do vault funciona em dev e falha com ENOENT em produção. O cron já escreve no Supabase no mesmo run em que renderiza o HTML, então persistir ali não adiciona superfície nova. A rota fica sob `/admin/` e não sob `/api/` porque o matcher do middleware é `['/', '/admin/:path*']` — em `/api/` ficaria pública.
+- **Dois bugs de plataforma corrigidos de passagem**: `build:static` nunca rodou no Windows (usa sintaxe POSIX de env var, que o cmd.exe não entende) e a detecção de CLI em `render-html.mjs` e `build-doc.mjs` comparava `import.meta.url` com uma string montada à mão, que no Windows nunca casa (`file:///C:/` tem três barras).
+
+## Executado em 2026-07-30 (saneamento em produção)
+
+Bloco 2, 3 e parte do 5 do calendário editorial, aplicados direto no ar.
+
+- **9 páginas com meta tags reescritas** (`adhoc-fix-meta.mjs --apply`). Maiores casos: `quanto-custa-construir-...` saiu de 70 para 50 caracteres (o título de 70 era descartado pelo Google, que exibia o H1 truncado); `financiar-construcao-...` ganhou **"Caixa"** no título, entidade que o 1º colocado da SERP usa e que faltava; `fundacao-steel-frame-vs-alvenaria` ganhou **"radier"**, palavra que está na query e não estava no título; `drywall-st-ru-rf` perdeu o jargão inicial e o "2025" defasado.
+- **Duas suposições do plano foram refutadas na execução**: `normas-light-steel-frame-brasil` **já tinha** NBR 16970 no título e 55 caracteres, então só a descrição mudou; e `custo-steel-frame-m2-2026` foi deliberadamente **não alterada** no título, porque tem o melhor CTR do site (2,98%) e o risco não compensa.
+- **Contradição de preço resolvida sem precisar de decisão**: o corpo do artigo, os componentes JSONB e a `meta_description` já convergiam em **R$ 3.015 a R$ 6.091/m²**. Só o `answer_summary` dizia R$ 2.500-4.500, e era ele o desatualizado — junto com a simulação de 150 m², que dizia R$ 375-675 mil quando o corpo diz R$ 600-780 mil. Isso **destrava as pautas de custo de agosto**.
+- **`Google-Extended` desbloqueado** em `app/robots.ts`, com o comentário corrigido. `ChatGPT-User`, `Claude-User` e `Perplexity-User` ganharam allow explícito em vez de depender do curinga. `GPTBot` e `ClaudeBot` continuam bloqueados **por escolha editorial**, que é diferente de estarem bloqueados por engano.
+- **Vault sincronizado com produção**: 17 arquivos e 19 campos de `seo_title`/`seo_description`/`answer_summary` estavam divergentes do que está no ar, a maioria por deriva anterior a esta sessão. Novo script `adhoc-sync-vault-meta.mjs` faz a direção Supabase → vault, que não existia.
+- **Warn antigo do vault zerado**: `2026-07-09-pdf-institucional/briefing.md` tinha `projetos_relacionados` fora da ordem canônica. Vault em **0 errors, 0 warns**.
+
+A linha de base de CTR de cada página ficou registrada em [[2026-08-calendario-editorial]]. O cron de 01/09 mede o efeito sem intervenção.
+
+### Pendências abertas desta sessão
+
+- [x] ~~**Aplicar migration 008**~~ ✅ 2026-07-30 — aplicada pelo Bruno, 10 documentos semeados
+- [ ] Conferir `/admin/documentacoes` logado: lista, filtro, viewer e gráficos dentro do iframe
+- [x] ~~Desbloquear `Google-Extended`~~ ✅ 2026-07-30 — liberado, verificado no robots.txt de produção
+- [x] ~~Corrigir a descrição do robots.txt em [[seo-aeo-strategy]]~~ ✅ 2026-07-30
+- [x] ~~Publicar o OAuth consent screen~~ — feito em 2026-07-30. App em produção, refresh voltou a funcionar e token reemitido sob o novo regime. Detalhes em [[google-apis-setup]]
+- [x] ~~Registrar custom dimensions no GA4~~ ✅ 2026-07-30 — `cta_location`, `channel` e `segment` criadas com escopo Evento. Falta marcar `generate_lead`/`contact_click` como Evento principal, o que só é possível depois da Fase 3
+- [ ] Conferir visualmente `/admin/analytics` (badge, tooltip do Comparar, ponto vazado) — não verificável sem login
+- [x] ~~Resolver contradição de preço~~ ✅ 2026-07-30 — faixa canônica **R$ 3.015 a R$ 6.091/m²** (Sudeste). Só o `answer_summary` divergia
+- [ ] Classificar os 6 arquivos do vault que não estão em produção (despublicados? renomeados? nunca publicados?) — ver [[blog]]
+- [x] ~~Refazer metas P0/P3 de [[seo-aeo]]~~ ✅ 2026-07-30 — as antigas mediam "existir no Google", fase encerrada. As novas medem concentração, diversificação de intenção e conversão
+- [ ] Fases 3-5 do plano (instrumentação de conversão, CTA no blog, IQS, diagnóstico): `~/.claude/plans/executa-o-sprint-4-whimsical-thimble.md` ⚠️ **fora do vault e fora do git** — 32KB só na máquina local. Se importar, promover para nota do vault
+- [ ] Rodar `/wrap-up` da semana de 27-31/07 na sexta. O de 24/07 foi perdido (limite de uso) e não é recuperável
+- [ ] Avaliar mudar o horário dos crons: `berkahn-wrapup-semanal` roda sexta 17h, encavalado com uso interativo. Rodar de madrugada reduz a chance de bater no limite semanal
+- [ ] Considerar um passo de verificação nos crons de standup/wrap-up que confirme se o arquivo esperado existe ao final, já que uma sessão pode morrer entre a chamada e a escrita
 
 ## Wins / decisões (2026-07-01)
 
@@ -111,9 +196,9 @@ semana_fim: 2026-05-23
 
 | Métrica | Valor atual | Meta semanal | Δ |
 |---------|-------------|--------------|---|
-| Artigos publicados (total) | 32 ativos + 3 arquivados | 36 (sem 22) | -4 |
+| Artigos publicados (total) | 38 ativos + 3 arquivados | 39 (sem 30) | -1 |
 | Posts LinkedIn (total) | 1 | 2 | -1 |
-| Páginas indexadas Google | 6/44 (14%) | 16/44 (36%) | -10 ⚠️ |
+| Páginas indexadas Google | 34/38 (89%) | 38/38 | -4 |
 | Posts sem meta tags | 9 | 5 | +4 ⚠️ |
 | Posts sem answer_summary | 3 | 0 | +3 ⚠️ |
 

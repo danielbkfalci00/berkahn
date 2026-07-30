@@ -32,6 +32,29 @@ function formatDayMonth(iso: string): string {
   return `${d}/${m}`;
 }
 
+/**
+ * Ponto de mês parcial fica oco e tracejado. O ponto NÃO é removido de
+ * propósito: esconder o mês corrente faria a pessoa procurá-lo no gráfico.
+ * Marcá-lo avisa que a queda visual é artefato de janela, não de desempenho.
+ */
+function partialAwareDot(color: string) {
+  return function Dot({ cx, cy, payload }: { cx?: number; cy?: number; payload?: TrendPoint }) {
+    if (cx == null || cy == null) return <g />;
+    if (!payload?.partial) return <circle cx={cx} cy={cy} r={4} fill={color} />;
+    return (
+      <circle
+        cx={cx}
+        cy={cy}
+        r={5}
+        fill="#FFFFFF"
+        stroke={color}
+        strokeWidth={2}
+        strokeDasharray="2 1.5"
+      />
+    );
+  };
+}
+
 function GrowthTooltip({ active, payload, label, events }: GrowthTooltipProps) {
   if (!active || !payload?.length) return null;
 
@@ -156,7 +179,7 @@ export function GrowthChart({ data, events = [] }: GrowthChartProps) {
               name="Usuários (GA4)"
               stroke="#0A0A0A"
               strokeWidth={2}
-              dot={{ fill: "#0A0A0A", r: 4 }}
+              dot={partialAwareDot("#0A0A0A")}
               activeDot={{ r: 6 }}
               isAnimationActive={false}
             />
@@ -167,13 +190,19 @@ export function GrowthChart({ data, events = [] }: GrowthChartProps) {
               name="Cliques (GSC)"
               stroke="#8A8A8A"
               strokeWidth={2}
-              dot={{ fill: "#8A8A8A", r: 4 }}
+              dot={partialAwareDot("#8A8A8A")}
               activeDot={{ r: 6 }}
               isAnimationActive={false}
             />
           </LineChart>
         </ResponsiveContainer>
       </div>
+      {data.some((d) => d.partial) && (
+        <p className="mt-3 text-xs text-amber-700">
+          O último ponto (círculo vazado) é de um mês ainda aberto: cobre menos dias que os
+          anteriores, então a queda é artefato da janela, não do desempenho.
+        </p>
+      )}
     </Card>
   );
 }

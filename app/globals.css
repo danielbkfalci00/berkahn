@@ -561,20 +561,23 @@
     background-color: #000000 !important;
   }
 
-  /* Admin layout: esconde sidebar + header em /admin/analytics print */
-  aside,
-  header.admin-header,
-  [data-admin-sidebar],
-  [data-admin-header] {
+  /* Admin analytics (window.print): esconde chrome e aplica margem de impressão.
+     Escopado em .admin-shell — sem o escopo, `main { padding: 1.5cm }` vaza no
+     page.pdf() do Puppeteer (que também emula print media) e insere um gutter de
+     1.5cm em qualquer PDF com wrapper <main>, incl. /orcamento/estimativa/[id]. */
+  .admin-shell aside,
+  .admin-shell header.admin-header,
+  .admin-shell [data-admin-sidebar],
+  .admin-shell [data-admin-header] {
     display: none !important;
   }
 
   /* Remove o padding-left do main content quando admin sidebar some */
-  .lg\:pl-64 {
+  .admin-shell .lg\:pl-64 {
     padding-left: 0 !important;
   }
 
-  main {
+  .admin-shell main {
     padding: 1.5cm !important;
   }
 }

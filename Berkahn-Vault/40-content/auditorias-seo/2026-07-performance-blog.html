@@ -1,0 +1,1613 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Performance Blog Berkahn — Julho/2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<style>
+:root {
+  --bg: #FFFFFF;
+  --bg-soft: #F4F2EC;
+  --bg-zebra: #FAF8F2;
+  --text: #0A0A0A;
+  --text-soft: #4A4A4A;
+  --text-muted: #8A8A8A;
+  --border: #E5E2D9;
+  --border-strong: #0A0A0A;
+  --accent-up: #1F6F3D;
+  --accent-up-bg: #E8F3EC;
+  --accent-down: #B83A3A;
+  --accent-down-bg: #F8E8E8;
+  --accent-neutral: #6A6A6A;
+  --accent-warn: #8A5A00;
+  --accent-warn-bg: #FDF3E0;
+  --shadow: 0 1px 2px rgba(0,0,0,.04), 0 4px 12px rgba(0,0,0,.04);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { font-size: 16px; }
+
+body {
+  font-family: 'Manrope', system-ui, -apple-system, sans-serif;
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--text);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 56px 48px 96px;
+}
+
+/* Header */
+.header {
+  border-bottom: 1px solid var(--border-strong);
+  padding-bottom: 32px;
+  margin-bottom: 48px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+
+.header-brand {
+  font-weight: 800;
+  font-size: 14px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.header-tagline {
+  font-size: 12px;
+  color: var(--text-muted);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+.header-meta {
+  text-align: right;
+  font-size: 13px;
+  color: var(--text-soft);
+}
+
+.header-meta strong {
+  display: block;
+  color: var(--text);
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+}
+
+h1 {
+  font-size: 44px;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 24px 0 8px;
+}
+
+h2 {
+  font-size: 26px;
+  font-weight: 700;
+  margin: 56px 0 24px;
+  letter-spacing: -0.01em;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+h3 {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 32px 0 16px;
+  letter-spacing: -0.005em;
+  color: var(--text);
+}
+
+p {
+  margin: 12px 0;
+  color: var(--text-soft);
+}
+
+ul, ol {
+  margin: 12px 0 12px 24px;
+}
+
+li {
+  margin: 6px 0;
+  color: var(--text-soft);
+}
+
+li::marker {
+  color: var(--text-muted);
+}
+
+a {
+  color: var(--text);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+code {
+  font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.85em;
+  background: var(--bg-soft);
+  padding: 2px 6px;
+  border-radius: 3px;
+  color: var(--text);
+}
+
+strong { font-weight: 600; color: var(--text); }
+
+/* Hero summary cards */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin: 24px 0 32px;
+}
+
+.kpi-card {
+  background: var(--bg-soft);
+  padding: 20px 22px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+}
+
+.kpi-card-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.kpi-card-value {
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+
+.kpi-card-delta {
+  display: inline-block;
+  margin-top: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 3px 9px;
+  border-radius: 999px;
+  letter-spacing: -0.005em;
+}
+
+.delta-up   { background: var(--accent-up-bg);   color: var(--accent-up);   }
+.delta-down { background: var(--accent-down-bg); color: var(--accent-down); }
+.delta-flat { background: var(--bg-zebra);       color: var(--accent-neutral); }
+
+/* Tables */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0 32px;
+  font-size: 14px;
+  background: var(--bg);
+}
+
+thead th {
+  text-align: left;
+  font-weight: 600;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  padding: 10px 14px;
+  border-bottom: 2px solid var(--border-strong);
+  background: var(--bg);
+}
+
+thead th:not(:first-child) { text-align: right; }
+
+tbody td {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-soft);
+  vertical-align: top;
+}
+
+tbody td:first-child { color: var(--text); font-weight: 500; }
+tbody td:not(:first-child) { text-align: right; font-variant-numeric: tabular-nums; }
+
+tbody tr:nth-child(even) td { background: var(--bg-zebra); }
+tbody tr:last-child td { border-bottom: none; }
+
+/* Chart container */
+.chart-block {
+  background: var(--bg-soft);
+  padding: 24px;
+  border-radius: 6px;
+  margin: 24px 0;
+  border: 1px solid var(--border);
+}
+
+.chart-block canvas { max-height: 320px; }
+
+.chart-title {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+/* Insights & actions */
+.insights-list, .actions-list {
+  list-style: none;
+  margin: 16px 0;
+  padding: 0;
+}
+
+.insights-list li {
+  background: var(--bg-soft);
+  padding: 16px 20px;
+  margin: 10px 0;
+  border-radius: 4px;
+  border-left: 3px solid var(--border-strong);
+  color: var(--text);
+}
+
+.insights-list li::before {
+  content: counter(insight) ".";
+  counter-increment: insight;
+  font-weight: 700;
+  color: var(--text-muted);
+  margin-right: 10px;
+}
+
+.insights-list { counter-reset: insight; }
+
+.actions-list li {
+  padding: 14px 18px;
+  margin: 8px 0;
+  border-radius: 4px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  color: var(--text);
+}
+
+.actions-list li::before {
+  content: "□";
+  font-size: 18px;
+  line-height: 1;
+  color: var(--text-muted);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.actions-p0 li { background: var(--accent-down-bg); border-left: 3px solid var(--accent-down); }
+.actions-p1 li { background: var(--bg-soft);       border-left: 3px solid var(--text-soft);    }
+.actions-p2 li { background: var(--bg-zebra);      border-left: 3px solid var(--border-strong); }
+
+.priority-tag {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  padding: 3px 10px;
+  border-radius: 3px;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+}
+
+.priority-p0 { background: var(--accent-down); color: var(--bg); }
+.priority-p1 { background: var(--text);        color: var(--bg); }
+.priority-p2 { background: var(--text-muted);  color: var(--bg); }
+
+/* Status pills for indexation */
+.status-pill {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 999px;
+  letter-spacing: 0.04em;
+}
+
+.status-indexed     { background: var(--accent-up-bg);   color: var(--accent-up);   }
+.status-not-indexed { background: var(--accent-down-bg); color: var(--accent-down); }
+.status-pending     { background: var(--bg-zebra);       color: var(--accent-neutral); }
+.status-partial     { background: var(--accent-warn-bg); color: var(--accent-warn); }
+
+/* Banner de relatório parcial */
+.partial-banner {
+  background: var(--accent-warn-bg);
+  border-left: 3px solid var(--accent-warn);
+  color: var(--accent-warn);
+  padding: 14px 18px;
+  margin: 20px 0;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.partial-banner-title {
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  font-size: 12px;
+}
+
+/* Footer */
+.footer {
+  margin-top: 80px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+  font-size: 12px;
+  color: var(--text-muted);
+  text-align: center;
+  letter-spacing: 0.04em;
+}
+
+/* Print */
+@media print {
+  body { font-size: 11pt; }
+  .container { padding: 24px 32px; max-width: none; }
+  h1 { font-size: 28pt; }
+  h2 { font-size: 18pt; page-break-after: avoid; margin-top: 32px; }
+  h3 { font-size: 13pt; page-break-after: avoid; }
+  table, .chart-block, .kpi-grid { page-break-inside: avoid; }
+  .header { padding-bottom: 16px; margin-bottom: 24px; }
+  .kpi-card { box-shadow: none; }
+  .chart-block { background: var(--bg); border: 1px solid var(--border); }
+  @page { margin: 1.5cm; size: A4; }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .container { padding: 32px 20px; }
+  h1 { font-size: 32px; }
+  h2 { font-size: 22px; }
+  .header { flex-direction: column; align-items: flex-start; }
+  .header-meta { text-align: left; }
+  table { font-size: 12px; }
+  thead th, tbody td { padding: 8px 10px; }
+}
+</style>
+</head>
+<body>
+<div class="container" id="report-root">
+
+<div class="header">
+  <div>
+    <div class="header-brand">Berkahn</div>
+    <div class="header-tagline">Performance Report</div>
+  </div>
+  <div class="header-meta">
+    <strong>Julho/2026</strong> <span class="status-pill status-partial">parcial · 26/31 dias</span>
+    <div>2026-07-01 a 2026-07-26</div>
+    <div>Gerado em 2026-07-29</div>
+  </div>
+</div>
+  <h1>Performance Blog Berkahn — Julho/2026 (parcial)</h1><div class="kpi-grid"><div class="kpi-card"><div class="kpi-card-label">Users (GA4)</div><div class="kpi-card-value">1.407</div><span class="kpi-card-delta delta-up">↑ 43.1%</span></div><div class="kpi-card"><div class="kpi-card-label">Sessions</div><div class="kpi-card-value">1.671</div><span class="kpi-card-delta delta-up">↑ 32.2%</span></div><div class="kpi-card"><div class="kpi-card-label">Clicks (GSC)</div><div class="kpi-card-value">1.107</div><span class="kpi-card-delta delta-up">↑ 54.4%</span></div><div class="kpi-card"><div class="kpi-card-label">Impressions</div><div class="kpi-card-value">33.321</div><span class="kpi-card-delta delta-up">↑ 11.5%</span></div><div class="kpi-card"><div class="kpi-card-label">CTR médio</div><div class="kpi-card-value">3.32%</div><span class="kpi-card-delta delta-up">↑ 38.3%</span></div><div class="kpi-card"><div class="kpi-card-label">Indexados</div><div class="kpi-card-value">34 / 38</div></div></div>
+<blockquote class="partial-banner"><p><span class="partial-banner-title">Relatório parcial — não é o fechamento do mês</span><br>
+Janela: <strong>2026-07-01 a 2026-07-26</strong> (26 de 31 dias). O Search Console consolida com 3 dias de lag, então os dias mais recentes ainda não entraram.
+As variações MoM comparam contra <strong>2026-06-01 a 2026-06-26</strong> (26 dias), para medir janelas equivalentes. Ressalva: como 26 não é múltiplo de 7, as duas janelas pegam quantidades diferentes de fim de semana.
+O run automático do dia 1 sobrescreve este arquivo com o mês fechado.</p>
+</blockquote>
+<h2>Resumo executivo</h2>
+<ul>
+<li>1407 usuários e 2002 pageviews no GA4 (+43% MoM).</li>
+<li>1107 cliques e 33321 impressões no Google Search (+54% MoM), posição média 4.2.</li>
+<li>34 de 38 artigos indexados no Google.</li>
+<li>Página mais acessada: Custo do Steel Frame por m² em 2026: Preços Atualizados (1127 pageviews).</li>
+</ul>
+<h2>GA4, tráfego do site</h2>
+<h3>Overall (vs mesmos 26 dias do mês anterior)</h3>
+<table>
+<thead>
+<tr>
+<th>Métrica</th>
+<th style="text-align:right">Valor</th>
+<th style="text-align:center">Variação MoM</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Users</td>
+<td style="text-align:right">1407</td>
+<td style="text-align:center">↑ 43.1%</td>
+</tr>
+<tr>
+<td>Sessions</td>
+<td style="text-align:right">1671</td>
+<td style="text-align:center">↑ 32.2%</td>
+</tr>
+<tr>
+<td>Pageviews</td>
+<td style="text-align:right">2002</td>
+<td style="text-align:center">↑ 26.4%</td>
+</tr>
+<tr>
+<td>Engagement rate</td>
+<td style="text-align:right">46.7%</td>
+<td style="text-align:center">↓ 1.3%</td>
+</tr>
+<tr>
+<td>Tempo médio sessão</td>
+<td style="text-align:right">135.1s</td>
+<td style="text-align:center">↓ 24.1%</td>
+</tr>
+</tbody>
+</table>
+<h3>Top 15 páginas (por pageviews)</h3>
+<table>
+<thead>
+<tr>
+<th>Página</th>
+<th style="text-align:right">Pageviews</th>
+<th style="text-align:right">Users</th>
+<th style="text-align:right">Tempo médio</th>
+<th style="text-align:center">MoM</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Custo do Steel Frame por m² em 2026: Preços Atualizados (<code>custo-steel-frame-m2-2026</code>)</td>
+<td style="text-align:right">1127</td>
+<td style="text-align:right">947</td>
+<td style="text-align:right">51.1s</td>
+<td style="text-align:center">↑ 42.8%</td>
+</tr>
+<tr>
+<td>Quanto custa construir em Steel Frame: tabela de preços por m² 2026 (<code>quanto-custa-construir-steel-frame-precos-m2-2026</code>)</td>
+<td style="text-align:right">296</td>
+<td style="text-align:right">253</td>
+<td style="text-align:right">100.2s</td>
+<td style="text-align:center">↑ 236.4%</td>
+</tr>
+<tr>
+<td>Home (``)</td>
+<td style="text-align:right">133</td>
+<td style="text-align:right">86</td>
+<td style="text-align:right">44.5s</td>
+<td style="text-align:center">↓ 16.4%</td>
+</tr>
+<tr>
+<td>Residencial (<code>/residencial</code>)</td>
+<td style="text-align:right">54</td>
+<td style="text-align:right">44</td>
+<td style="text-align:right">52.3s</td>
+<td style="text-align:center">↑ 22.7%</td>
+</tr>
+<tr>
+<td>Serviços (<code>/servicos</code>)</td>
+<td style="text-align:right">39</td>
+<td style="text-align:right">31</td>
+<td style="text-align:right">78.9s</td>
+<td style="text-align:center">↓ 11.4%</td>
+</tr>
+<tr>
+<td>Como Financiar uma Construção em Light Steel Frame (<code>financiar-construcao-light-steel-frame</code>)</td>
+<td style="text-align:right">35</td>
+<td style="text-align:right">28</td>
+<td style="text-align:right">70.4s</td>
+<td style="text-align:center">↑ 52.2%</td>
+</tr>
+<tr>
+<td>Principais Normas do Light Steel Frame no Brasil (<code>normas-light-steel-frame-brasil</code>)</td>
+<td style="text-align:right">28</td>
+<td style="text-align:right">25</td>
+<td style="text-align:right">24.8s</td>
+<td style="text-align:center">↑ 7.7%</td>
+</tr>
+<tr>
+<td>Empresa (<code>/empresa</code>)</td>
+<td style="text-align:right">28</td>
+<td style="text-align:right">22</td>
+<td style="text-align:right">65.2s</td>
+<td style="text-align:center">↓ 20.0%</td>
+</tr>
+<tr>
+<td>Fundação Steel Frame vs. Alvenaria: Comparativo Completo (<code>fundacao-steel-frame-vs-alvenaria</code>)</td>
+<td style="text-align:right">21</td>
+<td style="text-align:right">17</td>
+<td style="text-align:right">75.9s</td>
+<td style="text-align:center">↑ 200.0%</td>
+</tr>
+<tr>
+<td>Steel Frame vs Alvenaria: O Comparativo Definitivo (<code>steel-frame-vs-alvenaria</code>)</td>
+<td style="text-align:right">21</td>
+<td style="text-align:right">20</td>
+<td style="text-align:right">119.5s</td>
+<td style="text-align:center">↑ 50.0%</td>
+</tr>
+<tr>
+<td>Pillar LSF (<code>/lsf</code>)</td>
+<td style="text-align:right">19</td>
+<td style="text-align:right">17</td>
+<td style="text-align:right">101.1s</td>
+<td style="text-align:center">↑ 26.7%</td>
+</tr>
+<tr>
+<td>Apresentação Executiva (<code>/apresentacao-executiva</code>)</td>
+<td style="text-align:right">15</td>
+<td style="text-align:right">5</td>
+<td style="text-align:right">217.8s</td>
+<td style="text-align:center">↓ 31.8%</td>
+</tr>
+<tr>
+<td>Atualidades (índice) (<code>/atualidades</code>)</td>
+<td style="text-align:right">12</td>
+<td style="text-align:right">8</td>
+<td style="text-align:right">66.8s</td>
+<td style="text-align:center">→ 0.0%</td>
+</tr>
+<tr>
+<td>Fissuras no Steel Frame: Causas, Prevenção e Reparo (<code>fissuras-steel-frame</code>)</td>
+<td style="text-align:right">12</td>
+<td style="text-align:right">11</td>
+<td style="text-align:right">55s</td>
+<td style="text-align:center">↑ 20.0%</td>
+</tr>
+<tr>
+<td>Steel Frame e Fogo: O Que Realmente Acontece em um Incêndio (<code>steel-frame-fogo-incendio</code>)</td>
+<td style="text-align:right">12</td>
+<td style="text-align:right">9</td>
+<td style="text-align:right">8.4s</td>
+<td style="text-align:center">↓ 14.3%</td>
+</tr>
+<tr>
+<td>Steel Frame no Mundo: Como Cada País Constrói com Aço (<code>steel-frame-no-mundo</code>)</td>
+<td style="text-align:right">12</td>
+<td style="text-align:right">12</td>
+<td style="text-align:right">62.2s</td>
+<td style="text-align:center">↓ 36.8%</td>
+</tr>
+<tr>
+<td>Energia solar residencial: como funciona, quanto custa e como integrar ao projeto da sua casa (<code>energia-solar-residencial</code>)</td>
+<td style="text-align:right">10</td>
+<td style="text-align:right">9</td>
+<td style="text-align:right">1.9s</td>
+<td style="text-align:center">—</td>
+</tr>
+<tr>
+<td>/institucional/pdf (<code>/institucional/pdf</code>)</td>
+<td style="text-align:right">10</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">14s</td>
+<td style="text-align:center">—</td>
+</tr>
+<tr>
+<td>/admin/analytics (<code>/admin/analytics</code>)</td>
+<td style="text-align:right">7</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">166s</td>
+<td style="text-align:center">↓ 58.8%</td>
+</tr>
+<tr>
+<td>Anatomia da Parede de Steel Frame: Camada por Camada (<code>anatomia-parede-steel-frame</code>)</td>
+<td style="text-align:right">7</td>
+<td style="text-align:right">6</td>
+<td style="text-align:right">8.8s</td>
+<td style="text-align:center">—</td>
+</tr>
+<tr>
+<td>Patologias em Steel Frame: Como Prevenir e Como Corrigir (<code>patologias-steel-frame</code>)</td>
+<td style="text-align:right">7</td>
+<td style="text-align:right">6</td>
+<td style="text-align:right">52.2s</td>
+<td style="text-align:center">→ 0.0%</td>
+</tr>
+<tr>
+<td>Construir ou Comprar Pronto? Os Números na Grande SP (<code>construir-ou-comprar-pronto-numeros-grande-sp</code>)</td>
+<td style="text-align:right">5</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">66.5s</td>
+<td style="text-align:center">↓ 28.6%</td>
+</tr>
+<tr>
+<td>Drywall ST, RU e RF: qual usar em cada ambiente da sua obra (<code>drywall-st-ru-rf</code>)</td>
+<td style="text-align:right">5</td>
+<td style="text-align:right">5</td>
+<td style="text-align:right">106.6s</td>
+<td style="text-align:center">↓ 70.6%</td>
+</tr>
+<tr>
+<td>Como Financiar sua Construção em Steel Frame (<code>financiamento-construcao-steel-frame</code>)</td>
+<td style="text-align:right">5</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">33.8s</td>
+<td style="text-align:center">—</td>
+</tr>
+<tr>
+<td>Fundação para Steel Frame: Guia Definitivo (<code>fundacao-steel-frame</code>)</td>
+<td style="text-align:right">5</td>
+<td style="text-align:right">5</td>
+<td style="text-align:right">53s</td>
+<td style="text-align:center">↓ 16.7%</td>
+</tr>
+<tr>
+<td>Passo a Passo: Como Funciona a Construção em Steel Frame (<code>passo-passo-construcao-steel-frame</code>)</td>
+<td style="text-align:right">5</td>
+<td style="text-align:right">5</td>
+<td style="text-align:right">7.8s</td>
+<td style="text-align:center">↓ 54.5%</td>
+</tr>
+<tr>
+<td>Steel Frame vs Wood Frame: Qual Sistema Construtivo Escolher? (<code>steel-frame-vs-wood-frame</code>)</td>
+<td style="text-align:right">5</td>
+<td style="text-align:right">5</td>
+<td style="text-align:right">27.6s</td>
+<td style="text-align:center">↓ 37.5%</td>
+</tr>
+<tr>
+<td>Portfolio (<code>/portfolio</code>)</td>
+<td style="text-align:right">5</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">1.7s</td>
+<td style="text-align:center">—</td>
+</tr>
+<tr>
+<td>Política de Privacidade (<code>/privacidade</code>)</td>
+<td style="text-align:right">5</td>
+<td style="text-align:right">6</td>
+<td style="text-align:right">1.8s</td>
+<td style="text-align:center">↑ 150.0%</td>
+</tr>
+<tr>
+<td>/admin/orcamentos (<code>/admin/orcamentos</code>)</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">24s</td>
+<td style="text-align:center">↓ 66.7%</td>
+</tr>
+<tr>
+<td>Consequências da reforma tributária no mercado da construção industrializada (<code>reforma-tributaria-construcao-industrializada</code>)</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">0s</td>
+<td style="text-align:center">↑ 100.0%</td>
+</tr>
+<tr>
+<td>Steel Frame Pode Ter Laje de Concreto? Guia Prático Para Quem Vai Construir (<code>steel-frame-laje-de-concreto</code>)</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">14s</td>
+<td style="text-align:center">—</td>
+</tr>
+<tr>
+<td>Steel Frame: Vantagens e Desvantagens Reais (<code>steel-frame-vantagens-desvantagens</code>)</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">131.5s</td>
+<td style="text-align:center">↓ 71.4%</td>
+</tr>
+<tr>
+<td>Comercial e Industrial (<code>/comercial-industrial</code>)</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">18.5s</td>
+<td style="text-align:center">↓ 42.9%</td>
+</tr>
+<tr>
+<td>/admin/orcamentos/novo (<code>/admin/orcamentos/novo</code>)</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">23s</td>
+<td style="text-align:center">→ 0.0%</td>
+</tr>
+<tr>
+<td>/admin/orcamentos/novo/form (<code>/admin/orcamentos/novo/form</code>)</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">12s</td>
+<td style="text-align:center">↓ 50.0%</td>
+</tr>
+<tr>
+<td>Sistema Painelizado vs. Stick: o Que Vale Mais (<code>sistema-painelizado-vs-stick-steel-frame</code>)</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">67s</td>
+<td style="text-align:center">↓ 66.7%</td>
+</tr>
+<tr>
+<td>FAQ (<code>/perguntas-frequentes</code>)</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">27.7s</td>
+<td style="text-align:center">↓ 66.7%</td>
+</tr>
+<tr>
+<td>/projetos/chale (<code>/projetos/chale</code>)</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">3.5s</td>
+<td style="text-align:center">—</td>
+</tr>
+<tr>
+<td>/admin/propostas (<code>/admin/propostas</code>)</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">11s</td>
+<td style="text-align:center">↓ 60.0%</td>
+</tr>
+<tr>
+<td>Drywall ou Alvenaria de Bloco Cerâmico: Comparativo Técnico Completo (<code>drywall-ou-alvenaria</code>)</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">44s</td>
+<td style="text-align:center">↓ 50.0%</td>
+</tr>
+<tr>
+<td>Nova Lei de Eficiência Energética e Reforma Tributária: o Que Muda para Construir (<code>eficiencia-energetica-reforma-tributaria</code>)</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">0s</td>
+<td style="text-align:center">↓ 66.7%</td>
+</tr>
+<tr>
+<td>Isolamento Térmico e Acústico no Steel Frame (<code>isolamento-termico-acustico-steel-frame</code>)</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">3s</td>
+<td style="text-align:center">—</td>
+</tr>
+<tr>
+<td>Steel Frame Aguenta Vento Forte? A Engenharia por Trás dos 200 km/h (<code>steel-frame-aguenta-vento-forte</code>)</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">76s</td>
+<td style="text-align:center">—</td>
+</tr>
+<tr>
+<td>Steel Frame Resiste a Terremoto? O Teste que Provou (<code>steel-frame-terremoto-teste-cfs10</code>)</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">0s</td>
+<td style="text-align:center">—</td>
+</tr>
+<tr>
+<td>Termos de Uso (<code>/termos-de-uso</code>)</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">0s</td>
+<td style="text-align:center">→ 0.0%</td>
+</tr>
+<tr>
+<td>/admin/login (<code>/admin/login</code>)</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">14s</td>
+<td style="text-align:center">→ 0.0%</td>
+</tr>
+<tr>
+<td>/admin/orcamentos/1a8acfe8-6af1-45d8-8eeb-695dfec8f6c1 (<code>/admin/orcamentos/1a8acfe8-6af1-45d8-8eeb-695dfec8f6c1</code>)</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">144s</td>
+<td style="text-align:center">—</td>
+</tr>
+<tr>
+<td>/admin/orcamentos/f3931541-39ed-4957-99ce-d4c172c51458 (<code>/admin/orcamentos/f3931541-39ed-4957-99ce-d4c172c51458</code>)</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">9s</td>
+<td style="text-align:center">—</td>
+</tr>
+<tr>
+<td>/admin/orcamentos/novo/upload (<code>/admin/orcamentos/novo/upload</code>)</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">7s</td>
+<td style="text-align:center">→ 0.0%</td>
+</tr>
+</tbody>
+</table>
+<h3>Top 10 fontes de tráfego</h3>
+<table>
+<thead>
+<tr>
+<th>Source / Medium</th>
+<th style="text-align:right">Sessions</th>
+<th style="text-align:right">Users</th>
+<th style="text-align:right">% do total</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>google / organic</td>
+<td style="text-align:right">1300</td>
+<td style="text-align:right">1108</td>
+<td style="text-align:right">78%</td>
+</tr>
+<tr>
+<td>(direct) / (none)</td>
+<td style="text-align:right">186</td>
+<td style="text-align:right">157</td>
+<td style="text-align:right">11.2%</td>
+</tr>
+<tr>
+<td><a href="http://chatgpt.com">chatgpt.com</a> / ai-assistant</td>
+<td style="text-align:right">67</td>
+<td style="text-align:right">54</td>
+<td style="text-align:right">4%</td>
+</tr>
+<tr>
+<td>bing / organic</td>
+<td style="text-align:right">66</td>
+<td style="text-align:right">60</td>
+<td style="text-align:right">4%</td>
+</tr>
+<tr>
+<td><a href="http://search.google.com">search.google.com</a> / referral</td>
+<td style="text-align:right">17</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">1%</td>
+</tr>
+<tr>
+<td><a href="http://br.search.yahoo.com">br.search.yahoo.com</a> / referral</td>
+<td style="text-align:right">13</td>
+<td style="text-align:right">12</td>
+<td style="text-align:right">0.8%</td>
+</tr>
+<tr>
+<td>linkedin / social</td>
+<td style="text-align:right">8</td>
+<td style="text-align:right">5</td>
+<td style="text-align:right">0.5%</td>
+</tr>
+<tr>
+<td><a href="http://copilot.com">copilot.com</a> / ai-assistant</td>
+<td style="text-align:right">5</td>
+<td style="text-align:right">5</td>
+<td style="text-align:right">0.3%</td>
+</tr>
+<tr>
+<td><a href="http://claude.ai">claude.ai</a> / ai-assistant</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">0.1%</td>
+</tr>
+<tr>
+<td><a href="http://copilot.com">copilot.com</a> / (not set)</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">0.1%</td>
+</tr>
+</tbody>
+</table>
+<h3>Distribuição por área do site</h3>
+<table>
+<thead>
+<tr>
+<th>Área</th>
+<th style="text-align:right">Pageviews</th>
+<th style="text-align:right">% do total</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Blog (atualidades)</td>
+<td style="text-align:right">1646</td>
+<td style="text-align:right">82.2%</td>
+</tr>
+<tr>
+<td>Outras</td>
+<td style="text-align:right">165</td>
+<td style="text-align:right">8.2%</td>
+</tr>
+<tr>
+<td>Home</td>
+<td style="text-align:right">133</td>
+<td style="text-align:right">6.6%</td>
+</tr>
+<tr>
+<td>Serviços</td>
+<td style="text-align:right">39</td>
+<td style="text-align:right">1.9%</td>
+</tr>
+<tr>
+<td>Pillar LSF</td>
+<td style="text-align:right">19</td>
+<td style="text-align:right">0.9%</td>
+</tr>
+</tbody>
+</table>
+<h3>Devices</h3>
+<table>
+<thead>
+<tr>
+<th>Device</th>
+<th style="text-align:right">Users</th>
+<th style="text-align:right">% do total</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>mobile</td>
+<td style="text-align:right">854</td>
+<td style="text-align:right">60.7%</td>
+</tr>
+<tr>
+<td>desktop</td>
+<td style="text-align:right">546</td>
+<td style="text-align:right">38.8%</td>
+</tr>
+<tr>
+<td>tablet</td>
+<td style="text-align:right">6</td>
+<td style="text-align:right">0.4%</td>
+</tr>
+<tr>
+<td>smart tv</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">0.1%</td>
+</tr>
+</tbody>
+</table>
+<h3>Eventos / Conversões</h3>
+<p>Nenhum evento de conversão configurado no GA4 detectado no período.</p>
+<h2>GSC, performance no Google Search</h2>
+<h3>Overall (vs mesmos 26 dias do mês anterior)</h3>
+<table>
+<thead>
+<tr>
+<th>Métrica</th>
+<th style="text-align:right">Valor</th>
+<th style="text-align:center">Variação MoM</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Clicks</td>
+<td style="text-align:right">1107</td>
+<td style="text-align:center">↑ 54.4%</td>
+</tr>
+<tr>
+<td>Impressions</td>
+<td style="text-align:right">33321</td>
+<td style="text-align:center">↑ 11.5%</td>
+</tr>
+<tr>
+<td>CTR</td>
+<td style="text-align:right">3.32%</td>
+<td style="text-align:center">↑ 38.3%</td>
+</tr>
+<tr>
+<td>Posição média</td>
+<td style="text-align:right">4.2</td>
+<td style="text-align:center">↓ 6.7%</td>
+</tr>
+</tbody>
+</table>
+<h3>Top 20 queries</h3>
+<table>
+<thead>
+<tr>
+<th>Query</th>
+<th style="text-align:right">Clicks</th>
+<th style="text-align:right">Impressions</th>
+<th style="text-align:right">CTR</th>
+<th style="text-align:right">Posição</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>steel frame valor m2</td>
+<td style="text-align:right">60</td>
+<td style="text-align:right">683</td>
+<td style="text-align:right">8.78%</td>
+<td style="text-align:right">1.8</td>
+</tr>
+<tr>
+<td>casas steel frame preço m2</td>
+<td style="text-align:right">44</td>
+<td style="text-align:right">476</td>
+<td style="text-align:right">9.24%</td>
+<td style="text-align:right">1.9</td>
+</tr>
+<tr>
+<td>steel frame preço</td>
+<td style="text-align:right">17</td>
+<td style="text-align:right">481</td>
+<td style="text-align:right">3.53%</td>
+<td style="text-align:right">3.4</td>
+</tr>
+<tr>
+<td>casa steel frame 100m2 preço</td>
+<td style="text-align:right">13</td>
+<td style="text-align:right">234</td>
+<td style="text-align:right">5.56%</td>
+<td style="text-align:right">2.4</td>
+</tr>
+<tr>
+<td>casa steel frame preço</td>
+<td style="text-align:right">13</td>
+<td style="text-align:right">223</td>
+<td style="text-align:right">5.83%</td>
+<td style="text-align:right">1.7</td>
+</tr>
+<tr>
+<td>steel frame valor m2 2026</td>
+<td style="text-align:right">12</td>
+<td style="text-align:right">146</td>
+<td style="text-align:right">8.22%</td>
+<td style="text-align:right">1.7</td>
+</tr>
+<tr>
+<td>steel frame casas preço</td>
+<td style="text-align:right">11</td>
+<td style="text-align:right">136</td>
+<td style="text-align:right">8.09%</td>
+<td style="text-align:right">2.8</td>
+</tr>
+<tr>
+<td>steel frame é mais barato que alvenaria</td>
+<td style="text-align:right">11</td>
+<td style="text-align:right">321</td>
+<td style="text-align:right">3.43%</td>
+<td style="text-align:right">4.6</td>
+</tr>
+<tr>
+<td>light steel frame preço m2</td>
+<td style="text-align:right">9</td>
+<td style="text-align:right">177</td>
+<td style="text-align:right">5.08%</td>
+<td style="text-align:right">1.6</td>
+</tr>
+<tr>
+<td>casas steel frame preço</td>
+<td style="text-align:right">8</td>
+<td style="text-align:right">67</td>
+<td style="text-align:right">11.94%</td>
+<td style="text-align:right">1.8</td>
+</tr>
+<tr>
+<td>casa de steel frame valor</td>
+<td style="text-align:right">7</td>
+<td style="text-align:right">102</td>
+<td style="text-align:right">6.86%</td>
+<td style="text-align:right">2.1</td>
+</tr>
+<tr>
+<td>casa de steel frame é mais barata</td>
+<td style="text-align:right">7</td>
+<td style="text-align:right">116</td>
+<td style="text-align:right">6.03%</td>
+<td style="text-align:right">3.7</td>
+</tr>
+<tr>
+<td>construção steel frame preço m2</td>
+<td style="text-align:right">7</td>
+<td style="text-align:right">98</td>
+<td style="text-align:right">7.14%</td>
+<td style="text-align:right">2.2</td>
+</tr>
+<tr>
+<td>steel frame</td>
+<td style="text-align:right">5</td>
+<td style="text-align:right">313</td>
+<td style="text-align:right">1.6%</td>
+<td style="text-align:right">4</td>
+</tr>
+<tr>
+<td>steel frame preço m2</td>
+<td style="text-align:right">5</td>
+<td style="text-align:right">98</td>
+<td style="text-align:right">5.1%</td>
+<td style="text-align:right">2.8</td>
+</tr>
+<tr>
+<td>casa em steel frame valor</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">55</td>
+<td style="text-align:right">7.27%</td>
+<td style="text-align:right">1.7</td>
+</tr>
+<tr>
+<td>construtora steel frame sp</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">9</td>
+<td style="text-align:right">44.44%</td>
+<td style="text-align:right">1.6</td>
+</tr>
+<tr>
+<td>construção em steel frame é mais barato</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">43</td>
+<td style="text-align:right">9.3%</td>
+<td style="text-align:right">1.8</td>
+</tr>
+<tr>
+<td>quanto custa uma casa de steel frame</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">88</td>
+<td style="text-align:right">4.55%</td>
+<td style="text-align:right">2.1</td>
+</tr>
+<tr>
+<td>berkahn</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">6</td>
+<td style="text-align:right">50%</td>
+<td style="text-align:right">3.2</td>
+</tr>
+</tbody>
+</table>
+<h3>Top 15 páginas (por clicks)</h3>
+<table>
+<thead>
+<tr>
+<th>Página</th>
+<th style="text-align:right">Clicks</th>
+<th style="text-align:right">Impressions</th>
+<th style="text-align:right">CTR</th>
+<th style="text-align:right">Posição</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Custo do Steel Frame por m² em 2026: Preços Atualizados (<code>custo-steel-frame-m2-2026</code>)</td>
+<td style="text-align:right">864</td>
+<td style="text-align:right">21795</td>
+<td style="text-align:right">3.96%</td>
+<td style="text-align:right">3.5</td>
+</tr>
+<tr>
+<td>Quanto custa construir em Steel Frame: tabela de preços por m² 2026 (<code>quanto-custa-construir-steel-frame-precos-m2-2026</code>)</td>
+<td style="text-align:right">135</td>
+<td style="text-align:right">10463</td>
+<td style="text-align:right">1.29%</td>
+<td style="text-align:right">6.1</td>
+</tr>
+<tr>
+<td>Home (<code>/</code>)</td>
+<td style="text-align:right">23</td>
+<td style="text-align:right">305</td>
+<td style="text-align:right">7.54%</td>
+<td style="text-align:right">4.9</td>
+</tr>
+<tr>
+<td>Como Financiar uma Construção em Light Steel Frame (<code>financiar-construcao-light-steel-frame</code>)</td>
+<td style="text-align:right">20</td>
+<td style="text-align:right">1499</td>
+<td style="text-align:right">1.33%</td>
+<td style="text-align:right">5.6</td>
+</tr>
+<tr>
+<td>Principais Normas do Light Steel Frame no Brasil (<code>normas-light-steel-frame-brasil</code>)</td>
+<td style="text-align:right">17</td>
+<td style="text-align:right">1363</td>
+<td style="text-align:right">1.25%</td>
+<td style="text-align:right">5</td>
+</tr>
+<tr>
+<td>Fundação Steel Frame vs. Alvenaria: Comparativo Completo (<code>fundacao-steel-frame-vs-alvenaria</code>)</td>
+<td style="text-align:right">10</td>
+<td style="text-align:right">883</td>
+<td style="text-align:right">1.13%</td>
+<td style="text-align:right">5.4</td>
+</tr>
+<tr>
+<td>Steel Frame e Fogo: O Que Realmente Acontece em um Incêndio (<code>steel-frame-fogo-incendio</code>)</td>
+<td style="text-align:right">7</td>
+<td style="text-align:right">149</td>
+<td style="text-align:right">4.7%</td>
+<td style="text-align:right">4.5</td>
+</tr>
+<tr>
+<td>Fissuras no Steel Frame: Causas, Prevenção e Reparo (<code>fissuras-steel-frame</code>)</td>
+<td style="text-align:right">6</td>
+<td style="text-align:right">339</td>
+<td style="text-align:right">1.77%</td>
+<td style="text-align:right">6</td>
+</tr>
+<tr>
+<td>Anatomia da Parede de Steel Frame: Camada por Camada (<code>anatomia-parede-steel-frame</code>)</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">206</td>
+<td style="text-align:right">1.94%</td>
+<td style="text-align:right">5.8</td>
+</tr>
+<tr>
+<td>Patologias em Steel Frame: Como Prevenir e Como Corrigir (<code>patologias-steel-frame</code>)</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">140</td>
+<td style="text-align:right">2.86%</td>
+<td style="text-align:right">6</td>
+</tr>
+<tr>
+<td>Steel Frame no Mundo: Como Cada País Constrói com Aço (<code>steel-frame-no-mundo</code>)</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">448</td>
+<td style="text-align:right">0.89%</td>
+<td style="text-align:right">6</td>
+</tr>
+<tr>
+<td>Empresa (<code>/empresa</code>)</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">76</td>
+<td style="text-align:right">5.26%</td>
+<td style="text-align:right">7.3</td>
+</tr>
+<tr>
+<td>Pillar LSF (<code>/lsf</code>)</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">73</td>
+<td style="text-align:right">4.11%</td>
+<td style="text-align:right">5.9</td>
+</tr>
+<tr>
+<td>Fundação para Steel Frame: Guia Definitivo (<code>fundacao-steel-frame</code>)</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">129</td>
+<td style="text-align:right">1.55%</td>
+<td style="text-align:right">5.5</td>
+</tr>
+<tr>
+<td>Drywall ou Alvenaria de Bloco Cerâmico: Comparativo Técnico Completo (<code>drywall-ou-alvenaria</code>)</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">54</td>
+<td style="text-align:right">1.85%</td>
+<td style="text-align:right">5.1</td>
+</tr>
+</tbody>
+</table>
+<h3>Queries em alta (maior ganho de clicks MoM)</h3>
+<table>
+<thead>
+<tr>
+<th>Query</th>
+<th style="text-align:right">Clicks atual</th>
+<th style="text-align:right">Clicks anterior</th>
+<th style="text-align:right">Ganho</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>steel frame valor m2</td>
+<td style="text-align:right">60</td>
+<td style="text-align:right">29</td>
+<td style="text-align:right">+31</td>
+</tr>
+<tr>
+<td>casas steel frame preço m2</td>
+<td style="text-align:right">44</td>
+<td style="text-align:right">30</td>
+<td style="text-align:right">+14</td>
+</tr>
+<tr>
+<td>steel frame preço</td>
+<td style="text-align:right">17</td>
+<td style="text-align:right">10</td>
+<td style="text-align:right">+7</td>
+</tr>
+<tr>
+<td>steel frame é mais barato que alvenaria</td>
+<td style="text-align:right">11</td>
+<td style="text-align:right">5</td>
+<td style="text-align:right">+6</td>
+</tr>
+<tr>
+<td>steel frame valor m2 2026</td>
+<td style="text-align:right">12</td>
+<td style="text-align:right">8</td>
+<td style="text-align:right">+4</td>
+</tr>
+</tbody>
+</table>
+<h3>Queries em queda</h3>
+<table>
+<thead>
+<tr>
+<th>Query</th>
+<th style="text-align:right">Clicks atual</th>
+<th style="text-align:right">Clicks anterior</th>
+<th style="text-align:right">Perda</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>berkahn</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">11</td>
+<td style="text-align:right">-8</td>
+</tr>
+</tbody>
+</table>
+<h2>Indexação no Google (34 de 38)</h2>
+<table>
+<thead>
+<tr>
+<th>Slug</th>
+<th style="text-align:center">Status</th>
+<th style="text-align:center">Último crawl</th>
+<th style="text-align:left">Observação</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Steel Frame: O Futuro da Construção Civil no Brasil (<code>steel-frame-futuro-construcao</code>)</td>
+<td style="text-align:center"><span class="status-pill status-indexed">Indexada</span></td>
+<td style="text-align:center">18/07/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Steel Frame vs Alvenaria: O Comparativo Definitivo (<code>steel-frame-vs-alvenaria</code>)</td>
+<td style="text-align:center"><span class="status-pill status-indexed">Indexada</span></td>
+<td style="text-align:center">13/04/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>5 Vantagens Definitivas do Light Steel Frame (<code>5-vantagens-decisivas-light-steel-frame</code>)</td>
+<td style="text-align:center"><span class="status-pill status-indexed">Indexada</span></td>
+<td style="text-align:center">09/07/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Fissuras no Steel Frame: Causas, Prevenção e Reparo (<code>fissuras-steel-frame</code>)</td>
+<td style="text-align:center"><span class="status-pill status-indexed">Indexada</span></td>
+<td style="text-align:center">19/07/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Proteção contra quedas na construção civil: guia técnico completo (<code>protecao-contra-quedas-construcao-civil</code>)</td>
+<td style="text-align:center"><span class="status-pill status-indexed">Indexada</span></td>
+<td style="text-align:center">20/07/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Isolamento Térmico e Acústico no Steel Frame (<code>isolamento-termico-acustico-steel-frame</code>)</td>
+<td style="text-align:center"><span class="status-pill status-indexed">Indexada</span></td>
+<td style="text-align:center">28/06/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Custo do Steel Frame por m² em 2026: Preços Atualizados (<code>custo-steel-frame-m2-2026</code>)</td>
+<td style="text-align:center"><span class="status-pill status-indexed">Indexada</span></td>
+<td style="text-align:center">29/07/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Drywall ST, RU e RF: qual usar em cada ambiente da sua obra (<code>drywall-st-ru-rf</code>)</td>
+<td style="text-align:center"><span class="status-pill status-indexed">Indexada</span></td>
+<td style="text-align:center">25/07/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Steel Frame vs Wood Frame: Qual Sistema Construtivo Escolher? (<code>steel-frame-vs-wood-frame</code>)</td>
+<td style="text-align:center"><span class="status-pill status-indexed">Indexada</span></td>
+<td style="text-align:center">29/07/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Steel Frame e Fogo: O Que Realmente Acontece em um Incêndio (<code>steel-frame-fogo-incendio</code>)</td>
+<td style="text-align:center"><span class="status-pill status-indexed">Indexada</span></td>
+<td style="text-align:center">20/07/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Quanto custa construir em Steel Frame: tabela de preços por m² 2026 (<code>quanto-custa-construir-steel-frame-precos-m2-2026</code>)</td>
+<td style="text-align:center"><span class="status-pill status-indexed">Indexada</span></td>
+<td style="text-align:center">27/07/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Steel Frame: Vantagens e Desvantagens Reais (<code>steel-frame-vantagens-desvantagens</code>)</td>
+<td style="text-align:center"><span class="status-pill status-not-indexed">Não indexada</span></td>
+<td style="text-align:center">13/04/2026</td>
+<td style="text-align:left">Crawled - currently not indexed</td>
+</tr>
+<tr>
+<td>Sustentabilidade: O Impacto Positivo do Steel Frame (<code>sustentabilidade-construcao-industrializada</code>)</td>
+<td style="text-align:center"><span class="status-pill status-indexed">Indexada</span></td>
+<td style="text-align:center">03/07/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Passo a Passo: Como Funciona a Construção em Steel Frame (<code>passo-passo-construcao-steel-frame</code>)</td>
+<td style="text-align:center"><span class="status-pill status-indexed">Indexada</span></td>
+<td style="text-align:center">06/06/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Como Financiar uma Construção em Light Steel Frame (<code>financiar-construcao-light-steel-frame</code>)</td>
+<td style="text-align:center"><span class="status-pill status-indexed">Indexada</span></td>
+<td style="text-align:center">20/07/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Iluminação LED Residencial: Por Que a Luz da Sua Casa Começa na Planta (<code>iluminacao-led-residencial</code>)</td>
+<td style="text-align:center"><span class="status-pill status-indexed">Indexada</span></td>
+<td style="text-align:center">24/06/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Steel Frame Resiste a Terremoto? O Teste que Provou (<code>steel-frame-terremoto-teste-cfs10</code>)</td>
+<td style="text-align:center"><span class="status-pill status-indexed">Indexada</span></td>
+<td style="text-align:center">10/05/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Patologias em Steel Frame: Como Prevenir e Como Corrigir (<code>patologias-steel-frame</code>)</td>
+<td style="text-align:center"><span class="status-pill status-indexed">Indexada</span></td>
+<td style="text-align:center">24/07/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Steel Frame no Mundo: Como Cada País Constrói com Aço (<code>steel-frame-no-mundo</code>)</td>
+<td style="text-align:center"><span class="status-pill status-indexed">Indexada</span></td>
+<td style="text-align:center">21/07/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Como Construir ao Lado de um Hospital em Operação (<code>construir-hospital-em-operacao</code>)</td>
+<td style="text-align:center"><span class="status-pill status-indexed">Indexada</span></td>
+<td style="text-align:center">29/05/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Como Financiar sua Construção em Steel Frame (<code>financiamento-construcao-steel-frame</code>)</td>
+<td style="text-align:center"><span class="status-pill status-indexed">Indexada</span></td>
+<td style="text-align:center">15/07/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Steel Frame: o guia definitivo (<code>guia-definitivo-steel-frame-brasil</code>)</td>
+<td style="text-align:center"><span class="status-pill status-indexed">Indexada</span></td>
+<td style="text-align:center">25/07/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Construir ou Comprar Pronto? Os Números na Grande SP (<code>construir-ou-comprar-pronto-numeros-grande-sp</code>)</td>
+<td style="text-align:center"><span class="status-pill status-indexed">Indexada</span></td>
+<td style="text-align:center">11/07/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Tendências em Construção Industrializada para 2025 (<code>tendencias-construcao-modular-2025</code>)</td>
+<td style="text-align:center"><span class="status-pill status-indexed">Indexada</span></td>
+<td style="text-align:center">27/06/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Certificações e normas técnicas em Steel Frame (<code>certificacoes-steel-frame</code>)</td>
+<td style="text-align:center"><span class="status-pill status-indexed">Indexada</span></td>
+<td style="text-align:center">23/07/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Consequências da reforma tributária no mercado da construção industrializada (<code>reforma-tributaria-construcao-industrializada</code>)</td>
+<td style="text-align:center"><span class="status-pill status-indexed">Indexada</span></td>
+<td style="text-align:center">28/04/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Drywall ou Alvenaria de Bloco Cerâmico: Comparativo Técnico Completo (<code>drywall-ou-alvenaria</code>)</td>
+<td style="text-align:center"><span class="status-pill status-indexed">Indexada</span></td>
+<td style="text-align:center">28/07/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Principais Normas do Light Steel Frame no Brasil (<code>normas-light-steel-frame-brasil</code>)</td>
+<td style="text-align:center"><span class="status-pill status-indexed">Indexada</span></td>
+<td style="text-align:center">24/07/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Sustentabilidade na Construção Civil: O Peso Ambiental do Concreto e as Alternativas que Já Existem (<code>sustentabilidade-construcao-civil-economia-circular</code>)</td>
+<td style="text-align:center"><span class="status-pill status-indexed">Indexada</span></td>
+<td style="text-align:center">23/07/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Fundação para Steel Frame: Guia Definitivo (<code>fundacao-steel-frame</code>)</td>
+<td style="text-align:center"><span class="status-pill status-indexed">Indexada</span></td>
+<td style="text-align:center">12/07/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Construção Industrializada: a Casa Montada Como um Carro (<code>construcao-industrializada-casa-montada-como-carro</code>)</td>
+<td style="text-align:center"><span class="status-pill status-indexed">Indexada</span></td>
+<td style="text-align:center">09/07/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Fundação Steel Frame vs. Alvenaria: Comparativo Completo (<code>fundacao-steel-frame-vs-alvenaria</code>)</td>
+<td style="text-align:center"><span class="status-pill status-indexed">Indexada</span></td>
+<td style="text-align:center">18/07/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Sistema Painelizado vs. Stick: o Que Vale Mais (<code>sistema-painelizado-vs-stick-steel-frame</code>)</td>
+<td style="text-align:center"><span class="status-pill status-indexed">Indexada</span></td>
+<td style="text-align:center">20/07/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Nova Lei de Eficiência Energética e Reforma Tributária: o Que Muda para Construir (<code>eficiencia-energetica-reforma-tributaria</code>)</td>
+<td style="text-align:center"><span class="status-pill status-indexed">Indexada</span></td>
+<td style="text-align:center">23/06/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Steel Frame Aguenta Vento Forte? A Engenharia por Trás dos 200 km/h (<code>steel-frame-aguenta-vento-forte</code>)</td>
+<td style="text-align:center"><span class="status-pill status-not-indexed">Não indexada</span></td>
+<td style="text-align:center">—</td>
+<td style="text-align:left">Discovered - currently not indexed</td>
+</tr>
+<tr>
+<td>Steel Frame Pode Ter Laje de Concreto? Guia Prático Para Quem Vai Construir (<code>steel-frame-laje-de-concreto</code>)</td>
+<td style="text-align:center"><span class="status-pill status-not-indexed">Não indexada</span></td>
+<td style="text-align:center">—</td>
+<td style="text-align:left">Discovered - currently not indexed</td>
+</tr>
+<tr>
+<td>Anatomia da Parede de Steel Frame: Camada por Camada (<code>anatomia-parede-steel-frame</code>)</td>
+<td style="text-align:center"><span class="status-pill status-indexed">Indexada</span></td>
+<td style="text-align:center">20/07/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Energia solar residencial: como funciona, quanto custa e como integrar ao projeto da sua casa (<code>energia-solar-residencial</code>)</td>
+<td style="text-align:center"><span class="status-pill status-not-indexed">Não indexada</span></td>
+<td style="text-align:center">14/07/2026</td>
+<td style="text-align:left">Crawled - currently not indexed</td>
+</tr>
+</tbody>
+</table>
+<h2>Insights</h2><ol class="insights-list">
+<li>78% do tráfego vem de &quot;google / organic&quot;. Diversificar fontes reduz risco.</li>
+</ol>
+<h2>Ações priorizadas</h2>
+<h3>P0, urgente</h3><ul class="actions-list actions-p0">
+<li>[ ] Solicitar indexação manual no GSC para &quot;/atualidades/steel-frame-vantagens-desvantagens&quot; (status: Crawled - currently not indexed).</li>
+<li>[ ] Solicitar indexação manual no GSC para &quot;/atualidades/steel-frame-aguenta-vento-forte&quot; (status: Discovered - currently not indexed).</li>
+<li>[ ] Solicitar indexação manual no GSC para &quot;/atualidades/steel-frame-laje-de-concreto&quot; (status: Discovered - currently not indexed).</li>
+</ul>
+<h3>P1, esta semana</h3><ul class="actions-list actions-p1">
+<li>[ ] Revisar SERP snippet para query &quot;steel frame&quot; (CTR 1.6%, 313 impressões).</li>
+</ul>
+<h3>P2, backlog</h3><ul class="actions-list actions-p2">
+<li>[ ] Analisar bounce de &quot;Principais Normas do Light Steel Frame no Brasil&quot; (tempo médio 24.8s, 25 users).</li>
+</ul>
+<h2>Notas técnicas</h2>
+<ul>
+<li>Fonte GA4: property <code>516973519</code></li>
+<li>Fonte GSC: <code>sc-domain:berkahn.com.br</code></li>
+<li>Janela: 2026-07-01 a 2026-07-26 (parcial, 26 de 31 dias)</li>
+<li>Comparação MoM: 2026-06-01 a 2026-06-26 (26 dias, janela equivalente)</li>
+<li>Gerado em: 2026-07-29 15:38:51 via <code>/performance</code></li>
+<li>Histórico (3 meses): em breve (após 3 meses de bootstrap)</li>
+</ul>
+<hr>
+<p><strong>Contexto aplicado</strong>: [[seo-aeo-strategy]] · [[article-pipeline]] · [[blog]] · [[seo-aeo]]</p>
+
+</div>
+
+<script>
+// Charts são populados pelo render-html.mjs via dataset
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('canvas[data-chart]').forEach(canvas => {
+    try {
+      const cfg = JSON.parse(canvas.dataset.chart);
+      new Chart(canvas, cfg);
+    } catch (e) {
+      console.error('Chart config error', e);
+    }
+  });
+});
+</script>
+</body>
+</html>

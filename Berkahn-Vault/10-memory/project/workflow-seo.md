@@ -1,14 +1,14 @@
 ---
 tipo: memory
 criado: 2026-05-22
-atualizado: 2026-05-22
+atualizado: 2026-07-29
 tags:
   - ai/memory
   - status/active
   - project/site
   - project/blog
   - domain/seo
-ai_summary: Workflow do projeto SEO/AEO — auditoria periódica + remediação P0/P1/P2. Cadência sugerida quinzenal. Foco atual P0 indexação (6/44). Cross-projeto (afeta blog e site). Output em 40-content/auditorias-seo/.
+ai_summary: Workflow do projeto SEO/AEO — auditoria periódica + remediação P0/P1/P2. Cadência sugerida quinzenal. Indexação resolvida em 2026-07-29 (89%); foco atual são as 9 páginas sem meta tags e a conversão do tráfego, que virou 98,8% não-branded. Cross-projeto (afeta blog e site). Output em 40-content/auditorias-seo/.
 status: active
 subtipo: project
 why: "SEO/AEO é trabalho contínuo, não pontual. Indexação Google e citações por IA decidem visibilidade. Workflow definido garante regressões não passam batido e P0s são resolvidos antes de virarem crônicos."

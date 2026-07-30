@@ -229,6 +229,23 @@ export interface SnapshotContext {
   ga4PropertyId: string;
   gscSiteUrl: string;
   historicalMonths: string;
+
+  // Mês parcial. Ausentes nos snapshots gerados antes do suporte a parcial
+  // (2026-02 a 2026-06) — `partial === undefined` é falsy, então basta
+  // `if (ctx.partial)` sem guard extra.
+  /** True quando o mês ainda não fechou e a janela foi cortada no lag do GSC. */
+  partial?: boolean;
+  daysCovered?: number;
+  daysInMonth?: number;
+  /** Último dia com dado consolidado (= periodEnd). */
+  asOfDate?: string;
+  gscLagDays?: number | null;
+  /** Janela do mês anterior usada no MoM — equivalente em dias quando parcial. */
+  prevPeriodStart?: string;
+  prevPeriodEnd?: string;
+  prevDaysCovered?: number | null;
+  /** "2026-07-01 a 2026-07-26 (parcial, 26 de 31 dias)" */
+  periodoAnaliseLabel?: string;
 }
 
 // ============================================
@@ -281,6 +298,8 @@ export interface TrendPoint {
   pageviews: number;
   clicks: number;
   impressions: number;
+  /** Mês ainda aberto: o ponto cobre menos dias que os anteriores. */
+  partial?: boolean;
 }
 
 export interface TopQueryWithTrend extends GscQuery {

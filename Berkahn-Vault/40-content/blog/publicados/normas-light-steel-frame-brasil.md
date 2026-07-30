@@ -12,6 +12,7 @@ projeto: blog
 slug: normas-light-steel-frame-brasil
 data_publicacao: 2026-05-21
 title: Principais Normas do Light Steel Frame no Brasil
+seo_description: "A NBR 16970, de maio de 2022, é a primeira norma exclusiva do Light Steel Frame e tirou o sistema do rito de tecnologia inovadora. Veja as normas aplicáveis."
 palavras_chave:
   - NBR 16970
   - normas light steel frame

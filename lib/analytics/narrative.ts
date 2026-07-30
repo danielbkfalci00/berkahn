@@ -27,7 +27,8 @@ export function narrativeAct0Status(
     warning: "pede atenção",
     critical: "está em alerta",
   }[health.status];
-  const parts = [`${ctx.monthLabel} ${statusWord}`];
+  const monthName = ctx.partial ? `${ctx.monthLabel} (parcial)` : ctx.monthLabel;
+  const parts = [`${monthName} ${statusWord}`];
   if (win) parts.push(`maior ganho: ${win}`);
   if (redFlag) parts.push(`maior risco: ${redFlag}`);
   return parts.join(". ") + ".";

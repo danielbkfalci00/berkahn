@@ -1,7 +1,7 @@
 ---
 tipo: memory
 criado: 2026-05-28
-atualizado: 2026-05-28
+atualizado: 2026-07-29
 tags:
   - ai/memory
   - status/active
@@ -61,12 +61,14 @@ Implementado em [`lib/analytics/post-performance.ts`](../../../../lib/analytics/
 
 Implementado em [`lib/analytics/goals.ts`](../../../../lib/analytics/goals.ts). Aplicado no progress bar de cada KPI.
 
-**Fórmula**: meta = média dos últimos `LOOKBACK_MONTHS` (3) × `MOM_GROWTH_MULTIPLIER` (1.30).
+**Fórmula**: meta = **último mês fechado** × `MOM_GROWTH_MULTIPLIER` (1.30).
 
-- **users, sessions, pageviews, clicks, impressions**: média móvel × 1.30
+- **users, sessions, pageviews, clicks, impressions**: mês anterior × 1.30
 - **Indexação**: fixa em 100% (não escala — meta é o catálogo inteiro)
 
 **Quando não há histórico** (1º mês ou menos): meta = valor atual × 1.30 (placeholder). Tooltip avisa.
+
+Meses parciais são excluídos da base — são um prefixo do fechamento e puxariam a meta do mês seguinte para baixo.
 
 **Status por progresso**:
 - on-track: ≥ 80% atingido
@@ -77,9 +79,56 @@ Implementado em [`lib/analytics/goals.ts`](../../../../lib/analytics/goals.ts). 
 
 ### Histórico de ajustes do multiplier
 
-| Data | Multiplier | Razão |
-|------|-----------|-------|
-| 2026-05-28 | 1.30 | Setup inicial. Crescimento agressivo de 30% MoM como meta de partida. Reavaliar após 3 meses de calibração. |
+| Data | Base | Multiplier | Razão |
+|------|------|-----------|-------|
+| 2026-05-28 | média 3m | 1.30 | Setup inicial. Crescimento agressivo de 30% MoM como meta de partida. Reavaliar após 3 meses de calibração. |
+| 2026-07-29 | **último mês fechado** | 1.30 (mantido) | Calibração dos 3 meses. Ver análise abaixo. |
+
+#### Calibração de 2026-07-29
+
+Série fev-jul/2026. O multiplier **não** era o problema — a base era.
+
+**MoM real (users)**: +10,1% (mar) · +168,3% (abr) · +110,9% (mai) · +73,6% (jun) · +42,3% (jul, extrapolado de 26 dias). Desaceleração consistente, fator ~0,62 ao mês.
+
+**Atingimento com a fórmula antiga** (média 3m × 1,30) — todo KPI, todo mês:
+
+| Mês | users | sessions | pageviews | clicks | impressions |
+|-----|------:|---------:|----------:|-------:|------------:|
+| Mai/2026 | 284% | 211% | 152% | 588% | 850% |
+| Jun/2026 | 243% | 225% | 190% | 427% | 310% |
+| Jul/2026* | 178% | 164% | 150% | 238% | 153% |
+
+Nenhuma meta foi furada em nenhum mês, e o display satura em 200% — a barra sempre verde não distinguia mês bom de mês ótimo, ou seja, não informava nada.
+
+**Diagnóstico**: com crescimento rápido, a média de 3 meses fica muito abaixo do mês mais recente. Em julho a meta de users era 945 enquanto junho já havia realizado 1179 — uma "meta" menor que o mês anterior.
+
+**Correção**: base passa a ser o último mês fechado. Atingimento vira 162% (mai) · 134% (jun) · 109% (jul), refletindo a desaceleração real e voltando a ser um sinal.
+
+**Por que manter 1,30 e não subir para a mediana histórica (1,83)**: os +82,8% de mediana vêm da fase de lançamento partindo de 25 cliques/mês. Não é meta prospectiva. Com a desaceleração observada, a projeção para agosto é ~+26% — 1,30 fica bem calibrado agora.
+
+**Reavaliar em novembro/2026**, ou antes se o atingimento cair abaixo de 80% por dois meses seguidos.
+
+\* Julho extrapolado de 26 para 31 dias.
+
+## Mês parcial e janela equivalente no MoM
+
+Implementado em [`scripts/analytics/lib/period.mjs`](../../../../scripts/analytics/lib/period.mjs) (`partialMonthBounds`, `equivalentPreviousWindow`).
+
+O pipeline mensal foi desenhado para meses **fechados**. Para ver o mês corrente sem mentir no rótulo, o modo parcial corta a janela em `hoje − GSC_LAG_DAYS` (3 por padrão, via `ANALYTICS_GSC_LAG_DAYS`), porque o Search Console consolida com atraso e os últimos dias vêm artificialmente baixos.
+
+**A regra que importa**: em mês parcial o MoM compara contra a **mesma contagem de dias** do mês anterior, não contra o mês inteiro. Sem isso, 26 dias de julho seriam medidos contra 30 de junho e todo delta viria negativo por construção — um erro de janela lido como queda de desempenho.
+
+| Aspecto | Tratamento |
+|---------|-----------|
+| Health Score | Não muda. Com janelas equivalentes os MoM ficam válidos; `engagementRate` é taxa e `indexation` é point-in-time |
+| Metas dinâmicas | Não pro-rateadas. `computeMonthlyGoals` já exclui o mês corrente da média móvel (`monthSlug < currentMonthSlug`), então a baseline fica intacta |
+| Hubs `blog.md`/`seo-aeo.md` | **Não** atualizados — valores parciais são um prefixo do fechamento, e gravá-los faria `/standup` e `/wrap-up` narrarem regressão inexistente |
+| Modo comparativo do dashboard | Desabilitado — ele lê `ga4_data` das duas linhas, e a linha anterior guarda o mês inteiro |
+| `no-posts` | Texto muda para "primeiros N dias", mas a flag **não** é suprimida |
+
+**Limitação conhecida**: a composição de dias da semana só é idêntica quando `daysCovered` é múltiplo de 7. Fora disso as duas janelas pegam quantidades diferentes de fim de semana, o que enviesa levemente o MoM. Não foi corrigido por normalização de média diária — isso introduziria um segundo modelo mental ("users/dia") que ninguém lembraria em reunião.
+
+**Auto-cura**: o run do dia 1 (sem flags) regenera o mesmo mês como fechado, sobrescrevendo o mesmo arquivo MD e a mesma linha do Supabase (PK `month`). Não há estado órfão para limpar.
 
 ## Red flags (Ato 0)
 
@@ -91,7 +140,7 @@ Implementado em [`lib/analytics/red-flags.ts`](../../../../lib/analytics/red-fla
 | **clicks-drop** | critical (≤-20%) / warning (≤-10%) | `clicksMoMPct` abaixo do threshold |
 | **indexation-drop** | critical | `indexedCount < previous.indexedCount` |
 | **engagement-drop** | warning | `engagementRateMoMPct <= -15` |
-| **no-posts** | warning | nenhum post publicado no mês |
+| **no-posts** | warning | nenhum post publicado no mês (em mês parcial, "nos primeiros N dias") |
 | **opportunity-queries** | warning | query com `impressions ≥ 500` E `ctr < 2%` |
 
 Cada flag inclui `action` sugerida quando aplicável.
@@ -111,9 +160,28 @@ Implementado em [`lib/analytics/timeline-events.ts`](../../../../lib/analytics/t
 - **Bounce rate**: % de sessões que saíram sem nenhuma interação. GA4 padrão. 0-100.
 - **Engagement rate**: % de sessões "engajadas" (>10s OU >1 evento). GA4 padrão. 0-100.
 - **Retention %** (Berkahn-specific): tempo médio engajado ÷ read_time configurado. Mede leitura do conteúdo, não bounce do tráfego.
-- **MoM**: Month over Month. Comparação com mês imediatamente anterior.
-- **Indexado**: cobertura state do GSC inclui "indexed" (case-insensitive).
+- **MoM**: Month over Month. Comparação com mês imediatamente anterior. Em relatório parcial, com a **janela equivalente** (mesma contagem de dias), não com o mês inteiro.
+- **Relatório parcial**: mês ainda aberto, com janela cortada no lag do GSC. Marcado por `periodo_parcial: true` no frontmatter e badge "Parcial" no dashboard.
+- **Indexado**: `coverageState` do GSC contém "indexed" **e não contém "not indexed"** (case-insensitive). A segunda condição é obrigatória: `Crawled - currently not indexed` e `Discovered - currently not indexed` contêm a substring "indexed" e eram contados como indexados até 2026-07-29, inflando `indexedCount` (Julho/2026 reportava 38/38 quando o real era 34/38) e, por tabela, o Health Score. Ver ressalva sobre o histórico abaixo.
 - **Health Score**: número único 0-100 que resume saúde do projeto naquele mês. Ver fórmula acima.
+
+## Ressalva: relatórios de fev a jun/2026 têm indexação inflada
+
+O bug de contagem de indexação (ver Glossário) afetou **todos** os relatórios anteriores, sempre em +1:
+
+| Relatório | Reportado | Real |
+|-----------|----------:|-----:|
+| 2026-02 | 30/30 | 29/30 |
+| 2026-03 | 30/30 | 29/30 |
+| 2026-04 | 30/30 | 29/30 |
+| 2026-05 | 31/31 | 30/31 |
+| 2026-06 | 35/35 | 34/35 |
+
+**Esses relatórios não foram regenerados**, decisão de 2026-07-29. Regenerar reescreveria `criado:` e `data_diagnostico:` para a data da regeneração, apagando quando a análise realmente foi feita — custo maior que o benefício, já que o erro é de 1 página e move o Health Score em ~1 ponto.
+
+Consequências práticas: qualquer relatório anterior a julho/2026 que afirme "100% indexado" está errado por 1 página, e os `indexedCount` gravados em `analytics_snapshots` para esses meses seguem inflados. A série de Health Score histórica está ~1 ponto alta. **Não recalcular tendência de indexação usando fev-jun sem descontar isso.**
+
+Julho/2026 em diante está correto.
 
 ## Referências
 

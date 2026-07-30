@@ -1,21 +1,21 @@
 ---
 tipo: projeto
 criado: 2026-05-22
-atualizado: 2026-05-22
+atualizado: 2026-07-29
 tags:
   - project/site
   - status/active
-ai_summary: Hub do projeto Site — Next.js 15 + Supabase + Vercel em produção (berkahn.com.br). 44 páginas detectadas pelo Google. Ajustes contínuos, novas páginas, refactors, integração admin/Supabase. Code paths em app/, lib/, components/.
+ai_summary: Hub do projeto Site — Next.js 15 + Supabase + Vercel em produção (berkahn.com.br). Indexação dos artigos resolvida em 2026-07-29 (34/38); páginas institucionais nunca foram medidas. Ajustes contínuos, novas páginas, refactors, integração admin/Supabase. Code paths em app/, lib/, components/.
 status: active
 projeto: site
-kpi_paginas_indexadas: 6
-kpi_paginas_total: 44
+kpi_paginas_indexadas: 34
+kpi_paginas_total: 38
 kpi_lcp_target_ms: 2500
 kpi_fid_target_ms: 100
 kpi_cls_target: 0.1
 kpi_isr_revalidate_s: 60
 kpi_componentes_article: 19
-kpi_atualizado_em: 2026-05-22
+kpi_atualizado_em: 2026-07-29
 contextos_aplicados:
   - stack-nextjs-supabase
   - admin-setup
@@ -44,18 +44,21 @@ code_paths:
 
 ## Status atual
 
-Site em produção (Next.js App Router + Supabase + Vercel + Tailwind + shadcn/ui). 16 rotas em `app/` (atualidades, empresa, admin, apresentacao-executiva, etc.). Google detecta 44 páginas mas só indexa 6 — **ver [[seo-aeo]] para resolução**. Admin com painel de posts ativo (`app/admin/`). Integração Google Sheets para leads via Apps Script.
+Site em produção (Next.js App Router + Supabase + Vercel + Tailwind + shadcn/ui). 16 rotas em `app/` (atualidades, empresa, admin, apresentacao-executiva, etc.). Admin com painel de posts ativo (`app/admin/`). Integração Google Sheets para leads via Apps Script.
+
+**Indexação**: 34 de 38 artigos indexados (89%) em 2026-07-29, contra 6/44 em abril. O pipeline `/performance` inspeciona **só URLs de artigo** — as páginas institucionais (`/empresa`, `/servicos`, `/lsf`, `/portfolio`, etc.) nunca foram medidas. Se isso importar, ampliar `getAllPostUrls()` em `scripts/analytics/lib/posts.mjs`. Ver [[seo-aeo]].
 
 ## Bloqueios ativos
 
-- [ ] **Indexação Google** (delegado a [[seo-aeo]]): 6/44 = 14%
+- [ ] **PR #17 (institucional v3) pendente merge**: branch `design/institucional-monografia` (rota `/institucional/pdf` + API + 9 componentes). Validar geração do PDF em prod após merge. Ver [[materiais]] + `40-content/materiais/2026-07-09-pdf-institucional/`
+- [x] **Indexação Google** (delegado a [[seo-aeo]]): resolvido em 2026-07-29 — 34/38 artigos (89%), contra 6/44 em abril
 - [ ] **Bug SearchAction**: gera URL inválida — corrigir
 - [ ] **Google Sheets SPOF**: leads sem backup automático em Supabase (mitigado em Fase 4 do plano)
 - [ ] **Core Web Vitals**: monitorar LCP < 2.5s, FID < 100ms, CLS < 0.1
 
 ## Próximos 7 dias
 
-- [ ] (sob demanda — entrar via /standup conforme issues)
+- [ ] **Merge PR #17** (institucional v3) + validar `/institucional/pdf` gerando PDF em prod
 - [ ] Validar build (`npm run build`) sem warnings críticos
 - [ ] gitleaks scan pre-commit ativo
 
@@ -63,7 +66,8 @@ Site em produção (Next.js App Router + Supabase + Vercel + Tailwind + shadcn/u
 
 | Métrica | Atual | Meta | Δ |
 |---------|-------|------|---|
-| Páginas indexadas | 6 | 44 | -38 ⚠️ |
+| Artigos indexados | 34/38 (89%) | 38 | -4 |
+| Páginas institucionais indexadas | não medido | — | ampliar escopo do `/performance` |
 | LCP | n/d | < 2500ms | monitorar |
 | CLS | n/d | < 0.1 | monitorar |
 | ISR revalidate | 60s | 60s | OK |
@@ -109,5 +113,6 @@ Site em produção (Next.js App Router + Supabase + Vercel + Tailwind + shadcn/u
 
 ## Histórico recente
 
+- 2026-07-20: standup — infra nova do **Documento Institucional PDF**: rota `app/institucional/pdf/`, `GET /api/institucional/pdf`, `components/institucional/pdf/*.tsx` (9 páginas), copy em `lib/institucional-data.ts` (2026-07-09/10). Branch `design/institucional-monografia` → PR #17 pendente merge. Reusa pipeline Puppeteer + `optImg()` (PDF 31MB → 6.7MB).
 - 2026-05-22: hub criado
 - 2026-05-21: vault migrado, integração documentada em `60-arquitetura/`

@@ -1,7 +1,7 @@
 ---
 tipo: projeto
 criado: 2026-05-22
-atualizado: 2026-07-01
+atualizado: 2026-07-20
 tags:
   - project/material
   - status/active
@@ -110,6 +110,8 @@ Entry-point: [[banco-imagens]] (MOC). Fonte: `Docs/banco-imagens/<categoria>/`.
 
 ## Histórico recente
 
+- 2026-07-20: standup — **Documento Institucional PDF "O que fazemos"** (9 páginas A4) entregue como novo material. v1 (PR #14) → v2 "monografia editorial" (rejeitado "muito Claude") → **v3 "Suíço-brutalista / Blueprint"** (Archivo + Space Mono + azul `#123A5E`), branch `design/institucional-monografia` → PR #17 pendente merge. Briefing: `40-content/materiais/2026-07-09-pdf-institucional/`. Artefato `Docs/berkahn-institucional-v3.pdf` (6.7MB). Pipeline de PDF do site (não Canva).
+- 2026-07-06: standup — 2 wikilinks quebrados em notas-índice corrigidos (PR #10, 2026-07-02). Vault-validate 0 issues.
 - 2026-07-01: marca d'água BERKAHN aplicada em 26 imagens (Clube Quinta dos Lagos) via `watermark-images.mjs` — registro em [[watermark-clube-quinta-dos-lagos]].
 - 2026-07-01: banco de imagens reorganizado (160 arquivos / 9 categorias em `Docs/banco-imagens/`); catálogo reescrito — MOC [[banco-imagens]] + 9 índices 1:1 com as categorias; 7 notas-índice antigas (paths defasados) removidas; 8 galerias visuais + `banco-imagens.base`.
 - 2026-05-22: hub criado, plano de catalogação via 9 notas-índice

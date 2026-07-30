@@ -1,26 +1,27 @@
 ---
 tipo: projeto
 criado: 2026-05-22
-atualizado: 2026-07-01
+atualizado: 2026-07-30
 tags:
   - project/blog
   - status/active
-ai_summary: Hub do projeto Blog — posts semanais em /atualidades. 37 publicados, meta +1/semana. Pipeline 4 etapas (/brainstorm → /pesquisa → /criacao → /artigo). Bloqueio crítico:  indexação Google (1/35). Lido por /standup, /wrap-up, /artigo.
+ai_summary: Hub do projeto Blog — posts semanais em /atualidades. 38 publicados, 34 indexados (89%). Pipeline 4 etapas (/brainstorm → /pesquisa → /criacao → /artigo). Funil reposto em 2026-07-29 com 44 pautas até dezembro; meta tags e answer_summary saneados em 2026-07-30. Bloqueio atual é thin content — 9 artigos com menos de 55 palavras, 24% do blog — mais a canibalização entre as duas páginas de custo. Lido por /standup, /wrap-up, /artigo.
 status: active
 projeto: blog
-kpi_publicados: 37
+kpi_publicados: 38
 kpi_meta_publicados_semanal: 1
-kpi_indexados_google: 35
-kpi_meta_indexacao_total: 30
+kpi_indexados_google: 34
+kpi_meta_indexacao_total: 38
+kpi_posts_carcaca: 9
 kpi_posts_sem_meta: 9
-kpi_posts_sem_answer_summary: 3
+kpi_posts_sem_answer_summary: 0
 kpi_ga4_users_mes: 1179
 kpi_ga4_sessions_mes: 1498
 kpi_ga4_pageviews_mes: 1860
 kpi_gsc_clicks_mes: 850
 kpi_gsc_impressions_mes: 34396
 kpi_health_score_mes: 83
-kpi_atualizado_em: 2026-07-01
+kpi_atualizado_em: 2026-07-20
 contextos_aplicados:
   - berkahn-brand
   - seo-aeo-strategy
@@ -47,30 +48,80 @@ subagents_uteis:
 
 ## Status atual
 
-Pipeline editorial estável. 35 artigos publicados acumulados (cadência 1/semana). **Indexação Google é o gargalo crítico**: apenas 1 dos 35 artigos está indexado. Migração do vault concluída — `40-content/blog/publicados/` agora é source-of-truth (sync para Supabase via `/artigo`).
+Dados verificados em 2026-07-29 contra Supabase e GSC.
+
+**38 artigos publicados, 34 indexados (89%)**. O bloqueio P0 de indexação que dominava este hub desde abril **está encerrado** — o texto anterior dizia "1 de 35 indexados", número que já estava errado quando foi escrito.
+
+**O gargalo mudou de lugar**: o problema agora é o vault divergir da produção, não a indexação. Último post real é `anatomia-parede-steel-frame` (2026-07-20, 9 dias atrás) — a cadência está quase em dia, mas **esse post não existe no vault**. Ler `40-content/blog/publicados/` daria a resposta errada de que o último post foi 08/07.
+
+`ideias/` foi reposta em 2026-07-29 com 44 pautas até dezembro (`ideas-2026-{08..12}.md`). `drafts/` e `pesquisa/` seguem vazias: enchem conforme o ciclo semanal roda.
+
+Tráfego seguiu crescendo: 1.179 users em junho, 1.407 nos primeiros 26 dias de julho. Mas o crescimento vem de um ativo só (`custo-steel-frame-m2-2026` = 52% dos pageviews), não da cadência.
 
 ## Bloqueios ativos
 
-- [ ] **Indexação Google (P0)**: 1/35 artigos indexados. Solicitar indexação manual no GSC para top 10 artigos. Ver [[seo-aeo]]
-- [ ] **9 artigos sem meta_title/meta_description**: bloqueia ranking. Backfill agendado para Sprint 2
-- [ ] **3 artigos sem answer_summary**: bloqueia AEO (citações por IA)
-- [ ] **35 artigos = ilhas** no vault: zero `ai_summary`, zero tags `domain/`, zero wikilinks. Backfill via script em Sprint 2
+- [ ] **Vault divergente da produção (P0)**: 6 slugs no ar sem arquivo no vault e 6 arquivos no vault fora do ar. Ver seção abaixo
+- [x] ~~**Pipeline vazio (P0)**~~: resolvido em 2026-07-29. 44 pautas planejadas até dez/2026 em [[2026-08-calendario-editorial]], serializadas em `ideias/ideas-2026-{08..12}.md`. Briefing executável em [[2026-08-playbook-pautas]]
+- [ ] **Canibalização de custo (P0, novo)**: `quanto-custa-construir-steel-frame-precos-m2-2026` é suprimida pela página-mãe em **todas** as queries de preço. 17.759 impressões e CTR 1,15% em 90 dias. Ver [[2026-07-diagnostico-editorial]]
+- [x] ~~**CTR de 8 páginas com impressão alta (P0)**~~ — meta tags reescritas em produção em 2026-07-30. Linha de base registrada em [[2026-08-calendario-editorial]]; o relatório do cron de 01/09 mede o efeito
+- [x] ~~**Contradição de preço** em `custo-steel-frame-m2-2026`~~ — resolvida em 2026-07-30. Faixa canônica: **R$ 3.015 a R$ 6.091/m²** (Sudeste)
+- [x] ~~**4 artigos sem answer_summary** (P1)~~ — preenchidos em 2026-07-30, 98 a 102 palavras cada, com dado quantitativo do próprio corpo
+- [x] ~~**9 artigos são carcaças (P0)**~~ — resolvidos em 2026-07-30. **4** sem substituto ficaram no ar com `noindex, follow`; **5** com substituto foram consolidadas por **301**, com 14 links internos reescritos. Backlog de reescrita em [[2026-07-thin-content-mapa]]
+- [ ] **4 artigos não indexados** (P1): ver lista em [[seo-aeo]]
+- [ ] **`quanto-custa-construir-steel-frame-precos-m2-2026` com `published_at` nulo** (P2): quebra ordenação e a timeline do dashboard
 
 ## Próximos 7 dias
 
-- [ ] Post semanal: definir tema via `/brainstorm` (segunda)
-- [ ] `/pesquisa` (terça)
-- [ ] `/criacao` (quarta)
-- [ ] `/artigo` (quinta) + `/linkedin` (quinta tarde)
+- [ ] Semana S1: `/pesquisa` → `/criacao` → `/artigo` do ICMS solar (janela vence 31/12, e homologação leva meses). **Já destravado** — a faixa de preço canônica está definida
+- [ ] Backfill de meta tags nos posts que seguem sem `meta_title`/`meta_description` (os 9 de CTR baixo já foram)
+- [ ] Pedir indexação no GSC das 4 URLs fora do índice
 
 ## KPIs (snapshot)
 
 | Métrica | Atual | Meta | Δ |
 |---------|-------|------|---|
-| Posts publicados (total) | 35 | 36 (semana atual) | -1 |
-| Indexados Google | 1 | 30 | -29 ⚠️ P0 |
-| Posts sem meta tags | 9 | 0 | +9 ⚠️ P0 |
-| Posts sem answer_summary | 3 | 0 | +3 ⚠️ P1 |
+| Posts publicados (total) | 38 | — | ✅ |
+| Indexados Google | 34/38 (89%) | 38 | -4 |
+| Dias desde o último post | 9 | 7 | +2 |
+| Slugs divergentes vault ↔ produção | 12 (6+6) | 0 | ⚠️ P0 |
+| Posts carcaça (<55 palavras) | 9 | 0 | 4 noindex + 5 em 301 ✅ |
+| Artigos indexáveis (com conteúdo) | 29 | 33 | reescrever 4 |
+| Posts sem answer_summary | 0 | 0 | ✅ |
+| Páginas de CTR baixo corrigidas | 9 | — | ✅ 2026-07-30 |
+| Artigos no funil (drafts+ideias+pesquisa) | 44 planejados | ≥2 | ✅ |
+| CTR de `quanto-custa-construir-...` | 1,15% | >3% | ⚠️ P0 |
+| Concentração de cliques no artigo #1 | 78% | <55% | ⚠️ |
+
+## Divergência vault ↔ produção (2026-07-29)
+
+`40-content/blog/publicados/` **não é source-of-truth confiável**. Ambos os lados têm 38 arquivos, mas 12 slugs divergem.
+
+**No ar, sem arquivo no vault** — ✅ **resolvido em 2026-07-29**, mas eram **4**, não 6:
+
+Os 4 abaixo foram reconstruídos a partir do Supabase e agora estão em `publicados/`. Cada um traz um callout marcando que os campos curatoriais (`palavras_chave`, tags `domain/`, `linkedin_slug`, `material_visual_slug`) ficaram vazios e precisam de curadoria.
+
+`anatomia-parede-steel-frame` e `energia-solar-residencial` **já existiam em `main`, curados**. A ausência era artefato de a sessão ter rodado na branch `design/institucional-monografia`, que está 3 commits atrás de `main` (merge-base `a149b47`) e portanto nunca teve esses arquivos. Nada foi deletado, e mergear aquela branch não apaga nada. Restaurados de `main` na working tree local.
+
+**Lição**: contar arquivos em `publicados/` só é confiável na branch certa. Para saber o que está no ar, a fonte é o Supabase, não a pasta.
+
+| Publicado | Slug | Observação |
+|---|---|---|
+| 2024-10-25 | `tendencias-construcao-modular-2025` | data anterior ao vault |
+| 2026-03-16 | `custo-steel-frame-m2-2026` | **maior ativo: 78% dos cliques, 52% dos pageviews** |
+| 2026-03-16 | `steel-frame-vs-wood-frame` | |
+| 2026-04-27 | `reforma-tributaria-construcao-industrializada` | também sem `answer_summary` |
+| 2026-07-14 | `energia-solar-residencial` | recente |
+| 2026-07-20 | `anatomia-parede-steel-frame` | **último post publicado** |
+
+**No vault, fora do ar (6)** — ⏳ **pendente de decisão sua**: `alvenaria-vs-drywall`, `berkahn-reforma-construcao-industrializada`, `hold-downs-ancoragens`, `mitos-verdades-steel-frame`, `normas-lsf`, `orcamento-steel-frame`.
+
+Não dá para resolver isso por dedução: cada um pode ter sido despublicado de propósito, renomeado (vários têm nome próximo de slugs que estão no ar, ex. `normas-lsf` vs `normas-light-steel-frame-brasil`), ou nunca ter chegado a publicar. Precisam ser classificados um a um antes de arquivar ou republicar.
+
+### Faixa de preço canônica (resolvido em 2026-07-30)
+
+`custo-steel-frame-m2-2026` contradizia a si mesma sobre preço. O corpo, os componentes e a `meta_description` diziam **R$ 3.015 a R$ 6.091/m²** (Sudeste); só o `answer_summary` dizia R$ 2.500 a R$ 4.500. Foi ele o corrigido.
+
+**Toda pauta que citar preço usa R$ 3.015 a R$ 6.091/m² e nenhuma outra faixa.**
 
 > KPIs FLAT no frontmatter (`kpi_*`). Agregados por [[kpis.base]].
 
@@ -106,6 +157,7 @@ Pipeline editorial estável. 35 artigos publicados acumulados (cadência 1/seman
 
 ## Histórico recente
 
+- 2026-07-20: standup — `kpi_publicados` 37 → 38 (novo: `steel-frame-laje-de-concreto`, publicado 2026-07-08). 3 aprendizados de pipeline adicionados em [[article-pipeline]] (H1 duplica título; `NormsSection` título fixo; `StatHighlight` trunca decimais).
 - 2026-05-22: hub criado; sprint 1 do plano de reorganização do vault
 - 2026-05-21: vault migrado, artigos arquivados em `40-content/blog/publicados/`
 - 2026-04-13: pipeline /brainstorm → /pesquisa → /criacao → /artigo estabilizado

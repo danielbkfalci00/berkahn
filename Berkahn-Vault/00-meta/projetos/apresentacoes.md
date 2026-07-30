@@ -1,7 +1,7 @@
 ---
 tipo: projeto
 criado: 2026-05-22
-atualizado: 2026-05-22
+atualizado: 2026-07-06
 tags:
   - project/apresentacao
   - status/active
@@ -99,5 +99,6 @@ Ver [[presentation-system#Como adicionar um novo slide]] — pattern: criar `com
 
 ## Histórico recente
 
+- 2026-07-06: standup — fotos do globo (DomeGallery) renovadas na `/apresentacao-executiva` (PR #13, 2026-07-02). Validar em prod.
 - 2026-05-22: hub criado
 - 2026-05-21: roteiros migrados de `Docs/apresentacoes/`
