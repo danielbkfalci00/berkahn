@@ -1022,6 +1022,11 @@ O último post saiu em 20/07 e o funil está vazio desde 21/05. Publicar 2 artig
 </tbody>
 </table>
 <h3>Bloco 2 — Título e meta (maior ROI imediato)</h3>
+<blockquote>
+<p>[!success] Executado em 2026-07-30
+As 9 páginas abaixo foram atualizadas em produção via <code>scripts/analytics/adhoc-fix-meta.mjs --apply</code>, e o vault foi sincronizado com <code>adhoc-sync-vault-meta.mjs</code>. Os números da tabela são a <strong>linha de base</strong>: o relatório do cron de 01/09 mede o efeito.</p>
+<p>Uma suposição do plano foi refutada na execução: <code>normas-light-steel-frame-brasil</code> <strong>já tinha</strong> &quot;NBR 16970&quot; no título e 55 caracteres. Só a descrição mudou, para ganhar a data da norma. <code>custo-steel-frame-m2-2026</code> foi deliberadamente <strong>não alterada</strong> no título: tem o melhor CTR do site (2,98%) e mexer nela é risco sem ganho proporcional.</p>
+</blockquote>
 <p>Reescrever <code>meta_title</code> e <code>meta_description</code> de 8 páginas. Números de referência de julho registrados para medir o efeito no relatório de 01/09.</p>
 <table>
 <thead>
@@ -1085,7 +1090,7 @@ O último post saiu em 20/07 e o funil está vazio desde 21/05. Publicar 2 artig
 </table>
 <h3>Bloco 3 — Correções pontuais</h3>
 <ul>
-<li>[ ] <strong>Contradição de preço</strong> em <code>custo-steel-frame-m2-2026</code>: <code>answer_summary</code> diz R$ 2.500-4.500/m² e <code>seo_description</code> diz R$ 3.015-6.091. Definir a faixa correta e alinhar os dois campos, mais a tabela do artigo irmão. <strong>Trava toda pauta que cite preço</strong></li>
+<li>[x] <s><strong>Contradição de preço</strong> em <code>custo-steel-frame-m2-2026</code></s> — <strong>resolvida em 2026-07-30</strong>. Não havia decisão a tomar: o corpo do artigo, os componentes JSONB e a <code>meta_description</code> já convergiam em <strong>R$ 3.015 a R$ 6.091</strong> (Sudeste, alinhado ao índice de referência do setor). Só o <code>answer_summary</code> dizia R$ 2.500-4.500, e era ele o desatualizado. Reescrito, incluindo a simulação de 150 m² que também estava errada (R$ 375-675 mil → R$ 600-780 mil, agora igual ao corpo). <strong>Destrava as pautas de custo de agosto</strong></li>
 <li>[ ] Atualizar o índice de referência de preço: as duas páginas usam base mais antiga que a do concorrente que as supera</li>
 <li>[ ] Adicionar seção <strong>&quot;Desvantagens e pontos de atenção&quot;</strong> nas páginas de preço. Nenhuma delas admite uma limitação, e o líder da SERP tem essa seção</li>
 <li>[ ] Adicionar <strong>série histórica de preço (2023-2026)</strong> dentro da página-mãe: resolve 682 impressões em queries com &quot;2023&quot; sem criar página</li>
@@ -1105,9 +1110,9 @@ O último post saiu em 20/07 e o funil está vazio desde 21/05. Publicar 2 artig
 <h3>Bloco 5 — Configuração de IA e frescor (custo quase zero)</h3>
 <p>Sai da revisão de AEO em [[2026-07-diagnostico-editorial]]. Nada aqui exige escrever conteúdo.</p>
 <ul>
-<li>[ ] <strong>Desbloquear <code>Google-Extended</code> em <code>app/robots.ts:13</code>.</strong> O comentário do código diz &quot;no search/citation value&quot;, o que é falso: bloquear não protege de AI Overviews e exclui o site do grounding do Gemini e do Vertex AI, a plataforma que foi de 8,9% para 27,3% de fatia em um ano. Maior impacto do bloco, custo zero</li>
-<li>[ ] Desbloquear <code>ClaudeBot</code> e <code>GPTBot</code>. A Berkahn não é publisher e não tem conteúdo a proteger; o bloqueio só remove variáveis do diagnóstico sem trazer benefício</li>
-<li>[ ] Tornar explícito o allow de <code>ChatGPT-User</code>, <code>Claude-User</code> e <code>Perplexity-User</code>, que hoje dependem do grupo curinga</li>
+<li>[x] <s><strong>Desbloquear <code>Google-Extended</code></strong></s> — <strong>feito em 2026-07-30</strong>. Movido para o grupo de bots de busca em <code>app/robots.ts</code>, com o comentário corrigido: ele governa o grounding do Gemini e do Vertex AI, não protege de AI Overviews e não é sinal de ranking</li>
+<li>[x] <s>Tornar explícito o allow de <code>ChatGPT-User</code>, <code>Claude-User</code> e <code>Perplexity-User</code></s> — <strong>feito</strong>. Ganharam grupo próprio em vez de depender do curinga</li>
+<li>[ ] Desbloquear <code>ClaudeBot</code> e <code>GPTBot</code>. <strong>Mantidos bloqueados de propósito</strong>: são crawlers de treino, não decidem citação, e a escolha de não alimentar treino é editorial e sua. Diferente do Google-Extended, que estava bloqueado por engano</li>
 <li>[ ] Verificar o <strong>Search generative AI control</strong> no Search Console (existe desde 03/06/2026) e confirmar que a propriedade está em <em>Include</em></li>
 <li>[ ] Revisar <code>Disallow: /institucional/</code>: a rota retorna 404 hoje, então não há dano, mas se a página for ao ar bloqueada de todo crawler é decisão a tomar de propósito</li>
 <li>[ ] <strong>Ciclo trimestral de atualização</strong> das páginas de custo, preço e norma, com <code>dateModified</code> real. <code>custo-steel-frame-m2-2026</code> está com 13/04/2026 num artigo que promete &quot;2026&quot; e carrega 78% dos cliques. Frescor é o único fator estrutural com evidência causal unânime, e atualizar bate publicar novo</li>

@@ -13,7 +13,7 @@ slug: financiar-construcao-light-steel-frame
 data_publicacao: 2026-02-26
 title: Como Financiar Construção em Light Steel Frame
 description: "Guia completo com as 3 formas de financiar sua obra em Steel Frame: consignado, home equity e crédito imobiliário. Taxas atualizadas para 2026."
-seo_description: "Guia completo com as 3 formas de financiar sua obra em Steel Frame: consignado, home equity e crédito imobiliário. Taxas atualizadas para 2026."
+seo_description: "A Caixa financia obra em Light Steel Frame desde a NBR 16970. Veja as 4 formas de financiar, taxas de 2026, documentos exigidos e o que muda no MCMV."
 palavras_chave:
   - financiar construção steel frame
   - financiamento light steel frame

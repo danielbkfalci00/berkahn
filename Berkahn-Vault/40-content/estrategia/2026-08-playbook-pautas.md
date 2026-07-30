@@ -387,7 +387,7 @@ Logo, este artigo **não vai rankear para a query principal** e não deve ser co
 
 | Pauta | Bloqueio |
 |---|---|
-| S2, S3, S19 e qualquer pauta de custo | A contradição de preço em `custo-steel-frame-m2-2026` (R$ 2.500-4.500 vs R$ 3.015-6.091) precisa ser resolvida primeiro. Publicar um terceiro número piora o problema |
+| ~~S2, S3, S19 e qualquer pauta de custo~~ | ✅ **Destravado em 2026-07-30.** A faixa canônica é **R$ 3.015 a R$ 6.091/m²** (Sudeste), que o corpo do artigo e os componentes já usavam. Toda pauta de custo cita esta faixa e nenhuma outra |
 | S10 (cronograma) | Depende de fotos de obra datadas. Sem elas, vira mais uma faixa vaga |
 | S15 (checklist) | O `ResourceDownload` só entra se o backend segmentar a origem do lead |
 | S17 (construtora SP) | Só faz sentido junto com a página comercial do Bloco 4 |

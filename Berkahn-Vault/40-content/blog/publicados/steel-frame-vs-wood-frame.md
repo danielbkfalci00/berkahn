@@ -11,9 +11,9 @@ projeto: blog
 slug: steel-frame-vs-wood-frame
 data_publicacao: 2026-03-16
 title: "Steel Frame vs Wood Frame: Qual Sistema Construtivo Escolher?"
-seo_title: "Steel Frame vs Wood Frame: Comparativo Completo 2026 | Berkahn"
+seo_title: "Steel Frame ou Wood Frame: qual escolher e por quê"
 description: "Comparativo completo entre Steel Frame e Wood Frame: custo, durabilidade, resistência ao fogo, desempenho térmico, prazo de obra e manutenção. Dados reais para decidir."
-seo_description: "Steel Frame ou Wood Frame? Comparamos custo, durabilidade, resistência ao fogo, desempenho térmico, prazo e manutenção com dados técnicos. Guia definitivo."
+seo_description: "Comparativo entre Steel Frame e Wood Frame em custo, durabilidade, resistência ao fogo, desempenho térmico e prazo de obra, com dados técnicos e normas."
 palavras_chave: []
 category: "Mercado e Custos"
 read_time: "14 min"

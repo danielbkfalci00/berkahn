@@ -13,9 +13,9 @@ projeto: blog
 slug: fundacao-steel-frame-vs-alvenaria
 data_publicacao: 2026-06-09
 title: "Fundação Steel Frame vs. Alvenaria: Comparativo Completo"
-seo_title: "Fundação Steel Frame vs Alvenaria: Comparativo 2026"
+seo_title: "Fundação de Steel Frame: radier ou alvenaria?"
 description: "Steel Frame precisa de fundação? Qual usar? Comparativo técnico de custo, peso e prazo entre fundação para Steel Frame e alvenaria, com dados e normas."
-seo_description: "Steel Frame precisa de fundação? Compare custo, peso e prazo entre radier e alvenaria, veja qual usar em cada terreno e o que exigem as normas técnicas NBR."
+seo_description: "O radier é padrão no Steel Frame porque a casa pesa 250 kg/m² contra 1.250 da alvenaria. Compare custo, prazo e quando cada fundação se aplica."
 palavras_chave:
   - fundação steel frame
   - fundação radier steel frame
