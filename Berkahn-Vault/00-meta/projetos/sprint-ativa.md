@@ -96,7 +96,14 @@ Os três `scheduled-tasks` estão **enabled e disparando**. O problema nunca foi
 - **`/contato` existia em 4 CTAs e em nenhum lugar mais**. A rota nunca foi criada; a captura de lead só vivia como modal. `ContactForm` extraído do `ContactFormDialog`, agora servindo os dois.
 - **`published_at` nulo** no artigo de 17.759 impressões: tirava ele do RSS, deixava o schema sem `datePublished` e fazia o sitemap declarar `lastmod` = agora a cada crawl.
 
+**Instrumentação de conversão no ar** (era a Fase 3, pendente desde o Sprint 4). `ga4_data.events` era `[]` em todos os meses porque `fetch-ga4.mjs` filtrava por 5 nomes que o site não disparava, enquanto os 3 que ele disparava ficavam fora da allowlist. Agora os dois lados espelham a mesma lista, e `cta_click` / `form_submit` / `generate_lead` / `whatsapp_click` saem com `cta_location` e `page_path` — é o que liga pauta a lead. Card de Conversão no Ato 4 do dashboard.
+
+> [!warning] Os números de agosto vão cair, e isso é o comportamento certo
+> O consentimento passou a ser respeitado de fato: `consent default denied` antes do `config`, e replay da escolha salva. Antes disso o primeiro `page_view` saía com consentimento presumido e quem recusou era medido assim mesmo. `red-flags.ts` vai disparar `users-drop` no relatório de 01/09 — **é falso positivo desta mudança**. O GSC não é afetado (não depende de cookie): se `users` cair e `clicks` não, é este corte. Detalhes em [[analytics-methodology]].
+
 **Aberto, precisa de dado externo**: `custo-steel-frame-m2-2026` e `quanto-custa-construir-...` usam snapshots diferentes do mesmo índice Arquitecasa para o Sudeste (dez/2025 vs jan/2025). Rebasear a tabela regional exige a série dez/2025 das 5 regiões.
+
+**Precisa do Bruno**: marcar `generate_lead` e `whatsapp_click` como **Key Events** no GA4 Admin (Admin → Eventos). Só faz sentido agora que os eventos existem — antes não havia o que marcar.
 
 ## Wins / decisões (2026-07-29)
 

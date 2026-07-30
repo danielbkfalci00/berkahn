@@ -14,7 +14,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { usePathname } from "next/navigation";
 import { LEAD_ENDPOINT, WHATSAPP_URL } from "@/lib/contact";
+import { trackEvent } from "@/lib/analytics";
 
 export type Segment = "residencial" | "comercial" | "";
 
@@ -26,6 +28,11 @@ interface ContactFormProps {
    * a página /contato passa o próprio heading.
    */
   header?: React.ReactNode;
+  /**
+   * De onde o formulário foi aberto. Vai para o GA4 como `cta_location` —
+   * é o que permite responder "qual página gera lead".
+   */
+  ctaLocation?: string;
 }
 
 interface FormData {
@@ -67,7 +74,11 @@ function formatarTelefone(valor: string): string {
   return `(${digits.slice(0, 2)}) ${digits.slice(2, 7)}-${digits.slice(7)}`;
 }
 
-export function ContactForm({ defaultSegment = "", header }: ContactFormProps) {
+export function ContactForm({
+  defaultSegment = "",
+  header,
+  ctaLocation = "desconhecido",
+}: ContactFormProps) {
   const [formData, setFormData] = useState<FormData>({
     name: "",
     email: "",
@@ -77,6 +88,14 @@ export function ContactForm({ defaultSegment = "", header }: ContactFormProps) {
   });
   const [status, setStatus] = useState<FormStatus>("idle");
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const pathname = usePathname();
+
+  /** Base comum dos eventos de conversão deste formulário. */
+  const contexto = () => ({
+    cta_location: ctaLocation,
+    segment: formData.segment,
+    page_path: pathname ?? undefined,
+  });
 
   const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {};
@@ -109,6 +128,10 @@ export function ContactForm({ defaultSegment = "", header }: ContactFormProps) {
     setStatus("loading");
     setErrors({});
 
+    // Tentativa. Comparado com generate_lead, revela quanto se perde entre
+    // enviar e o Apps Script confirmar.
+    trackEvent("form_submit", { ...contexto(), channel: "form" });
+
     try {
       const response = await fetch(LEAD_ENDPOINT, {
         method: "POST",
@@ -129,6 +152,8 @@ export function ContactForm({ defaultSegment = "", header }: ContactFormProps) {
 
       if (result.success) {
         setStatus("success");
+        // Conversão confirmada — o lead chegou na planilha.
+        trackEvent("generate_lead", { ...contexto(), channel: "form" });
       } else {
         setStatus("error");
         setErrors({ submit: result.message || "Erro ao enviar mensagem" });
@@ -320,6 +345,9 @@ export function ContactForm({ defaultSegment = "", header }: ContactFormProps) {
                 href={WHATSAPP_URL}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() =>
+                  trackEvent("whatsapp_click", { ...contexto(), channel: "whatsapp" })
+                }
                 className="w-full h-10 flex items-center justify-center gap-2 border border-black-10 text-black-70 hover:bg-black-5 transition-colors text-xs uppercase tracking-wider font-medium rounded-md"
               >
                 <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">

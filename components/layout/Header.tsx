@@ -93,7 +93,7 @@ export function Header({
         {/* RIGHT: CTA - Hidden on mobile, visible on desktop */}
         <div className="hidden md:flex justify-self-end">
           {variant === 'default' ? (
-            <ContactFormDialog>
+            <ContactFormDialog ctaLocation="header">
               <Button
                 variant="default"
                 size="sm"

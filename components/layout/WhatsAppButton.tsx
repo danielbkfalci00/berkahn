@@ -3,9 +3,8 @@
 import { usePathname } from "next/navigation";
 import { motion, useReducedMotion } from "motion/react";
 import { cn } from "@/lib/utils";
-
-const WHATSAPP_URL =
-  "https://wa.me/5511966415742?text=Ol%C3%A1!%20Gostaria%20de%20saber%20mais%20sobre%20os%20servi%C3%A7os%20da%20Berkahn.";
+import { WHATSAPP_URL } from "@/lib/contact";
+import { trackEvent } from "@/lib/analytics";
 
 const HIDDEN_ROUTES = ["/apresentacao", "/admin", "/orcamento", "/etapas-da-obra", "/institucional"];
 
@@ -23,6 +22,14 @@ export function WhatsAppButton() {
       rel="nofollow noopener noreferrer"
       aria-label="Fale conosco pelo WhatsApp"
       title="Fale conosco"
+      onClick={() =>
+        trackEvent("whatsapp_click", {
+          cta_location: "whatsapp_flutuante",
+          channel: "whatsapp",
+          // A página de origem é o que dá sentido ao botão global.
+          page_path: pathname ?? undefined,
+        })
+      }
       initial={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, scale: 0.8 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{

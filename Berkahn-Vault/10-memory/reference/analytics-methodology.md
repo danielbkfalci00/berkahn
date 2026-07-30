@@ -1,7 +1,7 @@
 ---
 tipo: memory
 criado: 2026-05-28
-atualizado: 2026-07-29
+atualizado: 2026-07-30
 tags:
   - ai/memory
   - status/active
@@ -182,6 +182,41 @@ O bug de contagem de indexação (ver Glossário) afetou **todos** os relatório
 Consequências práticas: qualquer relatório anterior a julho/2026 que afirme "100% indexado" está errado por 1 página, e os `indexedCount` gravados em `analytics_snapshots` para esses meses seguem inflados. A série de Health Score histórica está ~1 ponto alta. **Não recalcular tendência de indexação usando fev-jun sem descontar isso.**
 
 Julho/2026 em diante está correto.
+
+## ⚠️ Corte de série em 2026-07-30: consentimento passou a ser respeitado
+
+> [!warning] Queda esperada nos números de agosto. **Não é perda de tráfego.**
+
+Até 30/07/2026 o site chamava `gtag('config', ...)` **sem** `gtag('consent', 'default')`. Na prática: o primeiro `page_view` saía com consentimento implicitamente concedido, antes de o banner aparecer. E o `update` só rodava no clique do banner — quem tinha escolhido "apenas necessários" numa visita anterior voltava e era medido normalmente, porque o provider fazia `setConsent` e retornava sem chamar o `gtag`.
+
+Os dois bugs foram corrigidos. Agora o default é `denied` nas 4 categorias do Consent Mode v2 antes do `config`, e a escolha salva é replayed no carregamento.
+
+**Consequência na medição**: usuários que não aceitam cookies deixam de ser contados. A queda em `users`, `sessions` e `pageviews` a partir de 01/08/2026 é a diferença entre o que era medido indevidamente e o que passa a ser medido com consentimento.
+
+**Ao ler o relatório de agosto (gerado pelo cron em 01/09)**:
+
+- `detectRedFlags` (`lib/analytics/red-flags.ts`) vai disparar `users-drop`. É falso positivo desta mudança.
+- O MoM de julho→agosto **não é comparável**. A base de comparação válida volta a existir em setembro→outubro, quando os dois meses já terão a mesma regra.
+- O GSC **não é afetado** — cliques e impressões vêm do Search Console, que não depende de cookie. Se `users` cair e `clicks` não, é este corte.
+
+## Eventos de conversão — série começa em 2026-07-30
+
+Antes desta data `ga4_data.events` era `[]` em **todos** os meses, e não por falta de tráfego: `fetch-ga4.mjs` filtrava por 5 nomes de evento que o site não disparava, enquanto os 3 que ele disparava (os de `/architects`) ficavam fora da allowlist. Os dois lados existiam e não se encontravam.
+
+Agora a allowlist (`EVENTOS_RASTREADOS` em `fetch-ga4.mjs`) espelha o `type EventName` de `lib/analytics.ts`. **Ao adicionar evento, mexer nos dois** — eles não se importam, então o desencontro é silencioso.
+
+Eventos e o que cada um significa:
+
+| Evento | Dispara quando | Dimensões |
+|---|---|---|
+| `cta_click` | modal de contato **abre** (qualquer gatilho) | `cta_location`, `page_path`, `segment` |
+| `form_submit` | usuário envia o formulário | + `channel: form` |
+| `generate_lead` | Apps Script confirma o recebimento | + `channel: form` |
+| `whatsapp_click` | clique em qualquer link `wa.me` | `cta_location`, `page_path`, `channel` |
+
+`cta_location` responde "qual gatilho" (`header`, `menu_lateral`, `contato_pagina`, `blog:<slug>`); `page_path` responde "em que página". Os dois juntos são o que permite ligar pauta a lead. A diferença entre `form_submit` e `generate_lead` mede a perda entre enviar e confirmar.
+
+Relatórios anteriores a agosto/2026 não têm esta seção preenchida — ausência ali é falta de instrumentação, não ausência de conversão.
 
 ## Referências
 

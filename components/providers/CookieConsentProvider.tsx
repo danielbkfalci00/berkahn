@@ -1,11 +1,5 @@
 "use client";
 
-declare global {
-  interface Window {
-    gtag?: (...args: unknown[]) => void;
-  }
-}
-
 import {
   createContext,
   useContext,
@@ -15,8 +9,15 @@ import {
   ReactNode,
 } from "react";
 import { usePathname } from "next/navigation";
+import {
+  CONSENT_STORAGE_KEY,
+  CONSENT_VERSION,
+  consentPayload,
+  type ConsentLevel,
+  type StoredConsent,
+} from "@/lib/consent";
 
-type ConsentLevel = "all" | "necessary" | null;
+// `window.gtag` é declarado em types/global.d.ts — não redeclarar aqui.
 
 // Renderers de PDF onde o cookie banner não deve aparecer (puppeteer rasteriza
 // e o banner ficaria gravado no PDF). Allowlist explícita — NÃO usar prefixo
@@ -41,15 +42,6 @@ const CookieConsentContext = createContext<CookieConsentContextType | undefined>
   undefined
 );
 
-const STORAGE_KEY = "berkahn-cookie-consent";
-const CONSENT_VERSION = "1.0";
-
-interface StoredConsent {
-  level: ConsentLevel;
-  version: string;
-  timestamp: number;
-}
-
 export function CookieConsentProvider({ children }: { children: ReactNode }) {
   const [consent, setConsent] = useState<ConsentLevel>(null);
   const [isVisible, setIsVisible] = useState(false);
@@ -59,11 +51,14 @@ export function CookieConsentProvider({ children }: { children: ReactNode }) {
     // Skip banner em renderers de PDF — puppeteer rasteriza e ficaria no PDF
     if (ehRendererPdf(pathname)) return;
 
-    const stored = localStorage.getItem(STORAGE_KEY);
+    const stored = localStorage.getItem(CONSENT_STORAGE_KEY);
     if (stored) {
       try {
         const parsed: StoredConsent = JSON.parse(stored);
         if (parsed.version === CONSENT_VERSION && parsed.level) {
+          // Só estado de UI: o `gtag consent update` de visitas anteriores já
+          // foi replayed pelo script inline em app/layout.tsx, antes do
+          // primeiro page_view. Repetir aqui seria tarde demais.
           setConsent(parsed.level);
           return;
         }
@@ -81,15 +76,12 @@ export function CookieConsentProvider({ children }: { children: ReactNode }) {
       version: CONSENT_VERSION,
       timestamp: Date.now(),
     };
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    localStorage.setItem(CONSENT_STORAGE_KEY, JSON.stringify(data));
     setConsent(level);
     setIsVisible(false);
 
     if (typeof window !== "undefined" && window.gtag) {
-      window.gtag("consent", "update", {
-        analytics_storage: level === "all" ? "granted" : "denied",
-        ad_storage: level === "all" ? "granted" : "denied",
-      });
+      window.gtag("consent", "update", consentPayload(level));
     }
   }, []);
 
