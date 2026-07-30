@@ -1,57 +1,72 @@
-import Image from "next/image";
-import { INSTITUCIONAL_CAPA } from "@/lib/institucional-data";
+import { INSTITUCIONAL_CAPA, optImg } from "@/lib/institucional-data";
 
+// Página 1 — Capa. Foto de fachada full-bleed + gradiente + título grande.
 export function CapaPDF() {
-  const capa = INSTITUCIONAL_CAPA;
+  const c = INSTITUCIONAL_CAPA;
 
   return (
-    <div className="relative h-full w-full bg-black text-white overflow-hidden">
-      <Image
-        src={capa.heroImage}
-        alt="Obra em Light Steel Frame executada pela Berkahn"
-        fill
-        priority
-        className="object-cover opacity-50"
-        sizes="794px"
+    <div style={{ position: "relative", width: "100%", height: "100%", overflow: "hidden", background: "#1A1A1A" }}>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={optImg(c.heroImage, 1080, 70)}
+        alt=""
+        style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}
       />
-      <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/20 to-black/90" />
-
-      <div className="relative z-10 h-full flex flex-col justify-between px-12 py-10">
-        {/* Topo: logo + label */}
-        <div className="flex items-center justify-between">
-          <Image
-            src={capa.logoBranco}
-            alt="Berkahn Construtora"
-            width={160}
-            height={48}
-            priority
-            className="h-10 w-auto"
-          />
-          <p className="text-[10px] uppercase tracking-[0.3em] text-white/60">
-            {capa.label}
-          </p>
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          background:
+            "linear-gradient(180deg, rgba(10,10,10,0.72) 0%, rgba(10,10,10,0.35) 42%, rgba(10,10,10,0.82) 100%)",
+        }}
+      />
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          padding: "20mm",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
+          color: "#fff",
+        }}
+      >
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+          <span style={{ fontSize: 15, fontWeight: 800, letterSpacing: "0.22em" }}>BERKAHN</span>
+          <span
+            style={{
+              fontSize: 9.5,
+              fontWeight: 500,
+              letterSpacing: "0.24em",
+              textTransform: "uppercase",
+              color: "#cfcdc6",
+            }}
+          >
+            {c.label}
+          </span>
         </div>
 
-        {/* Centro: headline */}
-        <div>
-          <p className="text-xs uppercase tracking-[0.3em] text-white/50 mb-5">
-            O que fazemos
-          </p>
-          <h1 className="font-heading text-6xl font-extrabold tracking-tight leading-[1.05] mb-6">
-            Do conceito à<br />
-            entrega das chaves
+        <div style={{ marginBottom: "8mm" }}>
+          <div style={{ width: 52, height: 1.5, background: "#fff", marginBottom: 22 }} />
+          <h1 style={{ fontSize: 62, fontWeight: 800, letterSpacing: "-0.03em", lineHeight: 1.0, margin: 0, maxWidth: "15ch" }}>
+            {c.headline}
           </h1>
-          <p className="text-lg text-white/70 font-light max-w-md leading-relaxed">
-            {capa.subtitle}
+          <p style={{ fontSize: 16, fontWeight: 400, lineHeight: 1.55, color: "#d8d6ce", margin: "26px 0 0", maxWidth: "52ch" }}>
+            {c.subtitle}
           </p>
         </div>
 
-        {/* Rodapé: wordmark + tagline */}
-        <div className="flex items-end justify-between border-t border-white/20 pt-6">
-          <p className="font-heading text-xl font-bold tracking-[0.3em]">BERKAHN</p>
-          <p className="text-sm text-white/50 font-light tracking-[0.2em]">
-            {capa.tagline}
-          </p>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "flex-end",
+            borderTop: "1px solid rgba(255,255,255,0.22)",
+            paddingTop: 16,
+          }}
+        >
+          <span style={{ fontSize: 13, fontWeight: 800, letterSpacing: "0.22em" }}>BERKAHN</span>
+          <span style={{ fontSize: 16, fontWeight: 300, letterSpacing: "0.02em", color: "#d8d6ce" }}>{c.tagline}</span>
         </div>
       </div>
     </div>

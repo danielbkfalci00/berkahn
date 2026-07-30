@@ -1,62 +1,87 @@
-import Image from "next/image";
-import { SISTEMAS_CONSTRUTIVOS } from "@/lib/institucional-data";
+import { SISTEMAS_CONSTRUTIVOS, optImg } from "@/lib/institucional-data";
+import { RunHead, Eyebrow, Footer, PHOTO_BG } from "@/components/institucional/pdf/chrome";
 
+// Página 4 — Sistemas construtivos (página escura). 3 blocos + diagrama LSF + NBRs.
 export function SistemasConstrutivosPDF() {
-  const dados = SISTEMAS_CONSTRUTIVOS;
+  const s = SISTEMAS_CONSTRUTIVOS;
 
   return (
-    <div className="h-full bg-black text-white flex flex-col justify-center px-12 py-8">
-      <p className="text-sm uppercase tracking-[0.3em] text-white/50 mb-3">
-        03 — {dados.label}
-      </p>
-      <h2 className="font-heading text-4xl font-bold tracking-tight leading-tight mb-4 max-w-2xl">
-        {dados.headline}
-      </h2>
-      <p className="text-base text-white/70 leading-relaxed max-w-2xl mb-8">
-        {dados.intro}
-      </p>
+    <div
+      style={{
+        position: "relative",
+        width: "100%",
+        height: "100%",
+        overflow: "hidden",
+        background: "#1A1A1A",
+        padding: "18mm 20mm",
+        display: "flex",
+        flexDirection: "column",
+        color: "#fff",
+      }}
+    >
+      <RunHead label="Sistemas Construtivos" dark />
 
-      <div className="grid grid-cols-[1.4fr,1fr] gap-8 mb-8">
-        {/* Blocos de sistemas */}
-        <div className="space-y-5">
-          {dados.blocos.map((bloco) => (
-            <div key={bloco.title} className="border-t border-white/15 pt-4">
-              <p className="text-[10px] uppercase tracking-[0.25em] text-white/40 mb-1">
-                {bloco.subtitle}
-              </p>
-              <h3 className="font-heading text-xl font-semibold mb-1">{bloco.title}</h3>
-              <p className="text-sm text-white/60 leading-relaxed">{bloco.description}</p>
-            </div>
-          ))}
-        </div>
-
-        {/* Diagrama de camadas LSF */}
-        <div className="relative rounded-xl overflow-hidden bg-white">
-          <Image
-            src={dados.image}
-            alt={dados.imageAlt}
-            fill
-            priority
-            className="object-contain p-2"
-            sizes="300px"
-          />
-        </div>
-      </div>
-
-      {/* Normas */}
-      <div className="border border-white/15 rounded-2xl p-5">
-        <p className="text-[10px] uppercase tracking-[0.25em] text-white/40 mb-4">
-          Referências normativas
+      <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", padding: "12mm 0" }}>
+        <Eyebrow dark>Sistemas Construtivos</Eyebrow>
+        <h2 style={{ fontSize: 38, fontWeight: 800, letterSpacing: "-0.025em", lineHeight: 1.05, color: "#fff", margin: "0 0 20px", maxWidth: "22ch" }}>
+          {s.headline}
+        </h2>
+        <p style={{ fontSize: 14, fontWeight: 400, lineHeight: 1.6, color: "#b8b6ae", margin: "0 0 20px", maxWidth: "70ch" }}>
+          {s.intro}
         </p>
-        <div className="grid grid-cols-3 gap-6">
-          {dados.normas.map((item) => (
-            <div key={item.norma}>
-              <p className="font-heading text-lg font-semibold mb-1">{item.norma}</p>
-              <p className="text-xs text-white/60 leading-relaxed">{item.descricao}</p>
-            </div>
-          ))}
+
+        <div style={{ display: "grid", gridTemplateColumns: "1.05fr 0.95fr", gap: 36, alignItems: "center" }}>
+          <div style={{ display: "flex", flexDirection: "column", borderTop: "1px solid #3a3a3a" }}>
+            {s.blocos.map((b, i) => (
+              <div key={b.title} style={{ padding: "20px 0", borderBottom: "1px solid #3a3a3a" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 8 }}>
+                  <h3 style={{ fontSize: 18, fontWeight: 600, color: "#fff", margin: 0 }}>{b.title}</h3>
+                  {i === 0 ? (
+                    <span
+                      style={{
+                        fontSize: 8.5,
+                        fontWeight: 500,
+                        letterSpacing: "0.18em",
+                        textTransform: "uppercase",
+                        color: "#fff",
+                        border: "1px solid #555",
+                        padding: "3px 8px",
+                      }}
+                    >
+                      {b.subtitle}
+                    </span>
+                  ) : (
+                    <span style={{ fontSize: 8.5, fontWeight: 500, letterSpacing: "0.18em", textTransform: "uppercase", color: "#999" }}>
+                      {b.subtitle}
+                    </span>
+                  )}
+                </div>
+                <p style={{ fontSize: 11.5, lineHeight: 1.55, color: "#999", margin: 0 }}>{b.description}</p>
+              </div>
+            ))}
+          </div>
+
+          <figure style={{ margin: 0, aspectRatio: "3 / 4", background: PHOTO_BG, position: "relative", overflow: "hidden" }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={optImg(s.image, 640)}
+              alt={s.imageAlt}
+              style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}
+            />
+          </figure>
         </div>
       </div>
+
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 24, borderTop: "1px solid #3a3a3a", paddingTop: 16, marginBottom: 16 }}>
+        {s.normas.map((n) => (
+          <div key={n.norma}>
+            <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: "0.04em", color: "#fff", marginBottom: 5 }}>{n.norma}</div>
+            <div style={{ fontSize: 10, lineHeight: 1.5, color: "#999" }}>{n.descricao}.</div>
+          </div>
+        ))}
+      </div>
+
+      <Footer page="04 / 09" dark />
     </div>
   );
 }

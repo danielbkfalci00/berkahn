@@ -1,58 +1,75 @@
-import Image from "next/image";
-import { Mail, Phone, Globe, Linkedin } from "lucide-react";
 import { CONTATO_INSTITUCIONAL } from "@/lib/institucional-data";
+import { RunHead, Eyebrow } from "@/components/institucional/pdf/chrome";
 
+// Página 9 — Contato (fecho preto). Título grande + canais + carimbo institucional.
 export function ContatoPDF() {
-  const contato = CONTATO_INSTITUCIONAL;
+  const c = CONTATO_INSTITUCIONAL;
 
-  const canais = [
-    { icon: Mail, value: contato.email },
-    { icon: Phone, value: contato.phone },
-    { icon: Globe, value: contato.website },
-    { icon: Linkedin, value: contato.linkedin },
+  const canais: [string, string][] = [
+    ["E-mail", c.email],
+    ["Telefone", c.phone],
+    ["Site", c.website],
+    ["LinkedIn", c.linkedin],
   ];
 
   return (
-    <div className="h-full bg-black text-white flex flex-col justify-between px-12 py-12">
-      {/* Logo no topo */}
-      <div className="flex justify-center">
-        <Image
-          src={contato.logoBranco}
-          alt="Berkahn Construtora"
-          width={180}
-          height={54}
-          priority
-          className="h-11 w-auto"
-        />
-      </div>
+    <div
+      style={{
+        position: "relative",
+        width: "100%",
+        height: "100%",
+        overflow: "hidden",
+        background: "#000000",
+        padding: "18mm 20mm",
+        display: "flex",
+        flexDirection: "column",
+        color: "#fff",
+      }}
+    >
+      <RunHead label="Contato" dark />
 
-      {/* Centro: CTA + canais */}
-      <div className="text-center">
-        <h2 className="font-heading text-6xl font-extrabold tracking-tight mb-4">
-          Vamos construir
-          <br />
-          juntos?
+      <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", padding: "14mm 0" }}>
+        <Eyebrow dark>Contato</Eyebrow>
+        <div style={{ width: 52, height: 1.5, background: "#fff", marginBottom: 26 }} />
+        <h2 style={{ fontSize: 64, fontWeight: 800, letterSpacing: "-0.03em", lineHeight: 1.0, color: "#fff", margin: "0 0 22px" }}>
+          {c.headline}
         </h2>
-        <p className="text-lg text-white/60 font-light mb-12">{contato.subtitle}</p>
+        <p style={{ fontSize: 17, fontWeight: 300, lineHeight: 1.5, color: "#cfcdc6", margin: "0 0 56px", maxWidth: "44ch" }}>
+          {c.subtitle}
+        </p>
 
-        <div className="inline-flex flex-col items-start gap-4">
-          {canais.map(({ icon: Icone, value }) => (
-            <div key={value} className="flex items-center gap-4">
-              <Icone className="w-5 h-5 text-white/50" strokeWidth={1.5} />
-              <span className="text-base text-white/80">{value}</span>
-            </div>
-          ))}
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", borderTop: "1px solid #333" }}>
+          {canais.map(([k, v], i) => {
+            const col = i % 2;
+            const row = Math.floor(i / 2);
+            return (
+              <div
+                key={k}
+                style={{
+                  padding: col === 0 ? "22px 24px 22px 0" : "22px 0 22px 24px",
+                  borderRight: col === 0 ? "1px solid #333" : undefined,
+                  borderBottom: row === 0 ? "1px solid #333" : undefined,
+                }}
+              >
+                <div style={{ fontSize: 9, fontWeight: 500, letterSpacing: "0.2em", textTransform: "uppercase", color: "#888", marginBottom: 8 }}>
+                  {k}
+                </div>
+                <div style={{ fontSize: 16, fontWeight: 600, color: "#fff", wordBreak: "break-word" }}>{v}</div>
+              </div>
+            );
+          })}
         </div>
       </div>
 
-      {/* Rodapé: dados da empresa */}
-      <div className="text-center border-t border-white/15 pt-6">
-        <p className="font-heading text-lg font-bold tracking-[0.3em] text-white/40 mb-2">
-          BERKAHN
-        </p>
-        <p className="text-xs text-white/40">
-          {contato.local} · CNPJ {contato.cnpj}
-        </p>
+      <div style={{ borderTop: "1px solid #333", paddingTop: 16, display: "flex", justifyContent: "space-between", alignItems: "flex-end" }}>
+        <div style={{ fontSize: 10, fontWeight: 400, color: "#888", lineHeight: 1.7 }}>
+          <span style={{ fontWeight: 800, letterSpacing: "0.18em", color: "#fff", fontSize: 12 }}>BERKAHN</span>
+          <br />
+          CNPJ {c.cnpj}
+          <br />
+          {c.local}
+        </div>
+        <span style={{ fontSize: 17, fontWeight: 300, color: "#cfcdc6" }}>Erguendo o amanhã</span>
       </div>
     </div>
   );

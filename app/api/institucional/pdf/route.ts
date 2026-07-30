@@ -33,6 +33,15 @@ export async function GET(request: Request) {
     })
     await page.evaluateHandle("document.fonts.ready")
 
+    // Esconde o indicador do Next dev (badge "N") — não existe em produção,
+    // mas apareceria no PDF gerado a partir do dev server.
+    await page
+      .addStyleTag({
+        content:
+          "nextjs-portal,[data-next-badge-root],[data-nextjs-dev-indicator],#__next-build-watcher{display:none!important}",
+      })
+      .catch(() => {})
+
     // Percorre a página inteira e volta ao topo: garante que toda imagem
     // decodifique antes do print, mesmo se algum request escapou do networkidle0.
     await page.evaluate(async () => {

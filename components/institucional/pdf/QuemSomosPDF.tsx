@@ -1,84 +1,83 @@
-import { Check, X } from "lucide-react";
 import { QUEM_SOMOS } from "@/lib/institucional-data";
+import { RunHead, Eyebrow, Footer } from "@/components/institucional/pdf/chrome";
 
+// Página 2 — Quem somos. Construtora × empreiteira, números, comparativo.
 export function QuemSomosPDF() {
-  const dados = QUEM_SOMOS;
+  const q = QUEM_SOMOS;
 
   return (
-    <div className="h-full bg-white flex flex-col justify-center px-12 py-8">
-      <p className="text-sm uppercase tracking-[0.3em] text-black/50 mb-3">
-        01 — {dados.label}
-      </p>
-      <h2 className="font-heading text-4xl font-bold tracking-tight mb-4">
-        {dados.headline}
-      </h2>
+    <div
+      style={{
+        position: "relative",
+        width: "100%",
+        height: "100%",
+        overflow: "hidden",
+        background: "#FFFFFF",
+        padding: "18mm 20mm",
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
+      <RunHead label="Quem Somos" />
 
-      <p className="text-base text-black font-medium leading-relaxed mb-2">
-        {dados.intro}
-      </p>
-      <p className="text-sm text-black/60 leading-relaxed mb-5">{dados.historia}</p>
+      <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", padding: "14mm 0 8mm" }}>
+        <Eyebrow>Quem Somos</Eyebrow>
+        <h2 style={{ fontSize: 46, fontWeight: 800, letterSpacing: "-0.025em", lineHeight: 1.02, color: "#1A1A1A", margin: "0 0 26px" }}>
+          {q.headline}
+        </h2>
 
-      {/* Stats */}
-      <div className="grid grid-cols-3 gap-4 mb-5">
-        {dados.stats.map((stat) => (
-          <div key={stat.label} className="border-t border-black/10 pt-3">
-            <p className="font-heading text-3xl font-light">{stat.value}</p>
-            <p className="text-[10px] uppercase tracking-wider text-black/50 mt-1">
-              {stat.label}
-            </p>
-          </div>
-        ))}
-      </div>
-
-      {/* Pilares */}
-      <div className="grid grid-cols-3 gap-4 mb-5">
-        {dados.pilares.map((pilar, index) => (
-          <div key={pilar.title} className="bg-[#F4F2EC] rounded-xl p-4">
-            <p className="text-[10px] uppercase tracking-[0.2em] text-black/40 mb-1">
-              Pilar 0{index + 1}
-            </p>
-            <h3 className="font-heading text-lg font-semibold mb-1">{pilar.title}</h3>
-            <p className="text-xs text-black/60 leading-relaxed">{pilar.description}</p>
-          </div>
-        ))}
-      </div>
-
-      {/* Construtora vs Empreiteira */}
-      <p className="text-sm text-black/60 mb-3">{dados.comparativo.subtitulo}</p>
-      <div className="grid grid-cols-2 gap-4">
-        <div className="bg-black text-white rounded-2xl p-5">
-          <p className="inline-block text-[10px] uppercase tracking-widest text-white border border-white/30 rounded-full px-3 py-1 mb-3">
-            Berkahn
-          </p>
-          <h3 className="font-heading text-lg font-semibold mb-3">
-            Construtora completa
-          </h3>
-          <ul className="space-y-2">
-            {dados.comparativo.construtora.map((item) => (
-              <li key={item} className="flex items-start gap-2">
-                <Check className="w-4 h-4 mt-0.5 shrink-0 text-white" strokeWidth={1.5} />
-                <span className="text-xs leading-relaxed text-white/90">{item}</span>
-              </li>
-            ))}
-          </ul>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 34, marginBottom: 34 }}>
+          <p style={{ fontSize: 15, fontWeight: 600, lineHeight: 1.5, color: "#1A1A1A", margin: 0 }}>{q.intro}</p>
+          <p style={{ fontSize: 12.5, fontWeight: 400, lineHeight: 1.6, color: "#666", margin: 0 }}>{q.historia}</p>
         </div>
-        <div className="bg-white border border-black/10 rounded-2xl p-5">
-          <p className="inline-block text-[10px] uppercase tracking-widest text-black/50 border border-black/20 rounded-full px-3 py-1 mb-3">
-            Empreiteira tradicional
-          </p>
-          <h3 className="font-heading text-lg font-semibold text-black/50 mb-3">
-            Executa só uma etapa
-          </h3>
-          <ul className="space-y-2">
-            {dados.comparativo.empreiteira.map((item) => (
-              <li key={item} className="flex items-start gap-2">
-                <X className="w-4 h-4 mt-0.5 shrink-0 text-black/30" strokeWidth={1.5} />
-                <span className="text-xs leading-relaxed text-black/70">{item}</span>
-              </li>
-            ))}
-          </ul>
+
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", borderTop: "1px solid #1A1A1A", borderBottom: "1px solid #e2e0d8" }}>
+          {q.stats.map((s, i) => (
+            <div
+              key={s.label}
+              style={{
+                padding: i === 0 ? "20px 0" : "20px 22px",
+                borderRight: i < 2 ? "1px solid #e2e0d8" : undefined,
+              }}
+            >
+              <div style={{ fontSize: 46, fontWeight: 800, letterSpacing: "-0.03em", color: "#1A1A1A", lineHeight: 1 }}>{s.value}</div>
+              <div style={{ fontSize: 11, fontWeight: 400, color: "#666", marginTop: 8 }}>{s.label}</div>
+            </div>
+          ))}
+        </div>
+
+        <p style={{ fontSize: 13, fontWeight: 600, lineHeight: 1.5, color: "#1A1A1A", margin: "30px 0 16px" }}>
+          {q.comparativo.subtitulo}
+        </p>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", border: "1px solid #e2e0d8" }}>
+          <div style={{ padding: "22px 24px", background: "#F4F2EC", borderRight: "1px solid #e2e0d8" }}>
+            <div style={{ fontSize: 9.5, fontWeight: 500, letterSpacing: "0.2em", textTransform: "uppercase", color: "#1A1A1A", marginBottom: 16 }}>
+              Construtora Berkahn
+            </div>
+            <ul style={{ listStyle: "none", margin: 0, padding: 0 }}>
+              {q.comparativo.construtora.map((it) => (
+                <li key={it} style={{ fontSize: 11.5, lineHeight: 1.45, color: "#333", padding: "7px 0", borderTop: "1px solid #e2e0d8" }}>
+                  {it}
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div style={{ padding: "22px 24px", background: "#fff" }}>
+            <div style={{ fontSize: 9.5, fontWeight: 500, letterSpacing: "0.2em", textTransform: "uppercase", color: "#999", marginBottom: 16 }}>
+              Empreiteira
+            </div>
+            <ul style={{ listStyle: "none", margin: 0, padding: 0 }}>
+              {q.comparativo.empreiteira.map((it) => (
+                <li key={it} style={{ fontSize: 11.5, lineHeight: 1.45, color: "#666", padding: "7px 0", borderTop: "1px solid #eee" }}>
+                  {it}
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       </div>
+
+      <Footer page="02 / 09" />
     </div>
   );
 }

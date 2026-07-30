@@ -1,58 +1,77 @@
-import Image from "next/image";
-import { PORTFOLIO_INSTITUCIONAL, presentationProjects } from "@/lib/institucional-data";
+import { PORTFOLIO_INSTITUCIONAL, presentationProjects, optImg } from "@/lib/institucional-data";
+import { RunHead, Eyebrow, Footer, PHOTO_BG } from "@/components/institucional/pdf/chrome";
 
+// Página 7 — Portfólio (página escura). Três obras com foto e ficha técnica.
 export function PortfolioPDF() {
-  const dados = PORTFOLIO_INSTITUCIONAL;
+  const p = PORTFOLIO_INSTITUCIONAL;
+  const obras = presentationProjects.slice(0, 3);
 
   return (
-    <div className="h-full bg-black text-white flex flex-col justify-center px-12 py-8">
-      <p className="text-sm uppercase tracking-[0.3em] text-white/50 mb-3">
-        06 — {dados.label}
-      </p>
-      <h2 className="font-heading text-4xl font-bold tracking-tight mb-8">
-        {dados.headline}
-      </h2>
+    <div
+      style={{
+        position: "relative",
+        width: "100%",
+        height: "100%",
+        overflow: "hidden",
+        background: "#1A1A1A",
+        padding: "18mm 20mm",
+        display: "flex",
+        flexDirection: "column",
+        color: "#fff",
+      }}
+    >
+      <RunHead label="Portfólio" dark />
 
-      <div className="space-y-5">
-        {presentationProjects.map((projeto) => (
-          <div key={projeto.number} className="flex gap-6 items-center">
-            <div className="relative w-56 h-36 rounded-xl overflow-hidden shrink-0">
-              <Image
-                src={projeto.images[0]}
-                alt={`Projeto ${projeto.title}`}
-                fill
-                priority
-                className="object-cover"
-                sizes="224px"
-              />
-            </div>
-            <div className="min-w-0">
-              <div className="flex items-baseline gap-3 mb-1">
-                <span className="font-heading text-2xl font-light text-white/30">
-                  {projeto.number}
-                </span>
-                <h3 className="font-heading text-xl font-semibold tracking-tight">
-                  {projeto.title}
-                </h3>
+      <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", padding: "14mm 0" }}>
+        <Eyebrow dark>Portfólio</Eyebrow>
+        <h2 style={{ fontSize: 46, fontWeight: 800, letterSpacing: "-0.025em", lineHeight: 1.02, color: "#fff", margin: "0 0 44px" }}>
+          {p.headline}
+        </h2>
+
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 26 }}>
+          {obras.map((obra) => {
+            const specs: [string, string][] = [
+              ["Local", obra.location],
+              ["Ano", obra.year],
+              ["Área", obra.area],
+              ["Sistema", obra.system],
+            ];
+            return (
+              <div key={obra.number}>
+                <figure style={{ margin: "0 0 18px", aspectRatio: "4 / 5", background: PHOTO_BG, position: "relative", overflow: "hidden" }}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={optImg(obra.images[0], 640)}
+                    alt={obra.title}
+                    style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}
+                  />
+                </figure>
+                <div style={{ fontSize: 9, fontWeight: 800, color: "#666", marginBottom: 8 }}>{obra.number}</div>
+                <h3 style={{ fontSize: 16, fontWeight: 700, color: "#fff", margin: "0 0 16px" }}>{obra.title}</h3>
+                <div style={{ borderTop: "1px solid #3a3a3a" }}>
+                  {specs.map(([k, v], j) => (
+                    <div
+                      key={k}
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        gap: 8,
+                        padding: "7px 0",
+                        borderBottom: j < specs.length - 1 ? "1px solid #2a2a2a" : undefined,
+                      }}
+                    >
+                      <span style={{ fontSize: 9, letterSpacing: "0.1em", textTransform: "uppercase", color: "#777", flexShrink: 0 }}>{k}</span>
+                      <span style={{ fontSize: 10, color: "#ccc", textAlign: "right" }}>{v}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
-              <p className="text-xs text-white/50 mb-2.5">
-                {projeto.location} · {projeto.year}
-              </p>
-              <div className="flex flex-wrap gap-2 mb-2.5">
-                <span className="text-[10px] uppercase tracking-wider text-white/70 border border-white/20 rounded-full px-2.5 py-0.5">
-                  {projeto.area}
-                </span>
-                <span className="text-[10px] uppercase tracking-wider text-white/70 border border-white/20 rounded-full px-2.5 py-0.5">
-                  {projeto.system}
-                </span>
-              </div>
-              <p className="text-xs text-white/60 leading-relaxed line-clamp-2">
-                {projeto.description}
-              </p>
-            </div>
-          </div>
-        ))}
+            );
+          })}
+        </div>
       </div>
+
+      <Footer page="07 / 09" dark />
     </div>
   );
 }
