@@ -113,9 +113,37 @@ Os 4 abaixo foram reconstruídos a partir do Supabase e agora estão em `publica
 | 2026-07-14 | `energia-solar-residencial` | recente |
 | 2026-07-20 | `anatomia-parede-steel-frame` | **último post publicado** |
 
-**No vault, fora do ar (6)** — ⏳ **pendente de decisão sua**: `alvenaria-vs-drywall`, `berkahn-reforma-construcao-industrializada`, `hold-downs-ancoragens`, `mitos-verdades-steel-frame`, `normas-lsf`, `orcamento-steel-frame`.
+**No vault, fora do ar (6)** — ✅ **classificados em 2026-07-30** por comparação de conteúdo (similaridade de trigramas contra todos os posts em produção). São dois grupos distintos:
 
-Não dá para resolver isso por dedução: cada um pode ter sido despublicado de propósito, renomeado (vários têm nome próximo de slugs que estão no ar, ex. `normas-lsf` vs `normas-light-steel-frame-brasil`), ou nunca ter chegado a publicar. Precisam ser classificados um a um antes de arquivar ou republicar.
+**Renomeações — arquivar o do vault, o conteúdo está no ar com outro slug:**
+
+| Arquivo do vault | É o mesmo artigo que | Similaridade |
+|---|---|---:|
+| `berkahn-reforma-construcao-industrializada` | `reforma-tributaria-construcao-industrializada` | **92%** |
+| `normas-lsf` | `normas-light-steel-frame-brasil` | **67%** |
+| `alvenaria-vs-drywall` | `drywall-ou-alvenaria` | **63%** |
+
+O `berkahn-reforma-...` é o de frontmatter corrompido (`title: **O que efetivamente mudou**`). Arquivar os três em `99-archive/`.
+
+**Artigos completos que nunca foram publicados** — similaridade máxima abaixo de 2% contra tudo que está no ar, ou seja, conteúdo único:
+
+| Arquivo | Palavras | Tema | Demanda |
+|---|---:|---|---|
+| `hold-downs-ancoragens` | **3.368** | Caminho de cargas, hold-downs, ancoragem | Técnica: baixa por si só |
+| `mitos-verdades-steel-frame` | **3.197** | "Enferruja", "pega fogo", "é frágil", "é barulhento" | **Objeção: alta.** Cluster que o diagnóstico aponta como não atendido |
+| `orcamento-steel-frame` | **2.961** | Custo com 8 estudos acadêmicos, CUB/SP e SINAPI | **Custo: 78,5% das impressões** |
+
+São **9.526 palavras prontas** enquanto o blog carregava 9 artigos de menos de 55 palavras publicados. As URLs retornam soft 404 (ver abaixo).
+
+`mitos-verdades-steel-frame` e `orcamento-steel-frame` valem publicação antes de qualquer pauta nova. **Ressalva**: `orcamento-steel-frame` cita dados de 2025 e entra no cluster de custo, que já tem canibalização — precisa de revisão de números e de decisão sobre canonical antes de ir ao ar.
+
+### Bug: soft 404 em todo `/atualidades/`
+
+Qualquer slug inexistente retorna **HTTP 200** com a página "404 Pagina nao encontrada" no corpo. Verificado em produção e reproduzido no build local com um slug inventado.
+
+O `notFound()` está no lugar certo (`app/atualidades/[slug]/page.tsx:294`) e **funciona** — a página de erro renderiza. O que não muda é o status. Tentei antecipar o `notFound()` para dentro do `generateMetadata` e **não resolveu**, então a causa não é a que parecia.
+
+Importa porque desperdiça orçamento de rastreamento, e `steel-frame-aguenta-vento-forte` está há um mês como "URL is unknown to Google". Investigar com calma: suspeitos são a interação de `revalidate = 60` com `dynamicParams = true`.
 
 ### Faixa de preço canônica (resolvido em 2026-07-30)
 
