@@ -62,7 +62,8 @@ Tráfego seguiu crescendo: 1.179 users em junho, 1.407 nos primeiros 26 dias de 
 - [ ] **Vault divergente da produção (P0)**: 6 slugs no ar sem arquivo no vault e 6 arquivos no vault fora do ar. Ver seção abaixo
 - [x] ~~**Pipeline vazio (P0)**~~: resolvido em 2026-07-29. 44 pautas planejadas até dez/2026 em [[2026-08-calendario-editorial]], serializadas em `ideias/ideas-2026-{08..12}.md`. Briefing executável em [[2026-08-playbook-pautas]]
 - [ ] **Canibalização de custo (P0, novo)**: `quanto-custa-construir-steel-frame-precos-m2-2026` é suprimida pela página-mãe em **todas** as queries de preço. 17.759 impressões e CTR 1,15% em 90 dias. Ver [[2026-07-diagnostico-editorial]]
-- [ ] **CTR de 8 páginas com impressão alta (P0, novo)**: começa por `financiar-construcao-...` (0,75%) e `drywall-st-ru-rf` (0,21%)
+- [x] ~~**CTR de 8 páginas com impressão alta (P0)**~~ — meta tags reescritas em produção em 2026-07-30. Linha de base registrada em [[2026-08-calendario-editorial]]; o relatório do cron de 01/09 mede o efeito
+- [x] ~~**Contradição de preço** em `custo-steel-frame-m2-2026`~~ — resolvida em 2026-07-30. Faixa canônica: **R$ 3.015 a R$ 6.091/m²** (Sudeste)
 - [ ] **9 artigos sem meta_title/meta_description** (P0): lista verificada no Supabase. Ver [[seo-aeo]]
 - [ ] **4 artigos sem answer_summary** (P1): bloqueia AEO. `financiar-construcao-light-steel-frame`, `steel-frame-no-mundo`, `construir-hospital-em-operacao`, `reforma-tributaria-construcao-industrializada`
 - [ ] **4 artigos não indexados** (P1): ver lista em [[seo-aeo]]
@@ -70,10 +71,9 @@ Tráfego seguiu crescendo: 1.179 users em junho, 1.407 nos primeiros 26 dias de 
 
 ## Próximos 7 dias
 
-- [ ] **Resolver a contradição de preço** em `custo-steel-frame-m2-2026` (R$ 2.500-4.500 vs R$ 3.015-6.091). Trava toda pauta de custo de agosto
-- [ ] Semana S1: `/pesquisa` → `/criacao` → `/artigo` do ICMS solar (janela vence 31/12, e homologação leva meses)
-- [ ] Backfill de meta tags nos 9 posts
-- [ ] Desbloquear `Google-Extended` em `app/robots.ts:13` (custo zero, exclui o site do grounding do Gemini)
+- [ ] Semana S1: `/pesquisa` → `/criacao` → `/artigo` do ICMS solar (janela vence 31/12, e homologação leva meses). **Já destravado** — a faixa de preço canônica está definida
+- [ ] Backfill de meta tags nos posts que seguem sem `meta_title`/`meta_description` (os 9 de CTR baixo já foram)
+- [ ] Pedir indexação no GSC das 4 URLs fora do índice
 
 ## KPIs (snapshot)
 

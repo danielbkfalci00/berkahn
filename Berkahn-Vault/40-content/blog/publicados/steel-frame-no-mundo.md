@@ -13,7 +13,7 @@ slug: steel-frame-no-mundo
 data_publicacao: 2026-02-24
 title: "Steel Frame no Mundo: Como Cada País Constrói com Aço"
 description: Descubra como EUA, Japão, Austrália e Reino Unido usam Steel Frame. Dados de mercado, cases reais e o que o Brasil pode aprender.
-seo_description: Descubra como EUA, Japão, Austrália e Reino Unido usam Steel Frame. Dados de mercado, cases reais e o que o Brasil pode aprender.
+seo_description: "EUA, Japão, Austrália e Reino Unido constroem em Steel Frame há décadas. Veja dados de mercado, cases reais e onde o Brasil se posiciona nesse mapa global."
 palavras_chave:
   - steel frame no mundo
   - steel frame pelo mundo

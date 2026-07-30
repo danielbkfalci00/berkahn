@@ -113,6 +113,19 @@ Os três `scheduled-tasks` estão **enabled e disparando**. O problema nunca foi
 - **Seção `/admin/documentacoes`**: tabela `documentos` no Supabase com o HTML inline, servido por `/admin/documentacoes/[slug]/raw` dentro de um iframe. Escolha de arquitetura: a Vercel **não sobe o repositório para a Lambda**, então `fs.readFile` do vault funciona em dev e falha com ENOENT em produção. O cron já escreve no Supabase no mesmo run em que renderiza o HTML, então persistir ali não adiciona superfície nova. A rota fica sob `/admin/` e não sob `/api/` porque o matcher do middleware é `['/', '/admin/:path*']` — em `/api/` ficaria pública.
 - **Dois bugs de plataforma corrigidos de passagem**: `build:static` nunca rodou no Windows (usa sintaxe POSIX de env var, que o cmd.exe não entende) e a detecção de CLI em `render-html.mjs` e `build-doc.mjs` comparava `import.meta.url` com uma string montada à mão, que no Windows nunca casa (`file:///C:/` tem três barras).
 
+## Executado em 2026-07-30 (saneamento em produção)
+
+Bloco 2, 3 e parte do 5 do calendário editorial, aplicados direto no ar.
+
+- **9 páginas com meta tags reescritas** (`adhoc-fix-meta.mjs --apply`). Maiores casos: `quanto-custa-construir-...` saiu de 70 para 50 caracteres (o título de 70 era descartado pelo Google, que exibia o H1 truncado); `financiar-construcao-...` ganhou **"Caixa"** no título, entidade que o 1º colocado da SERP usa e que faltava; `fundacao-steel-frame-vs-alvenaria` ganhou **"radier"**, palavra que está na query e não estava no título; `drywall-st-ru-rf` perdeu o jargão inicial e o "2025" defasado.
+- **Duas suposições do plano foram refutadas na execução**: `normas-light-steel-frame-brasil` **já tinha** NBR 16970 no título e 55 caracteres, então só a descrição mudou; e `custo-steel-frame-m2-2026` foi deliberadamente **não alterada** no título, porque tem o melhor CTR do site (2,98%) e o risco não compensa.
+- **Contradição de preço resolvida sem precisar de decisão**: o corpo do artigo, os componentes JSONB e a `meta_description` já convergiam em **R$ 3.015 a R$ 6.091/m²**. Só o `answer_summary` dizia R$ 2.500-4.500, e era ele o desatualizado — junto com a simulação de 150 m², que dizia R$ 375-675 mil quando o corpo diz R$ 600-780 mil. Isso **destrava as pautas de custo de agosto**.
+- **`Google-Extended` desbloqueado** em `app/robots.ts`, com o comentário corrigido. `ChatGPT-User`, `Claude-User` e `Perplexity-User` ganharam allow explícito em vez de depender do curinga. `GPTBot` e `ClaudeBot` continuam bloqueados **por escolha editorial**, que é diferente de estarem bloqueados por engano.
+- **Vault sincronizado com produção**: 17 arquivos e 19 campos de `seo_title`/`seo_description`/`answer_summary` estavam divergentes do que está no ar, a maioria por deriva anterior a esta sessão. Novo script `adhoc-sync-vault-meta.mjs` faz a direção Supabase → vault, que não existia.
+- **Warn antigo do vault zerado**: `2026-07-09-pdf-institucional/briefing.md` tinha `projetos_relacionados` fora da ordem canônica. Vault em **0 errors, 0 warns**.
+
+A linha de base de CTR de cada página ficou registrada em [[2026-08-calendario-editorial]]. O cron de 01/09 mede o efeito sem intervenção.
+
 ### Pendências abertas desta sessão
 
 - [ ] **Aplicar `supabase/migrations/008_documentacoes.sql`** no SQL Editor do Supabase. `SUPABASE_DB_PASSWORD` não está no `.env.local`, então `apply-migration.mjs` não roda. Depois: `node --env-file=.env.local scripts/documentacoes/seed-documentos.mjs`

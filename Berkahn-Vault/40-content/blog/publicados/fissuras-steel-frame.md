@@ -13,7 +13,7 @@ slug: fissuras-steel-frame
 data_publicacao: 2025-03-10
 title: "Fissuras no Steel Frame: Causas, Prevenção e Reparo"
 description: "Guia técnico sobre fissuras em Light Steel Frame: por que acontecem, como prevenir e como reparar. Dados reais e comparativo com alvenaria."
-seo_description: "Guia técnico sobre fissuras em Light Steel Frame: por que acontecem, como prevenir e como reparar. Dados reais e comparativo com alvenaria."
+seo_description: "Por que fissuras ocorrem no Steel Frame, como prevenir e reparar. Dados de pesquisa UNICAMP, comparativo com alvenaria e protocolo completo de tratamento."
 palavras_chave:
   - fissuras steel frame
   - patologias light steel frame

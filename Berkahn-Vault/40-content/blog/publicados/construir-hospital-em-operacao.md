@@ -13,7 +13,7 @@ slug: construir-hospital-em-operacao
 data_publicacao: 2026-04-22
 title: Como Construir ao Lado de um Hospital em Operação
 description: O projeto MedStar Georgetown mostra como prefabricação, BIM e construção a seco permitem obras complexas sem interromper o atendimento hospitalar.
-seo_description: O projeto MedStar Georgetown mostra como prefabricação, BIM e construção a seco permitem obras complexas sem interromper o atendimento hospitalar.
+seo_description: "Como o MedStar Georgetown entregou 477 mil pés² de hospital em 6 anos sem interromper um atendimento. Prefabricação, BIM e Steel Frame em obras hospitalares."
 palavras_chave:
   - construção hospitalar
   - reforma hospital em operação

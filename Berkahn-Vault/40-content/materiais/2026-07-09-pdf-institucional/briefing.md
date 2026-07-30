@@ -10,14 +10,14 @@ tags:
 ai_summary: Documento institucional PDF "O que fazemos" (9 páginas A4, monocromático Manrope) para enviar a clientes que perguntam o que a Berkahn executa. Gerado pelo pipeline Puppeteer do site (rota /institucional/pdf + /api/institucional/pdf). Artefato em Docs/berkahn-institucional-v1.pdf (3.9MB). Copy centralizada em lib/institucional-data.ts.
 status: active
 projeto: materiais
-projetos_relacionados:
-  - materiais
-  - site
 contextos_aplicados:
   - berkahn-brand
   - design-principles
   - steel-frame-domain
 workflow: workflow-material
+projetos_relacionados:
+  - materiais
+  - site
 ---
 
 # Documento Institucional — PDF "O que fazemos"

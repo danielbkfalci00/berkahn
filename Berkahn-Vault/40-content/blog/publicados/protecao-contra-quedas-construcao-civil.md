@@ -13,7 +13,7 @@ slug: protecao-contra-quedas-construcao-civil
 data_publicacao: 2025-02-19
 title: "Proteção contra quedas na construção civil: guia técnico completo"
 description: Saiba como proteger sua equipe em altura com NR 35, tipos de ancoragem, EPIs e sistemas que reduzem riscos. Guia prático para construtoras e profissionais.
-seo_description: Saiba como proteger sua equipe em altura com NR 35, tipos de ancoragem, EPIs e sistemas que reduzem riscos. Guia prático para construtoras e profissionais.
+seo_description: "O que a NR 35 exige em trabalho em altura: tipos de ancoragem, linha de vida, EPIs obrigatórios e como montar o sistema de proteção coletiva no canteiro."
 palavras_chave:
   - proteção contra quedas
   - trabalho em altura

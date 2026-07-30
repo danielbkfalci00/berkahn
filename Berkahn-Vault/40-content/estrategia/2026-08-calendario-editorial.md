@@ -136,6 +136,11 @@ Não escreve artigo. É a parte do plano com maior retorno por hora investida.
 
 ### Bloco 2 — Título e meta (maior ROI imediato)
 
+> [!success] Executado em 2026-07-30
+> As 9 páginas abaixo foram atualizadas em produção via `scripts/analytics/adhoc-fix-meta.mjs --apply`, e o vault foi sincronizado com `adhoc-sync-vault-meta.mjs`. Os números da tabela são a **linha de base**: o relatório do cron de 01/09 mede o efeito.
+>
+> Uma suposição do plano foi refutada na execução: `normas-light-steel-frame-brasil` **já tinha** "NBR 16970" no título e 55 caracteres. Só a descrição mudou, para ganhar a data da norma. `custo-steel-frame-m2-2026` foi deliberadamente **não alterada** no título: tem o melhor CTR do site (2,98%) e mexer nela é risco sem ganho proporcional.
+
 Reescrever `meta_title` e `meta_description` de 8 páginas. Números de referência de julho registrados para medir o efeito no relatório de 01/09.
 
 | Página | Impr 90d | CTR | Correção |
@@ -151,7 +156,7 @@ Reescrever `meta_title` e `meta_description` de 8 páginas. Números de referên
 
 ### Bloco 3 — Correções pontuais
 
-- [ ] **Contradição de preço** em `custo-steel-frame-m2-2026`: `answer_summary` diz R$ 2.500-4.500/m² e `seo_description` diz R$ 3.015-6.091. Definir a faixa correta e alinhar os dois campos, mais a tabela do artigo irmão. **Trava toda pauta que cite preço**
+- [x] ~~**Contradição de preço** em `custo-steel-frame-m2-2026`~~ — **resolvida em 2026-07-30**. Não havia decisão a tomar: o corpo do artigo, os componentes JSONB e a `meta_description` já convergiam em **R$ 3.015 a R$ 6.091** (Sudeste, alinhado ao índice de referência do setor). Só o `answer_summary` dizia R$ 2.500-4.500, e era ele o desatualizado. Reescrito, incluindo a simulação de 150 m² que também estava errada (R$ 375-675 mil → R$ 600-780 mil, agora igual ao corpo). **Destrava as pautas de custo de agosto**
 - [ ] Atualizar o índice de referência de preço: as duas páginas usam base mais antiga que a do concorrente que as supera
 - [ ] Adicionar seção **"Desvantagens e pontos de atenção"** nas páginas de preço. Nenhuma delas admite uma limitação, e o líder da SERP tem essa seção
 - [ ] Adicionar **série histórica de preço (2023-2026)** dentro da página-mãe: resolve 682 impressões em queries com "2023" sem criar página
@@ -174,9 +179,9 @@ Estes quatro itens não são pauta de blog e não cabem neste calendário. Ficam
 
 Sai da revisão de AEO em [[2026-07-diagnostico-editorial]]. Nada aqui exige escrever conteúdo.
 
-- [ ] **Desbloquear `Google-Extended` em `app/robots.ts:13`.** O comentário do código diz "no search/citation value", o que é falso: bloquear não protege de AI Overviews e exclui o site do grounding do Gemini e do Vertex AI, a plataforma que foi de 8,9% para 27,3% de fatia em um ano. Maior impacto do bloco, custo zero
-- [ ] Desbloquear `ClaudeBot` e `GPTBot`. A Berkahn não é publisher e não tem conteúdo a proteger; o bloqueio só remove variáveis do diagnóstico sem trazer benefício
-- [ ] Tornar explícito o allow de `ChatGPT-User`, `Claude-User` e `Perplexity-User`, que hoje dependem do grupo curinga
+- [x] ~~**Desbloquear `Google-Extended`**~~ — **feito em 2026-07-30**. Movido para o grupo de bots de busca em `app/robots.ts`, com o comentário corrigido: ele governa o grounding do Gemini e do Vertex AI, não protege de AI Overviews e não é sinal de ranking
+- [x] ~~Tornar explícito o allow de `ChatGPT-User`, `Claude-User` e `Perplexity-User`~~ — **feito**. Ganharam grupo próprio em vez de depender do curinga
+- [ ] Desbloquear `ClaudeBot` e `GPTBot`. **Mantidos bloqueados de propósito**: são crawlers de treino, não decidem citação, e a escolha de não alimentar treino é editorial e sua. Diferente do Google-Extended, que estava bloqueado por engano
 - [ ] Verificar o **Search generative AI control** no Search Console (existe desde 03/06/2026) e confirmar que a propriedade está em *Include*
 - [ ] Revisar `Disallow: /institucional/`: a rota retorna 404 hoje, então não há dano, mas se a página for ao ar bloqueada de todo crawler é decisão a tomar de propósito
 - [ ] **Ciclo trimestral de atualização** das páginas de custo, preço e norma, com `dateModified` real. `custo-steel-frame-m2-2026` está com 13/04/2026 num artigo que promete "2026" e carrega 78% dos cliques. Frescor é o único fator estrutural com evidência causal unânime, e atualizar bate publicar novo

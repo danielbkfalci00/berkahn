@@ -18,7 +18,7 @@ palavras_chave: []
 category: "Mercado e Custos"
 read_time: "12 min"
 author: "Bruno Ribeiro"
-answer_summary: "O preço do Steel Frame por m² em 2026 varia de R$ 2.500/m² (padrão popular) a R$ 4.500/m² (alto padrão) em São Paulo. Para uma casa de 150m², o investimento total fica entre R$ 375.000 e R$ 675.000. O custo é 15-30% maior que alvenaria na construção, mas o TCO é menor no longo prazo."
+answer_summary: "O preço do Steel Frame por m² no Sudeste em 2026 varia de R$ 3.015 (padrão popular) a R$ 6.091 (alto padrão), conforme o índice de referência do setor. Para uma casa de 150 m² em padrão médio, o investimento total fica entre R$ 600.000 e R$ 780.000. O custo inicial é 15% a 30% maior que o da alvenaria, mas o prazo de obra cai pela metade e o custo total de propriedade fica menor no longo prazo, por causa do desempenho térmico e da manutenção reduzida."
 supabase_id: e0e48f69-218c-4275-940c-bb339f0f077d
 url_final: "https://www.berkahn.com.br/atualidades/custo-steel-frame-m2-2026"
 contextos_aplicados:

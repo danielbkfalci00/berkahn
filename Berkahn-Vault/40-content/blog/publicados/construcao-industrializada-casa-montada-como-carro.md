@@ -15,7 +15,7 @@ data_publicacao: 2026-06-02
 title: "Construção Industrializada: a Casa Montada Como um Carro"
 seo_title: "Construção Industrializada: Casa Como um Carro | Berkahn"
 description: "Construir em Light Steel Frame se aproxima da lógica de uma montadora, com peças precisas e projeto antes da obra. Veja onde a analogia funciona e onde não."
-seo_description: "Construir em Light Steel Frame se aproxima da lógica de uma montadora — precisão milimétrica, projeto antes da obra, desperdício abaixo de 5%. Veja onde a analogia funciona."
+seo_description: "Construir em Light Steel Frame se aproxima da lógica de uma montadora — precisão milimétrica, projeto antes da obra, desperdício abaixo de 5%. Veja onde a analogia funciona e seus limites."
 palavras_chave:
   - construção industrializada
   - light steel frame alto padrão

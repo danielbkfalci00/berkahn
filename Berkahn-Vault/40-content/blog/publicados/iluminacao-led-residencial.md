@@ -13,7 +13,7 @@ slug: iluminacao-led-residencial
 data_publicacao: 2026-02-20
 title: "Iluminação LED Residencial: Por Que a Luz da Sua Casa Começa na Planta"
 description: Descubra como a iluminação LED transforma projetos residenciais de alto padrão. Guia com dados, tendências e a conexão com construção em Steel Frame.
-seo_description: Descubra como a iluminação LED transforma projetos residenciais de alto padrão. Guia com dados, tendências e a conexão com construção em Steel Frame.
+seo_description: "LED vai além da economia. Saiba como planejar iluminação com IRC 90+, luz circadiana e automação desde a planta em Steel Frame."
 palavras_chave:
   - iluminação LED residencial
   - projeto de iluminação LED
