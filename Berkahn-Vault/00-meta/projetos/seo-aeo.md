@@ -6,16 +6,16 @@ tags:
   - project/site
   - project/blog
   - status/active
-ai_summary: Hub do projeto SEO/AEO — indexação 34/38 artigos (89%), tráfego 98,8% NÃO-branded (meta de 40% já superada), 850 cliques/mês em junho. P0 restante — 9 posts sem meta tags, 4 sem answer_summary, 4 URLs não indexadas, 11 categorias a normalizar. Estratégia em 20-context, diagnósticos em 40-content/auditorias-seo.
+ai_summary: Hub do projeto SEO/AEO — acervo saneado em 2026-07-30 (9 artigos vazios: 5 em 301, 4 em noindex), meta tags e answer_summary zerados, Google-Extended liberado. Metas refeitas para medir concentração e conversão, não mais indexação. P0 restante — 3 URLs fora do índice, zero backlinks, concentração de 78% num artigo só. Estratégia em 20-context, diagnósticos em 40-content/auditorias-seo.
 status: active
 projeto: seo-aeo
-kpi_posts_sem_answer_summary: 4
+kpi_posts_sem_answer_summary: 0
 kpi_score: 52
 kpi_paginas_indexadas: 34
-kpi_paginas_total: 38
+kpi_paginas_total: 33
 kpi_pct_indexacao: 89
-kpi_posts_sem_meta_title: 9
-kpi_posts_sem_meta_description: 9
+kpi_posts_sem_meta_title: 0
+kpi_posts_sem_meta_description: 0
 kpi_trafego_cliques_90d: 1281
 kpi_pct_branded: 1.2
 kpi_dominio_idade_meses: 6
@@ -24,7 +24,7 @@ kpi_trafego_cliques_30d: 850
 kpi_trafego_impressoes_30d: 34396
 kpi_ctr_medio: 2.47
 kpi_posicao_media: 4.5
-kpi_atualizado_em: 2026-07-29
+kpi_atualizado_em: 2026-07-30
 contextos_aplicados:
   - seo-aeo-strategy
   - article-pipeline
@@ -95,25 +95,28 @@ Dados de 2026-07-29 (junho fechado + julho parcial 01-26).
 ## Próximos 7 dias
 
 - [ ] GSC: solicitar indexação das 4 URLs pendentes
-- [ ] Backfill meta tags nos 9 posts
+- [x] ~~Backfill meta tags nos 9 posts~~ — resolvido em 2026-07-30 por outro caminho: os 9 sem meta tag eram exatamente os 9 artigos com menos de 55 palavras. 5 foram consolidados por 301 e 4 estão em `noindex` até serem reescritos. Meta tag em página vazia só aumentaria impressão e decepção
 - [ ] Rodar `/seo` para recalcular `kpi_score` (o 52 é de abril)
 
 ## KPIs (snapshot)
 
 Verificados em 2026-07-29 contra Supabase e GSC.
 
-| Métrica | Atual | Meta P0 | Meta P3 | Situação |
-|---------|-------|---------|---------|----------|
-| Score geral | 52/100 (abril) | 65 | 85 | ⏳ recalcular via `/seo` |
-| Artigos indexados | 34/38 (89%) | 20 | 40 | ✅ meta P0 superada |
-| Posts sem meta tags | 9 | 0 | 0 | ⚠️ P0 |
-| Posts sem answer_summary | 4 | 0 | 0 | ⚠️ P0 |
-| Tráfego orgânico (90d) | 1.281 | 200 | 1000 | ✅ meta P3 superada |
-| % branded | 1,2% | 70% | 40% | ✅ meta P3 superada |
-| Backlinks | 0 | 5 | 30 | ⚠️ -5 |
-| Concentração top-1 | 78% dos cliques | — | — | ⚠️ risco novo |
+Metas refeitas em 2026-07-30. As antigas foram batidas e mediam a fase de "existir no Google", que acabou. As novas medem **concentração, conversão e profundidade** — a fase em que o projeto está agora.
 
-Três metas foram superadas e não foram rebaixadas ainda — **as metas P0/P3 precisam ser refeitas**, senão o painel só mostra verde. Fica para a próxima sessão, junto com a definição de tráfego qualificado.
+| Métrica | Base jul/2026 | Meta set | Meta dez | Por que essa meta |
+|---|---|---|---|---|
+| **Concentração do artigo #1** | 78% dos cliques | 70% | **55%** | Métrica mais importante do hub. Cai por diluição, não por perda: `custo-steel-frame-m2-2026` não deve render menos, o resto deve render mais |
+| **Páginas com +100 cliques/mês** | 1 | 2 | **4** | O outro lado da mesma moeda, em número absoluto |
+| **CTR de `quanto-custa-construir-...`** | 1,15% | 2,5% | **3%** | Linha de base do saneamento de 30/07. Mede se a reescrita de título funcionou |
+| **Cliques fora de intenção de preço** | 94 (13%) | 20% | **30%** | Hoje 78,5% das impressões são preço. Diversificar é o eixo do calendário |
+| **Artigos indexáveis** | 29 de 33 | 31 | **33** | Denominador caiu de 38 para 33 com o saneamento de thin content. Inclui as 3 fora do índice + as 4 a reescrever |
+| **Backlinks** | 0 | 3 | **10** | Única meta antiga preservada, rebaixada de 30 para 10. Zero backlinks com 6 meses de domínio é o teto que segura o resto |
+| **Taxa de conversão** | não medível | instrumentar | **medir** | `ga4.events` está vazio em todos os meses. Depende da Fase 3 |
+
+**Metas aposentadas** por terem sido batidas com folga e não medirem mais nada útil: artigos indexados (89%, meta era 40 páginas), tráfego orgânico 90d (1.281, meta era 1.000) e % branded (1,2%, meta era 40%). A de branded inverteu de sentido — hoje o problema é ninguém conhecer a marca, não o contrário.
+
+O **Score geral (52/100)** é de abril e nunca foi recomputado. Não vale como meta enquanto não for recalculado por `/seo`.
 
 ## Contexto aplicado
 
