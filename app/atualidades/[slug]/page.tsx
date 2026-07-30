@@ -12,6 +12,7 @@ import { AnswerSummary } from "@/components/article/AnswerSummary";
 import { RelatedArticlesCarousel } from "@/components/article/RelatedArticlesCarousel";
 import type { Post } from "@/types/admin";
 import type { BlogPost } from "@/types/blog";
+import { robotsForArticle } from "@/lib/seo/thin-content";
 
 interface ArticlePageProps {
   params: Promise<{ slug: string }>;
@@ -101,6 +102,9 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
         canonical: `/atualidades/${slug}`,
         languages: { "pt-BR": `https://www.berkahn.com.br/atualidades/${slug}` },
       },
+      // Artigos sem conteúdo suficiente saem do índice sem sair do ar.
+      // Lista e critério em lib/seo/thin-content.ts.
+      robots: robotsForArticle(slug),
     };
   }
 
@@ -135,6 +139,7 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
       canonical: `/atualidades/${slug}`,
       languages: { "pt-BR": `https://www.berkahn.com.br/atualidades/${slug}` },
     },
+    robots: robotsForArticle(slug),
   };
 }
 
