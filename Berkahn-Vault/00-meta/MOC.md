@@ -84,6 +84,7 @@ Query estruturada: [[artigos.base]] | [[calendario.base]]
 - [[logos]] — Inventário (PNGs em `Docs/brand/logos/`)
 - [[stack-nextjs-supabase]] — Stack técnica
 - [[admin-setup]] — Painel admin
+- [[comentarios-inline-documentacoes]] — Comentários inline nas documentações
 - [[google-sheets]] — Integração formulário
 - [[blog-infra-vs-wordpress]] — Comparativo
 

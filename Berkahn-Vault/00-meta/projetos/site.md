@@ -78,6 +78,7 @@ Site em produção (Next.js App Router + Supabase + Vercel + Tailwind + shadcn/u
 
 - [[stack-nextjs-supabase]] — arquitetura geral (Next.js 15 + Supabase + RLS + Vercel)
 - [[admin-setup]] — painel admin, autenticação, schema `posts`
+- [[comentarios-inline-documentacoes]] — comentários inline em `/admin/documentacoes`: ponte com o iframe, ancoragem por texto e a restrição de minificação
 - [[design-principles]] — paleta preto/off-white, Manrope, ícones outline
 - [[seo-aeo-strategy]] — regras técnicas SEO (schema, meta, robots)
 - [[google-sheets]] — integração leads via Apps Script
@@ -104,6 +105,7 @@ Site em produção (Next.js App Router + Supabase + Vercel + Tailwind + shadcn/u
 | `app/` | 16 rotas Next.js App Router | [[stack-nextjs-supabase]] |
 | `components/article/` | 19 componentes interativos | [[article-pipeline]] |
 | `components/presentation/` | Slides + UI da /apresentacao-executiva | [[presentation-system]] |
+| `lib/documentacoes/` | Ancoragem, ponte e queries dos comentários inline | [[comentarios-inline-documentacoes]] |
 | `lib/` | Utilitários (Supabase client, helpers) | [[stack-nextjs-supabase]] |
 | `public/images/img_blog/` | Capas WebP por artigo | — |
 | `scripts/articles/` | add-article-*.mjs (25 scripts batch) | [[article-pipeline]] |
