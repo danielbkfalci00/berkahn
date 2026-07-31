@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useRef, useState, useTransition } from "react";
+import { useCallback, useEffect, useRef, useState, useTransition } from "react";
 import { createPortal } from "react-dom";
 import Link from "next/link";
 import {
@@ -42,7 +42,17 @@ export function DocumentoViewer({ meta, threadsIniciais }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const molduraRef = useRef<HTMLDivElement>(null);
   const [emTelaCheia, setEmTelaCheia] = useState(false);
-  const [painelAberto, setPainelAberto] = useState(true);
+
+  // null = ninguém mexeu, o CSS decide (visível a partir de lg, oculto abaixo).
+  // true/false = escolha explícita do usuário.
+  //
+  // Um booleano só não resolve: com `true` como padrão, uma janela estreita
+  // abria o painel POR CIMA do documento já no carregamento. E decidir o padrão
+  // por matchMedia no render causaria piscada na hidratação. Deixar o padrão
+  // com o CSS e usar estado apenas para a escolha explícita evita os dois.
+  const [aberturaManual, setAberturaManual] = useState<boolean | null>(null);
+  // Só para o aria-expanded — não afeta pintura, então não pisca.
+  const [ehTelaLarga, setEhTelaLarga] = useState<boolean | null>(null);
 
   const [threads, setThreads] = useState<Thread[]>(threadsIniciais);
   const [orfas, setOrfas] = useState<Set<string>>(new Set());
@@ -56,11 +66,35 @@ export function DocumentoViewer({ meta, threadsIniciais }: Props) {
   const { nome, carregado, salvar } = useAutor();
   const rawUrl = `/admin/documentacoes/${meta.slug}/raw`;
 
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 1024px)");
+    const sincronizar = () => setEhTelaLarga(mq.matches);
+    sincronizar();
+    mq.addEventListener("change", sincronizar);
+    return () => mq.removeEventListener("change", sincronizar);
+  }, []);
+
+  // Renderizado (ainda que oculto pelo CSS) sempre que não foi fechado de
+  // propósito: manter o painel montado preserva o estado dos filtros e mantém
+  // os destaques pintados no documento.
+  const painelMontado = aberturaManual !== false;
+
+  function alternarPainel() {
+    // A largura é lida no clique, não no render — é o que mantém a pintura
+    // livre de piscada e ainda assim faz o botão alternar na direção certa.
+    const telaLarga = window.matchMedia("(min-width: 1024px)").matches;
+    setAberturaManual((atual) => (atual === null ? !telaLarga : !atual));
+  }
+
+  const painelVisivel =
+    aberturaManual ?? (ehTelaLarga === null ? true : ehTelaLarga);
+
   const aoSelecionar = useCallback((ancora: Ancora, r: RectSelecao) => {
     setPendente(ancora);
     setRect(r);
     setErroCriacao(null);
-    setPainelAberto(true);
+    // Selecionar texto não deve abrir o painel sozinho numa tela estreita —
+    // taparia o documento no meio da leitura. Quem abre é o clique na pílula.
   }, []);
 
   const aoCancelarSelecao = useCallback(() => setRect(null), []);
@@ -139,7 +173,7 @@ export function DocumentoViewer({ meta, threadsIniciais }: Props) {
       ? createPortal(
           <button
             type="button"
-            onClick={() => setPainelAberto(true)}
+            onClick={() => setAberturaManual(true)}
             style={{
               top: molduraRect.top + rect.bottom + 8,
               left: molduraRect.left + rect.left,
@@ -183,10 +217,11 @@ export function DocumentoViewer({ meta, threadsIniciais }: Props) {
           <Button
             variant="outline"
             size="sm"
-            onClick={() => setPainelAberto((v) => !v)}
-            aria-pressed={painelAberto}
+            onClick={alternarPainel}
+            aria-expanded={painelVisivel}
+            aria-controls="painel-comentarios"
           >
-            {painelAberto ? (
+            {painelVisivel ? (
               <PanelRightClose className="h-4 w-4" />
             ) : (
               <PanelRightOpen className="h-4 w-4" />
@@ -223,7 +258,7 @@ export function DocumentoViewer({ meta, threadsIniciais }: Props) {
       <div
         ref={containerRef}
         className={`relative grid h-[calc(100vh-11rem)] overflow-hidden rounded-lg border border-neutral-200 bg-white ${
-          painelAberto ? "grid-cols-1 lg:grid-cols-[1fr_340px]" : "grid-cols-1"
+          painelMontado ? "grid-cols-1 lg:grid-cols-[1fr_340px]" : "grid-cols-1"
         }`}
       >
         <div ref={molduraRef} className="relative min-w-0 overflow-hidden">
@@ -241,10 +276,20 @@ export function DocumentoViewer({ meta, threadsIniciais }: Props) {
           )}
         </div>
 
-        {painelAberto && (
-          // Abaixo de lg o painel cobre o documento em vez de espremer os dois
-          // numa coluna de 340px que não caberia. Acima, é a segunda coluna.
-          <div className="absolute inset-0 z-20 min-h-0 lg:static lg:z-auto">
+        {painelMontado && (
+          // Padrão (aberturaManual === null): `hidden lg:block` — coluna à
+          // direita a partir de lg, oculto abaixo, decidido só pelo CSS.
+          // Aberto de propósito numa tela estreita: cobre o documento, porque
+          // 340px não cabem ao lado. O botão do cabeçalho fica fora do overlay,
+          // então continua alcançável para fechar.
+          <div
+            id="painel-comentarios"
+            className={
+              aberturaManual === true
+                ? "absolute inset-0 z-20 min-h-0 lg:static lg:z-auto"
+                : "hidden min-h-0 lg:block"
+            }
+          >
             <ComentariosRail
               threads={threads}
               orfas={orfas}
