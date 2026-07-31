@@ -74,19 +74,32 @@ CREATE INDEX IF NOT EXISTS idx_comentarios_thread
   ON documento_comentarios (thread_id, criado_em);
 
 -- ============================================
--- TRIGGERS (update_updated_at_column vem da 001)
+-- TRIGGERS
 -- ============================================
+-- NÃO usar update_updated_at_column() da 001: ela faz `NEW.updated_at = NOW()`,
+-- e estas tabelas seguem o naming em português (`atualizado_em`). Com a função
+-- errada, TODO UPDATE falha com `record "new" has no field "updated_at"` — o
+-- que quebraria resolver thread e editar comentário. É por isso que `orcamentos`
+-- (que também usa `atualizado_em`) não tem trigger nenhuma.
+CREATE OR REPLACE FUNCTION update_atualizado_em_column()
+RETURNS TRIGGER AS $$
+BEGIN
+  NEW.atualizado_em = NOW();
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
 DROP TRIGGER IF EXISTS update_documento_threads_updated_at ON documento_threads;
 CREATE TRIGGER update_documento_threads_updated_at
   BEFORE UPDATE ON documento_threads
   FOR EACH ROW
-  EXECUTE FUNCTION update_updated_at_column();
+  EXECUTE FUNCTION update_atualizado_em_column();
 
 DROP TRIGGER IF EXISTS update_documento_comentarios_updated_at ON documento_comentarios;
 CREATE TRIGGER update_documento_comentarios_updated_at
   BEFORE UPDATE ON documento_comentarios
   FOR EACH ROW
-  EXECUTE FUNCTION update_updated_at_column();
+  EXECUTE FUNCTION update_atualizado_em_column();
 
 -- ============================================
 -- RLS
