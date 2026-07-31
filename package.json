@@ -8,8 +8,6 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "build:static": "BUILD_MODE=static next build",
-    "build:admin": "BUILD_MODE=full next build",
     "start": "next start",
     "lint": "next lint"
   },
