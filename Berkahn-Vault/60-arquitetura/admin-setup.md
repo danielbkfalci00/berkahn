@@ -29,14 +29,21 @@ O Sistema Admin Berkahn é um painel administrativo para gerenciar:
 berkahn.com.br (Site Público)     admin.berkahn.com.br (Painel Admin)
          │                                    │
          ▼                                    ▼
-   Next.js Static                      Next.js Dynamic
-   output: "export"                    server-side
+   Next.js SSG + ISR                   Next.js Dynamic
+   (mesmo build, `npm run build`)      server-side
          │                                    │
          └──────────────┬─────────────────────┘
                         │
                    Supabase
               (Database + Auth + Storage)
 ```
+
+> [!warning] Corrigido em 2026-07-31
+> Este diagrama dizia `output: "export"` para o site público, e a seção de
+> produção mandava usar `npm run build:static` com output `out`. **Nunca foi o
+> que roda.** `vercel.json` define `buildCommand: "npm run build"`, que vale
+> para os dois projetos e tem precedência sobre a configuração do dashboard.
+> O modo estático foi removido do repositório — ver `next.config.ts`.
 
 ## Estrutura de Arquivos
 
@@ -138,31 +145,22 @@ O admin estará disponível em `http://localhost:3000/admin`
 ### Build
 
 ```bash
-# Build completo (site + admin)
+# Único build. Serve os dois domínios.
 npm run build
-
-# Build apenas site público (estático)
-npm run build:static
-
-# Build apenas admin (dinâmico)
-npm run build:admin
 ```
 
 ## Configuração de Produção
 
-### Opção 1: Dois Projetos Vercel (Recomendado)
+Dois projetos Vercel apontando para o **mesmo repositório e o mesmo build**:
 
-Configure dois projetos no Vercel apontando para o mesmo repositório:
+| Projeto | Domínio | Build |
+|---|---|---|
+| `berkahn` | `berkahn.com.br` | `npm run build` (de `vercel.json`) |
+| `berkahn-admin` | `admin.berkahn.com.br` | `npm run build` (de `vercel.json`) |
 
-**Projeto 1: Site Público**
-- Domain: `berkahn.com.br`
-- Build Command: `npm run build:static`
-- Output Directory: `out`
-
-**Projeto 2: Admin**
-- Domain: `admin.berkahn.com.br`
-- Build Command: `npm run build:admin`
-- (sem output directory - usa o padrão do Next.js)
+O que separa os dois é o **middleware**, não o build: `middleware.ts` tem matcher
+`['/', '/admin/:path*']` e exige sessão em tudo sob `/admin`. O output é `.next`
+nos dois.
 
 ### Opção 2: Projeto Único
 
@@ -239,4 +237,6 @@ Verifique se as variáveis `NEXT_PUBLIC_SUPABASE_URL` e `NEXT_PUBLIC_SUPABASE_AN
 O Supabase não está inicializado corretamente. Verifique as variáveis de ambiente.
 
 ### Página de admin retorna 404
-O build pode ter sido feito com `output: "export"`. Use `npm run build` ou `npm run build:admin`.
+Verifique se o middleware está ativo e se a rota está sob `/admin`. (Até
+2026-07-31 esta seção culpava `output: "export"`, que não existe mais no
+projeto.)
