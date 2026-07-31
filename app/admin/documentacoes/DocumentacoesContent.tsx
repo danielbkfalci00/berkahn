@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
-import { ArrowUpRight, Search } from "lucide-react";
+import { ArrowUpRight, MessageSquare, Search } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
   CATEGORIA_LABEL,
@@ -14,6 +14,8 @@ type Filtro = CategoriaDocumento | "todos";
 
 type Props = {
   documentos: DocumentoMeta[];
+  /** Threads em aberto por slug. Ausente = zero. */
+  comentariosAbertos: Record<string, number>;
 };
 
 const CATEGORIA_ESTILO: Record<CategoriaDocumento, string> = {
@@ -26,7 +28,7 @@ function formatarData(iso: string): string {
   return `${dia}/${mes}/${ano}`;
 }
 
-export function DocumentacoesContent({ documentos }: Props) {
+export function DocumentacoesContent({ documentos, comentariosAbertos }: Props) {
   const [filtro, setFiltro] = useState<Filtro>("todos");
   const [busca, setBusca] = useState("");
 
@@ -140,6 +142,15 @@ export function DocumentacoesContent({ documentos }: Props) {
                   <span className="shrink-0">
                     atualizado {formatarData(doc.atualizadoEm)}
                   </span>
+                  {(comentariosAbertos[doc.slug] ?? 0) > 0 && (
+                    <span
+                      className="ml-auto inline-flex shrink-0 items-center gap-1 rounded-full bg-amber-50 px-1.5 py-0.5 font-medium text-amber-700 ring-1 ring-inset ring-amber-600/20"
+                      title={`${comentariosAbertos[doc.slug]} comentário(s) em aberto`}
+                    >
+                      <MessageSquare className="h-3 w-3" />
+                      {comentariosAbertos[doc.slug]}
+                    </span>
+                  )}
                 </div>
               </Link>
             </li>

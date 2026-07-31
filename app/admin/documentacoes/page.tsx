@@ -1,4 +1,5 @@
 import { listarDocumentos } from "@/lib/documentacoes/queries";
+import { contarThreadsAbertas } from "@/lib/documentacoes/comentarios";
 import { DocumentacoesContent } from "./DocumentacoesContent";
 import { FileText } from "lucide-react";
 
@@ -31,5 +32,13 @@ export default async function DocumentacoesPage() {
     );
   }
 
-  return <DocumentacoesContent documentos={documentos} />;
+  // Uma query a mais, não uma por card: a contagem vem agregada por slug.
+  const comentariosAbertos = await contarThreadsAbertas();
+
+  return (
+    <DocumentacoesContent
+      documentos={documentos}
+      comentariosAbertos={comentariosAbertos}
+    />
+  );
 }
