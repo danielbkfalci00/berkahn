@@ -1,11 +1,11 @@
 ---
 tipo: projeto
 criado: 2026-05-22
-atualizado: 2026-07-30
+atualizado: 2026-07-31
 tags:
   - project/site
   - status/active
-ai_summary: Hub do projeto Site — Next.js 15 + Supabase + Vercel em produção (berkahn.com.br). Indexação dos artigos resolvida em 2026-07-29; páginas institucionais nunca foram medidas. Em 2026-07-30 - soft 404 de /atualidades corrigido (era loading.tsx, não revalidate), ISR restaurado com lib/supabase/public.ts (a rota renderizava dinâmico a cada visita), /contato criado (4 CTAs apontavam para 404) e SearchAction removido. Ajustes contínuos, novas páginas, refactors, integração admin/Supabase. Code paths em app/, lib/, components/.
+ai_summary: "Hub do projeto Site — Next.js 15 + Supabase + Vercel em produção (berkahn.com.br + admin.berkahn.com.br, mesmo build). Em 2026-07-31 - comentários inline nas documentações (#39, #40), modo de build estático removido por estar morto e incompatível (#41) e, o mais grave, a senha da conta Supabase Auth saiu do bundle público do admin, onde estava desde que o admin existe (#42, ver [[supabase-config]]). Em 2026-07-30 - soft 404 de /atualidades (era loading.tsx), ISR restaurado, /contato criado, SearchAction removido. Indexação resolvida em 2026-07-29; páginas institucionais nunca foram medidas. Code paths em app/, lib/, components/."
 status: active
 projeto: site
 kpi_paginas_indexadas: 34
@@ -54,6 +54,8 @@ Site em produção (Next.js App Router + Supabase + Vercel + Tailwind + shadcn/u
 - [x] **Indexação Google** (delegado a [[seo-aeo]]): resolvido em 2026-07-29 — 34/38 artigos (89%), contra 6/44 em abril
 - [x] ~~**Bug SearchAction**~~ — resolvido em 2026-07-30 **removendo** o bloco. Não era URL inválida: o `urlTemplate` apontava para `/perguntas-frequentes?q=`, e aquela página ignora o parâmetro (o componente não recebe props) e devolve a FAQ inteira. Como o sitelinks searchbox foi descontinuado pelo Google em nov/2024, declarar a busca não tinha contrapartida
 - [x] ~~**Quatro CTAs apontando para `/contato`, que respondia 404**~~ — resolvido em 2026-07-30. `app/portfolio/page.tsx:153`, `ProjectModels.tsx:180`, `ProjectSpecs.tsx:72` e `ProjectsGrid.tsx:41` linkavam para uma rota que **nunca existiu**: a captura de lead só existia como modal. O `ContactForm` foi extraído do `ContactFormDialog` e agora serve os dois — o modal e a página `/contato`, indexável e linkável. Fecha o item 7 do diagnóstico ("não existe caminho público para pedir orçamento")
+- [x] ~~**Senha da conta Supabase no bundle público do admin**~~ — resolvido em 2026-07-31 (#42). `LoginForm.tsx` era Client Component e a constante `ACCESS_CODE` era, na verdade, a senha passada para `signInWithPassword`. Autenticação movida para Server Action; não há mais segredo no repositório nem no ambiente. Senha rotacionada. Detalhes e o que ainda cabe fazer em [[supabase-config]] (Histórico de incidentes)
+- [ ] **Contas Supabase por pessoa**: hoje todos entram com a mesma conta compartilhada, então `auth.uid()` não distingue ninguém e o autor dos comentários é nome digitado no localStorage. Projeto próprio — ver [[comentarios-inline-documentacoes]], seção "Identidade"
 - [ ] **Google Sheets SPOF**: leads sem backup automático em Supabase (mitigado em Fase 4 do plano)
 - [ ] **Core Web Vitals**: monitorar LCP < 2.5s, FID < 100ms, CLS < 0.1. **Mudança relevante em 2026-07-30**: `/atualidades/[slug]` era renderizada dinamicamente a cada visita (`await cookies()` em `lib/supabase/server.ts` optava a rota por dynamic) e agora é SSG/ISR servida da CDN. Medir de novo — é a rota de maior tráfego
 

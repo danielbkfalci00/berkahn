@@ -157,7 +157,8 @@ A linha de base de CTR de cada página ficou registrada em [[2026-08-calendario-
 - [ ] Classificar os 6 arquivos do vault que não estão em produção (despublicados? renomeados? nunca publicados?) — ver [[blog]]
 - [x] ~~Refazer metas P0/P3 de [[seo-aeo]]~~ ✅ 2026-07-30 — as antigas mediam "existir no Google", fase encerrada. As novas medem concentração, diversificação de intenção e conversão
 - [ ] Fases 3-5 do plano (instrumentação de conversão, CTA no blog, IQS, diagnóstico): `~/.claude/plans/executa-o-sprint-4-whimsical-thimble.md` ⚠️ **fora do vault e fora do git** — 32KB só na máquina local. Se importar, promover para nota do vault
-- [ ] Rodar `/wrap-up` da semana de 27-31/07 na sexta. O de 24/07 foi perdido (limite de uso) e não é recuperável
+- [ ] Rodar `/wrap-up` da semana de 27-31/07 na sexta. O de 24/07 foi perdido (limite de uso) e não é recuperável. **Material de 31/07 para o wrap-up**: 4 PRs mergeados e no ar — comentários inline nas documentações (#39, #40, ver [[comentarios-inline-documentacoes]]), remoção do modo de build estático (#41, ver [[admin-setup]]) e o incidente de credencial no bundle do admin (#42, ver [[supabase-config]])
+- [ ] Conferir os logs de auth do Supabase por acessos não reconhecidos. A senha da conta esteve pública no bundle do admin desde que ele existe — rotacionada em 31/07, mas não há como saber se foi usada sem olhar o log
 - [ ] Avaliar mudar o horário dos crons: `berkahn-wrapup-semanal` roda sexta 17h, encavalado com uso interativo. Rodar de madrugada reduz a chance de bater no limite semanal
 - [ ] Considerar um passo de verificação nos crons de standup/wrap-up que confirme se o arquivo esperado existe ao final, já que uma sessão pode morrer entre a chamada e a escrita
 
