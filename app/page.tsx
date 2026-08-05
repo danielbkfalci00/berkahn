@@ -23,7 +23,7 @@ export const metadata: Metadata = {
 
 // Medições de engenharia do sistema LSF (fonte: lib/lsf-data.ts COMPARISON_DATA)
 const HOME_STATS = [
-  { value: 6, prefix: "3 a ", suffix: " meses", label: "do terreno à entrega" },
+  { value: 6, prefix: "até ", suffix: " meses", label: "do terreno à entrega" },
   { value: 5, prefix: "< ", suffix: "%", label: "de desperdício de material" },
   { value: 2, prefix: "± ", suffix: " mm", label: "de tolerância na estrutura" },
   { value: 8, prefix: "até ", suffix: " m", label: "de vãos livres" },

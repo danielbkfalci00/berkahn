@@ -11,9 +11,10 @@ import "lenis/dist/lenis.css";
  * - Roda sobre o scroll nativo (Lenis): âncoras, sticky e a11y preservados.
  * - Com prefers-reduced-motion nada é instanciado — scroll 100% nativo.
  * - Sincroniza com ScrollTrigger via gsap.ticker (pattern canônico Lenis+GSAP).
- * - Pausa automaticamente quando qualquer modal trava o body (Sidebar,
- *   ContactFormDialog/Radix): MutationObserver no style do body, sem tocar
- *   na API de nenhum componente compartilhado.
+ * - Pausa automaticamente quando qualquer modal trava o body: MutationObserver
+ *   cobre tanto style.overflow inline (Sidebar/MenuProvider) quanto o atributo
+ *   data-scroll-locked que o Radix/react-remove-scroll usa (ContactFormDialog),
+ *   sem tocar na API de nenhum componente compartilhado.
  */
 export function SmoothScroll() {
   useEffect(() => {
@@ -33,20 +34,27 @@ export function SmoothScroll() {
     gsap.ticker.lagSmoothing(0);
 
     const body = document.body;
+    const isBodyLocked = () =>
+      body.style.overflow === "hidden" || body.hasAttribute("data-scroll-locked");
     const syncWithBodyLock = () => {
-      if (body.style.overflow === "hidden") {
+      if (isBodyLocked()) {
         lenis.stop();
       } else {
         lenis.start();
       }
     };
     const observer = new MutationObserver(syncWithBodyLock);
-    observer.observe(body, { attributes: true, attributeFilter: ["style"] });
+    observer.observe(body, {
+      attributes: true,
+      attributeFilter: ["style", "data-scroll-locked"],
+    });
     syncWithBodyLock();
 
     return () => {
       observer.disconnect();
       gsap.ticker.remove(raf);
+      // lagSmoothing é global do GSAP — restaura os defaults ao sair da home
+      gsap.ticker.lagSmoothing(500, 33);
       lenis.destroy();
     };
   }, []);

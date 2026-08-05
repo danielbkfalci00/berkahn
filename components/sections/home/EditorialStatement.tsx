@@ -13,12 +13,15 @@ export function EditorialStatement() {
 
   useGSAP(
     (_context, contextSafe) => {
+      // useGSAP sempre fornece contextSafe em runtime; o guard satisfaz o tipo
+      if (!contextSafe) return;
+
       const mm = gsap.matchMedia();
 
       mm.add("(prefers-reduced-motion: no-preference)", () => {
         // Split só depois das fontes: quebra de linha correta com Archivo carregada
         document.fonts.ready.then(
-          contextSafe!(() => {
+          contextSafe(() => {
             const target = sectionRef.current?.querySelector("[data-statement]");
             if (!target) return;
 

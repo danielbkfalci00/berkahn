@@ -68,6 +68,9 @@ export function AutoplayVideo({
         const isVisible = entries.some((entry) => entry.isIntersecting);
         if (isVisible) {
           setShouldLoad(true);
+          // No-op na primeira interseção (o <video> ainda não montou; o effect
+          // de shouldLoad faz o primeiro play) — nas seguintes, retoma o vídeo
+          // pausado ao sair do viewport
           videoRef.current?.play().catch(() => {
             // Autoplay bloqueado: o poster permanece
           });

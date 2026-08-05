@@ -22,9 +22,13 @@ export function useHeaderScroll() {
     handleScroll();
 
     window.addEventListener("scroll", handleScroll, { passive: true });
+    // innerHeight muda quando o chrome do browser mobile colapsa/expande —
+    // re-avaliar os thresholds mantém o flip alinhado ao hero de 100svh
+    window.addEventListener("resize", handleScroll, { passive: true });
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", handleScroll);
     };
   }, []);
 
