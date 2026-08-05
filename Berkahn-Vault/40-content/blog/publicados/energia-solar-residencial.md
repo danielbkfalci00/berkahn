@@ -1,7 +1,7 @@
 ---
 tipo: draft-content
 criado: 2026-07-14
-atualizado: 2026-07-29
+atualizado: 2026-08-05
 tags:
   - project/blog
   - status/published
@@ -146,7 +146,7 @@ O ponto que se mantém verdadeiro é o de fluxo de caixa. Em boa parte dos finan
 
 ## Incentivos fiscais em São Paulo, com prazo correndo
 
-São Paulo mantém isenção de ICMS sobre a energia compensada por meio do Decreto nº 69.827/2024, válida **até 31 de dezembro de 2026**. Não há prorrogação confirmada até o momento.
+São Paulo mantém isenção de ICMS sobre a energia compensada por meio do Decreto nº 69.287/2024, que deu ao parágrafo 4º do artigo 166 do Anexo I do RICMS a redação em vigor, válida **até 31 de dezembro de 2026**. Não há prorrogação confirmada até o momento.
 
 Esse detalhe merece atenção. São Paulo renovou a isenção apenas até o fim da atual gestão estadual, enquanto Minas Gerais, Rio de Janeiro e Espírito Santo estenderam o benefício até 2032. A ABSOLAR cobra publicamente o alinhamento paulista. Como a isenção incide sobre a energia compensada ao longo de toda a vida do sistema, e não apenas na instalação, a diferença entre estar dentro ou fora dela é relevante no cálculo de longo prazo.
 
@@ -193,4 +193,4 @@ Na Berkahn projetamos e construímos em Light Steel Frame e sistemas híbridos. 
 
 **Contexto aplicado**: [[berkahn-brand]] · [[seo-aeo-strategy]] · [[article-pipeline]] · [[copy-sem-travessao]] · [[steel-frame-domain]]
 
-**Validade dos dados**: revisar até jan/2027. O Fio B sobe para 75% em janeiro de 2027 e a isenção de ICMS-SP (Decreto 69.827/2024) expira em 31/12/2026. Conferir também a conclusão da Tomada de Subsídios nº 23/2025 (regra pós-2029) e o desfecho da consulta sobre Tarifa Branca compulsória.
+**Validade dos dados**: revisar até jan/2027. O Fio B sobe para 75% em janeiro de 2027 e a isenção de ICMS-SP (Decreto 69.287/2024, conferido na SEFAZ-SP em 05/08/2026) expira em 31/12/2026. Conferir também a conclusão da Tomada de Subsídios nº 23/2025 (regra pós-2029) e o desfecho da consulta sobre Tarifa Branca compulsória.
