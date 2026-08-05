@@ -1,7 +1,7 @@
 ---
 tipo: documentacao
 criado: 2026-07-29
-atualizado: 2026-07-29
+atualizado: 2026-08-05
 tags:
   - project/blog
   - project/seo-aeo
@@ -53,9 +53,13 @@ Revisão de evidência 2025-2026 em [[2026-07-diagnostico-editorial]]. Muda o de
 
 **Keyword**: isenção icms energia solar sp 2026 · **Intenção** transacional · **Fundo**
 
-**Por que agora**: janela mais curta do calendário. O Decreto SP 69.827/2024 prorrogou a isenção de ICMS sobre energia compensada até **31/12/2026**, e o Fio B passa de 60% para **75% em 01/01/2027** (Lei 14.300, art. 27). Projeto e homologação de geração distribuída levam meses: publicar em novembro não dá tempo do leitor agir. Publicado em janeiro, vira retrospectiva.
+**Por que agora**: janela mais curta do calendário. O Decreto SP 69.287/2024 prorrogou a isenção de ICMS sobre energia compensada até **31/12/2026**, e o Fio B passa de 60% para **75% em 01/01/2027** (Lei 14.300, art. 27). Projeto e homologação de geração distribuída levam meses: publicar em novembro não dá tempo do leitor agir. Publicado em janeiro, vira retrospectiva.
 
-**Ângulo**: a conta lado a lado de quem homologa em 2026 contra quem homologa em 2027, em reais e em anos de payback.
+> [!warning] Verificação feita em 05/08/2026, e ela mudou a pauta
+> **Decreto correto é 69.287/2024, não 69.827.** Fonte primária: SEFAZ-SP, art. 166 do Anexo I do RICMS, nota de alteração verbatim "Redação dada ao parágrafo pelo Decreto 69.287, de 30-12-2024, DOE 01-01-2025". Canal Solar, ABSOLAR, Portal Solar e pv magazine propagaram 69.827 (transposição de dígito). Corrigido também em [[energia-solar-residencial]].
+> **O ângulo original pesa errado os dois prazos.** Nem o Fio B nem a isenção travam: o art. 27 escalona por ano-calendário, e o §4º do art. 166 vence para todos, inclusive quem já instalou. Modelando o caso-base, a queda de 21,5% no valor do crédito em 01/01/2027 se decompõe em **ICMS 90,5% e Fio B 9,5%**. A comparação "homologa em 2026 vs 2027" vale cerca de R$ 960 uma vez, contra ~R$ 2.000/ano de deslocar consumo para o horário de geração e ~R$ 2.700/ano do fim da isenção. É o terceiro item em tamanho, não o primeiro.
+
+**Ângulo**: os dois relógios são reais, mas nenhum trava nada. Entregar a conta honesta de homologar em 2026 contra 2027 e mostrar qual alavanca realmente move o payback.
 
 **Estrutura**: o que vence e quando → simulação de payback nos dois cenários → o que precisa estar pronto para homologar ainda em 2026 → por que integrar ao projeto da casa sai mais barato que retrofit → o que ainda é incerto (renovação do ICMS é decisão do próximo governo).
 
