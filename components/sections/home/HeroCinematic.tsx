@@ -48,6 +48,10 @@ export function HeroCinematic() {
         let currentIndex = 0;
         let isPosterHidden = false;
 
+        // Fonte 4:3 numa tela 16:9: o crop vertical ancora em 80% para baixo
+        // (mostra sofás, portas e piso em vez de só o teto de madeira)
+        const VERTICAL_FOCUS = 0.8;
+
         // Desenha o frame carregado mais próximo (para trás) do índice pedido
         const draw = (index: number) => {
           let nearest = Math.min(index, frameCount - 1);
@@ -60,7 +64,7 @@ export function HeroCinematic() {
           const scale = Math.max(cw / img.naturalWidth, ch / img.naturalHeight);
           const w = img.naturalWidth * scale;
           const h = img.naturalHeight * scale;
-          context2d.drawImage(img, (cw - w) / 2, (ch - h) / 2, w, h);
+          context2d.drawImage(img, (cw - w) / 2, (ch - h) * VERTICAL_FOCUS, w, h);
 
           if (!isPosterHidden && posterWrapRef.current) {
             posterWrapRef.current.style.opacity = "0";
@@ -128,13 +132,24 @@ export function HeroCinematic() {
             },
             0
           )
-          // Coreografia dos textos: cue some cedo; conteúdo sobe e limpa a
-          // tela antes da revelação final da piscina
+          // Coreografia dos textos: dissolve em estágios ao longo do voo —
+          // cue, depois label+barra, depois subtítulo; headline e CTAs saem
+          // por último, limpando a tela para a revelação final da piscina
           .to("[data-hero-foot]", { autoAlpha: 0, duration: 0.12, ease: "none" }, 0.06)
           .to(
+            ["[data-hero-label]", "[data-hero-bar]"],
+            { autoAlpha: 0, duration: 0.14, ease: "none" },
+            0.28
+          )
+          .to(
+            "[data-hero-sub]",
+            { autoAlpha: 0, y: -18, duration: 0.16, ease: "none" },
+            0.38
+          )
+          .to(
             contentRef.current,
-            { yPercent: -24, autoAlpha: 0, duration: 0.32, ease: "none" },
-            0.48
+            { yPercent: -20, autoAlpha: 0, duration: 0.28, ease: "none" },
+            0.52
           );
 
         // Entrada (tempo, não scroll): reveal por linha
@@ -174,7 +189,7 @@ export function HeroCinematic() {
             fill
             priority
             sizes="100vw"
-            className="object-cover"
+            className="object-cover object-[50%_80%]"
           />
         </div>
 
@@ -206,15 +221,20 @@ export function HeroCinematic() {
             aria-hidden="true"
           />
 
+          {/* Jogo tipográfico: apoio fino, força em bold, ponto bronze de carimbo */}
           <h1 className="headline-hero hero-text-shadow mb-7">
             <span className="block overflow-hidden">
               <span data-hero-line className="block md:whitespace-nowrap">
-                Especialistas em Light Steel Frame
+                <span className="font-light text-white-70">Especialistas em</span>{" "}
+                <span className="font-semibold">Light Steel Frame</span>
               </span>
             </span>
             <span className="block overflow-hidden">
               <span data-hero-line className="block md:whitespace-nowrap">
-                Mestres em Construir
+                <span className="font-light text-white-70">Mestres em</span>{" "}
+                <span className="font-semibold">
+                  Construir<span className="text-bronze">.</span>
+                </span>
               </span>
             </span>
           </h1>
