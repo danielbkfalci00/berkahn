@@ -87,9 +87,8 @@ export function HeroCinematic() {
         <AutoplayVideo
           sources={HERO_VIDEO_SOURCES}
           poster="/videos/hero/hero-poster.webp"
-          posterAlt="Vila da Mata, residência de alto padrão construída pela Berkahn em Light Steel Frame"
+          posterAlt="Interior de residência de alto padrão construída pela Berkahn em Light Steel Frame"
           posterPriority
-          disableOnMobile
           posterClassName="animate-kenburns"
         />
       </div>
