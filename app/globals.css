@@ -315,11 +315,13 @@
   /* Luxury shadows agora vivem só no tailwind.config.ts (valores idênticos aos que
      este bloco definia — fonte única para evitar drift entre CSS e config) */
 
-  /* Headline do hero cinematográfico — display forte, escala fluida */
+  /* Headline do hero cinematográfico — display forte, escala fluida.
+     Máximo calibrado para "Especialistas em Light Steel Frame" caber em
+     uma linha no desktop dentro do container de 1100px. */
   .headline-hero {
     @apply font-display font-semibold tracking-tight text-white;
-    font-size: clamp(2.5rem, 1.1rem + 5vw, 5.5rem);
-    line-height: 1.06;
+    font-size: clamp(2rem, 0.9rem + 3.6vw, 3.9rem);
+    line-height: 1.08;
   }
 
   /* Scroll-driven animations nativas — progressive enhancement.

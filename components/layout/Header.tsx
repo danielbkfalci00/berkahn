@@ -21,10 +21,12 @@ export function Header({
 }: HeaderProps = {}) {
   const pathname = usePathname();
   const { isOpen, toggle } = useMenu();
-  const { isScrolled, isPastHero, isPastHeroEnd } = useHeaderScroll();
+  // Overlay: o hero da home é pinado (runway de 260vh) — o flip para sólido
+  // acontece no fim do runway, não no fim do primeiro viewport.
+  const { isScrolled, isPastHero, isPastHeroEnd } = useHeaderScroll({
+    heroEndFactor: variant === 'overlay' ? 1.55 : 0.92,
+  });
 
-  // Overlay: transparente sobre o hero full-viewport da home; vira sólido
-  // apenas ao passar o FIM do hero (isPastHeroEnd), não nos thresholds antigos.
   const isOverlay = variant === 'overlay';
   const isSolid = !isOverlay || isPastHeroEnd;
 

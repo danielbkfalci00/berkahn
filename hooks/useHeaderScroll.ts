@@ -4,7 +4,16 @@ import { useState, useEffect } from "react";
 
 const SCROLL_THRESHOLD = 50;
 
-export function useHeaderScroll() {
+type UseHeaderScrollOptions = {
+  /**
+   * Fim do hero em múltiplos da altura do viewport — usado pelo variant
+   * overlay do Header. 0.92 = hero de 100svh; a home pinada usa ~1.55
+   * (runway de 260vh menos o viewport preso).
+   */
+  heroEndFactor?: number;
+};
+
+export function useHeaderScroll({ heroEndFactor = 0.92 }: UseHeaderScrollOptions = {}) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isPastHero, setIsPastHero] = useState(false);
   const [isPastHeroEnd, setIsPastHeroEnd] = useState(false);
@@ -14,8 +23,7 @@ export function useHeaderScroll() {
       const scrollY = window.scrollY;
       setIsScrolled(scrollY > SCROLL_THRESHOLD);
       setIsPastHero(scrollY > window.innerHeight * 0.6);
-      // Fim de um hero full-viewport (100svh) — usado pelo variant overlay do Header
-      setIsPastHeroEnd(scrollY > window.innerHeight * 0.92);
+      setIsPastHeroEnd(scrollY > window.innerHeight * heroEndFactor);
     };
 
     // Initial check
@@ -30,7 +38,7 @@ export function useHeaderScroll() {
       window.removeEventListener("scroll", handleScroll);
       window.removeEventListener("resize", handleScroll);
     };
-  }, []);
+  }, [heroEndFactor]);
 
   return { isScrolled, isPastHero, isPastHeroEnd };
 }
