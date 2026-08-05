@@ -53,7 +53,7 @@ export function EditorialStatement() {
   return (
     <section ref={sectionRef} className="bg-carbon text-off-white py-2xl md:py-3xl">
       <div className="container">
-        <p className="font-tech text-xs lowercase tracking-wide text-bronze mb-10">
+        <p className="font-tech text-xs lowercase tracking-wide text-white-50 mb-10">
           01 · a nossa régua
         </p>
 

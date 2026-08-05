@@ -39,10 +39,9 @@ const config: Config = {
   			},
   			'off-white': '#F4F2EC',
   			carbon: {
-  				DEFAULT: '#14120F',
-  				soft: '#1D1A16'
-  			},
-  			bronze: '#A8845F'
+  				DEFAULT: '#000000',
+  				soft: '#1A1A1A'
+  			}
   		},
   		fontFamily: {
   			heading: [

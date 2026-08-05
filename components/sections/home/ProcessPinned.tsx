@@ -93,7 +93,7 @@ export function ProcessPinned() {
     <section ref={sectionRef} className="bg-carbon text-white">
       <div className="container pt-2xl md:pt-3xl">
         <RevealOnScroll>
-          <p className="font-tech text-xs lowercase tracking-wide text-bronze mb-4">
+          <p className="font-tech text-xs lowercase tracking-wide text-white-50 mb-4">
             03 · como construímos
           </p>
           <h2 className="headline-md text-white max-w-2xl">
@@ -134,7 +134,7 @@ export function ProcessPinned() {
                     key={act.label}
                     data-process-step
                     className={
-                      "font-tech text-sm tracking-wide text-bronze" +
+                      "font-tech text-sm tracking-wide text-white" +
                       (index === 0 ? "" : " opacity-30")
                     }
                   >
@@ -154,7 +154,7 @@ export function ProcessPinned() {
                       index === 0 ? "absolute inset-0" : "absolute inset-0 opacity-0"
                     }
                   >
-                    <p className="font-tech text-xs lowercase tracking-wide text-bronze mb-3">
+                    <p className="font-tech text-xs lowercase tracking-wide text-white-50 mb-3">
                       {act.label}
                     </p>
                     <h3 className="font-display font-semibold text-2xl xl:text-3xl tracking-tight mb-4">
@@ -184,7 +184,7 @@ export function ProcessPinned() {
                 className="object-cover"
               />
             </div>
-            <p className="font-tech text-xs lowercase tracking-wide text-bronze mb-3">
+            <p className="font-tech text-xs lowercase tracking-wide text-white-50 mb-3">
               {act.label}
             </p>
             <h3 className="font-display font-semibold text-2xl tracking-tight mb-3">
@@ -201,7 +201,7 @@ export function ProcessPinned() {
             href="/etapas-da-obra"
             className="group inline-flex items-center gap-4 text-sm uppercase tracking-wider font-medium text-white"
           >
-            <span className="h-[3px] w-10 bg-bronze transition-all duration-500 ease-expo group-hover:w-16" />
+            <span className="h-[3px] w-10 bg-white transition-all duration-500 ease-expo group-hover:w-16" />
             As quatro fases da obra em detalhe
           </Link>
         </RevealOnScroll>

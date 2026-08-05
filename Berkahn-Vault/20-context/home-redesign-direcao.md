@@ -28,8 +28,8 @@ Registro da direção aprovada pelo Bruno em 2026-08-05 para a repaginada da hom
 
 | Camada | Decisão |
 |--------|---------|
-| Superfícies dark | `carbon #14120F` / `carbon-soft #1D1A16` (quase-preto quente) |
-| Acento único | `bronze #A8845F` (barras, numerais, detalhes). Azul blueprint `#123A5E` fica reservado ao institucional |
+| Superfícies dark | `carbon #000000` / `carbon-soft #1A1A1A` (preto puro + cinza escuro oficiais — decisão do Bruno em 2026-08-05: paleta estritamente mono, sem acentos de cor) |
+| Acento | **Nenhum.** O bronze `#A8845F` foi testado e removido a pedido do Bruno (fora da paleta). Barras e detalhes usam branco sobre dark e preto sobre claro. Azul blueprint `#123A5E` segue reservado ao institucional |
 | Seções claras | branco puro + `off-white #F4F2EC` existente |
 | Display | **Archivo** (variável 500-900, `font-display`) — grotesca industrial já validada na v3 do institucional |
 | Corpo/UI | **Manrope** (mantida, identidade atual) |

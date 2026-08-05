@@ -172,7 +172,7 @@ export function ProjectsRail() {
                       {project.name}
                     </h3>
                     <span
-                      className="h-[3px] w-8 bg-bronze transition-all duration-500 ease-expo group-hover:w-14"
+                      className="h-[3px] w-8 bg-black transition-all duration-500 ease-expo group-hover:w-14"
                       aria-hidden="true"
                     />
                   </div>
@@ -185,7 +185,7 @@ export function ProjectsRail() {
           <CarouselItem className="pl-5 md:pl-7 basis-[80vw] sm:basis-[55vw] lg:basis-[32vw]">
             <Link href="/portfolio" className="group block">
               <div className="flex aspect-[4/5] flex-col items-start justify-end bg-carbon p-8 transition-colors duration-500 group-hover:bg-carbon-soft">
-                <span className="h-[3px] w-10 bg-bronze mb-6 transition-all duration-500 ease-expo group-hover:w-16" />
+                <span className="h-[3px] w-10 bg-white mb-6 transition-all duration-500 ease-expo group-hover:w-16" />
                 <p className="font-display font-semibold text-2xl tracking-tight text-white mb-2">
                   Ver portfólio completo
                 </p>
@@ -204,7 +204,7 @@ export function ProjectsRail() {
           </p>
           <div className="h-[2px] flex-1 bg-black-10">
             <div
-              className="h-full bg-bronze"
+              className="h-full bg-black"
               style={{ width: `${Math.round(progress * 100)}%` }}
             />
           </div>

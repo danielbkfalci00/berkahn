@@ -84,7 +84,7 @@ export function Segments() {
                     </p>
                   </div>
                   <span
-                    className="mt-2 h-[3px] w-10 shrink-0 bg-bronze transition-all duration-500 ease-expo group-hover:w-16"
+                    className="mt-2 h-[3px] w-10 shrink-0 bg-black transition-all duration-500 ease-expo group-hover:w-16"
                     aria-hidden="true"
                   />
                 </div>

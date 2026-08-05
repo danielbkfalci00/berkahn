@@ -217,11 +217,11 @@ export function HeroCinematic() {
 
           <div
             data-hero-bar
-            className="h-[3px] w-14 bg-bronze mb-7"
+            className="h-[3px] w-14 bg-white mb-7"
             aria-hidden="true"
           />
 
-          {/* Jogo tipográfico: apoio fino, força em bold, ponto bronze de carimbo */}
+          {/* Jogo tipográfico: apoio fino, força em bold */}
           <h1 className="headline-hero hero-text-shadow mb-7">
             <span className="block overflow-hidden">
               <span data-hero-line className="block md:whitespace-nowrap">
@@ -232,9 +232,7 @@ export function HeroCinematic() {
             <span className="block overflow-hidden">
               <span data-hero-line className="block md:whitespace-nowrap">
                 <span className="font-light text-white-70">Mestres em</span>{" "}
-                <span className="font-semibold">
-                  Construir<span className="text-bronze">.</span>
-                </span>
+                <span className="font-semibold">Construir.</span>
               </span>
             </span>
           </h1>

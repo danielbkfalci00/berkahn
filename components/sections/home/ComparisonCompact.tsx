@@ -44,7 +44,7 @@ export function ComparisonCompact() {
                     {row.lsf}
                   </p>
                   <div className="mt-3 flex items-center gap-3">
-                    <span className="h-[3px] w-8 bg-bronze" aria-hidden="true" />
+                    <span className="h-[3px] w-8 bg-black" aria-hidden="true" />
                     <p className="text-xs uppercase tracking-wider text-black-70 font-medium">
                       Light Steel Frame
                     </p>
@@ -69,7 +69,7 @@ export function ComparisonCompact() {
             href="/lsf"
             className="group mt-12 inline-flex items-center gap-4 text-sm uppercase tracking-wider font-medium text-black"
           >
-            <span className="h-[3px] w-10 bg-bronze transition-all duration-500 ease-expo group-hover:w-16" />
+            <span className="h-[3px] w-10 bg-black transition-all duration-500 ease-expo group-hover:w-16" />
             Comparação completa do sistema
           </Link>
         </RevealOnScroll>
