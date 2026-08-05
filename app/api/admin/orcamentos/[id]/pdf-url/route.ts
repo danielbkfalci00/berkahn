@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
 import { createServiceClient } from "@/lib/supabase/admin"
+import { exigirSessao } from "@/lib/supabase/sessao"
 import { gerarSignedUrlPdf } from "@/lib/orcamento-pdf-storage"
 
 interface RouteContext {
@@ -7,6 +8,11 @@ interface RouteContext {
 }
 
 export async function GET(_: Request, ctx: RouteContext) {
+  // Devolve signed URL do PDF do cliente com service key: sem esta checagem,
+  // qualquer um com um id na mão baixava o orçamento de qualquer cliente.
+  const barrado = await exigirSessao()
+  if (barrado) return barrado
+
   const { id } = await ctx.params
 
   const supabase = createServiceClient()

@@ -1,8 +1,12 @@
 import { NextResponse } from "next/server"
 import { createClient } from "@/lib/supabase/server"
+import { exigirSessao } from "@/lib/supabase/sessao"
 import type { OrcamentoInsert } from "@/types/orcamento-estimativa"
 
 export async function GET(request: Request) {
+  const barrado = await exigirSessao()
+  if (barrado) return barrado
+
   const supabase = await createClient()
   const { searchParams } = new URL(request.url)
   const status = searchParams.get("status")
@@ -26,6 +30,9 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
+  const barrado = await exigirSessao()
+  if (barrado) return barrado
+
   const supabase = await createClient()
   let body: Partial<OrcamentoInsert>
   try {
