@@ -58,13 +58,11 @@ export function ProcessPinned() {
         () => {
           const images = gsap.utils.toArray<HTMLElement>("[data-process-img]");
           const texts = gsap.utils.toArray<HTMLElement>("[data-process-text]");
+          const steps = gsap.utils.toArray<HTMLElement>("[data-process-step]");
           if (images.length < 3 || texts.length < 3) return;
 
-          gsap.set(images.slice(1), { autoAlpha: 0 });
-          gsap.set(texts.slice(1), { opacity: 0.3 });
-
           const tl = gsap.timeline({
-            defaults: { duration: 0.6, ease: "none" },
+            defaults: { duration: 0.5, ease: "none" },
             scrollTrigger: {
               trigger: "[data-process-track]",
               start: "top top",
@@ -73,12 +71,18 @@ export function ProcessPinned() {
             },
           });
 
-          tl.to(texts[0], { opacity: 0.3 }, 0.7)
+          // Ato 1 -> 2
+          tl.to(texts[0], { autoAlpha: 0 }, 0.7)
+            .to(steps[0], { opacity: 0.3 }, 0.7)
             .to(images[1], { autoAlpha: 1 }, 0.7)
-            .to(texts[1], { opacity: 1 }, 0.7)
-            .to(texts[1], { opacity: 0.3 }, 1.7)
+            .to(texts[1], { autoAlpha: 1 }, 0.8)
+            .to(steps[1], { opacity: 1 }, 0.8)
+            // Ato 2 -> 3
+            .to(texts[1], { autoAlpha: 0 }, 1.7)
+            .to(steps[1], { opacity: 0.3 }, 1.7)
             .to(images[2], { autoAlpha: 1 }, 1.7)
-            .to(texts[2], { opacity: 1 }, 1.7);
+            .to(texts[2], { autoAlpha: 1 }, 1.8)
+            .to(steps[2], { opacity: 1 }, 1.8);
         }
       );
     },
@@ -98,13 +102,19 @@ export function ProcessPinned() {
         </RevealOnScroll>
       </div>
 
-      {/* Desktop: track de 300vh com mídia sticky e crossfade por scroll */}
-      <div data-process-track className="hidden lg:block relative h-[300vh]">
-        <div className="sticky top-0 h-screen flex items-center">
+      {/* Desktop com motion: track com mídia sticky e UM ato visível por vez.
+          Altura clampada em svh e padding compensando o header fixo — nada
+          corta em viewports baixos ou com zoom. */}
+      <div data-process-track className="hidden motion-safe:lg:block relative h-[260vh]">
+        <div className="sticky top-0 flex h-screen flex-col justify-center pt-24 pb-10">
           <div className="container grid grid-cols-12 gap-10 items-center">
-            <div className="col-span-7 relative aspect-[16/11] overflow-hidden">
+            <div className="col-span-7 relative h-[56svh] min-h-[380px] overflow-hidden">
               {ACTS.map((act, index) => (
-                <div key={act.label} data-process-img className="absolute inset-0">
+                <div
+                  key={act.label}
+                  data-process-img
+                  className={index === 0 ? "absolute inset-0" : "absolute inset-0 opacity-0"}
+                >
                   <Image
                     src={act.image}
                     alt={index === 0 ? act.imageAlt : ""}
@@ -116,27 +126,53 @@ export function ProcessPinned() {
               ))}
             </div>
 
-            <div className="col-span-4 col-start-9 flex flex-col gap-12">
-              {ACTS.map((act) => (
-                <div key={act.label} data-process-text>
-                  <p className="font-tech text-xs lowercase tracking-wide text-bronze mb-3">
-                    {act.label}
-                  </p>
-                  <h3 className="font-display font-semibold text-2xl tracking-tight mb-3">
-                    {act.title}
-                  </h3>
-                  <p className="text-white-70 leading-relaxed text-sm">
-                    {act.description}
-                  </p>
-                </div>
-              ))}
+            <div className="col-span-4 col-start-9">
+              {/* Índice dos atos */}
+              <div className="flex items-center gap-6 mb-10" aria-hidden="true">
+                {ACTS.map((act, index) => (
+                  <span
+                    key={act.label}
+                    data-process-step
+                    className={
+                      "font-tech text-sm tracking-wide text-bronze" +
+                      (index === 0 ? "" : " opacity-30")
+                    }
+                  >
+                    0{index + 1}
+                  </span>
+                ))}
+                <span className="h-[3px] flex-1 bg-white-10" />
+              </div>
+
+              {/* Slot de ato único — blocos sobrepostos, crossfade por scroll */}
+              <div className="relative min-h-[260px]">
+                {ACTS.map((act, index) => (
+                  <div
+                    key={act.label}
+                    data-process-text
+                    className={
+                      index === 0 ? "absolute inset-0" : "absolute inset-0 opacity-0"
+                    }
+                  >
+                    <p className="font-tech text-xs lowercase tracking-wide text-bronze mb-3">
+                      {act.label}
+                    </p>
+                    <h3 className="font-display font-semibold text-2xl xl:text-3xl tracking-tight mb-4">
+                      {act.title}
+                    </h3>
+                    <p className="text-white-70 leading-relaxed">
+                      {act.description}
+                    </p>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Mobile / reduced-motion: stack estático */}
-      <div className="lg:hidden container flex flex-col gap-14 pt-16">
+      {/* Mobile sempre; desktop quando prefers-reduced-motion: stack estático completo */}
+      <div className="motion-safe:lg:hidden container flex flex-col gap-14 pt-16">
         {ACTS.map((act, index) => (
           <RevealOnScroll key={act.label} delay={index * 0.1}>
             <div className="relative aspect-[16/10] overflow-hidden mb-6">
