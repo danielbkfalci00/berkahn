@@ -9,13 +9,13 @@ import { Button } from "@/components/ui/button";
 
 /**
  * Sources do vídeo de hero (AV1 → HEVC → H.264), servidos de public/videos/hero/.
- * Lista vazia = modo poster (render 4K + Ken Burns) até o vídeo definitivo
- * ser gerado e encodado — o swap é só preencher este array.
+ * Fonte: drone fly-through gerado por IA (interior → piscina, golden hour),
+ * trim 0,5s–7,8s, sem áudio, +faststart. Poster = primeiro frame do corte.
  */
 const HERO_VIDEO_SOURCES: VideoSource[] = [
-  // { src: "/videos/hero/hero-1080-av1.mp4", type: 'video/mp4; codecs="av01.0.05M.08"' },
-  // { src: "/videos/hero/hero-1080-hevc.mp4", type: 'video/mp4; codecs="hvc1"' },
-  // { src: "/videos/hero/hero-1080-h264.mp4", type: "video/mp4" },
+  { src: "/videos/hero/hero-av1.mp4", type: 'video/mp4; codecs="av01.0.05M.08"' },
+  { src: "/videos/hero/hero-hevc.mp4", type: 'video/mp4; codecs="hvc1"' },
+  { src: "/videos/hero/hero-h264.mp4", type: "video/mp4" },
 ];
 
 export function HeroCinematic() {
