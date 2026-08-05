@@ -147,9 +147,16 @@ export interface Pauta {
  * "Publicado" com artigo em rascunho, ou o contrário. O quadro nunca escreve
  * em `posts.status`, então essa divergência é possível de propósito; a UI a
  * exibe em vez de esconder.
+ *
+ * Cards `linkedin-acervo` nunca divergem: eles nascem de um artigo que JÁ está
+ * no ar, e a coluna descreve o andamento do post de LinkedIn, não o do artigo.
+ * Sem esta exceção o aviso apareceria nos 22 de uma vez, e um alerta que
+ * dispara em um terço do quadro só ensina a ignorá-lo.
  */
 export function divergeDoArtigo(pauta: Pauta): boolean {
   if (!pauta.artigo) return false;
+  if (pauta.tipo === "linkedin-acervo") return false;
+
   const publicadoNoSite = pauta.artigo.status === "published";
   return pauta.coluna === "publicado" ? !publicadoNoSite : publicadoNoSite;
 }
