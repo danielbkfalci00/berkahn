@@ -33,6 +33,18 @@ const SELECT_COM_ARTIGO = `
   posts ( id, slug, title, status, published_at )
 `;
 
+/**
+ * Mensagem para quando um UPDATE/DELETE não atinge linha nenhuma.
+ *
+ * ⚠️ O PostgREST **não** devolve erro quando a RLS filtra a linha: a operação
+ * "funciona" e afeta zero linhas. Sem checar isso, uma sessão que expirou com a
+ * aba aberta faz o autosave reportar "Salvo" para sempre enquanto o banco não
+ * recebe nada — e a pessoa perde o texto ao fechar a aba. Verificado: `update`
+ * com a anon key nesta tabela retorna `error: null` e `data: []`.
+ */
+const SEM_LINHA =
+  "Nada foi gravado. Sua sessão pode ter expirado — abra o admin em outra aba, confirme que está logado e tente de novo.";
+
 /** Corta e normaliza texto livre; string vazia vira null. */
 function limpar(valor: string | null | undefined, max: number): string | null {
   if (valor === null || valor === undefined) return null;
@@ -185,8 +197,13 @@ export async function excluirPauta(id: string): Promise<Resultado> {
     .eq("id", id)
     .maybeSingle();
 
-  const { error } = await supabase.from("conteudo_pautas").delete().eq("id", id);
+  const { data: apagadas, error } = await supabase
+    .from("conteudo_pautas")
+    .delete()
+    .eq("id", id)
+    .select("id");
   if (error) return { data: null, error: error.message };
+  if (!apagadas || apagadas.length === 0) return { data: null, error: SEM_LINHA };
 
   await registrarLog(
     supabase,
@@ -237,12 +254,14 @@ export async function salvarBloco(
   if (!coluna) return { data: null, error: "Bloco desconhecido." };
 
   const supabase = await createClient();
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from("conteudo_pautas")
     .update({ [coluna]: limpar(texto, LIMITES.blocoMax) })
-    .eq("id", id);
+    .eq("id", id)
+    .select("id");
 
   if (error) return { data: null, error: error.message };
+  if (!data || data.length === 0) return { data: null, error: SEM_LINHA };
   return { data: null, error: null };
 }
 
@@ -275,11 +294,13 @@ export async function moverPautas(
 
   const supabase = await createClient();
   for (const u of updates) {
-    const { error } = await supabase
+    const { data, error } = await supabase
       .from("conteudo_pautas")
       .update({ coluna: u.coluna, ordem: u.ordem })
-      .eq("id", u.id);
+      .eq("id", u.id)
+      .select("id");
     if (error) return { data: null, error: error.message };
+    if (!data || data.length === 0) return { data: null, error: SEM_LINHA };
   }
 
   return { data: null, error: null };
@@ -403,12 +424,14 @@ export async function definirCapa(
   // isso o navegador serve a capa antiga do cache depois de trocar a imagem.
   const url = `${publicUrl}?v=${Date.now()}`;
 
-  const { error } = await supabase
+  const { data: linhas, error } = await supabase
     .from("conteudo_pautas")
     .update({ [COLUNA_DA_CAPA[tipo]]: url })
-    .eq("id", pautaId);
+    .eq("id", pautaId)
+    .select("id");
 
   if (error) return { data: null, error: error.message };
+  if (!linhas || linhas.length === 0) return { data: null, error: SEM_LINHA };
   revalidatePath("/admin/conteudo");
   return { data: { url }, error: null };
 }
@@ -423,12 +446,14 @@ export async function removerCapa(
     return { data: null, error: "Tipo de capa desconhecido." };
 
   const supabase = await createClient();
-  const { error } = await supabase
+  const { data: linhas, error } = await supabase
     .from("conteudo_pautas")
     .update({ [COLUNA_DA_CAPA[tipo]]: null })
-    .eq("id", pautaId);
+    .eq("id", pautaId)
+    .select("id");
 
   if (error) return { data: null, error: error.message };
+  if (!linhas || linhas.length === 0) return { data: null, error: SEM_LINHA };
   revalidatePath("/admin/conteudo");
   return { data: null, error: null };
 }
