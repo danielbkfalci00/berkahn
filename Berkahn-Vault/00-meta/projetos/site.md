@@ -1,11 +1,11 @@
 ---
 tipo: projeto
 criado: 2026-05-22
-atualizado: 2026-07-31
+atualizado: 2026-08-05
 tags:
   - project/site
   - status/active
-ai_summary: "Hub do projeto Site — Next.js 15 + Supabase + Vercel em produção (berkahn.com.br + admin.berkahn.com.br, mesmo build). Em 2026-07-31 - comentários inline nas documentações (#39, #40), modo de build estático removido por estar morto e incompatível (#41) e, o mais grave, a senha da conta Supabase Auth saiu do bundle público do admin, onde estava desde que o admin existe (#42, ver [[supabase-config]]). Em 2026-07-30 - soft 404 de /atualidades (era loading.tsx), ISR restaurado, /contato criado, SearchAction removido. Indexação resolvida em 2026-07-29; páginas institucionais nunca foram medidas. Code paths em app/, lib/, components/."
+ai_summary: "Hub do projeto Site — Next.js 15 + Supabase + Vercel em produção (berkahn.com.br + admin.berkahn.com.br, mesmo build). Em 2026-08-05 - redesign completo da home na branch feat/home-scrollytelling: direção 'luxo de engenharia' ([[home-redesign-direcao]]), hero cinematográfico com poster-LCP, Lenis + GSAP ScrollTrigger, 6 seções antigas substituídas; vídeo IA do hero pendente de geração pelo Bruno. Em 2026-07-31 - comentários inline nas documentações (#39, #40), build estático removido (#41), senha Supabase fora do bundle do admin (#42, ver [[supabase-config]]). Indexação resolvida em 2026-07-29; páginas institucionais nunca foram medidas. Code paths em app/, lib/, components/."
 status: active
 projeto: site
 kpi_paginas_indexadas: 34
@@ -61,6 +61,9 @@ Site em produção (Next.js App Router + Supabase + Vercel + Tailwind + shadcn/u
 
 ## Próximos 7 dias
 
+- [ ] **Home redesign**: revisar visualmente a branch `feat/home-scrollytelling` (preview localhost:3112), decidir conceito do vídeo de hero (A ou B) e gerar com os prompts de [[home-redesign-direcao]]; mergear o PR
+- [ ] **CWV da home nova**: medir LCP/CLS no SpeedInsights após deploy (First Load subiu para 261 kB com GSAP+Lenis)
+- [ ] Importar Clube Quinta dos Lagos para o banco de imagens (candidato ao rail de projetos)
 - [ ] Validar `/institucional/pdf` gerando PDF em produção (pós-merge do #17)
 - [ ] Atualizar o briefing do institucional para **v4** antes de distribuir — o código está em v4, a documentação em v3
 - [ ] Validar build (`npm run build`) sem warnings críticos
