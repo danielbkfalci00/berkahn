@@ -65,6 +65,12 @@ Blur grava na hora, debounce de 1200 ms cobre quem digita sem tirar o foco, `Ctr
 
 `BlocoColapsavel` não usa `components/ui/accordion.tsx`: a linha 47 renderiza o `Content` sem `forceMount`, então fechar **desmonta** o textarea e mata o timer do debounce. Aqui o corpo fica sempre montado, escondido com `hidden`, e o indicador de gravação vive no cabeçalho — bloco fechado com pendência continua sinalizando.
 
+## Duas armadilhas dos blocos de capa e artigo
+
+**`listarArtigosVinculaveis` exclui o artigo da própria pauta.** A query filtra todo post que já pertence a alguma pauta — inclusive a que está aberta. Alimentar um seletor só com essa lista faria um card que **tem** artigo mostrar "nenhum selecionado", e os 22 cards de acervo são exatamente esse caso. Por isso `BlocoArtigo` lê o vínculo atual de `pauta.artigo` e usa a lista só para **trocar**.
+
+**JPEG não tem canal alfa.** `comprimirImagem` pinta o fundo de branco antes de desenhar; sem isso um PNG transparente é achatado contra o que o navegador escolher, normalmente preto. Importa porque as capas são geradas por IA e gerador entrega PNG com frequência. O nome do arquivo também precisa virar `.jpg`, porque `definirCapa` deriva a extensão dele — bytes JPEG num `.png` gravam o objeto errado no bucket.
+
 ## Estado dos comandos (pendência aberta)
 
 `/pesquisa` ainda grava em `blog/pesquisa/*.md` e `/linkedin` em `linkedin/*/post.md`, enquanto `pesquisa_conteudo` e `linkedin_texto` existem no banco. **É dupla escrita, e é temporária.**

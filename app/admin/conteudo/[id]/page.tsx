@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getPauta } from "@/lib/conteudo/queries";
+import { getPauta, listarArtigosVinculaveis } from "@/lib/conteudo/queries";
 import { PainelPauta } from "@/components/admin/conteudo/detalhe/PainelPauta";
 
 export const metadata: Metadata = {
@@ -14,8 +14,11 @@ interface Props {
 
 export default async function PautaPage({ params }: Props) {
   const { id } = await params;
-  const pauta = await getPauta(id);
+  const [pauta, artigosLivres] = await Promise.all([
+    getPauta(id),
+    listarArtigosVinculaveis(),
+  ]);
   if (!pauta) notFound();
 
-  return <PainelPauta pauta={pauta} />;
+  return <PainelPauta pauta={pauta} artigosLivres={artigosLivres} />;
 }

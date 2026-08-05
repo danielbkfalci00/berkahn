@@ -17,8 +17,14 @@ interface Props {
   altura?: string;
   /** Renderizado acima do textarea (ex.: o ângulo do calendário, read-only). */
   antes?: ReactNode;
-  /** Renderizado abaixo, ao lado do contador (ex.: botão de copiar). */
-  acoes?: ReactNode;
+  /**
+   * Renderizado abaixo, ao lado do contador (ex.: botão de copiar).
+   *
+   * Render prop, e não `ReactNode`: recebe o valor **corrente** do textarea.
+   * Como nó pronto, o pai só teria o valor que veio do servidor, e o botão de
+   * copiar entregaria texto velho logo depois de qualquer edição.
+   */
+  acoes?: (valorAtual: string) => ReactNode;
   /** Avisa o pai quando há gravação pendente, para o guard de saída. */
   aoMudarPendencia?: (bloco: BlocoTextoPauta, pendente: boolean) => void;
 }
@@ -79,7 +85,7 @@ export function BlocoTexto({
         <p className={cn("text-xs tabular-nums", perto ? "font-medium text-red-600" : "text-neutral-400")}>
           {valor.length.toLocaleString("pt-BR")} / {LIMITES.blocoMax.toLocaleString("pt-BR")}
         </p>
-        <div className="flex items-center gap-2">{acoes}</div>
+        <div className="flex items-center gap-2">{acoes?.(valor)}</div>
       </div>
     </BlocoColapsavel>
   );

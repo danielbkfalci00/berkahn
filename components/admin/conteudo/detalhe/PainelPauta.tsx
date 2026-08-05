@@ -4,10 +4,10 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import {
   ArrowLeft,
-  FileText,
   Image as ImagemIcone,
   Lightbulb,
   Linkedin,
+  Palette,
   Search,
 } from "lucide-react";
 import {
@@ -20,13 +20,17 @@ import { SeloPostVinculado } from "@/components/admin/conteudo/SeloPostVinculado
 import { BadgesPlataforma } from "@/components/admin/conteudo/BadgesPlataforma";
 import { FaixaMetadados } from "./FaixaMetadados";
 import { BlocoTexto } from "./BlocoTexto";
+import { BlocoCapa } from "./BlocoCapa";
+import { BlocoArtigo, type ArtigoLivre } from "./BlocoArtigo";
+import { BotaoCopiar } from "./BotaoCopiar";
 import { cn } from "@/lib/utils";
 
 interface Props {
   pauta: Pauta;
+  artigosLivres: ArtigoLivre[];
 }
 
-export function PainelPauta({ pauta }: Props) {
+export function PainelPauta({ pauta, artigosLivres }: Props) {
   // Quais blocos têm gravação pendente. É a base do guard de saída.
   const [pendentes, setPendentes] = useState<Set<BlocoTextoPauta>>(new Set());
   const temPendencia = pendentes.size > 0;
@@ -116,8 +120,25 @@ export function PainelPauta({ pauta }: Props) {
           aoMudarPendencia={aoMudarPendencia}
         />
 
-        {/* Artigo Finalizado e as capas entram na próxima fase (A3). Por ora o
-            selo do cabeçalho já mostra o estado real do artigo vinculado. */}
+        <BlocoArtigo pauta={pauta} artigosLivres={artigosLivres} />
+
+        <BlocoCapa
+          pautaId={pauta.id}
+          tipo="blog"
+          titulo="Capa Blog"
+          proporcao="aspect-[3/2]"
+          dica="3:2, ~1200×800. Vira JPEG comprimido no envio."
+          urlInicial={pauta.capaBlogUrl}
+        />
+
+        <BlocoCapa
+          pautaId={pauta.id}
+          tipo="linkedin"
+          titulo="Capa Linkedin"
+          proporcao="aspect-[1200/627]"
+          dica="1200×627 é o formato que o LinkedIn recorta melhor."
+          urlInicial={pauta.capaLinkedinUrl}
+        />
 
         <BlocoTexto
           pautaId={pauta.id}
@@ -128,6 +149,7 @@ export function PainelPauta({ pauta }: Props) {
           placeholder="Post pronto para colar no LinkedIn…"
           altura="min-h-[260px]"
           aoMudarPendencia={aoMudarPendencia}
+          acoes={(atual) => <BotaoCopiar texto={atual} rotulo="Copiar post" />}
           antes={
             pauta.linkedinBriefing ? (
               <blockquote className="mb-3 border-l-2 border-neutral-300 bg-neutral-50 px-3 py-2">
@@ -151,20 +173,22 @@ export function PainelPauta({ pauta }: Props) {
           placeholder="Prompt em inglês para colar no gerador de imagem…"
           altura="min-h-[140px]"
           aoMudarPendencia={aoMudarPendencia}
+          acoes={(atual) => <BotaoCopiar texto={atual} rotulo="Copiar prompt" />}
         />
 
-        {pauta.artigo && (
-          <p className="flex items-center gap-1.5 px-1 text-xs text-neutral-500">
-            <FileText className="h-3.5 w-3.5" strokeWidth={1.75} aria-hidden />
-            Artigo vinculado:{" "}
-            <Link
-              href={`/admin/posts/${pauta.artigo.id}`}
-              className="rounded underline underline-offset-2 hover:text-neutral-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900"
-            >
-              {pauta.artigo.titulo}
-            </Link>
-          </p>
-        )}
+        {/* Separado do prompt de propósito: o botão acima precisa copiar só o
+            inglês, sem a direção em português junto. */}
+        <BlocoTexto
+          pautaId={pauta.id}
+          bloco="imagem-briefing"
+          titulo="Direção visual da imagem"
+          icone={<Palette className="h-4 w-4" strokeWidth={1.75} aria-hidden />}
+          valorInicial={pauta.linkedinImagemBriefing}
+          placeholder="Textos que entram na imagem, referência visual, identidade da marca…"
+          altura="min-h-[140px]"
+          aoMudarPendencia={aoMudarPendencia}
+        />
+
       </div>
     </div>
   );
