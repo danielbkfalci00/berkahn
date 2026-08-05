@@ -1,5 +1,9 @@
+"use client";
+
+import { useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
 
 type RailProject = {
@@ -37,12 +41,25 @@ const PROJECTS: RailProject[] = [
 ];
 
 const CARD_SIZES = "(min-width: 1024px) 32vw, (min-width: 640px) 55vw, 80vw";
+const RAIL_GAP_PX = 28;
 
 /**
- * Galeria de projetos em rail horizontal — scroll-snap CSS puro, zero JS.
- * data-lenis-prevent deixa o wheel horizontal com o container, não com o Lenis.
+ * Galeria de projetos em rail horizontal com scroll-snap CSS.
+ * O wheel vertical fica com a página (Lenis) — a navegação horizontal é
+ * por setas no desktop e swipe nativo no touch. Sem data-lenis-prevent:
+ * um container só-horizontal engoliria o wheel e travaria o scroll da página.
  */
 export function ProjectsRail() {
+  const railRef = useRef<HTMLDivElement>(null);
+
+  const scrollByCard = (direction: 1 | -1) => {
+    const rail = railRef.current;
+    if (!rail) return;
+    const card = rail.querySelector<HTMLElement>("[data-rail-card]");
+    const step = card ? card.offsetWidth + RAIL_GAP_PX : rail.clientWidth * 0.4;
+    rail.scrollBy({ left: direction * step, behavior: "smooth" });
+  };
+
   return (
     <section id="projetos" className="bg-white py-2xl md:py-3xl overflow-hidden">
       <div className="container">
@@ -56,24 +73,45 @@ export function ProjectsRail() {
                 Obra entregue é a melhor vitrine.
               </h2>
             </div>
+
+            <div className="hidden md:flex items-center gap-3">
+              <button
+                type="button"
+                onClick={() => scrollByCard(-1)}
+                aria-label="Projetos anteriores"
+                className="flex h-11 w-11 items-center justify-center border border-black-10 text-black transition-colors duration-300 hover:bg-black hover:text-white"
+              >
+                <ChevronLeft className="h-5 w-5" />
+              </button>
+              <button
+                type="button"
+                onClick={() => scrollByCard(1)}
+                aria-label="Próximos projetos"
+                className="flex h-11 w-11 items-center justify-center border border-black-10 text-black transition-colors duration-300 hover:bg-black hover:text-white"
+              >
+                <ChevronRight className="h-5 w-5" />
+              </button>
+            </div>
+
             <p
-              className="hidden md:block font-tech text-xs lowercase tracking-wide text-black-30 whitespace-nowrap"
+              className="md:hidden font-tech text-xs lowercase tracking-wide text-black-30 whitespace-nowrap"
               aria-hidden="true"
             >
-              arraste para navegar →
+              deslize →
             </p>
           </div>
         </RevealOnScroll>
       </div>
 
       <div
-        data-lenis-prevent
+        ref={railRef}
         className="flex gap-5 md:gap-7 overflow-x-auto snap-x snap-mandatory scrollbar-hide px-6 md:px-16 lg:px-24"
       >
         {PROJECTS.map((project) => (
           <Link
             key={project.name}
             href="/portfolio"
+            data-rail-card
             className="group shrink-0 snap-start w-[80vw] sm:w-[55vw] lg:w-[32vw]"
           >
             <div className="relative aspect-[4/5] overflow-hidden">

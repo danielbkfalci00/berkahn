@@ -21,6 +21,7 @@ const HERO_VIDEO_SOURCES: VideoSource[] = [
 export function HeroCinematic() {
   const sectionRef = useRef<HTMLElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
+  const mediaRef = useRef<HTMLDivElement>(null);
 
   useGSAP(
     () => {
@@ -48,6 +49,18 @@ export function HeroCinematic() {
           )
           .from("[data-hero-foot]", { autoAlpha: 0, duration: 0.9 }, 1.15);
 
+        // Dolly-in ligado ao scroll: a câmera "entra" na casa conforme rola
+        gsap.to(mediaRef.current, {
+          scale: 1.18,
+          ease: "none",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top top",
+            end: "bottom top",
+            scrub: true,
+          },
+        });
+
         // Saída sutil: conteúdo desliza e esmaece conforme o hero deixa o viewport
         gsap.to(contentRef.current, {
           yPercent: -14,
@@ -70,14 +83,16 @@ export function HeroCinematic() {
       ref={sectionRef}
       className="relative h-[100svh] min-h-[600px] overflow-hidden bg-carbon"
     >
-      <AutoplayVideo
-        sources={HERO_VIDEO_SOURCES}
-        poster="/videos/hero/hero-poster.webp"
-        posterAlt="Residência de alto padrão construída em Light Steel Frame pela Berkahn"
-        posterPriority
-        disableOnMobile
-        posterClassName="animate-kenburns"
-      />
+      <div ref={mediaRef} className="absolute inset-0 will-change-transform">
+        <AutoplayVideo
+          sources={HERO_VIDEO_SOURCES}
+          poster="/videos/hero/hero-poster.webp"
+          posterAlt="Vila da Mata, residência de alto padrão construída pela Berkahn em Light Steel Frame"
+          posterPriority
+          disableOnMobile
+          posterClassName="animate-kenburns"
+        />
+      </div>
 
       {/* Vinheta para legibilidade do texto e das anotações */}
       <div className="absolute inset-0 hero-overlay-vignette" aria-hidden="true" />
