@@ -312,20 +312,68 @@
     @apply text-xs leading-relaxed;
   }
 
-  /* Luxury shadows - Minimal profundidade */
-  .shadow-luxury-sm {
-    box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.03),
-                0 1px 2px -1px rgba(0, 0, 0, 0.02);
+  /* Luxury shadows agora vivem só no tailwind.config.ts (valores idênticos aos que
+     este bloco definia — fonte única para evitar drift entre CSS e config) */
+
+  /* Headline do hero cinematográfico — display forte, escala fluida */
+  .headline-hero {
+    @apply font-display font-semibold tracking-tight text-white;
+    font-size: clamp(2.5rem, 1.1rem + 5vw, 5.5rem);
+    line-height: 1.06;
   }
 
-  .shadow-luxury-md {
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05),
-                0 2px 4px -1px rgba(0, 0, 0, 0.03);
+  /* Scroll-driven animations nativas — progressive enhancement.
+     Estado base = estado final: sem suporte ou com reduced-motion, nada se move. */
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      .sda-fade-up {
+        animation: sda-fade-up linear both;
+        animation-timeline: view();
+        animation-range: entry 0% entry 60%;
+      }
+
+      .sda-scale-in {
+        animation: sda-scale-in linear both;
+        animation-timeline: view();
+        animation-range: entry 0% cover 45%;
+      }
+    }
   }
 
-  .shadow-luxury-lg {
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.07),
-                0 4px 6px -2px rgba(0, 0, 0, 0.04);
+  @keyframes sda-fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(2.5rem);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes sda-scale-in {
+    from {
+      transform: scale(1.08);
+    }
+    to {
+      transform: scale(1);
+    }
+  }
+
+  /* Ken Burns de assentamento — poster do hero enquanto não há vídeo */
+  @media (prefers-reduced-motion: no-preference) {
+    .animate-kenburns {
+      animation: kenburns 16s cubic-bezier(0.19, 1, 0.22, 1) both;
+    }
+  }
+
+  @keyframes kenburns {
+    from {
+      transform: scale(1.08);
+    }
+    to {
+      transform: scale(1);
+    }
   }
 
   /* Hide scrollbar utility */

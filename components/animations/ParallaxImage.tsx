@@ -14,6 +14,7 @@ interface ParallaxImageProps {
   containerStyle?: React.CSSProperties;
   priority?: boolean;
   quality?: number;
+  sizes?: string;
 }
 
 export function ParallaxImage({
@@ -25,6 +26,7 @@ export function ParallaxImage({
   containerStyle,
   priority = false,
   quality = 85,
+  sizes = "100vw",
 }: ParallaxImageProps) {
   const ref = useRef<HTMLDivElement>(null);
   const prefersReducedMotion = useReducedMotion();
@@ -59,7 +61,7 @@ export function ParallaxImage({
           className={`object-cover ${className}`}
           priority={priority}
           quality={quality}
-          sizes="100vw"
+          sizes={sizes}
         />
       </motion.div>
     </div>
