@@ -19,8 +19,8 @@ import { Button } from "@/components/ui/button";
  * - Mobile usa sequência própria (44 frames, 640px, ~1,2 MB)
  * - prefers-reduced-motion: sem runway, sem pin, poster estático + texto
  */
-const FRAME_COUNT_DESKTOP = 88;
-const FRAME_COUNT_MOBILE = 44;
+const FRAME_COUNT_DESKTOP = 82;
+const FRAME_COUNT_MOBILE = 41;
 
 const framePath = (index: number, isMobile: boolean) =>
   `/videos/hero/${isMobile ? "seq-m" : "seq"}/f_${String(index + 1).padStart(3, "0")}.webp`;
