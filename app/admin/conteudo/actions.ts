@@ -28,6 +28,7 @@ const SELECT_COM_ARTIGO = `
   keyword, intencao, funil, prioridade, trilha, semana, data_alvo,
   insights, pesquisa_conteudo, post_id,
   capa_blog_url, capa_linkedin_url, linkedin_texto, linkedin_briefing,
+  linkedin_imagem_prompt, linkedin_imagem_briefing,
   plataformas, criado_por, criado_em, atualizado_em,
   posts ( id, slug, title, status, published_at )
 `;
@@ -213,6 +214,8 @@ const COLUNA_DO_BLOCO: Record<BlocoTextoPauta, string> = {
   insights: "insights",
   pesquisa: "pesquisa_conteudo",
   linkedin: "linkedin_texto",
+  "imagem-prompt": "linkedin_imagem_prompt",
+  "imagem-briefing": "linkedin_imagem_briefing",
 };
 
 /**

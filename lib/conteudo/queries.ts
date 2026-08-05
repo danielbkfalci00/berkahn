@@ -15,6 +15,7 @@ const COLUNAS_PAUTA = `
   keyword, intencao, funil, prioridade, trilha, semana, data_alvo,
   insights, pesquisa_conteudo, post_id,
   capa_blog_url, capa_linkedin_url, linkedin_texto, linkedin_briefing,
+  linkedin_imagem_prompt, linkedin_imagem_briefing,
   plataformas, criado_por, criado_em, atualizado_em,
   posts ( id, slug, title, status, published_at )
 `;

@@ -28,8 +28,13 @@ export type Intencao =
 export type Funil = "topo" | "meio" | "fundo" | "pos-venda";
 export type Plataforma = "blog" | "linkedin";
 
-/** Um dos seis blocos de texto editáveis do card. */
-export type BlocoTextoPauta = "insights" | "pesquisa" | "linkedin";
+/** Campos de texto longo com autosave. Cada um mapeia para uma coluna. */
+export type BlocoTextoPauta =
+  | "insights"
+  | "pesquisa"
+  | "linkedin"
+  | "imagem-prompt"
+  | "imagem-briefing";
 
 /**
  * Ordem das colunas no quadro. Fonte única — a UI itera isto, e a query ordena
@@ -135,6 +140,10 @@ export interface Pauta {
 
   /** Ângulo + dado-âncora do calendário. Insumo do texto, não o texto. */
   linkedinBriefing: string | null;
+  /** Prompt em inglês para gerar a imagem por IA. Copiado limpo. */
+  linkedinImagemPrompt: string | null;
+  /** Direção visual em português. Insumo do prompt, não o prompt. */
+  linkedinImagemBriefing: string | null;
   plataformas: Plataforma[];
 
   criadoPor: string | null;
@@ -193,6 +202,8 @@ export interface PautaRow {
   capa_linkedin_url: string | null;
   linkedin_texto: string | null;
   linkedin_briefing: string | null;
+  linkedin_imagem_prompt: string | null;
+  linkedin_imagem_briefing: string | null;
   plataformas: string[] | null;
   criado_por: string | null;
   criado_em: string;
@@ -286,6 +297,8 @@ export function toPauta(row: PautaRow): Pauta {
     linkedinTexto: row.linkedin_texto,
 
     linkedinBriefing: row.linkedin_briefing,
+    linkedinImagemPrompt: row.linkedin_imagem_prompt ?? null,
+    linkedinImagemBriefing: row.linkedin_imagem_briefing ?? null,
     plataformas: (row.plataformas ?? []).filter(ehPlataforma),
 
     criadoPor: row.criado_por,
