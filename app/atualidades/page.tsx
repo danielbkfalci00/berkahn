@@ -3,6 +3,8 @@ import { AtualidadeContent } from "./AtualidadeContent";
 import { Breadcrumb } from "@/components/layout/Breadcrumb";
 import { createPublicClient } from "@/lib/supabase/public";
 import { normalizeBlogCategory, type BlogPost } from "@/types/blog";
+import { HeroEditorial } from "@/components/atualidade/HeroEditorial";
+import { CTA } from "@/components/sections/CTA";
 
 export const metadata: Metadata = {
   title: "Atualidades | Berkahn Steel Frame",
@@ -85,6 +87,7 @@ export default async function AtualidadePage() {
   }
 
   const posts = ((data ?? []) as PostListRow[]).map(toBlogPost);
+  const featuredPost = posts.find((post) => post.featured) ?? posts[0];
 
   return (
     <>
@@ -121,7 +124,15 @@ export default async function AtualidadePage() {
           items={[{ name: "Atualidades", href: "/atualidades" }]}
           schemaOnly
         />
-        <AtualidadeContent posts={posts} />
+        <main className="bg-off-white">
+          <HeroEditorial post={featuredPost} />
+          <AtualidadeContent
+            posts={posts}
+            featuredPostId={featuredPost?.id}
+            featuredPostCategory={featuredPost?.category}
+          />
+          <CTA />
+        </main>
       </div>
     </>
   );
