@@ -1,12 +1,14 @@
 // Verificação transacional da migration 012 em produção.
 // Toda escrita fica dentro de BEGIN/ROLLBACK; nenhuma pauta é persistida.
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import pg from "pg";
 
-for (const linha of readFileSync(".env.local", "utf8").split(/\r?\n/)) {
-  const m = linha.match(/^\s*([A-Z_][A-Z0-9_]*)\s*=\s*(.*)$/);
-  if (m && !process.env[m[1]])
-    process.env[m[1]] = m[2].trim().replace(/^["']|["']$/g, "");
+if (existsSync(".env.local")) {
+  for (const linha of readFileSync(".env.local", "utf8").split(/\r?\n/)) {
+    const m = linha.match(/^\s*([A-Z_][A-Z0-9_]*)\s*=\s*(.*)$/);
+    if (m && !process.env[m[1]])
+      process.env[m[1]] = m[2].trim().replace(/^["']|["']$/g, "");
+  }
 }
 if (!process.env.DATABASE_URL) throw new Error("DATABASE_URL ausente");
 
