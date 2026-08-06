@@ -1,11 +1,11 @@
 ---
 tipo: projeto
 criado: 2026-05-22
-atualizado: 2026-08-05
+atualizado: 2026-08-06
 tags:
   - project/site
   - status/active
-ai_summary: "Hub do projeto Site — Next.js 15 + Supabase + Vercel em produção (berkahn.com.br + admin.berkahn.com.br, mesmo build). Em 2026-08-05 - redesign completo da home na branch feat/home-scrollytelling: direção 'luxo de engenharia' ([[home-redesign-direcao]]), hero cinematográfico com poster-LCP, Lenis + GSAP ScrollTrigger, 6 seções antigas substituídas; vídeo IA do hero pendente de geração pelo Bruno. Em 2026-07-31 - comentários inline nas documentações (#39, #40), build estático removido (#41), senha Supabase fora do bundle do admin (#42, ver [[supabase-config]]). Indexação resolvida em 2026-07-29; páginas institucionais nunca foram medidas. Code paths em app/, lib/, components/."
+ai_summary: "Hub do projeto Site — Next.js 15 + Supabase + Vercel em produção (berkahn.com.br + admin.berkahn.com.br, mesmo build). Em 2026-08-05/06 - redesign completo da home na branch feat/home-scrollytelling (PR 43): direção 'luxo de engenharia' mono ([[home-redesign-direcao]]), hero com scrub por scroll (frames em canvas, take IA steel-frame), Lenis + GSAP, Embla no rail de projetos, 6 seções antigas substituídas. ATENÇÃO: este hub foi editado em paralelo na branch feat/quadro-conteudo - reconciliar no merge. Em 2026-07-31 - comentários inline (#39, #40), build estático removido (#41), senha Supabase fora do bundle (#42, ver [[supabase-config]]). Code paths em app/, lib/, components/."
 status: active
 projeto: site
 kpi_paginas_indexadas: 34
@@ -20,6 +20,7 @@ contextos_aplicados:
   - stack-nextjs-supabase
   - admin-setup
   - design-principles
+  - home-redesign-direcao
   - seo-aeo-strategy
   - google-sheets
 workflow: workflow-site
@@ -61,8 +62,9 @@ Site em produção (Next.js App Router + Supabase + Vercel + Tailwind + shadcn/u
 
 ## Próximos 7 dias
 
-- [ ] **Home redesign**: revisar visualmente a branch `feat/home-scrollytelling` (preview localhost:3112), decidir conceito do vídeo de hero (A ou B) e gerar com os prompts de [[home-redesign-direcao]]; mergear o PR
-- [ ] **CWV da home nova**: medir LCP/CLS no SpeedInsights após deploy (First Load subiu para 261 kB com GSAP+Lenis)
+- [ ] **Home redesign — fechar o PR #43**: regerar o take do hero em 1080p (prompt A no banco de [[home-redesign-direcao]]), rodar `@design-review` + Lighthouse (nunca rodaram nesta feature) e mergear **reconciliando este hub com a versão da branch feat/quadro-conteudo** (editado em paralelo). Preview: worktree `berkahn-home`, `npx next start -p 3113`
+- [ ] **CWV da home nova**: medir LCP/CLS no SpeedInsights após deploy (First Load 271 kB com GSAP+Lenis+Embla; hero agora carrega ~4,9 MB de frames em estágios)
+- [ ] **Próxima página do redesign: `/atualidades`** — diagnóstico UX/UI + renarrativa na linguagem de [[home-redesign-direcao]]; rota de maior tráfego, manter SSG/ISR
 - [ ] Importar Clube Quinta dos Lagos para o banco de imagens (candidato ao rail de projetos)
 - [ ] Validar `/institucional/pdf` gerando PDF em produção (pós-merge do #17)
 - [ ] Atualizar o briefing do institucional para **v4** antes de distribuir — o código está em v4, a documentação em v3
@@ -85,6 +87,7 @@ Site em produção (Next.js App Router + Supabase + Vercel + Tailwind + shadcn/u
 - [[admin-setup]] — painel admin, autenticação, schema `posts`
 - [[comentarios-inline-documentacoes]] — comentários inline em `/admin/documentacoes`: ponte com o iframe, ancoragem por texto e a restrição de minificação
 - [[design-principles]] — paleta preto/off-white, Manrope, ícones outline
+- [[home-redesign-direcao]] — direção "luxo de engenharia" da home: paleta mono estrita, Archivo/Space Mono, hero com scrub por canvas, pipeline de troca de take e banco de prompts steel-frame
 - [[seo-aeo-strategy]] — regras técnicas SEO (schema, meta, robots)
 - [[google-sheets]] — integração leads via Apps Script
 
