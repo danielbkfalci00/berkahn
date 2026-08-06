@@ -112,7 +112,6 @@ export default function RootLayout({
     <html lang="pt-BR" className={`${manrope.variable} ${caveat.variable} ${playfair.variable} ${archivo.variable} ${spaceMono.variable}`}>
       <head>
         <link rel="preconnect" href="https://sfqaknxomxwmviarpwfy.supabase.co" />
-        <link rel="preconnect" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://images.unsplash.com" />
         <link rel="alternate" type="application/rss+xml" title="Blog Berkahn - Atualidades" href="/feed.xml" />
       </head>
