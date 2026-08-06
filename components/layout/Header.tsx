@@ -84,6 +84,7 @@ export function Header({
         {/* CENTER: Logo + Slogan */}
         <Link
           href="/"
+          prefetch={false}
           className="flex flex-col items-center hover:opacity-70 transition-opacity"
         >
           <span

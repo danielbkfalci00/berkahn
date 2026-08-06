@@ -1,8 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { motion } from "motion/react";
-import { BlogPost } from "@/types/blog";
+import { useEffect, useState } from "react";
+import type { BlogPost } from "@/types/blog";
 import { ArticleCard, ArticleCardMinimal } from "./ArticleCard";
 import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
 
@@ -11,12 +10,16 @@ const POSTS_PER_PAGE = 9;
 interface MasonryGridProps {
   posts: BlogPost[];
   variant?: "masonry" | "minimal";
+  emptyMessage?: string;
 }
 
-export function MasonryGrid({ posts, variant = "masonry" }: MasonryGridProps) {
+export function MasonryGrid({
+  posts,
+  variant = "masonry",
+  emptyMessage = "Ainda não há publicações nesta categoria.",
+}: MasonryGridProps) {
   const [displayCount, setDisplayCount] = useState(POSTS_PER_PAGE);
 
-  // Reset pagination when posts change (e.g. category filter)
   useEffect(() => {
     setDisplayCount(POSTS_PER_PAGE);
   }, [posts]);
@@ -26,67 +29,87 @@ export function MasonryGrid({ posts, variant = "masonry" }: MasonryGridProps) {
   }
 
   const visiblePosts = posts.slice(0, displayCount);
+  const bentoPosts = visiblePosts.slice(0, 5);
+  const remainingPosts = visiblePosts.slice(5);
   const hasMore = displayCount < posts.length;
 
   return (
-    <section className="py-xl bg-white">
+    <section className="bg-off-white py-16 md:py-24">
       <div className="container">
         <RevealOnScroll>
-          <div className="flex items-center justify-between mb-12">
-            <h2 className="headline-sm">Mais Artigos</h2>
-            <p className="text-sm text-black-50 uppercase tracking-wider">
-              {visiblePosts.length} de {posts.length} artigos
+          <div className="mb-10 flex items-end justify-between gap-6 border-b-[3px] border-black pb-5 md:mb-14">
+            <div>
+              <p className="mb-3 font-tech text-[10px] lowercase tracking-wide text-black-50 md:text-xs">
+                arquivo editorial
+              </p>
+              <h2 className="font-display text-4xl font-semibold tracking-tight md:text-6xl">
+                Mais artigos
+              </h2>
+            </div>
+            <p
+              role="status"
+              aria-live="polite"
+              className="shrink-0 font-tech text-[10px] lowercase tracking-wide text-black-50 md:text-xs"
+            >
+              {String(visiblePosts.length).padStart(2, "0")} / {String(posts.length).padStart(2, "0")}
             </p>
           </div>
+
+          {visiblePosts.length > 0 ? (
+            <>
+              <BentoGrid posts={bentoPosts} />
+
+              {remainingPosts.length > 0 && (
+                <div className="mt-8 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+                  {remainingPosts.map((post) => (
+                    <ArticleCard key={post.id} post={post} />
+                  ))}
+                </div>
+              )}
+            </>
+          ) : (
+            <div className="border-b-[3px] border-black py-20">
+              <p className="max-w-xl font-display text-2xl font-medium leading-tight tracking-tight md:text-3xl">
+                {emptyMessage}
+              </p>
+            </div>
+          )}
         </RevealOnScroll>
 
-        {/* Article Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-8">
-          {visiblePosts.map((post, index) => (
-            <ArticleCard
-              key={post.id}
-              post={post}
-              index={index}
-            />
-          ))}
-        </div>
-
-        {/* Load More Button */}
         {hasMore && (
-          <RevealOnScroll delay={0.3}>
-            <div className="mt-16 text-center">
-              <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={() => setDisplayCount(prev => Math.min(prev + POSTS_PER_PAGE, posts.length))}
-                className="px-8 py-4 border border-black text-black text-sm uppercase tracking-wider font-medium hover:bg-black hover:text-white transition-colors duration-300"
-              >
-                Ver Mais Artigos
-              </motion.button>
-            </div>
-          </RevealOnScroll>
+          <div className="mt-14 text-center md:mt-20">
+            <button
+              type="button"
+              onClick={() =>
+                setDisplayCount((current) =>
+                  Math.min(current + POSTS_PER_PAGE, posts.length)
+                )
+              }
+              className="border-[3px] border-black px-7 py-4 font-tech text-xs lowercase tracking-wide text-black transition-colors duration-300 hover:bg-black hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-black"
+            >
+              carregar mais · {Math.min(POSTS_PER_PAGE, posts.length - displayCount)}
+            </button>
+          </div>
         )}
       </div>
     </section>
   );
 }
 
-// Alternative minimal grid layout
 function MinimalGrid({ posts }: { posts: BlogPost[] }) {
   return (
-    <section className="py-xl bg-white">
+    <section className="bg-white py-xl">
       <div className="container">
         <RevealOnScroll>
-          <div className="flex items-center justify-between mb-12">
+          <div className="mb-12 flex items-center justify-between">
             <h2 className="headline-sm">Mais Artigos</h2>
-            <p className="text-sm text-black-50 uppercase tracking-wider">
+            <p className="text-sm uppercase tracking-wider text-black-50">
               {posts.length} artigos
             </p>
           </div>
         </RevealOnScroll>
 
-        {/* Simple Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8 lg:gap-12">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-3 lg:gap-12">
           {posts.map((post, index) => (
             <ArticleCardMinimal key={post.id} post={post} index={index} />
           ))}
@@ -96,82 +119,55 @@ function MinimalGrid({ posts }: { posts: BlogPost[] }) {
   );
 }
 
-// Bento-style grid for featured sections
 export function BentoGrid({ posts }: { posts: BlogPost[] }) {
-  if (posts.length < 4) return null;
+  if (posts.length === 0) return null;
+
+  const layouts = [
+    "lg:col-span-7",
+    "lg:col-span-5",
+    "lg:col-span-4",
+    "lg:col-span-4",
+    "lg:col-span-4",
+  ];
 
   return (
-    <section className="py-xl bg-black-5">
-      <div className="container">
-        <RevealOnScroll>
-          <p className="label-text text-black-50 mb-4">Explorar por Tema</p>
-          <h2 className="headline-md mb-12">Artigos em Destaque</h2>
-        </RevealOnScroll>
-
-        {/* Bento Layout */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-6">
-          {/* Large card - spans 2 cols and 2 rows */}
-          <div className="md:col-span-2 md:row-span-2">
-            <ArticleCard post={posts[0]} size="large" index={0} />
-          </div>
-
-          {/* Two small cards stacked */}
-          <div className="md:col-span-1">
-            <ArticleCard post={posts[1]} size="small" index={1} />
-          </div>
-          <div className="md:col-span-1">
-            <ArticleCard post={posts[2]} size="small" index={2} />
-          </div>
-
-          {/* Bottom row */}
-          <div className="md:col-span-1">
-            <ArticleCard post={posts[3]} size="small" index={3} />
-          </div>
-          {posts[4] && (
-            <div className="md:col-span-1">
-              <ArticleCard post={posts[4]} size="small" index={4} />
-            </div>
-          )}
+    <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-12">
+      {posts.map((post, index) => (
+        <div
+          key={post.id}
+          className={index === 0 ? layouts[index] : `${layouts[index]} md:col-span-1`}
+        >
+          <ArticleCard post={post} size={index === 0 ? "large" : "small"} />
         </div>
-      </div>
-    </section>
+      ))}
+    </div>
   );
 }
 
-// Horizontal scrolling row for related posts
-export function ArticleRow({ posts, title = "Relacionados" }: { posts: BlogPost[]; title?: string }) {
+export function ArticleRow({
+  posts,
+  title = "Relacionados",
+}: {
+  posts: BlogPost[];
+  title?: string;
+}) {
   return (
-    <section className="py-lg bg-white overflow-hidden">
+    <section className="overflow-hidden bg-white py-lg">
       <div className="container">
         <RevealOnScroll>
-          <p className="label-text text-black-50 mb-8">{title}</p>
+          <p className="label-text mb-8 text-black-50">{title}</p>
         </RevealOnScroll>
       </div>
 
-      {/* Horizontal Scroll Container */}
-      <div className="relative">
-        <motion.div
-          className="flex gap-4 md:gap-6 px-4 md:px-6 lg:px-[calc((100vw-1280px)/2+24px)] overflow-x-auto scrollbar-hide pb-4"
-          drag="x"
-          dragConstraints={{ right: 0, left: -((posts.length - 3) * 340) }}
-        >
-          {posts.map((post, index) => (
-            <motion.div
-              key={post.id}
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="flex-shrink-0 w-[300px] md:w-[340px]"
-            >
-              <ArticleCardMinimal post={post} index={index} />
-            </motion.div>
-          ))}
-        </motion.div>
-
-        {/* Gradient Edges */}
-        <div className="absolute left-0 top-0 bottom-4 w-12 bg-gradient-to-r from-white to-transparent pointer-events-none" />
-        <div className="absolute right-0 top-0 bottom-4 w-12 bg-gradient-to-l from-white to-transparent pointer-events-none" />
+      <div className="flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-4 scrollbar-hide md:gap-6 md:px-6 lg:px-[calc((100vw-1280px)/2+24px)]">
+        {posts.map((post, index) => (
+          <div
+            key={post.id}
+            className="w-[300px] shrink-0 snap-start md:w-[340px]"
+          >
+            <ArticleCardMinimal post={post} index={index} />
+          </div>
+        ))}
       </div>
     </section>
   );

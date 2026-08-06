@@ -50,6 +50,7 @@ export interface BlogPost {
   category: BlogCategory;
   author: string;
   date: string;
+  publishedAt?: string;
   readTime: string;
   tags?: string[];
   featured?: boolean;
