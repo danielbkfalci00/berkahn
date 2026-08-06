@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from "react";
 import type { Post } from "@/types/admin";
-import type { BlogPost } from "@/types/blog";
+import { normalizeBlogCategory, type BlogPost } from "@/types/blog";
 import { HeroEditorial } from "@/components/atualidade/HeroEditorial";
 import { FeaturedArticle } from "@/components/atualidade/FeaturedArticle";
 import { CategoryFilter } from "@/components/atualidade/CategoryFilter";
@@ -29,7 +29,7 @@ export function AtualidadeContent({ supabasePosts }: AtualidadeContentProps) {
     title: post.title,
     excerpt: post.excerpt,
     image: post.cover_image || "",
-    category: post.category,
+    category: normalizeBlogCategory(post.category),
     author: post.author,
     date: post.published_at
       ? new Date(post.published_at).toISOString().split('T')[0]

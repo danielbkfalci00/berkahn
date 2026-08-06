@@ -4,7 +4,7 @@ export const steelFrameProcessoArticle: RichArticle = {
   slug: "passo-passo-construcao-steel-frame",
   title: "Passo a Passo: Como Funciona a Construção em Steel Frame",
   subtitle: "Do projeto à entrega: conheça as 11 etapas da construção industrializada",
-  category: "Tecnologia",
+  category: "Tecnologia e Inovação",
   author: "Equipe Berkahn",
   publishDate: "2024-12-15",
   readTime: 18,

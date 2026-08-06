@@ -5,7 +5,7 @@ export const steelFrameVsAlvenariaArticle: RichArticle = {
   slug: "steel-frame-vs-alvenaria",
   title: "Steel Frame vs Alvenaria: o comparativo definitivo para o mercado brasileiro",
   subtitle: "Dados concretos, números atualizados de 2025 e análises técnicas baseadas em normas ABNT",
-  category: "Análise",
+  category: "Mercado e Custos",
   author: "Equipe Técnica Berkahn",
   publishDate: "2025-01-15",
   readTime: 25,

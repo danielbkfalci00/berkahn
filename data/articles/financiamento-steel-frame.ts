@@ -4,7 +4,7 @@ export const financiamentoSteelFrameArticle: RichArticle = {
   slug: "financiamento-construcao-steel-frame",
   title: "Como financiar sua construção em Steel Frame: guia completo para 2026",
   subtitle: "Todas as opções de crédito, documentação necessária e processo passo a passo",
-  category: "Guia",
+  category: "Guias e Tutoriais",
   author: "Equipe Berkahn",
   publishDate: "2025-01-15",
   readTime: 18,

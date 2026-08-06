@@ -5,7 +5,7 @@ export const isolamentoTermicoAcusticoArticle: RichArticle = {
   slug: "isolamento-termico-acustico-steel-frame",
   title: "Isolamento Térmico e Acústico no Steel Frame: o guia definitivo para construir com conforto no Brasil",
   subtitle: "Desempenho 4x superior, economia de 30% e conformidade total com NBR 15575",
-  category: "Tecnologia",
+  category: "Tecnologia e Inovação",
   author: "Equipe Técnica Berkahn",
   publishDate: "2025-01-15",
   readTime: 22,

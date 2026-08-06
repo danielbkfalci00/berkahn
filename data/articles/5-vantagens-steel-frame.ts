@@ -4,7 +4,7 @@ export const cincoVantagensSteelFrameArticle: RichArticle = {
   slug: "5-vantagens-decisivas-light-steel-frame",
   title: "As 5 vantagens decisivas do Light Steel Frame que estão revolucionando a construção no Brasil",
   subtitle: "Construa em até 70% menos tempo com menos de 1% de desperdício e durabilidade de 300 anos",
-  category: "Tecnologia",
+  category: "Tecnologia e Inovação",
   author: "Equipe Berkahn",
   publishDate: "2025-01-15",
   readTime: 20,

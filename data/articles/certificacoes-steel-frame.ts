@@ -4,7 +4,7 @@ export const certificacoesArticle: RichArticle = {
   slug: "certificacoes-steel-frame",
   title: "Certificações e normas técnicas em Steel Frame: o guia definitivo para construir com segurança no Brasil",
   subtitle: "NBR 16970, PBQP-H, financiamento Caixa e certificações ambientais explicadas",
-  category: "Segurança",
+  category: "Segurança e Normas",
   author: "Equipe Técnica Berkahn",
   publishDate: "2025-01-18",
   readTime: 18,
