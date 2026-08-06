@@ -41,6 +41,7 @@ export function HeroEditorial({ post }: HeroEditorialProps) {
                     alt={post.title}
                     fill
                     priority
+                    fetchPriority="high"
                     sizes="(max-width: 1024px) 100vw, 58vw"
                     className="object-cover grayscale-[12%] transition duration-700 ease-expo group-hover:scale-[1.025] group-hover:grayscale-0 motion-reduce:transform-none motion-reduce:transition-none"
                   />

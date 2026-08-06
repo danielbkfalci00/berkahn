@@ -1,5 +1,7 @@
 "use client";
 
+import Script from "next/script";
+
 import {
   createContext,
   useContext,
@@ -18,6 +20,35 @@ import {
 } from "@/lib/consent";
 
 // `window.gtag` é declarado em types/global.d.ts — não redeclarar aqui.
+
+const GA_MEASUREMENT_ID = "G-RBQJ1D6JHW";
+
+function GoogleAnalytics({ consent }: { consent: ConsentLevel }) {
+  if (consent !== "all") return null;
+
+  return (
+    <>
+      <Script id="google-analytics-consented" strategy="afterInteractive">
+        {`
+          window.dataLayer = window.dataLayer || [];
+          window.gtag = window.gtag || function gtag(){ window.dataLayer.push(arguments); };
+          window.gtag('consent', 'default', {
+            analytics_storage: 'granted',
+            ad_storage: 'granted',
+            ad_user_data: 'granted',
+            ad_personalization: 'granted'
+          });
+          window.gtag('js', new Date());
+          window.gtag('config', '${GA_MEASUREMENT_ID}');
+        `}
+      </Script>
+      <Script
+        src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
+        strategy="afterInteractive"
+      />
+    </>
+  );
+}
 
 // Renderers de PDF onde o cookie banner não deve aparecer (puppeteer rasteriza
 // e o banner ficaria gravado no PDF). Allowlist explícita — NÃO usar prefixo
@@ -95,6 +126,7 @@ export function CookieConsentProvider({ children }: { children: ReactNode }) {
       value={{ consent, hasConsented, acceptAll, acceptNecessary, isVisible }}
     >
       {children}
+      <GoogleAnalytics consent={consent} />
     </CookieConsentContext.Provider>
   );
 }
