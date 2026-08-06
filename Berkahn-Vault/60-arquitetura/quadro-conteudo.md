@@ -71,11 +71,23 @@ Blur grava na hora, debounce de 1200 ms cobre quem digita sem tirar o foco, `Ctr
 
 **JPEG não tem canal alfa.** `comprimirImagem` pinta o fundo de branco antes de desenhar; sem isso um PNG transparente é achatado contra o que o navegador escolher, normalmente preto. Importa porque as capas são geradas por IA e gerador entrega PNG com frequência. O nome do arquivo também precisa virar `.jpg`, porque `definirCapa` deriva a extensão dele — bytes JPEG num `.png` gravam o objeto errado no bucket.
 
-## Estado dos comandos (pendência aberta)
+## Os comandos gravam na pauta
 
-`/pesquisa` ainda grava em `blog/pesquisa/*.md` e `/linkedin` em `linkedin/*/post.md`, enquanto `pesquisa_conteudo` e `linkedin_texto` existem no banco. **É dupla escrita, e é temporária.**
+Desde 2026-08-06, `/pesquisa` e `/linkedin` **não criam mais arquivo no vault**. Eles chamam `scripts/conteudo/pauta.mjs`, que grava direto na coluna. Acabou a dupla escrita.
 
-Enquanto durar: o `.md` gerado pelos comandos é rascunho descartável — **quem manda é o card**. Migrar os dois para gravar na pauta é a próxima entrega.
+Três regras que o script impõe, e que existem porque a tabela **não tem versionamento nem undo**:
+
+- **O texto vai por `--arquivo`, nunca no argv.** O output do `/pesquisa` tem milhares de caracteres com aspas, `$` e quebras de linha — isso quebra no PowerShell na primeira execução real.
+- **Bloco preenchido não é sobrescrito sem `--forcar`**, e `--forcar` guarda o anterior em `scripts/.cache/`. Rodar `/pesquisa` duas vezes no mesmo tema apagaria a edição feita à mão.
+- **Acima de 60.000 caracteres recusa**, batendo com o teto da UI. A server action corta em silêncio.
+
+O comando **pergunta** quando a busca devolve mais de um resultado ou nenhum — nunca escolhe nem cria pauta sozinho. As 66 vêm de um calendário pensado, e um tema já planejado com fraseado diferente viraria a 67ª duplicada.
+
+`linkedin_briefing` (o ângulo do calendário) é **somente leitura** para os comandos: é a única cópia daquele texto.
+
+> `/scripts/` é gitignored, então num clone novo o script não existe. Os dois comandos têm fallback escrito: entregam o texto no chat e mandam colar em `/admin/conteudo/[id]`.
+
+`40-content/linkedin/` virou acervo congelado, com README próprio — não foi migrado nem apagado: as notas têm frontmatter que o validator checa, o hub conta KPI a partir delas, e ali está a única cópia de uma das imagens finais.
 
 ---
 

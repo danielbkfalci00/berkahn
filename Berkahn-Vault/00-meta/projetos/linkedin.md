@@ -40,13 +40,13 @@ Contagem verificada em 2026-07-29 contra `main` — o `kpi_publicados: 1` anteri
 ## Bloqueios ativos
 
 - [ ] **Cadência abaixo da meta**: 3 posts arquivados vs 38 artigos do blog — só ~8% dos artigos viraram post
-- [ ] **Rastreamento bidirecional inexiste**: post não tem `artigo_slug:`, artigos não têm `linkedin_slug:`. Backfill agendado Sprint 2
+- [x] ~~**Rastreamento bidirecional inexiste**~~ — resolvido em 2026-08-06 pelo quadro de conteúdo. Não era caso de backfill de frontmatter: a pauta tem `post_id` como FK de verdade, então o vínculo post ↔ artigo é uma constraint, não uma convenção que alguém precisa lembrar de preencher. Os 22 cards de LinkedIn do acervo já nascem vinculados. Ver [[quadro-conteudo]]
 - [ ] **Engajamento não tracked**: sem captura de métricas (likes, comments, reach)
 
 ## Próximos 7 dias
 
-- [ ] Post LinkedIn da semana referenciando artigo recente (`/linkedin`)
-- [ ] Exportar imagem do Canva conforme briefing
+- [ ] Post LinkedIn da semana referenciando artigo recente (`/linkedin` — grava na pauta, não cria pasta no vault)
+- [ ] Gerar a imagem com o prompt em inglês da pauta e subir no bloco Capa Linkedin
 - [ ] Começar o backlog de distribuição: 22 posts derivam de artigos **já publicados** e não exigem escrever artigo nenhum
 
 ## Backlog planejado (2026-07-29)

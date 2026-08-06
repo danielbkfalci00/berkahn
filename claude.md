@@ -96,7 +96,7 @@ Cada projeto tem nota-hub em `Berkahn-Vault/00-meta/projetos/{nome}.md` com `tip
 |-----|---------|-----------|
 | Segunda 9h | `/standup` (auto via `berkahn-standup-semanal`) | `00-meta/standup/YYYY-MM-DD.md` |
 | Segunda 14h | `/brainstorm` | `40-content/blog/ideias/ideas-YYYY-MM.md` |
-| Terça | `/pesquisa` | `40-content/blog/pesquisa/YYYY-MM-DD-tema.md` |
+| Terça | `/pesquisa` | bloco **Pesquisa** da pauta (`/admin/conteudo/[id]`) |
 | Quarta | `/criacao` | `40-content/blog/drafts/[slug].md` |
 | Quinta | `/artigo` + `/linkedin` | `40-content/blog/publicados/` + `40-content/linkedin/YYYY-MM-DD-tema/` |
 | Sexta 17h | `/wrap-up` (auto via `berkahn-wrapup-semanal`) | `00-meta/wrap-up/YYYY-MM-DD.md` |
@@ -111,7 +111,7 @@ Cada projeto tem nota-hub em `Berkahn-Vault/00-meta/projetos/{nome}.md` com `tip
 | `/artigo` | Implementar artigo + publicar Supabase |
 | `/linkedin` | Post LinkedIn + briefing imagem Canva |
 | `/brainstorm` | Ideias priorizadas (gera `40-content/blog/ideias/`) |
-| `/pesquisa` | Pesquisa tema + artigo completo (gera `40-content/blog/pesquisa/`) |
+| `/pesquisa` | Pesquisa tema + artigo completo (grava no bloco Pesquisa da pauta) |
 | `/criacao` | Draft final (gera `40-content/blog/drafts/`) |
 | `/apresentacao` | Slide na apresentação executiva |
 | `/material` | Briefing material Canva |
@@ -168,6 +168,8 @@ gitleaks detect      # scan secrets (auto em pre-commit)
 | `vault-supabase-resync.mjs` | Compara slugs vault ↔ Supabase (`--check`) ou faz PATCH `meta_title/meta_description/answer_summary` (`--patch=slug1,slug2`). Requer `$env:SUPABASE_SERVICE_KEY` |
 | `vault-validate.mjs` | Linter de completude vault (9 validações, exit 0/1/2, output ANSI ou `--json`). Rodado manual ou via `/standup`, `/wrap-up` |
 | `vault-images.mjs` | Banco de imagens (`Docs/banco-imagens/`). `--inventory` (manifesto + flag `em_producao` cruzada por sha256 com `public/images/`), `--dupes` (duplicatas exatas + pares PNG/WEBP), `--check` (contagens vs índices), `--thumbs` (gera thumbnails webp). Entry-point do catálogo: `Berkahn-Vault/40-content/materiais/banco-imagens.md` |
+| `conteudo/pauta.mjs` | Lê e grava blocos das pautas do quadro (`/admin/conteudo`). `buscar "<termo>"` ou `buscar --slug=<artigo>`, `ver <id>`, `gravar <id> --bloco=insights\|pesquisa\|linkedin\|imagem-prompt\|imagem-briefing --arquivo=<path>`. Texto **sempre por arquivo**, nunca no argv. Recusa sobrescrever bloco preenchido sem `--forcar` (que faz backup em `scripts/.cache/`) e recusa acima de 60k. É o que `/pesquisa` e `/linkedin` chamam |
+| `conteudo/gerar-seed.mjs` | Gera o SQL das 66 pautas a partir do calendário editorial e dos `ideas-*.md`. Emite `.sql` para revisão a olho, não escreve no banco. Rodou uma vez |
 | `watermark-images.mjs` | Marca d'água BERKAHN em lote (Node + sharp). Isola o wordmark "BERKAHN" do logo-texto, centraliza grande com opacidade baixa e cor adaptativa por região. Flags `--src --out --frac --opacity --color --halo --pick --dry-run`. Preserva originais (escreve só em `--out`). Doc de uso: `Berkahn-Vault/40-content/materiais/watermark-clube-quinta-dos-lagos.md` |
 
 Documentação completa: `scripts/VAULT-SCRIPTS-README.md`

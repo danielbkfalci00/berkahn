@@ -12,7 +12,61 @@ Execute a pesquisa em duas fases:
 1. FASE 1: Pesquise os melhores artigos sobre o tema, identifique gaps e oportunidades
 2. FASE 2: Escreva o artigo completo com elementos visuais e especificações técnicas
 
-**Arquivar a pesquisa no vault:**
-Salvar o output em `Berkahn-Vault/40-content/blog/pesquisa/[YYYY-MM-DD]-[tema-slug].md` com frontmatter (tipo: meta, status: active, tags: project/blog, source/pesquisa, ai_summary). Fontes externas como wikilinks `[[]]` para cruzar com publicados existentes.
+---
+
+## Onde o resultado vai: na pauta, não no vault
+
+O quadro de conteúdo (`/admin/conteudo`) é a fonte da verdade da pesquisa.
+**Não crie arquivo em `40-content/blog/pesquisa/`** — aquela pasta saiu do fluxo.
+
+### 1. Achar a pauta certa
+
+```bash
+node scripts/conteudo/pauta.mjs buscar "<termo do tema>"
+```
+
+- **Um resultado** → é essa.
+- **Mais de um** → mostre os títulos e **pergunte ao Bruno qual**. Nunca escolha
+  sozinho: gravar na pauta errada sobrescreve o trabalho de outra.
+- **Nenhum** → **pergunte** se ele quer criar uma pauta nova ou apontar um id.
+  Não crie por conta própria: as 66 pautas vêm de um calendário pensado, e um
+  tema já planejado com fraseado diferente viraria a 67ª duplicada.
+
+Se ele já passou um id ou a URL de `/admin/conteudo/<id>` em `$ARGUMENTS`, use
+direto e pule a busca.
+
+### 2. Gravar
+
+Escreva o texto num arquivo temporário do scratchpad da sessão (**nunca** no
+vault) e passe o caminho:
+
+```bash
+node scripts/conteudo/pauta.mjs gravar <id> --bloco=pesquisa --arquivo=<caminho>
+```
+
+O texto vai por arquivo porque o output tem milhares de caracteres com aspas,
+`$` e quebras de linha — passar isso por linha de comando quebra no PowerShell.
+
+Se o bloco já tiver conteúdo, o script **recusa** e mostra o que está lá.
+Nesse caso mostre ao Bruno e pergunte antes de repetir com `--forcar` (que
+guarda o anterior em `scripts/.cache/`).
+
+### 3. Insights, só se estiver vazio
+
+Se a FASE 1 produziu gaps e ângulos que valem guardar **e** o bloco `insights`
+estiver vazio (o `buscar` mostra quais estão preenchidos), ofereça gravá-los:
+
+```bash
+node scripts/conteudo/pauta.mjs gravar <id> --bloco=insights --arquivo=<caminho>
+```
+
+**Nunca sobrescreva `insights` preenchido** — ele vem do calendário editorial e
+é a justificativa de por que a pauta existe.
+
+### Se o script não existir
+
+`/scripts/` é gitignored, então num clone novo ele não está lá. Nesse caso
+**não invente outro caminho**: entregue o texto no chat e diga ao Bruno para
+colar no bloco Pesquisa Conteúdo em `/admin/conteudo/<id>`.
 
 $ARGUMENTS
