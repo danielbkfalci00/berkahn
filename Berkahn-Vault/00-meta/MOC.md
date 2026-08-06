@@ -85,6 +85,7 @@ Query estruturada: [[artigos.base]] | [[calendario.base]]
 - [[stack-nextjs-supabase]] — Stack técnica
 - [[admin-setup]] — Painel admin
 - [[comentarios-inline-documentacoes]] — Comentários inline nas documentações
+- [[quadro-conteudo]] — Quadro Kanban de pautas em `/admin/conteudo`, e por que os comandos gravam no banco
 - [[google-sheets]] — Integração formulário
 - [[blog-infra-vs-wordpress]] — Comparativo
 

@@ -1,7 +1,7 @@
 ---
 tipo: projeto
 criado: 2026-05-22
-atualizado: 2026-07-30
+atualizado: 2026-08-06
 tags:
   - project/blog
   - status/active
@@ -15,13 +15,13 @@ kpi_meta_indexacao_total: 38
 kpi_posts_carcaca: 9
 kpi_posts_sem_meta: 9
 kpi_posts_sem_answer_summary: 0
-kpi_ga4_users_mes: 1179
-kpi_ga4_sessions_mes: 1498
-kpi_ga4_pageviews_mes: 1860
-kpi_gsc_clicks_mes: 850
-kpi_gsc_impressions_mes: 34396
-kpi_health_score_mes: 83
-kpi_atualizado_em: 2026-07-30
+kpi_ga4_users_mes: 1681
+kpi_ga4_sessions_mes: 2027
+kpi_ga4_pageviews_mes: 2444
+kpi_gsc_clicks_mes: 1370
+kpi_gsc_impressions_mes: 42011
+kpi_health_score_mes: 77
+kpi_atualizado_em: 2026-08-02
 contextos_aplicados:
   - berkahn-brand
   - seo-aeo-strategy
@@ -193,6 +193,7 @@ O motivo está em comentário no `app/atualidades/[slug]/page.tsx` para o skelet
 - [[berkahn-brand]] — voz, pilares (leveza/previsibilidade/limpeza), ICP, vícios proibidos
 - [[seo-aeo-strategy]] — passage-level, ski ramp, hierarquia headings, schema.org
 - [[article-pipeline]] — pipeline técnico, 19 componentes interativos, schema Supabase
+- [[quadro-conteudo]] — o quadro em `/admin/conteudo`: a pauta é a unidade de trabalho, e desde 2026-08-06 `/pesquisa` grava lá em vez de criar `.md` no vault
 - [[copy-sem-travessao]] — regra de copy (sem travessão `—`)
 - [[steel-frame-domain]] — domínio LSF (normas, custos, fogo, acústica)
 

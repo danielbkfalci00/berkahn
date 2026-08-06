@@ -1,11 +1,11 @@
 ---
 tipo: projeto
 criado: 2026-05-22
-atualizado: 2026-07-31
+atualizado: 2026-08-06
 tags:
   - project/site
   - status/active
-ai_summary: "Hub do projeto Site — Next.js 15 + Supabase + Vercel em produção (berkahn.com.br + admin.berkahn.com.br, mesmo build). Em 2026-07-31 - comentários inline nas documentações (#39, #40), modo de build estático removido por estar morto e incompatível (#41) e, o mais grave, a senha da conta Supabase Auth saiu do bundle público do admin, onde estava desde que o admin existe (#42, ver [[supabase-config]]). Em 2026-07-30 - soft 404 de /atualidades (era loading.tsx), ISR restaurado, /contato criado, SearchAction removido. Indexação resolvida em 2026-07-29; páginas institucionais nunca foram medidas. Code paths em app/, lib/, components/."
+ai_summary: "Hub do projeto Site — Next.js 15 + Supabase + Vercel em produção (berkahn.com.br + admin.berkahn.com.br, mesmo build). Em 2026-08-06 - quadro de pautas em /admin/conteudo (migrations 010/011, 66 pautas semeadas) e fim da dupla escrita dos comandos; e SEIS rotas /api/admin estavam sem autenticação em produção, expondo dado pessoal de cliente. Aprendizado que vale para o projeto todo - o PostgREST não devolve erro quando a RLS filtra a linha, então update silencioso reporta sucesso (ver [[quadro-conteudo]]). Em 2026-07-31 - comentários inline nas documentações e a senha do admin saiu do bundle público (ver [[supabase-config]]). Em 2026-07-30 - soft 404 de /atualidades, ISR restaurado, /contato criado. Code paths em app/, lib/, components/."
 status: active
 projeto: site
 kpi_paginas_indexadas: 34
@@ -56,7 +56,7 @@ Site em produção (Next.js App Router + Supabase + Vercel + Tailwind + shadcn/u
 - [x] ~~**Quatro CTAs apontando para `/contato`, que respondia 404**~~ — resolvido em 2026-07-30. `app/portfolio/page.tsx:153`, `ProjectModels.tsx:180`, `ProjectSpecs.tsx:72` e `ProjectsGrid.tsx:41` linkavam para uma rota que **nunca existiu**: a captura de lead só existia como modal. O `ContactForm` foi extraído do `ContactFormDialog` e agora serve os dois — o modal e a página `/contato`, indexável e linkável. Fecha o item 7 do diagnóstico ("não existe caminho público para pedir orçamento")
 - [x] ~~**Senha da conta Supabase no bundle público do admin**~~ — resolvido em 2026-07-31 (#42). `LoginForm.tsx` era Client Component e a constante `ACCESS_CODE` era, na verdade, a senha passada para `signInWithPassword`. Autenticação movida para Server Action; não há mais segredo no repositório nem no ambiente. Senha rotacionada. Detalhes e o que ainda cabe fazer em [[supabase-config]] (Histórico de incidentes)
 - [x] ~~**Seis rotas `/api/admin/*` sem autenticação**~~ — resolvido em 2026-08-05. O matcher do middleware era `['/', '/admin/:path*']` e não cobria `/api/admin/*`; três das rotas usavam `createServiceClient()`, que bypassa RLS. Sem login dava para listar todos os orçamentos com dado pessoal do cliente, apagar por id, e pegar signed URL do PDF. Fechado com matcher + `exigirSessao()` nos 10 handlers. Verificado: as 9 combinações devolvem 401
-- [ ] **Dupla escrita dos comandos de conteúdo**: `/pesquisa` e `/linkedin` ainda gravam no vault enquanto `pesquisa_conteudo` e `linkedin_texto` existem no banco. Enquanto durar, o `.md` é rascunho e **quem manda é o card**. Ver [[quadro-conteudo]]
+- [x] ~~**Dupla escrita dos comandos de conteúdo**~~ — resolvido em 2026-08-06. `/pesquisa` e `/linkedin` gravam na pauta via `scripts/conteudo/pauta.mjs` e não criam mais `.md` no vault. `/criacao` e `/calendario` foram corrigidos junto: um procurava a pesquisa na pasta que deixou de ser alimentada, o outro contava posts pendentes varrendo uma pasta congelada. Ver [[quadro-conteudo]]
 - [ ] **Contas Supabase por pessoa**: hoje todos entram com a mesma conta compartilhada, então `auth.uid()` não distingue ninguém e o autor dos comentários é nome digitado no localStorage. Projeto próprio — ver [[comentarios-inline-documentacoes]], seção "Identidade"
 - [ ] **Google Sheets SPOF**: leads sem backup automático em Supabase (mitigado em Fase 4 do plano)
 - [ ] **Core Web Vitals**: monitorar LCP < 2.5s, FID < 100ms, CLS < 0.1. **Mudança relevante em 2026-07-30**: `/atualidades/[slug]` era renderizada dinamicamente a cada visita (`await cookies()` em `lib/supabase/server.ts` optava a rota por dynamic) e agora é SSG/ISR servida da CDN. Medir de novo — é a rota de maior tráfego
