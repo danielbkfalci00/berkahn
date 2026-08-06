@@ -21,6 +21,21 @@ FROM (
 ) AS mapping(alias, canonical)
 WHERE post.category = mapping.alias;
 
+-- Consolida o legado de múltiplos destaques sem mudar a curadoria visível:
+-- preserva o featured mais recente, que já era o escolhido pela listagem.
+WITH keeper AS (
+  SELECT id
+  FROM posts
+  WHERE featured IS TRUE
+  ORDER BY published_at DESC NULLS LAST, created_at DESC NULLS LAST
+  LIMIT 1
+)
+UPDATE posts AS post
+SET featured = FALSE
+WHERE post.featured IS TRUE
+  AND EXISTS (SELECT 1 FROM keeper)
+  AND post.id <> (SELECT id FROM keeper);
+
 -- Verificação esperada no conjunto de 40 posts existente em 2026-08-06:
 -- Guias e Tutoriais       16
 -- Tecnologia e Inovação    9
@@ -28,3 +43,4 @@ WHERE post.category = mapping.alias;
 -- Segurança e Normas       3
 -- Sustentabilidade         4
 -- A contagem é operacional; não vira constraint porque o acervo cresce.
+-- Featured                 1

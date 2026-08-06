@@ -10,6 +10,7 @@ import { ArticleContent } from "./ArticleContent";
 import { RichPostRenderer } from "@/components/blog/RichPostRenderer";
 import { AnswerSummary } from "@/components/article/AnswerSummary";
 import { RelatedArticlesCarousel } from "@/components/article/RelatedArticlesCarousel";
+import { ReadingProgress } from "@/components/article/ReadingProgress";
 import type { Post } from "@/types/admin";
 import { normalizeBlogCategory, type BlogPost } from "@/types/blog";
 import { robotsForArticle } from "@/lib/seo/thin-content";
@@ -209,6 +210,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
     // Use new RichPostRenderer for Supabase posts
     return (
       <main className="min-h-screen bg-white">
+        <ReadingProgress />
         {/* Hero Section */}
         <div className="relative">
           <Breadcrumb
