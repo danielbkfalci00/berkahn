@@ -1,12 +1,12 @@
 ---
 tipo: context
 criado: 2026-04-13
-atualizado: 2026-07-08
+atualizado: 2026-08-06
 tags:
   - ai/context
   - project/blog
   - domain/lsf
-ai_summary: Pipeline técnico de artigos do blog Berkahn — 4 etapas (/brainstorm, /pesquisa, /criacao, /artigo), arquivos em Docs/publicados, 19 componentes interativos via placeholders, schema Supabase posts.
+ai_summary: Pipeline técnico de artigos do blog Berkahn — 4 etapas (/brainstorm, /pesquisa, /criacao, /artigo), taxonomia canônica de 5 categorias, 19 componentes interativos via placeholders e schema Supabase posts.
 status: active
 escopo: berkahn
 ---
@@ -112,6 +112,22 @@ Detalhes em [[supabase-config]].
   components: jsonb             // Objeto com arrays nomeados
 }
 ```
+
+### Taxonomia canônica
+
+O campo `posts.category` aceita somente estes cinco valores:
+
+1. `Guias e Tutoriais`
+2. `Tecnologia e Inovação`
+3. `Mercado e Custos`
+4. `Segurança e Normas`
+5. `Sustentabilidade`
+
+O `/artigo` deve validar esse valor antes de gerar ou executar o script de publicação. Para **somente `category`**, esta lista substitui a taxonomia antiga do prompt locked `article-implementation-prompt.md`; o prompt não deve ser editado.
+
+Aliases antigos são aceitos temporariamente pelo código de leitura para permitir rollout sem janela incompatível, mas não devem ser gravados. O normalizador em `types/blog.ts` lança erro explícito para categoria desconhecida. Scripts futuros devem importar ou reproduzir a lista canônica e abortar antes do INSERT quando o valor não pertencer a ela.
+
+Mapeamento histórico: Guia/Guias/Guia Técnico/Educação → Guias e Tutoriais; Tecnologia/Arquitetura e Tecnologia/Construção Industrializada → Tecnologia e Inovação; Mercado/Análise → Mercado e Custos; Segurança/Engenharia Estrutural → Segurança e Normas; Meio Ambiente/Eficiência Energética → Sustentabilidade.
 
 ## Sistema de Componentes Interativos
 

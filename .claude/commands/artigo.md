@@ -52,7 +52,9 @@ Execute o pipeline de implementação completo:
    - `answer_summary` (Supabase + vault frontmatter): 80-120 palavras, assertivo, com dado quantitativo, sem hedging (pode/talvez/depende)
    - `ai_summary` (vault frontmatter ONLY, não vai para Supabase): 1-3 linhas TL;DR para Claude SKIM
    - `tags` (Supabase) / `palavras_chave` (vault): 3-5 keywords
-   - `category` (Supabase): uma de [Tecnologia, Sustentabilidade, Projetos, Mercado, Guias]
+   - `category` (Supabase): uma de [Guias e Tutoriais, Tecnologia e Inovação, Mercado e Custos, Segurança e Normas, Sustentabilidade]
+     - Para **somente este campo**, esta taxonomia canônica substitui a lista antiga do prompt locked `article-implementation-prompt.md`.
+     - Não editar o prompt locked. Scripts de publicação devem rejeitar qualquer valor fora dessas cinco categorias antes do INSERT.
    - `components.faqs` (Supabase JSONB): mínimo 3 perguntas
    - Wikilinks vault (corpo): 2-3 links para atomic notes em [[70-knowledge/]]
    - Links internos Supabase (markdown): 3-5 links para `/atualidades/[outros-slugs]`

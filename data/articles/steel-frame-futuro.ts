@@ -13,7 +13,7 @@ export const steelFrameFuturoArticle: RichArticle = {
   slug: "steel-frame-futuro-construcao",
   title: "Steel Frame: O Futuro da Construção Civil",
   subtitle: "O sistema construtivo que está transformando a construção civil brasileira",
-  category: "Tecnologia",
+  category: "Tecnologia e Inovação",
   author: "Equipe Berkahn",
   publishDate: "2024-12-01",
   readTime: 15,

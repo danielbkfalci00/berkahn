@@ -1,7 +1,8 @@
-// Atualidades - Blog da Berkahn
 import { Metadata } from "next";
 import { AtualidadeContent } from "./AtualidadeContent";
 import { Breadcrumb } from "@/components/layout/Breadcrumb";
+import { createPublicClient } from "@/lib/supabase/public";
+import { normalizeBlogCategory, type BlogPost } from "@/types/blog";
 
 export const metadata: Metadata = {
   title: "Atualidades | Berkahn Steel Frame",
@@ -28,45 +29,77 @@ export const metadata: Metadata = {
   },
 };
 
-// Revalidate every 60 seconds to fetch new posts from Supabase
 export const revalidate = 60;
 
-import { createPublicClient } from "@/lib/supabase/public";
-import type { Post } from "@/types/admin";
+type PostListRow = {
+  id: string;
+  slug: string;
+  title: string;
+  excerpt: string;
+  cover_image: string | null;
+  category: string;
+  author: string;
+  published_at: string | null;
+  read_time: number;
+  featured: boolean;
+};
+
+const dateFormatter = new Intl.DateTimeFormat("pt-BR", {
+  day: "2-digit",
+  month: "short",
+  year: "numeric",
+  timeZone: "UTC",
+});
+
+function toBlogPost(post: PostListRow): BlogPost {
+  return {
+    id: post.id,
+    slug: post.slug,
+    title: post.title,
+    excerpt: post.excerpt,
+    image: post.cover_image || "/images/Compartilhamento/og-image.webp",
+    category: normalizeBlogCategory(post.category),
+    author: post.author,
+    date: post.published_at
+      ? dateFormatter.format(new Date(post.published_at)).replace(/\./g, "")
+      : "",
+    publishedAt: post.published_at || undefined,
+    readTime: `${post.read_time} min`,
+    featured: post.featured,
+  };
+}
 
 export default async function AtualidadePage() {
   const supabase = createPublicClient();
+  const { data, error } = await supabase
+    .from("posts")
+    .select(
+      "id, slug, title, excerpt, cover_image, category, author, published_at, read_time, featured"
+    )
+    .eq("status", "published")
+    .order("published_at", { ascending: false });
 
-  // Buscar posts publicados do Supabase
-  let supabasePosts: Post[] = [];
-  try {
-    const { data, error } = await supabase
-      .from('posts')
-      .select('*')
-      .eq('status', 'published')
-      .order('published_at', { ascending: false });
-
-    if (!error && data) {
-      supabasePosts = data as Post[];
-    }
-  } catch (err) {
-    console.error('Error fetching posts:', err);
+  if (error) {
+    console.error("Error fetching published posts:", error);
+    throw new Error(`Falha ao atualizar /atualidades: ${error.message}`);
   }
+
+  const posts = ((data ?? []) as PostListRow[]).map(toBlogPost);
 
   return (
     <>
-      {/* ItemList structured data for rich snippets */}
       <script type="application/ld+json">
         {JSON.stringify({
           "@context": "https://schema.org",
           "@type": "CollectionPage",
           name: "Atualidades | Berkahn Steel Frame",
-          description: "Artigos e guias sobre Steel Frame: custos, prazos, comparativos e tendências da construção industrializada.",
+          description:
+            "Artigos e guias sobre Steel Frame: custos, prazos, comparativos e tendências da construção industrializada.",
           url: "https://www.berkahn.com.br/atualidades",
           mainEntity: {
             "@type": "ItemList",
-            numberOfItems: supabasePosts.length,
-            itemListElement: supabasePosts.map((post, index) => ({
+            numberOfItems: posts.length,
+            itemListElement: posts.map((post, index) => ({
               "@type": "ListItem",
               position: index + 1,
               item: {
@@ -74,8 +107,8 @@ export default async function AtualidadePage() {
                 headline: post.title,
                 description: post.excerpt,
                 url: `https://www.berkahn.com.br/atualidades/${post.slug}`,
-                image: post.cover_image || undefined,
-                datePublished: post.published_at || undefined,
+                image: post.image,
+                datePublished: post.publishedAt,
                 author: { "@type": "Person", name: post.author },
               },
             })),
@@ -88,7 +121,7 @@ export default async function AtualidadePage() {
           items={[{ name: "Atualidades", href: "/atualidades" }]}
           schemaOnly
         />
-        <AtualidadeContent supabasePosts={supabasePosts} />
+        <AtualidadeContent posts={posts} />
       </div>
     </>
   );

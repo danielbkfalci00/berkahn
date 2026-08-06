@@ -3,9 +3,8 @@
 import { motion } from "motion/react";
 import Image from "next/image";
 import Link from "next/link";
-import { BlogPost } from "@/types/blog";
+import type { BlogPost } from "@/types/blog";
 import { Badge } from "@/components/ui/badge";
-import { ArrowUpRight, Clock } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface ArticleCardProps {
@@ -14,110 +13,73 @@ interface ArticleCardProps {
   index?: number;
 }
 
-export function ArticleCard({ post, size = "small", index = 0 }: ArticleCardProps) {
+export function ArticleCard({ post, size = "small" }: ArticleCardProps) {
   const isLarge = size === "large";
 
   return (
-    <motion.article
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-50px" }}
-      transition={{
-        duration: 0.6,
-        delay: index * 0.1,
-        ease: [0.19, 1, 0.22, 1],
-      }}
-      className="group relative bg-white"
-    >
-      <Link href={`/atualidades/${post.slug}`} className="block h-full">
-        {/* Image Container */}
+    <article className="group h-full">
+      <Link
+        href={`/atualidades/${post.slug}`}
+        prefetch={false}
+        className="block h-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-black"
+      >
         <div
           className={cn(
-            "relative overflow-hidden",
-            isLarge ? "aspect-[3/4]" : "aspect-[4/3]"
+            "relative overflow-hidden bg-carbon-soft",
+            isLarge ? "aspect-[16/10]" : "aspect-[4/3]"
           )}
         >
-          <motion.div
-            whileHover={{ scale: 1.05 }}
-            transition={{ duration: 0.6, ease: [0.19, 1, 0.22, 1] }}
-            className="w-full h-full"
-          >
-            <Image
-              src={post.image}
-              alt={post.title}
-              fill
-              className="object-cover transition-all duration-700 group-hover:grayscale-0 grayscale-[20%]"
-              sizes={isLarge ? "(max-width: 768px) 100vw, 50vw" : "(max-width: 768px) 100vw, 33vw"}
-            />
-          </motion.div>
-
-          {/* Hover Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-500" />
-
-          {/* Category Badge */}
-          <Badge
-            variant="outline"
-            className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm text-xs uppercase tracking-wider border-0 text-black/80"
-          >
+          <Image
+            src={post.image}
+            alt={post.title}
+            fill
+            className="object-cover grayscale-[12%] transition duration-700 ease-expo group-hover:scale-[1.025] group-hover:grayscale-0 motion-reduce:transform-none motion-reduce:transition-none"
+            sizes={
+              isLarge
+                ? "(max-width: 768px) 100vw, 58vw"
+                : "(max-width: 768px) 100vw, 33vw"
+            }
+          />
+          <span className="absolute left-0 top-0 bg-black px-3 py-2 font-tech text-[10px] lowercase tracking-wide text-white md:text-xs">
             {post.category}
-          </Badge>
+          </span>
+        </div>
 
-          {/* Hover Arrow */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            whileHover={{ opacity: 1, scale: 1 }}
-            className="absolute top-4 right-4 w-10 h-10 bg-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300"
-          >
-            <ArrowUpRight className="w-5 h-5 text-black" />
-          </motion.div>
-
-          {/* Content Overlay */}
-          <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
-            {/* Meta */}
-            <div className="flex items-center gap-3 text-xs text-white/70 mb-3">
-              <span>{post.date}</span>
-              <span className="w-1 h-1 rounded-full bg-white/50" />
-              <span className="flex items-center gap-1">
-                <Clock className="w-3 h-3" />
-                {post.readTime}
-              </span>
-            </div>
-
-            {/* Title */}
-            <h3
-              className={cn(
-                "font-heading font-semibold leading-tight",
-                isLarge ? "text-xl md:text-2xl" : "text-lg"
-              )}
-            >
-              {post.title}
-            </h3>
-
-            {/* Excerpt - Only on large cards */}
-            {isLarge && (
-              <p className="mt-3 text-sm text-white/80 line-clamp-2">
-                {post.excerpt}
-              </p>
-            )}
-
-            {/* Read More Link */}
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              className="mt-4 opacity-0 group-hover:opacity-100 transition-all duration-300 transform group-hover:translate-y-0 translate-y-2"
-            >
-              <span className="inline-flex items-center gap-2 text-xs uppercase tracking-wider font-medium text-white/90">
-                Ler Artigo
-                <ArrowUpRight className="w-3 h-3" />
-              </span>
-            </motion.div>
+        <div className="border-t-[3px] border-black pt-4">
+          <div className="mb-3 flex items-center justify-between gap-4 font-tech text-[10px] lowercase tracking-wide text-black-50 md:text-xs">
+            <span>{post.date}</span>
+            <span>{post.readTime}</span>
           </div>
+
+          <h3
+            className={cn(
+              "font-display font-semibold leading-[1.04] tracking-tight text-black transition-colors duration-300 group-hover:text-black-70",
+              isLarge ? "text-3xl md:text-5xl" : "text-2xl md:text-[1.7rem]"
+            )}
+          >
+            {post.title}
+          </h3>
+
+          {isLarge && (
+            <p className="mt-4 line-clamp-2 max-w-2xl text-sm leading-relaxed text-black-70 md:text-base">
+              {post.excerpt}
+            </p>
+          )}
+
+          <span className="mt-5 flex items-center gap-3 font-tech text-[10px] lowercase tracking-wide text-black md:text-xs">
+            ler artigo
+            <span
+              className="h-[3px] w-8 bg-black transition-[width] duration-500 ease-expo group-hover:w-14 motion-reduce:transition-none"
+              aria-hidden="true"
+            />
+          </span>
         </div>
       </Link>
-    </motion.article>
+    </article>
   );
 }
 
-// Alternative minimal card style
+// Shared by the article related-post carousel. Keep behavior stable.
 export function ArticleCardMinimal({ post, index = 0 }: Omit<ArticleCardProps, "size">) {
   return (
     <motion.article
@@ -132,12 +94,11 @@ export function ArticleCardMinimal({ post, index = 0 }: Omit<ArticleCardProps, "
       className="group"
     >
       <Link href={`/atualidades/${post.slug}`} className="block">
-        {/* Image */}
-        <div className="relative aspect-[16/10] overflow-hidden mb-4">
+        <div className="relative mb-4 aspect-[16/10] overflow-hidden">
           <motion.div
             whileHover={{ scale: 1.03 }}
             transition={{ duration: 0.5, ease: [0.19, 1, 0.22, 1] }}
-            className="w-full h-full"
+            className="h-full w-full"
           >
             <Image
               src={post.image}
@@ -149,22 +110,21 @@ export function ArticleCardMinimal({ post, index = 0 }: Omit<ArticleCardProps, "
           </motion.div>
         </div>
 
-        {/* Content */}
         <div>
           <Badge
             variant="outline"
-            className="mb-3 text-[10px] uppercase tracking-wider border-black/20 text-black/60"
+            className="mb-3 border-black/20 text-[10px] uppercase tracking-wider text-black/60"
           >
             {post.category}
           </Badge>
 
-          <h3 className="text-lg font-heading font-semibold leading-tight mb-2 group-hover:text-black/70 transition-colors duration-300">
+          <h3 className="mb-2 font-heading text-lg font-semibold leading-tight transition-colors duration-300 group-hover:text-black/70">
             {post.title}
           </h3>
 
           <div className="flex items-center gap-3 text-xs text-black/50">
             <span>{post.date}</span>
-            <span className="w-1 h-1 rounded-full bg-black/30" />
+            <span className="h-1 w-1 rounded-full bg-black/30" />
             <span>{post.readTime}</span>
           </div>
         </div>

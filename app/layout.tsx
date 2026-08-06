@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Manrope, Caveat, Playfair_Display } from "next/font/google";
+import { Manrope, Caveat, Playfair_Display, Archivo, Space_Mono } from "next/font/google";
 import Script from "next/script";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { ClientLayout } from "@/components/layout/ClientLayout";
@@ -28,6 +28,20 @@ const playfair = Playfair_Display({
   subsets: ["latin"],
   weight: ["400", "600", "700", "800"],
   variable: "--font-playfair",
+  display: "swap",
+});
+
+// Fonte variável (eixo completo de peso) — display da home "luxo de engenharia"
+const archivo = Archivo({
+  subsets: ["latin"],
+  variable: "--font-archivo",
+  display: "swap",
+});
+
+const spaceMono = Space_Mono({
+  subsets: ["latin"],
+  weight: ["400"],
+  variable: "--font-space-mono",
   display: "swap",
 });
 
@@ -97,7 +111,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-BR" className={`${manrope.variable} ${caveat.variable} ${playfair.variable}`}>
+    <html lang="pt-BR" className={`${manrope.variable} ${caveat.variable} ${playfair.variable} ${archivo.variable} ${spaceMono.variable}`}>
       <head>
         <link rel="preconnect" href="https://sfqaknxomxwmviarpwfy.supabase.co" />
         <link rel="preconnect" href="https://www.googletagmanager.com" />

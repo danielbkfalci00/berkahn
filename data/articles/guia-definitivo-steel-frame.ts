@@ -4,7 +4,7 @@ export const guiaDefinitivoSteelFrameArticle: RichArticle = {
   slug: "guia-definitivo-steel-frame-brasil",
   title: "Steel Frame: o guia definitivo para construir mais rápido, sustentável e com qualidade no Brasil",
   subtitle: "O sistema construtivo que entrega casas em até 60% do tempo da construção convencional",
-  category: "Guia",
+  category: "Guias e Tutoriais",
   author: "Equipe Berkahn",
   publishDate: "2025-01-15",
   readTime: 20,

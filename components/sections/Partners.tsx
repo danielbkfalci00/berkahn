@@ -2,10 +2,10 @@ import Image from "next/image";
 import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
 
 const defaultPartners = [
-  { name: "Brand 01", logo: "/images/Apresentação/Marcas Parceiras/brand-01.webp" },
-  { name: "Lumen", logo: "/images/Apresentação/Marcas Parceiras/lumen.webp" },
-  { name: "Knauf", logo: "/images/Apresentação/Marcas Parceiras/knauf.webp" },
-  { name: "Aquapanel", logo: "/images/Apresentação/Marcas Parceiras/aquapanel.webp" },
+  { name: "Brand 01", logo: "/images/parceiros/brand-01.webp" },
+  { name: "Lumen", logo: "/images/parceiros/lumen.webp" },
+  { name: "Knauf", logo: "/images/parceiros/knauf.webp" },
+  { name: "Aquapanel", logo: "/images/parceiros/aquapanel.webp" },
 ];
 
 interface PartnersProps {

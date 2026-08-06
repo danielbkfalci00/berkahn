@@ -32,7 +32,7 @@ import {
   Calendar,
 } from "lucide-react";
 import type { Post, PostInsert, PostStatus } from "@/types/admin";
-import { BLOG_CATEGORIES } from "@/types/blog";
+import { BLOG_CATEGORIES, normalizeBlogCategory } from "@/types/blog";
 import { cn } from "@/lib/utils";
 import { uploadCoverImage } from "@/app/admin/posts/upload-actions";
 import { useToast } from "@/hooks/use-toast";
@@ -48,7 +48,7 @@ const defaultPost: PostInsert = {
   excerpt: "",
   content: "",
   cover_image: null,
-  category: "Tecnologia",
+  category: "Tecnologia e Inovação",
   tags: [],
   author: "Berkahn",
   status: "draft",
@@ -70,7 +70,7 @@ export function PostEditor({ post }: PostEditorProps) {
           excerpt: post.excerpt,
           content: post.content,
           cover_image: post.cover_image,
-          category: post.category,
+          category: normalizeBlogCategory(post.category),
           tags: post.tags,
           author: post.author,
           status: post.status,
@@ -564,7 +564,7 @@ export function PostEditor({ post }: PostEditorProps) {
               }
               className="w-full px-3 py-2 border border-neutral-200 rounded-lg text-sm"
             >
-              {BLOG_CATEGORIES.filter((c) => c !== "Todos").map((category) => (
+              {BLOG_CATEGORIES.map((category) => (
                 <option key={category} value={category}>
                   {category}
                 </option>

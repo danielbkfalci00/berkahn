@@ -3,6 +3,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
 import type { Post, PostInsert, PostUpdate } from '@/types/admin'
+import { normalizeBlogCategory } from '@/types/blog'
 
 // Webhook helper for N8N integration
 async function triggerPublishWebhook(post: Post): Promise<void> {
@@ -43,9 +44,23 @@ async function triggerPublishWebhook(post: Post): Promise<void> {
 export async function createPost(data: PostInsert): Promise<{ data: Post | null; error: string | null }> {
   const supabase = await createClient()
 
+  const normalizedData: PostInsert = {
+    ...data,
+    category: normalizeBlogCategory(data.category),
+  }
+
+  if (normalizedData.featured) {
+    const { error: featuredError } = await supabase
+      .from('posts')
+      .update({ featured: false })
+      .eq('featured', true)
+
+    if (featuredError) return { data: null, error: featuredError.message }
+  }
+
   const { data: post, error } = await supabase
     .from('posts')
-    .insert(data)
+    .insert(normalizedData)
     .select()
     .single()
 
@@ -69,11 +84,29 @@ export async function createPost(data: PostInsert): Promise<{ data: Post | null;
 
   revalidatePath('/admin/posts')
   revalidatePath('/admin')
+  revalidatePath('/atualidades')
+  revalidatePath(`/atualidades/${post.slug}`)
   return { data: post as Post, error: null }
 }
 
 export async function updatePost(id: string, data: PostUpdate): Promise<{ data: Post | null; error: string | null }> {
   const supabase = await createClient()
+
+  const normalizedData: PostUpdate = data.category
+    ? { ...data, category: normalizeBlogCategory(data.category) }
+    : data
+
+  if (normalizedData.featured) {
+    const { error: featuredError } = await supabase
+      .from('posts')
+      .update({ featured: false })
+      .eq('featured', true)
+      .neq('id', id)
+
+    if (featuredError) {
+      return { data: null, error: featuredError.message }
+    }
+  }
 
   // Get previous status to detect publish action
   const { data: previousPost } = await supabase
@@ -86,7 +119,7 @@ export async function updatePost(id: string, data: PostUpdate): Promise<{ data: 
 
   const { data: post, error } = await supabase
     .from('posts')
-    .update(data)
+    .update(normalizedData)
     .eq('id', id)
     .select()
     .single()
@@ -99,7 +132,7 @@ export async function updatePost(id: string, data: PostUpdate): Promise<{ data: 
   // Log activity
   const { data: { user } } = await supabase.auth.getUser()
   if (user && post) {
-    const action = data.status === 'published' ? 'Post publicado' : 'Post atualizado'
+    const action = normalizedData.status === 'published' ? 'Post publicado' : 'Post atualizado'
     await supabase.from('activity_logs').insert({
       user_id: user.id,
       user_name: user.email || 'Admin',
@@ -111,13 +144,14 @@ export async function updatePost(id: string, data: PostUpdate): Promise<{ data: 
   }
 
   // Trigger N8N webhook if post was just published
-  if (post && data.status === 'published' && previousStatus !== 'published') {
+  if (post && normalizedData.status === 'published' && previousStatus !== 'published') {
     await triggerPublishWebhook(post as Post)
   }
 
   revalidatePath('/admin/posts')
   revalidatePath('/admin')
   revalidatePath(`/atualidades/${post?.slug}`)
+  revalidatePath('/atualidades')
   return { data: post as Post, error: null }
 }
 
@@ -127,7 +161,7 @@ export async function deletePost(id: string): Promise<{ error: string | null }> 
   // Get post info before deleting for activity log
   const { data: post } = await supabase
     .from('posts')
-    .select('title')
+    .select('title, slug')
     .eq('id', id)
     .single()
 
@@ -156,6 +190,10 @@ export async function deletePost(id: string): Promise<{ error: string | null }> 
 
   revalidatePath('/admin/posts')
   revalidatePath('/admin')
+  revalidatePath('/atualidades')
+  if (post?.slug) {
+    revalidatePath(`/atualidades/${post.slug}`)
+  }
   return { error: null }
 }
 

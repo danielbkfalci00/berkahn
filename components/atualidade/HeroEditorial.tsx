@@ -1,102 +1,81 @@
-"use client";
-
-import { motion, useScroll, useTransform } from "motion/react";
-import { useRef } from "react";
 import Image from "next/image";
-import { CharReveal } from "@/components/animations/TextReveal";
+import Link from "next/link";
+import type { BlogPost } from "@/types/blog";
 
 interface HeroEditorialProps {
-  title?: string;
-  subtitle?: string;
-  imageSrc?: string;
+  post?: BlogPost;
 }
 
-export function HeroEditorial({
-  title = "ATUALIDADES",
-  subtitle = "Insights & Tendências em Steel Frame",
-  imageSrc = "/images/empresa/primeira-imagem.webp",
-}: HeroEditorialProps) {
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end start"],
-  });
-
-  // Parallax effects
-  const imageY = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
-  const imageScale = useTransform(scrollYProgress, [0, 1], [1, 1.1]);
-  const overlayOpacity = useTransform(scrollYProgress, [0, 0.5], [0.4, 0.7]);
-  const contentY = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
-
+export function HeroEditorial({ post }: HeroEditorialProps) {
   return (
-    <section
-      ref={containerRef}
-      className="relative h-[70vh] min-h-[500px] max-h-[800px] flex items-start justify-start pt-32 md:pt-40 overflow-hidden"
-    >
-      {/* Background Image with Parallax */}
-      <motion.div
-        className="absolute inset-0 z-0"
-        style={{ y: imageY, scale: imageScale }}
-      >
-        <Image
-          src={imageSrc}
-          alt="Atualidades Berkahn"
-          fill
-          className="object-cover"
-          priority
-          sizes="100vw"
-          quality={90}
-        />
-      </motion.div>
+    <section className="bg-carbon pb-12 pt-28 text-white md:pb-10 md:pt-24 lg:pb-12 lg:pt-28">
+      <div className="container">
+        <header>
+          <p className="font-tech text-[11px] lowercase tracking-wide text-white-50 md:text-xs">
+            caderno técnico · atualidades
+          </p>
+          <div className="my-5 h-[3px] w-full bg-white" aria-hidden="true" />
+        </header>
 
-      {/* Gradient Overlay Dinâmico para legibilidade - top vignette */}
-      <motion.div
-        className="absolute inset-0 z-5 hero-overlay-top"
-        style={{ opacity: overlayOpacity }}
-        aria-hidden="true"
-      />
+        <div className="grid gap-8 lg:grid-cols-[0.72fr_1.28fr] lg:items-end lg:gap-10">
+          <div className="flex h-full flex-col justify-between gap-6">
+            <h1 className="font-display text-[clamp(4rem,6vw,7rem)] font-semibold leading-[0.78] tracking-[-0.075em]">
+              Atualidades
+            </h1>
+            <p className="max-w-md text-sm leading-relaxed text-white-70 md:text-base">
+              Engenharia explicada com rigor: guias, custos, normas e decisões
+              para construir melhor em Steel Frame.
+            </p>
+          </div>
 
-      {/* Content */}
-      <motion.div
-        className="relative z-20 text-left"
-        style={{ y: contentY }}
-      >
-        <div className="hero-content-left">
-          {/* Label */}
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="hero-label text-white mb-6 hero-text-shadow"
-          >
-            Blog & Notícias
-          </motion.p>
+          {post && (
+            <article aria-label="Artigo em destaque">
+              <Link
+                href={`/atualidades/${post.slug}`}
+                prefetch={false}
+                className="group block focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
+              >
+                <div className="relative aspect-[16/9] overflow-hidden bg-carbon-soft md:aspect-[16/7] lg:aspect-[16/8]">
+                  <Image
+                    src={post.image}
+                    alt={post.title}
+                    fill
+                    priority
+                    sizes="(max-width: 1024px) 100vw, 58vw"
+                    className="object-cover grayscale-[12%] transition duration-700 ease-expo group-hover:scale-[1.025] group-hover:grayscale-0 motion-reduce:transform-none motion-reduce:transition-none"
+                  />
+                  <span className="absolute left-0 top-0 bg-white px-3 py-2 font-tech text-[10px] lowercase tracking-wide text-black md:px-4 md:text-xs">
+                    em destaque
+                  </span>
+                </div>
 
-          {/* Title with Character Reveal */}
-          <h1 className="headline-lg text-white mb-6 hero-text-shadow-strong">
-            <CharReveal text={title} delay={0.4} className="justify-start" />
-          </h1>
+                <div className="grid gap-4 border-t-[3px] border-white pt-4 md:grid-cols-[0.34fr_0.66fr] md:gap-6">
+                  <div className="font-tech text-[10px] lowercase leading-relaxed tracking-wide text-white-50 md:text-xs">
+                    <p className="text-white">{post.category}</p>
+                    <p>{post.date} · {post.readTime}</p>
+                  </div>
 
-          {/* Subtitle */}
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 1.2 }}
-            className="text-white text-lg md:text-xl font-light tracking-wide max-w-2xl hero-text-shadow"
-          >
-            {subtitle}
-          </motion.p>
-
-          {/* Decorative Element */}
-          <motion.div
-            initial={{ width: 0 }}
-            animate={{ width: 80 }}
-            transition={{ duration: 1, delay: 1.5, ease: [0.19, 1, 0.22, 1] }}
-            className="h-px bg-white/40 mt-8"
-          />
+                  <div>
+                    <h2 className="font-display text-2xl font-semibold leading-[1.02] tracking-tight md:text-3xl">
+                      {post.title}
+                    </h2>
+                    <p className="mt-3 line-clamp-2 text-sm leading-relaxed text-white-70 md:text-base">
+                      {post.excerpt}
+                    </p>
+                    <span className="mt-3 inline-flex items-center gap-3 font-tech text-[10px] lowercase tracking-wide text-white md:text-xs">
+                      ler análise
+                      <span
+                        className="h-[3px] w-8 bg-white transition-[width] duration-500 ease-expo group-hover:w-14 motion-reduce:transition-none"
+                        aria-hidden="true"
+                      />
+                    </span>
+                  </div>
+                </div>
+              </Link>
+            </article>
+          )}
         </div>
-      </motion.div>
+      </div>
     </section>
   );
 }

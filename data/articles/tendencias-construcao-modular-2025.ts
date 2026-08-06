@@ -4,7 +4,7 @@ export const tendenciasModular2025: RichArticle = {
   slug: "tendencias-construcao-modular-2025",
   title: "Tendências da Construção Industrializada 2025",
   subtitle: "Como a industrialização está transformando o mercado brasileiro de edificações",
-  category: "Mercado",
+  category: "Mercado e Custos",
   author: "Equipe Berkahn",
   publishDate: "2025-01-15",
   readTime: 18,

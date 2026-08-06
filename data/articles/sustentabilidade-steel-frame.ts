@@ -4,7 +4,7 @@ export const sustentabilidadeSteelFrameArticle: RichArticle = {
   slug: "sustentabilidade-construcao-industrializada",
   title: "Steel Frame: a revolução sustentável que está transformando a construção brasileira",
   subtitle: "99% menos água, 85% menos resíduos e 7× menos CO₂: os números que comprovam o impacto ambiental positivo",
-  category: "Meio Ambiente",
+  category: "Sustentabilidade",
   author: "Equipe Berkahn",
   publishDate: "2025-01-15",
   readTime: 18,

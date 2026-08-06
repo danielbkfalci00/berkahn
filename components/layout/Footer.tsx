@@ -148,14 +148,14 @@ export function Footer() {
           </div>
 
           {/* Contact - FIX: SVG sizing */}
-          <div>
+          <div className="min-w-0">
             <p className="label-text mb-6">Contato</p>
             <div className="space-y-3">
               {FOOTER_CONTACT.map((item) => (
-                <p key={item.label} className="flex items-center gap-3">
+                <p key={item.label} className="flex min-w-0 items-center gap-3">
                   {/* FIX: Wrapper com w-5 h-5 */}
                   <span className="w-5 h-5 flex-shrink-0">{getContactIcon(item.type)}</span>
-                  <span className="text-white-70">{item.value}</span>
+                  <span className="min-w-0 break-all text-white-70">{item.value}</span>
                 </p>
               ))}
             </div>

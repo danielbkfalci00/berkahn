@@ -9,7 +9,7 @@ export const blogPosts: BlogPost[] = [
       "Entenda por que o Light Steel Frame está revolucionando o mercado da construção civil com tecnologia de ponta, velocidade de execução e sustentabilidade. Uma análise profunda sobre a transformação do setor.",
     image:
       "https://images.unsplash.com/photo-1503594384566-461fe158e797?ixlib=rb-4.0.3&auto=format&fit=crop&w=2400&q=80",
-    category: "Tecnologia",
+    category: "Tecnologia e Inovação",
     author: "Equipe Berkahn",
     date: "2024-12-01",
     readTime: "8 min",
@@ -22,7 +22,7 @@ export const blogPosts: BlogPost[] = [
     excerpt:
       "Descubra as principais vantagens da construção em steel frame: redução de custos, prazos mais curtos e máxima flexibilidade arquitetônica.",
     image: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?ixlib=rb-4.0.3&auto=format&fit=crop&w=2400&q=80",
-    category: "Guia",
+    category: "Guias e Tutoriais",
     author: "Berkahn",
     date: "2024-11-25",
     readTime: "6 min",
@@ -35,7 +35,7 @@ export const blogPosts: BlogPost[] = [
     excerpt:
       "Conheça o processo completo da construção em Light Steel Frame, desde o projeto inicial até a entrega da obra finalizada.",
     image: "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?ixlib=rb-4.0.3&auto=format&fit=crop&w=2400&q=80",
-    category: "Educação",
+    category: "Guias e Tutoriais",
     author: "Berkahn",
     date: "2024-11-18",
     readTime: "10 min",
@@ -48,7 +48,7 @@ export const blogPosts: BlogPost[] = [
     excerpt:
       "Análise detalhada entre steel frame e alvenaria: custos, tempo de execução, durabilidade e impacto ambiental comparados.",
     image: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?ixlib=rb-4.0.3&auto=format&fit=crop&w=2400&q=80",
-    category: "Análise",
+    category: "Mercado e Custos",
     author: "Berkahn",
     date: "2024-11-10",
     readTime: "12 min",
@@ -62,7 +62,7 @@ export const blogPosts: BlogPost[] = [
       "Entenda como o steel frame contribui para uma construção mais sustentável, reduzindo desperdícios e minimizando o impacto ambiental.",
     image:
       "https://images.unsplash.com/photo-1497366811353-6870744d04b2?ixlib=rb-4.0.3&auto=format&fit=crop&w=2400&q=80",
-    category: "Meio Ambiente",
+    category: "Sustentabilidade",
     author: "Berkahn",
     date: "2024-11-01",
     readTime: "7 min",
@@ -76,7 +76,7 @@ export const blogPosts: BlogPost[] = [
       "Conheça as principais tendências e inovações em construção industrializada que estão transformando o setor da construção civil.",
     image:
       "https://images.unsplash.com/photo-1486325212027-8081e485255e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
-    category: "Mercado",
+    category: "Mercado e Custos",
     author: "Berkahn",
     date: "2024-10-25",
     readTime: "5 min",
@@ -90,7 +90,7 @@ export const blogPosts: BlogPost[] = [
       "Guia completo de normas, certificações PBQP-H, LEED, AQUA-HQE e financiamento Caixa para Steel Frame. NBR 16970, requisitos técnicos e valorização imobiliária.",
     image:
       "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
-    category: "Segurança",
+    category: "Segurança e Normas",
     author: "Equipe Técnica Berkahn",
     date: "2025-01-18",
     readTime: "18 min",
@@ -104,7 +104,7 @@ export const blogPosts: BlogPost[] = [
       "Descubra como o sistema Steel Frame proporciona excelente isolamento térmico e acústico, garantindo conforto em todas as estações.",
     image:
       "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
-    category: "Tecnologia",
+    category: "Tecnologia e Inovação",
     author: "Berkahn",
     date: "2024-09-28",
     readTime: "7 min",
@@ -118,7 +118,7 @@ export const blogPosts: BlogPost[] = [
       "Guia completo sobre as opções de financiamento disponíveis para construções em Steel Frame, incluindo bancos e programas especiais.",
     image:
       "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
-    category: "Guia",
+    category: "Guias e Tutoriais",
     author: "Berkahn",
     date: "2024-09-20",
     readTime: "9 min",
@@ -131,7 +131,7 @@ export const blogPosts: BlogPost[] = [
     excerpt:
       "Guia completo sobre Steel Frame 2025: custos regionais, normas ABNT NBR 16970, processo construtivo, sustentabilidade, financiamento. Tudo para construir ou comprar.",
     image: "/images/Lsf/lsf-hero-structure.webp",
-    category: "Guia",
+    category: "Guias e Tutoriais",
     author: "Equipe Berkahn",
     date: "2025-01-15",
     readTime: "20 min",

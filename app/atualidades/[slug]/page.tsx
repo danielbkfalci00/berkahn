@@ -11,7 +11,7 @@ import { RichPostRenderer } from "@/components/blog/RichPostRenderer";
 import { AnswerSummary } from "@/components/article/AnswerSummary";
 import { RelatedArticlesCarousel } from "@/components/article/RelatedArticlesCarousel";
 import type { Post } from "@/types/admin";
-import type { BlogPost } from "@/types/blog";
+import { normalizeBlogCategory, type BlogPost } from "@/types/blog";
 import { robotsForArticle } from "@/lib/seo/thin-content";
 
 interface ArticlePageProps {
@@ -200,7 +200,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
       title: p.title,
       excerpt: p.excerpt,
       image: p.cover_image || "/images/Compartilhamento/og-image.webp",
-      category: p.category,
+      category: normalizeBlogCategory(p.category),
       author: p.author,
       date: p.published_at ? new Date(p.published_at).toLocaleDateString("pt-BR") : "",
       readTime: `${p.read_time} min`,

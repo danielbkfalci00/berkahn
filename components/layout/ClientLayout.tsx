@@ -20,11 +20,14 @@ export function ClientLayout({ children }: { children: React.ReactNode }) {
     return <>{children}</>;
   }
 
+  // Home: hero full-bleed encosta no topo (sem pt-20) sob header transparente
+  const isHome = pathname === "/";
+
   return (
     <MenuProvider>
-      <Header />
+      <Header variant={isHome ? "overlay" : "default"} />
       <Sidebar />
-      <main className="pt-20">{children}</main>
+      <main className={isHome ? undefined : "pt-20"}>{children}</main>
     </MenuProvider>
   );
 }

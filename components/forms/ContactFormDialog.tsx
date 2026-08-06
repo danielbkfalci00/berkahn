@@ -49,7 +49,10 @@ export function ContactFormDialog({
   return (
     <Dialog onOpenChange={aoAbrir}>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className="w-[calc(100%-2rem)] sm:max-w-[360px] p-0 rounded-none sm:rounded-lg bg-white max-h-[90vh] overflow-y-auto">
+      <DialogContent
+        data-lenis-prevent
+        className="w-[calc(100%-2rem)] sm:max-w-[360px] p-0 rounded-none sm:rounded-lg bg-white max-h-[90vh] overflow-y-auto"
+      >
         <ContactForm
           defaultSegment={defaultSegment}
           ctaLocation={ctaLocation}

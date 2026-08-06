@@ -5,13 +5,13 @@ atualizado: 2026-08-06
 tags:
   - project/blog
   - status/active
-ai_summary: Hub do projeto Blog — posts semanais em /atualidades. 39 publicados, 34 indexados. Pipeline 4 etapas (/brainstorm → /pesquisa → /criacao → /artigo). Funil reposto em 2026-07-29 com 44 pautas até dezembro. Thin content e soft 404 resolvidos em 2026-07-30. Bloqueios restantes - canibalização entre as duas páginas de custo, e duas séries Arquitecasa diferentes no ar para o mesmo Sudeste. orcamento-steel-frame e hold-downs-ancoragens em backlog sem data, cada um com bloqueio nomeado. Lido por /standup, /wrap-up, /artigo.
+ai_summary: Hub do projeto Blog — 40 posts em /atualidades, 34 indexados. Taxonomia normalizada em 2026-08-06 para 5 categorias canônicas ponta a ponta; `/artigo` valida a lista sem alterar o prompt locked. Pipeline 4 etapas, 44 pautas até dezembro. Bloqueios restantes: canibalização das páginas de custo e duas séries Arquitecasa para o Sudeste. Lido por /standup, /wrap-up, /artigo.
 status: active
 projeto: blog
-kpi_publicados: 39
+kpi_publicados: 40
 kpi_meta_publicados_semanal: 1
 kpi_indexados_google: 34
-kpi_meta_indexacao_total: 38
+kpi_meta_indexacao_total: 40
 kpi_posts_carcaca: 9
 kpi_posts_sem_meta: 9
 kpi_posts_sem_answer_summary: 0
@@ -48,11 +48,11 @@ subagents_uteis:
 
 ## Status atual
 
-Dados verificados em 2026-07-30 contra Supabase e GSC.
+Dados de publicação verificados em 2026-08-06 contra Supabase; indexação permanece no snapshot GSC de 2026-07-30.
 
-**39 artigos publicados** (contagem conferida na tabela `posts`), 34 indexados. O bloqueio P0 de indexação que dominava este hub desde abril **está encerrado** — o texto anterior dizia "1 de 35 indexados", número que já estava errado quando foi escrito.
+**40 artigos publicados**, 34 indexados no último snapshot. O bloqueio P0 de indexação que dominava este hub desde abril **está encerrado** — o texto anterior dizia "1 de 35 indexados", número que já estava errado quando foi escrito.
 
-Último post: `mitos-verdades-steel-frame`, publicado em 2026-07-30 — tirado do próprio vault, onde estava pronto e nunca tinha ido ao ar.
+Último post: `isencao-icms-energia-solar-sp`, publicado em 2026-08-05.
 
 **A divergência vault ↔ produção foi encerrada em 2026-07-30**: dos 6 arquivos do vault fora do ar, 3 eram renomeações (arquivadas) e 3 eram artigos inéditos, dos quais 1 foi publicado e 2 foram para backlog. A seção histórica abaixo fica como registro de como o descompasso foi diagnosticado.
 
@@ -68,6 +68,7 @@ Tráfego seguiu crescendo: 1.179 users em junho, 1.407 nos primeiros 26 dias de 
 - [x] ~~**CTR de 8 páginas com impressão alta (P0)**~~ — meta tags reescritas em produção em 2026-07-30. Linha de base registrada em [[2026-08-calendario-editorial]]; o relatório do cron de 01/09 mede o efeito
 - [x] ~~**Contradição de preço** em `custo-steel-frame-m2-2026`~~ — resolvida em 2026-07-30. Faixa canônica: **R$ 3.015 a R$ 6.091/m²** (Sudeste)
 - [x] ~~**4 artigos sem answer_summary** (P1)~~ — preenchidos em 2026-07-30, 98 a 102 palavras cada, com dado quantitativo do próprio corpo
+- [x] ~~**12 categorias inconsistentes**~~ — normalizadas em 2026-08-06 para Guias e Tutoriais, Tecnologia e Inovação, Mercado e Custos, Segurança e Normas e Sustentabilidade. Código tolerante a aliases foi entregue antes da migration 012; `/artigo` e [[article-pipeline]] agora rejeitam valores fora da lista canônica
 - [x] ~~**9 artigos são carcaças (P0)**~~ — resolvidos em 2026-07-30. **4** sem substituto ficaram no ar com `noindex, follow`; **5** com substituto foram consolidadas por **301**, com 14 links internos reescritos. Backlog de reescrita em [[2026-07-thin-content-mapa]]
 - [ ] **3 artigos fora do índice** (P1): `steel-frame-aguenta-vento-forte` (URL unknown), `steel-frame-laje-de-concreto` (discovered), `steel-frame-vantagens-desvantagens` (crawled). Eram 4; ver [[seo-aeo]]
 - [x] ~~**`quanto-custa-construir-steel-frame-precos-m2-2026` com `published_at` nulo**~~ — corrigido em 2026-07-30 para `created_at` (2026-01-26). Além da ordenação, o nulo tirava o artigo do RSS, deixava o schema Article sem `datePublished` e fazia o sitemap declarar `lastmod` = agora a cada crawl
@@ -84,8 +85,8 @@ Tráfego seguiu crescendo: 1.179 users em junho, 1.407 nos primeiros 26 dias de 
 
 | Métrica | Atual | Meta | Δ |
 |---------|-------|------|---|
-| Posts publicados (total) | 39 | — | ✅ |
-| Indexados Google | 34/39 | 39 | -5 |
+| Posts publicados (total) | 40 | — | ✅ |
+| Indexados Google | 34/40 | 40 | -6 no snapshot anterior ao post novo |
 | Dias desde o último post | 0 | 7 | ✅ |
 | Slugs divergentes vault ↔ produção | 0 | 0 | ✅ 2026-07-30 |
 | Soft 404 em `/atualidades/` | resolvido | — | ✅ 2026-07-30 |
@@ -220,6 +221,8 @@ O motivo está em comentário no `app/atualidades/[slug]/page.tsx` para o skelet
 - Capas em produção: `public/images/img_blog/[slug]/cover.webp`
 
 ## Histórico recente
+
+- 2026-08-06: taxonomia consolidada em cinco categorias; redesign editorial de `/atualidades` entregue com ISR 60 e payload reduzido. Ver [[home-redesign-direcao]] e [[article-pipeline]]
 
 - 2026-07-20: standup — `kpi_publicados` 37 → 38 (novo: `steel-frame-laje-de-concreto`, publicado 2026-07-08). 3 aprendizados de pipeline adicionados em [[article-pipeline]] (H1 duplica título; `NormsSection` título fixo; `StatHighlight` trunca decimais).
 - 2026-05-22: hub criado; sprint 1 do plano de reorganização do vault
