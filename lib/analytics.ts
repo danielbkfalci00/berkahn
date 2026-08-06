@@ -1,9 +1,8 @@
 /**
- * Eventos de analytics (GA4 via `window.gtag`, configurado em app/layout.tsx).
+ * Eventos de analytics (GA4 via `window.gtag`).
  *
- * O consentimento é gerido pelo CookieConsentProvider (gtag consent mode) e o
- * default é `denied` desde antes do primeiro page_view, então basta disparar:
- * o GA segura o evento até haver consentimento.
+ * O CookieConsentProvider carrega o GA somente depois do consentimento completo.
+ * Eventos disparados antes disso ficam deliberadamente ignorados.
  *
  * Uso: trackEvent("generate_lead", { segment: "residencial", cta_location: "contato_pagina" });
  */
