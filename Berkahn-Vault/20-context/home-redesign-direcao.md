@@ -41,7 +41,7 @@ Registro da direção aprovada pelo Bruno em 2026-08-05 para a repaginada da hom
 
 Hero cinematográfico (vídeo/poster 100svh) → statement editorial (SplitText scrub) → segmentos (parallax) → processo em 3 atos (sticky + crossfade) → números de engenharia (CountUp) → comparativo enxuto LSF vs convencional → rail de projetos nomeados (scroll-snap) → parceiros → CTA. Scroll global: Lenis escopado à home (lerp 0.12, anchors), GSAP ScrollTrigger só nos momentos-assinatura.
 
-## Estado de entrega (2026-08-06 — branch `feat/home-scrollytelling`, PR #43)
+## Estado de entrega (2026-08-06 — PR #43 mergeado)
 
 **Hero final = scrub por scroll**: seção pinada (runway 260vh, sticky) com sequência de frames WebP desenhada em canvas — o drone avança na medida do scroll. `<video>` autoplay foi testado e substituído a pedido do Bruno; `video.currentTime` por scroll foi descartado (instável, mobile). Take em produção: **conceito A steel-frame** (corredor de montantes galvanizados ao pôr do sol terminando no quarto acabado), gerado por IA em 720p.
 
@@ -89,9 +89,9 @@ Cinco conceitos com o LSF como protagonista (prompts completos no formato das re
 
 A rota de maior tráfego foi redesenhada na mesma branch. A abertura funde `HeroEditorial` e o post curado: carbono/off-white, label técnica minúscula, Archivo, barra estrutural de 3 px e capa/título/resumo/metadados na primeira sequência visual. A listagem usa cinco categorias canônicas com contagem e bento assimétrico nos cinco primeiros resultados; filtros usam scroll-snap nativo, sem Embla adicional.
 
-A página continua SSG/ISR (`revalidate = 60`, `createPublicClient`, sem `cookies()`/`loading.tsx`). O `select('*')` foi substituído por 10 campos e a conversão ocorre no Server Component. HTML caiu de **809/239 KB** bruto/comprimido para **141/26 KB**; build: rota 7,61 KB, First Load 205 KB. Artigo válido retorna 200 e slug falso 404.
+A página continua SSG/ISR (`revalidate = 60`, `createPublicClient`, sem `cookies()`/`loading.tsx`). O `select('*')` foi substituído por 10 campos e a conversão ocorre no Server Component. HTML de produção caiu de **809/239 KB** bruto/comprimido para aproximadamente **139/26 KB**; após separar hero/CTA do boundary interativo, o build registra rota 6,52 KB e First Load 204 KB. Artigo válido retorna 200 e slug falso 404.
 
-CWV local (3 rodadas Lighthouse mobile com throttling): CLS 0 em todas; LCP 3,25–6,50 s e TBT 488–774 ms, ainda fora das metas. O breakdown aponta custo do layout global/Google Analytics e variabilidade local; prefetch dos bundles pesados da home e dos artigos foi desativado. Validar Speed Insights após deploy antes de considerar o gate encerrado.
+CWV em produção após os PRs #43/#44 (3 rodadas Lighthouse mobile com throttling): CLS 0 em todas; LCP 3,04–3,54 s e TBT 304–756 ms. Houve melhora forte sobre o baseline (LCP até 5,38 s; TBT até 1.736 ms) após adiar GA até consentimento, priorizar a imagem LCP e reduzir o boundary interativo. O gate sintético estrito ainda não fechou; validar dados de campo no Speed Insights antes de ampliar a refatoração global.
 
 Relacionados: [[article-pipeline]] · [[seo-aeo-strategy]] · [[site]] · [[blog]]
 
@@ -99,8 +99,8 @@ Relacionados: [[article-pipeline]] · [[seo-aeo-strategy]] · [[site]] · [[blog
 
 - [x] ~~Gerar vídeo do hero~~ — take A em produção (2026-08-06)
 - [ ] **Regerar o take A em 1080p/HD** na ferramenta (mesmo prompt) — o 720p a 1,9 Mbps limita a nitidez dos perfis; swap em ~10 min pelo pipeline documentado acima
-- [ ] **Review visual humano completo + `@design-review` + Lighthouse/CWV** antes de mergear o PR #43 (o subagent de design nunca rodou nesta feature)
-- [ ] **Mergear PR #43** — atenção: `00-meta/projetos/site.md` foi editado em paralelo nas branches `feat/home-scrollytelling` e `feat/quadro-conteudo`; reconciliar as duas atualizações no merge
+- [x] ~~**Review visual humano completo + `@design-review`**~~ — concluído em 2026-08-06; o único gap material (destaque fora da primeira dobra) foi corrigido e verificado em 390, 768, 1024 e 1440 px. Lighthouse/CWV de campo permanece acompanhado separadamente
+- [x] ~~**Mergear PR #43**~~ — mergeado em 2026-08-06; o follow-up PR #44 fechou progresso de leitura, featured único e carregamento de analytics por consentimento. Migration 012 aplicada: 16/9/8/3/4 posts nas cinco categorias e um único destaque
 - [ ] Importar Clube Quinta dos Lagos (26 imagens em `C:\Users\bruno\Downloads\Arquitetura\originais\`) para o banco e avaliar entrada no rail de projetos
 - [ ] Otimização de fontes: mover Playfair + Caveat do layout root para a rota `/orcamento` (únicos consumidores) — menos 2 famílias em todas as demais páginas
 - [ ] First Load JS da home: 271 kB (stack GSAP+Lenis+Embla) — avaliar lazy-load das seções GSAP abaixo da dobra

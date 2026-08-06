@@ -3,29 +3,29 @@
 import { useMemo, useState } from "react";
 import {
   BLOG_CATEGORIES,
+  type BlogCategory,
   type BlogCategoryFilter,
   type BlogPost,
 } from "@/types/blog";
-import { HeroEditorial } from "@/components/atualidade/HeroEditorial";
 import {
   CategoryFilter,
   type CategoryFilterItem,
 } from "@/components/atualidade/CategoryFilter";
 import { MasonryGrid } from "@/components/atualidade/MasonryGrid";
-import { CTA } from "@/components/sections/CTA";
 
 interface AtualidadeContentProps {
   posts: BlogPost[];
+  featuredPostId?: string;
+  featuredPostCategory?: BlogCategory;
 }
 
-export function AtualidadeContent({ posts }: AtualidadeContentProps) {
+export function AtualidadeContent({
+  posts,
+  featuredPostId,
+  featuredPostCategory,
+}: AtualidadeContentProps) {
   const [activeCategory, setActiveCategory] =
     useState<BlogCategoryFilter>("Todos");
-
-  const featuredPost = useMemo(
-    () => posts.find((post) => post.featured) ?? posts[0],
-    [posts]
-  );
 
   const categories = useMemo<CategoryFilterItem[]>(
     () => [
@@ -44,20 +44,18 @@ export function AtualidadeContent({ posts }: AtualidadeContentProps) {
         ? posts
         : posts.filter((post) => post.category === activeCategory);
 
-    return featuredPost
-      ? categoryPosts.filter((post) => post.id !== featuredPost.id)
+    return featuredPostId
+      ? categoryPosts.filter((post) => post.id !== featuredPostId)
       : categoryPosts;
-  }, [activeCategory, featuredPost, posts]);
+  }, [activeCategory, featuredPostId, posts]);
 
   const featuredIsOnlyResult =
     activeCategory !== "Todos" &&
     filteredPosts.length === 0 &&
-    featuredPost?.category === activeCategory;
+    featuredPostCategory === activeCategory;
 
   return (
-    <main className="bg-off-white">
-      <HeroEditorial post={featuredPost} />
-
+    <>
       <CategoryFilter
         categories={categories}
         activeCategory={activeCategory}
@@ -72,8 +70,6 @@ export function AtualidadeContent({ posts }: AtualidadeContentProps) {
             : "Ainda não há publicações nesta categoria."
         }
       />
-
-      <CTA />
-    </main>
+    </>
   );
 }

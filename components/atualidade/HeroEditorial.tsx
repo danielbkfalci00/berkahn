@@ -8,18 +8,18 @@ interface HeroEditorialProps {
 
 export function HeroEditorial({ post }: HeroEditorialProps) {
   return (
-    <section className="bg-carbon pb-12 pt-28 text-white md:pb-10 md:pt-24 lg:pb-12 lg:pt-28">
+    <section className="bg-carbon pb-8 pt-24 text-white md:pt-20">
       <div className="container">
         <header>
           <p className="font-tech text-[11px] lowercase tracking-wide text-white-50 md:text-xs">
             caderno técnico · atualidades
           </p>
-          <div className="my-5 h-[3px] w-full bg-white" aria-hidden="true" />
+          <div className="my-4 h-[3px] w-full bg-white" aria-hidden="true" />
         </header>
 
-        <div className="grid gap-8 lg:grid-cols-[0.72fr_1.28fr] lg:items-end lg:gap-10">
-          <div className="flex h-full flex-col justify-between gap-6">
-            <h1 className="font-display text-[clamp(4rem,6vw,7rem)] font-semibold leading-[0.78] tracking-[-0.075em]">
+        <div className="grid gap-6 lg:grid-cols-[0.72fr_1.28fr] lg:items-end lg:gap-8">
+          <div className="flex h-full flex-col justify-between gap-4">
+            <h1 className="font-display text-[clamp(3.75rem,6vw,6.5rem)] font-semibold leading-[0.78] tracking-[-0.075em]">
               Atualidades
             </h1>
             <p className="max-w-md text-sm leading-relaxed text-white-70 md:text-base">
@@ -35,7 +35,7 @@ export function HeroEditorial({ post }: HeroEditorialProps) {
                 prefetch={false}
                 className="group block focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
               >
-                <div className="relative aspect-[16/9] overflow-hidden bg-carbon-soft md:aspect-[16/7] lg:aspect-[16/8]">
+                <div className="relative aspect-[16/9] overflow-hidden bg-carbon-soft md:aspect-[16/6] lg:aspect-[16/7]">
                   <Image
                     src={post.image}
                     alt={post.title}
@@ -50,7 +50,7 @@ export function HeroEditorial({ post }: HeroEditorialProps) {
                   </span>
                 </div>
 
-                <div className="grid gap-4 border-t-[3px] border-white pt-4 md:grid-cols-[0.34fr_0.66fr] md:gap-6">
+                <div className="grid gap-3 border-t-[3px] border-white pt-3 md:grid-cols-[0.34fr_0.66fr] md:gap-5">
                   <div className="font-tech text-[10px] lowercase leading-relaxed tracking-wide text-white-50 md:text-xs">
                     <p className="text-white">{post.category}</p>
                     <p>{post.date} · {post.readTime}</p>
@@ -60,10 +60,10 @@ export function HeroEditorial({ post }: HeroEditorialProps) {
                     <h2 className="font-display text-2xl font-semibold leading-[1.02] tracking-tight md:text-3xl">
                       {post.title}
                     </h2>
-                    <p className="mt-3 line-clamp-2 text-sm leading-relaxed text-white-70 md:text-base">
+                    <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-white-70 md:text-base">
                       {post.excerpt}
                     </p>
-                    <span className="mt-3 inline-flex items-center gap-3 font-tech text-[10px] lowercase tracking-wide text-white md:text-xs">
+                    <span className="mt-2 inline-flex items-center gap-3 font-tech text-[10px] lowercase tracking-wide text-white md:text-xs">
                       ler análise
                       <span
                         className="h-[3px] w-8 bg-white transition-[width] duration-500 ease-expo group-hover:w-14 motion-reduce:transition-none"
