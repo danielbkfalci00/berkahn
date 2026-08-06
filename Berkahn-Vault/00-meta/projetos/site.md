@@ -60,11 +60,11 @@ Site em produção (Next.js App Router + Supabase + Vercel + Tailwind + shadcn/u
 - [x] ~~**Dupla escrita dos comandos de conteúdo**~~ — resolvido em 2026-08-06. `/pesquisa` e `/linkedin` gravam na pauta via `scripts/conteudo/pauta.mjs` e não criam mais `.md` no vault. `/criacao` e `/calendario` foram corrigidos junto: um procurava a pesquisa na pasta que deixou de ser alimentada, o outro contava posts pendentes varrendo uma pasta congelada. Ver [[quadro-conteudo]]
 - [ ] **Contas Supabase por pessoa**: hoje todos entram com a mesma conta compartilhada, então `auth.uid()` não distingue ninguém e o autor dos comentários é nome digitado no localStorage. Projeto próprio — ver [[comentarios-inline-documentacoes]], seção "Identidade"
 - [ ] **Google Sheets SPOF**: leads sem backup automático em Supabase (mitigado em Fase 4 do plano)
-- [ ] **Core Web Vitals**: `/atualidades` preserva SSG/ISR e CLS local = 0, mas 3 rodadas Lighthouse mobile em 2026-08-06 ficaram em LCP 3,25–6,50 s e TBT 488–774 ms. O custo restante é majoritariamente layout global/GA; validar Speed Insights após deploy. Meta: LCP < 2,5 s, CLS < 0,1 e TBT < 200 ms
+- [ ] **Core Web Vitals de campo**: `/atualidades` preserva SSG/ISR e CLS = 0. Após GA condicionado ao consentimento, prioridade da imagem LCP e boundary interativo menor, 3 rodadas em produção ficaram em LCP 3,04–3,54 s e TBT 304–756 ms (baseline chegava a 5,38 s/1.736 ms). O sintético ainda oscila acima da meta; validar Speed Insights antes de ampliar a refatoração global. Meta: LCP < 2,5 s, CLS < 0,1 e TBT < 200 ms
 
 ## Próximos 7 dias
 
-- [ ] **Home redesign — fechar o PR #43**: regerar o take do hero em 1080p (prompt A no banco de [[home-redesign-direcao]]), rodar `@design-review` + Lighthouse (nunca rodaram nesta feature) e mergear **reconciliando este hub com a versão da branch feat/quadro-conteudo** (editado em paralelo). Preview: worktree `berkahn-home`, `npx next start -p 3113`
+- [x] ~~**Home redesign — fechar o PR #43**~~ — mergeado em 2026-08-06 com hub reconciliado; `@design-review` executado e follow-up PR #44 mergeado. A troca do take do hero por 1080p permanece como melhoria visual independente em [[home-redesign-direcao]]
 - [ ] **CWV da home nova**: medir LCP/CLS no SpeedInsights após deploy (First Load 271 kB com GSAP+Lenis+Embla; hero agora carrega ~4,9 MB de frames em estágios)
 - [x] ~~**Próxima página do redesign: `/atualidades`**~~ — concluída em 2026-08-06: abertura fundida, bento, categorias canônicas, payload 141/26 KB e ISR 60 preservado
 - [ ] Importar Clube Quinta dos Lagos para o banco de imagens (candidato ao rail de projetos)
@@ -79,7 +79,7 @@ Site em produção (Next.js App Router + Supabase + Vercel + Tailwind + shadcn/u
 |---------|-------|------|---|
 | Artigos indexados | 34/38 (89%) | 38 | -4 |
 | Páginas institucionais indexadas | não medido | — | ampliar escopo do `/performance` |
-| LCP `/atualidades` local | 3,25–6,50 s | < 2,5 s | validar pós-deploy |
+| LCP `/atualidades` produção (sintético) | 3,04–3,54 s | < 2,5 s | validar Speed Insights |
 | CLS `/atualidades` local | 0 | < 0,1 | ✅ |
 | ISR revalidate | 60s | 60s | OK |
 
@@ -128,7 +128,7 @@ Site em produção (Next.js App Router + Supabase + Vercel + Tailwind + shadcn/u
 
 ## Histórico recente
 
-- 2026-08-06: `/atualidades` redesenhada na linguagem [[home-redesign-direcao]]; taxonomia 12→5, migration 012, payload 83% menor bruto e SSG/ISR preservado
+- 2026-08-06: PRs #43/#44 mergeados; `/atualidades` redesenhada na linguagem [[home-redesign-direcao]], migration 012 aplicada (40 posts, cinco categorias, featured único), payload ~83% menor bruto, analytics condicionado ao consentimento e SSG/ISR preservado
 
 - 2026-07-20: standup — infra nova do **Documento Institucional PDF**: rota `app/institucional/pdf/`, `GET /api/institucional/pdf`, `components/institucional/pdf/*.tsx` (9 páginas), copy em `lib/institucional-data.ts` (2026-07-09/10). Branch `design/institucional-monografia` → PR #17 pendente merge. Reusa pipeline Puppeteer + `optImg()` (PDF 31MB → 6.7MB).
 - 2026-05-22: hub criado
