@@ -16,7 +16,7 @@ const SEGMENTS: Segment[] = [
     index: "01",
     title: "Residencial",
     description:
-      "Casas de alto padrão com qualidade técnica, acabamento criterioso e soluções integradas do projeto à entrega.",
+      "Projetos residenciais com qualidade técnica, acabamento criterioso e soluções integradas do projeto à entrega.",
     href: "/residencial",
     image: "/images/Services/residencial.webp",
     imageAlt: "Residência de alto padrão construída em Light Steel Frame",
@@ -25,17 +25,14 @@ const SEGMENTS: Segment[] = [
     index: "02",
     title: "Comercial & Industrial",
     description:
-      "Ambientes corporativos e estruturas industriais com gestão de obra precisa e soluções técnicas sob medida.",
+      "Ambientes corporativos e estruturas industriais com gestão de obra precisa, eficiência e soluções técnicas sob medida.",
     href: "/comercial-industrial",
     image: "/images/Services/comercial.webp",
     imageAlt: "Edifício comercial construído em Light Steel Frame",
   },
 ];
 
-/**
- * Segmentos de atuação — grid editorial assimétrico: cards com parallax,
- * numerais-índice em mono e offset vertical no desktop.
- */
+/** Segmentos de atuação em grid editorial assimétrico. */
 export function Segments() {
   return (
     <section className="bg-white py-2xl md:py-3xl overflow-hidden">
@@ -45,7 +42,7 @@ export function Segments() {
             02 · segmentos
           </p>
           <h2 className="headline-md max-w-2xl mb-16 md:mb-20">
-            Construímos para morar e para operar.
+            Construímos para todos os setores
           </h2>
         </RevealOnScroll>
 
@@ -82,11 +79,14 @@ export function Segments() {
                     <p className="text-black-70 leading-relaxed max-w-md">
                       {segment.description}
                     </p>
+                    <span className="mt-6 inline-flex items-center gap-3 text-xs uppercase tracking-wider font-semibold text-black">
+                      Saiba mais
+                      <span
+                        className="h-[3px] w-8 bg-black transition-all duration-500 ease-expo group-hover:w-14"
+                        aria-hidden="true"
+                      />
+                    </span>
                   </div>
-                  <span
-                    className="mt-2 h-[3px] w-10 shrink-0 bg-black transition-all duration-500 ease-expo group-hover:w-16"
-                    aria-hidden="true"
-                  />
                 </div>
               </Link>
             </RevealOnScroll>

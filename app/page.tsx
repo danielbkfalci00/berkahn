@@ -7,7 +7,6 @@ import { Segments } from "@/components/sections/home/Segments";
 import { ProcessPinned } from "@/components/sections/home/ProcessPinned";
 import { StatsCounter } from "@/components/sections/StatsCounter";
 import { ComparisonCompact } from "@/components/sections/home/ComparisonCompact";
-import { ProjectsRail } from "@/components/sections/home/ProjectsRail";
 import { Partners } from "@/components/sections/Partners";
 import { CTA } from "@/components/sections/CTA";
 
@@ -30,7 +29,6 @@ const HOME_STATS = [
 ];
 
 export default function Home() {
-  // Preload LCP image with high priority — React 19 / Next.js 15 API
   preload("/videos/hero/hero-poster.webp", { as: "image", fetchPriority: "high" });
 
   return (
@@ -42,7 +40,6 @@ export default function Home() {
       <ProcessPinned />
       <StatsCounter stats={HOME_STATS} />
       <ComparisonCompact />
-      <ProjectsRail />
       <Partners
         label="PARCERIAS QUE SUSTENTAM A QUALIDADE"
         title="Marcas que Garantem o Padrão Berkahn"

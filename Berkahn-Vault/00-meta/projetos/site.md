@@ -5,7 +5,7 @@ atualizado: 2026-08-06
 tags:
   - project/site
   - status/active
-ai_summary: "Hub do Site — Next.js 15 + Supabase + Vercel. Home e /atualidades seguem 'luxo de engenharia' mono com ISR 60. No admin, migration 012 do quadro criou duas trilhas, RPC transacional e 66 pautas verificadas; ICMS foi reconciliado e o CLI genérico substituiu scripts por artigo. Smoke autenticado e migration 013 seguem pendentes. Seis rotas /api/admin sem auth foram fechadas; atenção ao zero-row silencioso do PostgREST com RLS."
+ai_summary: "Hub do Site — Next.js 15 + Supabase + Vercel. Home usa novo take 1080p no scrub, copy institucional canônica e projetos temporariamente desmontados; /atualidades segue editorial com ISR 60. No admin, migration 012 do quadro criou duas trilhas, RPC transacional e 66 pautas verificadas; ICMS foi reconciliado e o CLI genérico substituiu scripts por artigo. Smoke autenticado e migration 013 seguem pendentes."
 status: active
 projeto: site
 kpi_paginas_indexadas: 34
@@ -64,10 +64,11 @@ Site em produção (Next.js App Router + Supabase + Vercel + Tailwind + shadcn/u
 
 ## Próximos 7 dias
 
-- [x] ~~**Home redesign — fechar o PR #43**~~ — mergeado em 2026-08-06 com hub reconciliado; `@design-review` executado e follow-up PR #44 mergeado. A troca do take do hero por 1080p permanece como melhoria visual independente em [[home-redesign-direcao]]
-- [ ] **CWV da home nova**: medir LCP/CLS no SpeedInsights após deploy (First Load 271 kB com GSAP+Lenis+Embla; hero agora carrega ~4,9 MB de frames em estágios)
+- [x] ~~**Home redesign — fechar o PR #43**~~ — mergeado em 2026-08-06 com hub reconciliado; `@design-review` executado e follow-up PR #44 mergeado
+- [x] ~~**Trocar take e restaurar copy institucional da home**~~ — 1080p integral convertido em 72/36 frames; copy conferida contra `bc6515f`; rail de projetos preservado no código e desmontado da composição
+- [ ] **CWV da home nova**: medir no Speed Insights após deploy. Build local: First Load 264 kB; hero carrega 5,28 MB no desktop ou 1,01 MB no mobile, com 580 KB imediatos no desktop. Lighthouse local final (3×): LCP 2,80–4,24 s, CLS 0–0,001, TBT 682–1.226 ms; não há baseline local comparável para cravar regressão
 - [x] ~~**Próxima página do redesign: `/atualidades`**~~ — concluída em 2026-08-06: abertura fundida, bento, categorias canônicas, payload 141/26 KB e ISR 60 preservado
-- [ ] Importar Clube Quinta dos Lagos para o banco de imagens (candidato ao rail de projetos)
+- [ ] Importar Clube Quinta dos Lagos para o banco de imagens antes de reativar o rail de projetos
 - [ ] Validar `/institucional/pdf` gerando PDF em produção (pós-merge do #17)
 - [ ] Atualizar o briefing do institucional para **v4** antes de distribuir — o código está em v4, a documentação em v3
 - [ ] Validar build (`npm run build`) sem warnings críticos
@@ -128,6 +129,7 @@ Site em produção (Next.js App Router + Supabase + Vercel + Tailwind + shadcn/u
 
 ## Histórico recente
 
+- 2026-08-06: home atualizada com take integral 1080p (72/36 WebPs), preload reduzido a seis frames, copy institucional restaurada de `bc6515f`, quatro fases canônicas e `ProjectsRail` temporariamente desmontado sem afetar `/portfolio`; `@design-review` fechou sobreposição do CTA com consentimento e reduced-motion dos parceiros
 - 2026-08-06: PRs #43/#44 mergeados; `/atualidades` redesenhada na linguagem [[home-redesign-direcao]], migration 012 aplicada (40 posts, cinco categorias, featured único), payload ~83% menor bruto, analytics condicionado ao consentimento e SSG/ISR preservado
 
 - 2026-07-20: standup — infra nova do **Documento Institucional PDF**: rota `app/institucional/pdf/`, `GET /api/institucional/pdf`, `components/institucional/pdf/*.tsx` (9 páginas), copy em `lib/institucional-data.ts` (2026-07-09/10). Branch `design/institucional-monografia` → PR #17 pendente merge. Reusa pipeline Puppeteer + `optImg()` (PDF 31MB → 6.7MB).

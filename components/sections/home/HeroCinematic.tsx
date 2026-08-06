@@ -2,28 +2,24 @@
 
 import { useRef } from "react";
 import Image from "next/image";
-import Link from "next/link";
 import { gsap, useGSAP } from "@/lib/gsap";
 import { ContactFormDialog } from "@/components/forms/ContactFormDialog";
 import { Button } from "@/components/ui/button";
 
 /**
- * Hero pinado com scrub por scroll (estilo Apple): o drone atravessa o
- * corredor de montantes de aço até o quarto acabado na medida em que o
- * usuário rola. Sequência de frames WebP desenhada em canvas —
- * <video currentTime> por scroll é instável, frames não são.
- * Fonte: voo gerado por IA (conceito A da nota de direção), trim
- * 0,2s–9,9s, marca d'água removida via delogo.
+ * Hero pinado com scrub por scroll: o drone percorre uma estrutura em aço e
+ * avança até um ambiente finalizado conforme o usuário rola. A sequência WebP
+ * é desenhada em canvas para evitar a instabilidade de <video currentTime>.
  *
- * - Runway de 260vh (motion-safe); viewport fica preso via position: sticky
- * - Poster = LCP (pinta no SSR); o canvas assume no primeiro frame carregado
- * - Preload em estágios: 10 primeiros frames imediatos, resto em background;
- *   o draw usa o frame carregado mais próximo (nunca trava esperando rede)
- * - Mobile usa sequência própria (44 frames, 640px, ~1,2 MB)
+ * - Runway de 260vh (motion-safe); viewport preso via position: sticky
+ * - Poster = LCP e fallback; o canvas assume no primeiro frame carregado
+ * - Preload em estágios: seis frames imediatos, restante em background;
+ *   o draw usa o frame carregado mais próximo
+ * - Mobile usa sequência própria de 36 frames a 640 px
  * - prefers-reduced-motion: sem runway, sem pin, poster estático + texto
  */
-const FRAME_COUNT_DESKTOP = 87;
-const FRAME_COUNT_MOBILE = 44;
+const FRAME_COUNT_DESKTOP = 72;
+const FRAME_COUNT_MOBILE = 36;
 
 const framePath = (index: number, isMobile: boolean) =>
   `/videos/hero/${isMobile ? "seq-m" : "seq"}/f_${String(index + 1).padStart(3, "0")}.webp`;
@@ -51,11 +47,9 @@ export function HeroCinematic() {
         let currentIndex = 0;
         let isPosterHidden = false;
 
-        // Fonte 4:3 numa tela 16:9: o crop vertical ancora em 80% para baixo
-        // (mostra sofás, portas e piso em vez de só o teto de madeira)
+        // O foco vertical baixo preserva o piso e a leitura do percurso.
         const VERTICAL_FOCUS = 0.8;
 
-        // Desenha o frame carregado mais próximo (para trás) do índice pedido
         const draw = (index: number) => {
           let nearest = Math.min(index, frameCount - 1);
           while (nearest > 0 && !isLoaded[nearest]) nearest--;
@@ -84,7 +78,6 @@ export function HeroCinematic() {
         resize();
         window.addEventListener("resize", resize);
 
-        // Preload em estágios
         const loadFrame = (index: number) => {
           const img = new window.Image();
           img.src = framePath(index, isMobile);
@@ -95,7 +88,7 @@ export function HeroCinematic() {
           images[index] = img;
         };
 
-        const EAGER_FRAMES = Math.min(10, frameCount);
+        const EAGER_FRAMES = Math.min(6, frameCount);
         for (let i = 0; i < EAGER_FRAMES; i++) loadFrame(i);
 
         let nextToLoad = EAGER_FRAMES;
@@ -107,7 +100,6 @@ export function HeroCinematic() {
         };
         loadRemaining();
 
-        // Master timeline scrubada ao longo do runway inteiro
         const frameState = { frame: 0 };
         const master = gsap.timeline({
           scrollTrigger: {
@@ -135,9 +127,7 @@ export function HeroCinematic() {
             },
             0
           )
-          // Coreografia dos textos: dissolve em estágios ao longo do voo —
-          // cue, depois label+barra, depois subtítulo; headline e CTAs saem
-          // por último, limpando a tela para a revelação final da piscina
+          // Dissolve o conteúdo em estágios para liberar a vista no fim do percurso.
           .to("[data-hero-foot]", { autoAlpha: 0, duration: 0.12, ease: "none" }, 0.06)
           .to(
             ["[data-hero-label]", "[data-hero-bar]"],
@@ -155,7 +145,6 @@ export function HeroCinematic() {
             0.52
           );
 
-        // Entrada (tempo, não scroll): reveal por linha
         const intro = gsap.timeline({ defaults: { ease: "expo.out" } });
         intro
           .from("[data-hero-label]", { autoAlpha: 0, y: 16, duration: 0.7 }, 0.15)
@@ -166,7 +155,7 @@ export function HeroCinematic() {
           )
           .from("[data-hero-line]", { yPercent: 110, duration: 1.1, stagger: 0.12 }, 0.25)
           .from("[data-hero-sub]", { autoAlpha: 0, y: 24, duration: 0.9 }, 0.8)
-          .from("[data-hero-cta]", { autoAlpha: 0, y: 18, duration: 0.8, stagger: 0.08 }, 0.95)
+          .from("[data-hero-cta]", { autoAlpha: 0, y: 18, duration: 0.8 }, 0.95)
           .from("[data-hero-foot]", { autoAlpha: 0, duration: 0.9 }, 1.15);
 
         return () => {
@@ -181,14 +170,13 @@ export function HeroCinematic() {
   return (
     <section ref={sectionRef} className="relative bg-carbon h-[100svh] motion-safe:h-[260vh]">
       <div className="sticky top-0 h-[100svh] min-h-[600px] overflow-hidden">
-        {/* Poster: LCP e fallback (reduced-motion / sem JS / frames carregando) */}
         <div
           ref={posterWrapRef}
           className="absolute inset-0 transition-opacity duration-500"
         >
           <Image
             src="/videos/hero/hero-poster.webp"
-            alt="Interior de residência de alto padrão construída pela Berkahn em Light Steel Frame"
+            alt="Corredor de estrutura em Light Steel Frame avançando até um ambiente finalizado"
             fill
             priority
             sizes="100vw"
@@ -196,20 +184,17 @@ export function HeroCinematic() {
           />
         </div>
 
-        {/* Sequência scrubada pelo scroll */}
         <canvas
           ref={canvasRef}
           className="absolute inset-0 h-full w-full"
           aria-hidden="true"
         />
 
-        {/* Vinheta para legibilidade do texto e das anotações */}
         <div className="absolute inset-0 hero-overlay-vignette" aria-hidden="true" />
 
-        {/* Conteúdo — composição lower-left */}
         <div
           ref={contentRef}
-          className="relative z-10 flex h-full flex-col justify-end pb-28 md:pb-32 pl-6 pr-6 md:pl-16 lg:pl-24 max-w-[1100px]"
+          className="relative z-10 flex h-full flex-col justify-end pb-48 md:pb-32 pl-6 pr-6 md:pl-16 lg:pl-24 max-w-[1100px]"
         >
           <p
             data-hero-label
@@ -224,7 +209,6 @@ export function HeroCinematic() {
             aria-hidden="true"
           />
 
-          {/* Jogo tipográfico: apoio fino, força em bold */}
           <h1 className="headline-hero hero-text-shadow mb-7">
             <span className="block overflow-hidden">
               <span data-hero-line className="block md:whitespace-nowrap">
@@ -235,7 +219,7 @@ export function HeroCinematic() {
             <span className="block overflow-hidden">
               <span data-hero-line className="block md:whitespace-nowrap">
                 <span className="font-light text-white-70">Mestres em</span>{" "}
-                <span className="font-semibold">Construir.</span>
+                <span className="font-semibold">Construir</span>
               </span>
             </span>
           </h1>
@@ -248,31 +232,18 @@ export function HeroCinematic() {
             ou comercial, simples ou complexo.
           </p>
 
-          <div className="flex flex-wrap items-center gap-4">
-            <div data-hero-cta>
-              <ContactFormDialog ctaLocation="home_hero">
-                <Button
-                  size="lg"
-                  className="rounded-full bg-white text-black hover:bg-off-white px-8 text-xs uppercase tracking-wider font-semibold"
-                >
-                  Fale conosco
-                </Button>
-              </ContactFormDialog>
-            </div>
-            <div data-hero-cta>
+          <div data-hero-cta>
+            <ContactFormDialog ctaLocation="home_hero">
               <Button
-                asChild
                 size="lg"
-                variant="outline"
-                className="rounded-full border-white-30 bg-transparent text-white hover:bg-white/10 hover:text-white px-8 text-xs uppercase tracking-wider font-semibold"
+                className="rounded-full bg-white text-black hover:bg-off-white px-8 text-xs uppercase tracking-wider font-semibold"
               >
-                <Link href="#projetos">Ver projetos</Link>
+                Fale conosco
               </Button>
-            </div>
+            </ContactFormDialog>
           </div>
         </div>
 
-        {/* Rodapé técnico do hero */}
         <div
           data-hero-foot
           className="absolute bottom-0 left-0 right-0 z-10 flex items-end justify-between pb-8 pl-6 pr-6 md:pl-16 md:pr-16 lg:pl-24"
