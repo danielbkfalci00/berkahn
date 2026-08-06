@@ -37,23 +37,24 @@ Registro da direção aprovada pelo Bruno em 2026-08-05 para a repaginada da hom
 | Fotografia | Full-bleed, grading quente golden-hour, corte editorial |
 | Motion | Reveals e transições (easing expo canônico), nunca bounce. `prefers-reduced-motion` desliga tudo |
 
-## Narrativa da home (10 blocos)
+## Narrativa da home (9 blocos)
 
-Hero cinematográfico (vídeo/poster 100svh) → statement editorial (SplitText scrub) → segmentos (parallax) → processo em 3 atos (sticky + crossfade) → números de engenharia (CountUp) → comparativo enxuto LSF vs convencional → rail de projetos nomeados (scroll-snap) → parceiros → CTA. Scroll global: Lenis escopado à home (lerp 0.12, anchors), GSAP ScrollTrigger só nos momentos-assinatura.
+Hero cinematográfico (canvas/poster 100svh) → expertise institucional (SplitText scrub) → segmentos (parallax) → processo em 4 fases (sticky + crossfade) → números de engenharia (CountUp) → introdução LSF + comparativo enxuto → parceiros → CTA. O rail de projetos está preservado no código, mas desmontado temporariamente da home. Scroll global: Lenis escopado à home (lerp 0.12, anchors), GSAP ScrollTrigger só nos momentos-assinatura.
 
 ## Estado de entrega (2026-08-06 — PR #43 mergeado)
 
-**Hero final = scrub por scroll**: seção pinada (runway 260vh, sticky) com sequência de frames WebP desenhada em canvas — o drone avança na medida do scroll. `<video>` autoplay foi testado e substituído a pedido do Bruno; `video.currentTime` por scroll foi descartado (instável, mobile). Take em produção: **conceito A steel-frame** (corredor de montantes galvanizados ao pôr do sol terminando no quarto acabado), gerado por IA em 720p.
+**Hero final = scrub por scroll**: seção pinada (runway 260vh, sticky) com sequência de frames WebP desenhada em canvas — o drone avança na medida do scroll. `<video>` autoplay foi testado e substituído a pedido do Bruno; `video.currentTime` por scroll foi descartado (instável, mobile). O take foi trocado em 2026-08-06 por uma fonte 1080p de 8 s, usada integralmente e sem delogo.
 
 **Parâmetros do take atual** (para reproduzir/trocar):
-- Fonte: `Downloads/Slow_forward_drone_glide_down.mp4` (1280×720, 24fps, 10s, ~1,9 Mbps)
-- Trim `0,2s → 9,9s` · marca d'água removida com `delogo=x=1130:y=555:w=80:h=90`
-- Frames: desktop `fps=9` nativo q82 (87 frames, ~4,9 MB em `public/videos/hero/seq/`), mobile `fps=4.5 scale=640` q80 (44 frames, `seq-m/`), poster q88
+- Fonte local: `Downloads/Firefly Slow forward drone glide down the corridor of steel studs toward the glowing finished room, .mp4` (1920×1080, 24fps, 8s); o MP4 não é versionado
+- Sem trim e sem delogo; início e fim foram inspecionados como limpos
+- Frames: desktop `fps=9 scale=1440 q72` (72 frames, 5,28 MB em `public/videos/hero/seq/`), mobile `fps=4.5 scale=640 q80` (36 frames, 1,01 MB em `seq-m/`), poster `scale=1440 q78` (116 KB)
+- Preload imediato limitado a 6 frames (580 KB); restante carrega progressivamente em background
 - Constantes `FRAME_COUNT_DESKTOP/MOBILE` em `components/sections/home/HeroCinematic.tsx` devem bater com a contagem de arquivos
 
-**Como trocar o take** (pipeline validado 3×): apontar o novo MP4 → Claude inspeciona frames (ghost no início, endcard no fim, marca d'água), define trim/delogo, extrai sequências, atualiza contadores, build. ~10 min.
+**Como trocar o take** (pipeline validado): apontar o novo MP4 → inspecionar início/fim e marcas → decidir trim/delogo apenas se necessário → extrair sequências → validar pesos/contagens → atualizar contadores → build. ~10 min.
 
-**Limitação conhecida**: o take veio 3× mais comprimido que o anterior (1,9 vs 5,8 Mbps) e a cena de perfis finos sofre — regerar em 1080p/HD é a pendência nº 1.
+**Copy institucional**: o redesign visual mantém o texto aprovado anterior ao PR #43, com `bc6515f` como fonte canônica. Foram restaurados hero, expertise, segmentos, promessa da construtora completa, quatro fases de `EXECUTION_PHASES` e introdução LSF; stats e comparativo novos foram mantidos.
 
 ## Prompts históricos (pré-steel-frame)
 
@@ -97,13 +98,14 @@ Relacionados: [[article-pipeline]] · [[seo-aeo-strategy]] · [[site]] · [[blog
 
 ## Follow-ups registrados
 
-- [x] ~~Gerar vídeo do hero~~ — take A em produção (2026-08-06)
-- [ ] **Regerar o take A em 1080p/HD** na ferramenta (mesmo prompt) — o 720p a 1,9 Mbps limita a nitidez dos perfis; swap em ~10 min pelo pipeline documentado acima
-- [x] ~~**Review visual humano completo + `@design-review`**~~ — concluído em 2026-08-06; o único gap material (destaque fora da primeira dobra) foi corrigido e verificado em 390, 768, 1024 e 1440 px. Lighthouse/CWV de campo permanece acompanhado separadamente
+- [x] ~~Gerar vídeo do hero~~ — take inicial entregue em 2026-08-06
+- [x] ~~**Trocar o take do hero por fonte 1080p/HD**~~ — concluído em 2026-08-06 com 72/36 frames, poster de 116 KB e seis eager em 580 KB
+- [x] ~~**Review visual humano completo + `@design-review`**~~ — repetido em 2026-08-06 para o novo take; os dois gaps materiais foram corrigidos: CTA mobile acima do consentimento e marquee estático em reduced-motion. Verificado em 390, 768, 1024 e 1440 px
 - [x] ~~**Mergear PR #43**~~ — mergeado em 2026-08-06; o follow-up PR #44 fechou progresso de leitura, featured único e carregamento de analytics por consentimento. Migration 012 aplicada: 16/9/8/3/4 posts nas cinco categorias e um único destaque
-- [ ] Importar Clube Quinta dos Lagos (26 imagens em `C:\Users\bruno\Downloads\Arquitetura\originais\`) para o banco e avaliar entrada no rail de projetos
+- [ ] Importar Clube Quinta dos Lagos (26 imagens em `C:\Users\bruno\Downloads\Arquitetura\originais\`) para o banco; o `ProjectsRail` está preservado, mas desmontado da home até haver portfólio curado para reativá-lo
 - [ ] Otimização de fontes: mover Playfair + Caveat do layout root para a rota `/orcamento` (únicos consumidores) — menos 2 famílias em todas as demais páginas
-- [ ] First Load JS da home: 271 kB (stack GSAP+Lenis+Embla) — avaliar lazy-load das seções GSAP abaixo da dobra
+- [ ] Medir CWV do novo take em produção. Três rodadas Lighthouse mobile locais com os assets finais: LCP 2,80–4,24 s, CLS 0–0,001 e TBT 682–1.226 ms; sem baseline local comparável, o gate de não regressão fica para Speed Insights. Payload por dispositivo: 5,28 MB desktop / 1,01 MB mobile, com 580 KB imediatos no desktop
+- [ ] First Load JS da home: 264 kB (stack GSAP+Lenis; antes documentado em 271 kB) — avaliar lazy-load das seções GSAP abaixo da dobra
 - [x] ~~**Próxima página do redesign: `/atualidades`**~~ — concluída em 2026-08-06 com abertura editorial fundida, taxonomia 5 categorias, bento, payload reduzido e ISR 60 preservado. CWV pós-deploy segue como gate aberto
 
 Relacionados: [[site]] · [[berkahn-brand]] · [[design-principles]] · [[guia-design-berkahn]]
