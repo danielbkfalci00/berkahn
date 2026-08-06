@@ -1,30 +1,33 @@
 "use server";
 
-import { createClient } from "@/lib/supabase/server";
+import sharp from "sharp";
 import { revalidatePath } from "next/cache";
+import { createClient } from "@/lib/supabase/server";
 import {
-  ehColunaPauta,
   ehPlataforma,
+  ehStatusDoCanal,
   LIMITES,
   toPauta,
   type BlocoTextoPauta,
-  type ColunaPauta,
+  type CanalConteudo,
   type Funil,
   type Intencao,
   type Pauta,
   type PautaRow,
   type Plataforma,
+  type StatusBlog,
+  type StatusLinkedin,
   type TipoPauta,
   type Trilha,
 } from "@/types/conteudo";
 
 type Resultado<T = null> = { data: T; error: string | null };
-
 const UUID_PATTERN =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-
 const SELECT_COM_ARTIGO = `
-  id, titulo, tipo, coluna, ordem,
+  id, titulo, tipo,
+  status_blog, status_linkedin, ordem_blog, ordem_linkedin,
+  draft_path, linkedin_url, linkedin_publicado_em,
   keyword, intencao, funil, prioridade, trilha, semana, data_alvo,
   insights, pesquisa_conteudo, post_id,
   capa_blog_url, capa_linkedin_url, linkedin_texto, linkedin_briefing,
@@ -32,35 +35,28 @@ const SELECT_COM_ARTIGO = `
   plataformas, criado_por, criado_em, atualizado_em,
   posts ( id, slug, title, status, published_at )
 `;
-
-/**
- * Mensagem para quando um UPDATE/DELETE não atinge linha nenhuma.
- *
- * ⚠️ O PostgREST **não** devolve erro quando a RLS filtra a linha: a operação
- * "funciona" e afeta zero linhas. Sem checar isso, uma sessão que expirou com a
- * aba aberta faz o autosave reportar "Salvo" para sempre enquanto o banco não
- * recebe nada — e a pessoa perde o texto ao fechar a aba. Verificado: `update`
- * com a anon key nesta tabela retorna `error: null` e `data: []`.
- */
 const SEM_LINHA =
   "Nada foi gravado. Sua sessão pode ter expirado — abra o admin em outra aba, confirme que está logado e tente de novo.";
 
-/** Corta e normaliza texto livre; string vazia vira null. */
 function limpar(valor: string | null | undefined, max: number): string | null {
   if (valor === null || valor === undefined) return null;
   const texto = valor.trim().slice(0, max);
   return texto === "" ? null : texto;
 }
 
+function revalidarPauta(id?: string) {
+  revalidatePath("/admin/conteudo");
+  if (id) revalidatePath(`/admin/conteudo/${id}`);
+}
+
 async function registrarLog(
   supabase: Awaited<ReturnType<typeof createClient>>,
   acao: string,
   pautaId: string,
-  titulo: string
+  titulo: string,
+  details?: Record<string, unknown>
 ) {
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const { data: { user } } = await supabase.auth.getUser();
   if (!user) return;
   await supabase.from("activity_logs").insert({
     user_id: user.id,
@@ -69,58 +65,60 @@ async function registrarLog(
     entity_type: "pauta",
     entity_id: pautaId,
     entity_name: titulo,
+    details: details ?? null,
   });
 }
 
-// ============================================
-// Criar / atualizar / excluir
-// ============================================
-
 export async function criarPauta(input: {
   titulo: string;
-  coluna?: ColunaPauta;
   tipo?: TipoPauta;
   plataformas?: Plataforma[];
+  canal?: CanalConteudo;
+  status?: StatusBlog | StatusLinkedin;
 }): Promise<Resultado<Pauta | null>> {
   const titulo = limpar(input.titulo, LIMITES.tituloMax);
   if (!titulo) return { data: null, error: "Título obrigatório." };
 
-  const coluna =
-    input.coluna && ehColunaPauta(input.coluna) ? input.coluna : "decisao";
-  const plataformas = (input.plataformas ?? []).filter(ehPlataforma);
+  const plataformas = [
+    ...new Set(
+      (input.plataformas ??
+        (input.tipo === "linkedin-acervo" ? ["linkedin"] : ["blog", "linkedin"]))
+        .filter(ehPlataforma)
+    ),
+  ];
+  if (plataformas.length === 0)
+    return { data: null, error: "Escolha ao menos uma plataforma." };
+  if (input.canal && !plataformas.includes(input.canal))
+    return { data: null, error: "A coluna escolhida não pertence às plataformas da pauta." };
+  if (input.canal && input.status && !ehStatusDoCanal(input.canal, input.status))
+    return { data: null, error: "Status inválido para o canal." };
+  if (input.status === "publicado")
+    return { data: null, error: "Publicação exige a operação explícita do canal." };
 
   const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  // Entra no fim da coluna de destino.
-  const { data: ultima } = await supabase
-    .from("conteudo_pautas")
-    .select("ordem")
-    .eq("coluna", coluna)
-    .order("ordem", { ascending: false })
-    .limit(1)
-    .maybeSingle();
+  const { data: { user } } = await supabase.auth.getUser();
+  const insert: Record<string, unknown> = {
+    titulo,
+    tipo: input.tipo ?? "pauta",
+    plataformas,
+    criado_por: user?.email ?? null,
+  };
+  if (input.canal === "blog" && input.status) insert.status_blog = input.status;
+  if (input.canal === "linkedin" && input.status) insert.status_linkedin = input.status;
 
   const { data, error } = await supabase
     .from("conteudo_pautas")
-    .insert({
-      titulo,
-      coluna,
-      tipo: input.tipo ?? "pauta",
-      plataformas,
-      ordem: ((ultima?.ordem as number | undefined) ?? 0) + 1,
-      criado_por: user?.email ?? null,
-    })
+    .insert(insert)
     .select(SELECT_COM_ARTIGO)
     .single();
 
   if (error) return { data: null, error: error.message };
-
   const pauta = toPauta(data as unknown as PautaRow);
-  await registrarLog(supabase, "Pauta criada", pauta.id, pauta.titulo);
-  revalidatePath("/admin/conteudo");
+  await registrarLog(supabase, "Pauta criada", pauta.id, pauta.titulo, {
+    origem: "admin",
+    plataformas,
+  });
+  revalidarPauta(pauta.id);
   return { data: pauta, error: null };
 }
 
@@ -139,7 +137,6 @@ export async function atualizarPauta(
   }
 ): Promise<Resultado<Pauta | null>> {
   if (!UUID_PATTERN.test(id)) return { data: null, error: "Pauta inválida." };
-
   const update: Record<string, unknown> = {};
 
   if (patch.titulo !== undefined) {
@@ -147,28 +144,31 @@ export async function atualizarPauta(
     if (!titulo) return { data: null, error: "Título não pode ficar vazio." };
     update.titulo = titulo;
   }
-  if (patch.keyword !== undefined)
-    update.keyword = limpar(patch.keyword, LIMITES.keywordMax);
+  if (patch.keyword !== undefined) update.keyword = limpar(patch.keyword, LIMITES.keywordMax);
   if (patch.intencao !== undefined) update.intencao = patch.intencao;
   if (patch.funil !== undefined) update.funil = patch.funil;
   if (patch.trilha !== undefined) update.trilha = patch.trilha;
   if (patch.dataAlvo !== undefined) update.data_alvo = patch.dataAlvo || null;
-
   if (patch.prioridade !== undefined) {
-    const p = patch.prioridade;
-    if (p !== null && (!Number.isInteger(p) || p < 1 || p > 5))
-      return { data: null, error: "Prioridade deve ser de 1 a 5." };
-    update.prioridade = p;
+    if (
+      patch.prioridade !== null &&
+      (!Number.isInteger(patch.prioridade) || patch.prioridade < 1 || patch.prioridade > 5)
+    ) return { data: null, error: "Prioridade deve ser de 1 a 5." };
+    update.prioridade = patch.prioridade;
   }
   if (patch.semana !== undefined) {
-    const s = patch.semana;
-    if (s !== null && (!Number.isInteger(s) || s < 1 || s > 53))
-      return { data: null, error: "Semana deve ser de 1 a 53." };
-    update.semana = s;
+    if (
+      patch.semana !== null &&
+      (!Number.isInteger(patch.semana) || patch.semana < 1 || patch.semana > 53)
+    ) return { data: null, error: "Semana deve ser de 1 a 53." };
+    update.semana = patch.semana;
   }
-  if (patch.plataformas !== undefined)
-    update.plataformas = patch.plataformas.filter(ehPlataforma);
-
+  if (patch.plataformas !== undefined) {
+    const plataformas = [...new Set(patch.plataformas.filter(ehPlataforma))];
+    if (plataformas.length === 0)
+      return { data: null, error: "A pauta precisa de ao menos uma plataforma." };
+    update.plataformas = plataformas;
+  }
   if (Object.keys(update).length === 0)
     return { data: null, error: "Nada para atualizar." };
 
@@ -181,16 +181,13 @@ export async function atualizarPauta(
     .single();
 
   if (error) return { data: null, error: error.message };
-  revalidatePath("/admin/conteudo");
+  revalidarPauta(id);
   return { data: toPauta(data as unknown as PautaRow), error: null };
 }
 
 export async function excluirPauta(id: string): Promise<Resultado> {
   if (!UUID_PATTERN.test(id)) return { data: null, error: "Pauta inválida." };
-
   const supabase = await createClient();
-
-  // Lê o título antes de apagar: depois do delete não há de onde tirar.
   const { data: alvo } = await supabase
     .from("conteudo_pautas")
     .select("titulo")
@@ -203,30 +200,22 @@ export async function excluirPauta(id: string): Promise<Resultado> {
     .eq("id", id)
     .select("id");
   if (error) return { data: null, error: error.message };
-  if (!apagadas || apagadas.length === 0) return { data: null, error: SEM_LINHA };
+  if (!apagadas?.length) return { data: null, error: SEM_LINHA };
 
+  await supabase.storage
+    .from("post-images")
+    .remove([`conteudo/${id}/blog.jpg`, `conteudo/${id}/linkedin.jpg`]);
   await registrarLog(
     supabase,
     "Pauta excluída",
     id,
-    (alvo?.titulo as string | undefined) ?? "(sem título)"
+    (alvo?.titulo as string | undefined) ?? "(sem título)",
+    { origem: "admin" }
   );
-  revalidatePath("/admin/conteudo");
+  revalidarPauta();
   return { data: null, error: null };
 }
 
-// ============================================
-// Blocos de texto
-// ============================================
-
-/**
- * Allowlist bloco → coluna.
- *
- * ⚠️ É a fronteira de segurança desta action. Passar o nome do bloco direto
- * para `.update({ [bloco]: texto })` deixaria o cliente escolher a coluna a
- * escrever — daria para sobrescrever `post_id`, `coluna` ou `ordem` mandando
- * outra string. O mapa fecha isso: só estas três chaves existem.
- */
 const COLUNA_DO_BLOCO: Record<BlocoTextoPauta, string> = {
   insights: "insights",
   pesquisa: "pesquisa_conteudo",
@@ -235,101 +224,193 @@ const COLUNA_DO_BLOCO: Record<BlocoTextoPauta, string> = {
   "imagem-briefing": "linkedin_imagem_briefing",
 };
 
-/**
- * Salva um dos blocos de texto longo.
- *
- * Sem `revalidatePath`, deliberado — mesma razão de `moverPautas` e do
- * `reorderTasks` em app/admin/analytics/actions.ts: a UI é otimista e o
- * autosave dispara a cada pausa de digitação. Revalidar re-buscaria o quadro
- * inteiro a cada 1,2s e causaria flicker no que a pessoa está escrevendo.
- */
 export async function salvarBloco(
   id: string,
   bloco: BlocoTextoPauta,
   texto: string
 ): Promise<Resultado> {
   if (!UUID_PATTERN.test(id)) return { data: null, error: "Pauta inválida." };
-
   const coluna = COLUNA_DO_BLOCO[bloco];
   if (!coluna) return { data: null, error: "Bloco desconhecido." };
 
   const supabase = await createClient();
+  const { data: atual } = await supabase
+    .from("conteudo_pautas")
+    .select("status_blog,status_linkedin,capa_linkedin_url")
+    .eq("id", id)
+    .maybeSingle();
+  if (!atual) return { data: null, error: SEM_LINHA };
+
+  const valor = limpar(texto, LIMITES.blocoMax);
+  const update: Record<string, unknown> = { [coluna]: valor };
+  if (bloco === "pesquisa" && atual.status_blog === "planejada")
+    update.status_blog = "pesquisa";
+  if (["linkedin", "imagem-prompt", "imagem-briefing"].includes(bloco)) {
+    if (atual.status_linkedin === "planejada") update.status_linkedin = "producao";
+    if (
+      bloco === "linkedin" &&
+      valor &&
+      atual.capa_linkedin_url &&
+      ["planejada", "producao"].includes(atual.status_linkedin ?? "")
+    ) update.status_linkedin = "produzido";
+  }
+
   const { data, error } = await supabase
     .from("conteudo_pautas")
-    .update({ [coluna]: limpar(texto, LIMITES.blocoMax) })
+    .update(update)
     .eq("id", id)
     .select("id");
-
   if (error) return { data: null, error: error.message };
-  if (!data || data.length === 0) return { data: null, error: SEM_LINHA };
+  if (!data?.length) return { data: null, error: SEM_LINHA };
   return { data: null, error: null };
 }
 
-// ============================================
-// Drag and drop
-// ============================================
+export interface MudancaPauta {
+  id: string;
+  status: StatusBlog | StatusLinkedin;
+  ordem: number;
+}
 
-/**
- * Persiste coluna e ordem depois de um arrasto.
- *
- * Recebe só as linhas que mudaram (o cliente diffa contra o snapshot
- * pré-arrasto), e não a coluna inteira: com 66 pautas, recalcular tudo seria
- * 66 round-trips por card solto.
- *
- * Sem `revalidatePath` — ver a nota em `salvarBloco`.
- */
 export async function moverPautas(
-  updates: { id: string; coluna: ColunaPauta; ordem: number }[]
+  canal: CanalConteudo,
+  updates: MudancaPauta[]
 ): Promise<Resultado> {
   if (updates.length === 0) return { data: null, error: null };
-
-  for (const u of updates) {
-    if (!UUID_PATTERN.test(u.id))
+  for (const update of updates) {
+    if (!UUID_PATTERN.test(update.id))
       return { data: null, error: "Pauta inválida no lote." };
-    if (!ehColunaPauta(u.coluna))
-      return { data: null, error: `Coluna desconhecida: ${u.coluna}` };
-    if (!Number.isInteger(u.ordem))
+    if (!ehStatusDoCanal(canal, update.status))
+      return { data: null, error: `Status inválido para ${canal}.` };
+    if (!Number.isInteger(update.ordem) || update.ordem < 1)
       return { data: null, error: "Ordem inválida." };
   }
 
   const supabase = await createClient();
-  for (const u of updates) {
-    const { data, error } = await supabase
-      .from("conteudo_pautas")
-      .update({ coluna: u.coluna, ordem: u.ordem })
-      .eq("id", u.id)
-      .select("id");
-    if (error) return { data: null, error: error.message };
-    if (!data || data.length === 0) return { data: null, error: SEM_LINHA };
-  }
-
-  return { data: null, error: null };
+  const { error } = await supabase.rpc("mover_pautas_conteudo", {
+    p_canal: canal,
+    p_updates: updates,
+    p_origem: "admin",
+  });
+  return { data: null, error: error?.message ?? null };
 }
 
-// ============================================
-// Artigo vinculado
-// ============================================
+export async function alterarStatusPauta(
+  id: string,
+  canal: CanalConteudo,
+  status: StatusBlog | StatusLinkedin
+): Promise<Resultado<Pauta | null>> {
+  if (!UUID_PATTERN.test(id)) return { data: null, error: "Pauta inválida." };
+  if (!ehStatusDoCanal(canal, status))
+    return { data: null, error: "Status inválido para o canal." };
+  if (status === "publicado")
+    return { data: null, error: "Publicação exige a operação explícita do canal." };
 
-/**
- * Liga (ou desliga) a pauta de um artigo.
- *
- * O pré-check existe porque a UNIQUE parcial de `post_id` vai disparar de
- * verdade: quatro pautas Core do calendário são refresh declarado de artigo
- * existente. Disparar é o comportamento certo — significa "esses dois cards
- * são o mesmo assunto". O que não pode é vazar `duplicate key value violates
- * unique constraint` na tela.
- */
+  const supabase = await createClient();
+  const colunaStatus = canal === "blog" ? "status_blog" : "status_linkedin";
+  const colunaOrdem = canal === "blog" ? "ordem_blog" : "ordem_linkedin";
+  const { data: atual } = await supabase
+    .from("conteudo_pautas")
+    .select(`${colunaStatus},${colunaOrdem}`)
+    .eq("id", id)
+    .maybeSingle();
+  if (!atual) return { data: null, error: SEM_LINHA };
+
+  const statusAtual = atual[colunaStatus as keyof typeof atual] as string | null;
+  const ordemAtual = atual[colunaOrdem as keyof typeof atual] as number | null;
+  if (statusAtual !== status) {
+    const { data: ultima } = await supabase
+      .from("conteudo_pautas")
+      .select(colunaOrdem)
+      .eq(colunaStatus, status)
+      .order(colunaOrdem, { ascending: false })
+      .limit(1)
+      .maybeSingle();
+    const ultimaOrdem =
+      (ultima?.[colunaOrdem as keyof typeof ultima] as number | undefined) ?? 0;
+    const { error } = await supabase.rpc("mover_pautas_conteudo", {
+      p_canal: canal,
+      p_updates: [{ id, status, ordem: ultimaOrdem + 1 }],
+      p_origem: "admin-detalhe",
+    });
+    if (error) return { data: null, error: error.message };
+  } else if (!ordemAtual) {
+    return { data: null, error: "A trilha está sem ordem válida." };
+  }
+
+  const { data, error } = await supabase
+    .from("conteudo_pautas")
+    .select(SELECT_COM_ARTIGO)
+    .eq("id", id)
+    .single();
+  if (error) return { data: null, error: error.message };
+  revalidarPauta(id);
+  return { data: toPauta(data as unknown as PautaRow), error: null };
+}
+
+export async function marcarLinkedinPublicado(
+  id: string,
+  urlInformada: string,
+  dataInformada: string
+): Promise<Resultado<Pauta | null>> {
+  if (!UUID_PATTERN.test(id)) return { data: null, error: "Pauta inválida." };
+  let url: URL;
+  try {
+    url = new URL(urlInformada.trim());
+  } catch {
+    return { data: null, error: "Informe uma URL válida do LinkedIn." };
+  }
+  if (
+    url.protocol !== "https:" ||
+    !(url.hostname === "linkedin.com" || url.hostname.endsWith(".linkedin.com"))
+  ) return { data: null, error: "A URL precisa ser https://...linkedin.com/..." };
+
+  const instante = new Date(dataInformada);
+  if (!dataInformada || Number.isNaN(instante.getTime()))
+    return { data: null, error: "Informe a data de publicação." };
+
+  const supabase = await createClient();
+  const { data: anterior } = await supabase
+    .from("conteudo_pautas")
+    .select("titulo,status_linkedin")
+    .eq("id", id)
+    .maybeSingle();
+  if (!anterior) return { data: null, error: SEM_LINHA };
+  if (!["aprovado", "publicado"].includes(anterior.status_linkedin ?? ""))
+    return { data: null, error: "O LinkedIn precisa estar aprovado antes de publicar." };
+
+  const { data, error } = await supabase
+    .from("conteudo_pautas")
+    .update({
+      linkedin_url: url.toString(),
+      linkedin_publicado_em: instante.toISOString(),
+      status_linkedin: "publicado",
+    })
+    .eq("id", id)
+    .select(SELECT_COM_ARTIGO)
+    .single();
+  if (error) return { data: null, error: error.message };
+
+  const pauta = toPauta(data as unknown as PautaRow);
+  await registrarLog(supabase, "LinkedIn publicado", id, pauta.titulo, {
+    canal: "linkedin",
+    origem: "admin",
+    anterior: anterior.status_linkedin,
+    novo: "publicado",
+    url: pauta.linkedinUrl,
+  });
+  revalidarPauta(id);
+  return { data: pauta, error: null };
+}
+
 export async function vincularPost(
   pautaId: string,
   postId: string | null
 ): Promise<Resultado<Pauta | null>> {
-  if (!UUID_PATTERN.test(pautaId))
-    return { data: null, error: "Pauta inválida." };
+  if (!UUID_PATTERN.test(pautaId)) return { data: null, error: "Pauta inválida." };
   if (postId !== null && !UUID_PATTERN.test(postId))
     return { data: null, error: "Artigo inválido." };
 
   const supabase = await createClient();
-
   if (postId !== null) {
     const { data: jaTem } = await supabase
       .from("conteudo_pautas")
@@ -337,7 +418,6 @@ export async function vincularPost(
       .eq("post_id", postId)
       .neq("id", pautaId)
       .maybeSingle();
-
     if (jaTem) {
       return {
         data: null,
@@ -352,7 +432,6 @@ export async function vincularPost(
     .eq("id", pautaId)
     .select(SELECT_COM_ARTIGO)
     .single();
-
   if (error) return { data: null, error: error.message };
 
   const pauta = toPauta(data as unknown as PautaRow);
@@ -360,90 +439,96 @@ export async function vincularPost(
     supabase,
     postId ? "Artigo vinculado à pauta" : "Artigo desvinculado da pauta",
     pauta.id,
-    pauta.titulo
+    pauta.titulo,
+    { canal: "blog", origem: "admin", post_id: postId }
   );
-  revalidatePath("/admin/conteudo");
+  revalidarPauta(pautaId);
   return { data: pauta, error: null };
 }
-
-// ============================================
-// Capas
-// ============================================
 
 const TAMANHO_MAX_CAPA = 5 * 1024 * 1024;
 const COLUNA_DA_CAPA = {
   blog: "capa_blog_url",
   linkedin: "capa_linkedin_url",
 } as const;
-
 export type TipoCapa = keyof typeof COLUNA_DA_CAPA;
 
-/**
- * Sobe uma capa para o bucket `post-images`.
- *
- * Path próprio `conteudo/{pauta_id}/{tipo}.{ext}`: as duas convenções que já
- * existem no projeto não servem. `covers/{slug}` (upload-actions.ts) depende
- * de um slug de POST, que a pauta pode não ter; a de lib/services/storage.ts
- * está órfã. O `upsert` mantém uma capa por tipo, sem acumular lixo.
- */
 export async function definirCapa(
   formData: FormData
 ): Promise<Resultado<{ url: string } | null>> {
   const pautaId = String(formData.get("pautaId") ?? "");
   const tipo = String(formData.get("tipo") ?? "") as TipoCapa;
   const arquivo = formData.get("arquivo") as File | null;
-
-  if (!UUID_PATTERN.test(pautaId))
-    return { data: null, error: "Pauta inválida." };
-  if (!COLUNA_DA_CAPA[tipo])
-    return { data: null, error: "Tipo de capa desconhecido." };
-  if (!arquivo || arquivo.size === 0)
-    return { data: null, error: "Nenhum arquivo enviado." };
+  if (!UUID_PATTERN.test(pautaId)) return { data: null, error: "Pauta inválida." };
+  if (!COLUNA_DA_CAPA[tipo]) return { data: null, error: "Tipo de capa desconhecido." };
+  if (!arquivo?.size) return { data: null, error: "Nenhum arquivo enviado." };
   if (!arquivo.type.startsWith("image/"))
     return { data: null, error: "O arquivo precisa ser uma imagem." };
   if (arquivo.size > TAMANHO_MAX_CAPA)
     return { data: null, error: "A imagem passa de 5 MB." };
 
-  const ext = (arquivo.name.split(".").pop() ?? "jpg")
-    .toLowerCase()
-    .replace(/[^a-z0-9]/g, "");
-  const caminho = `conteudo/${pautaId}/${tipo}.${ext || "jpg"}`;
-
   const supabase = await createClient();
+  const { data: pauta } = await supabase
+    .from("conteudo_pautas")
+    .select("id,status_linkedin,linkedin_texto,capa_blog_url,capa_linkedin_url")
+    .eq("id", pautaId)
+    .maybeSingle();
+  if (!pauta) return { data: null, error: SEM_LINHA };
+
+  let pipeline = sharp(Buffer.from(await arquivo.arrayBuffer())).rotate();
+  const metadata = await pipeline.metadata();
+  if (!metadata.width || !metadata.height)
+    return { data: null, error: "Não foi possível ler as dimensões da imagem." };
+  if (tipo === "linkedin") {
+    const proporcao = metadata.width / metadata.height;
+    if (Math.abs(proporcao - 0.8) > 0.02)
+      return { data: null, error: "A capa do LinkedIn precisa estar em 4:5 (ex.: 1080×1350)." };
+    pipeline = pipeline.resize(1080, 1350, { fit: "cover" });
+  } else {
+    pipeline = pipeline.resize(1200, 800, { fit: "cover" });
+  }
+  const buffer = await pipeline
+    .flatten({ background: "#ffffff" })
+    .jpeg({ quality: 86, progressive: true })
+    .toBuffer();
+
+  const caminho = `conteudo/${pautaId}/${tipo}.jpg`;
   const { error: erroUpload } = await supabase.storage
     .from("post-images")
-    .upload(caminho, arquivo, { upsert: true, contentType: arquivo.type });
-
+    .upload(caminho, buffer, { upsert: true, contentType: "image/jpeg" });
   if (erroUpload) return { data: null, error: erroUpload.message };
 
-  const {
-    data: { publicUrl },
-  } = supabase.storage.from("post-images").getPublicUrl(caminho);
-
-  // Query string com o timestamp: o path é o mesmo a cada upsert, então sem
-  // isso o navegador serve a capa antiga do cache depois de trocar a imagem.
+  const { data: { publicUrl } } = supabase.storage.from("post-images").getPublicUrl(caminho);
   const url = `${publicUrl}?v=${Date.now()}`;
+  const update: Record<string, unknown> = { [COLUNA_DA_CAPA[tipo]]: url };
+  if (
+    tipo === "linkedin" &&
+    pauta.linkedin_texto &&
+    ["planejada", "producao"].includes(pauta.status_linkedin ?? "")
+  ) update.status_linkedin = "produzido";
 
   const { data: linhas, error } = await supabase
     .from("conteudo_pautas")
-    .update({ [COLUNA_DA_CAPA[tipo]]: url })
+    .update(update)
     .eq("id", pautaId)
     .select("id");
-
-  if (error) return { data: null, error: error.message };
-  if (!linhas || linhas.length === 0) return { data: null, error: SEM_LINHA };
-  revalidatePath("/admin/conteudo");
+  if (error || !linhas?.length) {
+    const colunaAnterior = tipo === "blog" ? pauta.capa_blog_url : pauta.capa_linkedin_url;
+    if (!colunaAnterior) {
+      await supabase.storage.from("post-images").remove([caminho]);
+    }
+    return { data: null, error: error?.message ?? SEM_LINHA };
+  }
+  revalidarPauta(pautaId);
   return { data: { url }, error: null };
 }
 
 export async function removerCapa(
   pautaId: string,
   tipo: TipoCapa
-): Promise<Resultado> {
-  if (!UUID_PATTERN.test(pautaId))
-    return { data: null, error: "Pauta inválida." };
-  if (!COLUNA_DA_CAPA[tipo])
-    return { data: null, error: "Tipo de capa desconhecido." };
+): Promise<Resultado<{ warning: string | null } | null>> {
+  if (!UUID_PATTERN.test(pautaId)) return { data: null, error: "Pauta inválida." };
+  if (!COLUNA_DA_CAPA[tipo]) return { data: null, error: "Tipo de capa desconhecido." };
 
   const supabase = await createClient();
   const { data: linhas, error } = await supabase
@@ -451,9 +536,15 @@ export async function removerCapa(
     .update({ [COLUNA_DA_CAPA[tipo]]: null })
     .eq("id", pautaId)
     .select("id");
-
   if (error) return { data: null, error: error.message };
-  if (!linhas || linhas.length === 0) return { data: null, error: SEM_LINHA };
-  revalidatePath("/admin/conteudo");
-  return { data: null, error: null };
+  if (!linhas?.length) return { data: null, error: SEM_LINHA };
+
+  const { error: erroStorage } = await supabase.storage
+    .from("post-images")
+    .remove([`conteudo/${pautaId}/${tipo}.jpg`]);
+  revalidarPauta(pautaId);
+  return {
+    data: { warning: erroStorage ? "A referência foi removida, mas o objeto no Storage precisa de limpeza manual." : null },
+    error: null,
+  };
 }

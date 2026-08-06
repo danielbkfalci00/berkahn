@@ -7,17 +7,22 @@
 // A ordem e os rótulos vivem em types/conteudo.ts (COLUNAS, COLUNA_LABEL);
 // aqui fica só o que é visual.
 
-import type { ColunaPauta } from "@/types/conteudo";
+import type { StatusQuadro } from "@/types/conteudo";
 
 /**
  * Ponto colorido ao lado do nome da coluna, no espírito do Notion de onde o
  * quadro veio. Tons dessaturados para conviver com o resto do admin, que é
  * preto/off-white — a cor marca progresso, não decora.
  */
-export const COLUNA_PONTO: Record<ColunaPauta, string> = {
-  decisao: "bg-neutral-400",
+export const COLUNA_PONTO: Record<StatusQuadro, string> = {
+  planejada: "bg-neutral-400",
+  "em-producao": "bg-violet-400",
+  "aguardando-aprovacao": "bg-sky-400",
+  "pronta-publicar": "bg-amber-400",
+  concluida: "bg-emerald-500",
   pesquisa: "bg-violet-400",
-  envelopar: "bg-rose-400",
+  draft: "bg-rose-400",
+  producao: "bg-violet-400",
   produzido: "bg-sky-400",
   aprovado: "bg-amber-400",
   publicado: "bg-emerald-500",

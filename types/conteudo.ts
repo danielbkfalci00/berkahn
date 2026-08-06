@@ -1,34 +1,36 @@
-// Tipos do quadro de conteúdo (/admin/conteudo)
-// Tabela: conteudo_pautas (supabase/migrations/010_conteudo_pautas.sql)
-//
-// A unidade é a PAUTA (assunto), não o artigo. Um card agrega insights,
-// pesquisa, artigo, post de LinkedIn e as duas capas.
-//
-// Este arquivo é NEUTRO: sem "use client", sem "server-only". É importado dos
-// dois lados da fronteira — pela query no servidor e pelos componentes no
-// cliente. Não coloque nada aqui que dependa de um dos ambientes.
+// Contrato neutro do quadro de conteúdo: compartilhado por Server Components,
+// actions e UI. A unidade é a pauta; Blog e LinkedIn têm trilhas independentes.
 
 import type { PostStatus } from "./admin";
 
-export type ColunaPauta =
-  | "decisao"
+export type StatusBlog =
+  | "planejada"
   | "pesquisa"
-  | "envelopar"
+  | "draft"
   | "produzido"
   | "aprovado"
   | "publicado";
+export type StatusLinkedin =
+  | "planejada"
+  | "producao"
+  | "produzido"
+  | "aprovado"
+  | "publicado";
+export type EstadoGeral =
+  | "planejada"
+  | "em-producao"
+  | "aguardando-aprovacao"
+  | "pronta-publicar"
+  | "concluida";
+export type VisaoQuadro = "geral" | "blog" | "linkedin";
+export type CanalConteudo = Exclude<VisaoQuadro, "geral">;
+export type StatusQuadro = StatusBlog | StatusLinkedin | EstadoGeral;
 
 export type TipoPauta = "pauta" | "linkedin-acervo";
 export type Trilha = "core" | "expansao";
-export type Intencao =
-  | "transacional"
-  | "informacional"
-  | "comparativa"
-  | "objecao";
+export type Intencao = "transacional" | "informacional" | "comparativa" | "objecao";
 export type Funil = "topo" | "meio" | "fundo" | "pos-venda";
 export type Plataforma = "blog" | "linkedin";
-
-/** Campos de texto longo com autosave. Cada um mapeia para uma coluna. */
 export type BlocoTextoPauta =
   | "insights"
   | "pesquisa"
@@ -36,32 +38,28 @@ export type BlocoTextoPauta =
   | "imagem-prompt"
   | "imagem-briefing";
 
-/**
- * Ordem das colunas no quadro. Fonte única — a UI itera isto, e a query ordena
- * por ela. Mudar a ordem aqui reordena o quadro; mudar os valores exige
- * migration (são CHECK no banco).
- */
-export const COLUNAS: readonly ColunaPauta[] = [
-  "decisao",
-  "pesquisa",
-  "envelopar",
-  "produzido",
-  "aprovado",
-  "publicado",
+export const STATUS_BLOG: readonly StatusBlog[] = [
+  "planejada", "pesquisa", "draft", "produzido", "aprovado", "publicado",
+] as const;
+export const STATUS_LINKEDIN: readonly StatusLinkedin[] = [
+  "planejada", "producao", "produzido", "aprovado", "publicado",
+] as const;
+export const ESTADOS_GERAIS: readonly EstadoGeral[] = [
+  "planejada", "em-producao", "aguardando-aprovacao", "pronta-publicar", "concluida",
 ] as const;
 
-/**
- * Rótulos exibidos. Ficam aqui e não no banco porque 'Decisão LK/Blog' tem
- * acento e barra: como valor de coluna viraria query string quebrada e
- * comparação sensível a NFC/NFD.
- */
-export const COLUNA_LABEL: Record<ColunaPauta, string> = {
-  decisao: "Decisão LK/Blog",
+export const STATUS_LABEL: Record<StatusQuadro, string> = {
+  planejada: "Planejada",
   pesquisa: "Pesquisa",
-  envelopar: "Envelopar",
+  draft: "Draft",
+  producao: "Produção",
   produzido: "Produzido",
   aprovado: "Aprovado",
   publicado: "Publicado",
+  "em-producao": "Em produção",
+  "aguardando-aprovacao": "Aguardando aprovação",
+  "pronta-publicar": "Pronta para publicar",
+  concluida: "Concluída",
 };
 
 export const INTENCAO_LABEL: Record<Intencao, string> = {
@@ -70,40 +68,15 @@ export const INTENCAO_LABEL: Record<Intencao, string> = {
   comparativa: "Comparativa",
   objecao: "Objeção",
 };
-
 export const FUNIL_LABEL: Record<Funil, string> = {
-  topo: "Topo",
-  meio: "Meio",
-  fundo: "Fundo",
-  "pos-venda": "Pós-venda",
+  topo: "Topo", meio: "Meio", fundo: "Fundo", "pos-venda": "Pós-venda",
 };
-
-export const TRILHA_LABEL: Record<Trilha, string> = {
-  core: "Core",
-  expansao: "Expansão",
-};
-
+export const TRILHA_LABEL: Record<Trilha, string> = { core: "Core", expansao: "Expansão" };
 export const PLATAFORMA_LABEL: Record<Plataforma, string> = {
-  blog: "Blog",
-  linkedin: "Linkedin",
+  blog: "Blog", linkedin: "LinkedIn",
 };
+export const LIMITES = { tituloMax: 300, keywordMax: 200, blocoMax: 60000 } as const;
 
-/**
- * Limites de tamanho, reaplicados nas server actions.
- *
- * `tituloMax` espelha o CHECK da migration 010. Os demais são **só de
- * aplicação**: os blocos de texto não têm CHECK no banco, porque são
- * long-form e um teto no schema exigiria migration a cada vez que a pesquisa
- * crescer. O cap existe para barrar um Ctrl+A acidental, não para modelar o
- * domínio.
- */
-export const LIMITES = {
-  tituloMax: 300,
-  keywordMax: 200,
-  blocoMax: 60000,
-} as const;
-
-/** Artigo vinculado. Só leitura — o quadro nunca escreve em `posts`. */
 export interface ArtigoVinculado {
   id: string;
   slug: string;
@@ -111,68 +84,102 @@ export interface ArtigoVinculado {
   status: PostStatus;
   publicadoEm: string | null;
 }
-
 export interface Pauta {
   id: string;
   titulo: string;
   tipo: TipoPauta;
-  coluna: ColunaPauta;
-  ordem: number;
-
-  // Planejamento editorial (vem do calendário; null em card criado à mão)
+  statusBlog: StatusBlog | null;
+  statusLinkedin: StatusLinkedin | null; // gitleaks:allow — nome de campo, não client id
+  ordemBlog: number | null;
+  ordemLinkedin: number | null;
+  draftPath: string | null;
+  linkedinUrl: string | null;
+  linkedinPublicadoEm: string | null;
   keyword: string | null;
   intencao: Intencao | null;
   funil: Funil | null;
   prioridade: number | null;
   trilha: Trilha | null;
   semana: number | null;
-  /** Data de calendário, formato YYYY-MM-DD. Nunca carrega hora nem fuso. */
   dataAlvo: string | null;
-
-  // Os 6 blocos
   insights: string | null;
   pesquisaConteudo: string | null;
-  /** "Artigo Finalizado". Null quando a pauta ainda não tem artigo. */
   artigo: ArtigoVinculado | null;
   capaBlogUrl: string | null;
   capaLinkedinUrl: string | null;
   linkedinTexto: string | null;
-
-  /** Ângulo + dado-âncora do calendário. Insumo do texto, não o texto. */
   linkedinBriefing: string | null;
-  /** Prompt em inglês para gerar a imagem por IA. Copiado limpo. */
   linkedinImagemPrompt: string | null;
-  /** Direção visual em português. Insumo do prompt, não o prompt. */
   linkedinImagemBriefing: string | null;
   plataformas: Plataforma[];
-
   criadoPor: string | null;
   criadoEm: string;
   atualizadoEm: string;
 }
 
-/**
- * True quando a coluna do quadro discorda do estado real do artigo — card em
- * "Publicado" com artigo em rascunho, ou o contrário. O quadro nunca escreve
- * em `posts.status`, então essa divergência é possível de propósito; a UI a
- * exibe em vez de esconder.
- *
- * Cards `linkedin-acervo` nunca divergem: eles nascem de um artigo que JÁ está
- * no ar, e a coluna descreve o andamento do post de LinkedIn, não o do artigo.
- * Sem esta exceção o aviso apareceria nos 22 de uma vez, e um alerta que
- * dispara em um terço do quadro só ensina a ignorá-lo.
- */
-export function divergeDoArtigo(pauta: Pauta): boolean {
-  if (!pauta.artigo) return false;
-  if (pauta.tipo === "linkedin-acervo") return false;
+const RANK_BLOG: Record<StatusBlog, number> = {
+  planejada: 0, pesquisa: 1, draft: 2, produzido: 3, aprovado: 4, publicado: 5,
+};
+const RANK_LINKEDIN: Record<StatusLinkedin, number> = {
+  planejada: 0, producao: 1, produzido: 2, aprovado: 3, publicado: 4,
+};
 
-  const publicadoNoSite = pauta.artigo.status === "published";
-  return pauta.coluna === "publicado" ? !publicadoNoSite : publicadoNoSite;
+/** Estado geral derivado: nunca há uma terceira coluna persistida. */
+export function estadoGeral(pauta: Pauta): EstadoGeral {
+  const trilhas = [
+    pauta.statusBlog && {
+      rank: RANK_BLOG[pauta.statusBlog], produzido: 3, aprovado: 4, publicado: 5,
+    },
+    pauta.statusLinkedin && {
+      rank: RANK_LINKEDIN[pauta.statusLinkedin], produzido: 2, aprovado: 3, publicado: 4,
+    },
+  ].filter(Boolean) as { rank: number; produzido: number; aprovado: number; publicado: number }[];
+
+  if (trilhas.length === 0 || trilhas.every((t) => t.rank === 0)) return "planejada";
+  if (trilhas.every((t) => t.rank >= t.publicado)) return "concluida";
+  if (trilhas.every((t) => t.rank >= t.aprovado)) return "pronta-publicar";
+  if (trilhas.every((t) => t.rank >= t.produzido)) return "aguardando-aprovacao";
+  return "em-producao";
 }
 
-// ============================================
-// Shapes crus do PostgREST (snake_case)
-// ============================================
+export function statusNaVisao(pauta: Pauta, visao: VisaoQuadro): StatusQuadro | null {
+  if (visao === "blog") return pauta.statusBlog;
+  if (visao === "linkedin") return pauta.statusLinkedin;
+  return estadoGeral(pauta);
+}
+
+export function ordemNaVisao(pauta: Pauta, visao: CanalConteudo): number | null {
+  return visao === "blog" ? pauta.ordemBlog : pauta.ordemLinkedin;
+}
+
+export function proximaAcao(pauta: Pauta): string {
+  if (pauta.statusBlog && pauta.statusBlog !== "publicado") {
+    const blog: Record<Exclude<StatusBlog, "publicado">, string> = {
+      planejada: "Pesquisar para o Blog",
+      pesquisa: "Criar draft do Blog",
+      draft: "Produzir artigo",
+      produzido: "Aprovar artigo",
+      aprovado: "Publicar artigo",
+    };
+    return blog[pauta.statusBlog];
+  }
+  if (pauta.statusLinkedin && pauta.statusLinkedin !== "publicado") {
+    const linkedin: Record<Exclude<StatusLinkedin, "publicado">, string> = {
+      planejada: "Produzir LinkedIn",
+      producao: "Finalizar texto e capa",
+      produzido: "Aprovar LinkedIn",
+      aprovado: "Publicar e informar URL",
+    };
+    return linkedin[pauta.statusLinkedin];
+  }
+  return "Concluída";
+}
+
+export function divergeDoArtigo(pauta: Pauta): boolean {
+  if (!pauta.artigo || pauta.tipo === "linkedin-acervo" || !pauta.statusBlog) return false;
+  const publicadoNoSite = pauta.artigo.status === "published";
+  return pauta.statusBlog === "publicado" ? !publicadoNoSite : publicadoNoSite;
+}
 
 export interface PostVinculadoRow {
   id: string;
@@ -181,13 +188,17 @@ export interface PostVinculadoRow {
   status: string;
   published_at: string | null;
 }
-
 export interface PautaRow {
   id: string;
   titulo: string;
   tipo: string;
-  coluna: string;
-  ordem: number;
+  status_blog: string | null;
+  status_linkedin: string | null;
+  ordem_blog: number | null;
+  ordem_linkedin: number | null;
+  draft_path: string | null;
+  linkedin_url: string | null;
+  linkedin_publicado_em: string | null;
   keyword: string | null;
   intencao: string | null;
   funil: string | null;
@@ -208,71 +219,54 @@ export interface PautaRow {
   criado_por: string | null;
   criado_em: string;
   atualizado_em: string;
-  /**
-   * Embed do PostgREST. Para FK to-one ele devolve objeto, mas a tipagem
-   * gerada às vezes diz array — aceitar as duas formas e normalizar em
-   * `toPauta` sai mais barato que brigar com o gerador.
-   */
   posts?: PostVinculadoRow | PostVinculadoRow[] | null;
 }
 
-// ============================================
-// Guards e mapper
-// ============================================
-
-export function ehColunaPauta(valor: string): valor is ColunaPauta {
-  return (COLUNAS as readonly string[]).includes(valor);
+export function ehStatusBlog(valor: string): valor is StatusBlog {
+  return (STATUS_BLOG as readonly string[]).includes(valor);
 }
-
+export function ehStatusLinkedin(valor: string): valor is StatusLinkedin {
+  return (STATUS_LINKEDIN as readonly string[]).includes(valor);
+}
+export function ehStatusDoCanal(
+  canal: CanalConteudo,
+  valor: string
+): valor is StatusBlog | StatusLinkedin {
+  return canal === "blog" ? ehStatusBlog(valor) : ehStatusLinkedin(valor);
+}
 export function ehPlataforma(valor: string): valor is Plataforma {
   return valor === "blog" || valor === "linkedin";
 }
-
 function ehTipoPauta(valor: string): valor is TipoPauta {
   return valor === "pauta" || valor === "linkedin-acervo";
 }
-
-function ehIntencao(valor: string): valor is Intencao {
-  return valor in INTENCAO_LABEL;
-}
-
-function ehFunil(valor: string): valor is Funil {
-  return valor in FUNIL_LABEL;
-}
-
-function ehTrilha(valor: string): valor is Trilha {
-  return valor === "core" || valor === "expansao";
-}
-
+function ehIntencao(valor: string): valor is Intencao { return valor in INTENCAO_LABEL; }
+function ehFunil(valor: string): valor is Funil { return valor in FUNIL_LABEL; }
+function ehTrilha(valor: string): valor is Trilha { return valor === "core" || valor === "expansao"; }
 function ehPostStatus(valor: string): valor is PostStatus {
-  return (
-    valor === "draft" ||
-    valor === "scheduled" ||
-    valor === "published" ||
-    valor === "archived"
-  );
+  return ["draft", "scheduled", "published", "archived"].includes(valor);
 }
-
-/** Normaliza o embed, que pode vir objeto, array de um, ou null. */
-function primeiroArtigo(
-  embed: PautaRow["posts"]
-): PostVinculadoRow | null {
+function primeiroArtigo(embed: PautaRow["posts"]): PostVinculadoRow | null {
   if (!embed) return null;
   return Array.isArray(embed) ? embed[0] ?? null : embed;
 }
 
 export function toPauta(row: PautaRow): Pauta {
   const post = primeiroArtigo(row.posts);
-
   return {
     id: row.id,
     titulo: row.titulo,
-    // Enums caem no default em vez de estourar: uma linha com valor
-    // inesperado some da tela se lançarmos, e o quadro inteiro vai junto.
-    tipo: row.tipo && ehTipoPauta(row.tipo) ? row.tipo : "pauta",
-    coluna: row.coluna && ehColunaPauta(row.coluna) ? row.coluna : "decisao",
-    ordem: row.ordem ?? 0,
-
+    tipo: ehTipoPauta(row.tipo) ? row.tipo : "pauta",
+    statusBlog: row.status_blog && ehStatusBlog(row.status_blog) ? row.status_blog : null,
+    statusLinkedin:
+      row.status_linkedin && ehStatusLinkedin(row.status_linkedin)
+        ? row.status_linkedin
+        : null,
+    ordemBlog: row.ordem_blog,
+    ordemLinkedin: row.ordem_linkedin,
+    draftPath: row.draft_path,
+    linkedinUrl: row.linkedin_url,
+    linkedinPublicadoEm: row.linkedin_publicado_em,
     keyword: row.keyword,
     intencao: row.intencao && ehIntencao(row.intencao) ? row.intencao : null,
     funil: row.funil && ehFunil(row.funil) ? row.funil : null,
@@ -280,7 +274,6 @@ export function toPauta(row: PautaRow): Pauta {
     trilha: row.trilha && ehTrilha(row.trilha) ? row.trilha : null,
     semana: row.semana,
     dataAlvo: row.data_alvo,
-
     insights: row.insights,
     pesquisaConteudo: row.pesquisa_conteudo,
     artigo: post
@@ -295,12 +288,10 @@ export function toPauta(row: PautaRow): Pauta {
     capaBlogUrl: row.capa_blog_url,
     capaLinkedinUrl: row.capa_linkedin_url,
     linkedinTexto: row.linkedin_texto,
-
     linkedinBriefing: row.linkedin_briefing,
-    linkedinImagemPrompt: row.linkedin_imagem_prompt ?? null,
-    linkedinImagemBriefing: row.linkedin_imagem_briefing ?? null,
+    linkedinImagemPrompt: row.linkedin_imagem_prompt,
+    linkedinImagemBriefing: row.linkedin_imagem_briefing,
     plataformas: (row.plataformas ?? []).filter(ehPlataforma),
-
     criadoPor: row.criado_por,
     criadoEm: row.criado_em,
     atualizadoEm: row.atualizado_em,

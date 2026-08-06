@@ -30,6 +30,14 @@ Checklist obrigatório antes de entregar:
 **Arquivar draft no vault:**
 Salvar o artigo final em `Berkahn-Vault/40-content/blog/drafts/[slug].md` com frontmatter completo (tipo: draft-content, status: draft, slug, seo_title, seo_description, palavras_chave, ai_summary, tags: project/blog, status/draft). Usar template `Berkahn-Vault/91-templates/template-draft-blog.md` como base.
 
-Após `/criacao`, próximo passo é `/artigo Berkahn-Vault/40-content/blog/drafts/[slug].md` para implementar e publicar.
+Registre o caminho na mesma pauta e avance Blog para `draft`:
+
+```bash
+node scripts/conteudo/pauta.mjs registrar-draft <id> --arquivo=Berkahn-Vault/40-content/blog/drafts/[slug].md --dry-run
+node scripts/conteudo/pauta.mjs registrar-draft <id> --arquivo=Berkahn-Vault/40-content/blog/drafts/[slug].md
+```
+
+Após `/criacao`, o próximo passo é
+`/artigo produzir <id> Berkahn-Vault/40-content/blog/drafts/[slug].md`.
 
 $ARGUMENTS

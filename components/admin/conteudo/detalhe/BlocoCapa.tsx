@@ -23,6 +23,7 @@ export function BlocoCapa({ pautaId, tipo, titulo, proporcao, dica, urlInicial }
   const [url, setUrl] = useState(urlInicial);
   const [fase, setFase] = useState<Fase>("ocioso");
   const [erro, setErro] = useState<string | null>(null);
+  const [aviso, setAviso] = useState<string | null>(null);
   const [arrastando, setArrastando] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -35,6 +36,7 @@ export function BlocoCapa({ pautaId, tipo, titulo, proporcao, dica, urlInicial }
 
     setFase("enviando");
     setErro(null);
+    setAviso(null);
     try {
       const comprimida = await comprimirImagem(file);
       const fd = new FormData();
@@ -72,6 +74,7 @@ export function BlocoCapa({ pautaId, tipo, titulo, proporcao, dica, urlInicial }
       return;
     }
     setUrl(null);
+    setAviso(res.data?.warning ?? null);
     setFase("ocioso");
   }
 
@@ -84,6 +87,16 @@ export function BlocoCapa({ pautaId, tipo, titulo, proporcao, dica, urlInicial }
       abertoInicial={Boolean(urlInicial)}
       resumo={url ? "capa definida" : undefined}
     >
+      <input
+        ref={inputRef}
+        type="file"
+        accept="image/*"
+        className="hidden"
+        onChange={(e) => {
+          const f = e.target.files?.[0];
+          if (f) void enviar(f);
+        }}
+      />
       {url ? (
         <div className="space-y-2">
           {/* <img> cru: é preview de admin que troca a cada upload, e o
@@ -97,33 +110,27 @@ export function BlocoCapa({ pautaId, tipo, titulo, proporcao, dica, urlInicial }
           />
           <div className="flex items-center justify-between gap-2">
             <p className="text-xs text-neutral-500">{dica}</p>
-            <button
-              type="button"
-              onClick={remover}
-              disabled={enviando}
-              className="inline-flex items-center gap-1.5 rounded px-2 py-1 text-xs text-red-600 transition-colors hover:bg-red-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-600 disabled:opacity-50"
-            >
-              {enviando ? (
-                <Loader2 className="h-3.5 w-3.5 animate-spin" strokeWidth={2} aria-hidden />
-              ) : (
-                <Trash2 className="h-3.5 w-3.5" strokeWidth={2} aria-hidden />
-              )}
-              Remover
-            </button>
+            <div className="flex items-center gap-1">
+              <button type="button" onClick={() => inputRef.current?.click()}
+                disabled={enviando}
+                className="inline-flex items-center gap-1.5 rounded px-2 py-1 text-xs text-neutral-600 transition-colors hover:bg-neutral-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 disabled:opacity-50">
+                <Upload className="h-3.5 w-3.5" strokeWidth={2} aria-hidden />
+                Trocar
+              </button>
+              <button type="button" onClick={remover} disabled={enviando}
+                className="inline-flex items-center gap-1.5 rounded px-2 py-1 text-xs text-red-600 transition-colors hover:bg-red-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-600 disabled:opacity-50">
+                {enviando ? (
+                  <Loader2 className="h-3.5 w-3.5 animate-spin" strokeWidth={2} aria-hidden />
+                ) : (
+                  <Trash2 className="h-3.5 w-3.5" strokeWidth={2} aria-hidden />
+                )}
+                Remover
+              </button>
+            </div>
           </div>
         </div>
       ) : (
         <>
-          <input
-            ref={inputRef}
-            type="file"
-            accept="image/*"
-            className="hidden"
-            onChange={(e) => {
-              const f = e.target.files?.[0];
-              if (f) void enviar(f);
-            }}
-          />
           <button
             type="button"
             disabled={enviando}
@@ -168,6 +175,7 @@ export function BlocoCapa({ pautaId, tipo, titulo, proporcao, dica, urlInicial }
       {/* Em erro a imagem que já estava lá não é removida da tela: continua
           válida, e só a tentativa nova falhou. */}
       {erro && <p className="mt-2 text-xs text-red-600">{erro}</p>}
+      {aviso && <p className="mt-2 text-xs text-amber-700">{aviso}</p>}
     </BlocoColapsavel>
   );
 }

@@ -18,7 +18,7 @@ status: active
 Conhecimento de domínio (especialmente LSF/Steel Frame) hoje vive disperso em:
 - `20-context/steel-frame-domain.md` — contexto genérico (90 linhas, raso)
 - 33 artigos publicados em `40-content/blog/publicados/` — conteúdo profundo, mas isolado e não reutilizável
-- Pesquisas brutas em `40-content/blog/pesquisa/` — consumidas por `/criacao` e descartadas
+- Pesquisas editoriais no bloco da pauta — consumidas por `/criacao`
 
 Atomic notes resolvem este gap: destilação de conceitos centrais em notas com:
 - `ai_summary` (1 linha) + síntese de 200-400 palavras

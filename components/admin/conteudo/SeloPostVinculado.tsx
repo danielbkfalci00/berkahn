@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { AlertCircle, ExternalLink } from "lucide-react";
 import { ARTIGO_BADGE } from "@/lib/conteudo/colunas";
-import { COLUNA_LABEL, divergeDoArtigo, type Pauta } from "@/types/conteudo";
+import { STATUS_LABEL, divergeDoArtigo, type Pauta } from "@/types/conteudo";
 import { cn } from "@/lib/utils";
 
 interface Props {
@@ -37,7 +37,7 @@ export function SeloPostVinculado({ pauta }: Props) {
       {diverge && (
         <span
           className="inline-flex items-center gap-1 text-[11px] font-medium text-amber-700"
-          title={`O card está em "${COLUNA_LABEL[pauta.coluna]}", mas o artigo está como "${badge.label}" no site.`}
+          title={`A trilha Blog está em "${pauta.statusBlog ? STATUS_LABEL[pauta.statusBlog] : "não se aplica"}", mas o artigo está como "${badge.label}" no site.`}
         >
           <AlertCircle className="h-3 w-3" strokeWidth={2} aria-hidden />
           discorda

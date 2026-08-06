@@ -1,7 +1,7 @@
 ---
 tipo: memory
 criado: 2026-04-13
-atualizado: 2026-05-21
+atualizado: 2026-08-06
 tags:
   - ai/memory
   - status/active
@@ -19,11 +19,13 @@ Bruno é o único profissional de marketing da Berkahn. Ele gerencia todas as fr
 - **LinkedIn** — posts semanais de divulgação (company page)
 - **Apresentações** — comerciais, executivas, institucionais
 - **Materiais** — treinamentos, mockups, equipamentos (Canva)
-- **Notion** — hub de gerenciamento e organização
+- **Quadro admin** — hub operacional das pautas de Blog e LinkedIn
 
 ## Como trabalha
 
-Trabalha em português brasileiro. Cria materiais visuais no Canva. Posts do LinkedIn são manuais (prompt gera texto + briefing de imagem → cria no Canva → copia para card no Notion → publica no LinkedIn).
+Trabalha em português brasileiro. Cria materiais visuais no Canva. Posts do
+LinkedIn são manuais: o card reúne texto, prompt, briefing e capa; após publicar,
+Bruno registra URL e data.
 
 ## Perfil técnico
 

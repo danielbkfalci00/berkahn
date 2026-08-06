@@ -1,11 +1,11 @@
 ---
 tipo: projeto
 criado: 2026-05-22
-atualizado: 2026-07-29
+atualizado: 2026-08-06
 tags:
   - project/linkedin
   - status/active
-ai_summary: Hub do projeto LinkedIn — posts semanais de divulgação que referenciam artigos do blog. 3 arquivados (formato YYYY-MM-DD-tema/) contra 38 artigos, meta +1/semana. Bruno copia manualmente para Notion. Briefing imagem → Canva.
+ai_summary: Hub do LinkedIn. 66 pautas têm trilha própria no quadro; texto, prompt e briefing vivem no card, capa exige 1080×1350 (4:5), aprovação é manual e URL+data fecham publicação. Quatro pastas antigas permanecem legado congelado.
 status: active
 projeto: linkedin
 kpi_publicados: 3
@@ -33,7 +33,13 @@ subagents_uteis: []
 
 ## Status atual
 
-Pipeline definido mas sub-utilizado: 3 posts arquivados (2026-04-13 Medstar/Gestão de Obra · 2026-06-16 Painelizado vs Stick · 2026-07-14 Energia Solar). Bruno publica manualmente no LinkedIn e copia conteúdo para Notion. Briefing de imagem vai para Canva manual.
+Pipeline centralizado no [[quadro-conteudo]]: 66 trilhas LinkedIn, sendo 44 das
+pautas editoriais e 22 do acervo. O texto e os insumos visuais não são mais
+copiados para Notion nem para novas pastas do vault. Bruno continua publicando
+manualmente no LinkedIn; o card só vira `publicado` após URL e data.
+
+As quatro pastas em `40-content/linkedin/` são legado imutável. A pasta de ICMS
+foi reconciliada no banco sem apagar os arquivos.
 
 Contagem verificada em 2026-07-29 contra `main` — o `kpi_publicados: 1` anterior estava parado desde maio.
 

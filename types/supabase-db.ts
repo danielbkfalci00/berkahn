@@ -23,7 +23,7 @@ export type Database = {
           entity_name: string
           entity_type: string
           id: string
-          user_id: string
+          user_id: string | null
           user_name: string
         }
         Insert: {
@@ -34,7 +34,7 @@ export type Database = {
           entity_name: string
           entity_type: string
           id?: string
-          user_id: string
+          user_id?: string | null
           user_name: string
         }
         Update: {
@@ -45,7 +45,7 @@ export type Database = {
           entity_name?: string
           entity_type?: string
           id?: string
-          user_id?: string
+          user_id?: string | null
           user_name?: string
         }
         Relationships: []
@@ -131,6 +131,120 @@ export type Database = {
         }
         Relationships: []
       }
+      conteudo_pautas: {
+        Row: {
+          atualizado_em: string
+          capa_blog_url: string | null
+          capa_linkedin_url: string | null
+          coluna: string
+          criado_em: string
+          criado_por: string | null
+          data_alvo: string | null
+          draft_path: string | null
+          funil: string | null
+          id: string
+          insights: string | null
+          intencao: string | null
+          keyword: string | null
+          linkedin_briefing: string | null
+          linkedin_imagem_briefing: string | null
+          linkedin_imagem_prompt: string | null
+          linkedin_publicado_em: string | null
+          linkedin_texto: string | null
+          linkedin_url: string | null
+          ordem: number
+          ordem_blog: number | null
+          ordem_linkedin: number | null
+          plataformas: string[]
+          post_id: string | null
+          prioridade: number | null
+          pesquisa_conteudo: string | null
+          semana: number | null
+          status_blog: string | null
+          status_linkedin: string | null
+          tipo: string
+          titulo: string
+          trilha: string | null
+        }
+        Insert: {
+          atualizado_em?: string
+          capa_blog_url?: string | null
+          capa_linkedin_url?: string | null
+          coluna?: string
+          criado_em?: string
+          criado_por?: string | null
+          data_alvo?: string | null
+          draft_path?: string | null
+          funil?: string | null
+          id?: string
+          insights?: string | null
+          intencao?: string | null
+          keyword?: string | null
+          linkedin_briefing?: string | null
+          linkedin_imagem_briefing?: string | null
+          linkedin_imagem_prompt?: string | null
+          linkedin_publicado_em?: string | null
+          linkedin_texto?: string | null
+          linkedin_url?: string | null
+          ordem?: number
+          ordem_blog?: number | null
+          ordem_linkedin?: number | null
+          plataformas?: string[]
+          post_id?: string | null
+          prioridade?: number | null
+          pesquisa_conteudo?: string | null
+          semana?: number | null
+          status_blog?: string | null
+          status_linkedin?: string | null
+          tipo?: string
+          titulo: string
+          trilha?: string | null
+        }
+        Update: {
+          atualizado_em?: string
+          capa_blog_url?: string | null
+          capa_linkedin_url?: string | null
+          coluna?: string
+          criado_em?: string
+          criado_por?: string | null
+          data_alvo?: string | null
+          draft_path?: string | null
+          funil?: string | null
+          id?: string
+          insights?: string | null
+          intencao?: string | null
+          keyword?: string | null
+          linkedin_briefing?: string | null
+          linkedin_imagem_briefing?: string | null
+          linkedin_imagem_prompt?: string | null
+          linkedin_publicado_em?: string | null
+          linkedin_texto?: string | null
+          linkedin_url?: string | null
+          ordem?: number
+          ordem_blog?: number | null
+          ordem_linkedin?: number | null
+          plataformas?: string[]
+          post_id?: string | null
+          prioridade?: number | null
+          pesquisa_conteudo?: string | null
+          semana?: number | null
+          status_blog?: string | null
+          status_linkedin?: string | null
+          tipo?: string
+          titulo?: string
+          trilha?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "conteudo_pautas_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+
       orcamentos: {
         Row: {
           atualizado_em: string
@@ -450,6 +564,14 @@ export type Database = {
     Functions: {
       gerar_numero_orcamento: { Args: never; Returns: string }
       get_dashboard_stats: { Args: never; Returns: Json }
+      mover_pautas_conteudo: {
+        Args: { p_canal: string; p_updates: Json; p_origem?: string }
+        Returns: undefined
+      }
+      publicar_artigo_pauta: {
+        Args: { p_pauta_id: string; p_publicado_path: string }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never

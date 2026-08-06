@@ -6,7 +6,7 @@ tags:
   - project/site
   - project/blog
   - status/active
-ai_summary: "Sprint ativa de marketing/dev Berkahn (semana 2026-07-20 a 2026-07-24). Institucional PDF v4 na branch design/institucional-monografia, pendente merge. Analytics: PR #18 merged em 29/07 (mês parcial + 3 bugs de métrica). P0 de indexação ENCERRADO (89%). Fase atual: fechar institucional + publicar OAuth consent screen (trava o cron de 01/09) + instrumentar conversão. Atualizado segunda via /standup. Source of truth do estado semanal."
+ai_summary: "Sprint 03–07/08: quadro de conteúdo evoluído para duas trilhas independentes. Migration 012 aplicada e verificada com 66 pautas, ICMS reconciliado, RPC transacional, UI com abas/filtros e CLI genérico versionado. Pendente: smoke autenticado, clipboard humano e migration 013 após deploy compatível."
 status: active
 projetos_em_curso:
   - blog
@@ -17,37 +17,49 @@ projetos_em_curso:
   - materiais
   - pesquisas
   - orcamento-automacao
-semana_inicio: 2026-07-27
-semana_fim: 2026-07-31
+semana_inicio: 2026-08-03
+semana_fim: 2026-08-07
 ---
 
-# Sprint Ativa — semana de 2026-07-27
+# Sprint Ativa — semana de 2026-08-03
 
-> [!info] Janela rolada à mão em 2026-07-29
-> O frontmatter ainda apontava para a semana de 20-24/07 e alimenta as Bases. O standup de 27/07 **rodou** e foi recuperado do transcript — ver [[2026-07-27]] e a seção sobre os crons abaixo.
+> [!info] Infraestrutura editorial antes da próxima pauta
+> A prioridade desta semana é tornar [[quadro-conteudo]] a fonte única do
+> pipeline, sem produzir a próxima pauta sobre um modelo ambíguo.
 
 > Atualizado segunda-feira via `/standup` (auto seg 9h via scheduled-task). Referenciado em [[CLAUDE]] vault-level e em `vault-manifest.json` (`paths.sprint_doc`). Para detalhes por projeto, abrir o hub correspondente. Validação: `node scripts/vault-validate.mjs` → 0 issues.
 
 ## Objetivo da semana
 
-**Fechar o Documento Institucional PDF** (merge PR #17 v3 + validar geração em prod + distribuir) e **retomar cadência editorial** (blog + LinkedIn semanal). Manter pressão no **P0 SEO** (indexação Google — ação Bruno). Reorganização do vault permanece concluída (3 sprints + P1 + P2).
+**Fechar o modelo operacional do conteúdo**: separar Blog e LinkedIn, tornar
+reordenação/publicação atômicas, versionar a automação genérica e alinhar o
+vault. Só então exercitar a próxima pauta ponta a ponta em sessão autenticada.
 
 ## Status por projeto
 
 | Projeto | Status | Bloqueio principal | Próxima ação |
 |---------|--------|--------------------|--------------|
-| [[blog]] | active | Pipeline editorial vazio (drafts/ideias/pesquisa) | Repor funil via `/brainstorm` |
-| [[linkedin]] | active | Cadência: 2 posts vs 38 artigos | Post LinkedIn da semana |
-| [[site]] | active | Nenhum bloqueante — PRs #15/#16/#17 mergeados em 30/07 | Validar `/institucional/pdf` em prod |
+| [[blog]] | active | Smoke autenticado do novo fluxo | Produzir próxima pauta até aprovação |
+| [[linkedin]] | active | Publicação externa manual | Validar URL/data e clipboard com clique humano |
+| [[site]] | active | Migration 013 aguarda deploy compatível | Validar `/admin/conteudo` logado |
 | [[seo-aeo]] | active | 3 URLs fora do índice (ação manual no GSC) | Pedir indexação das 3 |
 | [[apresentacoes]] | active | Roteiros não versionados (parcial) | Validar 16 slides em live env |
 | [[materiais]] | active | **Institucional PDF v4** aguarda briefing atualizado + distribuição | Atualizar briefing v3→v4; distribuir; preencher `usado_em` |
-| [[pesquisas]] | active | 70-knowledge populado (10 atomics) | Inventariar mais conceitos |
+| [[pesquisas]] | active | Pesquisa editorial migrou para o card | Validar `/pesquisa` ponta a ponta |
 | [[orcamento-automacao]] | published | Smoke test E2E prod pendente (Bruno) | Gerar PDF BRK-2026-0001 (checar pgs/peso) |
 
 ## Bloqueios consolidados (cross-projeto)
 
 ### P0 — Esta semana
+- [x] **Migration 012 aplicada**: 66 pautas preservadas, distribuição 44/22,
+  ICMS ligado ao post e trilhas independentes verificadas por teste transacional
+- [x] **Quadro compatível**: abas Geral/Blog/LinkedIn, estados derivados,
+  busca/filtros, ações em lote sem aprovação, renomeação, prontidão e publicação manual do LinkedIn
+- [x] **Automação genérica**: `pauta.mjs` versionado; criar, gravar,
+  registrar-draft, produzir e publicar com dry-run/rollback
+- [ ] **Smoke autenticado**: criação, autosave, drag-and-drop, capas, vínculo,
+  aprovação, URL do LinkedIn, sessão expirada e clipboard. Três tentativas
+  Playwright locais não receberam o DOM pelo loopback; build e gates passaram
 - [x] ~~**Merge PR #17**~~ ✅ 2026-07-30 — #15, #16 e #17 mergeados. **Sobrou**: validar `/institucional/pdf` em prod, atualizar o briefing para v4 e distribuir o PDF. Ver [[site]] e [[materiais]]
 - [x] **Indexação Google** ([[seo-aeo]]): **encerrado em 2026-07-29** — 34/38 artigos (89%), contra 6/44 em abril. Restam 4 URLs em "Crawled/Discovered - currently not indexed", agora P1
 - [x] ~~**Publicar OAuth consent screen**~~ ✅ 2026-07-30 — app em produção, refresh voltou a funcionar, token reemitido. Ver [[google-apis-setup]]
@@ -55,12 +67,17 @@ semana_fim: 2026-07-31
 - [x] ~~**Smoke test Supabase**~~ ✅ 2026-07-30 — rodado, 6 slugs vault-only confirmados
 
 ### P1 — Próximas 2 semanas
+- [ ] Aplicar migration 013 somente após o deploy compatível ser validado;
+  remover `coluna`, `ordem` e índice legado
+- [ ] Rotacionar as referências da service key antiga nos 42 scripts históricos
+  (higiene; sem incidente ativo)
 - [x] **4 erros de frontmatter em `40-content/curadoria/`** (vault health): corrigidos em 2026-07-02 (PR #11) — `status`/`tipo` inválidos normalizados. `vault-validate.mjs` → 0 issues. Chip `task_abaacde6` fechado.
 - [ ] **Google Sheets SPOF de leads** ([[site]]): backup automático Supabase (Fase 4.4 — opcional)
 - [x] ~~**9 posts sem meta_title/meta_description**~~ ✅ 2026-07-30 — eram os 9 artigos com menos de 55 palavras. 5 em 301, 4 em noindex. Ver [[2026-07-thin-content-mapa]]
 - [x] ~~**4 posts sem answer_summary**~~ ✅ 2026-07-30 — preenchidos, 98 a 102 palavras cada
 
 ### P2 — 2-4 semanas
+- [ ] Integração externa para publicar LinkedIn; até lá, URL + data são manuais
 - [ ] **Fase 4 MCPs** (opcional): HubSpot leads sync · n8n KPIs · Figma tokens
 - [x] **Capas consolidadas** em `Docs/banco-imagens/capas-blog/` (2026-07-01): dedup por hash concluído; par PNG/WEBP `lsf-mundial` mantido de propósito (PNG master + WEBP em produção). Path antigo `Docs/Conteúdo/Capas blog/` não existe mais.
 - [ ] **Migrar slugs ambíguos** ([[blog]]): 2 TODOs no SLUG_MAP do `vault-backfill-articles.mjs`
@@ -176,7 +193,7 @@ A linha de base de CTR de cada página ficou registrada em [[2026-08-calendario-
 - [ ] Classificar os 6 arquivos do vault que não estão em produção (despublicados? renomeados? nunca publicados?) — ver [[blog]]
 - [x] ~~Refazer metas P0/P3 de [[seo-aeo]]~~ ✅ 2026-07-30 — as antigas mediam "existir no Google", fase encerrada. As novas medem concentração, diversificação de intenção e conversão
 - [ ] Fases 3-5 do plano (instrumentação de conversão, CTA no blog, IQS, diagnóstico): `~/.claude/plans/executa-o-sprint-4-whimsical-thimble.md` ⚠️ **fora do vault e fora do git** — 32KB só na máquina local. Se importar, promover para nota do vault
-- [ ] Rodar `/wrap-up` da semana de 27-31/07 na sexta. O de 24/07 foi perdido (limite de uso) e não é recuperável. **Material de 31/07 para o wrap-up**: 4 PRs mergeados e no ar — comentários inline nas documentações (#39, #40, ver [[comentarios-inline-documentacoes]]), remoção do modo de build estático (#41, ver [[admin-setup]]) e o incidente de credencial no bundle do admin (#42, ver [[supabase-config]])
+- [x] ~~Rodar `/wrap-up` da semana de 27-31/07~~ — janela encerrada; os fatos relevantes foram consolidados nesta sprint e nos hubs. O de 24/07 foi perdido por limite de uso e não é recuperável
 - [ ] Conferir os logs de auth do Supabase por acessos não reconhecidos. A senha da conta esteve pública no bundle do admin desde que ele existe — rotacionada em 31/07, mas não há como saber se foi usada sem olhar o log
 - [ ] Avaliar mudar o horário dos crons: `berkahn-wrapup-semanal` roda sexta 17h, encavalado com uso interativo. Rodar de madrugada reduz a chance de bater no limite semanal
 - [ ] Considerar um passo de verificação nos crons de standup/wrap-up que confirme se o arquivo esperado existe ao final, já que uma sessão pode morrer entre a chamada e a escrita

@@ -1,17 +1,17 @@
 ---
 tipo: memory
 criado: 2026-05-22
-atualizado: 2026-05-22
+atualizado: 2026-08-06
 tags:
   - ai/memory
   - status/active
   - project/blog
   - project/site
-ai_summary: Workflow do projeto Pesquisas — tema → fontes → síntese → atomic notes reutilizáveis (70-knowledge/). Cross-projeto. Saídas: blog (/pesquisa raw), competitor research, pesquisa de mercado, pesquisa SEO/AEO. Gap crítico atual:  70-knowledge vazio — pesquisas não destilam em atomic notes.
+ai_summary: Workflow de Pesquisas — /pesquisa grava a pesquisa editorial no card da pauta; competitor, mercado e SEO continuam no vault. Sínteses reutilizáveis vão para 70-knowledge/.
 status: active
 subtipo: project
 why: "Cada nova pesquisa hoje re-explora terreno já coberto (LSF normas, custos, fogo, acústica). Destilação em atomic notes (70-knowledge/) permite reutilização entre artigos e elimina re-trabalho. Source of truth para domínio Berkahn."
-how_to_apply: "Pesquisa nova → /pesquisa (raw em 40-content/blog/pesquisa/) → /criacao consome → APÓS uso, extrair conceitos centrais para atomic notes em 70-knowledge/ com frontmatter usado_em + origem_pesquisa. Próxima pesquisa busca atomic notes antes."
+how_to_apply: "Pesquisa editorial → bloco Pesquisa da pauta → /criacao consome pelo id → APÓS uso, extrair conceitos centrais para 70-knowledge/ com usado_em + origem_pesquisa. Pesquisas de mercado/SEO continuam em pastas próprias."
 ---
 
 # Workflow do projeto Pesquisas
@@ -28,13 +28,13 @@ how_to_apply: "Pesquisa nova → /pesquisa (raw em 40-content/blog/pesquisa/) �
    └─ Demanda estratégica (SEO/AEO, mudança de algoritmo)
        ↓
 2. Pesquisa raw
-   ├─ Para blog: /pesquisa → 40-content/blog/pesquisa/YYYY-MM-DD-tema.md
+   ├─ Para blog: /pesquisa → bloco Pesquisa em /admin/conteudo
    ├─ Para competitor: 40-content/pesquisa-mercado/competitor-research/<name>-snapshot.md
    ├─ Para mercado: 40-content/pesquisa-mercado/<tema>.md
    └─ Para SEO/AEO: 40-content/auditorias-seo/research-<tema>.md
        ↓
 3. Consumo direto
-   ├─ Blog: /criacao usa pesquisa raw → artigo final em /publicados/
+   ├─ Blog: /criacao lê a pauta → draft no vault → /artigo
    ├─ Apresentação: dados puxados para slides
    └─ Site: copy puxado para páginas
        ↓
@@ -58,7 +58,7 @@ how_to_apply: "Pesquisa nova → /pesquisa (raw em 40-content/blog/pesquisa/) �
 
 ### 2. Pesquisa raw — escolher saída
 - **Blog**: `/pesquisa <tema>` (LOCKED prompt em [[blog-pesquisa]])
-  - Output: `40-content/blog/pesquisa/YYYY-MM-DD-tema.md`
+  - Output: bloco `pesquisa_conteudo` da pauta; não cria arquivo raw
 - **Competitor**: capturar accessibility tree, screenshots, snapshots de páginas
   - Output: `40-content/pesquisa-mercado/competitor-research/<empresa>-snapshot.md` (ver [[stalart-snapshot]] como exemplo)
 - **Mercado** (sales/comercial): pesquisa estruturada de mercado, benchmarks, dados
@@ -98,7 +98,8 @@ how_to_apply: "Pesquisa nova → /pesquisa (raw em 40-content/blog/pesquisa/) �
 
 ## Outputs típicos
 
-- Pesquisa raw em `40-content/blog/pesquisa/`, `40-content/pesquisa-mercado/`, ou `40-content/auditorias-seo/`
+- Pesquisa editorial no card; pesquisas de mercado em
+  `40-content/pesquisa-mercado/` e SEO em `40-content/auditorias-seo/`
 - Atomic notes em `70-knowledge/<conceito>.md`
 - Update do hub [[pesquisas]] (kpi_atomic_notes_geradas)
 - Update de [[steel-frame-domain]] com novos wikilinks para atomic notes criadas

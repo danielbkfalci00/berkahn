@@ -109,7 +109,7 @@ function InsightCard({
               {insight.proof.name}
             </p>
             <p className="text-[#2D2D2D] font-medium">
-              "{insight.proof.quote}"
+              “{insight.proof.quote}”
             </p>
           </div>
         )}
@@ -118,7 +118,7 @@ function InsightCard({
         {insight.proof.type === "testimonial" && (
           <div className="mt-6 p-6 bg-white/60 backdrop-blur rounded-lg">
             <p className="text-lg italic text-[#2D2D2D]/80 mb-4">
-              "{insight.proof.quote}"
+              “{insight.proof.quote}”
             </p>
             <p className="text-sm font-medium text-[#2D2D2D]">
               — {insight.proof.name}

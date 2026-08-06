@@ -48,8 +48,10 @@ O texto vai por arquivo porque o output tem milhares de caracteres com aspas,
 `$` e quebras de linha — passar isso por linha de comando quebra no PowerShell.
 
 Se o bloco já tiver conteúdo, o script **recusa** e mostra o que está lá.
-Nesse caso mostre ao Bruno e pergunte antes de repetir com `--forcar` (que
-guarda o anterior em `scripts/.cache/`).
+Nesse caso mostre ao Bruno e pergunte antes de repetir com
+`--forcar --confirmar-substituicao` (que guarda o anterior em
+`scripts/.cache/`). O comando simples também avança Blog de `planejada` para
+`pesquisa`; nunca avança aprovação.
 
 ### 3. Insights, só se estiver vazio
 
@@ -62,11 +64,5 @@ node scripts/conteudo/pauta.mjs gravar <id> --bloco=insights --arquivo=<caminho>
 
 **Nunca sobrescreva `insights` preenchido** — ele vem do calendário editorial e
 é a justificativa de por que a pauta existe.
-
-### Se o script não existir
-
-`/scripts/` é gitignored, então num clone novo ele não está lá. Nesse caso
-**não invente outro caminho**: entregue o texto no chat e diga ao Bruno para
-colar no bloco Pesquisa Conteúdo em `/admin/conteudo/<id>`.
 
 $ARGUMENTS
