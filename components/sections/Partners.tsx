@@ -25,13 +25,13 @@ function LogoMarquee({ partners }: { partners: { name: string; logo: string }[] 
 
   return (
     <div className="overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
-      <div className="flex w-max animate-marquee-fast md:animate-marquee hover:[animation-play-state:paused]">
+      <div className="flex w-max animate-marquee-fast md:animate-marquee hover:[animation-play-state:paused] motion-reduce:w-full motion-reduce:flex-wrap motion-reduce:justify-center motion-reduce:animate-none">
         {doubled.map((partner, i) => (
           <div
             key={`${partner.name}-${i}`}
-            className="flex items-center justify-center shrink-0 h-32 md:h-28 w-40 md:w-48 mr-3 md:mr-16 lg:mr-24"
+            className={`flex items-center justify-center shrink-0 h-32 md:h-28 w-40 md:w-48 mr-3 md:mr-16 lg:mr-24 ${i >= partners.length ? "motion-reduce:hidden" : ""}`}
           >
-            <div className="relative w-full h-full md:grayscale md:opacity-50 md:hover:grayscale-0 md:hover:opacity-100 transition-all duration-500">
+            <div className="relative w-full h-full md:grayscale md:opacity-50 md:hover:grayscale-0 md:hover:opacity-100 transition-all duration-500 motion-reduce:transition-none">
               <Image
                 src={partner.logo}
                 alt={`Logo ${partner.name}`}

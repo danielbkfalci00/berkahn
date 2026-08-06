@@ -4,47 +4,21 @@ import { useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { gsap, useGSAP } from "@/lib/gsap";
+import { EXECUTION_PHASES } from "@/lib/servicos-data";
 import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
 
-type ProcessAct = {
-  label: string;
-  title: string;
-  description: string;
-  image: string;
-  imageAlt: string;
-};
-
-const ACTS: ProcessAct[] = [
-  {
-    label: "fase 01 · pré-obra e fundação",
-    title: "Planejamento antes do canteiro",
-    description:
-      "Análise dos projetos, orçamento fechado e cronograma executivo. A fundação sai mais leve e econômica porque a estrutura pesa até 15 vezes menos que a alvenaria.",
-    image: "/images/Services/servicos-foundations.webp",
-    imageAlt: "Fundação e preparação do terreno para obra em Light Steel Frame",
-  },
-  {
-    label: "fase 02 · superestrutura e vedação",
-    title: "Precisão de milímetros",
-    description:
-      "Perfis de aço galvanizado montados com tolerância de 1 a 2 mm, com vedações, fachadas e instalações integradas na mesma etapa.",
-    image: "/images/Services/servicos-structure.webp",
-    imageAlt: "Superestrutura de aço galvanizado montada com precisão",
-  },
-  {
-    label: "fase 03 · acabamento e entrega",
-    title: "Entrega vistoriada",
-    description:
-      "Revestimentos, esquadrias e marcenaria com a mesma equipe técnica do primeiro dia. Obra seca, canteiro limpo, prazo cumprido.",
-    image: "/images/Services/servicos-finished.webp",
-    imageAlt: "Residência finalizada com acabamento de alto padrão",
-  },
-];
+const ACTS = EXECUTION_PHASES.map((phase) => ({
+  id: phase.id,
+  label: `fase ${String(phase.number).padStart(2, "0")} · ${phase.shortTitle.toLowerCase()}`,
+  title: phase.title,
+  description: phase.summary ?? phase.description,
+  image: phase.images.primary,
+  imageAlt: phase.images.primaryAlt,
+}));
 
 /**
- * Momento-assinatura 3: narrativa de processo em três atos.
- * Desktop: coluna de mídia presa (CSS sticky) com crossfade dirigido por
- * scroll (ScrollTrigger scrub); mobile e reduced-motion: stack estático.
+ * As quatro fases canônicas da execução. No desktop, mídia e texto fazem
+ * crossfade dentro do track sticky; mobile e reduced-motion usam stack estático.
  */
 export function ProcessPinned() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -59,7 +33,13 @@ export function ProcessPinned() {
           const images = gsap.utils.toArray<HTMLElement>("[data-process-img]");
           const texts = gsap.utils.toArray<HTMLElement>("[data-process-text]");
           const steps = gsap.utils.toArray<HTMLElement>("[data-process-step]");
-          if (images.length < 3 || texts.length < 3) return;
+          if (
+            images.length !== ACTS.length ||
+            texts.length !== ACTS.length ||
+            steps.length !== ACTS.length
+          ) {
+            return;
+          }
 
           const tl = gsap.timeline({
             defaults: { duration: 0.5, ease: "none" },
@@ -71,18 +51,14 @@ export function ProcessPinned() {
             },
           });
 
-          // Ato 1 -> 2
-          tl.to(texts[0], { autoAlpha: 0 }, 0.7)
-            .to(steps[0], { opacity: 0.3 }, 0.7)
-            .to(images[1], { autoAlpha: 1 }, 0.7)
-            .to(texts[1], { autoAlpha: 1 }, 0.8)
-            .to(steps[1], { opacity: 1 }, 0.8)
-            // Ato 2 -> 3
-            .to(texts[1], { autoAlpha: 0 }, 1.7)
-            .to(steps[1], { opacity: 0.3 }, 1.7)
-            .to(images[2], { autoAlpha: 1 }, 1.7)
-            .to(texts[2], { autoAlpha: 1 }, 1.8)
-            .to(steps[2], { opacity: 1 }, 1.8);
+          for (let index = 1; index < ACTS.length; index++) {
+            const transitionAt = index - 0.3;
+            tl.to(texts[index - 1], { autoAlpha: 0 }, transitionAt)
+              .to(steps[index - 1], { opacity: 0.3 }, transitionAt)
+              .to(images[index], { autoAlpha: 1 }, transitionAt)
+              .to(texts[index], { autoAlpha: 1 }, transitionAt + 0.1)
+              .to(steps[index], { opacity: 1 }, transitionAt + 0.1);
+          }
         }
       );
     },
@@ -94,24 +70,25 @@ export function ProcessPinned() {
       <div className="container pt-2xl md:pt-3xl">
         <RevealOnScroll>
           <p className="font-tech text-xs lowercase tracking-wide text-white-50 mb-4">
-            03 · como construímos
+            03 · construtora completa
           </p>
-          <h2 className="headline-md text-white max-w-2xl">
-            A obra inteira com uma equipe só.
+          <h2 className="headline-md text-white max-w-3xl">
+            Como construtora, fazemos a obra inteira.
           </h2>
+          <p className="mt-6 max-w-2xl text-base md:text-lg leading-relaxed text-white-70">
+            Quatro fases coordenadas pela mesma equipe. Você não negocia com
+            fornecedores soltos.
+          </p>
         </RevealOnScroll>
       </div>
 
-      {/* Desktop com motion: track com mídia sticky e UM ato visível por vez.
-          Altura clampada em svh e padding compensando o header fixo — nada
-          corta em viewports baixos ou com zoom. */}
-      <div data-process-track className="hidden motion-safe:lg:block relative h-[260vh]">
+      <div data-process-track className="hidden motion-safe:lg:block relative h-[340vh]">
         <div className="sticky top-0 flex h-screen flex-col justify-center pt-24 pb-10">
           <div className="container grid grid-cols-12 gap-10 items-center">
             <div className="col-span-7 relative h-[56svh] min-h-[380px] overflow-hidden">
               {ACTS.map((act, index) => (
                 <div
-                  key={act.label}
+                  key={act.id}
                   data-process-img
                   className={index === 0 ? "absolute inset-0" : "absolute inset-0 opacity-0"}
                 >
@@ -127,28 +104,26 @@ export function ProcessPinned() {
             </div>
 
             <div className="col-span-4 col-start-9">
-              {/* Índice dos atos */}
               <div className="flex items-center gap-6 mb-10" aria-hidden="true">
                 {ACTS.map((act, index) => (
                   <span
-                    key={act.label}
+                    key={act.id}
                     data-process-step
                     className={
                       "font-tech text-sm tracking-wide text-white" +
                       (index === 0 ? "" : " opacity-30")
                     }
                   >
-                    0{index + 1}
+                    {String(index + 1).padStart(2, "0")}
                   </span>
                 ))}
                 <span className="h-[3px] flex-1 bg-white-10" />
               </div>
 
-              {/* Slot de ato único — blocos sobrepostos, crossfade por scroll */}
-              <div className="relative min-h-[260px]">
+              <div className="relative min-h-[300px]">
                 {ACTS.map((act, index) => (
                   <div
-                    key={act.label}
+                    key={act.id}
                     data-process-text
                     className={
                       index === 0 ? "absolute inset-0" : "absolute inset-0 opacity-0"
@@ -171,10 +146,9 @@ export function ProcessPinned() {
         </div>
       </div>
 
-      {/* Mobile sempre; desktop quando prefers-reduced-motion: stack estático completo */}
       <div className="motion-safe:lg:hidden container flex flex-col gap-14 pt-16">
         {ACTS.map((act, index) => (
-          <RevealOnScroll key={act.label} delay={index * 0.1}>
+          <RevealOnScroll key={act.id} delay={index * 0.1}>
             <div className="relative aspect-[16/10] overflow-hidden mb-6">
               <Image
                 src={act.image}
