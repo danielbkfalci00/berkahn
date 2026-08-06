@@ -8,16 +8,16 @@ interface HeroEditorialProps {
 
 export function HeroEditorial({ post }: HeroEditorialProps) {
   return (
-    <section className="bg-carbon pb-12 pt-28 text-white md:pb-16 md:pt-32 lg:pb-20 lg:pt-36">
+    <section className="bg-carbon pb-12 pt-28 text-white md:pb-10 md:pt-24 lg:pb-12 lg:pt-28">
       <div className="container">
         <header>
           <p className="font-tech text-[11px] lowercase tracking-wide text-white-50 md:text-xs">
             caderno técnico · atualidades
           </p>
-          <div className="my-5 h-[3px] w-full bg-white md:my-7" aria-hidden="true" />
+          <div className="my-5 h-[3px] w-full bg-white" aria-hidden="true" />
         </header>
 
-        <div className="grid gap-10 lg:grid-cols-[0.72fr_1.28fr] lg:items-end lg:gap-14">
+        <div className="grid gap-8 lg:grid-cols-[0.72fr_1.28fr] lg:items-end lg:gap-10">
           <div className="flex h-full flex-col justify-between gap-6">
             <h1 className="font-display text-[clamp(4rem,6vw,7rem)] font-semibold leading-[0.78] tracking-[-0.075em]">
               Atualidades
@@ -35,7 +35,7 @@ export function HeroEditorial({ post }: HeroEditorialProps) {
                 prefetch={false}
                 className="group block focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
               >
-                <div className="relative aspect-[16/9] overflow-hidden bg-carbon-soft lg:aspect-[16/10]">
+                <div className="relative aspect-[16/9] overflow-hidden bg-carbon-soft md:aspect-[16/7] lg:aspect-[16/8]">
                   <Image
                     src={post.image}
                     alt={post.title}
@@ -49,20 +49,20 @@ export function HeroEditorial({ post }: HeroEditorialProps) {
                   </span>
                 </div>
 
-                <div className="grid gap-4 border-t-[3px] border-white pt-4 md:grid-cols-[0.34fr_0.66fr] md:gap-8 md:pt-5">
+                <div className="grid gap-4 border-t-[3px] border-white pt-4 md:grid-cols-[0.34fr_0.66fr] md:gap-6">
                   <div className="font-tech text-[10px] lowercase leading-relaxed tracking-wide text-white-50 md:text-xs">
                     <p className="text-white">{post.category}</p>
                     <p>{post.date} · {post.readTime}</p>
                   </div>
 
                   <div>
-                    <h2 className="font-display text-2xl font-semibold leading-[1.02] tracking-tight md:text-3xl lg:text-[2.35rem]">
+                    <h2 className="font-display text-2xl font-semibold leading-[1.02] tracking-tight md:text-3xl">
                       {post.title}
                     </h2>
                     <p className="mt-3 line-clamp-2 text-sm leading-relaxed text-white-70 md:text-base">
                       {post.excerpt}
                     </p>
-                    <span className="mt-4 inline-flex items-center gap-3 font-tech text-[10px] lowercase tracking-wide text-white md:text-xs">
+                    <span className="mt-3 inline-flex items-center gap-3 font-tech text-[10px] lowercase tracking-wide text-white md:text-xs">
                       ler análise
                       <span
                         className="h-[3px] w-8 bg-white transition-[width] duration-500 ease-expo group-hover:w-14 motion-reduce:transition-none"
