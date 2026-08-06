@@ -4,44 +4,15 @@ import { useState, useCallback, useRef } from "react"
 import { Upload, ImageIcon, Loader2, X } from "lucide-react"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
+// Comprime via Canvas pra ficar abaixo do limite de body do Vercel (~4.5MB) e
+// do nosso server (10MB). Extraída para lib/imagens/ quando o quadro de
+// conteúdo passou a precisar dela — e lá ganhou o fundo branco, que evita
+// tarja preta em PNG transparente.
+import { comprimirImagem, nomeComprimido } from "@/lib/imagens/comprimir"
 
 interface Props {
   orcamentoId: string
   initialPreviewUrl?: string | null
-}
-
-// Comprime via Canvas pra ficar abaixo do limite de body do Vercel
-// (~4.5MB) e do nosso server (10MB). Reduz pra max 1920px no maior lado
-// + JPEG quality 0.85. Server processa via Sharp depois (resize/webp).
-async function comprimirImagem(file: File, maxDim = 1920): Promise<Blob> {
-  const url = URL.createObjectURL(file)
-  try {
-    const img = await new Promise<HTMLImageElement>((resolve, reject) => {
-      const i = new Image()
-      i.onload = () => resolve(i)
-      i.onerror = () => reject(new Error("Não consegui carregar a imagem"))
-      i.src = url
-    })
-    let { width, height } = img
-    if (width > maxDim || height > maxDim) {
-      const ratio = Math.min(maxDim / width, maxDim / height)
-      width = Math.round(width * ratio)
-      height = Math.round(height * ratio)
-    }
-    const canvas = document.createElement("canvas")
-    canvas.width = width
-    canvas.height = height
-    const ctx = canvas.getContext("2d")
-    if (!ctx) throw new Error("Canvas 2D não disponível neste navegador")
-    ctx.drawImage(img, 0, 0, width, height)
-    const blob = await new Promise<Blob | null>((resolve) =>
-      canvas.toBlob(resolve, "image/jpeg", 0.85)
-    )
-    if (!blob) throw new Error("Falha ao comprimir a imagem")
-    return blob
-  } finally {
-    URL.revokeObjectURL(url)
-  }
 }
 
 interface UploadState {
@@ -65,8 +36,7 @@ export function HeroUpload({ orcamentoId, initialPreviewUrl }: Props) {
       try {
         const payload = await comprimirImagem(file)
         const fd = new FormData()
-        const nome = file.name.replace(/\.[^.]+$/, "") + ".jpg"
-        fd.append("file", payload, nome)
+        fd.append("file", payload, nomeComprimido(file.name))
 
         const res = await fetch(`/api/admin/orcamentos/${orcamentoId}/hero`, {
           method: "POST",

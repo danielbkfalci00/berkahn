@@ -7,17 +7,74 @@ Leia os seguintes arquivos de contexto (vault Obsidian):
 - `Berkahn-Vault/20-context/article-pipeline.md` — regras de arquivo de publicações
 - `Berkahn-Vault/30-prompts/linkedin-post.md` — prompt completo do LinkedIn (LOCKED — executar fielmente)
 
-Depois, pergunte ao usuário qual artigo ou tema será a base do post.
+## 1. Achar a pauta
 
-Execute o prompt de LinkedIn fielmente. Entregue:
-1. Post pronto para copiar e colar
-2. Briefing de imagem para Canva (em seção separada)
+Pergunte qual **pauta** é a base — não qual artigo. A pauta já carrega o artigo
+vinculado, o ângulo do calendário e as capas.
 
-**Após gerar o conteúdo, arquivar automaticamente no vault:**
-1. Criar pasta `Berkahn-Vault/40-content/linkedin/[YYYY-MM-DD]-[tema-curto]/`
-   - Usar a data de hoje e um resumo curto do tema (ex: `2026-04-13-custo-m2`)
-2. Salvar o texto do post em `post.md` com frontmatter (tipo: draft-content, status: draft, tags: project/linkedin, ai_summary, relacionado: [[blog/slug]])
-3. Salvar o briefing da imagem em `briefing-imagem.md`
-4. Informar o Bruno: "Quando exportar a imagem do Canva, salve como `imagem-final.png` na pasta `Berkahn-Vault/40-content/linkedin/[YYYY-MM-DD]-[tema-curto]/`"
+```bash
+node scripts/conteudo/pauta.mjs buscar "<termo>"
+node scripts/conteudo/pauta.mjs buscar --slug=<slug-do-artigo>   # caminho exato
+```
+
+Os 22 cards de LinkedIn do acervo já nascem com o artigo vinculado, então a
+busca por slug acerta de primeira. Com mais de um resultado, **pergunte**.
+Com nenhum, **pergunte** — não crie pauta por conta própria.
+
+Depois, leia a pauta para aproveitar o que já existe:
+
+```bash
+node scripts/conteudo/pauta.mjs ver <id>
+```
+
+O bloco `linkedin_briefing` traz o **ângulo do calendário editorial** (ângulo +
+dado-âncora). Use como direção do post. **Nunca grave nesse bloco** — ele é a
+única cópia daquele briefing.
+
+## 2. Executar o prompt
+
+Execute o prompt LOCKED fielmente. Entregue:
+
+1. **Post pronto** para copiar e colar
+2. **Briefing de imagem**, com os quatro itens que o prompt pede (textos da
+   imagem, foto ou visual de referência, direção visual, identidade constante)
+3. **Prompt de geração em inglês** — a tradução do briefing acima para colar
+   num gerador de imagem por IA
+
+O item 3 é adição, não substituição: o prompt LOCKED descreve briefing de Canva
+e a prática migrou para IA. Entregue os dois; mexer no prompt calibrado exige
+permissão explícita do Bruno.
+
+## 3. Gravar na pauta
+
+Escreva cada texto num arquivo temporário do scratchpad da sessão (**nunca** no
+vault) e grave:
+
+```bash
+node scripts/conteudo/pauta.mjs gravar <id> --bloco=linkedin          --arquivo=<post.txt>
+node scripts/conteudo/pauta.mjs gravar <id> --bloco=imagem-prompt     --arquivo=<prompt-en.txt>
+node scripts/conteudo/pauta.mjs gravar <id> --bloco=imagem-briefing   --arquivo=<briefing-pt.txt>
+```
+
+O prompt em inglês vai separado do briefing em português de propósito: o botão
+de copiar do admin precisa entregar só o inglês, sem a justificativa junto.
+
+Se algum bloco já tiver conteúdo o script recusa e mostra o que está lá —
+mostre ao Bruno e pergunte antes de repetir com `--forcar`.
+
+**Não crie pasta em `40-content/linkedin/`.** As três pastas antigas de lá são
+acervo congelado; o texto novo vive na pauta.
+
+## 4. A imagem
+
+Depois de gerar a imagem com o prompt, diga ao Bruno para subi-la no bloco
+**Capa Linkedin** em `/admin/conteudo/<id>` — o admin comprime e guarda no
+bucket. Não peça para salvar arquivo no vault.
+
+### Se o script não existir
+
+`/scripts/` é gitignored, então num clone novo ele não está lá. Nesse caso
+**não invente outro caminho**: entregue os textos no chat e diga ao Bruno para
+colar nos blocos correspondentes em `/admin/conteudo/<id>`.
 
 $ARGUMENTS

@@ -1,7 +1,7 @@
 ---
 tipo: meta
 criado: 2026-05-21
-atualizado: 2026-07-30
+atualizado: 2026-08-06
 tags:
   - project/site
   - project/blog
@@ -86,6 +86,25 @@ Os três `scheduled-tasks` estão **enabled e disparando**. O problema nunca foi
 **Diagnóstico**: as falhas têm causas diferentes (limite de uso, morte de sessão, token OAuth), mas o mesmo sintoma — nenhum artefato e nenhum aviso. O `last-error.log` do `performance` só cobre erro lançado pelo script; não cobre sessão que morre nem limite de conta.
 
 **Onde os transcripts ficam**: `~/.claude/projects/C--Users-bruno-Documents-Pessoal-Site-Berkahn/*.jsonl`, um por sessão, com data de modificação batendo com o `lastRunAt`. É onde olhar quando um cron não deixar rastro — e de onde o standup de 27/07 foi recuperado.
+
+## Wins / decisões (2026-08-06) — quadro de conteúdo
+
+Sprint de 9 commits, mergeado em `main` e no ar. Detalhe técnico em [[quadro-conteudo]]; aqui só o que mudou de estado.
+
+**A pauta virou entidade de primeira classe.** `conteudo_pautas` (migrations 010 e 011) com as 66 pautas do calendário ago–dez já semeadas — 44 do calendário mais 22 de LinkedIn do acervo, 22 semanas de 03/08 a 28/12. Quadro Kanban em `/admin/conteudo`, card editável em `/admin/conteudo/[id]` com os seis blocos.
+
+**Acabou a dupla escrita.** `/pesquisa` e `/linkedin` gravam na pauta via `scripts/conteudo/pauta.mjs`. `/criacao` e `/calendario` foram corrigidos junto — um procurava a pesquisa numa pasta que deixou de ser alimentada, o outro contava posts pendentes varrendo uma pasta congelada. Os dois teriam quebrado em silêncio.
+
+**Dois bugs que a verificação pegou, não a leitura de código:**
+
+- **Seis rotas `/api/admin/*` sem autenticação em produção.** O matcher do middleware era `['/', '/admin/:path*']` e não cobria `/api/admin/*`; três das rotas usavam service key, que bypassa RLS. Sem login dava para listar todos os orçamentos com dado pessoal do cliente, apagar por id e pegar signed URL do PDF. Fechado com matcher + `exigirSessao()` nos 10 handlers.
+- **O PostgREST não devolve erro quando a RLS filtra a linha** — o update "funciona" e afeta zero linhas. A tela dizia "Salvo às 18:41" com `null` no banco. Em produção seria a sessão expirando com a aba aberta: a pessoa continua escrevendo e perde tudo ao fechar. As oito mutações agora conferem a linha afetada. **Vale para qualquer tabela com RLS neste projeto.**
+
+**Pendências que ficaram:**
+
+- [ ] Exercitar o quadro logado — salvar, subir as duas capas, vincular artigo, `/pesquisa` ponta a ponta. Nada disso passou por sessão autenticada; a RLS barra o harness
+- [ ] Botão de copiar do LinkedIn: escrita no clipboard exige ativação real do usuário, que clique sintético não fornece
+- [ ] 42 scripts em `/scripts` com a service key **antiga** hardcoded (comparada com a atual: não batem). Higiene, não incidente — mas o histórico do git tem `897b18f` destrackeando a pasta
 
 ## Wins / decisões (2026-07-30, tarde)
 

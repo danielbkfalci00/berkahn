@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server"
 import sharp from "sharp"
 import { createServiceClient } from "@/lib/supabase/admin"
+import { exigirSessao } from "@/lib/supabase/sessao"
 
 const MAX_INPUT_BYTES = 10 * 1024 * 1024
 const TARGET_MAX_BYTES = 500 * 1024
@@ -24,6 +25,9 @@ async function processarHero(buffer: Buffer): Promise<Buffer> {
 }
 
 export async function POST(request: Request, ctx: RouteContext) {
+  const barrado = await exigirSessao()
+  if (barrado) return barrado
+
   const { id } = await ctx.params
   const formData = await request.formData()
   const file = formData.get("file")

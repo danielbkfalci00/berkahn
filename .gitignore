@@ -80,3 +80,9 @@ tmpgitleaks*.json
 # Nunca versionar: um `git add -A` distraido vaza credencial de producao.
 .claude/sessions/
 .agents/
+
+# Harness de verificacao local. Renderiza telas do /admin sem sessao, lendo com
+# a service key — precisa existir em disco para eu verificar UI que exige login,
+# e NAO pode ir para producao (bypassa RLS e expoe rota publica).
+# Ignorado desde a criacao, para nao depender de lembrar de apagar.
+/app/dev-harness/

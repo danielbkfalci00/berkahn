@@ -15,6 +15,7 @@ import {
   Menu,
   BarChart3,
   BookOpen,
+  KanbanSquare,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
@@ -36,6 +37,11 @@ const navigation = [
     name: "Documentações",
     href: "/admin/documentacoes",
     icon: BookOpen,
+  },
+  {
+    name: "Conteúdo",
+    href: "/admin/conteudo",
+    icon: KanbanSquare,
   },
   {
     name: "Posts",

@@ -26,6 +26,13 @@ Documenta o fluxo completo de criação e publicação de artigos em `/atualidad
 
 Após publicação: `/linkedin` para criar post de divulgação.
 
+> [!important] O estado do fluxo vive no quadro, não em arquivos soltos
+> Desde 2026-08-06 a unidade de trabalho é a **pauta** (o assunto), em `/admin/conteudo`. Um card agrega pesquisa, artigo, post de LinkedIn e as duas capas.
+>
+> `/pesquisa` e `/linkedin` **gravam na pauta**, não criam `.md` no vault — `40-content/blog/pesquisa/` saiu do fluxo e `40-content/linkedin/` é acervo congelado. O `/criacao` lê a pesquisa da pauta.
+>
+> O artigo continua onde sempre esteve: markdown em `40-content/blog/publicados/` mais a linha em `posts`. A pauta só referencia por FK. Contexto completo em [[quadro-conteudo]].
+
 Workflow editorial em [[workflow-conteudo]]. Regras de copy em [[copy-sem-travessao]] e [[berkahn-brand]].
 
 ## Arquivo de Publicações

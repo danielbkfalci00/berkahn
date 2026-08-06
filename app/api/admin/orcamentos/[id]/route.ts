@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
 import { createClient } from "@/lib/supabase/server"
+import { exigirSessao } from "@/lib/supabase/sessao"
 import type { OrcamentoUpdate } from "@/types/orcamento-estimativa"
 
 interface RouteContext {
@@ -7,6 +8,9 @@ interface RouteContext {
 }
 
 export async function GET(_: Request, ctx: RouteContext) {
+  const barrado = await exigirSessao()
+  if (barrado) return barrado
+
   const { id } = await ctx.params
   const supabase = await createClient()
   const { data, error } = await supabase
@@ -22,6 +26,9 @@ export async function GET(_: Request, ctx: RouteContext) {
 }
 
 export async function PATCH(request: Request, ctx: RouteContext) {
+  const barrado = await exigirSessao()
+  if (barrado) return barrado
+
   const { id } = await ctx.params
   const supabase = await createClient()
 
@@ -46,6 +53,9 @@ export async function PATCH(request: Request, ctx: RouteContext) {
 }
 
 export async function DELETE(_: Request, ctx: RouteContext) {
+  const barrado = await exigirSessao()
+  if (barrado) return barrado
+
   const { id } = await ctx.params
   const supabase = await createClient()
 

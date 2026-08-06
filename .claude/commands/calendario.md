@@ -14,7 +14,7 @@ Mostre o estado atual do pipeline:
 1. **Artigos publicados recentemente** — listar do `40-content/blog/publicados/` ordenado por `publicado_em` (mais recentes primeiro)
 2. **Drafts em andamento** — listar do `40-content/blog/drafts/` (status: draft)
 3. **Ideias do mês** — listar de `40-content/blog/ideias/ideas-[YYYY-MM].md`
-4. **Posts LinkedIn pendentes** — artigos publicados sem post correspondente em `40-content/linkedin/`
+4. **Posts LinkedIn pendentes** — pautas com `linkedin` nas plataformas e o bloco Texto Linkedin ainda vazio. Sai de `node scripts/conteudo/pauta.mjs buscar "<termo>"`, que lista os blocos preenchidos de cada pauta. **Não conte pastas em `40-content/linkedin/`**: aquilo é acervo congelado desde 2026-08-06 e não cresce mais
 5. **Ações SEO pendentes** — auditorias em `40-content/auditorias-seo/` que sinalizam P0/P1
 
 Ajude o usuário a planejar a semana:

@@ -277,7 +277,16 @@ export interface ActivityLog {
   user_id: string;
   user_name: string;
   action: string;
-  entity_type: 'post' | 'proposal' | 'presentation';
+  // Espelha o CHECK de activity_logs, reescrito por inteiro a cada migration
+  // que estende a lista: 005 somou 'task', 006 somou 'orcamento', 010 somou
+  // 'pauta'. Este tipo estava defasado desde a 005.
+  entity_type:
+    | 'post'
+    | 'proposal'
+    | 'presentation'
+    | 'task'
+    | 'orcamento'
+    | 'pauta';
   entity_id: string;
   entity_name: string;
   details: Record<string, unknown> | null;

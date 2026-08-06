@@ -144,7 +144,8 @@ Hook `validate-write` (futuro) bloqueará edits sem flag explícita.
 | Atomic note (1 conceito) | `70-knowledge/[conceito].md` |
 | Draft blog | `40-content/blog/drafts/[slug].md` (use template `template-draft-blog`) |
 | Ideia solta | `40-content/blog/ideias/ideas-YYYY-MM.md` (append) |
-| Pesquisa | `40-content/blog/pesquisa/YYYY-MM-DD-tema.md` |
+| Pesquisa de artigo | **não é nota** — vai no bloco Pesquisa da pauta, em `/admin/conteudo/[id]`. Ver [[quadro-conteudo]] |
+| Post de LinkedIn | **não é nota** — bloco Texto Linkedin da pauta. `40-content/linkedin/` é acervo congelado |
 | Reflexão consolidada (dream) | `~/.claude/projects/.../memory/` → revisar segunda → promover para `10-memory/` |
 | Daily note | `00-meta/standup/YYYY-MM-DD.md` (via `/standup`) |
 

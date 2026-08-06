@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
 import { createServiceClient } from "@/lib/supabase/admin"
+import { exigirSessao } from "@/lib/supabase/sessao"
 import { launchBrowser, getBaseUrl } from "@/lib/puppeteer-launch"
 import { assinarToken, ORCAMENTO_TOKEN_HEADER } from "@/lib/orcamento-token"
 import { salvarPdfOrcamento } from "@/lib/orcamento-pdf-storage"
@@ -36,6 +37,11 @@ interface RouteContext {
 }
 
 export async function POST(request: Request, ctx: RouteContext) {
+  // `assinarToken` abaixo autentica a chamada ao RENDERER, não esta entrada:
+  // sem esta checagem, gerar PDF de qualquer orçamento era público.
+  const barrado = await exigirSessao()
+  if (barrado) return barrado
+
   const { id } = await ctx.params
 
   const supabase = createServiceClient()

@@ -42,6 +42,14 @@ export async function updateSession(request: NextRequest) {
   // Protected admin routes
   const isAdminRoute = request.nextUrl.pathname.startsWith('/admin')
   const isLoginPage = request.nextUrl.pathname === '/admin/login'
+  const isAdminApi = request.nextUrl.pathname.startsWith('/api/admin')
+
+  // API responde 401, nunca redirect: um 302 para /admin/login vira, dentro de
+  // um fetch(), uma resposta 200 com HTML de tela de login — que o cliente lê
+  // como sucesso e tenta parsear como JSON. O status tem que dizer a verdade.
+  if (isAdminApi && !user) {
+    return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
+  }
 
   if (isAdminRoute && !isLoginPage && !user) {
     // Redirect to login if not authenticated

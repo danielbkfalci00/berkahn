@@ -7,7 +7,17 @@ Leia os seguintes arquivos de contexto (vault Obsidian):
 - `Berkahn-Vault/20-context/seo-aeo-strategy.md` — regras de SEO/AEO
 - `Berkahn-Vault/30-prompts/blog-criacao.md` — prompt de criação (LOCKED)
 
-Com base na pesquisa feita anteriormente nesta conversa (ou em `Berkahn-Vault/40-content/blog/pesquisa/`), escreva o artigo final seguindo todas as regras do prompt de criação.
+Escreva o artigo final seguindo todas as regras do prompt de criação, com base na pesquisa feita anteriormente nesta conversa.
+
+Se a pesquisa foi de outra sessão, ela está na **pauta**, não no vault — desde
+2026-08-06 o `/pesquisa` grava no banco:
+
+```bash
+node scripts/conteudo/pauta.mjs buscar "<termo do tema>"
+node scripts/conteudo/pauta.mjs ver <id>     # mostra o bloco Pesquisa completo
+```
+
+`40-content/blog/pesquisa/` está vazia e saiu do fluxo — não procure lá.
 
 Checklist obrigatório antes de entregar:
 - Max 2.500 palavras

@@ -1,9 +1,13 @@
 import { NextResponse } from "next/server"
 import { gerarTemplateXlsx } from "@/lib/orcamento-template-xlsx"
+import { exigirSessao } from "@/lib/supabase/sessao"
 
 export const dynamic = "force-dynamic"
 
 export async function GET() {
+  const barrado = await exigirSessao()
+  if (barrado) return barrado
+
   try {
     const buffer = await gerarTemplateXlsx()
     return new NextResponse(new Uint8Array(buffer), {
