@@ -1,6 +1,6 @@
-# CLAUDE.md — Site Berkahn
+# AGENTS.md — Site Berkahn
 
-Instruções projeto-level para Claude Code. Para regras específicas do vault, ver `Berkahn-Vault/CLAUDE.md`.
+Instruções projeto-level para Codex. Para regras específicas do vault, ver `Berkahn-Vault/CLAUDE.md`.
 
 ---
 
@@ -31,7 +31,7 @@ Contexto: projeto teve histórico de criação de duplicatas. Toda decisão de "
 Padrão **SKIM → GREP → READ TARGETED** reduz 60-70% tokens vs leitura defensiva:
 
 1. **SKIM** (auto via SessionStart hook):
-   - este `CLAUDE.md`
+   - este `AGENTS.md`
    - `Berkahn-Vault/index.md` (entry point)
    - `Berkahn-Vault/10-memory/MEMORY.md` (índice)
    - `Berkahn-Vault/00-meta/projetos/sprint-ativa.md` (sprint atual)
@@ -96,11 +96,11 @@ Cada projeto tem nota-hub em `Berkahn-Vault/00-meta/projetos/{nome}.md` com `tip
 |-----|---------|-----------|
 | Segunda 9h | `/standup` (auto via `berkahn-standup-semanal`) | `00-meta/standup/YYYY-MM-DD.md` |
 | Segunda 14h | `/brainstorm` | `40-content/blog/ideias/ideas-YYYY-MM.md` |
-| Terça | `/pesquisa` | bloco **Pesquisa** da pauta (`/admin/conteudo/[id]`) |
+| Terça | `/pesquisa` | bloco Pesquisa da pauta em `/admin/conteudo` |
 | Quarta | `/criacao` | `40-content/blog/drafts/[slug].md` |
 | Quinta | `/artigo produzir` + aprovação + `/artigo publicar` | post draft → publicado; LinkedIn fecha no card |
 | Sexta 17h | `/wrap-up` (auto via `berkahn-wrapup-semanal`) | `00-meta/wrap-up/YYYY-MM-DD.md` |
-| Domingo 03h | `dream` (auto, semana 2+) | `~/.claude/projects/.../memory/` (revisar segunda) |
+| Domingo 03h | `dream` (auto, semana 2+) | `~/.Codex/projects/.../memory/` (revisar segunda) |
 
 ---
 
@@ -111,7 +111,7 @@ Cada projeto tem nota-hub em `Berkahn-Vault/00-meta/projetos/{nome}.md` com `tip
 | `/artigo` | `produzir` cria draft; `publicar` exige aprovação |
 | `/linkedin` | Grava texto, prompt e briefing no card |
 | `/brainstorm` | Ideias priorizadas (gera `40-content/blog/ideias/`) |
-| `/pesquisa` | Pesquisa tema + artigo completo (grava no bloco Pesquisa da pauta) |
+| `/pesquisa` | Pesquisa tema + artigo completo (grava na pauta) |
 | `/criacao` | Draft final (gera `40-content/blog/drafts/`) |
 | `/apresentacao` | Slide na apresentação executiva |
 | `/material` | Briefing material Canva |
@@ -124,11 +124,11 @@ Todos referenciam prompts em `Berkahn-Vault/30-prompts/` e contexto em `Berkahn-
 
 ### Scheduled-tasks ativas
 
-Listáveis via skill `scheduled-tasks` (MCP) ou em `~/.claude/scheduled-tasks/`:
+Listáveis via skill `scheduled-tasks` (MCP) ou em `~/.Codex/scheduled-tasks/`:
 - `berkahn-standup-semanal` — cron `0 9 * * 1` (segunda 9h)
 - `berkahn-wrapup-semanal` — cron `0 17 * * 5` (sexta 17h)
 
-Cada um roda em sessão fresca lendo `.claude/commands/{standup,wrap-up}.md`. Notifica Bruno ao completar.
+Cada um roda em sessão fresca lendo `.Codex/commands/{standup,wrap-up}.md`. Notifica Bruno ao completar.
 
 ---
 
@@ -140,7 +140,7 @@ Cada um roda em sessão fresca lendo `.claude/commands/{standup,wrap-up}.md`. No
 | `@agent-security-review` | Antes de auth/payments/data handling (Opus, false-positive minimization) |
 | `@agent-design-review` | UI/UX changes (Sonnet + Playwright, live env first) |
 
-Detalhes em `.claude/subagents/`.
+Detalhes em `.Codex/subagents/`.
 
 ---
 
@@ -168,8 +168,6 @@ gitleaks detect      # scan secrets (auto em pre-commit)
 | `vault-supabase-resync.mjs` | Compara slugs vault ↔ Supabase (`--check`) ou faz PATCH `meta_title/meta_description/answer_summary` (`--patch=slug1,slug2`). Requer `$env:SUPABASE_SERVICE_KEY` |
 | `vault-validate.mjs` | Linter de completude vault (9 validações, exit 0/1/2, output ANSI ou `--json`). Rodado manual ou via `/standup`, `/wrap-up` |
 | `vault-images.mjs` | Banco de imagens (`Docs/banco-imagens/`). `--inventory` (manifesto + flag `em_producao` cruzada por sha256 com `public/images/`), `--dupes` (duplicatas exatas + pares PNG/WEBP), `--check` (contagens vs índices), `--thumbs` (gera thumbnails webp). Entry-point do catálogo: `Berkahn-Vault/40-content/materiais/banco-imagens.md` |
-| `conteudo/pauta.mjs` | CLI genérico versionado do quadro: `buscar`, `ver`, `criar` com aprovação, `gravar`, `registrar-draft`, `produzir` e `publicar`. Toda escrita aceita `--dry-run`; overwrite exige dupla confirmação. Substitui `add-article-[slug].mjs` |
-| `conteudo/gerar-seed.mjs` | Gera o SQL das 66 pautas a partir do calendário editorial e dos `ideas-*.md`. Emite `.sql` para revisão a olho, não escreve no banco. Rodou uma vez |
 | `watermark-images.mjs` | Marca d'água BERKAHN em lote (Node + sharp). Isola o wordmark "BERKAHN" do logo-texto, centraliza grande com opacidade baixa e cor adaptativa por região. Flags `--src --out --frac --opacity --color --halo --pick --dry-run`. Preserva originais (escreve só em `--out`). Doc de uso: `Berkahn-Vault/40-content/materiais/watermark-clube-quinta-dos-lagos.md` |
 
 Documentação completa: `scripts/VAULT-SCRIPTS-README.md`
@@ -200,7 +198,7 @@ Documentação completa: `scripts/VAULT-SCRIPTS-README.md`
 | Skill `code-review` | Code review |
 | Skill `security-review` | Security analysis |
 
-**NÃO USAR**: MCP `obsidian-claude-code-mcp` (10-40k tokens schema, sem ganho real aqui).
+**NÃO USAR**: MCP `obsidian-Codex-mcp` (10-40k tokens schema, sem ganho real aqui).
 
 ---
 
@@ -217,5 +215,5 @@ Documentação completa: `scripts/VAULT-SCRIPTS-README.md`
 
 ## Feedback / Issues
 
-- Bugs no Claude Code: https://github.com/anthropics/claude-code/issues
+- Bugs no Codex: https://github.com/anthropics/Codex/issues
 - Comando help: `/help`

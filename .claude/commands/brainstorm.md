@@ -15,4 +15,12 @@ Entregue a tabela priorizada com clusters de conteúdo e sugestões de internal 
 **Arquivar o output no vault:**
 Salvar a tabela priorizada em `Berkahn-Vault/40-content/blog/ideias/ideas-[YYYY-MM].md` (append se arquivo do mês existir, novo se primeiro do mês). Frontmatter: tipo: meta, tags: project/blog, source/brainstorm, ai_summary.
 
+O brainstorm **não cria pauta automaticamente**. Depois de entregar a tabela,
+pergunte quais itens foram aprovados. Somente para cada seleção explícita, rode:
+
+```bash
+node scripts/conteudo/pauta.mjs criar --titulo="<título aprovado>" --plataformas=blog,linkedin --confirmar-aprovacao --dry-run
+node scripts/conteudo/pauta.mjs criar --titulo="<título aprovado>" --plataformas=blog,linkedin --confirmar-aprovacao
+```
+
 $ARGUMENTS

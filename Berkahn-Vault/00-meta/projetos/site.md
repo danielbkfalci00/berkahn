@@ -5,7 +5,7 @@ atualizado: 2026-08-06
 tags:
   - project/site
   - status/active
-ai_summary: "Hub do projeto Site — Next.js 15 + Supabase + Vercel em produção. Em 2026-08-06, home e /atualidades seguem a direção 'luxo de engenharia' mono ([[home-redesign-direcao]]); a listagem editorial preserva ISR 60 e caiu de 809/239 KB para 141/26 KB bruto/comprimido. Quadro de pautas em /admin/conteudo usa migrations 010/011; taxonomia do blog foi normalizada pela 012. Seis rotas /api/admin sem autenticação também foram fechadas (ver [[quadro-conteudo]]). Code paths em app/, lib/, components/."
+ai_summary: "Hub do Site — Next.js 15 + Supabase + Vercel. Home e /atualidades seguem 'luxo de engenharia' mono com ISR 60. No admin, migration 012 do quadro criou duas trilhas, RPC transacional e 66 pautas verificadas; ICMS foi reconciliado e o CLI genérico substituiu scripts por artigo. Smoke autenticado e migration 013 seguem pendentes. Seis rotas /api/admin sem auth foram fechadas; atenção ao zero-row silencioso do PostgREST com RLS."
 status: active
 projeto: site
 kpi_paginas_indexadas: 34
@@ -119,7 +119,7 @@ Site em produção (Next.js App Router + Supabase + Vercel + Tailwind + shadcn/u
 | `lib/documentacoes/` | Ancoragem, ponte e queries dos comentários inline | [[comentarios-inline-documentacoes]] |
 | `lib/` | Utilitários (Supabase client, helpers) | [[stack-nextjs-supabase]] |
 | `public/images/img_blog/` | Capas WebP por artigo | — |
-| `scripts/articles/` | add-article-*.mjs (25 scripts batch) | [[article-pipeline]] |
+| `scripts/conteudo/pauta.mjs` | CLI genérico versionado do pipeline | [[quadro-conteudo]] |
 
 ## Materiais de apoio
 

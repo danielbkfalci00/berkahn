@@ -71,7 +71,7 @@ export function MythBuster({ myths, variant = "accordion" }: MythBusterProps) {
                         </h4>
                       </div>
                       <p className="body-md text-red-800 leading-relaxed">
-                        "{item.myth}"
+                        “{item.myth}”
                       </p>
                     </div>
                     <p className="text-sm text-red-600 mt-4">
@@ -117,7 +117,7 @@ export function MythBuster({ myths, variant = "accordion" }: MythBusterProps) {
                 </div>
                 <div className="flex-1">
                   <p className="font-semibold text-black leading-snug">
-                    "{item.myth}"
+                    “{item.myth}”
                   </p>
                   <p className="text-sm text-black-50 mt-1">
                     {expandedIndex === index ? "Clique para fechar" : "Clique para ver a realidade"}

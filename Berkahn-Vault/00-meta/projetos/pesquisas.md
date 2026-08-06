@@ -1,19 +1,19 @@
 ---
 tipo: projeto
 criado: 2026-05-22
-atualizado: 2026-05-22
+atualizado: 2026-08-06
 tags:
   - project/blog
   - project/site
   - status/active
-ai_summary: Hub do projeto Pesquisas — mercado, concorrência, novos temas. Cross-projeto (alimenta blog, site, comercial). Pesquisas brutas em 40-content/blog/pesquisa/, competitor research em 40-content/pesquisa-mercado/ (migrado de Docs/REMODELAÇÃO/). Destilação em atomic notes (70-knowledge/) é GAP.
+ai_summary: Hub de Pesquisas. Pesquisa editorial de Blog vive no bloco da pauta em /admin/conteudo; competitor, mercado e SEO continuam no vault. Destilação reutilizável permanece em 70-knowledge/.
 status: active
 projeto: pesquisas
 kpi_pesquisas_brutas_arquivadas: 0
 kpi_competitors_documentados: 1
-kpi_atomic_notes_geradas: 0
+kpi_atomic_notes_geradas: 10
 kpi_meta_atomic_notes: 10
-kpi_atualizado_em: 2026-05-22
+kpi_atualizado_em: 2026-08-06
 contextos_aplicados:
   - seo-aeo-strategy
   - steel-frame-domain
@@ -33,17 +33,21 @@ subagents_uteis: []
 
 ## Status atual
 
-Pipeline de pesquisa funcional para blog (`/pesquisa` salva em `40-content/blog/pesquisa/YYYY-MM-DD-tema.md` que `/criacao` consome). Competitor research recém-migrado de `Docs/REMODELAÇÃO/competitor-research/` (1 snapshot: Stalart). Pesquisa de mercado de orçamento migrado de `Docs/Orçamento/`. Pesquisa SEO/AEO em `40-content/auditorias-seo/research-seo-aeo.md`. **Gap crítico**: `70-knowledge/` está vazio — pesquisas viram markdown bruto consumido e descartado, sem destilação em atomic notes reutilizáveis.
+Para Blog, `/pesquisa` grava diretamente em `pesquisa_conteudo` na pauta e
+`/criacao` lê pelo id; `40-content/blog/pesquisa/` não recebe arquivos novos.
+Competitor research, mercado e SEO continuam em pastas próprias. A destilação em
+`70-knowledge/` já começou e permanece a camada reutilizável.
 
 ## Bloqueios ativos
 
-- [ ] **70-knowledge/ vazio** — conhecimento não acumula entre artigos. Sprint 2.2 cria 8-10 atomic notes LSF (normas, custos, fogo, acústica, financiamento, etc.)
+- [x] **70-knowledge/ populado** — 10 atomic notes LSF criadas; a pendência agora é conectá-las às pesquisas novas quando houver aprendizado reutilizável
 - [ ] **Pesquisas brutas não viram atomic notes** — fluxo `/pesquisa → /criacao` descarta destilação
 - [ ] **Apenas 1 competitor documentado** (Stalart) — concorrência LSF brasileira é maior
 
 ## Próximos 7 dias
 
-- [ ] Inventariar pesquisas brutas existentes em `40-content/blog/pesquisa/`
+- [x] Retirar `40-content/blog/pesquisa/` do fluxo operacional
+- [ ] Inventariar blocos de pesquisa das pautas antes de criar novas atomic notes
 - [ ] Identificar 3-5 temas recorrentes para virar atomic notes (Sprint 2)
 
 ## KPIs (snapshot)
@@ -52,7 +56,7 @@ Pipeline de pesquisa funcional para blog (`/pesquisa` salva em `40-content/blog/
 |---------|-------|------|---|
 | Pesquisas brutas arquivadas | n/d | tracked | medir |
 | Competitors documentados | 1 | 5 | -4 |
-| Atomic notes geradas | 0 | 10 | -10 ⚠️ Sprint 2 |
+| Atomic notes geradas | 10 | 10 | meta atingida |
 | Pesquisas usadas em 2+ artigos | 0 | tracked | — |
 
 ## Contexto aplicado
@@ -66,7 +70,7 @@ Pipeline de pesquisa funcional para blog (`/pesquisa` salva em `40-content/blog/
 - Workflow: [[workflow-pesquisa]] — tema → fontes → síntese → atomic notes (criado em Sprint 1.8)
 - Prompts (LOCKED): [[blog-pesquisa]] · `/pesquisa` slash command
 - Outputs em:
-  - `40-content/blog/pesquisa/YYYY-MM-DD-tema.md` — pesquisas brutas para blog
+  - `/admin/conteudo` — pesquisas editoriais do Blog
   - `40-content/pesquisa-mercado/` — pesquisa de mercado + competitor research (migrado)
   - `40-content/auditorias-seo/research-seo-aeo.md` — fundamentos SEO/AEO
   - `70-knowledge/<conceito>.md` — atomic notes destiladas (em construção Sprint 2)

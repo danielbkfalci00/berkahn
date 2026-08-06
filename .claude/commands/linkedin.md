@@ -60,21 +60,18 @@ O prompt em inglês vai separado do briefing em português de propósito: o bot�
 de copiar do admin precisa entregar só o inglês, sem a justificativa junto.
 
 Se algum bloco já tiver conteúdo o script recusa e mostra o que está lá —
-mostre ao Bruno e pergunte antes de repetir com `--forcar`.
+mostre ao Bruno e pergunte antes de repetir com
+`--forcar --confirmar-substituicao`.
 
-**Não crie pasta em `40-content/linkedin/`.** As três pastas antigas de lá são
+**Não crie pasta em `40-content/linkedin/`.** As quatro pastas antigas de lá são
 acervo congelado; o texto novo vive na pauta.
 
 ## 4. A imagem
 
 Depois de gerar a imagem com o prompt, diga ao Bruno para subi-la no bloco
 **Capa Linkedin** em `/admin/conteudo/<id>` — o admin comprime e guarda no
-bucket. Não peça para salvar arquivo no vault.
-
-### Se o script não existir
-
-`/scripts/` é gitignored, então num clone novo ele não está lá. Nesse caso
-**não invente outro caminho**: entregue os textos no chat e diga ao Bruno para
-colar nos blocos correspondentes em `/admin/conteudo/<id>`.
+bucket. A imagem precisa ter **1080×1350, proporção 4:5**; outra proporção é
+recusada. Quando texto e capa estiverem presentes, a trilha chega a
+`produzido`. Aprovação e publicação continuam manuais.
 
 $ARGUMENTS

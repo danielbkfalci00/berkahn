@@ -1,20 +1,20 @@
 {
   "nodes": [
     {"id": "brainstorm", "type": "text", "text": "## 1. /brainstorm\nIdeias priorizadas\n→ 40-content/blog/ideias/", "x": -400, "y": -200, "width": 280, "height": 120, "color": "5"},
-    {"id": "pesquisa", "type": "text", "text": "## 2. /pesquisa\nFontes + estrutura\n→ 40-content/blog/pesquisa/", "x": -50, "y": -200, "width": 280, "height": 120, "color": "5"},
+    {"id": "pesquisa", "type": "text", "text": "## 2. /pesquisa\nFontes + estrutura\n→ bloco Pesquisa da pauta\nBlog: pesquisa", "x": -50, "y": -200, "width": 280, "height": 140, "color": "5"},
     {"id": "criacao", "type": "text", "text": "## 3. /criacao\nDraft final\n→ 40-content/blog/drafts/", "x": 300, "y": -200, "width": 280, "height": 120, "color": "5"},
-    {"id": "artigo", "type": "text", "text": "## 4. /artigo\nPublish + Supabase\n→ 40-content/blog/publicados/\n+ public/images/img_blog/\n+ scripts/articles/", "x": 650, "y": -200, "width": 320, "height": 180, "color": "6"},
-    {"id": "linkedin", "type": "text", "text": "## /linkedin\nPost + briefing\n→ 40-content/linkedin/", "x": 650, "y": 50, "width": 280, "height": 120, "color": "4"},
+    {"id": "artigo", "type": "text", "text": "## 4. /artigo\nproduzir → post draft\naprovação manual\npublicar → vault + Supabase\nCLI genérico pauta.mjs", "x": 650, "y": -200, "width": 320, "height": 190, "color": "6"},
+    {"id": "linkedin", "type": "text", "text": "## /linkedin\nTexto + briefing no card\nCapa 1080×1350\nPublicação externa manual", "x": 650, "y": 50, "width": 300, "height": 150, "color": "4"},
     {"id": "context", "type": "text", "text": "## Contexto (leitura)\n[[berkahn-brand]]\n[[steel-frame-domain]]\n[[seo-aeo-strategy]]\n[[article-pipeline]]", "x": -400, "y": 50, "width": 320, "height": 160, "color": "3"},
     {"id": "prompts", "type": "text", "text": "## Prompts (LOCKED 🔒)\n[[blog-brainstorm]]\n[[blog-pesquisa]]\n[[blog-criacao]]\n[[article-implementation-prompt]]\n[[linkedin-post]]", "x": -50, "y": 50, "width": 320, "height": 180, "color": "2"},
-    {"id": "supabase", "type": "text", "text": "## Supabase\nINSERT posts\n[[supabase-config]]", "x": 1050, "y": -200, "width": 220, "height": 120, "color": "1"}
+    {"id": "supabase", "type": "text", "text": "## Supabase\nconteudo_pautas + posts\nRPC transacional\n[[supabase-config]]", "x": 1050, "y": -200, "width": 240, "height": 140, "color": "1"}
   ],
   "edges": [
     {"id": "e1", "fromNode": "brainstorm", "fromSide": "right", "toNode": "pesquisa", "toSide": "left"},
     {"id": "e2", "fromNode": "pesquisa", "fromSide": "right", "toNode": "criacao", "toSide": "left"},
     {"id": "e3", "fromNode": "criacao", "fromSide": "right", "toNode": "artigo", "toSide": "left"},
     {"id": "e4", "fromNode": "artigo", "fromSide": "right", "toNode": "supabase", "toSide": "left"},
-    {"id": "e5", "fromNode": "artigo", "fromSide": "bottom", "toNode": "linkedin", "toSide": "top", "label": "após publish"},
+    {"id": "e5", "fromNode": "artigo", "fromSide": "bottom", "toNode": "linkedin", "toSide": "top", "label": "trilha independente"},
     {"id": "e6", "fromNode": "context", "fromSide": "top", "toNode": "brainstorm", "toSide": "bottom", "label": "lê"},
     {"id": "e7", "fromNode": "prompts", "fromSide": "top", "toNode": "pesquisa", "toSide": "bottom", "label": "executa"}
   ]

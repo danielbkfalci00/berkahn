@@ -30,7 +30,10 @@ Além disso, `2026-06-16-painelizado-vs-stick/imagem-final.png` é o único luga
 | `2026-07-14-energia-solar` | `energia-solar-residencial` |
 | `2026-08-05-icms-solar-sp` | `isencao-icms-energia-solar-sp` |
 
-Nenhuma foi migrada para o banco: casam por `artigo_slug` do frontmatter, não por id, e um match errado custa mais do que os quatro cards valem. Se quiser trazer alguma, é `pauta.mjs gravar` à mão.
+Somente ICMS foi reconciliado explicitamente no banco, pelo UUID da pauta e do
+post. As outras três não foram migradas: casam por `artigo_slug` do
+frontmatter, não por id, e um match errado custa mais do que os cards valem.
+Os arquivos das quatro continuam imutáveis.
 
 ## Onde o fluxo vive agora
 

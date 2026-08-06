@@ -43,8 +43,8 @@ Regras detalhadas em [[CLAUDE]] (vault-level — separado do CLAUDE.md do projet
 |-----|---------|-----------|
 | Segunda 9h | `/standup` | `00-meta/standup/YYYY-MM-DD.md` |
 | Segunda 14h | `/brainstorm` | `40-content/blog/ideias/ideas-YYYY-MM.md` |
-| Terça | `/pesquisa` | `40-content/blog/pesquisa/YYYY-MM-DD-tema.md` |
+| Terça | `/pesquisa` | bloco Pesquisa da pauta em `/admin/conteudo` |
 | Quarta | `/criacao` | `40-content/blog/drafts/[slug].md` |
-| Quinta | `/artigo` + `/linkedin` | `40-content/blog/publicados/[slug].md` + `40-content/linkedin/YYYY-MM-DD-tema/` |
+| Quinta | `/artigo produzir` + aprovação + `/artigo publicar` | markdown publicado + trilhas do card |
 | Sexta 17h | `/wrap-up` | `00-meta/wrap-up/YYYY-MM-DD.md` |
 | Domingo | `dream` (auto) | `~/.claude/projects/.../memory/` (revisar segunda) |

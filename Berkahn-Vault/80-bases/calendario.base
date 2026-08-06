@@ -1,3 +1,5 @@
+# Visão do acervo versionado no vault. O pipeline operacional vive em
+# /admin/conteudo e não deve ser inferido destes arquivos.
 filters:
   or:
     - file.inFolder("40-content/blog")
@@ -18,7 +20,7 @@ properties:
 
 views:
   - type: cards
-    name: "Pipeline (cards por data)"
+    name: "Acervo (cards por data)"
     cardSize: 240
     order:
       - titulo
@@ -29,7 +31,7 @@ views:
         direction: ASC
 
   - type: table
-    name: "Próximos 30 dias"
+    name: "Acervo nos próximos 30 dias"
     filters:
       and:
         - 'publicado_em >= today()'
@@ -43,7 +45,7 @@ views:
         direction: ASC
 
   - type: list
-    name: "Backlog (sem data)"
+    name: "Acervo sem data"
     filters:
       and:
         - '!publicado_em'

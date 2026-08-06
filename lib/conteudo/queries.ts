@@ -11,7 +11,9 @@ import { toPauta, type Pauta, type PautaRow } from "@/types/conteudo";
  * declarada na migration 010 — o PostgREST descobre a relação pelo constraint.
  */
 const COLUNAS_PAUTA = `
-  id, titulo, tipo, coluna, ordem,
+  id, titulo, tipo,
+  status_blog, status_linkedin, ordem_blog, ordem_linkedin,
+  draft_path, linkedin_url, linkedin_publicado_em,
   keyword, intencao, funil, prioridade, trilha, semana, data_alvo,
   insights, pesquisa_conteudo, post_id,
   capa_blog_url, capa_linkedin_url, linkedin_texto, linkedin_briefing,
@@ -41,8 +43,8 @@ export async function listarPautas(): Promise<ResultadoPautas> {
   const { data, error } = await supabase
     .from("conteudo_pautas")
     .select(COLUNAS_PAUTA)
-    .order("coluna", { ascending: true })
-    .order("ordem", { ascending: true });
+    .order("data_alvo", { ascending: true, nullsFirst: false })
+    .order("ordem_blog", { ascending: true, nullsFirst: false });
 
   if (error) return { pautas: [], erro: error.message };
   if (!data) return { pautas: [], erro: null };

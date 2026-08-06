@@ -110,7 +110,7 @@ export function CompanyStorySection({ story }: CompanyStorySectionProps) {
                 <p>
                   A Berkahn é nova, mas quem está por trás não é.{" "}
                   <em className="font-serif italic">
-                    "São 20 anos observando o que funciona — e o que não funciona — na construção civil."
+                    “São 20 anos observando o que funciona — e o que não funciona — na construção civil.”
                   </em>
                 </p>
 

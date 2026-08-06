@@ -1,10 +1,10 @@
 ---
 tipo: meta
 criado: 2026-05-21
-atualizado: 2026-07-29
+atualizado: 2026-08-06
 tags:
   - status/active
-ai_summary: Map of Content visual do vault Berkahn. Expansão do index.md com seções temáticas para navegação humana. Topo destaca 7 hubs de projeto ativos (first-class entities) + bases dinâmicas. Cluster por workstream (blog, LinkedIn, apresentação, site).
+ai_summary: MOC do vault. O quadro de conteúdo é o hub operacional de Blog e LinkedIn; calendario.base lista o acervo do vault. Oito hubs de projeto e bases dinâmicas permanecem como navegação.
 status: active
 ---
 
@@ -16,8 +16,8 @@ Mapa temático do vault Berkahn. Para visão estrutural (por pasta), ver [[index
 
 | Projeto | Status | Bloqueio principal | Workflow | Atualizado |
 |---------|--------|--------------------|----------|------------|
-| [[blog]] | active | Pipeline editorial vazio; vault divergente de produção | [[workflow-conteudo]] | 2026-07-29 |
-| [[linkedin]] | active | Cadência: 3/38 artigos com post | [[workflow-conteudo]] | 2026-07-29 |
+| [[blog]] | active | Exercitar próximo ciclo completo autenticado | [[workflow-conteudo]] | 2026-08-06 |
+| [[linkedin]] | active | Publicação externa continua manual | [[workflow-conteudo]] | 2026-08-06 |
 | [[site]] | active | Bug SearchAction + Google Sheets SPOF | [[workflow-site]] | 2026-05-22 |
 | [[seo-aeo]] | active | **P0**: 9 posts sem meta tags (indexação resolvida: 89%) | [[workflow-seo]] | 2026-07-29 |
 | [[apresentacoes]] | active | Roteiros não versionados (parcial) | [[workflow-comercial]] | 2026-05-22 |
@@ -49,6 +49,7 @@ Conhecimento que orienta o trabalho:
 - [[steel-frame-domain]] — Técnica LSF
 - [[design-principles]] — Design system
 - [[article-pipeline]] — Pipeline técnico blog
+- [[quadro-conteudo]] — Fonte operacional das pautas e duas trilhas
 - [[seo-aeo-strategy]] — Estratégia SEO + AEO
 - [[presentation-system]] — Sistema apresentação
 
@@ -57,7 +58,7 @@ Conhecimento que orienta o trabalho:
 Por workstream:
 - **Blog (LOCKED 🔒)**: [[blog-brainstorm]] → [[blog-pesquisa]] → [[blog-criacao]] → [[article-implementation-prompt]]
 - **LinkedIn (LOCKED 🔒)**: [[linkedin-post]]
-- **Quick add (LOCKED 🔒)**: [[add-article]]
+- **Quick add (LOCKED 🔒, legado)**: [[add-article]] — preservado como referência; o fluxo atual usa `scripts/conteudo/pauta.mjs`
 - **Material (flexível)**: [[canva-briefing]]
 - **Apresentação (flexível)**: [[presentation-slide]]
 - **SEO (flexível)**: [[seo-page-audit]]
@@ -69,14 +70,14 @@ Por workstream:
 - **Blog publicados**: 38 artigos em `40-content/blog/publicados/`
 - **Drafts**: `40-content/blog/drafts/`
 - **Ideias**: `40-content/blog/ideias/ideas-YYYY-MM.md`
-- **Pesquisa**: `40-content/blog/pesquisa/`
-- **LinkedIn**: `40-content/linkedin/YYYY-MM-DD-tema/`
+- **Pesquisa editorial**: bloco da pauta no [[quadro-conteudo]]
+- **LinkedIn legado**: `40-content/linkedin/` (quatro pastas congeladas)
 - **Apresentações**: `40-content/apresentacoes/`
 - **Materiais**: `40-content/materiais/`
 - **Auditorias SEO**: `40-content/auditorias-seo/`
 - **Estratégia editorial**: `40-content/estrategia/` — [[2026-07-diagnostico-editorial]] · [[2026-08-calendario-editorial]] · [[2026-08-playbook-pautas]] · [[2026-07-thin-content-mapa]]
 
-Query estruturada: [[artigos.base]] | [[calendario.base]]
+Query do acervo: [[artigos.base]] | [[calendario.base]] · Operação: [[quadro-conteudo]]
 
 ## 🎨 Brand + 🏗️ Arquitetura
 

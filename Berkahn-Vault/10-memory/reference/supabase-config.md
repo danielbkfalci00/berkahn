@@ -31,6 +31,7 @@ subtipo: reference
 | Tabela | Operações |
 |--------|-----------|
 | `posts` | INSERT (POST → 201), UPDATE (PATCH → 204) |
+| `conteudo_pautas` | Fonte operacional do pipeline. Migration 012: trilhas independentes, RPC de reordenação e publicação atômica. Ver [[quadro-conteudo]] |
 | `orcamentos` | CRUD via server actions em `app/admin/orcamentos/actions.ts`; trigger `BEFORE INSERT` gera `numero` BRK-YYYY-NNNN; PDFs no bucket `orcamento-pdfs` (signed URL 7 dias). Schema completo em `supabase/migrations/006_create_orcamentos.sql`. Ver [[orcamento-automacao]] |
 | `proposals`, `presentations` | Existem em [migration 001](../../../supabase/migrations/001_initial_schema.sql) mas conceito diferente — não confundir com `orcamentos` (estimativa preliminar não-vinculante com faixa de valor) |
 | `documentos` | HTML standalone dos relatórios e da estratégia, servido em `/admin/documentacoes`. Upsert por slug pelo cron e pelo seed. Migration 008 |
@@ -51,7 +52,9 @@ Para `SupabaseClient<Database>` funcionar em supabase-js 2.90+, o tipo Database 
 
 ## Onde ficam os scripts
 
-`scripts/articles/add-article-*.mjs` (todo o diretório `scripts/` está gitignored — secrets hardcoded ali NÃO vazam, mas mesmo assim use env vars por convenção).
+`scripts/conteudo/pauta.mjs` é versionado e lê a service role apenas de
+`.env.local`. Scripts históricos continuam ignorados, mas hardcode permanece
+dívida de higiene: ignorado não significa seguro para cópia, backup ou transcript.
 
 ## Histórico de incidentes
 

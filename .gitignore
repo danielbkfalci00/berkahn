@@ -74,6 +74,18 @@ tmpgitleaks*.json
 
 # scripts (migration and utility scripts, not needed in production)
 /scripts/
+!/scripts/
+/scripts/*
+!/scripts/VAULT-SCRIPTS-README.md
+!/scripts/conteudo/
+/scripts/conteudo/*
+!/scripts/conteudo/pauta.mjs
+!/scripts/db/
+/scripts/db/*
+!/scripts/db/testar-autosave.mjs
+!/scripts/db/testar-ordem.mjs
+!/scripts/db/testar-estados.mjs
+!/scripts/db/verificar-012.mjs
 
 # Transcripts de sessao do Claude Code. Contem output de comandos, e por isso
 # ja carregaram service key do Supabase e token assinado de PDF em texto claro.

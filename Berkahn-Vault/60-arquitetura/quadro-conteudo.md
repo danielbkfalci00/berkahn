@@ -1,14 +1,14 @@
 ---
 tipo: context
 criado: 2026-08-05
-atualizado: 2026-08-05
+atualizado: 2026-08-06
 tags:
   - project/site
   - project/blog
   - project/linkedin
   - status/active
   - domain/integrations
-ai_summary: "Quadro Kanban de pautas em /admin/conteudo. A unidade é o ASSUNTO, não o artigo: um card agrega insights, pesquisa, artigo (por FK), post de LinkedIn e capas. Quatro decisões que a próxima sessão re-derivaria sozinha: por que a pauta é entidade separada de posts, por que o quadro nunca escreve posts.status, por que o seed é gerador de uma vez só, e por que toda mutação confere a linha afetada (RLS não devolve erro, devolve zero linhas)."
+ai_summary: "Fonte operacional do conteúdo em /admin/conteudo. Uma pauta tem trilhas Blog e LinkedIn independentes, estado geral derivado e reordenação transacional. Mover card nunca publica; somente /artigo publicar atualiza post+pauta. Migration 012 aplicada com 66 pautas e ICMS reconciliado; 013 aguarda deploy compatível."
 status: active
 projeto: site
 contextos_aplicados:
@@ -29,11 +29,40 @@ Daí `conteudo_pautas` ([migration 010](../../supabase/migrations/010_conteudo_p
 
 O vínculo é FK com `ON DELETE SET NULL` e UNIQUE parcial. `CASCADE` apagaria semanas de pesquisa por causa de um artigo; `RESTRICT` faria o delete em `/admin/posts` falhar por uma tabela que aquela tela nem conhece. A UNIQUE **dispara de propósito** — quatro pautas Core são refresh de artigo existente, e ali o certo é fundir os cards, não duplicar.
 
-## O quadro nunca escreve em `posts.status`
+## Mover no quadro nunca escreve em `posts.status`
 
-Arrastar um card para "Publicado" move o card, não publica o artigo. Publicar continua sendo ato explícito no editor de posts.
+As trilhas não aceitam arrastar para `publicado`. Aprovação é manual, mas
+publicação é uma operação explícita: `/artigo publicar` chama a RPC
+`publicar_artigo_pauta`, que altera `posts.status` e `status_blog` na mesma
+transação. No LinkedIn, a action exige URL e data após a publicação externa.
 
-O preço é que a coluna do quadro e o estado real do artigo podem discordar. Em vez de esconder isso, `SeloPostVinculado` **mostra**: o selo traz o status real e acende um aviso quando os dois divergem. Cards `linkedin-acervo` ficam fora da checagem — eles nascem de artigo já publicado, e sem a exceção o aviso apareceria em 22 dos 66 de uma vez, ensinando a ignorá-lo.
+O selo continua comparando a trilha Blog com o artigo real e torna divergências
+visíveis. Cards `linkedin-acervo` ficam fora da checagem porque Blog não se
+aplica a eles.
+
+## Duas trilhas, três visões
+
+A migration 012 adicionou `status_blog`, `status_linkedin`, ordens próprias,
+`draft_path` e os campos de publicação do LinkedIn. Status e ordem são
+`NULL` quando a plataforma não se aplica. A aba Geral deriva cinco estados e
+não persiste um terceiro status: Planejada, Em produção, Aguardando aprovação,
+Pronta para publicar e Concluída.
+
+A RPC `mover_pautas_conteudo` recebe todo o diff de uma solta e executa em uma
+transação. Qualquer item inválido desfaz o lote, evitando meia reordenação.
+`activity_logs.details` registra canal, origem, estado anterior e novo.
+Drag-and-drop, menu do card e ação em lote reutilizam a mesma RPC. O lote só
+oferece etapas de produção; aprovação e publicação permanecem individuais.
+
+> [!warning] Migration 013 ainda não existe
+> `coluna`, `ordem` e o índice antigo permanecem somente para compatibilidade
+> de deploy. Removê-los antes do smoke autenticado criaria uma janela sem volta.
+
+> [!todo] Smoke autenticado
+> Build, tipos, lint, testes puros e banco passaram. Três tentativas Playwright
+> locais não receberam o DOM nem em `next dev` nem em `next start`, mesmo sem
+> proxy; isso é bloqueio do loopback desta sessão, não aceite visual. Ainda é
+> obrigatório testar logado e validar o clipboard com clique humano.
 
 ## O seed é gerador, não importador
 
@@ -51,7 +80,7 @@ O calendário é documento estático e a tabela nasceu vazia: o seed roda **uma 
 > [!danger] O PostgREST não devolve erro quando a RLS filtra a linha
 > O `update` "funciona" e afeta **zero linhas**. Sem checar isso, uma sessão expirada com a aba aberta faz o autosave reportar "Salvo" para sempre enquanto o banco não recebe nada — e a pessoa perde o texto ao fechar a aba.
 >
-> Aconteceu de verdade na verificação: a tela dizia "Salvo às 18:41" com `null` no banco. As oito mutações de `app/admin/conteudo/actions.ts` agora conferem: cinco com `.select("id")` + checagem de vazio, três já cobertas por `.single()`, que erra em zero linhas.
+> Aconteceu de verdade na verificação: a tela dizia "Salvo às 18:41" com `null` no banco. As mutações de `app/admin/conteudo/actions.ts` conferem a linha afetada com `.select("id")` ou `.single()`, que erra em zero linhas.
 
 Vale para qualquer tabela com RLS neste projeto, não só esta.
 
@@ -69,25 +98,37 @@ Blur grava na hora, debounce de 1200 ms cobre quem digita sem tirar o foco, `Ctr
 
 **`listarArtigosVinculaveis` exclui o artigo da própria pauta.** A query filtra todo post que já pertence a alguma pauta — inclusive a que está aberta. Alimentar um seletor só com essa lista faria um card que **tem** artigo mostrar "nenhum selecionado", e os 22 cards de acervo são exatamente esse caso. Por isso `BlocoArtigo` lê o vínculo atual de `pauta.artigo` e usa a lista só para **trocar**.
 
-**JPEG não tem canal alfa.** `comprimirImagem` pinta o fundo de branco antes de desenhar; sem isso um PNG transparente é achatado contra o que o navegador escolher, normalmente preto. Importa porque as capas são geradas por IA e gerador entrega PNG com frequência. O nome do arquivo também precisa virar `.jpg`, porque `definirCapa` deriva a extensão dele — bytes JPEG num `.png` gravam o objeto errado no bucket.
+**JPEG não tem canal alfa.** O processamento pinta o fundo de branco. Os objetos
+de staging usam paths fixos `conteudo/{id}/blog.jpg` e
+`conteudo/{id}/linkedin.jpg`; troca não acumula extensões e remoção limpa banco
+e Storage. Se um upload novo não chegar ao update e não havia capa anterior, a
+action também remove o objeto recém-criado. LinkedIn valida 4:5 e normaliza para 1080×1350. No Blog, o CLI
+`produzir` converte staging para WebP público por slug.
 
 ## Os comandos gravam na pauta
 
 Desde 2026-08-06, `/pesquisa` e `/linkedin` **não criam mais arquivo no vault**. Eles chamam `scripts/conteudo/pauta.mjs`, que grava direto na coluna. Acabou a dupla escrita.
 
-Três regras que o script impõe, e que existem porque a tabela **não tem versionamento nem undo**:
+O script é versionado seletivamente e cobre `criar`, `gravar`,
+`registrar-draft`, `produzir` e `publicar`. Três regras existem porque a
+tabela **não tem versionamento nem undo**:
 
 - **O texto vai por `--arquivo`, nunca no argv.** O output do `/pesquisa` tem milhares de caracteres com aspas, `$` e quebras de linha — isso quebra no PowerShell na primeira execução real.
-- **Bloco preenchido não é sobrescrito sem `--forcar`**, e `--forcar` guarda o anterior em `scripts/.cache/`. Rodar `/pesquisa` duas vezes no mesmo tema apagaria a edição feita à mão.
+- **Bloco preenchido não é sobrescrito sem
+  `--forcar --confirmar-substituicao`**, e o anterior vai para
+  `scripts/.cache/`.
 - **Acima de 60.000 caracteres recusa**, batendo com o teto da UI. A server action corta em silêncio.
+
+`publicar` aceita reexecução quando `draft_path` já aponta para
+`publicados/`, e valida o frontmatter antes de mover o arquivo. Em falha da
+RPC, restaura o markdown original.
 
 O comando **pergunta** quando a busca devolve mais de um resultado ou nenhum — nunca escolhe nem cria pauta sozinho. As 66 vêm de um calendário pensado, e um tema já planejado com fraseado diferente viraria a 67ª duplicada.
 
 `linkedin_briefing` (o ângulo do calendário) é **somente leitura** para os comandos: é a única cópia daquele texto.
 
-> `/scripts/` é gitignored, então num clone novo o script não existe. Os dois comandos têm fallback escrito: entregam o texto no chat e mandam colar em `/admin/conteudo/[id]`.
-
-`40-content/linkedin/` virou acervo congelado, com README próprio — não foi migrado nem apagado: as notas têm frontmatter que o validator checa, o hub conta KPI a partir delas, e ali está a única cópia de uma das imagens finais.
+`40-content/linkedin/` virou acervo congelado com quatro pastas. Somente ICMS
+foi reconciliado no banco; os arquivos legados não foram apagados.
 
 ---
 

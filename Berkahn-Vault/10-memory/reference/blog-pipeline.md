@@ -1,7 +1,7 @@
 ---
 tipo: memory
 criado: 2026-04-13
-atualizado: 2026-05-21
+atualizado: 2026-08-06
 tags:
   - ai/memory
   - status/active
@@ -34,15 +34,16 @@ No conteúdo markdown, componentes interativos são referenciados por placeholde
 
 | Conteúdo | Path |
 |----------|------|
-| Scripts INSERT/UPDATE Supabase | `scripts/articles/add-article-*.mjs` (gitignored) |
-| Capas (live, Next.js consome) | `public/images/blog/[slug]/cover.webp` |
+| CLI de conteúdo | `scripts/conteudo/pauta.mjs` (versionado) |
+| Capas (live, Next.js consome) | `public/images/img_blog/[slug]/cover.webp` |
 | Outros assets blog (não capas) | `public/images/img_blog/` |
 | Markdown publicado | `Berkahn-Vault/40-content/blog/publicados/` (após Fase 8) |
 
 ## Comando
 
 ```
-/artigo Berkahn-Vault/40-content/blog/publicados/[slug].md
+/artigo produzir <pauta-id> Berkahn-Vault/40-content/blog/drafts/[slug].md
+/artigo publicar <pauta-id>
 ```
 
 Lê o arquivo direto, sem precisar colar conteúdo.

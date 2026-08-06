@@ -5,7 +5,7 @@ atualizado: 2026-08-06
 tags:
   - project/blog
   - status/active
-ai_summary: Hub do projeto Blog — 40 posts em /atualidades, 34 indexados. Taxonomia normalizada em 2026-08-06 para 5 categorias canônicas ponta a ponta; `/artigo` valida a lista sem alterar o prompt locked. Pipeline 4 etapas, 44 pautas até dezembro. Bloqueios restantes: canibalização das páginas de custo e duas séries Arquitecasa para o Sudeste. Lido por /standup, /wrap-up, /artigo.
+ai_summary: Hub do Blog — 40 posts em /atualidades, 34 indexados e taxonomia normalizada para 5 categorias canônicas. O quadro /admin/conteudo tem 44 trilhas Blog; /pesquisa grava no card, /criacao registra draft_path e /artigo separa produção de publicação aprovada. ICMS reconciliado. Bloqueios: canibalização de custo e séries Arquitecasa para o Sudeste.
 status: active
 projeto: blog
 kpi_publicados: 40
@@ -56,7 +56,10 @@ Dados de publicação verificados em 2026-08-06 contra Supabase; indexação per
 
 **A divergência vault ↔ produção foi encerrada em 2026-07-30**: dos 6 arquivos do vault fora do ar, 3 eram renomeações (arquivadas) e 3 eram artigos inéditos, dos quais 1 foi publicado e 2 foram para backlog. A seção histórica abaixo fica como registro de como o descompasso foi diagnosticado.
 
-`ideias/` foi reposta em 2026-07-29 com 44 pautas até dezembro (`ideas-2026-{08..12}.md`). `drafts/` e `pesquisa/` seguem vazias: enchem conforme o ciclo semanal roda.
+`ideias/` foi reposta em 2026-07-29 com 44 pautas até dezembro
+(`ideas-2026-{08..12}.md`). O estado dessas pautas vive no
+[[quadro-conteudo]]; `pesquisa/` saiu do fluxo e `drafts/` contém apenas o
+markdown ativo referenciado por `draft_path`.
 
 Tráfego seguiu crescendo: 1.179 users em junho, 1.407 nos primeiros 26 dias de julho. Mas o crescimento vem de um ativo só (`custo-steel-frame-m2-2026` = 52% dos pageviews), não da cadência.
 
@@ -76,7 +79,10 @@ Tráfego seguiu crescendo: 1.179 users em junho, 1.407 nos primeiros 26 dias de 
 
 ## Próximos 7 dias
 
-- [ ] Semana S1: `/pesquisa` → `/criacao` → `/artigo` do ICMS solar (janela vence 31/12, e homologação leva meses). **Já destravado** — a faixa de preço canônica está definida
+- [x] Semana S1: artigo de ICMS publicado e reconciliado com a pauta
+- [ ] Exercitar a próxima pauta pelo fluxo
+  `/pesquisa` → `/criacao` → `/artigo produzir` → aprovação →
+  `/artigo publicar`
 
 > [!note] `orcamento-steel-frame` e `hold-downs-ancoragens` saíram do fluxo semanal
 > Foram para backlog sem data em 2026-07-30, cada um com bloqueio nomeado. Ver "Backlog: os 2 artigos prontos que não vão ao ar agora" abaixo. **Não puxar para a semana sem antes ter os números** — publicar `orcamento-steel-frame` como está adiciona uma terceira faixa de preço ao acervo.
@@ -213,7 +219,7 @@ O motivo está em comentário no `app/atualidades/[slug]/page.tsx` para o skelet
 ## Subagents úteis
 
 - `@pragmatic-code-review` — review de componentes React novos em `components/article/`
-- `@security-review` — antes de PRs com mudanças em `scripts/articles/` ou Supabase keys
+- `@security-review` — antes de PRs com mudanças no CLI de conteúdo ou Supabase keys
 
 ## Materiais de apoio
 

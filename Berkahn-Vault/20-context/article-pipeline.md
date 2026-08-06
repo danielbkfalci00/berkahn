@@ -6,7 +6,7 @@ tags:
   - ai/context
   - project/blog
   - domain/lsf
-ai_summary: Pipeline técnico de artigos do blog Berkahn — 4 etapas (/brainstorm, /pesquisa, /criacao, /artigo), taxonomia canônica de 5 categorias, 19 componentes interativos via placeholders e schema Supabase posts.
+ai_summary: Pipeline operacional e técnico do conteúdo. /admin/conteudo mantém Blog e LinkedIn independentes; pesquisa fica no card, draft no vault e /artigo separa produção de publicação aprovada. Artigos usam 5 categorias canônicas, 19 componentes via placeholders e schema Supabase posts.
 status: active
 escopo: berkahn
 ---
@@ -21,7 +21,9 @@ Documenta o fluxo completo de criação e publicação de artigos em `/atualidad
 1. /brainstorm → Gerar ideias priorizadas por impacto
 2. /pesquisa  → Pesquisar e escrever artigo completo sobre tema escolhido
 3. /criacao   → Escrever artigo final com regras rígidas de qualidade
-4. /artigo    → Implementar com componentes interativos + publicar no Supabase
+4. /artigo produzir → Implementar componentes + criar post draft vinculado
+5. aprovação manual → Blog aprovado no quadro
+6. /artigo publicar → Mover markdown + publicar post e pauta atomicamente
 ```
 
 Após publicação: `/linkedin` para criar post de divulgação.
@@ -48,35 +50,34 @@ Todo conteúdo publicado é arquivado em `Berkahn-Vault/40-content/blog/publicad
       [slug].md          ← rascunho ativo
     ideias/
       ideas-YYYY-MM.md   ← saída de /brainstorm
-    pesquisa/
-      YYYY-MM-DD-tema.md ← saída de /pesquisa
-  linkedin/
-    YYYY-MM-DD-tema/
-      post.md            ← texto pronto + hashtags
-      briefing-imagem.md ← briefing visual para Canva
-      imagem-final.png   ← exportada do Canva (manual)
+    pesquisa/            ← legado vazio; pesquisa operacional vive na pauta
+  linkedin/              ← quatro pastas legadas, congeladas
 ```
 
 Capas vivem em `public/images/img_blog/[slug]/cover.webp` (consumido pelo Next.js — fora do vault).
 
 ### Passos obrigatórios no /artigo
-1. Salvar markdown final em `40-content/blog/publicados/[slug].md`
-2. Converter imagem de capa para WebP
-3. Copiar WebP para `public/images/img_blog/[slug]/cover.webp`
-4. Criar script `scripts/articles/add-article-[slug].mjs` e inserir no Supabase
+1. `/artigo produzir`: ler o draft registrado em `draft_path`
+2. Converter a capa staging para `public/images/img_blog/[slug]/cover.webp`
+3. Criar ou atualizar `posts` como `draft` e vincular `post_id`
+4. Aguardar aprovação manual no quadro
+5. `/artigo publicar`: mover o markdown para `publicados/` e publicar
+   post+pauta pela RPC idempotente; em falha, restaurar o markdown
 
 ### Passos obrigatórios no /linkedin
-1. Salvar texto em `40-content/linkedin/YYYY-MM-DD-tema/post.md`
-2. Salvar briefing em `40-content/linkedin/YYYY-MM-DD-tema/briefing-imagem.md`
-3. Informar Bruno para exportar Canva como `imagem-final.png` na mesma pasta
+1. Gravar texto, prompt e briefing nos blocos da pauta
+2. Subir capa 1080×1350 (4:5) no card
+3. Aprovar manualmente
+4. Após publicar manualmente no LinkedIn, informar URL e data no card
 
 ## Onde mora cada coisa
 
 | O quê | Onde |
 |-------|------|
 | Markdown publicado | `Berkahn-Vault/40-content/blog/publicados/` |
-| LinkedIn arquivado | `Berkahn-Vault/40-content/linkedin/` |
-| Scripts de inserção | `scripts/articles/add-article-[slug].mjs` (gitignored) |
+| Estado operacional | `/admin/conteudo` / tabela `conteudo_pautas` |
+| LinkedIn legado | `Berkahn-Vault/40-content/linkedin/` (congelado) |
+| Automação genérica | `scripts/conteudo/pauta.mjs` (versionado) |
 | Metadados dos posts | `data/posts.ts` |
 | Componentes de artigo | `components/article/` (25 componentes) |
 | Renderizador principal | `app/atualidades/[slug]/page.tsx` |

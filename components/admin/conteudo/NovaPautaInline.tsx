@@ -2,11 +2,11 @@
 
 import { useRef, useState } from "react";
 import { Plus } from "lucide-react";
-import type { ColunaPauta } from "@/types/conteudo";
+import type { StatusQuadro } from "@/types/conteudo";
 
 interface Props {
-  coluna: ColunaPauta;
-  aoCriar: (titulo: string, coluna: ColunaPauta) => void;
+  coluna: StatusQuadro;
+  aoCriar: (titulo: string, coluna: StatusQuadro) => void;
   desabilitado: boolean;
 }
 

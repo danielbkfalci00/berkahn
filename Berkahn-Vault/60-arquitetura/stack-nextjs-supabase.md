@@ -1,7 +1,7 @@
 ---
 tipo: context
 criado: 2026-05-21
-atualizado: 2026-05-21
+atualizado: 2026-08-06
 tags:
   - ai/context
   - project/site
@@ -50,7 +50,7 @@ Painel Next.js separado para gerenciar posts, leads, dashboard, **orçamentos** 
 | Integração | Função | Doc |
 |------------|--------|-----|
 | Google Sheets via Apps Script | Captura leads do formulário de contato | [[google-sheets]] |
-| Notion | Hub de gerenciamento (manual, Bruno copia conteúdo) | — |
+| Quadro admin | Hub operacional de pautas, Blog e LinkedIn | [[quadro-conteudo]] |
 | Canva | Materiais visuais (briefing manual) | [[canva-briefing]] |
 | Google Search Console | Indexação + analytics | — |
 
@@ -67,7 +67,7 @@ Site Berkahn/
 ├── lib/                    ← Utils, dados estáticos, helpers
 ├── public/                 ← Assets estáticos (imagens, infograficos)
 │   └── images/img_blog/    ← Capas dos artigos (consumidas pelo Next)
-├── scripts/                ← Scripts node (gitignored — Supabase INSERT, migrations, etc.)
+├── scripts/                ← Scripts node; CLI de conteúdo versionado seletivamente
 ├── tests-playwright/       ← Testes Playwright (Python)
 ├── data/                   ← Dados estáticos (posts.ts, presentation-data.ts)
 ├── types/                  ← TypeScript types
@@ -84,8 +84,8 @@ Site Berkahn/
 
 Detalhes em [[workflow-conteudo]]:
 - 1 artigo blog + 1 post LinkedIn por semana
-- Pipeline 4-etapas: brainstorm → pesquisa → criação → publicação
-- Notion = hub gerencial (manual)
+- Pipeline: brainstorm → pesquisa → criação → produção → aprovação → publicação
+- `/admin/conteudo` = hub operacional
 
 ## Comandos críticos
 

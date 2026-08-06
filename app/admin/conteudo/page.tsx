@@ -17,8 +17,7 @@ export default async function ConteudoPage() {
         <div>
           <h1 className="text-2xl font-semibold text-neutral-900">Conteúdo</h1>
           <p className="mt-1 text-sm text-neutral-500">
-            Cada card é um assunto: pesquisa, artigo, post de LinkedIn e capas no
-            mesmo lugar.
+            Uma pauta, duas trilhas: acompanhe Blog e LinkedIn sem duplicar o trabalho.
           </p>
         </div>
         {pautas.length > 0 && (
@@ -50,8 +49,8 @@ export default async function ConteudoPage() {
             Nenhuma pauta ainda
           </h2>
           <p className="mt-1 max-w-sm text-sm text-neutral-500">
-            Crie a primeira pela coluna Decisão LK/Blog, ou rode o gerador de seed
-            para trazer o calendário editorial.
+            Crie a primeira pauta planejada ou importe uma seleção aprovada do
+            calendário editorial.
           </p>
         </div>
       ) : (
