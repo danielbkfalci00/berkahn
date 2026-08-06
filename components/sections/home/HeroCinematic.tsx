@@ -8,9 +8,12 @@ import { ContactFormDialog } from "@/components/forms/ContactFormDialog";
 import { Button } from "@/components/ui/button";
 
 /**
- * Hero pinado com scrub por scroll (estilo Apple): o drone atravessa a casa
- * na medida em que o usuário rola. Sequência de frames WebP desenhada em
- * canvas — <video currentTime> por scroll é instável, frames não são.
+ * Hero pinado com scrub por scroll (estilo Apple): o drone atravessa o
+ * corredor de montantes de aço até o quarto acabado na medida em que o
+ * usuário rola. Sequência de frames WebP desenhada em canvas —
+ * <video currentTime> por scroll é instável, frames não são.
+ * Fonte: voo gerado por IA (conceito A da nota de direção), trim
+ * 0,2s–9,9s, marca d'água removida via delogo.
  *
  * - Runway de 260vh (motion-safe); viewport fica preso via position: sticky
  * - Poster = LCP (pinta no SSR); o canvas assume no primeiro frame carregado
@@ -19,8 +22,8 @@ import { Button } from "@/components/ui/button";
  * - Mobile usa sequência própria (44 frames, 640px, ~1,2 MB)
  * - prefers-reduced-motion: sem runway, sem pin, poster estático + texto
  */
-const FRAME_COUNT_DESKTOP = 62;
-const FRAME_COUNT_MOBILE = 31;
+const FRAME_COUNT_DESKTOP = 87;
+const FRAME_COUNT_MOBILE = 44;
 
 const framePath = (index: number, isMobile: boolean) =>
   `/videos/hero/${isMobile ? "seq-m" : "seq"}/f_${String(index + 1).padStart(3, "0")}.webp`;
