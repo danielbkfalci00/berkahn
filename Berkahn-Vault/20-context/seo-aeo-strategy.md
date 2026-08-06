@@ -1,12 +1,12 @@
 ---
 tipo: context
 criado: 2026-04-13
-atualizado: 2026-06-16
+atualizado: 2026-08-06
 tags:
   - ai/context
   - project/site
   - project/blog
-ai_summary: Estratégia SEO + AEO Berkahn (abril 2026, score 52/100). Padrões Passage-Level + Ski Ramp (44.2% citações AI nos primeiros 30%). Hierarquia headings, schema.org, robots.txt seletivo. P0: indexação (6/44 páginas).
+ai_summary: Estratégia SEO + AEO Berkahn. Padrões Passage-Level + Ski Ramp, hierarquia headings, schema.org e robots.txt seletivo. Taxonomia do blog 12→5 concluída em 2026-08-06; indexação no último snapshot: 34 artigos.
 status: active
 escopo: berkahn
 ---
@@ -130,7 +130,7 @@ Estado real do arquivo, verificado em `app/robots.ts:5-21` (2026-07-29). A vers�
 5. Corrigir bug de SearchAction gerando URL inválida
 
 ### P1 — 1-2 semanas
-1. Normalizar 12 categorias para 5
+1. [x] Normalizar 12 categorias para 5 — concluído em 2026-08-06 com migration 012, normalizador tolerante a aliases e validação no `/artigo`; ver [[article-pipeline]]
 2. Adicionar lastModified a páginas estáticas no sitemap
 3. Registrar em diretórios de construção brasileiros
 4. Compartilhar 5 posts em redes sociais

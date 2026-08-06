@@ -7,7 +7,7 @@ tags:
   - domain/architecture
   - project/site
   - status/active
-ai_summary: Direção visual da home redesenhada (2026-08-05/06) — "luxo de engenharia" em paleta estritamente mono (preto/branco/off-white, bronze testado e removido). Archivo display + Space Mono técnica, hero com SCRUB por scroll (sequência de frames em canvas, não autoplay), Lenis + GSAP. Contém o estado de entrega do PR 43, o pipeline de troca de take (trim/delogo/ffmpeg) e o banco de prompts steel-frame para gerar novos voos.
+ai_summary: Direção visual do redesign do site (2026-08-05/06) — "luxo de engenharia" em paleta estritamente mono, Archivo display + Space Mono técnica e motion contido. Aplicada na home e em /atualidades, cuja abertura funde masthead e destaque editorial sem regredir SSG/ISR. Contém o estado do PR 43, pipeline do hero e decisões reutilizáveis para as próximas rotas.
 status: active
 projeto: site
 contextos_aplicados:
@@ -85,6 +85,16 @@ Cinco conceitos com o LSF como protagonista (prompts completos no formato das re
 - **D · Aéreo de implantação**: drone elevado three-quarter sobre a estrutura no terreno paisagístico, grid geométrico preciso, montanhas 6000K ao fundo, 35mm — i2v: aproximação descendente
 - **E · Do aço ao acabado, por dentro**: montantes em primeiro plano emoldurando a sala pronta com portas abertas para o terraço, one-point 24mm — i2v: glide atravessando os montantes até as portas
 
+## Aplicação em `/atualidades` (2026-08-06)
+
+A rota de maior tráfego foi redesenhada na mesma branch. A abertura funde `HeroEditorial` e o post curado: carbono/off-white, label técnica minúscula, Archivo, barra estrutural de 3 px e capa/título/resumo/metadados na primeira sequência visual. A listagem usa cinco categorias canônicas com contagem e bento assimétrico nos cinco primeiros resultados; filtros usam scroll-snap nativo, sem Embla adicional.
+
+A página continua SSG/ISR (`revalidate = 60`, `createPublicClient`, sem `cookies()`/`loading.tsx`). O `select('*')` foi substituído por 10 campos e a conversão ocorre no Server Component. HTML caiu de **809/239 KB** bruto/comprimido para **141/26 KB**; build: rota 7,61 KB, First Load 205 KB. Artigo válido retorna 200 e slug falso 404.
+
+CWV local (3 rodadas Lighthouse mobile com throttling): CLS 0 em todas; LCP 3,25–6,50 s e TBT 488–774 ms, ainda fora das metas. O breakdown aponta custo do layout global/Google Analytics e variabilidade local; prefetch dos bundles pesados da home e dos artigos foi desativado. Validar Speed Insights após deploy antes de considerar o gate encerrado.
+
+Relacionados: [[article-pipeline]] · [[seo-aeo-strategy]] · [[site]] · [[blog]]
+
 ## Follow-ups registrados
 
 - [x] ~~Gerar vídeo do hero~~ — take A em produção (2026-08-06)
@@ -94,6 +104,6 @@ Cinco conceitos com o LSF como protagonista (prompts completos no formato das re
 - [ ] Importar Clube Quinta dos Lagos (26 imagens em `C:\Users\bruno\Downloads\Arquitetura\originais\`) para o banco e avaliar entrada no rail de projetos
 - [ ] Otimização de fontes: mover Playfair + Caveat do layout root para a rota `/orcamento` (únicos consumidores) — menos 2 famílias em todas as demais páginas
 - [ ] First Load JS da home: 271 kB (stack GSAP+Lenis+Embla) — avaliar lazy-load das seções GSAP abaixo da dobra
-- [ ] **Próxima página do redesign: `/atualidades`** — mesma linguagem desta nota (mono, Archivo/Space Mono, motion contido); é a rota de maior tráfego do site (SSG/ISR — não regredir para dynamic)
+- [x] ~~**Próxima página do redesign: `/atualidades`**~~ — concluída em 2026-08-06 com abertura editorial fundida, taxonomia 5 categorias, bento, payload reduzido e ISR 60 preservado. CWV pós-deploy segue como gate aberto
 
 Relacionados: [[site]] · [[berkahn-brand]] · [[design-principles]] · [[guia-design-berkahn]]
