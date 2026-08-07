@@ -382,6 +382,111 @@ export type Database = {
           },
         ]
       }
+      conteudo_worker_heartbeats: {
+        Row: {
+          detalhes: Json
+          versao: string | null
+          visto_em: string
+          worker_id: string
+        }
+        Insert: {
+          detalhes?: Json
+          versao?: string | null
+          visto_em?: string
+          worker_id: string
+        }
+        Update: {
+          detalhes?: Json
+          versao?: string | null
+          visto_em?: string
+          worker_id?: string
+        }
+        Relationships: []
+      }
+      conteudo_performance_snapshots: {
+        Row: {
+          amostra_suficiente: boolean
+          criado_em: string
+          evidencias: Json
+          headings: number | null
+          id: string
+          janela_fim: string
+          janela_inicio: string
+          leads_por_100_engajadas: number | null
+          leads_qualificados: number
+          palavras: number | null
+          pauta_id: string
+          post_id: string | null
+          profundidade_25: number
+          profundidade_50: number
+          profundidade_75: number
+          profundidade_90: number
+          run_id: string
+          sessoes: number
+          sessoes_engajadas: number
+          tempo_medio_engajamento: number | null
+        }
+        Insert: {
+          amostra_suficiente?: boolean
+          criado_em?: string
+          evidencias?: Json
+          headings?: number | null
+          id?: string
+          janela_fim: string
+          janela_inicio: string
+          leads_por_100_engajadas?: number | null
+          leads_qualificados?: number
+          palavras?: number | null
+          pauta_id: string
+          post_id?: string | null
+          profundidade_25?: number
+          profundidade_50?: number
+          profundidade_75?: number
+          profundidade_90?: number
+          run_id?: string
+          sessoes?: number
+          sessoes_engajadas?: number
+          tempo_medio_engajamento?: number | null
+        }
+        Update: {
+          amostra_suficiente?: boolean
+          criado_em?: string
+          evidencias?: Json
+          headings?: number | null
+          id?: string
+          janela_fim?: string
+          janela_inicio?: string
+          leads_por_100_engajadas?: number | null
+          leads_qualificados?: number
+          palavras?: number | null
+          pauta_id?: string
+          post_id?: string | null
+          profundidade_25?: number
+          profundidade_50?: number
+          profundidade_75?: number
+          profundidade_90?: number
+          run_id?: string
+          sessoes?: number
+          sessoes_engajadas?: number
+          tempo_medio_engajamento?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "conteudo_performance_snapshots_pauta_id_fkey"
+            columns: ["pauta_id"]
+            isOneToOne: false
+            referencedRelation: "conteudo_pautas"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "conteudo_performance_snapshots_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       leads: {
         Row: {
           id: string
@@ -789,7 +894,58 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      conteudo_automation_jobs_latest: {
+        Row: {
+          acao: string | null
+          atualizado_em: string | null
+          criado_em: string | null
+          erro: string | null
+          id: string | null
+          pauta_id: string | null
+          status: string | null
+          tentativas: number | null
+        }
+        Relationships: []
+      }
+      conteudo_pautas_quadro: {
+        Row: {
+          atualizado_em: string | null
+          capa_blog_url: string | null
+          capa_linkedin_url: string | null
+          criado_em: string | null
+          criado_por: string | null
+          data_alvo: string | null
+          draft_path: string | null
+          funil: string | null
+          id: string | null
+          intencao: string | null
+          keyword: string | null
+          linkedin_publicado_em: string | null
+          linkedin_url: string | null
+          ordem_blog: number | null
+          ordem_linkedin: number | null
+          plataformas: string[] | null
+          post_id: string | null
+          post_published_at: string | null
+          post_slug: string | null
+          post_status: string | null
+          post_title: string | null
+          prioridade: number | null
+          semana: number | null
+          status_blog: string | null
+          status_linkedin: string | null
+          tem_insights: boolean | null
+          tem_linkedin_briefing: boolean | null
+          tem_linkedin_imagem_briefing: boolean | null
+          tem_linkedin_imagem_prompt: boolean | null
+          tem_linkedin_texto: boolean | null
+          tem_pesquisa: boolean | null
+          tipo: string | null
+          titulo: string | null
+          trilha: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       gerar_numero_orcamento: { Args: never; Returns: string }
@@ -801,6 +957,18 @@ export type Database = {
       atualizar_tags_pauta: {
         Args: { p_pauta_id: string; p_tags: string[] }
         Returns: undefined
+      }
+      atualizar_pauta_metadados: {
+        Args: { p_pauta_id: string; p_patch?: Json; p_tags?: string[] | null }
+        Returns: undefined
+      }
+      reordenar_analytics_tasks: {
+        Args: { p_updates: Json }
+        Returns: undefined
+      }
+      registrar_conteudo_worker_heartbeat: {
+        Args: { p_worker_id: string; p_versao?: string | null; p_detalhes?: Json }
+        Returns: Database["public"]["Tables"]["conteudo_worker_heartbeats"]["Row"]
       }
       claim_conteudo_automation_job: {
         Args: { p_worker_id: string; p_lease_seconds?: number }

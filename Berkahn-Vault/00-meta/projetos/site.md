@@ -5,7 +5,7 @@ atualizado: 2026-08-07
 tags:
   - project/site
   - status/active
-ai_summary: "Hub do Site — migrations 014–020 e código em produção: status livre, capas RLS, edição inline/tags, fila Codex e leads primários com PII restrita ao admin. Banco e smoke autenticado verdes com 66 pautas. Pende redeploy externo do Apps Script e dimensões GA4."
+ai_summary: "Hub do Site — migrations 014–023 e hardening do quadro em produção: agenda leve, escrita atômica, fila observável e snapshots de aprendizado sem PII. Banco e smoke autenticado verdes com 66 pautas. Pendem somente integrações externas: Apps Script e dimensões GA4."
 status: active
 projeto: site
 kpi_paginas_indexadas: 34

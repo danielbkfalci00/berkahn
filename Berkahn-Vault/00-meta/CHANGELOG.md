@@ -12,6 +12,17 @@ status: active
 
 Histórico de mudanças estruturais do vault. Append-only.
 
+## 2026-08-07 — Quadro observável e aprendizado editorial
+
+- Migrations 021–023: view leve, mutações atômicas, heartbeat do worker,
+  snapshots agregados de 28 dias e correção UTF-8 da taxonomia
+- Visão Geral virou agenda; filtros persistem na URL e a listagem pagina 18 cards
+- Analytics do admin foi excluído e o ciclo de recomendações permanece humano
+- Verificador transacional cobre o schema 012–023; CI cobre código e build
+- Documentação reconciliada em [[quadro-conteudo]], [[workflow-conteudo]] e
+  [[analytics-methodology]]
+
+
 ## 2026-05-21 — Vault criado e populado
 
 **Migração inicial** de fontes fragmentadas para single source of truth:

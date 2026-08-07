@@ -6,7 +6,7 @@ tags:
   - project/site
   - project/blog
   - status/active
-ai_summary: "Sprint 03–07/08: migrations 014–020 aplicadas, código em produção e 66 pautas preservadas. Smoke autenticado validou edição inline, status livre, tags, clipboard, capas e sessão expirada. Pendem redeploy manual do Apps Script, dimensões GA4 e o fluxo editorial ponta a ponta."
+ai_summary: "Sprint 03–07/08: migrations 014–023 aplicadas, 66 pautas preservadas e hardening do quadro concluído. Agenda, escrita atômica, fila observável, aprendizado de 28 dias e smoke autenticado estão verdes. Pendem integrações externas e a próxima pauta editorial ponta a ponta."
 status: active
 projetos_em_curso:
   - blog
@@ -49,6 +49,21 @@ vault. Só então exercitar a próxima pauta ponta a ponta em sessão autenticad
 | [[orcamento-automacao]] | published | Smoke test E2E prod pendente (Bruno) | Gerar PDF BRK-2026-0001 (checar pgs/peso) |
 
 ## Bloqueios consolidados (cross-projeto)
+
+### Entrega final do quadro — 2026-08-07
+
+- [x] Migrations 021–023 aplicadas e verificadas em transação: view leve, escrita
+  atômica de metadados+tags, reorder de analytics, heartbeat do worker,
+  snapshots de 28 dias e label UTF-8
+- [x] Visão Geral convertida em agenda com quatro grupos, filtros persistidos na
+  URL e paginação inicial de 18 cards; Kanbans por canal preservados
+- [x] Tráfego do admin excluído do GA e banner de consentimento removido das
+  rotas internas
+- [x] Gates de CI versionados: lint, typecheck, testes de conteúdo, testes do
+  aprendizado e build
+- [ ] Integrações externas: registrar dimensões GA4 e redeployar Apps Script
+- [ ] Exercitar pesquisa → draft → produção → aprovação → publicação na próxima
+  pauta real
 
 ### P0 — Esta semana
 - [x] **Migration 012 aplicada**: 66 pautas preservadas, distribuição 44/22,

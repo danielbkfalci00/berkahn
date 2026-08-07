@@ -114,6 +114,23 @@ export interface TagCatalogo {
   ativo: boolean;
   ordem: number;
 }
+
+export interface StatusWorkerConteudo {
+  online: boolean;
+  workerId: string | null;
+  versao: string | null;
+  vistoEm: string | null;
+}
+
+export interface ArtefatosResumoPauta {
+  insights: boolean;
+  pesquisa: boolean;
+  linkedinTexto: boolean;
+  linkedinBriefing: boolean;
+  linkedinImagemPrompt: boolean;
+  linkedinImagemBriefing: boolean;
+}
+
 export interface Pauta {
   id: string;
   titulo: string;
@@ -145,6 +162,8 @@ export interface Pauta {
   tags: TagConteudo[];
   automationJob: JobAutomacao | null;
   criadoPor: string | null;
+  /** Presencas calculadas pela view leve do quadro; o detalhe usa os textos reais. */
+  artefatosResumo?: ArtefatosResumoPauta;
   criadoEm: string;
   atualizadoEm: string;
 }
@@ -208,14 +227,14 @@ export function estadoDoQuadro(pauta: Pauta): EstadoGeral {
 export function gapsConteudo(pauta: Pauta): string[] {
   const gaps: string[] = [];
   if (pauta.statusBlog) {
-    if (!pauta.pesquisaConteudo) gaps.push("Pesquisa do Blog");
+    if (!temArtefato(pauta, "pesquisa", pauta.pesquisaConteudo)) gaps.push("Pesquisa do Blog");
     if (!pauta.draftPath) gaps.push("Draft do Blog");
     if (!pauta.artigo) gaps.push("Artigo vinculado");
     if (!pauta.capaBlogUrl) gaps.push("Capa do Blog");
     if (pauta.statusBlog === "publicado" && publicacaoReal(pauta).blog !== "publicado") gaps.push("Publicação real do Blog");
   }
   if (pauta.statusLinkedin) {
-    if (!pauta.linkedinTexto) gaps.push("Texto do LinkedIn");
+    if (!temArtefato(pauta, "linkedinTexto", pauta.linkedinTexto)) gaps.push("Texto do LinkedIn");
     if (!pauta.capaLinkedinUrl) gaps.push("Capa do LinkedIn");
     if (pauta.statusLinkedin === "publicado" && publicacaoReal(pauta).linkedin !== "publicado") gaps.push("URL e data reais do LinkedIn");
   }
@@ -225,17 +244,25 @@ export function gapsConteudo(pauta: Pauta): string[] {
 export function proximaAcaoOperacional(pauta: Pauta): string {
   const real = publicacaoReal(pauta);
   if (pauta.statusBlog) {
-    if (!pauta.pesquisaConteudo) return "Pesquisar para o Blog";
+    if (!temArtefato(pauta, "pesquisa", pauta.pesquisaConteudo)) return "Pesquisar para o Blog";
     if (!pauta.draftPath) return "Criar draft do Blog";
     if (!pauta.artigo || !pauta.capaBlogUrl) return "Produzir artigo e capa";
     if (real.blog !== "publicado") return "Revisar e publicar artigo";
   }
   if (pauta.statusLinkedin) {
-    if (!pauta.linkedinTexto) return "Produzir texto do LinkedIn";
+    if (!temArtefato(pauta, "linkedinTexto", pauta.linkedinTexto)) return "Produzir texto do LinkedIn";
     if (!pauta.capaLinkedinUrl) return "Produzir capa do LinkedIn";
     if (real.linkedin !== "publicado") return "Revisar, publicar e registrar URL";
   }
   return "Publicação real concluída";
+}
+
+function temArtefato(
+  pauta: Pauta,
+  campo: keyof ArtefatosResumoPauta,
+  valorCompleto: string | null
+): boolean {
+  return pauta.artefatosResumo?.[campo] ?? Boolean(valorCompleto?.trim());
 }
 
 export const proximaAcao = proximaAcaoOperacional;
@@ -285,6 +312,43 @@ export interface PautaRow {
   criado_em: string;
   atualizado_em: string;
   posts?: PostVinculadoRow | PostVinculadoRow[] | null;
+}
+
+export interface PautaQuadroRow {
+  id: string;
+  titulo: string;
+  tipo: string;
+  status_blog: string | null;
+  status_linkedin: string | null;
+  ordem_blog: number | null;
+  ordem_linkedin: number | null;
+  draft_path: string | null;
+  linkedin_url: string | null;
+  linkedin_publicado_em: string | null;
+  keyword: string | null;
+  intencao: string | null;
+  funil: string | null;
+  prioridade: number | null;
+  trilha: string | null;
+  semana: number | null;
+  data_alvo: string | null;
+  post_id: string | null;
+  capa_blog_url: string | null;
+  capa_linkedin_url: string | null;
+  plataformas: string[] | null;
+  criado_por: string | null;
+  criado_em: string;
+  atualizado_em: string;
+  tem_insights: boolean;
+  tem_pesquisa: boolean;
+  tem_linkedin_texto: boolean;
+  tem_linkedin_briefing: boolean;
+  tem_linkedin_imagem_prompt: boolean;
+  tem_linkedin_imagem_briefing: boolean;
+  post_slug: string | null;
+  post_title: string | null;
+  post_status: string | null;
+  post_published_at: string | null;
 }
 
 export function ehStatusBlog(valor: string): valor is StatusBlog {
@@ -363,4 +427,33 @@ export function toPauta(row: PautaRow): Pauta {
     criadoEm: row.criado_em,
     atualizadoEm: row.atualizado_em,
   };
+}
+export function toPautaQuadro(row: PautaQuadroRow): Pauta {
+  const pauta = toPauta({
+    ...row,
+    insights: null,
+    pesquisa_conteudo: null,
+    linkedin_texto: null,
+    linkedin_briefing: null,
+    linkedin_imagem_prompt: null,
+    linkedin_imagem_briefing: null,
+    posts: row.post_id && row.post_slug && row.post_title && row.post_status
+      ? {
+          id: row.post_id,
+          slug: row.post_slug,
+          title: row.post_title,
+          status: row.post_status,
+          published_at: row.post_published_at,
+        }
+      : null,
+  });
+  pauta.artefatosResumo = {
+    insights: row.tem_insights,
+    pesquisa: row.tem_pesquisa,
+    linkedinTexto: row.tem_linkedin_texto,
+    linkedinBriefing: row.tem_linkedin_briefing,
+    linkedinImagemPrompt: row.tem_linkedin_imagem_prompt,
+    linkedinImagemBriefing: row.tem_linkedin_imagem_briefing,
+  };
+  return pauta;
 }

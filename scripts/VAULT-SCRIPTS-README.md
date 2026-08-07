@@ -86,6 +86,22 @@ node scripts/conteudo/pauta.mjs publicar <id> --dry-run
 
 `criar` exige `--confirmar-aprovacao`. Sobrescrever conteúdo exige `--forcar --confirmar-substituicao`. `publicar` recusa pautas não aprovadas e desfaz a movimentação local do markdown se o banco falhar. Requer `NEXT_PUBLIC_SUPABASE_URL` e `SUPABASE_SERVICE_KEY` no ambiente para operações remotas.
 
+### 5. `analytics/` — relatório e aprendizado editorial
+
+O pipeline operacional de GA4/GSC é versionado seletivamente. Além do relatório
+mensal, ele grava snapshots agregados de 28 dias e cria somente recomendações
+pendentes. Não envia PII para analytics nem altera artigos.
+
+```bash
+npm run test:analytics
+npm run analytics:report
+npm run analytics:learning
+```
+
+O modo de aprendizado exige as custom dimensions de evento `article_slug` e
+`percent_scrolled` no GA4. Sem elas, o relatório continua e marca profundidade
+como indisponível.
+
 ## Segurança
 
 - Todos os scripts usam `process.env.SUPABASE_SERVICE_KEY` (não hardcoded). Allowlist `.gitleaks.toml` cobre `process.env.[A-Z_]+`.
@@ -132,9 +148,11 @@ node scripts/watermark-images.mjs --src="<dir>" --pick="a.jpeg,b.jpeg" --out="<d
 
 Flags: `--src` `--out` (default `<src>/com-marca-dagua`) `--logo` `--frac=0.58` `--opacity=0.15` `--color=auto|white|black` `--halo` `--halo-opacity=0.55` `--pick=a,b` `--limit=N` `--dry-run`. **Dependencia**: `sharp`. Read-only nos originais. Doc da entrega: `Berkahn-Vault/40-content/materiais/watermark-clube-quinta-dos-lagos.md`.
 
-## Tech debt detectado
+## Tech debt verificado
 
-- `scripts/run-sprint4.mjs` e `scripts/articles/add-article-*.mjs` têm SUPABASE_SERVICE_KEY **hardcoded**. Migrar para `process.env.SUPABASE_SERVICE_KEY` em sprint futuro.
+A varredura de 405 arquivos encontrou zero JWT Supabase e zero `sb_secret_`
+hardcoded. Scripts históricos continuam fora do deploy; apenas os CLIs
+operacionais seguros são versionados.
 
 ## Estado pós-Sprint 2
 

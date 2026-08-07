@@ -8,7 +8,7 @@ tags:
   - project/linkedin
   - status/active
   - domain/integrations
-ai_summary: "Fonte operacional em /admin/conteudo. Status é posição livre; prontidão, publicação real e próxima ação são derivadas. Migrations 014–020 e código estão em produção. Schema preserva 66 pautas; smoke autenticado validou edição, tags, clipboard, capas e sessão expirada."
+ai_summary: "Fonte operacional em /admin/conteudo. Status é posição livre; prontidão, publicação real e próxima ação são derivadas. Migrations 014–023 estão em produção. O quadro lê uma view leve, metadados+tags salvam atomicamente e a visão Geral virou agenda paginada. Schema preserva 66 pautas; smoke autenticado validou edição, tags, clipboard, capas e sessão expirada."
 status: active
 projeto: site
 contextos_aplicados:
@@ -63,10 +63,26 @@ Drag-and-drop, chips inline, menu do card e ação em lote reutilizam a mesma RP
 > Dry-run com rollback passou antes da execução. Em produção, as 66 pautas
 > foram preservadas e o verificador confirmou zero colunas legadas.
 
-> [!todo] Smoke autenticado
-> Build, tipos, testes puros e banco passaram. Em produção, o navegador chegou
-> à tela de login, mas não havia sessão nem código de acesso disponível. Ainda
-> é obrigatório testar logado e validar o clipboard com clique humano.
+> [!success] Smoke autenticado
+> Playwright validou agenda, filtros por URL, renomeação, data e tags inline,
+> status livre com gaps, clipboard com clique real e upload/remoção das duas
+> capas. O teste removeu seus dados e confirmou zero objeto órfão no Storage.
+
+## Hardening operacional e ciclo de aprendizado
+
+As migrations 021–023 não mudam o modelo editorial. Elas reduzem custo e risco:
+
+- `conteudo_pautas_quadro` exclui os blocos de até 60 mil caracteres da listagem;
+- `atualizar_pauta_metadados` salva propriedades e tags na mesma transação;
+- reordenação de `analytics_tasks` também é transacional;
+- `conteudo_worker_heartbeats` diferencia fila vazia de worker desligado;
+- `conteudo_performance_snapshots` guarda janelas de 28 dias sem PII;
+- recomendações entram pendentes em `analytics_tasks`, nunca alteram conteúdo;
+- a migration 023 corrige apenas o label UTF-8 de `domain/integrations`.
+
+A visão Geral é uma agenda: Atrasadas, próximos 7 dias, Depois e Sem data. Ela
+carrega 18 cards inicialmente; Blog e LinkedIn continuam Kanban com drag livre.
+Filtros ficam na URL, então voltar, recarregar ou compartilhar preserva o recorte.
 
 ## O seed é gerador, não importador
 
