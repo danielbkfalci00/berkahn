@@ -1,11 +1,11 @@
 ---
 tipo: projeto
 criado: 2026-05-22
-atualizado: 2026-08-06
+atualizado: 2026-08-07
 tags:
   - project/site
   - status/active
-ai_summary: "Hub do Site — Next.js 15 + Supabase + Vercel. Home usa novo take 1080p no scrub, copy institucional canônica e projetos temporariamente desmontados; /atualidades segue editorial com ISR 60. No admin, migration 012 do quadro criou duas trilhas, RPC transacional e 66 pautas verificadas; ICMS foi reconciliado e o CLI genérico substituiu scripts por artigo. Smoke autenticado e migration 013 seguem pendentes."
+ai_summary: "Hub do Site — Next.js 15 + Supabase + Vercel. Home usa take 1080p e /atualidades segue editorial com ISR 60. No admin, migrations 012/013 consolidaram duas trilhas, RPC transacional e 66 pautas; colunas legadas foram removidas. O único gate do quadro ainda aberto é o smoke autenticado com clipboard humano."
 status: active
 projeto: site
 kpi_paginas_indexadas: 34

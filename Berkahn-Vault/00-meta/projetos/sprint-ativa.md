@@ -1,12 +1,12 @@
 ---
 tipo: meta
 criado: 2026-05-21
-atualizado: 2026-08-06
+atualizado: 2026-08-07
 tags:
   - project/site
   - project/blog
   - status/active
-ai_summary: "Sprint 03–07/08: quadro de conteúdo evoluído para duas trilhas independentes. Migration 012 aplicada e verificada com 66 pautas, ICMS reconciliado, RPC transacional, UI com abas/filtros e CLI genérico versionado. Pendente: smoke autenticado, clipboard humano e migration 013 após deploy compatível."
+ai_summary: "Sprint 03–07/08: quadro com trilhas independentes e migrations 012/013 verificadas em produção com 66 pautas. CLI e gate do vault versionados; referências históricas de service key ausentes em 405 arquivos. Pendente apenas o smoke autenticado e o clipboard com clique humano."
 status: active
 projetos_em_curso:
   - blog
@@ -41,7 +41,7 @@ vault. Só então exercitar a próxima pauta ponta a ponta em sessão autenticad
 |---------|--------|--------------------|--------------|
 | [[blog]] | active | Smoke autenticado do novo fluxo | Produzir próxima pauta até aprovação |
 | [[linkedin]] | active | Publicação externa manual | Validar URL/data e clipboard com clique humano |
-| [[site]] | active | Migration 013 aguarda deploy compatível | Validar `/admin/conteudo` logado |
+| [[site]] | active | Migration 013 aplicada; falta sessão autenticada | Validar `/admin/conteudo` logado |
 | [[seo-aeo]] | active | 3 URLs fora do índice (ação manual no GSC) | Pedir indexação das 3 |
 | [[apresentacoes]] | active | Roteiros não versionados (parcial) | Validar 16 slides em live env |
 | [[materiais]] | active | **Institucional PDF v4** aguarda briefing atualizado + distribuição | Atualizar briefing v3→v4; distribuir; preencher `usado_em` |
@@ -53,6 +53,8 @@ vault. Só então exercitar a próxima pauta ponta a ponta em sessão autenticad
 ### P0 — Esta semana
 - [x] **Migration 012 aplicada**: 66 pautas preservadas, distribuição 44/22,
   ICMS ligado ao post e trilhas independentes verificadas por teste transacional
+- [x] **Migration 013 aplicada**: `coluna`, `ordem` e o índice legado removidos
+  em produção; 66 pautas preservadas e suíte transacional verde
 - [x] **Quadro compatível**: abas Geral/Blog/LinkedIn, estados derivados,
   busca/filtros, ações em lote sem aprovação, renomeação, prontidão e publicação manual do LinkedIn
 - [x] **Automação genérica**: `pauta.mjs` versionado; criar, gravar,
@@ -67,10 +69,10 @@ vault. Só então exercitar a próxima pauta ponta a ponta em sessão autenticad
 - [x] ~~**Smoke test Supabase**~~ ✅ 2026-07-30 — rodado, 6 slugs vault-only confirmados
 
 ### P1 — Próximas 2 semanas
-- [ ] Aplicar migration 013 somente após o deploy compatível ser validado;
+- [x] Aplicar migration 013 após o deploy compatível;
   remover `coluna`, `ordem` e índice legado
-- [ ] Rotacionar as referências da service key antiga nos 42 scripts históricos
-  (higiene; sem incidente ativo)
+- [x] **Higiene da service key histórica verificada**: varredura em 405 arquivos
+  de `scripts/` encontrou zero JWT Supabase e zero chave `sb_secret_` hardcoded
 - [x] **4 erros de frontmatter em `40-content/curadoria/`** (vault health): corrigidos em 2026-07-02 (PR #11) — `status`/`tipo` inválidos normalizados. `vault-validate.mjs` → 0 issues. Chip `task_abaacde6` fechado.
 - [ ] **Google Sheets SPOF de leads** ([[site]]): backup automático Supabase (Fase 4.4 — opcional)
 - [x] ~~**9 posts sem meta_title/meta_description**~~ ✅ 2026-07-30 — eram os 9 artigos com menos de 55 palavras. 5 em 301, 4 em noindex. Ver [[2026-07-thin-content-mapa]]
@@ -106,7 +108,7 @@ Os três `scheduled-tasks` estão **enabled e disparando**. O problema nunca foi
 
 ## Wins / decisões (2026-08-06) — quadro de conteúdo
 
-Sprint de 9 commits, mergeado em `main` e no ar. Detalhe técnico em [[quadro-conteudo]]; aqui só o que mudou de estado.
+Infra integrada em `main` e no ar. A migration 013 foi aplicada em 2026-08-07; detalhe técnico em [[quadro-conteudo]].
 
 **A pauta virou entidade de primeira classe.** `conteudo_pautas` (migrations 010 e 011) com as 66 pautas do calendário ago–dez já semeadas — 44 do calendário mais 22 de LinkedIn do acervo, 22 semanas de 03/08 a 28/12. Quadro Kanban em `/admin/conteudo`, card editável em `/admin/conteudo/[id]` com os seis blocos.
 
@@ -121,7 +123,7 @@ Sprint de 9 commits, mergeado em `main` e no ar. Detalhe técnico em [[quadro-co
 
 - [ ] Exercitar o quadro logado — salvar, subir as duas capas, vincular artigo, `/pesquisa` ponta a ponta. Nada disso passou por sessão autenticada; a RLS barra o harness
 - [ ] Botão de copiar do LinkedIn: escrita no clipboard exige ativação real do usuário, que clique sintético não fornece
-- [ ] 42 scripts em `/scripts` com a service key **antiga** hardcoded (comparada com a atual: não batem). Higiene, não incidente — mas o histórico do git tem `897b18f` destrackeando a pasta
+- [x] Varredura de 405 arquivos em `/scripts` encontrou zero service role JWT e zero `sb_secret_` hardcoded; a pendência histórica não existe mais no disco atual
 
 ## Wins / decisões (2026-07-30, tarde)
 

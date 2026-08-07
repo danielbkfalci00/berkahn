@@ -1,14 +1,14 @@
 ---
 tipo: context
 criado: 2026-08-05
-atualizado: 2026-08-06
+atualizado: 2026-08-07
 tags:
   - project/site
   - project/blog
   - project/linkedin
   - status/active
   - domain/integrations
-ai_summary: "Fonte operacional do conteúdo em /admin/conteudo. Uma pauta tem trilhas Blog e LinkedIn independentes, estado geral derivado e reordenação transacional. Mover card nunca publica; somente /artigo publicar atualiza post+pauta. Migration 012 aplicada com 66 pautas e ICMS reconciliado; 013 aguarda deploy compatível."
+ai_summary: "Fonte operacional do conteúdo em /admin/conteudo. Trilhas Blog e LinkedIn são independentes, o estado geral é derivado e a reordenação é transacional. Migrations 012/013 aplicadas: 66 pautas preservadas e colunas legadas removidas. Pendente apenas smoke autenticado e clipboard humano."
 status: active
 projeto: site
 contextos_aplicados:
@@ -48,21 +48,23 @@ A migration 012 adicionou `status_blog`, `status_linkedin`, ordens próprias,
 não persiste um terceiro status: Planejada, Em produção, Aguardando aprovação,
 Pronta para publicar e Concluída.
 
+A migration 013, aplicada em 2026-08-07, removeu `coluna`, `ordem` e
+`idx_pautas_coluna_ordem`. As duas trilhas são agora a única fonte persistida.
+
 A RPC `mover_pautas_conteudo` recebe todo o diff de uma solta e executa em uma
 transação. Qualquer item inválido desfaz o lote, evitando meia reordenação.
 `activity_logs.details` registra canal, origem, estado anterior e novo.
 Drag-and-drop, menu do card e ação em lote reutilizam a mesma RPC. O lote só
 oferece etapas de produção; aprovação e publicação permanecem individuais.
 
-> [!warning] Migration 013 ainda não existe
-> `coluna`, `ordem` e o índice antigo permanecem somente para compatibilidade
-> de deploy. Removê-los antes do smoke autenticado criaria uma janela sem volta.
+> [!success] Migration 013 aplicada
+> Dry-run com rollback passou antes da execução. Em produção, as 66 pautas
+> foram preservadas e o verificador confirmou zero colunas legadas.
 
 > [!todo] Smoke autenticado
-> Build, tipos, lint, testes puros e banco passaram. Três tentativas Playwright
-> locais não receberam o DOM nem em `next dev` nem em `next start`, mesmo sem
-> proxy; isso é bloqueio do loopback desta sessão, não aceite visual. Ainda é
-> obrigatório testar logado e validar o clipboard com clique humano.
+> Build, tipos, testes puros e banco passaram. Em produção, o navegador chegou
+> à tela de login, mas não havia sessão nem código de acesso disponível. Ainda
+> é obrigatório testar logado e validar o clipboard com clique humano.
 
 ## O seed é gerador, não importador
 

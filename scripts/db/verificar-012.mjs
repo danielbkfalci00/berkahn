@@ -54,7 +54,7 @@ try {
       AND table_name = 'conteudo_pautas'
       AND column_name IN ('coluna', 'ordem')
   `);
-  console.log("\\nSCHEMA");
+  console.log("\nSCHEMA");
   checar("colunas legadas removidas", legado.length === 0, legado.map((r) => r.column_name).join(", "));
 
   const { rows } = await client.query(`
@@ -146,5 +146,5 @@ try {
   await client.end();
 }
 
-console.log(falhas === 0 ? "\n✅ migration 012 verificada" : `\n❌ ${falhas} falha(s)`);
+console.log(falhas === 0 ? "\n✅ schema 012/013 verificado" : `\n❌ ${falhas} falha(s)`);
 process.exit(falhas === 0 ? 0 : 1);
