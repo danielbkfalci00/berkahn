@@ -1,12 +1,12 @@
 ---
 tipo: projeto
 criado: 2026-05-22
-atualizado: 2026-08-06
+atualizado: 2026-08-07
 tags:
   - project/blog
   - project/site
   - status/active
-ai_summary: Hub de Pesquisas. Pesquisa editorial de Blog vive no bloco da pauta em /admin/conteudo; competitor, mercado e SEO continuam no vault. Destilação reutilizável permanece em 70-knowledge/.
+ai_summary: Hub de Pesquisas. Pesquisa editorial vive no card e pode entrar na fila Codex com contexto progressivo; tags domain/* preservam taxonomia. Insights de analytics viram recomendações aprováveis, nunca mudanças automáticas.
 status: active
 projeto: pesquisas
 kpi_pesquisas_brutas_arquivadas: 0

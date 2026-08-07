@@ -5,7 +5,7 @@ atualizado: 2026-08-07
 tags:
   - project/site
   - status/active
-ai_summary: "Hub do Site — Next.js 15 + Supabase + Vercel. Home usa take 1080p e /atualidades segue editorial com ISR 60. No admin, migrations 012/013 consolidaram duas trilhas, RPC transacional e 66 pautas; colunas legadas foram removidas. O único gate do quadro ainda aberto é o smoke autenticado com clipboard humano."
+ai_summary: "Hub do Site — migrations 014–019 aplicadas: status livre, capas RLS, edição inline/tags, fila Codex e leads primários com PII restrita ao admin. Banco verificado com 66 pautas. Pendente smoke autenticado, clipboard e redeploy do Apps Script."
 status: active
 projeto: site
 kpi_paginas_indexadas: 34
@@ -59,7 +59,7 @@ Site em produção (Next.js App Router + Supabase + Vercel + Tailwind + shadcn/u
 - [x] ~~**Seis rotas `/api/admin/*` sem autenticação**~~ — resolvido em 2026-08-05. O matcher do middleware era `['/', '/admin/:path*']` e não cobria `/api/admin/*`; três das rotas usavam `createServiceClient()`, que bypassa RLS. Sem login dava para listar todos os orçamentos com dado pessoal do cliente, apagar por id, e pegar signed URL do PDF. Fechado com matcher + `exigirSessao()` nos 10 handlers. Verificado: as 9 combinações devolvem 401
 - [x] ~~**Dupla escrita dos comandos de conteúdo**~~ — resolvido em 2026-08-06. `/pesquisa` e `/linkedin` gravam na pauta via `scripts/conteudo/pauta.mjs` e não criam mais `.md` no vault. `/criacao` e `/calendario` foram corrigidos junto: um procurava a pesquisa na pasta que deixou de ser alimentada, o outro contava posts pendentes varrendo uma pasta congelada. Ver [[quadro-conteudo]]
 - [ ] **Contas Supabase por pessoa**: hoje todos entram com a mesma conta compartilhada, então `auth.uid()` não distingue ninguém e o autor dos comentários é nome digitado no localStorage. Projeto próprio — ver [[comentarios-inline-documentacoes]], seção "Identidade"
-- [ ] **Google Sheets SPOF**: leads sem backup automático em Supabase (mitigado em Fase 4 do plano)
+- [x] **Google Sheets SPOF encerrado**: `leads` no Supabase é primário e a planilha é espelho com retry. Apps Script 1.1 aguarda redeploy manual
 - [ ] **Core Web Vitals de campo**: `/atualidades` preserva SSG/ISR e CLS = 0. Após GA condicionado ao consentimento, prioridade da imagem LCP e boundary interativo menor, 3 rodadas em produção ficaram em LCP 3,04–3,54 s e TBT 304–756 ms (baseline chegava a 5,38 s/1.736 ms). O sintético ainda oscila acima da meta; validar Speed Insights antes de ampliar a refatoração global. Meta: LCP < 2,5 s, CLS < 0,1 e TBT < 200 ms
 
 ## Próximos 7 dias

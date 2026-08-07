@@ -1,7 +1,7 @@
 // Queries server-side para o sistema de tarefas (Sprint 7).
 import "server-only";
 import { createClient } from "@/lib/supabase/server";
-import type { AnalyticsTask } from "@/types/analytics";
+import type { AnalyticsLead, AnalyticsTask } from "@/types/analytics";
 
 const PRIORITY_RANK: Record<string, number> = { p0: 0, p1: 1, p2: 2 };
 
@@ -28,4 +28,19 @@ export async function getTasks(): Promise<AnalyticsTask[]> {
     // Ordem manual
     return a.sort_order - b.sort_order;
   });
+}
+
+export async function getLeads(): Promise<AnalyticsLead[]> {
+  const supabase = await createClient();
+  const janelaInicio = new Date();
+  janelaInicio.setUTCDate(janelaInicio.getUTCDate() - 28);
+  const { data, error } = await supabase
+    .from("leads")
+    .select("id,nome,email,telefone,segmento,mensagem,canal,status,pagina_origem,slug_origem,cta_location,pauta_id,sheet_sync_status,sheet_sync_tentativas,sheet_sync_error,criado_em")
+    .gte("criado_em", janelaInicio.toISOString())
+    .order("criado_em", { ascending: false })
+    .limit(100);
+
+  if (error || !data) return [];
+  return data as AnalyticsLead[];
 }

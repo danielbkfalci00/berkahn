@@ -6,7 +6,7 @@ import {
   ArrowLeft, Image as ImagemIcone, Lightbulb, Linkedin, Palette, Search,
 } from "lucide-react";
 import {
-  STATUS_LABEL, type BlocoTextoPauta, type Pauta, type StatusQuadro,
+  STATUS_LABEL, type BlocoTextoPauta, type Pauta, type StatusQuadro, type TagCatalogo,
 } from "@/types/conteudo";
 import { COLUNA_PONTO } from "@/lib/conteudo/colunas";
 import { SeloPostVinculado } from "@/components/admin/conteudo/SeloPostVinculado";
@@ -18,9 +18,9 @@ import { BlocoArtigo, type ArtigoLivre } from "./BlocoArtigo";
 import { BotaoCopiar } from "./BotaoCopiar";
 import { cn } from "@/lib/utils";
 
-interface Props { pauta: Pauta; artigosLivres: ArtigoLivre[]; }
+interface Props { pauta: Pauta; artigosLivres: ArtigoLivre[]; tagsCatalogo: TagCatalogo[]; }
 
-export function PainelPauta({ pauta, artigosLivres }: Props) {
+export function PainelPauta({ pauta, artigosLivres, tagsCatalogo }: Props) {
   const [local, setLocal] = useState(pauta);
   const [pendentes, setPendentes] = useState<Set<BlocoTextoPauta>>(new Set());
   const temPendencia = pendentes.size > 0;
@@ -79,7 +79,7 @@ export function PainelPauta({ pauta, artigosLivres }: Props) {
         </div>
       </header>
 
-      <FaixaMetadados pauta={local} aoAtualizar={setLocal} />
+      <FaixaMetadados pauta={local} tagsCatalogo={tagsCatalogo} aoAtualizar={setLocal} />
 
       <div className="space-y-3">
         <BlocoTexto pautaId={local.id} bloco="insights" titulo="Insights & Referências"

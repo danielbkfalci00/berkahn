@@ -8,7 +8,7 @@ tags:
   - project/linkedin
   - status/active
   - domain/integrations
-ai_summary: "Fonte operacional do conteúdo em /admin/conteudo. Trilhas Blog e LinkedIn são independentes, o estado geral é derivado e a reordenação é transacional. Migrations 012/013 aplicadas: 66 pautas preservadas e colunas legadas removidas. Pendente apenas smoke autenticado e clipboard humano."
+ai_summary: "Fonte operacional em /admin/conteudo. Status é posição livre; prontidão, publicação real e próxima ação são derivadas. Migrations 014–020 liberam movimentos, corrigem capas, tags, fila Codex e leads/analytics. Schema verificado com 66 pautas; smoke autenticado final ainda pendente."
 status: active
 projeto: site
 contextos_aplicados:
@@ -29,16 +29,19 @@ Daí `conteudo_pautas` ([migration 010](../../supabase/migrations/010_conteudo_p
 
 O vínculo é FK com `ON DELETE SET NULL` e UNIQUE parcial. `CASCADE` apagaria semanas de pesquisa por causa de um artigo; `RESTRICT` faria o delete em `/admin/posts` falhar por uma tabela que aquela tela nem conhece. A UNIQUE **dispara de propósito** — quatro pautas Core são refresh de artigo existente, e ali o certo é fundir os cards, não duplicar.
 
-## Mover no quadro nunca escreve em `posts.status`
+## Status é posição; publicação real é outro fato
 
-As trilhas não aceitam arrastar para `publicado`. Aprovação é manual, mas
-publicação é uma operação explícita: `/artigo publicar` chama a RPC
-`publicar_artigo_pauta`, que altera `posts.status` e `status_blog` na mesma
-transação. No LinkedIn, a action exige URL e data após a publicação externa.
+Qualquer status válido pode ser escolhido, em qualquer direção, mesmo com gaps.
+O quadro registra a intenção operacional; ele não publica e não altera
+`posts.status`. Os gaps permanecem visíveis como avisos e próxima ação.
 
-O selo continua comparando a trilha Blog com o artigo real e torna divergências
-visíveis. Cards `linkedin-acervo` ficam fora da checagem porque Blog não se
-aplica a eles.
+Aprovação editorial continua manual. A publicação real do Blog existe somente
+quando `posts.status = published`; no LinkedIn, somente quando URL e data estão
+registradas. A visão Geral usa `estadoDoQuadro`: duas trilhas em `publicado` sem
+esses artefatos ficam em **Pronta para publicar**, nunca em Concluída.
+
+`/artigo publicar` é a única operação que publica post+pauta. Registrar a
+publicação real do LinkedIn continua separado do chip de status.
 
 ## Duas trilhas, três visões
 
@@ -54,8 +57,7 @@ A migration 013, aplicada em 2026-08-07, removeu `coluna`, `ordem` e
 A RPC `mover_pautas_conteudo` recebe todo o diff de uma solta e executa em uma
 transação. Qualquer item inválido desfaz o lote, evitando meia reordenação.
 `activity_logs.details` registra canal, origem, estado anterior e novo.
-Drag-and-drop, menu do card e ação em lote reutilizam a mesma RPC. O lote só
-oferece etapas de produção; aprovação e publicação permanecem individuais.
+Drag-and-drop, chips inline, menu do card e ação em lote reutilizam a mesma RPC. Gaps nunca bloqueiam o movimento; aprovação e publicação real permanecem operações explícitas.
 
 > [!success] Migration 013 aplicada
 > Dry-run com rollback passou antes da execução. Em produção, as 66 pautas
@@ -100,12 +102,12 @@ Blur grava na hora, debounce de 1200 ms cobre quem digita sem tirar o foco, `Ctr
 
 **`listarArtigosVinculaveis` exclui o artigo da própria pauta.** A query filtra todo post que já pertence a alguma pauta — inclusive a que está aberta. Alimentar um seletor só com essa lista faria um card que **tem** artigo mostrar "nenhum selecionado", e os 22 cards de acervo são exatamente esse caso. Por isso `BlocoArtigo` lê o vínculo atual de `pauta.artigo` e usa a lista só para **trocar**.
 
-**JPEG não tem canal alfa.** O processamento pinta o fundo de branco. Os objetos
-de staging usam paths fixos `conteudo/{id}/blog.jpg` e
-`conteudo/{id}/linkedin.jpg`; troca não acumula extensões e remoção limpa banco
-e Storage. Se um upload novo não chegar ao update e não havia capa anterior, a
-action também remove o objeto recém-criado. LinkedIn valida 4:5 e normaliza para 1080×1350. No Blog, o CLI
-`produzir` converte staging para WebP público por slug.
+**JPEG não tem canal alfa.** O processamento pinta o fundo de branco. O upload
+usa path versionado por SHA-256 em `conteudo/{id}/{canal}/{hash}.jpg`: primeiro
+envia, depois atualiza o banco e só então remove a versão anterior. Se o update
+falhar, a versão nova é apagada e a anterior permanece. Falha de cleanup fica
+visível com retry no card. LinkedIn valida 4:5 e normaliza para 1080×1350. No
+Blog, o CLI `produzir` converte staging para WebP público por slug.
 
 ## Os comandos gravam na pauta
 

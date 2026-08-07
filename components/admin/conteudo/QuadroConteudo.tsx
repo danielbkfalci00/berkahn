@@ -28,6 +28,7 @@ import {
   type StatusBlog,
   type StatusLinkedin,
   type StatusQuadro,
+  type TagCatalogo,
   type Trilha,
   type VisaoQuadro,
 } from "@/types/conteudo";
@@ -40,7 +41,7 @@ import { criarPauta, excluirPauta, moverPautas } from "@/app/admin/conteudo/acti
 import { ColunaPauta } from "./ColunaPauta";
 import { BadgesPlataforma } from "./BadgesPlataforma";
 
-interface Props { pautas: Pauta[]; }
+interface Props { pautas: Pauta[]; tagsCatalogo: TagCatalogo[]; }
 export type ItemQuadro = Pauta & { coluna: StatusQuadro; ordem: number };
 const TODOS = "__todos__";
 
@@ -64,7 +65,7 @@ function prazoCasa(pauta: Pauta, filtro: string) {
   return true;
 }
 
-export function QuadroConteudo({ pautas: doServidor }: Props) {
+export function QuadroConteudo({ pautas: doServidor, tagsCatalogo }: Props) {
   const router = useRouter();
   const [visao, setVisao] = useState<VisaoQuadro>("geral");
   const [busca, setBusca] = useState("");
@@ -165,7 +166,7 @@ export function QuadroConteudo({ pautas: doServidor }: Props) {
   }
 
   function handleMover(id: string, coluna: StatusQuadro) {
-    if (visao === "geral" || coluna === "publicado") return;
+    if (visao === "geral") return;
     const alvo = itens.find((p) => p.id === id);
     if (!alvo || alvo.coluna === coluna) return;
     const semAlvo = itens.filter((p) => p.id !== id);
@@ -333,7 +334,7 @@ export function QuadroConteudo({ pautas: doServidor }: Props) {
           <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-neutral-100 pt-3">
             <button type="button"
               onClick={() => setSelecionados(new Set(
-                itens.filter((pauta) => pauta.coluna !== "publicado").map((pauta) => pauta.id)
+                itens.map((pauta) => pauta.id)
               ))}
               className="rounded px-2 py-1 text-xs font-medium text-neutral-600 hover:bg-neutral-100">
               Selecionar visíveis
@@ -349,8 +350,8 @@ export function QuadroConteudo({ pautas: doServidor }: Props) {
                   </SelectTrigger>
                   <SelectContent>
                     {(visao === "blog"
-                      ? ["planejada", "pesquisa", "draft", "produzido"]
-                      : ["planejada", "producao", "produzido"]
+                      ? STATUS_BLOG
+                      : STATUS_LINKEDIN
                     ).map((status) => (
                       <SelectItem key={status} value={status}>
                         {status === "producao" ? "Produção" :
@@ -383,7 +384,7 @@ export function QuadroConteudo({ pautas: doServidor }: Props) {
                 aoExcluir={handleExcluir}
                 idConfirmandoExclusao={confirmandoExclusao}
                 aoPedirExclusao={setConfirmandoExclusao} pendente={pendente}
-                selecionados={selecionados} aoSelecionar={selecionar} />
+                selecionados={selecionados} aoSelecionar={selecionar} tagsCatalogo={tagsCatalogo} />
             ))}
           </div>
         </div>

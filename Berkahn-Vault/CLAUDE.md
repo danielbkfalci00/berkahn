@@ -93,7 +93,7 @@ substitui: <slug versão anterior>  # se aplica
 ## Tag taxonomy (5 raízes, inglês)
 
 ```
-#domain/   → assunto técnico: steel-frame, lsf, drywall, normas, sustentabilidade, brand, architecture, integrations
+#domain/   -> assunto tecnico: domain/admin, domain/architecture, domain/brand, domain/drywall, domain/financiamento, domain/integrations, domain/lsf, domain/normas, domain/seo, domain/steel-frame, domain/sustentabilidade
 #project/  → frente: site, blog, linkedin, apresentacao, material, comercial
 #status/   → ciclo: draft, active, review, published, archived, locked, stale
 #ai/       → sinalização: context, memory, prompt, locked, do-not-edit, ai-generated

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { AlertCircle, KanbanSquare } from "lucide-react";
-import { listarPautas } from "@/lib/conteudo/queries";
+import { listarPautas, listarTagsConteudo } from "@/lib/conteudo/queries";
 import { QuadroConteudo } from "@/components/admin/conteudo/QuadroConteudo";
 
 export const metadata: Metadata = {
@@ -9,7 +9,10 @@ export const metadata: Metadata = {
 };
 
 export default async function ConteudoPage() {
-  const { pautas, erro } = await listarPautas();
+  const [{ pautas, erro }, tagsCatalogo] = await Promise.all([
+    listarPautas(),
+    listarTagsConteudo(),
+  ]);
 
   return (
     <div className="space-y-6">
@@ -54,7 +57,7 @@ export default async function ConteudoPage() {
           </p>
         </div>
       ) : (
-        <QuadroConteudo pautas={pautas} />
+        <QuadroConteudo pautas={pautas} tagsCatalogo={tagsCatalogo} />
       )}
     </div>
   );

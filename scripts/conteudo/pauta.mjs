@@ -2,6 +2,7 @@
 //
 // Buscar/ver são somente leitura. Toda escrita aceita --dry-run; overwrite exige
 // --forcar e --confirmar-substituicao. Publicação é uma operação explícita.
+import { createHash } from "node:crypto";
 import {
   existsSync, mkdirSync, readFileSync, renameSync, unlinkSync, writeFileSync,
 } from "node:fs";
@@ -42,9 +43,9 @@ const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const CAMPOS =
   "id,titulo,tipo,status_blog,status_linkedin,ordem_blog,ordem_linkedin," +
-  "draft_path,linkedin_url,keyword,semana,data_alvo,trilha,insights," +
+  "draft_path,linkedin_url,linkedin_publicado_em,keyword,semana,data_alvo,trilha,insights," +
   "pesquisa_conteudo,linkedin_texto,linkedin_briefing,linkedin_imagem_prompt," +
-  "linkedin_imagem_briefing,post_id,plataformas,capa_blog_url,capa_linkedin_url";
+  "linkedin_imagem_briefing,post_id,plataformas,capa_blog_url,capa_linkedin_url,atualizado_em";
 
 function abortar(mensagem, codigo = 1) {
   console.error(`\n❌ ${mensagem}`);
@@ -52,6 +53,13 @@ function abortar(mensagem, codigo = 1) {
 }
 function garantirId(id) {
   if (!UUID.test(id ?? "")) abortar("id inválido — use o UUID da pauta");
+}
+function garantirVersao(pauta, expected) {
+  if (expected && pauta.atualizado_em !== expected)
+    abortar(`pauta alterada depois do handoff (esperado ${expected}; atual ${pauta.atualizado_em})`);
+}
+function hashTexto(valor) {
+  return createHash("sha256").update(valor || "").digest("hex");
 }
 function caminhoRelativoSeguro(arquivo, pastaPermitida) {
   if (!arquivo) abortar("--arquivo é obrigatório");
@@ -169,7 +177,7 @@ async function criar({ titulo, plataformas, confirmar, dryRun }) {
   console.log(`\n✅ Pauta criada: ${data.id}\n`);
 }
 
-async function gravar(id, { bloco, arquivo, forcar, confirmar, dryRun }) {
+async function gravar(id, { bloco, arquivo, forcar, confirmar, expected, dryRun }) {
   garantirId(id);
   const coluna = COLUNA_DO_BLOCO[bloco];
   if (!coluna) abortar(`--bloco inválido: ${Object.keys(COLUNA_DO_BLOCO).join(", ")}`);
@@ -179,10 +187,11 @@ async function gravar(id, { bloco, arquivo, forcar, confirmar, dryRun }) {
   if (texto.length > MAX_CHARS) abortar(`o texto passa de ${MAX_CHARS} caracteres`);
 
   const { data: atual, error } = await db.from("conteudo_pautas")
-    .select(`titulo,${coluna},status_blog,status_linkedin,capa_linkedin_url`)
+    .select(`titulo,${coluna},status_blog,status_linkedin,capa_linkedin_url,atualizado_em`)
     .eq("id", id).maybeSingle();
   if (error) abortar(error.message);
   if (!atual) abortar(`nenhuma pauta com id ${id}`);
+  garantirVersao(atual, expected);
   const anterior = atual[coluna];
   if (anterior && (!forcar || !confirmar)) {
     console.error(`\n❌ O bloco "${bloco}" já tem ${anterior.length} caracteres.`);
@@ -218,7 +227,7 @@ async function gravar(id, { bloco, arquivo, forcar, confirmar, dryRun }) {
   console.log(`\n✅ ${bloco} gravado em "${atual.titulo}"\n`);
 }
 
-async function registrarDraft(id, { arquivo, forcar, confirmar, dryRun }) {
+async function registrarDraft(id, { arquivo, forcar, confirmar, expected, dryRun }) {
   garantirId(id);
   const caminho = caminhoRelativoSeguro(
     arquivo, "Berkahn-Vault/40-content/blog/drafts"
@@ -228,6 +237,7 @@ async function registrarDraft(id, { arquivo, forcar, confirmar, dryRun }) {
     .select(CAMPOS).eq("id", id).maybeSingle();
   if (error) abortar(error.message);
   if (!pauta?.status_blog) abortar("Blog não se aplica a esta pauta");
+  garantirVersao(pauta, expected);
   if (
     pauta.draft_path && pauta.draft_path !== caminho.relativoRaiz &&
     (!forcar || !confirmar)
@@ -265,7 +275,7 @@ function dadosPost(arquivo) {
   return Object.fromEntries(permitidos.filter((k) => bruto[k] !== undefined).map((k) => [k, bruto[k]]));
 }
 
-async function produzir(id, { arquivo, dados, usarExistente, dryRun }) {
+async function produzir(id, { arquivo, dados, usarExistente, expected, dryRun }) {
   garantirId(id);
   const draft = caminhoRelativoSeguro(arquivo, "Berkahn-Vault/40-content/blog/drafts");
   const post = dadosPost(dados);
@@ -273,6 +283,7 @@ async function produzir(id, { arquivo, dados, usarExistente, dryRun }) {
     .select(CAMPOS).eq("id", id).maybeSingle();
   if (error) abortar(error.message);
   if (!pauta?.status_blog) abortar("Blog não se aplica a esta pauta");
+  garantirVersao(pauta, expected);
   if (!pauta.capa_blog_url) abortar("defina a capa staging do Blog antes de produzir");
 
   const coverRel = `public/images/img_blog/${post.slug}/cover.webp`;
@@ -365,12 +376,13 @@ function frontmatterPublicado(markdown, postId, slug) {
   return `---\n${linhas.join("\n")}\n---${markdown.slice(fim + 4)}`;
 }
 
-async function publicar(id, { dryRun }) {
+async function publicar(id, { expected, dryRun }) {
   garantirId(id);
   const { data: pauta, error } = await db.from("conteudo_pautas")
     .select(`${CAMPOS},posts(id,slug,status)`).eq("id", id).maybeSingle();
   if (error) abortar(error.message);
   if (!pauta?.post_id || !pauta.posts) abortar("pauta sem artigo vinculado");
+  garantirVersao(pauta, expected);
   if (!["aprovado", "publicado"].includes(pauta.status_blog))
     abortar("Blog precisa estar aprovado antes de publicar");
   if (!pauta.draft_path) abortar("pauta sem draft_path");
@@ -415,6 +427,135 @@ async function publicar(id, { dryRun }) {
   console.log(`\n✅ Publicação concluída: ${destinoRel}\n`);
 }
 
+function gapsDaPauta(pauta) {
+  const gaps = [];
+  if (pauta.status_blog) {
+    if (!pauta.pesquisa_conteudo) gaps.push("pesquisa");
+    if (!pauta.draft_path) gaps.push("draft");
+    if (!pauta.post_id) gaps.push("artigo");
+    if (!pauta.capa_blog_url) gaps.push("capa_blog");
+    if (pauta.status_blog === "publicado" && pauta.posts?.status !== "published")
+      gaps.push("publicacao_real_blog");
+  }
+  if (pauta.status_linkedin) {
+    if (!pauta.linkedin_texto) gaps.push("texto_linkedin");
+    if (!pauta.capa_linkedin_url) gaps.push("capa_linkedin");
+    if (pauta.status_linkedin === "publicado" && (!pauta.linkedin_url || !pauta.linkedin_publicado_em))
+      gaps.push("publicacao_real_linkedin");
+  }
+  return gaps;
+}
+
+function proximaAcaoPauta(pauta) {
+  if (pauta.status_blog) {
+    if (!pauta.pesquisa_conteudo) return "pesquisar";
+    if (!pauta.draft_path) return "criar-draft";
+    if (!pauta.post_id || !pauta.capa_blog_url) return "produzir-artigo";
+    if (pauta.posts?.status !== "published") return "revisar";
+  }
+  if (pauta.status_linkedin) {
+    if (!pauta.linkedin_texto || !pauta.capa_linkedin_url) return "produzir-linkedin";
+    if (!pauta.linkedin_url || !pauta.linkedin_publicado_em) return "preparar-publicacao";
+  }
+  return "concluido-real";
+}
+
+async function contextoPauta(id, { include = "", json = false, silent = false } = {}) {
+  garantirId(id);
+  const { data: pauta, error } = await db.from("conteudo_pautas")
+    .select(`${CAMPOS},posts(slug,title,status,published_at)`)
+    .eq("id", id).maybeSingle();
+  if (error) abortar(error.message);
+  if (!pauta) abortar(`nenhuma pauta com id ${id}`);
+
+  const { data: tagRows } = await db.from("conteudo_pauta_tags")
+    .select("tag_slug").eq("pauta_id", id);
+  const inclusoes = new Set(String(include || "").split(",").filter(Boolean));
+  const blocos = {};
+  if (inclusoes.has("pesquisa") && pauta.pesquisa_conteudo)
+    blocos.pesquisa = pauta.pesquisa_conteudo;
+  if (inclusoes.has("linkedin") && pauta.linkedin_texto)
+    blocos.linkedin = pauta.linkedin_texto;
+  if (inclusoes.has("draft") && pauta.draft_path) {
+    const caminho = resolve(ROOT, pauta.draft_path);
+    if (existsSync(caminho)) blocos.draft = readFileSync(caminho, "utf8");
+  }
+
+  const payload = {
+    pauta_id: pauta.id,
+    titulo: pauta.titulo,
+    status_blog: pauta.status_blog,
+    status_linkedin: pauta.status_linkedin,
+    plataformas: pauta.plataformas,
+    keyword: pauta.keyword,
+    data_alvo: pauta.data_alvo,
+    tags: (tagRows || []).map((row) => row.tag_slug),
+    gaps: gapsDaPauta(pauta),
+    proxima_acao: proximaAcaoPauta(pauta),
+    atualizado_em: pauta.atualizado_em,
+    hashes: {
+      pesquisa: hashTexto(pauta.pesquisa_conteudo),
+      linkedin: hashTexto(pauta.linkedin_texto),
+      draft_path: hashTexto(pauta.draft_path),
+    },
+    blocos,
+  };
+  if (silent) return payload;
+  if (json) console.log(JSON.stringify(payload, null, 2));
+  else {
+    console.log(`
+${payload.titulo}
+próxima: ${payload.proxima_acao}
+gaps: ${payload.gaps.join(", ") || "nenhum"}`);
+    console.log(`contexto: ${Object.keys(blocos).join(", ") || "somente metadados"}
+`);
+  }
+  return payload;
+}
+
+async function validarPauta(id, json) {
+  const payload = await contextoPauta(id, { silent: true });
+  const resultado = { valido: true, gaps: payload.gaps, proxima_acao: payload.proxima_acao };
+  console.log(json ? JSON.stringify(resultado, null, 2) : `válida; ${payload.gaps.length} gap(s)`);
+}
+
+async function claimJob(workerId, leaseSeconds, dryRun) {
+  if (!workerId) abortar("--worker é obrigatório");
+  if (dryRun) {
+    console.log("🔍 --dry-run: consultaria o próximo job sem reservar.");
+    return;
+  }
+  const { data, error } = await db.rpc("claim_conteudo_automation_job", {
+    p_worker_id: workerId,
+    p_lease_seconds: Number(leaseSeconds || 900),
+  });
+  if (error) abortar(error.message);
+  console.log(JSON.stringify(data?.[0] || null, null, 2));
+}
+
+async function finalizarJob(id, workerId, status, flags) {
+  garantirId(id);
+  if (!workerId) abortar("--worker é obrigatório");
+  if (!flags["run-id"]) abortar("--run-id is required");
+  if (flags["dry-run"]) {
+    console.log(`🔍 --dry-run: finalizaria ${id} como ${status}.`);
+    return;
+  }
+  const { data, error } = await db.rpc("finalizar_conteudo_automation_job", {
+    p_job_id: id,
+    p_worker_id: workerId,
+    p_run_id: flags["run-id"],
+    p_status: status,
+    p_context_hashes: flags.hashes ? JSON.parse(flags.hashes) : {},
+    p_tokens_entrada: flags["tokens-entrada"] ? Number(flags["tokens-entrada"]) : null,
+    p_tokens_saida: flags["tokens-saida"] ? Number(flags["tokens-saida"]) : null,
+    p_custo_estimado: flags.custo ? Number(flags.custo) : null,
+    p_erro: flags.erro || null,
+  });
+  if (error) abortar(error.message);
+  console.log(JSON.stringify(data, null, 2));
+}
+
 const [comando, ...resto] = process.argv.slice(2);
 const flags = Object.fromEntries(
   resto.filter((arg) => arg.startsWith("--")).map((arg) => {
@@ -432,6 +573,24 @@ switch (comando) {
   case "ver":
     await ver(posicional[0]);
     break;
+  case "proxima":
+    await contextoPauta(posicional[0], {
+      include: flags.include,
+      json: Boolean(flags.json),
+    });
+    break;
+  case "validar":
+    await validarPauta(posicional[0], Boolean(flags.json));
+    break;
+  case "job-claim":
+    await claimJob(flags.worker, flags.lease, dryRun);
+    break;
+  case "job-complete":
+    await finalizarJob(posicional[0], flags.worker, flags.status || "concluido", flags);
+    break;
+  case "job-fail":
+    await finalizarJob(posicional[0], flags.worker, "falhou", flags);
+    break;
   case "criar":
     await criar({
       titulo: flags.titulo,
@@ -446,6 +605,7 @@ switch (comando) {
       arquivo: flags.arquivo,
       forcar: Boolean(flags.forcar),
       confirmar: Boolean(flags["confirmar-substituicao"]),
+      expected: flags["expected-updated-at"],
       dryRun,
     });
     break;
@@ -454,6 +614,7 @@ switch (comando) {
       arquivo: flags.arquivo,
       forcar: Boolean(flags.forcar),
       confirmar: Boolean(flags["confirmar-substituicao"]),
+      expected: flags["expected-updated-at"],
       dryRun,
     });
     break;
@@ -462,22 +623,28 @@ switch (comando) {
       arquivo: flags.arquivo,
       dados: flags.dados,
       usarExistente: Boolean(flags["usar-existente"]),
+      expected: flags["expected-updated-at"],
       dryRun,
     });
     break;
   case "publicar":
-    await publicar(posicional[0], { dryRun });
+    await publicar(posicional[0], { expected: flags["expected-updated-at"], dryRun });
     break;
   default:
     console.log(`
 uso:
   pauta.mjs buscar "<termo>" [--slug=<artigo>]
   pauta.mjs ver <id>
+  pauta.mjs proxima <id> [--json] [--include=pesquisa,draft,linkedin]
+  pauta.mjs validar <id> [--json]
+  pauta.mjs job-claim --worker=<id> [--lease=900] [--dry-run]
+  pauta.mjs job-complete <job-id> --worker=<id> --run-id=<uuid> [--status=concluido|aguardando-aprovacao]
+  pauta.mjs job-fail <job-id> --worker=<id> --run-id=<uuid> --erro="<mensagem>"
   pauta.mjs criar --titulo="<título>" [--plataformas=blog,linkedin] --confirmar-aprovacao [--dry-run]
-  pauta.mjs gravar <id> --bloco=<bloco> --arquivo=<path> [--forcar --confirmar-substituicao] [--dry-run]
-  pauta.mjs registrar-draft <id> --arquivo=<markdown> [--dry-run]
-  pauta.mjs produzir <id> --arquivo=<draft.md> --dados=<post.json> [--usar-existente] [--dry-run]
-  pauta.mjs publicar <id> [--dry-run]
+  pauta.mjs gravar <id> --bloco=<bloco> --arquivo=<path> [--forcar --confirmar-substituicao] [--expected-updated-at=<iso>] [--dry-run]
+  pauta.mjs registrar-draft <id> --arquivo=<markdown> [--expected-updated-at=<iso>] [--dry-run]
+  pauta.mjs produzir <id> --arquivo=<draft.md> --dados=<post.json> [--usar-existente] [--expected-updated-at=<iso>] [--dry-run]
+  pauta.mjs publicar <id> [--expected-updated-at=<iso>] [--dry-run]
 
 blocos: ${Object.keys(COLUNA_DO_BLOCO).join(" | ")}
 `);

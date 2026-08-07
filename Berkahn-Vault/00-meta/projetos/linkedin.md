@@ -1,11 +1,11 @@
 ---
 tipo: projeto
 criado: 2026-05-22
-atualizado: 2026-08-06
+atualizado: 2026-08-07
 tags:
   - project/linkedin
   - status/active
-ai_summary: Hub do LinkedIn. 66 pautas têm trilha própria no quadro; texto, prompt e briefing vivem no card, capa exige 1080×1350 (4:5), aprovação é manual e URL+data fecham publicação. Quatro pastas antigas permanecem legado congelado.
+ai_summary: Hub do LinkedIn. Status é livre e não comprova publicação; URL+data são o registro real. Texto/capa podem entrar na fila Codex, aprovação e publicação seguem manuais. Quatro pastas antigas permanecem legado congelado.
 status: active
 projeto: linkedin
 kpi_publicados: 3
@@ -36,7 +36,7 @@ subagents_uteis: []
 Pipeline centralizado no [[quadro-conteudo]]: 66 trilhas LinkedIn, sendo 44 das
 pautas editoriais e 22 do acervo. O texto e os insumos visuais não são mais
 copiados para Notion nem para novas pastas do vault. Bruno continua publicando
-manualmente no LinkedIn; o card só vira `publicado` após URL e data.
+manualmente no LinkedIn; o chip de status é livre, mas somente URL e data comprovam a publicação real.
 
 As quatro pastas em `40-content/linkedin/` são legado imutável. A pasta de ICMS
 foi reconciliada no banco sem apagar os arquivos.

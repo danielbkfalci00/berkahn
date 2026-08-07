@@ -1,5 +1,6 @@
 "use server";
 
+import { createHash } from "node:crypto";
 import sharp from "sharp";
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
@@ -8,6 +9,7 @@ import {
   ehStatusDoCanal,
   LIMITES,
   toPauta,
+  type AcaoAutomacao,
   type BlocoTextoPauta,
   type CanalConteudo,
   type Funil,
@@ -18,6 +20,7 @@ import {
   type StatusBlog,
   type StatusLinkedin,
   type TipoPauta,
+  type TagConteudo,
   type Trilha,
 } from "@/types/conteudo";
 
@@ -92,8 +95,6 @@ export async function criarPauta(input: {
     return { data: null, error: "A coluna escolhida não pertence às plataformas da pauta." };
   if (input.canal && input.status && !ehStatusDoCanal(input.canal, input.status))
     return { data: null, error: "Status inválido para o canal." };
-  if (input.status === "publicado")
-    return { data: null, error: "Publicação exige a operação explícita do canal." };
 
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
@@ -134,6 +135,7 @@ export async function atualizarPauta(
     semana?: number | null;
     dataAlvo?: string | null;
     plataformas?: Plataforma[];
+    tags?: TagConteudo[];
   }
 ): Promise<Resultado<Pauta | null>> {
   if (!UUID_PATTERN.test(id)) return { data: null, error: "Pauta inválida." };
@@ -169,20 +171,52 @@ export async function atualizarPauta(
       return { data: null, error: "A pauta precisa de ao menos uma plataforma." };
     update.plataformas = plataformas;
   }
-  if (Object.keys(update).length === 0)
+
+  const tags = patch.tags === undefined
+    ? undefined
+    : [...new Set(patch.tags.filter((tag): tag is TagConteudo => /^domain\/[a-z0-9]+(?:-[a-z0-9]+)*$/.test(tag)))];
+  if (patch.tags !== undefined && tags?.length !== patch.tags.length)
+    return { data: null, error: "Uma ou mais tags não pertencem à taxonomia oficial." };
+  if (Object.keys(update).length === 0 && tags === undefined)
     return { data: null, error: "Nada para atualizar." };
 
   const supabase = await createClient();
-  const { data, error } = await supabase
-    .from("conteudo_pautas")
-    .update(update)
-    .eq("id", id)
-    .select(SELECT_COM_ARTIGO)
-    .single();
+  let data: unknown;
+  if (Object.keys(update).length > 0) {
+    const resultado = await supabase
+      .from("conteudo_pautas")
+      .update(update)
+      .eq("id", id)
+      .select(SELECT_COM_ARTIGO)
+      .single();
+    if (resultado.error) return { data: null, error: resultado.error.message };
+    data = resultado.data;
+  } else {
+    const resultado = await supabase
+      .from("conteudo_pautas")
+      .select(SELECT_COM_ARTIGO)
+      .eq("id", id)
+      .single();
+    if (resultado.error) return { data: null, error: resultado.error.message };
+    data = resultado.data;
+  }
 
-  if (error) return { data: null, error: error.message };
+  if (tags !== undefined) {
+    const { error } = await supabase.rpc("atualizar_tags_pauta", {
+      p_pauta_id: id,
+      p_tags: tags,
+    });
+    if (error) return { data: null, error: error.message };
+  }
+
+  const { data: tagRows } = await supabase
+    .from("conteudo_pauta_tags")
+    .select("tag_slug")
+    .eq("pauta_id", id);
+  const pauta = toPauta(data as PautaRow);
+  pauta.tags = (tagRows ?? []).map((row) => row.tag_slug as TagConteudo);
   revalidarPauta(id);
-  return { data: toPauta(data as unknown as PautaRow), error: null };
+  return { data: pauta, error: null };
 }
 
 export async function excluirPauta(id: string): Promise<Resultado> {
@@ -190,7 +224,7 @@ export async function excluirPauta(id: string): Promise<Resultado> {
   const supabase = await createClient();
   const { data: alvo } = await supabase
     .from("conteudo_pautas")
-    .select("titulo")
+    .select("titulo,capa_blog_url,capa_linkedin_url")
     .eq("id", id)
     .maybeSingle();
 
@@ -202,9 +236,13 @@ export async function excluirPauta(id: string): Promise<Resultado> {
   if (error) return { data: null, error: error.message };
   if (!apagadas?.length) return { data: null, error: SEM_LINHA };
 
-  await supabase.storage
-    .from("post-images")
-    .remove([`conteudo/${id}/blog.jpg`, `conteudo/${id}/linkedin.jpg`]);
+  const caminhos = [
+    caminhoStorageDaUrl(alvo?.capa_blog_url ?? null),
+    caminhoStorageDaUrl(alvo?.capa_linkedin_url ?? null),
+    `conteudo/${id}/blog.jpg`,
+    `conteudo/${id}/linkedin.jpg`,
+  ].filter((caminho): caminho is string => Boolean(caminho));
+  if (caminhos.length) await supabase.storage.from("post-images").remove([...new Set(caminhos)]);
   await registrarLog(
     supabase,
     "Pauta excluída",
@@ -302,8 +340,6 @@ export async function alterarStatusPauta(
   if (!UUID_PATTERN.test(id)) return { data: null, error: "Pauta inválida." };
   if (!ehStatusDoCanal(canal, status))
     return { data: null, error: "Status inválido para o canal." };
-  if (status === "publicado")
-    return { data: null, error: "Publicação exige a operação explícita do canal." };
 
   const supabase = await createClient();
   const colunaStatus = canal === "blog" ? "status_blog" : "status_linkedin";
@@ -375,8 +411,6 @@ export async function marcarLinkedinPublicado(
     .eq("id", id)
     .maybeSingle();
   if (!anterior) return { data: null, error: SEM_LINHA };
-  if (!["aprovado", "publicado"].includes(anterior.status_linkedin ?? ""))
-    return { data: null, error: "O LinkedIn precisa estar aprovado antes de publicar." };
 
   const { data, error } = await supabase
     .from("conteudo_pautas")
@@ -446,6 +480,70 @@ export async function vincularPost(
   return { data: pauta, error: null };
 }
 
+export async function solicitarAutomacao(
+  pautaId: string,
+  acao: AcaoAutomacao
+): Promise<Resultado<{ id: string; status: string } | null>> {
+  if (!UUID_PATTERN.test(pautaId)) return { data: null, error: "Pauta inválida." };
+  const permitidas: AcaoAutomacao[] = [
+    "pesquisar", "criar-draft", "produzir-artigo",
+    "produzir-linkedin", "revisar", "preparar-publicacao",
+  ];
+  if (!permitidas.includes(acao)) return { data: null, error: "Ação inválida." };
+
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return { data: null, error: SEM_LINHA };
+  const { data: pauta } = await supabase
+    .from("conteudo_pautas")
+    .select("titulo,atualizado_em")
+    .eq("id", pautaId)
+    .maybeSingle();
+  if (!pauta) return { data: null, error: SEM_LINHA };
+
+  const { data, error } = await supabase
+    .from("conteudo_automation_jobs")
+    .insert({
+      pauta_id: pautaId,
+      acao,
+      solicitado_por: user.id,
+      esperado_atualizado_em: pauta.atualizado_em,
+    })
+    .select("id,status")
+    .single();
+  if (error?.code === "23505")
+    return { data: null, error: "Esta ação já está na fila ou aguardando aprovação." };
+  if (error) return { data: null, error: error.message };
+
+  await registrarLog(supabase, "Automação solicitada", pautaId, pauta.titulo, {
+    origem: "admin",
+    acao,
+    job_id: data.id,
+  });
+  revalidarPauta(pautaId);
+  return { data, error: null };
+}
+
+export async function cancelarAutomacao(
+  pautaId: string,
+  jobId: string
+): Promise<Resultado> {
+  if (!UUID_PATTERN.test(pautaId) || !UUID_PATTERN.test(jobId))
+    return { data: null, error: "Job inválido." };
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("conteudo_automation_jobs")
+    .update({ status: "cancelado" })
+    .eq("id", jobId)
+    .eq("pauta_id", pautaId)
+    .in("status", ["na-fila", "falhou"])
+    .select("id");
+  if (error) return { data: null, error: error.message };
+  if (!data?.length) return { data: null, error: "O job já começou e não pode mais ser cancelado." };
+  revalidarPauta(pautaId);
+  return { data: null, error: null };
+}
+
 const TAMANHO_MAX_CAPA = 5 * 1024 * 1024;
 const COLUNA_DA_CAPA = {
   blog: "capa_blog_url",
@@ -453,9 +551,21 @@ const COLUNA_DA_CAPA = {
 } as const;
 export type TipoCapa = keyof typeof COLUNA_DA_CAPA;
 
+function caminhoStorageDaUrl(url: string | null): string | null {
+  if (!url) return null;
+  try {
+    const pathname = new URL(url).pathname;
+    const marcador = "/post-images/";
+    const indice = pathname.indexOf(marcador);
+    return indice === -1 ? null : decodeURIComponent(pathname.slice(indice + marcador.length));
+  } catch {
+    return null;
+  }
+}
+
 export async function definirCapa(
   formData: FormData
-): Promise<Resultado<{ url: string } | null>> {
+): Promise<Resultado<{ url: string; warning?: string | null; cleanupPath?: string | null } | null>> {
   const pautaId = String(formData.get("pautaId") ?? "");
   const tipo = String(formData.get("tipo") ?? "") as TipoCapa;
   const arquivo = formData.get("arquivo") as File | null;
@@ -470,7 +580,7 @@ export async function definirCapa(
   const supabase = await createClient();
   const { data: pauta } = await supabase
     .from("conteudo_pautas")
-    .select("id,status_linkedin,linkedin_texto,capa_blog_url,capa_linkedin_url")
+    .select("titulo,capa_blog_url,capa_linkedin_url")
     .eq("id", pautaId)
     .maybeSingle();
   if (!pauta) return { data: null, error: SEM_LINHA };
@@ -492,59 +602,93 @@ export async function definirCapa(
     .jpeg({ quality: 86, progressive: true })
     .toBuffer();
 
-  const caminho = `conteudo/${pautaId}/${tipo}.jpg`;
+  const hash = createHash("sha256").update(buffer).digest("hex");
+  const caminho = `conteudo/${pautaId}/${tipo}/${hash}.jpg`;
+  const anteriorUrl = tipo === "blog" ? pauta.capa_blog_url : pauta.capa_linkedin_url;
+  const caminhoAnterior = caminhoStorageDaUrl(anteriorUrl);
   const { error: erroUpload } = await supabase.storage
     .from("post-images")
     .upload(caminho, buffer, { upsert: true, contentType: "image/jpeg" });
   if (erroUpload) return { data: null, error: erroUpload.message };
 
   const { data: { publicUrl } } = supabase.storage.from("post-images").getPublicUrl(caminho);
-  const url = `${publicUrl}?v=${Date.now()}`;
-  const update: Record<string, unknown> = { [COLUNA_DA_CAPA[tipo]]: url };
-  if (
-    tipo === "linkedin" &&
-    pauta.linkedin_texto &&
-    ["planejada", "producao"].includes(pauta.status_linkedin ?? "")
-  ) update.status_linkedin = "produzido";
-
   const { data: linhas, error } = await supabase
     .from("conteudo_pautas")
-    .update(update)
+    .update({ [COLUNA_DA_CAPA[tipo]]: publicUrl })
     .eq("id", pautaId)
     .select("id");
   if (error || !linhas?.length) {
-    const colunaAnterior = tipo === "blog" ? pauta.capa_blog_url : pauta.capa_linkedin_url;
-    if (!colunaAnterior) {
+    if (caminhoAnterior !== caminho)
       await supabase.storage.from("post-images").remove([caminho]);
-    }
     return { data: null, error: error?.message ?? SEM_LINHA };
   }
+
+  let warning: string | null = null;
+  if (caminhoAnterior && caminhoAnterior !== caminho) {
+    const { error: limpeza } = await supabase.storage.from("post-images").remove([caminhoAnterior]);
+    if (limpeza) warning = "A capa foi salva, mas a versão anterior ficou pendente de limpeza.";
+  }
+  await registrarLog(supabase, "Capa da pauta atualizada", pautaId, pauta.titulo, {
+    origem: "admin",
+    tipo,
+    caminho,
+    anterior: caminhoAnterior,
+    cleanup_pendente: Boolean(warning),
+  });
   revalidarPauta(pautaId);
-  return { data: { url }, error: null };
+  return { data: { url: publicUrl, warning, cleanupPath: warning ? caminhoAnterior : null }, error: null };
 }
 
 export async function removerCapa(
   pautaId: string,
   tipo: TipoCapa
-): Promise<Resultado<{ warning: string | null } | null>> {
+): Promise<Resultado<{ warning: string | null; cleanupPath: string | null } | null>> {
   if (!UUID_PATTERN.test(pautaId)) return { data: null, error: "Pauta inválida." };
   if (!COLUNA_DA_CAPA[tipo]) return { data: null, error: "Tipo de capa desconhecido." };
 
   const supabase = await createClient();
+  const coluna = COLUNA_DA_CAPA[tipo];
+  const { data: pauta } = await supabase
+    .from("conteudo_pautas")
+    .select(`titulo,${coluna}`)
+    .eq("id", pautaId)
+    .maybeSingle();
+  if (!pauta) return { data: null, error: SEM_LINHA };
+  const urlAnterior = pauta[coluna as keyof typeof pauta] as string | null;
+  const caminhoAnterior = caminhoStorageDaUrl(urlAnterior);
+
   const { data: linhas, error } = await supabase
     .from("conteudo_pautas")
-    .update({ [COLUNA_DA_CAPA[tipo]]: null })
+    .update({ [coluna]: null })
     .eq("id", pautaId)
     .select("id");
   if (error) return { data: null, error: error.message };
   if (!linhas?.length) return { data: null, error: SEM_LINHA };
 
-  const { error: erroStorage } = await supabase.storage
-    .from("post-images")
-    .remove([`conteudo/${pautaId}/${tipo}.jpg`]);
+  const { error: erroStorage } = caminhoAnterior
+    ? await supabase.storage.from("post-images").remove([caminhoAnterior])
+    : { error: null };
+  const warning = erroStorage
+    ? "A referência foi removida, mas o objeto ficou pendente de limpeza."
+    : null;
+  await registrarLog(supabase, "Capa da pauta removida", pautaId, String(pauta.titulo), {
+    origem: "admin",
+    tipo,
+    caminho: caminhoAnterior,
+    cleanup_pendente: Boolean(warning),
+  });
   revalidarPauta(pautaId);
-  return {
-    data: { warning: erroStorage ? "A referência foi removida, mas o objeto no Storage precisa de limpeza manual." : null },
-    error: null,
-  };
+  return { data: { warning, cleanupPath: warning ? caminhoAnterior : null }, error: null };
+}
+
+export async function limparObjetoCapa(caminho: string): Promise<Resultado> {
+  const seguro =
+    new RegExp("^conteudo/[0-9a-f-]{36}/(blog|linkedin)/[0-9a-f]{64}[.]jpg$", "i").test(caminho);
+  if (!seguro) return { data: null, error: "Caminho de limpeza inválido." };
+
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return { data: null, error: "Sessão expirada." };
+  const { error } = await supabase.storage.from("post-images").remove([caminho]);
+  return { data: null, error: error?.message ?? null };
 }

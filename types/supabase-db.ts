@@ -82,14 +82,17 @@ export type Database = {
       }
       analytics_tasks: {
         Row: {
+          approval_status: string
           completed_at: string | null
           completed_by: string | null
           completion_note: string | null
           created_at: string
           created_by: string | null
           description: string | null
+          evidence: Json
           id: string
           origin_signal: string | null
+          pauta_id: string | null
           priority: string
           sort_order: number
           source: string
@@ -98,14 +101,17 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          approval_status?: string
           completed_at?: string | null
           completed_by?: string | null
           completion_note?: string | null
           created_at?: string
           created_by?: string | null
           description?: string | null
+          evidence?: Json
           id?: string
           origin_signal?: string | null
+          pauta_id?: string | null
           priority?: string
           sort_order?: number
           source?: string
@@ -114,14 +120,17 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          approval_status?: string
           completed_at?: string | null
           completed_by?: string | null
           completion_note?: string | null
           created_at?: string
           created_by?: string | null
           description?: string | null
+          evidence?: Json
           id?: string
           origin_signal?: string | null
+          pauta_id?: string | null
           priority?: string
           sort_order?: number
           source?: string
@@ -239,6 +248,233 @@ export type Database = {
         ]
       }
 
+      conteudo_tags: {
+        Row: {
+          slug: string
+          label: string
+          ativo: boolean
+          ordem: number
+          criado_em: string
+          atualizado_em: string
+        }
+        Insert: {
+          slug: string
+          label: string
+          ativo?: boolean
+          ordem?: number
+          criado_em?: string
+          atualizado_em?: string
+        }
+        Update: {
+          slug?: string
+          label?: string
+          ativo?: boolean
+          ordem?: number
+          criado_em?: string
+          atualizado_em?: string
+        }
+        Relationships: []
+      }
+      conteudo_pauta_tags: {
+        Row: {
+          pauta_id: string
+          tag_slug: string
+          criado_em: string
+        }
+        Insert: {
+          pauta_id: string
+          tag_slug: string
+          criado_em?: string
+        }
+        Update: {
+          pauta_id?: string
+          tag_slug?: string
+          criado_em?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "conteudo_pauta_tags_pauta_id_fkey"
+            columns: ["pauta_id"]
+            isOneToOne: false
+            referencedRelation: "conteudo_pautas"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "conteudo_pauta_tags_tag_slug_fkey"
+            columns: ["tag_slug"]
+            isOneToOne: false
+            referencedRelation: "conteudo_tags"
+            referencedColumns: ["slug"]
+          },
+        ]
+      }
+      conteudo_automation_jobs: {
+        Row: {
+          id: string
+          pauta_id: string
+          acao: string
+          status: string
+          solicitado_por: string | null
+          worker_id: string | null
+          tentativas: number
+          lease_ate: string | null
+          esperado_atualizado_em: string | null
+          run_id: string | null
+          erro: string | null
+          context_hashes: Json
+          tokens_entrada: number | null
+          tokens_saida: number | null
+          custo_estimado: number | null
+          criado_em: string
+          iniciado_em: string | null
+          finalizado_em: string | null
+          atualizado_em: string
+        }
+        Insert: {
+          id?: string
+          pauta_id: string
+          acao: string
+          status?: string
+          solicitado_por?: string | null
+          worker_id?: string | null
+          tentativas?: number
+          lease_ate?: string | null
+          esperado_atualizado_em?: string | null
+          run_id?: string | null
+          erro?: string | null
+          context_hashes?: Json
+          tokens_entrada?: number | null
+          tokens_saida?: number | null
+          custo_estimado?: number | null
+          criado_em?: string
+          iniciado_em?: string | null
+          finalizado_em?: string | null
+          atualizado_em?: string
+        }
+        Update: {
+          id?: string
+          pauta_id?: string
+          acao?: string
+          status?: string
+          solicitado_por?: string | null
+          worker_id?: string | null
+          tentativas?: number
+          lease_ate?: string | null
+          esperado_atualizado_em?: string | null
+          run_id?: string | null
+          erro?: string | null
+          context_hashes?: Json
+          tokens_entrada?: number | null
+          tokens_saida?: number | null
+          custo_estimado?: number | null
+          criado_em?: string
+          iniciado_em?: string | null
+          finalizado_em?: string | null
+          atualizado_em?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "conteudo_automation_jobs_pauta_id_fkey"
+            columns: ["pauta_id"]
+            isOneToOne: false
+            referencedRelation: "conteudo_pautas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      leads: {
+        Row: {
+          id: string
+          nome: string
+          email: string | null
+          telefone: string
+          segmento: string
+          mensagem: string
+          canal: string
+          status: string
+          pagina_origem: string | null
+          slug_origem: string | null
+          cta_location: string | null
+          utm: Json
+          post_id: string | null
+          pauta_id: string | null
+          request_fingerprint: string | null
+          qualificado_por: string | null
+          qualificado_em: string | null
+          sheet_sync_status: string
+          sheet_sync_tentativas: number
+          sheet_synced_at: string | null
+          sheet_sync_error: string | null
+          criado_em: string
+          atualizado_em: string
+        }
+        Insert: {
+          id?: string
+          nome: string
+          email?: string | null
+          telefone: string
+          segmento: string
+          mensagem: string
+          canal?: string
+          status?: string
+          pagina_origem?: string | null
+          slug_origem?: string | null
+          cta_location?: string | null
+          utm?: Json
+          post_id?: string | null
+          pauta_id?: string | null
+          request_fingerprint?: string | null
+          qualificado_por?: string | null
+          qualificado_em?: string | null
+          sheet_sync_status?: string
+          sheet_sync_tentativas?: number
+          sheet_synced_at?: string | null
+          sheet_sync_error?: string | null
+          criado_em?: string
+          atualizado_em?: string
+        }
+        Update: {
+          id?: string
+          nome?: string
+          email?: string | null
+          telefone?: string
+          segmento?: string
+          mensagem?: string
+          canal?: string
+          status?: string
+          pagina_origem?: string | null
+          slug_origem?: string | null
+          cta_location?: string | null
+          utm?: Json
+          post_id?: string | null
+          pauta_id?: string | null
+          request_fingerprint?: string | null
+          qualificado_por?: string | null
+          qualificado_em?: string | null
+          sheet_sync_status?: string
+          sheet_sync_tentativas?: number
+          sheet_synced_at?: string | null
+          sheet_sync_error?: string | null
+          criado_em?: string
+          atualizado_em?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "leads_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "posts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "leads_pauta_id_fkey"
+            columns: ["pauta_id"]
+            isOneToOne: false
+            referencedRelation: "conteudo_pautas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       orcamentos: {
         Row: {
           atualizado_em: string
@@ -561,6 +797,28 @@ export type Database = {
       mover_pautas_conteudo: {
         Args: { p_canal: string; p_updates: Json; p_origem?: string }
         Returns: undefined
+      }
+      atualizar_tags_pauta: {
+        Args: { p_pauta_id: string; p_tags: string[] }
+        Returns: undefined
+      }
+      claim_conteudo_automation_job: {
+        Args: { p_worker_id: string; p_lease_seconds?: number }
+        Returns: Database["public"]["Tables"]["conteudo_automation_jobs"]["Row"][]
+      }
+      finalizar_conteudo_automation_job: {
+        Args: {
+          p_job_id: string
+          p_worker_id: string
+          p_run_id: string
+          p_status: string
+          p_context_hashes?: Json
+          p_tokens_entrada?: number
+          p_tokens_saida?: number
+          p_custo_estimado?: number
+          p_erro?: string
+        }
+        Returns: Database["public"]["Tables"]["conteudo_automation_jobs"]["Row"]
       }
       publicar_artigo_pauta: {
         Args: { p_pauta_id: string; p_publicado_path: string }

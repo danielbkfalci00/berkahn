@@ -140,11 +140,106 @@ try {
   );
   checar("ordens independentes por canal", independente.status_blog === alvo.status_blog && independente.ordem_blog === alvo.ordem_blog && independente.status_linkedin === "producao");
 
+  console.log("\nSTATUS LIVRE E PUBLICAÇÃO REAL");
+  const { rows: postsAntes } = await client.query(
+    "SELECT status, count(*)::int AS total FROM posts GROUP BY status ORDER BY status"
+  );
+  await client.query(
+    "SELECT mover_pautas_conteudo('blog', $1::jsonb, 'teste-status-livre')",
+    [JSON.stringify([{ id: alvo.id, status: "publicado", ordem: 1001 }])]
+  );
+  await client.query(
+    "SELECT mover_pautas_conteudo('linkedin', $1::jsonb, 'teste-status-livre')",
+    [JSON.stringify([{ id: alvo.id, status: "publicado", ordem: 1001 }])]
+  );
+  const { rows: [livre] } = await client.query(
+    "SELECT status_blog,status_linkedin,linkedin_url,linkedin_publicado_em FROM conteudo_pautas WHERE id=$1",
+    [alvo.id]
+  );
+  const { rows: postsDepois } = await client.query(
+    "SELECT status, count(*)::int AS total FROM posts GROUP BY status ORDER BY status"
+  );
+  checar("Blog aceita Publicado com gaps", livre.status_blog === "publicado");
+  checar("LinkedIn aceita Publicado sem URL/data",
+    livre.status_linkedin === "publicado" && !livre.linkedin_url && !livre.linkedin_publicado_em);
+  checar("mover status não altera posts", JSON.stringify(postsAntes) === JSON.stringify(postsDepois));
+
+  console.log("\nTAGS, FILA E LEADS");
+  const { rows: [tagCount] } = await client.query("SELECT count(*)::int AS total FROM conteudo_tags");
+  checar("11 domínios canônicos semeados", tagCount.total === 11, String(tagCount.total));
+  await client.query("SELECT atualizar_tags_pauta($1, $2::text[])", [
+    alvo.id, ["domain/lsf", "domain/steel-frame"],
+  ]);
+  const { rows: [pautaTags] } = await client.query(
+    "SELECT count(*)::int AS total FROM conteudo_pauta_tags WHERE pauta_id=$1", [alvo.id]
+  );
+  checar("tags normalizadas atualizam atomicamente", pautaTags.total === 2);
+
+  const { rows: [versao] } = await client.query(
+    "SELECT atualizado_em FROM conteudo_pautas WHERE id=$1", [alvo.id]
+  );
+  const { rows: [job] } = await client.query(
+    "INSERT INTO conteudo_automation_jobs(pauta_id,acao,esperado_atualizado_em) VALUES($1,'revisar',$2) RETURNING id",
+    [alvo.id, versao.atualizado_em]
+  );
+  const { rows: claimed } = await client.query(
+    "SELECT id,status,run_id FROM claim_conteudo_automation_job('teste-worker',60)"
+  );
+  checar("claim reserva um job", claimed.length === 1 && claimed[0].id === job.id);
+  const { rows: secondClaim } = await client.query(
+    "SELECT id FROM claim_conteudo_automation_job('outro-worker',60)"
+  );
+  checar("claim concorrente não duplica reserva", secondClaim.length === 0);
+  await client.query("SAVEPOINT job_fencing");
+  let runObsoletoRecusado = false;
+  try {
+    await client.query(
+      "SELECT finalizar_conteudo_automation_job($1,'teste-worker','00000000-0000-0000-0000-000000000001','concluido','{}',10,5,0.01,NULL)",
+      [job.id]
+    );
+  } catch {
+    runObsoletoRecusado = true;
+    await client.query("ROLLBACK TO SAVEPOINT job_fencing");
+  }
+  checar("run_id obsoleto não finaliza tentativa ativa", runObsoletoRecusado);
+
+  await client.query(
+    "SELECT finalizar_conteudo_automation_job($1,'teste-worker',$2,'concluido','{}',10,5,0.01,NULL)",
+    [job.id, claimed[0].run_id]
+  );
+
+  const { rows: [staleJob] } = await client.query(
+    "INSERT INTO conteudo_automation_jobs(pauta_id,acao,esperado_atualizado_em) VALUES($1,'pesquisar',$2) RETURNING id",
+    [alvo.id, new Date(0)]
+  );
+  await client.query("SELECT id FROM claim_conteudo_automation_job('teste-worker',60)");
+  const { rows: [stale] } = await client.query(
+    "SELECT status FROM conteudo_automation_jobs WHERE id=$1", [staleJob.id]
+  );
+  checar("job obsoleto é recusado antes do claim", stale.status === "falhou");
+
+  const { rows: [lead] } = await client.query(
+    "INSERT INTO leads(nome,telefone,segmento,mensagem) VALUES('Teste','11999999999','residencial','Teste transacional') RETURNING id"
+  );
+  await client.query("UPDATE leads SET status='qualificado' WHERE id=$1", [lead.id]);
+  const { rows: [leadAtualizado] } = await client.query(
+    "SELECT status,atualizado_em FROM leads WHERE id=$1", [lead.id]
+  );
+  checar("lead qualificado atualiza sem quebrar trigger", leadAtualizado.status === "qualificado");
+
+  const { rows: anonPolicies } = await client.query(`
+    SELECT tablename FROM pg_policies
+    WHERE schemaname='public' AND tablename IN
+      ('leads','conteudo_tags','conteudo_pauta_tags','conteudo_automation_jobs')
+      AND 'anon'=ANY(roles)
+  `);
+  checar("nenhuma tabela nova exposta a anon", anonPolicies.length === 0);
+
   await client.query("ROLLBACK");
 } finally {
   await client.query("ROLLBACK").catch(() => {});
   await client.end();
 }
 
-console.log(falhas === 0 ? "\n✅ schema 012/013 verificado" : `\n❌ ${falhas} falha(s)`);
+console.log(falhas === 0 ? "\n✅ schema 012–020 verificado" : `\n❌ ${falhas} falha(s)`);
 process.exit(falhas === 0 ? 0 : 1);

@@ -2,7 +2,7 @@
 
 import { useDroppable } from "@dnd-kit/core";
 import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
-import { STATUS_LABEL, type StatusQuadro, type VisaoQuadro } from "@/types/conteudo";
+import { STATUS_LABEL, type StatusQuadro, type TagCatalogo, type VisaoQuadro } from "@/types/conteudo";
 import { COLUNA_PONTO } from "@/lib/conteudo/colunas";
 import { PREFIXO_COLUNA } from "@/hooks/use-arrastar-entre-colunas";
 import { cn } from "@/lib/utils";
@@ -23,21 +23,22 @@ interface Props {
   pendente: boolean;
   selecionados: ReadonlySet<string>;
   aoSelecionar: (id: string, selecionado: boolean) => void;
+  tagsCatalogo: TagCatalogo[];
 }
 export function ColunaPauta({
   coluna, visao, pautas, arrastavel, aoCriar, aoMover, aoExcluir,
   idConfirmandoExclusao, aoPedirExclusao, pendente,
-  selecionados, aoSelecionar,
+  selecionados, aoSelecionar, tagsCatalogo,
 }: Props) {
-  const bloqueada = coluna === "publicado" || coluna === "concluida";
-  const podeArrastar = arrastavel && !bloqueada;
+
+  const podeArrastar = arrastavel;
   const { setNodeRef, isOver } = useDroppable({
     id: `${PREFIXO_COLUNA}${coluna}`,
-    disabled: !arrastavel || bloqueada,
+    disabled: !arrastavel,
   });
   const permiteCriar =
     (visao === "geral" && coluna === "planejada") ||
-    (visao !== "geral" && coluna !== "publicado");
+    visao !== "geral";
 
   return (
     <section aria-labelledby={`coluna-${coluna}`}
@@ -60,13 +61,13 @@ export function ColunaPauta({
             {pautas.map((pauta) => (
               <CartaoPauta key={pauta.id} pauta={pauta} visao={visao}
                 colunas={!podeArrastar || visao === "geral" ? [] : visao === "blog"
-                  ? ["planejada", "pesquisa", "draft", "produzido", "aprovado"]
-                  : ["planejada", "producao", "produzido", "aprovado"]}
+                  ? ["planejada", "pesquisa", "draft", "produzido", "aprovado", "publicado"]
+                  : ["planejada", "producao", "produzido", "aprovado", "publicado"]}
                 arrastavel={podeArrastar} aoMover={aoMover} aoExcluir={aoExcluir}
                 confirmandoExclusao={idConfirmandoExclusao === pauta.id}
                 aoPedirExclusao={aoPedirExclusao}
                 selecionado={selecionados.has(pauta.id)}
-                aoSelecionar={aoSelecionar} />
+                aoSelecionar={aoSelecionar} tagsCatalogo={tagsCatalogo} />
             ))}
           </ul>
         </SortableContext>

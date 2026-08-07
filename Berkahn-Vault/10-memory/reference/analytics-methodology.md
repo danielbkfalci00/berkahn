@@ -1,7 +1,7 @@
 ---
 tipo: memory
 criado: 2026-05-28
-atualizado: 2026-07-30
+atualizado: 2026-08-07
 tags:
   - ai/memory
   - status/active
@@ -9,7 +9,7 @@ tags:
   - project/site
   - project/blog
   - project/seo-aeo
-ai_summary: "Metodologia do dashboard /admin/analytics — Health Score, classificação de posts, metas dinâmicas, red flags e mês parcial. LEIA ANTES DE INTERPRETAR AGOSTO/2026: em 2026-07-30 o consentimento passou a ser respeitado (consent default denied), então users/sessions caem por construção e o detector users-drop dispara em falso. Eventos de conversão só existem a partir dessa data. Atualizar quando ajustar pesos ou cortar série."
+ai_summary: "Metodologia do /admin/analytics. Leads ficam no Supabase antes da planilha; métrica norte é qualificados por 100 sessões engajadas em 28 dias, com amostra insuficiente abaixo de 30. article_progress mede 25/50/75/90 após consentimento. Recomendações exigem aprovação."
 status: active
 subtipo: reference
 ---
@@ -211,7 +211,8 @@ Eventos e o que cada um significa:
 |---|---|---|
 | `cta_click` | modal de contato **abre** (qualquer gatilho) | `cta_location`, `page_path`, `segment` |
 | `form_submit` | usuário envia o formulário | + `channel: form` |
-| `generate_lead` | Apps Script confirma o recebimento | + `channel: form` |
+| `generate_lead` | Supabase confirma o lead; planilha é espelho | + `channel: form` |
+| `article_progress` | leitura cruza 25%, 50%, 75% ou 90% | `article_slug`, `percent_scrolled` |
 | `whatsapp_click` | clique em qualquer link `wa.me` | `cta_location`, `page_path`, `channel` |
 
 `cta_location` responde "qual gatilho" (`header`, `menu_lateral`, `contato_pagina`, `blog:<slug>`); `page_path` responde "em que página". Os dois juntos são o que permite ligar pauta a lead. A diferença entre `form_submit` e `generate_lead` mede a perda entre enviar e confirmar.
@@ -223,3 +224,27 @@ Relatórios anteriores a agosto/2026 não têm esta seção preenchida — ausê
 - Contexto: [[seo-aeo-strategy]] · [[article-pipeline]]
 - Hubs com KPIs: [[blog]] · [[seo-aeo]]
 - Setup técnico: [[google-apis-setup]]
+
+## Ciclo de aprendizado de conteúdo — série inicia em 2026-08-07
+
+`leads` é a fonte primária. Atribuição de página, slug, CTA, UTMs, `post_id` e
+`pauta_id` é resolvida no servidor; Google Sheets é espelho com retry. Analytics
+não recebe nome, email, telefone nem fingerprint.
+
+A métrica norte é:
+
+`leads qualificados / sessões engajadas × 100`
+
+A leitura usa janela móvel de 28 dias. Artigos com menos de 30 sessões
+engajadas recebem **amostra insuficiente** e não geram recomendação editorial.
+Comprimento, estrutura, retenção, profundidade, busca, CTR e conversão são
+evidências, não regras isoladas.
+
+`article_progress` dispara em 25%, 50%, 75% e 90%, uma vez por sessão e somente
+depois do consentimento. Para relatórios por threshold, `article_slug` e
+`percent_scrolled` precisam existir como dimensões personalizadas no GA4.
+
+Recomendações entram em `analytics_tasks` com pauta, evidências e
+`approval_status = pendente`. Aprovar transforma a recomendação em trabalho;
+nunca altera pauta, artigo ou prompt automaticamente. Prompts `locked` seguem
+intocados.

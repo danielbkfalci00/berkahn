@@ -2,6 +2,8 @@
 description: Pesquisar tema e escrever artigo completo
 ---
 
+Antes de cada escrita, rode `node scripts/conteudo/pauta.mjs proxima <id> --json`, capture `atualizado_em` e passe `--expected-updated-at=<valor>`. Depois de uma escrita bem-sucedida, carregue novamente antes da próxima; isso impede sobrescrever uma edição feita no admin.
+
 Leia os seguintes arquivos de contexto (vault Obsidian):
 - `Berkahn-Vault/20-context/berkahn-brand.md` — identidade e voz
 - `Berkahn-Vault/20-context/steel-frame-domain.md` — conhecimento técnico
@@ -41,7 +43,7 @@ Escreva o texto num arquivo temporário do scratchpad da sessão (**nunca** no
 vault) e passe o caminho:
 
 ```bash
-node scripts/conteudo/pauta.mjs gravar <id> --bloco=pesquisa --arquivo=<caminho>
+node scripts/conteudo/pauta.mjs gravar <id> --bloco=pesquisa --arquivo=<caminho> --expected-updated-at=<atualizado_em>
 ```
 
 O texto vai por arquivo porque o output tem milhares de caracteres com aspas,
@@ -59,7 +61,7 @@ Se a FASE 1 produziu gaps e ângulos que valem guardar **e** o bloco `insights`
 estiver vazio (o `buscar` mostra quais estão preenchidos), ofereça gravá-los:
 
 ```bash
-node scripts/conteudo/pauta.mjs gravar <id> --bloco=insights --arquivo=<caminho>
+node scripts/conteudo/pauta.mjs gravar <id> --bloco=insights --arquivo=<caminho> --expected-updated-at=<atualizado_em>
 ```
 
 **Nunca sobrescreva `insights` preenchido** — ele vem do calendário editorial e

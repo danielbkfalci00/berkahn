@@ -2,6 +2,8 @@
 description: Criar post para LinkedIn da Berkahn
 ---
 
+Antes de cada escrita, rode `node scripts/conteudo/pauta.mjs proxima <id> --json`, capture `atualizado_em` e passe `--expected-updated-at=<valor>`. Depois de uma escrita bem-sucedida, carregue novamente antes da próxima; isso impede sobrescrever uma edição feita no admin.
+
 Leia os seguintes arquivos de contexto (vault Obsidian):
 - `Berkahn-Vault/20-context/berkahn-brand.md` — identidade, voz, terminologia
 - `Berkahn-Vault/20-context/article-pipeline.md` — regras de arquivo de publicações
@@ -51,9 +53,9 @@ Escreva cada texto num arquivo temporário do scratchpad da sessão (**nunca** n
 vault) e grave:
 
 ```bash
-node scripts/conteudo/pauta.mjs gravar <id> --bloco=linkedin          --arquivo=<post.txt>
-node scripts/conteudo/pauta.mjs gravar <id> --bloco=imagem-prompt     --arquivo=<prompt-en.txt>
-node scripts/conteudo/pauta.mjs gravar <id> --bloco=imagem-briefing   --arquivo=<briefing-pt.txt>
+node scripts/conteudo/pauta.mjs gravar <id> --bloco=linkedin          --arquivo=<post.txt> --expected-updated-at=<atualizado_em>
+node scripts/conteudo/pauta.mjs gravar <id> --bloco=imagem-prompt     --arquivo=<prompt-en.txt> --expected-updated-at=<atualizado_em>
+node scripts/conteudo/pauta.mjs gravar <id> --bloco=imagem-briefing   --arquivo=<briefing-pt.txt> --expected-updated-at=<atualizado_em>
 ```
 
 O prompt em inglês vai separado do briefing em português de propósito: o botão

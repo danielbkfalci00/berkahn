@@ -31,6 +31,21 @@ export type Trilha = "core" | "expansao";
 export type Intencao = "transacional" | "informacional" | "comparativa" | "objecao";
 export type Funil = "topo" | "meio" | "fundo" | "pos-venda";
 export type Plataforma = "blog" | "linkedin";
+export type TagConteudo = `domain/${string}`;
+export type AcaoAutomacao =
+  | "pesquisar"
+  | "criar-draft"
+  | "produzir-artigo"
+  | "produzir-linkedin"
+  | "revisar"
+  | "preparar-publicacao";
+export type StatusAutomacao =
+  | "na-fila"
+  | "executando"
+  | "aguardando-aprovacao"
+  | "concluido"
+  | "falhou"
+  | "cancelado";
 export type BlocoTextoPauta =
   | "insights"
   | "pesquisa"
@@ -84,6 +99,21 @@ export interface ArtigoVinculado {
   status: PostStatus;
   publicadoEm: string | null;
 }
+export interface JobAutomacao {
+  id: string;
+  acao: AcaoAutomacao;
+  status: StatusAutomacao;
+  tentativas: number;
+  erro: string | null;
+  criadoEm: string;
+  atualizadoEm: string;
+}
+export interface TagCatalogo {
+  slug: TagConteudo;
+  label: string;
+  ativo: boolean;
+  ordem: number;
+}
 export interface Pauta {
   id: string;
   titulo: string;
@@ -112,6 +142,8 @@ export interface Pauta {
   linkedinImagemPrompt: string | null;
   linkedinImagemBriefing: string | null;
   plataformas: Plataforma[];
+  tags: TagConteudo[];
+  automationJob: JobAutomacao | null;
   criadoPor: string | null;
   criadoEm: string;
   atualizadoEm: string;
@@ -145,35 +177,68 @@ export function estadoGeral(pauta: Pauta): EstadoGeral {
 export function statusNaVisao(pauta: Pauta, visao: VisaoQuadro): StatusQuadro | null {
   if (visao === "blog") return pauta.statusBlog;
   if (visao === "linkedin") return pauta.statusLinkedin;
-  return estadoGeral(pauta);
+  return estadoDoQuadro(pauta);
 }
 
 export function ordemNaVisao(pauta: Pauta, visao: CanalConteudo): number | null {
   return visao === "blog" ? pauta.ordemBlog : pauta.ordemLinkedin;
 }
 
-export function proximaAcao(pauta: Pauta): string {
-  if (pauta.statusBlog && pauta.statusBlog !== "publicado") {
-    const blog: Record<Exclude<StatusBlog, "publicado">, string> = {
-      planejada: "Pesquisar para o Blog",
-      pesquisa: "Criar draft do Blog",
-      draft: "Produzir artigo",
-      produzido: "Aprovar artigo",
-      aprovado: "Publicar artigo",
-    };
-    return blog[pauta.statusBlog];
-  }
-  if (pauta.statusLinkedin && pauta.statusLinkedin !== "publicado") {
-    const linkedin: Record<Exclude<StatusLinkedin, "publicado">, string> = {
-      planejada: "Produzir LinkedIn",
-      producao: "Finalizar texto e capa",
-      produzido: "Aprovar LinkedIn",
-      aprovado: "Publicar e informar URL",
-    };
-    return linkedin[pauta.statusLinkedin];
-  }
-  return "Concluída";
+export interface PublicacaoReal {
+  blog: "nao-se-aplica" | "sem-artigo" | "draft" | "publicado";
+  linkedin: "nao-se-aplica" | "sem-registro" | "publicado";
 }
+
+export function publicacaoReal(pauta: Pauta): PublicacaoReal {
+  return {
+    blog: !pauta.statusBlog ? "nao-se-aplica" : !pauta.artigo ? "sem-artigo" : pauta.artigo.status === "published" ? "publicado" : "draft",
+    linkedin: !pauta.statusLinkedin ? "nao-se-aplica" : pauta.linkedinUrl && pauta.linkedinPublicadoEm ? "publicado" : "sem-registro",
+  };
+}
+
+/** A visão Geral só encerra quando a publicação real também está comprovada. */
+export function estadoDoQuadro(pauta: Pauta): EstadoGeral {
+  const posicao = estadoGeral(pauta);
+  if (posicao !== "concluida") return posicao;
+  const real = publicacaoReal(pauta);
+  const blogOk = real.blog === "nao-se-aplica" || real.blog === "publicado";
+  const linkedinOk = real.linkedin === "nao-se-aplica" || real.linkedin === "publicado";
+  return blogOk && linkedinOk ? "concluida" : "pronta-publicar";
+}
+export function gapsConteudo(pauta: Pauta): string[] {
+  const gaps: string[] = [];
+  if (pauta.statusBlog) {
+    if (!pauta.pesquisaConteudo) gaps.push("Pesquisa do Blog");
+    if (!pauta.draftPath) gaps.push("Draft do Blog");
+    if (!pauta.artigo) gaps.push("Artigo vinculado");
+    if (!pauta.capaBlogUrl) gaps.push("Capa do Blog");
+    if (pauta.statusBlog === "publicado" && publicacaoReal(pauta).blog !== "publicado") gaps.push("Publicação real do Blog");
+  }
+  if (pauta.statusLinkedin) {
+    if (!pauta.linkedinTexto) gaps.push("Texto do LinkedIn");
+    if (!pauta.capaLinkedinUrl) gaps.push("Capa do LinkedIn");
+    if (pauta.statusLinkedin === "publicado" && publicacaoReal(pauta).linkedin !== "publicado") gaps.push("URL e data reais do LinkedIn");
+  }
+  return gaps;
+}
+
+export function proximaAcaoOperacional(pauta: Pauta): string {
+  const real = publicacaoReal(pauta);
+  if (pauta.statusBlog) {
+    if (!pauta.pesquisaConteudo) return "Pesquisar para o Blog";
+    if (!pauta.draftPath) return "Criar draft do Blog";
+    if (!pauta.artigo || !pauta.capaBlogUrl) return "Produzir artigo e capa";
+    if (real.blog !== "publicado") return "Revisar e publicar artigo";
+  }
+  if (pauta.statusLinkedin) {
+    if (!pauta.linkedinTexto) return "Produzir texto do LinkedIn";
+    if (!pauta.capaLinkedinUrl) return "Produzir capa do LinkedIn";
+    if (real.linkedin !== "publicado") return "Revisar, publicar e registrar URL";
+  }
+  return "Publicação real concluída";
+}
+
+export const proximaAcao = proximaAcaoOperacional;
 
 export function divergeDoArtigo(pauta: Pauta): boolean {
   if (!pauta.artigo || pauta.tipo === "linkedin-acervo" || !pauta.statusBlog) return false;
@@ -292,6 +357,8 @@ export function toPauta(row: PautaRow): Pauta {
     linkedinImagemPrompt: row.linkedin_imagem_prompt,
     linkedinImagemBriefing: row.linkedin_imagem_briefing,
     plataformas: (row.plataformas ?? []).filter(ehPlataforma),
+    tags: [],
+    automationJob: null,
     criadoPor: row.criado_por,
     criadoEm: row.criado_em,
     atualizadoEm: row.atualizado_em,

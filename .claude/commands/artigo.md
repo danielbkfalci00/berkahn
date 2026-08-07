@@ -11,6 +11,8 @@ Este comando tem duas operações explícitas. Não publique como efeito colater
 produzir. Se `$ARGUMENTS` não começar com `produzir` ou `publicar`, pergunte
 qual operação o Bruno quer.
 
+Antes de cada escrita, rode `node scripts/conteudo/pauta.mjs proxima <id> --json`, capture `atualizado_em` e passe `--expected-updated-at=<valor>`. Depois de uma escrita bem-sucedida, carregue novamente antes da próxima; isso impede sobrescrever uma edição feita no admin.
+
 ## /artigo produzir <pauta-id> <draft.md>
 
 1. Leia a pauta com:
@@ -33,8 +35,8 @@ qual operação o Bruno quer.
    scripts descartáveis por artigo.
 5. Faça primeiro o dry-run e, se passar, produza:
    ```bash
-   node scripts/conteudo/pauta.mjs produzir <pauta-id> --arquivo=<draft.md> --dados=<post.json> --dry-run
-   node scripts/conteudo/pauta.mjs produzir <pauta-id> --arquivo=<draft.md> --dados=<post.json>
+   node scripts/conteudo/pauta.mjs produzir <pauta-id> --arquivo=<draft.md> --dados=<post.json> --expected-updated-at=<atualizado_em> --dry-run
+   node scripts/conteudo/pauta.mjs produzir <pauta-id> --arquivo=<draft.md> --dados=<post.json> --expected-updated-at=<atualizado_em>
    ```
    O CLI cria ou atualiza `posts` como `draft`, vincula `post_id`, converte
    a capa para `public/images/img_blog/[slug]/cover.webp` e avança Blog para
@@ -48,8 +50,8 @@ qual operação o Bruno quer.
 1. Leia a pauta e confirme que `status_blog = aprovado`.
 2. Rode:
    ```bash
-   node scripts/conteudo/pauta.mjs publicar <pauta-id> --dry-run
-   node scripts/conteudo/pauta.mjs publicar <pauta-id>
+   node scripts/conteudo/pauta.mjs publicar <pauta-id> --expected-updated-at=<atualizado_em> --dry-run
+   node scripts/conteudo/pauta.mjs publicar <pauta-id> --expected-updated-at=<atualizado_em>
    ```
 3. O CLI move o markdown de `drafts/` para `publicados/`, atualiza o
    frontmatter e publica post+pauta por RPC idempotente. Se o banco falhar, ele

@@ -150,7 +150,7 @@ Visão completa em `Berkahn-Vault/60-arquitetura/stack-nextjs-supabase.md`:
 - Next.js (App Router) + React + TypeScript + Tailwind + shadcn/ui
 - Supabase (PostgreSQL + Auth + RLS) — tabela `posts`
 - Vercel deploy
-- Integração Google Sheets via Apps Script
+- Leads no Supabase como fonte primária; Google Sheets é espelho assíncrono via Apps Script
 
 Comandos críticos:
 ```bash
@@ -168,7 +168,7 @@ gitleaks detect      # scan secrets (auto em pre-commit)
 | `vault-supabase-resync.mjs` | Compara slugs vault ↔ Supabase (`--check`) ou faz PATCH `meta_title/meta_description/answer_summary` (`--patch=slug1,slug2`). Requer `$env:SUPABASE_SERVICE_KEY` |
 | `vault-validate.mjs` | Linter de completude vault (9 validações, exit 0/1/2, output ANSI ou `--json`). Rodado manual ou via `/standup`, `/wrap-up` |
 | `vault-images.mjs` | Banco de imagens (`Docs/banco-imagens/`). `--inventory` (manifesto + flag `em_producao` cruzada por sha256 com `public/images/`), `--dupes` (duplicatas exatas + pares PNG/WEBP), `--check` (contagens vs índices), `--thumbs` (gera thumbnails webp). Entry-point do catálogo: `Berkahn-Vault/40-content/materiais/banco-imagens.md` |
-| `conteudo/pauta.mjs` | CLI genérico versionado do quadro: `buscar`, `ver`, `criar` com aprovação, `gravar`, `registrar-draft`, `produzir` e `publicar`. Toda escrita aceita `--dry-run`; overwrite exige dupla confirmação. Substitui `add-article-[slug].mjs` |
+| `conteudo/pauta.mjs` | CLI genérico versionado do quadro: `proxima`/contexto seletivo, `validar`, escrita com `--expected-updated-at`, produção/publicação e `job-claim|complete|fail`. Toda escrita aceita `--dry-run`; publicação e aprovação seguem humanas |
 | `conteudo/gerar-seed.mjs` | Gera o SQL das 66 pautas a partir do calendário editorial e dos `ideas-*.md`. Emite `.sql` para revisão a olho, não escreve no banco. Rodou uma vez |
 | `watermark-images.mjs` | Marca d'água BERKAHN em lote (Node + sharp). Isola o wordmark "BERKAHN" do logo-texto, centraliza grande com opacidade baixa e cor adaptativa por região. Flags `--src --out --frac --opacity --color --halo --pick --dry-run`. Preserva originais (escreve só em `--out`). Doc de uso: `Berkahn-Vault/40-content/materiais/watermark-clube-quinta-dos-lagos.md` |
 

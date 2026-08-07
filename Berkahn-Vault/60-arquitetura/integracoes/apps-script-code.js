@@ -16,8 +16,8 @@
  * 6. Quem tem acesso: Qualquer pessoa
  * 7. Copiar URL gerada
  *
- * @version 1.0.0
- * @date 2025-12-16
+ * @version 1.1.0
+ * @date 2026-08-07
  * @author Claude Code + Bruno Falci
  */
 
@@ -47,7 +47,7 @@ function doPost(e) {
     const data = JSON.parse(e.postData.contents);
 
     // Validação básica
-    if (!data.name || !data.email || !data.message) {
+    if (!data.name || !data.phone || !data.message) {
       return createResponse(false, 'Campos obrigatórios faltando');
     }
 
@@ -76,7 +76,7 @@ function doPost(e) {
 function doGet(e) {
   return createResponse(true, 'API Berkahn funcionando!', {
     timestamp: new Date().toISOString(),
-    version: '1.0.0'
+    version: '1.1.0'
   });
 }
 
@@ -107,21 +107,36 @@ function saveToSheet(data) {
     'dd/MM/yyyy HH:mm:ss'
   );
 
-  // Dados a serem inseridos (colunas A-E)
+  // Espelho operacional (A-J). lead_id torna retries idempotentes.
   const rowData = [
-    timestamp,           // A: Data/Hora
-    data.name || '',     // B: Nome
-    data.email || '',    // C: Email
-    data.phone || '',    // D: Telefone
-    data.message || ''   // E: Mensagem
+    timestamp,             // A: Data/Hora
+    data.name || '',       // B: Nome
+    data.email || '',      // C: Email (opcional)
+    data.phone || '',      // D: Telefone
+    data.message || '',    // E: Mensagem
+    data.lead_id || '',    // F: Lead ID Supabase
+    data.segmento || '',   // G: Segmento
+    data.origem || '',     // H: Origem
+    data.pauta || '',      // I: Pauta
+    data.status || 'novo'  // J: Status
   ];
 
-  // Adicionar nova linha
-  sheet.appendRow(rowData);
+  let existingRow = 0;
+  if (data.lead_id && sheet.getLastRow() > 0) {
+    const ids = sheet.getRange(1, 6, sheet.getLastRow(), 1).getDisplayValues();
+    const index = ids.findIndex((row) => row[0] === data.lead_id);
+    existingRow = index >= 0 ? index + 1 : 0;
+  }
+
+  if (existingRow) {
+    sheet.getRange(existingRow, 1, 1, rowData.length).setValues([rowData]);
+  } else {
+    sheet.appendRow(rowData);
+  }
 
   // Retornar informações da linha inserida
   return {
-    row: sheet.getLastRow(),
+    row: existingRow || sheet.getLastRow(),
     timestamp: timestamp
   };
 }
@@ -156,7 +171,7 @@ function sendNotificationEmail(data) {
           <tr>
             <td style="padding: 10px 0; border-bottom: 1px solid #eee; font-weight: bold;">Email:</td>
             <td style="padding: 10px 0; border-bottom: 1px solid #eee;">
-              <a href="mailto:${data.email}" style="color: #000;">${data.email}</a>
+              ${data.email ? `<a href="mailto:${data.email}" style="color: #000;">${data.email}</a>` : '<span style="color: #999;">Não informado</span>'}
             </td>
           </tr>
           <tr>
@@ -189,7 +204,7 @@ function sendNotificationEmail(data) {
 Novo Lead Berkahn
 
 Nome: ${data.name}
-Email: ${data.email}
+Email: ${data.email || 'Não informado'}
 Telefone: ${data.phone || 'Não informado'}
 
 Mensagem:

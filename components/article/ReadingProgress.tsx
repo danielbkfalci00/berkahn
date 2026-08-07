@@ -2,10 +2,12 @@
 
 import { useEffect, useState } from "react";
 import { motion, useScroll, useSpring } from "motion/react";
-import { Progress } from "@/components/ui/progress";
+import { usePathname } from "next/navigation";
+import { trackEvent } from "@/lib/analytics";
 
 export function ReadingProgress() {
   const [isVisible, setIsVisible] = useState(false);
+  const pathname = usePathname();
   const { scrollYProgress } = useScroll();
 
   // Smooth the progress animation
@@ -29,9 +31,21 @@ export function ReadingProgress() {
 
   useEffect(() => {
     return scaleX.on("change", (latest) => {
-      setProgress(latest * 100);
+      const percent = latest * 100;
+      setProgress(percent);
+      const slug = pathname?.split("/").filter(Boolean).at(-1) ?? "unknown";
+      for (const threshold of [25, 50, 75, 90] as const) {
+        if (percent < threshold) continue;
+        const key = `article-progress:${slug}:${threshold}`;
+        if (sessionStorage.getItem(key)) continue;
+        const tracked = trackEvent("article_progress", {
+          article_slug: slug,
+          percent_scrolled: threshold,
+        });
+        if (tracked) sessionStorage.setItem(key, "1");
+      }
     });
-  }, [scaleX]);
+  }, [pathname, scaleX]);
 
   return (
     <motion.div

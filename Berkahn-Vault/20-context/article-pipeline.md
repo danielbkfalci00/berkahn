@@ -1,12 +1,12 @@
 ---
 tipo: context
 criado: 2026-04-13
-atualizado: 2026-08-06
+atualizado: 2026-08-07
 tags:
   - ai/context
   - project/blog
   - domain/lsf
-ai_summary: Pipeline operacional e técnico do conteúdo. /admin/conteudo mantém Blog e LinkedIn independentes; pesquisa fica no card, draft no vault e /artigo separa produção de publicação aprovada. Artigos usam 5 categorias canônicas, 19 componentes via placeholders e schema Supabase posts.
+ai_summary: Pipeline operacional e técnico do conteúdo. Status é posição livre; publicação real vem dos artefatos. /admin/conteudo oferece edição inline, tags e fila Codex com contexto progressivo; aprovação e publicação permanecem humanas.
 status: active
 escopo: berkahn
 ---
@@ -34,6 +34,8 @@ Após publicação: `/linkedin` para criar post de divulgação.
 > `/pesquisa` e `/linkedin` **gravam na pauta**, não criam `.md` no vault — `40-content/blog/pesquisa/` saiu do fluxo e `40-content/linkedin/` é acervo congelado. O `/criacao` lê a pesquisa da pauta.
 >
 > O artigo continua onde sempre esteve: markdown em `40-content/blog/publicados/` mais a linha em `posts`. A pauta só referencia por FK. Contexto completo em [[quadro-conteudo]].
+>
+> Status e prontidão são separados: mover o card nunca publica. Gaps orientam a automação e a visão Geral só conclui com publicação real comprovada.
 
 Workflow editorial em [[workflow-conteudo]]. Regras de copy em [[copy-sem-travessao]] e [[berkahn-brand]].
 
@@ -77,7 +79,7 @@ Capas vivem em `public/images/img_blog/[slug]/cover.webp` (consumido pelo Next.j
 | Markdown publicado | `Berkahn-Vault/40-content/blog/publicados/` |
 | Estado operacional | `/admin/conteudo` / tabela `conteudo_pautas` |
 | LinkedIn legado | `Berkahn-Vault/40-content/linkedin/` (congelado) |
-| Automação genérica | `scripts/conteudo/pauta.mjs` (versionado) |
+| Automação genérica | `scripts/conteudo/pauta.mjs` + `conteudo_automation_jobs` |
 | Metadados dos posts | `data/posts.ts` |
 | Componentes de artigo | `components/article/` (25 componentes) |
 | Renderizador principal | `app/atualidades/[slug]/page.tsx` |

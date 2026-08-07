@@ -11,6 +11,7 @@ import { execFileSync } from "node:child_process";
 import { mkdtempSync, readFileSync, writeFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+import { fileURLToPath } from "node:url";
 
 const dir = mkdtempSync(join(tmpdir(), "ordem-"));
 const fonte = readFileSync("hooks/use-arrastar-entre-colunas.ts", "utf8");
@@ -32,7 +33,7 @@ writeFileSync(
 // spawn de .cmd com EINVAL, e sem shell espaço no caminho não vira argumento.
 execFileSync(
   process.execPath,
-  ["node_modules/typescript/lib/tsc.js", join(dir, "puro.ts"),
+  [fileURLToPath(import.meta.resolve("typescript/lib/tsc.js")), join(dir, "puro.ts"),
    "--module", "esnext", "--target", "es2022",
    "--moduleResolution", "bundler", "--outDir", dir],
   { stdio: "pipe" }
@@ -55,8 +56,8 @@ const decisao66 = Array.from({ length: 66 }, (_, i) => card(`c${i + 1}`, "decisa
 
 console.log("\nRENUMERAR");
 {
-  const bagunçado = [card("a", "decisao", 9), card("b", "decisao", 3), card("c", "pesquisa", 7)];
-  const r = renumerar(bagunçado);
+  const baguncado = [card("a", "decisao", 9), card("b", "decisao", 3), card("c", "pesquisa", 7)];
+  const r = renumerar(baguncado);
   checar("numera cada coluna de 1..n", r[0].ordem === 1 && r[1].ordem === 2 && r[2].ordem === 1,
     r.map((x) => `${x.coluna}:${x.ordem}`).join(" "));
   checar("preserva o objeto quando a ordem já bate",

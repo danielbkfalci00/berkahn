@@ -185,6 +185,30 @@ export interface AnalyticsTask {
   created_by: string | null;
   created_at: string;
   updated_at: string;
+  pauta_id: string | null;
+  evidence: Record<string, unknown>;
+  approval_status: "pendente" | "aprovada" | "rejeitada";
+}
+
+export type LeadStatus = "novo" | "qualificado" | "desqualificado" | "convertido";
+
+export interface AnalyticsLead {
+  id: string;
+  nome: string;
+  email: string | null;
+  telefone: string;
+  segmento: string;
+  mensagem: string;
+  canal: string;
+  status: LeadStatus;
+  pagina_origem: string | null;
+  slug_origem: string | null;
+  cta_location: string | null;
+  pauta_id: string | null;
+  sheet_sync_status: "pendente" | "sincronizado" | "falhou";
+  sheet_sync_tentativas: number;
+  sheet_sync_error: string | null;
+  criado_em: string;
 }
 
 export interface SnapshotContext {

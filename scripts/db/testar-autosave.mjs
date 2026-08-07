@@ -10,11 +10,12 @@ import { execFileSync } from "node:child_process";
 import { mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+import { fileURLToPath } from "node:url";
 
 const dir = mkdtempSync(join(tmpdir(), "autosave-"));
 execFileSync(
   process.execPath,
-  ["node_modules/typescript/lib/tsc.js", "lib/conteudo/autosave.ts",
+  [fileURLToPath(import.meta.resolve("typescript/lib/tsc.js")), "lib/conteudo/autosave.ts",
    "--module", "esnext", "--target", "es2022",
    "--moduleResolution", "bundler", "--outDir", dir],
   { stdio: "pipe" }

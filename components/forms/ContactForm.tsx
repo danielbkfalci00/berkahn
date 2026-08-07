@@ -88,6 +88,8 @@ export function ContactForm({
   });
   const [status, setStatus] = useState<FormStatus>("idle");
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [website, setWebsite] = useState("");
+  const [startedAt, setStartedAt] = useState(() => Date.now());
   const pathname = usePathname();
 
   /** Base comum dos eventos de conversão deste formulário. */
@@ -136,15 +138,18 @@ export function ContactForm({
       const response = await fetch(LEAD_ENDPOINT, {
         method: "POST",
         headers: {
-          "Content-Type": "text/plain",
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           name: formData.name,
           email: formData.email,
           phone: formData.phone,
-          categoria:
-            formData.segment === "residencial" ? "Residencial" : "Comercial/Industrial",
+          segment: formData.segment,
           message: formData.message,
+          pagePath: pathname ?? undefined,
+          ctaLocation,
+          website,
+          startedAt,
         }),
       });
 
@@ -168,6 +173,8 @@ export function ContactForm({
   const resetForm = () => {
     setFormData({ name: "", email: "", phone: "", segment: defaultSegment, message: "" });
     setErrors({});
+    setWebsite("");
+    setStartedAt(Date.now());
     setStatus("idle");
   };
 
@@ -224,6 +231,16 @@ export function ContactForm({
           {header}
 
           <form onSubmit={handleSubmit} className="space-y-3">
+            <input
+              type="text"
+              name="website"
+              value={website}
+              onChange={(event) => setWebsite(event.target.value)}
+              className="hidden"
+              tabIndex={-1}
+              autoComplete="off"
+              aria-hidden="true"
+            />
             {/* Nome */}
             <div className="space-y-1.5">
               <Label htmlFor="name" className="text-xs text-black-70 font-medium">

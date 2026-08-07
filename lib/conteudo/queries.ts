@@ -1,15 +1,17 @@
 // Queries server-side do quadro de conteúdo (/admin/conteudo)
 import "server-only";
 import { createClient } from "@/lib/supabase/server";
-import { toPauta, type Pauta, type PautaRow } from "@/types/conteudo";
+import {
+  toPauta,
+  type AcaoAutomacao,
+  type JobAutomacao,
+  type Pauta,
+  type PautaRow,
+  type StatusAutomacao,
+  type TagCatalogo,
+  type TagConteudo,
+} from "@/types/conteudo";
 
-/**
- * Colunas da pauta mais o embed do artigo vinculado.
- *
- * O embed `posts(...)` é o que materializa a regra central do quadro: o card
- * LÊ o status real do artigo numa query só e nunca o escreve. Depende da FK
- * declarada na migration 010 — o PostgREST descobre a relação pelo constraint.
- */
 const COLUNAS_PAUTA = `
   id, titulo, tipo,
   status_blog, status_linkedin, ordem_blog, ordem_linkedin,
@@ -27,17 +29,70 @@ const UUID_PATTERN =
 
 export interface ResultadoPautas {
   pautas: Pauta[];
-  /** Mensagem de erro do banco, ou null. */
   erro: string | null;
 }
 
-/**
- * Todas as pautas, agrupáveis por coluna e já na ordem do quadro.
- *
- * Devolve `{ pautas, erro }` em vez de `[]` em falha: com array vazio, "o
- * banco caiu" e "ainda não há pauta nenhuma" ficam indistinguíveis, e a tela
- * mostraria um estado vazio convidativo por cima de um erro real.
- */
+interface TagRow { pauta_id: string; tag_slug: TagConteudo }
+interface JobRow {
+  id: string;
+  pauta_id: string;
+  acao: AcaoAutomacao;
+  status: StatusAutomacao;
+  tentativas: number;
+  erro: string | null;
+  criado_em: string;
+  atualizado_em: string;
+}
+
+function toJob(row: JobRow): JobAutomacao {
+  return {
+    id: row.id,
+    acao: row.acao,
+    status: row.status,
+    tentativas: row.tentativas,
+    erro: row.erro,
+    criadoEm: row.criado_em,
+    atualizadoEm: row.atualizado_em,
+  };
+}
+
+async function enriquecerPautas(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  pautas: Pauta[]
+): Promise<Pauta[]> {
+  if (pautas.length === 0) return pautas;
+  const ids = pautas.map((pauta) => pauta.id);
+  const [{ data: tags }, { data: jobs }] = await Promise.all([
+    supabase
+      .from("conteudo_pauta_tags")
+      .select("pauta_id,tag_slug")
+      .in("pauta_id", ids),
+    supabase
+      .from("conteudo_automation_jobs")
+      .select("id,pauta_id,acao,status,tentativas,erro,criado_em,atualizado_em")
+      .in("pauta_id", ids)
+      .order("criado_em", { ascending: false }),
+  ]);
+
+  const tagsPorPauta = new Map<string, TagConteudo[]>();
+  for (const row of (tags ?? []) as unknown as TagRow[]) {
+    const atuais = tagsPorPauta.get(row.pauta_id) ?? [];
+    atuais.push(row.tag_slug);
+    tagsPorPauta.set(row.pauta_id, atuais);
+  }
+
+  const jobPorPauta = new Map<string, JobAutomacao>();
+  for (const row of (jobs ?? []) as unknown as JobRow[]) {
+    if (!jobPorPauta.has(row.pauta_id)) jobPorPauta.set(row.pauta_id, toJob(row));
+  }
+
+  return pautas.map((pauta) => ({
+    ...pauta,
+    tags: tagsPorPauta.get(pauta.id) ?? [],
+    automationJob: jobPorPauta.get(pauta.id) ?? null,
+  }));
+}
+
 export async function listarPautas(): Promise<ResultadoPautas> {
   const supabase = await createClient();
   const { data, error } = await supabase
@@ -49,13 +104,10 @@ export async function listarPautas(): Promise<ResultadoPautas> {
   if (error) return { pautas: [], erro: error.message };
   if (!data) return { pautas: [], erro: null };
 
-  return {
-    pautas: (data as unknown as PautaRow[]).map(toPauta),
-    erro: null,
-  };
+  const pautas = (data as unknown as PautaRow[]).map(toPauta);
+  return { pautas: await enriquecerPautas(supabase, pautas), erro: null };
 }
 
-/** Uma pauta pelo id. Null quando o id não existe ou não é UUID. */
 export async function getPauta(id: string): Promise<Pauta | null> {
   if (!UUID_PATTERN.test(id)) return null;
 
@@ -67,14 +119,20 @@ export async function getPauta(id: string): Promise<Pauta | null> {
     .single();
 
   if (error || !data) return null;
-  return toPauta(data as unknown as PautaRow);
+  const [pauta] = await enriquecerPautas(supabase, [toPauta(data as unknown as PautaRow)]);
+  return pauta ?? null;
 }
 
-/**
- * Artigos que ainda não pertencem a nenhuma pauta, para o seletor de vínculo.
- * Filtra no cliente porque o PostgREST não faz anti-join direto: são dezenas
- * de linhas, não milhares.
- */
+export async function listarTagsConteudo(): Promise<TagCatalogo[]> {
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("conteudo_tags")
+    .select("slug,label,ativo,ordem")
+    .eq("ativo", true)
+    .order("ordem");
+  return (data ?? []) as unknown as TagCatalogo[];
+}
+
 export async function listarArtigosVinculaveis(): Promise<
   { id: string; slug: string; titulo: string; status: string }[]
 > {

@@ -14,12 +14,12 @@ import {
   FUNIL_LABEL, INTENCAO_LABEL, LIMITES, PLATAFORMA_LABEL,
   STATUS_BLOG, STATUS_LABEL, STATUS_LINKEDIN, TRILHA_LABEL,
   type Funil, type Intencao, type Pauta, type Plataforma,
-  type StatusBlog, type StatusLinkedin, type Trilha,
+  type StatusBlog, type StatusLinkedin, type TagCatalogo, type Trilha,
 } from "@/types/conteudo";
 import { cn } from "@/lib/utils";
 
 const NENHUM = "__nenhum__";
-interface Props { pauta: Pauta; aoAtualizar?: (pauta: Pauta) => void; }
+interface Props { pauta: Pauta; tagsCatalogo: TagCatalogo[]; aoAtualizar?: (pauta: Pauta) => void; }
 function Campo({ label, children, className }: {
   label: string; children: ReactNode; className?: string;
 }) {
@@ -30,7 +30,7 @@ function Campo({ label, children, className }: {
     </label>
   );
 }
-export function FaixaMetadados({ pauta, aoAtualizar }: Props) {
+export function FaixaMetadados({ pauta, tagsCatalogo, aoAtualizar }: Props) {
   const [local, setLocal] = useState(pauta);
   const [erro, setErro] = useState<string | null>(null);
   const [urlLinkedin, setUrlLinkedin] = useState(pauta.linkedinUrl ?? "");
@@ -97,8 +97,8 @@ export function FaixaMetadados({ pauta, aoAtualizar }: Props) {
               <SelectTrigger className="h-9 bg-white"><SelectValue /></SelectTrigger>
               <SelectContent>
                 {STATUS_BLOG.map((status) => (
-                  <SelectItem key={status} value={status} disabled={status === "publicado"}>
-                    {STATUS_LABEL[status]}{status === "publicado" ? " · via /artigo" : ""}
+                  <SelectItem key={status} value={status}>
+                    {STATUS_LABEL[status]}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -113,8 +113,8 @@ export function FaixaMetadados({ pauta, aoAtualizar }: Props) {
               <SelectTrigger className="h-9 bg-white"><SelectValue /></SelectTrigger>
               <SelectContent>
                 {STATUS_LINKEDIN.map((status) => (
-                  <SelectItem key={status} value={status} disabled={status === "publicado"}>
-                    {STATUS_LABEL[status]}{status === "publicado" ? " · exige URL" : ""}
+                  <SelectItem key={status} value={status}>
+                    {STATUS_LABEL[status]}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -229,9 +229,30 @@ export function FaixaMetadados({ pauta, aoAtualizar }: Props) {
             ))}
           </div>
         </fieldset>
+        <fieldset className="col-span-2 flex flex-col gap-1 md:col-span-3 lg:col-span-4">
+          <legend className="text-xs font-medium uppercase tracking-wide text-neutral-500">
+            Tags de domínio
+          </legend>
+          <div className="flex flex-wrap gap-2">
+            {tagsCatalogo.map((tag) => (
+              <label key={tag.slug}
+                className="flex items-center gap-1.5 rounded border border-neutral-200 bg-white px-2 py-1.5 text-xs text-neutral-700">
+                <Checkbox checked={local.tags.includes(tag.slug)}
+                  onCheckedChange={() => {
+                    const tags = local.tags.includes(tag.slug)
+                      ? local.tags.filter((atual) => atual !== tag.slug)
+                      : [...local.tags, tag.slug];
+                    setLocal((anterior) => ({ ...anterior, tags }));
+                    salvar({ tags });
+                  }} />
+                {tag.label}
+              </label>
+            ))}
+          </div>
+        </fieldset>
       </div>
 
-      {local.statusLinkedin && ["aprovado", "publicado"].includes(local.statusLinkedin) && (
+      {local.statusLinkedin && (
         <div className="mt-4 border-t border-neutral-200 pt-4">
           <p className="text-xs font-medium uppercase tracking-wide text-neutral-500">
             Publicação manual do LinkedIn
@@ -251,7 +272,7 @@ export function FaixaMetadados({ pauta, aoAtualizar }: Props) {
               <button type="button" onClick={publicarLinkedin} disabled={pendente}
                 className="inline-flex h-9 items-center justify-center gap-1.5 rounded-md bg-neutral-900 px-3 text-sm font-medium text-white hover:bg-neutral-800 disabled:opacity-50">
                 {pendente && <Loader2 className="h-3.5 w-3.5 animate-spin" aria-hidden />}
-                Marcar publicado
+                Registrar publicação real
               </button>
             )}
           </div>

@@ -3,7 +3,7 @@
 import { useRef, useState } from "react";
 import { ImageIcon, Loader2, Trash2, Upload } from "lucide-react";
 import { comprimirImagem, nomeComprimido } from "@/lib/imagens/comprimir";
-import { definirCapa, removerCapa, type TipoCapa } from "@/app/admin/conteudo/actions";
+import { definirCapa, limparObjetoCapa, removerCapa, type TipoCapa } from "@/app/admin/conteudo/actions";
 import { BlocoColapsavel } from "./BlocoColapsavel";
 import { cn } from "@/lib/utils";
 
@@ -24,6 +24,7 @@ export function BlocoCapa({ pautaId, tipo, titulo, proporcao, dica, urlInicial }
   const [fase, setFase] = useState<Fase>("ocioso");
   const [erro, setErro] = useState<string | null>(null);
   const [aviso, setAviso] = useState<string | null>(null);
+  const [cleanupPath, setCleanupPath] = useState<string | null>(null);
   const [arrastando, setArrastando] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -54,6 +55,8 @@ export function BlocoCapa({ pautaId, tipo, titulo, proporcao, dica, urlInicial }
         return;
       }
       setUrl(res.data?.url ?? null);
+      setAviso(res.data?.warning ?? null);
+      setCleanupPath(res.data?.cleanupPath ?? null);
       setFase("ocioso");
     } catch (e) {
       setFase("erro");
@@ -75,9 +78,24 @@ export function BlocoCapa({ pautaId, tipo, titulo, proporcao, dica, urlInicial }
     }
     setUrl(null);
     setAviso(res.data?.warning ?? null);
+    setCleanupPath(res.data?.cleanupPath ?? null);
     setFase("ocioso");
   }
 
+  async function tentarLimpeza() {
+    if (!cleanupPath) return;
+    setFase("enviando");
+    const res = await limparObjetoCapa(cleanupPath);
+    if (res.error) {
+      setErro(res.error);
+      setFase("erro");
+      return;
+    }
+    setCleanupPath(null);
+    setAviso(null);
+    setErro(null);
+    setFase("ocioso");
+  }
   const enviando = fase === "enviando";
 
   return (
@@ -175,7 +193,17 @@ export function BlocoCapa({ pautaId, tipo, titulo, proporcao, dica, urlInicial }
       {/* Em erro a imagem que já estava lá não é removida da tela: continua
           válida, e só a tentativa nova falhou. */}
       {erro && <p className="mt-2 text-xs text-red-600">{erro}</p>}
-      {aviso && <p className="mt-2 text-xs text-amber-700">{aviso}</p>}
+      {aviso && (
+        <div className="mt-2 flex items-center gap-2 text-xs text-amber-700">
+          <span>{aviso}</span>
+          {cleanupPath && (
+            <button type="button" onClick={tentarLimpeza} disabled={enviando}
+              className="font-medium underline underline-offset-2 disabled:opacity-50">
+              Tentar limpeza
+            </button>
+          )}
+        </div>
+      )}
     </BlocoColapsavel>
   );
 }

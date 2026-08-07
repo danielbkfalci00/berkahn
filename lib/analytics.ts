@@ -31,7 +31,8 @@ export type EventName =
   // Curadoria de arquitetos
   | "select_architect"
   | "architect_contact_click"
-  | "architect_berkahn_whatsapp";
+  | "architect_berkahn_whatsapp"
+  | "article_progress";
 
 /**
  * Parâmetros do evento.
@@ -50,11 +51,13 @@ export interface EventParams {
   [key: string]: string | number | boolean | undefined;
 }
 
-export function trackEvent(name: EventName, params: EventParams = {}): void {
-  if (typeof window === "undefined") return;
+export function trackEvent(name: EventName, params: EventParams = {}): boolean {
+  if (typeof window === "undefined" || !window.gtag) return false;
   try {
-    window.gtag?.("event", name, params);
+    window.gtag("event", name, params);
+    return true;
   } catch {
     /* analytics nunca deve quebrar a UI */
+    return false;
   }
 }

@@ -2,6 +2,8 @@
 description: Escrever artigo final com base na pesquisa
 ---
 
+Antes de cada escrita, rode `node scripts/conteudo/pauta.mjs proxima <id> --json`, capture `atualizado_em` e passe `--expected-updated-at=<valor>`. Depois de uma escrita bem-sucedida, carregue novamente antes da próxima; isso impede sobrescrever uma edição feita no admin.
+
 Leia os seguintes arquivos de contexto (vault Obsidian):
 - `Berkahn-Vault/20-context/berkahn-brand.md` — identidade e voz
 - `Berkahn-Vault/20-context/seo-aeo-strategy.md` — regras de SEO/AEO
@@ -33,8 +35,8 @@ Salvar o artigo final em `Berkahn-Vault/40-content/blog/drafts/[slug].md` com fr
 Registre o caminho na mesma pauta e avance Blog para `draft`:
 
 ```bash
-node scripts/conteudo/pauta.mjs registrar-draft <id> --arquivo=Berkahn-Vault/40-content/blog/drafts/[slug].md --dry-run
-node scripts/conteudo/pauta.mjs registrar-draft <id> --arquivo=Berkahn-Vault/40-content/blog/drafts/[slug].md
+node scripts/conteudo/pauta.mjs registrar-draft <id> --arquivo=Berkahn-Vault/40-content/blog/drafts/[slug].md --expected-updated-at=<atualizado_em> --dry-run
+node scripts/conteudo/pauta.mjs registrar-draft <id> --arquivo=Berkahn-Vault/40-content/blog/drafts/[slug].md --expected-updated-at=<atualizado_em>
 ```
 
 Após `/criacao`, o próximo passo é

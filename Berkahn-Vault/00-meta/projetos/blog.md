@@ -1,11 +1,11 @@
 ---
 tipo: projeto
 criado: 2026-05-22
-atualizado: 2026-08-06
+atualizado: 2026-08-07
 tags:
   - project/blog
   - status/active
-ai_summary: Hub do Blog — 40 posts em /atualidades, 34 indexados e taxonomia normalizada para 5 categorias canônicas. O quadro /admin/conteudo tem 44 trilhas Blog; /pesquisa grava no card, /criacao registra draft_path e /artigo separa produção de publicação aprovada. ICMS reconciliado. Bloqueios: canibalização de custo e séries Arquitecasa para o Sudeste.
+ai_summary: Hub do Blog — 40 posts e 44 trilhas. Status do quadro é livre, mas Concluída exige post publicado; card tem edição inline/tags e fila Codex. article_progress e leads atribuídos iniciam o ciclo de aprendizado sem alterar conteúdo automaticamente.
 status: active
 projeto: blog
 kpi_publicados: 40

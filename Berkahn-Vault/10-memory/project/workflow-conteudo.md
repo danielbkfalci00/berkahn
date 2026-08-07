@@ -7,7 +7,7 @@ tags:
   - status/active
   - project/blog
   - project/linkedin
-ai_summary: Quadro /admin/conteudo é a fonte operacional. Cada pauta tem trilhas Blog e LinkedIn independentes; pesquisa e LinkedIn ficam no card, draft fica no vault e publicação exige aprovação manual.
+ai_summary: Status do quadro é livre e não publica. Gaps orientam a próxima ação; pesquisa, draft, artigo e LinkedIn podem entrar na fila Codex, mas aprovação editorial e publicação real continuam humanas.
 status: active
 subtipo: project
 why: "Cada etapa tem prompt específico calibrado. Separar em etapas permite iterar em cada fase sem perder contexto das regras de qualidade."
@@ -30,7 +30,7 @@ Pipeline de artigos tem 4 etapas sequenciais:
 - 1 artigo blog + 1 post LinkedIn por semana
 - Blog e LinkedIn avançam de forma independente no mesmo card
 - `/admin/conteudo` é o hub operacional; `calendario.base` é visão do acervo
-- LinkedIn continua sendo publicado manualmente; URL e data fecham a trilha
+- LinkedIn continua sendo publicado manualmente; URL e data comprovam a publicação real, independentemente do status escolhido
 
 ## Materiais relacionados
 
@@ -43,3 +43,14 @@ Pipeline de artigos tem 4 etapas sequenciais:
 - Pipeline técnico: [[article-pipeline]]
 - Prompts: [[prompts-calibrados]]
 - Brand: [[berkahn-brand]]
+
+## Operação assistida pelo Codex
+
+No card, **Enviar ao Codex** cria um job durável para a próxima ação derivada dos
+artefatos. O worker usa `pauta.mjs job-claim`, carrega contexto progressivo com
+`proxima --include` e finaliza com tokens, custo, hashes e `run_id`. Se o
+computador estiver desligado, o job permanece na fila. **Copiar contexto** é o
+fallback manual.
+
+Mover status é sempre permitido e nunca executa publicação. A visão Geral só
+mostra Concluída quando Blog e LinkedIn aplicáveis têm publicação real.

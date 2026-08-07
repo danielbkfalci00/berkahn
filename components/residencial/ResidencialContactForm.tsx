@@ -11,6 +11,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { CONTACT_FORM_PROJECT_TYPES } from "@/lib/residencial-data";
+import { usePathname } from "next/navigation";
+import { LEAD_ENDPOINT } from "@/lib/contact";
+import { trackEvent } from "@/lib/analytics";
 
 /* ─── Types ─── */
 
@@ -61,6 +64,9 @@ export function ResidencialContactForm() {
   });
   const [status, setStatus] = useState<FormStatus>("idle");
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [website, setWebsite] = useState("");
+  const [startedAt, setStartedAt] = useState(() => Date.now());
+  const pathname = usePathname();
 
   const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {};
@@ -88,31 +94,34 @@ export function ResidencialContactForm() {
     setStatus("loading");
     setErrors({});
 
+    trackEvent("form_submit", { segment: "residencial", channel: "form", cta_location: "residencial" });
+
     try {
       const projectLabel = CONTACT_FORM_PROJECT_TYPES.find(
         (t) => t.value === formData.projectType
       )?.label;
 
-      const response = await fetch(
-        "https://script.google.com/macros/s/AKfycbx7AGRX_hBuPp4z8UAv27xKQCZls0QRT4g1P2jGeGvqZ6v7IQesTDLmvijN5RwAyvAt4Q/exec",
-        {
-          method: "POST",
-          headers: { "Content-Type": "text/plain" },
-          body: JSON.stringify({
-            name: formData.name,
-            email: formData.email,
-            phone: formData.phone,
-            categoria: "Residencial",
-            tipo: projectLabel || "Não informado",
-            message: formData.description,
-          }),
-        }
-      );
-
+      const response = await fetch(LEAD_ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          segment: "residencial",
+          projectType: projectLabel || "Não informado",
+          message: formData.description,
+          pagePath: pathname ?? undefined,
+          ctaLocation: "residencial",
+          website,
+          startedAt,
+        }),
+      });
       const result = await response.json();
 
       if (result.success) {
         setStatus("success");
+        trackEvent("generate_lead", { segment: "residencial", channel: "form", cta_location: "residencial" });
       } else {
         setStatus("error");
         setErrors({ submit: result.message || "Erro ao enviar mensagem" });
@@ -127,6 +136,8 @@ export function ResidencialContactForm() {
   const resetForm = () => {
     setFormData({ name: "", email: "", phone: "", projectType: "", description: "" });
     setErrors({});
+    setWebsite("");
+    setStartedAt(Date.now());
     setStatus("idle");
   };
 
@@ -191,6 +202,7 @@ export function ResidencialContactForm() {
           onSubmit={handleSubmit}
           className="space-y-5"
         >
+          <input type="text" name="website" value={website} onChange={(event) => setWebsite(event.target.value)} className="hidden" tabIndex={-1} autoComplete="off" aria-hidden="true" />
           {/* Row 1: Nome + Telefone */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <LabelInputContainer>
