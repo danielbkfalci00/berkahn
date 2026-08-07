@@ -50,7 +50,9 @@ export function CTA({
         <div className="text-center max-w-3xl mx-auto bg-black p-6 sm:p-10 md:p-16">
           <RevealOnScroll>
             <p className="label-text mb-4 text-white/60">{label}</p>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-heading font-extrabold tracking-tight mb-6 text-white break-words hyphens-auto">{title}</h2>
+            <h2 className="mb-6 break-words hyphens-none text-3xl font-heading font-extrabold tracking-tight text-white sm:text-4xl md:text-5xl lg:text-6xl">
+              {title}
+            </h2>
             <p className="body-md mb-8 text-white/70">{description}</p>
 
             {actionType === "link" ? (
