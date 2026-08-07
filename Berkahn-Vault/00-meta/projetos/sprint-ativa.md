@@ -6,7 +6,7 @@ tags:
   - project/site
   - project/blog
   - status/active
-ai_summary: "Sprint 03–07/08: migrations 014–020 aplicadas e verificadas com 66 pautas. Status livre, capas versionadas, edição inline/tags, fila Codex e leads primários entregues. Gates de código e banco verdes; pendem smoke autenticado/clipboard e redeploy manual do Apps Script."
+ai_summary: "Sprint 03–07/08: migrations 014–020 aplicadas, código em produção e 66 pautas preservadas. Smoke autenticado validou edição inline, status livre, tags, clipboard, capas e sessão expirada. Pendem redeploy manual do Apps Script, dimensões GA4 e o fluxo editorial ponta a ponta."
 status: active
 projetos_em_curso:
   - blog
@@ -39,9 +39,9 @@ vault. Só então exercitar a próxima pauta ponta a ponta em sessão autenticad
 
 | Projeto | Status | Bloqueio principal | Próxima ação |
 |---------|--------|--------------------|--------------|
-| [[blog]] | active | Smoke autenticado do novo fluxo | Produzir próxima pauta até aprovação |
-| [[linkedin]] | active | Publicação externa manual | Validar URL/data e clipboard com clique humano |
-| [[site]] | active | Schema 014–020 aplicado; falta sessão autenticada | Validar quadro, capas e leads logado |
+| [[blog]] | active | Fluxo editorial completo ainda não exercitado | Rodar pesquisa → draft → aprovação na próxima pauta |
+| [[linkedin]] | active | Publicação externa manual | Registrar URL/data reais no próximo post |
+| [[site]] | active | Apps Script 1.1 e dimensões GA4 exigem configuração externa | Monitorar leads e fila Codex em produção |
 | [[seo-aeo]] | active | 3 URLs fora do índice (ação manual no GSC) | Pedir indexação das 3 |
 | [[apresentacoes]] | active | Roteiros não versionados (parcial) | Validar 16 slides em live env |
 | [[materiais]] | active | **Institucional PDF v4** aguarda briefing atualizado + distribuição | Atualizar briefing v3→v4; distribuir; preencher `usado_em` |
@@ -59,9 +59,12 @@ vault. Só então exercitar a próxima pauta ponta a ponta em sessão autenticad
   busca/filtros, ações em lote sem aprovação, renomeação, prontidão e publicação manual do LinkedIn
 - [x] **Automação genérica**: `pauta.mjs` versionado; criar, gravar,
   registrar-draft, produzir e publicar com dry-run/rollback
-- [ ] **Smoke autenticado**: criação, autosave, drag-and-drop, capas, vínculo,
-  aprovação, URL do LinkedIn, sessão expirada e clipboard. Três tentativas
-  Playwright locais não receberam o DOM pelo loopback; build e gates passaram
+- [x] **Smoke autenticado crítico em preview e produção**: data inline,
+  livre sem gaps, tags, clipboard com clique real, upload/troca/remoção das
+  capas Blog e LinkedIn 4:5, redirecionamento de sessão expirada e leitura das
+  66 pautas. RPC transacional cobre drag/order; ICMS cobre vínculo no banco
+- [ ] **Fluxo editorial E2E restante**: criar pauta pela UI, vincular artigo e
+  executar pesquisa → criação → aprovação → publicação na próxima pauta
 - [x] ~~**Merge PR #17**~~ ✅ 2026-07-30 — #15, #16 e #17 mergeados. **Sobrou**: validar `/institucional/pdf` em prod, atualizar o briefing para v4 e distribuir o PDF. Ver [[site]] e [[materiais]]
 - [x] **Indexação Google** ([[seo-aeo]]): **encerrado em 2026-07-29** — 34/38 artigos (89%), contra 6/44 em abril. Restam 4 URLs em "Crawled/Discovered - currently not indexed", agora P1
 - [x] ~~**Publicar OAuth consent screen**~~ ✅ 2026-07-30 — app em produção, refresh voltou a funcionar, token reemitido. Ver [[google-apis-setup]]
@@ -121,8 +124,8 @@ Infra integrada em `main` e no ar. A migration 013 foi aplicada em 2026-08-07; d
 
 **Pendências que ficaram:**
 
-- [ ] Exercitar o quadro logado — salvar, subir as duas capas, vincular artigo, `/pesquisa` ponta a ponta. Nada disso passou por sessão autenticada; a RLS barra o harness
-- [ ] Botão de copiar do LinkedIn: escrita no clipboard exige ativação real do usuário, que clique sintético não fornece
+- [x] Quadro logado exercitado em preview e produção: salvar data/status/tags, clipboard, capas Blog/LinkedIn e sessão expirada. Vínculo UI e pesquisa ponta a ponta seguem no fluxo editorial E2E acima
+- [x] Clipboard validado por clique real do Playwright com permissão explícita do navegador
 - [x] Varredura de 405 arquivos em `/scripts` encontrou zero service role JWT e zero `sb_secret_` hardcoded; a pendência histórica não existe mais no disco atual
 
 ## Wins / decisões (2026-07-30, tarde)

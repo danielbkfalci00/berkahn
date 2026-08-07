@@ -8,7 +8,7 @@ tags:
   - project/linkedin
   - status/active
   - domain/integrations
-ai_summary: "Fonte operacional em /admin/conteudo. Status é posição livre; prontidão, publicação real e próxima ação são derivadas. Migrations 014–020 liberam movimentos, corrigem capas, tags, fila Codex e leads/analytics. Schema verificado com 66 pautas; smoke autenticado final ainda pendente."
+ai_summary: "Fonte operacional em /admin/conteudo. Status é posição livre; prontidão, publicação real e próxima ação são derivadas. Migrations 014–020 e código estão em produção. Schema preserva 66 pautas; smoke autenticado validou edição, tags, clipboard, capas e sessão expirada."
 status: active
 projeto: site
 contextos_aplicados:
