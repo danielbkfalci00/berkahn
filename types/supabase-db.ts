@@ -136,7 +136,6 @@ export type Database = {
           atualizado_em: string
           capa_blog_url: string | null
           capa_linkedin_url: string | null
-          coluna: string
           criado_em: string
           criado_por: string | null
           data_alvo: string | null
@@ -152,7 +151,6 @@ export type Database = {
           linkedin_publicado_em: string | null
           linkedin_texto: string | null
           linkedin_url: string | null
-          ordem: number
           ordem_blog: number | null
           ordem_linkedin: number | null
           plataformas: string[]
@@ -170,7 +168,6 @@ export type Database = {
           atualizado_em?: string
           capa_blog_url?: string | null
           capa_linkedin_url?: string | null
-          coluna?: string
           criado_em?: string
           criado_por?: string | null
           data_alvo?: string | null
@@ -186,7 +183,6 @@ export type Database = {
           linkedin_publicado_em?: string | null
           linkedin_texto?: string | null
           linkedin_url?: string | null
-          ordem?: number
           ordem_blog?: number | null
           ordem_linkedin?: number | null
           plataformas?: string[]
@@ -204,7 +200,6 @@ export type Database = {
           atualizado_em?: string
           capa_blog_url?: string | null
           capa_linkedin_url?: string | null
-          coluna?: string
           criado_em?: string
           criado_por?: string | null
           data_alvo?: string | null
@@ -220,7 +215,6 @@ export type Database = {
           linkedin_publicado_em?: string | null
           linkedin_texto?: string | null
           linkedin_url?: string | null
-          ordem?: number
           ordem_blog?: number | null
           ordem_linkedin?: number | null
           plataformas?: string[]

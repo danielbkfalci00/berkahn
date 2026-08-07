@@ -25,7 +25,38 @@ function checar(nome, condicao, detalhe = "") {
 }
 
 await client.connect();
+if (process.argv.includes("--dry-run-013")) {
+  try {
+    const migrationUrl = new URL("../../supabase/migrations/013_remover_colunas_legadas_conteudo.sql", import.meta.url);
+    const sql = readFileSync(migrationUrl, "utf8").replace(/COMMIT;\s*$/, "ROLLBACK;");
+    await client.query(sql);
+    const { rows: legado } = await client.query(`
+      SELECT column_name
+      FROM information_schema.columns
+      WHERE table_schema = 'public'
+        AND table_name = 'conteudo_pautas'
+        AND column_name IN ('coluna', 'ordem')
+      ORDER BY column_name
+    `);
+    checar("migration 013 executa e reverte", legado.map((r) => r.column_name).join(",") === "coluna,ordem");
+  } finally {
+    await client.end();
+  }
+  console.log(falhas === 0 ? "\o dry-run 013 verificado" : `\nL ${falhas} falha(s)`);
+  process.exit(falhas === 0 ? 0 : 1);
+}
+
 try {
+  const { rows: legado } = await client.query(`
+    SELECT column_name
+    FROM information_schema.columns
+    WHERE table_schema = 'public'
+      AND table_name = 'conteudo_pautas'
+      AND column_name IN ('coluna', 'ordem')
+  `);
+  console.log("\\nSCHEMA");
+  checar("colunas legadas removidas", legado.length === 0, legado.map((r) => r.column_name).join(", "));
+
   const { rows } = await client.query(`
     SELECT
       count(*)::int AS total,
