@@ -181,38 +181,27 @@ export async function atualizarPauta(
     return { data: null, error: "Nada para atualizar." };
 
   const supabase = await createClient();
-  let data: unknown;
-  if (Object.keys(update).length > 0) {
-    const resultado = await supabase
-      .from("conteudo_pautas")
-      .update(update)
-      .eq("id", id)
-      .select(SELECT_COM_ARTIGO)
-      .single();
-    if (resultado.error) return { data: null, error: resultado.error.message };
-    data = resultado.data;
-  } else {
-    const resultado = await supabase
+  const { error: updateError } = await supabase.rpc("atualizar_pauta_metadados", {
+    p_pauta_id: id,
+    p_patch: update,
+    p_tags: tags ?? null,
+  });
+  if (updateError) return { data: null, error: updateError.message };
+
+  const [{ data, error }, { data: tagRows, error: tagError }] = await Promise.all([
+    supabase
       .from("conteudo_pautas")
       .select(SELECT_COM_ARTIGO)
       .eq("id", id)
-      .single();
-    if (resultado.error) return { data: null, error: resultado.error.message };
-    data = resultado.data;
-  }
+      .single(),
+    supabase
+      .from("conteudo_pauta_tags")
+      .select("tag_slug")
+      .eq("pauta_id", id),
+  ]);
+  if (error || !data) return { data: null, error: error?.message ?? "Pauta n\u00e3o encontrada." };
+  if (tagError) return { data: null, error: tagError.message };
 
-  if (tags !== undefined) {
-    const { error } = await supabase.rpc("atualizar_tags_pauta", {
-      p_pauta_id: id,
-      p_tags: tags,
-    });
-    if (error) return { data: null, error: error.message };
-  }
-
-  const { data: tagRows } = await supabase
-    .from("conteudo_pauta_tags")
-    .select("tag_slug")
-    .eq("pauta_id", id);
   const pauta = toPauta(data as PautaRow);
   pauta.tags = (tagRows ?? []).map((row) => row.tag_slug as TagConteudo);
   revalidarPauta(id);

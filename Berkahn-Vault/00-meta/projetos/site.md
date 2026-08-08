@@ -5,7 +5,7 @@ atualizado: 2026-08-07
 tags:
   - project/site
   - status/active
-ai_summary: "Hub do Site — sprint integrado de performance em 2026-08-07 reduziu o JS inicial do artigo em 41,2%, manteve SSG/ISR e fechou axe sério/crítico em 28 cenários. Conversão padronizada em quatro eventos; campo requer 7/28 dias. Apps Script 1.2 está pronto no código e aguarda configuração e redeploy externos."
+ai_summary: "Hub do Site — migrations 014–023 e quadro de conteúdo endurecido em produção; sprint de performance reduziu o JS do artigo em 41,2%, preservou SSG/ISR e zerou axe sério/crítico em 28 cenários. Pendências externas: Apps Script 1.2, Key Events GA4 e campo 7/28 dias."
 status: active
 projeto: site
 kpi_paginas_indexadas: 34

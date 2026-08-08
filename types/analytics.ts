@@ -19,6 +19,7 @@ export interface Ga4PageRow {
   avgEngagementTime: number;
   // Métricas adicionadas no Sprint 2 (fetch-ga4 retorna 0 quando não disponível)
   bounceRate?: number; // 0-100 (pct)
+  engagedSessions?: number;
   engagementRate?: number; // 0-100 (pct)
   sessions?: number;
   newUsers?: number;
@@ -63,8 +64,20 @@ export interface PostPerformance {
 export interface Ga4Device {
   device: string;
   users: number;
+
   pctOfTotal: number;
 }
+
+export interface Ga4ArticleProgress {
+  available: boolean;
+  reason?: string;
+  rows: Array<{
+    slug: string;
+    percent: number;
+    count: number;
+  }>;
+}
+
 
 export interface Ga4Area {
   area: string;
@@ -90,6 +103,7 @@ export interface Ga4Data {
   byArea: Ga4Area[];
   events: Ga4Event[];
   period: { startDate: string; endDate: string };
+  articleProgress?: Ga4ArticleProgress;
 }
 
 export interface GscQuery {

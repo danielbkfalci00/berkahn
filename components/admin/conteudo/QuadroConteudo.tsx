@@ -1,9 +1,9 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { DndContext, DragOverlay, closestCorners } from "@dnd-kit/core";
-import { AlertCircle, Search, SlidersHorizontal, X } from "lucide-react";
+import { AlertCircle, CalendarDays, Search, SlidersHorizontal, Wifi, WifiOff, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
@@ -31,6 +31,7 @@ import {
   type TagCatalogo,
   type Trilha,
   type VisaoQuadro,
+  type StatusWorkerConteudo,
 } from "@/types/conteudo";
 import { useListaOtimista } from "@/hooks/use-lista-otimista";
 import { useTelaLarga } from "@/hooks/use-tela-larga";
@@ -40,11 +41,22 @@ import {
 import { criarPauta, excluirPauta, moverPautas } from "@/app/admin/conteudo/actions";
 import { ColunaPauta } from "./ColunaPauta";
 import { BadgesPlataforma } from "./BadgesPlataforma";
+import { CartaoPauta } from "./CartaoPauta";
+import { useUrlFilters } from "@/lib/analytics/use-url-filters";
 
-interface Props { pautas: Pauta[]; tagsCatalogo: TagCatalogo[]; }
+interface Props {
+  pautas: Pauta[];
+  tagsCatalogo: TagCatalogo[];
+  worker: StatusWorkerConteudo;
+}
 export type ItemQuadro = Pauta & { coluna: StatusQuadro; ordem: number };
 const TODOS = "__todos__";
 
+const URL_KEYS = [
+  "conteudo_visao", "conteudo_q", "conteudo_plataforma", "conteudo_trilha",
+  "conteudo_funil", "conteudo_intencao", "conteudo_prioridade", "conteudo_prazo",
+] as const;
+const CONTEUDO_DEFAULTS = { conteudo_visao: "geral" } as const;
 function colunasDaVisao(visao: VisaoQuadro): readonly StatusQuadro[] {
   if (visao === "blog") return STATUS_BLOG;
   if (visao === "linkedin") return STATUS_LINKEDIN;
@@ -65,20 +77,46 @@ function prazoCasa(pauta: Pauta, filtro: string) {
   return true;
 }
 
-export function QuadroConteudo({ pautas: doServidor, tagsCatalogo }: Props) {
+export function QuadroConteudo({ pautas: doServidor, tagsCatalogo, worker }: Props) {
   const router = useRouter();
-  const [visao, setVisao] = useState<VisaoQuadro>("geral");
-  const [busca, setBusca] = useState("");
-  const [plataforma, setPlataforma] = useState<string>(TODOS);
-  const [trilha, setTrilha] = useState<string>(TODOS);
-  const [funil, setFunil] = useState<string>(TODOS);
-  const [intencao, setIntencao] = useState<string>(TODOS);
-  const [prioridade, setPrioridade] = useState<string>(TODOS);
-  const [prazo, setPrazo] = useState<string>(TODOS);
+  const filtrosUrl = useUrlFilters(URL_KEYS, { defaults: CONTEUDO_DEFAULTS });
+  const buscaUrl = filtrosUrl.values.conteudo_q;
+  const definirFiltro = filtrosUrl.setValue;
+  const visao: VisaoQuadro = ["geral", "blog", "linkedin"].includes(filtrosUrl.values.conteudo_visao)
+    ? filtrosUrl.values.conteudo_visao as VisaoQuadro
+    : "geral";
+  const [busca, setBusca] = useState(buscaUrl);
+  const plataforma = filtrosUrl.values.conteudo_plataforma || TODOS;
+  const buscaUrlRef = useRef(buscaUrl);
+  const trilha = filtrosUrl.values.conteudo_trilha || TODOS;
+  const funil = filtrosUrl.values.conteudo_funil || TODOS;
+  const intencao = filtrosUrl.values.conteudo_intencao || TODOS;
+  const prioridade = filtrosUrl.values.conteudo_prioridade || TODOS;
+  const prazo = filtrosUrl.values.conteudo_prazo || TODOS;
+  const setPlataforma = (valor: string) => filtrosUrl.setValue("conteudo_plataforma", valor === TODOS ? "" : valor);
+  const setTrilha = (valor: string) => filtrosUrl.setValue("conteudo_trilha", valor === TODOS ? "" : valor);
+  const setFunil = (valor: string) => filtrosUrl.setValue("conteudo_funil", valor === TODOS ? "" : valor);
+  const setIntencao = (valor: string) => filtrosUrl.setValue("conteudo_intencao", valor === TODOS ? "" : valor);
+  const setPrioridade = (valor: string) => filtrosUrl.setValue("conteudo_prioridade", valor === TODOS ? "" : valor);
+  const setPrazo = (valor: string) => filtrosUrl.setValue("conteudo_prazo", valor === TODOS ? "" : valor);
   const [confirmandoExclusao, setConfirmandoExclusao] = useState<string | null>(null);
   const [selecionados, setSelecionados] = useState<Set<string>>(new Set());
 
   const colunas = colunasDaVisao(visao);
+  useEffect(() => {
+    if (buscaUrl === buscaUrlRef.current) return;
+    buscaUrlRef.current = buscaUrl;
+    setBusca(buscaUrl);
+  }, [buscaUrl]);
+
+  useEffect(() => {
+    if (busca === buscaUrlRef.current) return;
+    const timer = window.setTimeout(() => {
+      buscaUrlRef.current = busca;
+      definirFiltro("conteudo_q", busca);
+    }, 350);
+    return () => window.clearTimeout(timer);
+  }, [busca, definirFiltro]);
   const filtradas = useMemo(() => {
     const termo = busca.trim().toLocaleLowerCase("pt-BR");
     return doServidor.filter((pauta) => {
@@ -264,13 +302,9 @@ export function QuadroConteudo({ pautas: doServidor, tagsCatalogo }: Props) {
   const filtrosAtivos = [busca, plataforma, trilha, funil, intencao, prioridade, prazo]
     .some((v, i) => (i === 0 ? Boolean(v) : v !== TODOS));
   function limparFiltros() {
+    buscaUrlRef.current = "";
     setBusca("");
-    setPlataforma(TODOS);
-    setTrilha(TODOS);
-    setFunil(TODOS);
-    setIntencao(TODOS);
-    setPrioridade(TODOS);
-    setPrazo(TODOS);
+    filtrosUrl.clearValues(URL_KEYS.slice(1));
   }
 
   return (
@@ -289,7 +323,7 @@ export function QuadroConteudo({ pautas: doServidor, tagsCatalogo }: Props) {
       <div className="rounded-lg border border-neutral-200 bg-white p-3 shadow-sm">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <Tabs value={visao} onValueChange={(v) => {
-            setVisao(v as VisaoQuadro);
+            filtrosUrl.setValue("conteudo_visao", v);
             setSelecionados(new Set());
           }}>
             <TabsList className="bg-[#F3F0E8]">
@@ -298,9 +332,20 @@ export function QuadroConteudo({ pautas: doServidor, tagsCatalogo }: Props) {
               <TabsTrigger value="linkedin">LinkedIn</TabsTrigger>
             </TabsList>
           </Tabs>
-          <p className="text-xs tabular-nums text-neutral-500">
-            {filtradas.length} de {doServidor.length} pautas
-          </p>
+          <div className="ml-auto flex flex-wrap items-center justify-end gap-3">
+            <span className={worker.online
+              ? "inline-flex items-center gap-1.5 text-xs font-medium text-emerald-700"
+              : "inline-flex items-center gap-1.5 text-xs font-medium text-amber-700"
+            }>
+              {worker.online
+                ? <Wifi className="h-3.5 w-3.5" aria-hidden />
+                : <WifiOff className="h-3.5 w-3.5" aria-hidden />}
+              {worker.online ? "Codex ativo" : "Fila manual"}
+            </span>
+            <p className="text-xs tabular-nums text-neutral-500">
+              {filtradas.length} de {doServidor.length} pautas
+            </p>
+          </div>
         </div>
 
         <div className="mt-3 grid gap-2 md:grid-cols-4 xl:grid-cols-7">
@@ -373,30 +418,139 @@ export function QuadroConteudo({ pautas: doServidor, tagsCatalogo }: Props) {
         )}
       </div>
 
-      <DndContext sensors={sensores} collisionDetection={closestCorners}
-        onDragStart={aoIniciar} onDragOver={aoPassarPor} onDragEnd={aoTerminar}>
-        <div className="-mx-6 overflow-x-auto px-6 pb-4">
-          <div className="flex min-w-full flex-col items-stretch gap-4 md:min-w-max md:flex-row md:items-start">
-            {colunas.map((coluna) => (
-              <ColunaPauta key={coluna} coluna={coluna} visao={visao}
-                pautas={itens.filter((p) => p.coluna === coluna)}
-                arrastavel={arrastavel} aoCriar={handleCriar} aoMover={handleMover}
-                aoExcluir={handleExcluir}
-                idConfirmandoExclusao={confirmandoExclusao}
-                aoPedirExclusao={setConfirmandoExclusao} pendente={pendente}
-                selecionados={selecionados} aoSelecionar={selecionar} tagsCatalogo={tagsCatalogo} />
-            ))}
-          </div>
-        </div>
-        <DragOverlay>
-          {pautaAtiva && (
-            <div className="w-[280px] rotate-2 rounded-lg border border-neutral-300 bg-white p-3 shadow-lg">
-              <p className="text-sm font-medium leading-snug text-neutral-900">{pautaAtiva.titulo}</p>
-              <BadgesPlataforma plataformas={pautaAtiva.plataformas} className="mt-2" />
+      {visao === "geral" ? (
+        <AgendaGeral pautas={itens} tagsCatalogo={tagsCatalogo}
+          aoExcluir={handleExcluir} confirmandoExclusao={confirmandoExclusao}
+          aoPedirExclusao={setConfirmandoExclusao} />
+      ) : (
+        <DndContext sensors={sensores} collisionDetection={closestCorners}
+          onDragStart={aoIniciar} onDragOver={aoPassarPor} onDragEnd={aoTerminar}>
+          <div className="-mx-6 overflow-x-auto px-6 pb-4">
+            <div className="flex min-w-full flex-col items-stretch gap-4 md:min-w-max md:flex-row md:items-start">
+              {colunas.map((coluna) => (
+                <ColunaPauta key={coluna} coluna={coluna} visao={visao}
+                  pautas={itens.filter((p) => p.coluna === coluna)}
+                  arrastavel={arrastavel} aoCriar={handleCriar} aoMover={handleMover}
+                  aoExcluir={handleExcluir}
+                  idConfirmandoExclusao={confirmandoExclusao}
+                  aoPedirExclusao={setConfirmandoExclusao} pendente={pendente}
+                  selecionados={selecionados} aoSelecionar={selecionar} tagsCatalogo={tagsCatalogo} />
+              ))}
             </div>
-          )}
-        </DragOverlay>
-      </DndContext>
+          </div>
+          <DragOverlay>
+            {pautaAtiva && (
+              <div className="w-[280px] rotate-2 rounded-lg border border-neutral-300 bg-white p-3 shadow-lg">
+                <p className="text-sm font-medium leading-snug text-neutral-900">{pautaAtiva.titulo}</p>
+                <BadgesPlataforma plataformas={pautaAtiva.plataformas} className="mt-2" />
+              </div>
+            )}
+          </DragOverlay>
+        </DndContext>
+      )}
+    </div>
+  );
+}
+
+function AgendaGeral({
+  pautas, tagsCatalogo, aoExcluir, confirmandoExclusao, aoPedirExclusao,
+}: {
+  pautas: ItemQuadro[];
+  tagsCatalogo: TagCatalogo[];
+  aoExcluir: (id: string) => void;
+  confirmandoExclusao: string | null;
+  aoPedirExclusao: (id: string | null) => void;
+}) {
+  const [limite, setLimite] = useState(18);
+  const grupos = useMemo(() => {
+    const hoje = new Date();
+    hoje.setHours(0, 0, 0, 0);
+    const seteDias = new Date(hoje);
+    seteDias.setDate(seteDias.getDate() + 7);
+    const ordenadas = [...pautas].sort((a, b) =>
+      (a.dataAlvo ?? "9999-12-31").localeCompare(b.dataAlvo ?? "9999-12-31")
+    );
+    return [
+      {
+        chave: "atrasadas",
+        titulo: "Atrasadas",
+        descricao: "Pedem decis\u00e3o ou nova data",
+        cor: "text-red-700",
+        itens: ordenadas.filter((pauta) =>
+          pauta.dataAlvo && new Date(`${pauta.dataAlvo}T12:00:00`) < hoje
+        ),
+      },
+      {
+        chave: "semana",
+        titulo: "Pr\u00f3ximos 7 dias",
+        descricao: "Foco editorial da semana",
+        cor: "text-neutral-900",
+        itens: ordenadas.filter((pauta) => {
+          if (!pauta.dataAlvo) return false;
+          const data = new Date(`${pauta.dataAlvo}T12:00:00`);
+          return data >= hoje && data <= seteDias;
+        }),
+      },
+      {
+        chave: "depois",
+        titulo: "Depois",
+        descricao: "Agenda futura, sem competir com o foco atual",
+        cor: "text-neutral-600",
+        itens: ordenadas.filter((pauta) =>
+          pauta.dataAlvo && new Date(`${pauta.dataAlvo}T12:00:00`) > seteDias
+        ),
+      },
+      {
+        chave: "sem-data",
+        titulo: "Sem data",
+        descricao: "Backlog ainda n\u00e3o agendado",
+        cor: "text-amber-700",
+        itens: ordenadas.filter((pauta) => !pauta.dataAlvo),
+      },
+    ];
+  }, [pautas]);
+
+  let restantes = limite;
+  const total = grupos.reduce((soma, grupo) => soma + grupo.itens.length, 0);
+
+  return (
+    <div className="space-y-5">
+      <div className="flex items-center gap-2 text-xs text-neutral-500">
+        <CalendarDays className="h-4 w-4" aria-hidden />
+        Agenda geral ordenada por prazo. Use Blog ou LinkedIn para reordenar o Kanban.
+      </div>
+      {grupos.map((grupo) => {
+        const visiveis = grupo.itens.slice(0, Math.max(0, restantes));
+        restantes -= visiveis.length;
+        if (grupo.itens.length === 0) return null;
+        return (
+          <section key={grupo.chave} aria-labelledby={`agenda-${grupo.chave}`}>
+            <div className="mb-2 flex items-baseline gap-2">
+              <h2 id={`agenda-${grupo.chave}`} className={`text-sm font-semibold ${grupo.cor}`}>
+                {grupo.titulo} <span className="font-normal tabular-nums">&middot; {grupo.itens.length}</span>
+              </h2>
+              <p className="hidden text-xs text-neutral-400 sm:block">{grupo.descricao}</p>
+            </div>
+            {visiveis.length > 0 && (
+              <ul className="grid gap-3 lg:grid-cols-2 2xl:grid-cols-3">
+                {visiveis.map((pauta) => (
+                  <CartaoPauta key={pauta.id} pauta={pauta} visao="geral" colunas={[]}
+                    arrastavel={false} aoMover={() => undefined} aoExcluir={aoExcluir}
+                    confirmandoExclusao={confirmandoExclusao === pauta.id}
+                    aoPedirExclusao={aoPedirExclusao} selecionado={false}
+                    aoSelecionar={() => undefined} tagsCatalogo={tagsCatalogo} />
+                ))}
+              </ul>
+            )}
+          </section>
+        );
+      })}
+      {limite < total && (
+        <button type="button" onClick={() => setLimite((atual) => atual + 18)}
+          className="w-full rounded-lg border border-dashed border-neutral-300 py-3 text-sm font-medium text-neutral-600 hover:border-neutral-400 hover:bg-white">
+          Mostrar mais {Math.min(18, total - limite)} pautas
+        </button>
+      )}
     </div>
   );
 }

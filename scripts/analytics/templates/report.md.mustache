@@ -1,0 +1,224 @@
+---
+tipo: auditoria
+criado: {{generatedDate}}
+atualizado: {{generatedDate}}
+tags:
+  - project/blog
+  - project/seo-aeo
+  - status/active
+  - source/manual
+ai_summary: "{{#partial}}PARCIAL ({{daysCovered}} de {{daysInMonth}} dias) — {{/partial}}Performance {{monthLabel}} — GA4 {{ga4.users}} users ({{ga4.usersMoMText}}), GSC {{gsc.clicks}} clicks ({{gsc.clicksMoMText}}), indexação {{indexedCount}}/{{totalArticles}}. Top: {{topArticle.title}}. P0: {{topAction.text}}."
+status: active
+subtipo: performance-mensal
+kpi_paginas_indexadas: {{indexedCount}}
+kpi_paginas_total: {{totalArticles}}
+kpi_ga4_users_mes: {{ga4.users}}
+kpi_ga4_sessions_mes: {{ga4.sessions}}
+kpi_ga4_pageviews_mes: {{ga4.pageviews}}
+kpi_ga4_engagement_rate: {{ga4.engagementRate}}
+kpi_gsc_clicks_mes: {{gsc.clicks}}
+kpi_gsc_impressions_mes: {{gsc.impressions}}
+kpi_gsc_ctr_mes: {{gsc.ctr}}
+kpi_gsc_position_mes: {{gsc.position}}
+kpi_delta_clicks_mom_pct: {{gsc.clicksMoMPct}}
+kpi_delta_users_mom_pct: {{ga4.usersMoMPct}}
+contextos_aplicados:
+  - seo-aeo-strategy
+  - article-pipeline
+projetos_relacionados:
+  - blog
+  - seo-aeo
+periodo_analise: "{{periodoAnaliseLabel}}"
+periodo_parcial: {{partial}}
+periodo_dias_cobertos: {{daysCovered}}
+periodo_dias_total: {{daysInMonth}}
+periodo_comparacao: "{{prevPeriodStart}} a {{prevPeriodEnd}}"
+data_diagnostico: {{generatedDate}}
+---
+
+# Performance Blog Berkahn — {{monthLabel}}{{#partial}} (parcial){{/partial}}
+
+{{#partial}}
+> [!warning] Relatório parcial — não é o fechamento do mês
+> Janela: **{{periodStart}} a {{periodEnd}}** ({{daysCovered}} de {{daysInMonth}} dias). O Search Console consolida com {{gscLagDays}} dias de lag, então os dias mais recentes ainda não entraram.
+> As variações MoM comparam contra **{{prevPeriodStart}} a {{prevPeriodEnd}}** ({{prevDaysCovered}} dias), para medir janelas equivalentes. Ressalva: como {{daysCovered}} não é múltiplo de 7, as duas janelas pegam quantidades diferentes de fim de semana.
+> O run automático do dia 1 sobrescreve este arquivo com o mês fechado.
+
+{{/partial}}
+## Resumo executivo
+
+{{#summary}}
+- {{text}}
+{{/summary}}
+
+## GA4, tráfego do site
+
+### Overall (vs {{#partial}}mesmos {{daysCovered}} dias do {{/partial}}mês anterior)
+
+| Métrica | Valor | Variação MoM |
+|---------|------:|:------------:|
+| Users | {{ga4.users}} | {{ga4.usersMoMText}} |
+| Sessions | {{ga4.sessions}} | {{ga4.sessionsMoMText}} |
+| Pageviews | {{ga4.pageviews}} | {{ga4.pageviewsMoMText}} |
+| Engagement rate | {{ga4.engagementRate}}% | {{ga4.engagementRateMoMText}} |
+| Tempo médio sessão | {{ga4.avgSessionDuration}}s | {{ga4.avgSessionDurationMoMText}} |
+
+### Top 15 páginas (por pageviews)
+
+| Página | Pageviews | Users | Tempo médio | MoM |
+|--------|----------:|------:|------------:|:---:|
+{{#ga4.topPages}}
+| {{title}} (`{{slug}}`) | {{pageviews}} | {{users}} | {{avgEngagementTime}}s | {{momText}} |
+{{/ga4.topPages}}
+
+### Top 10 fontes de tráfego
+
+| Source / Medium | Sessions | Users | % do total |
+|-----------------|---------:|------:|-----------:|
+{{#ga4.topSources}}
+| {{label}} | {{sessions}} | {{users}} | {{pctOfTotal}}% |
+{{/ga4.topSources}}
+
+### Distribuição por área do site
+
+| Área | Pageviews | % do total |
+|------|----------:|-----------:|
+{{#ga4.byArea}}
+| {{area}} | {{pageviews}} | {{pctOfTotal}}% |
+{{/ga4.byArea}}
+
+### Devices
+
+| Device | Users | % do total |
+|--------|------:|-----------:|
+{{#ga4.byDevice}}
+| {{device}} | {{users}} | {{pctOfTotal}}% |
+{{/ga4.byDevice}}
+
+### Eventos / Conversões
+
+{{#ga4.events.length}}
+| Evento | Count | Páginas top |
+|--------|------:|:------------|
+{{#ga4.events}}
+| `{{name}}` | {{count}} | {{topPages}} |
+{{/ga4.events}}
+{{/ga4.events.length}}
+{{^ga4.events.length}}
+Nenhum evento de conversão configurado no GA4 detectado no período.
+{{/ga4.events.length}}
+
+## GSC, performance no Google Search
+
+### Overall (vs {{#partial}}mesmos {{daysCovered}} dias do {{/partial}}mês anterior)
+
+| Métrica | Valor | Variação MoM |
+|---------|------:|:------------:|
+| Clicks | {{gsc.clicks}} | {{gsc.clicksMoMText}} |
+| Impressions | {{gsc.impressions}} | {{gsc.impressionsMoMText}} |
+| CTR | {{gsc.ctr}}% | {{gsc.ctrMoMText}} |
+| Posição média | {{gsc.position}} | {{gsc.positionMoMText}} |
+
+### Top 20 queries
+
+| Query | Clicks | Impressions | CTR | Posição |
+|-------|-------:|------------:|----:|--------:|
+{{#gsc.topQueries}}
+| {{query}} | {{clicks}} | {{impressions}} | {{ctr}}% | {{position}} |
+{{/gsc.topQueries}}
+
+### Top 15 páginas (por clicks)
+
+| Página | Clicks | Impressions | CTR | Posição |
+|--------|-------:|------------:|----:|--------:|
+{{#gsc.topPages}}
+| {{title}} (`{{slug}}`) | {{clicks}} | {{impressions}} | {{ctr}}% | {{position}} |
+{{/gsc.topPages}}
+
+### Queries em alta (maior ganho de clicks MoM)
+
+{{#gsc.risingQueries.length}}
+| Query | Clicks atual | Clicks anterior | Ganho |
+|-------|-------------:|----------------:|------:|
+{{#gsc.risingQueries}}
+| {{query}} | {{clicksCurrent}} | {{clicksPrevious}} | +{{clicksDelta}} |
+{{/gsc.risingQueries}}
+{{/gsc.risingQueries.length}}
+{{^gsc.risingQueries.length}}
+Sem variações significativas vs mês anterior.
+{{/gsc.risingQueries.length}}
+
+### Queries em queda
+
+{{#gsc.fallingQueries.length}}
+| Query | Clicks atual | Clicks anterior | Perda |
+|-------|-------------:|----------------:|------:|
+{{#gsc.fallingQueries}}
+| {{query}} | {{clicksCurrent}} | {{clicksPrevious}} | {{clicksDelta}} |
+{{/gsc.fallingQueries}}
+{{/gsc.fallingQueries.length}}
+{{^gsc.fallingQueries.length}}
+Sem quedas significativas vs mês anterior.
+{{/gsc.fallingQueries.length}}
+
+## Indexação no Google ({{indexedCount}} de {{totalArticles}})
+
+| Slug | Status | Último crawl | Observação |
+|------|:------:|:------------:|:-----------|
+{{#indexation}}
+| {{title}} (`{{slug}}`) | {{statusLabel}} | {{lastCrawlTime}} | {{coverageState}} |
+{{/indexation}}
+
+## Insights
+
+{{#insights}}
+{{position}}. {{text}}
+{{/insights}}
+
+## Ações priorizadas
+
+### P0, urgente
+
+{{#actionsP0.length}}
+{{#actionsP0}}
+- [ ] {{text}}
+{{/actionsP0}}
+{{/actionsP0.length}}
+{{^actionsP0.length}}
+Nenhuma ação P0 identificada neste período.
+{{/actionsP0.length}}
+
+### P1, esta semana
+
+{{#actionsP1.length}}
+{{#actionsP1}}
+- [ ] {{text}}
+{{/actionsP1}}
+{{/actionsP1.length}}
+{{^actionsP1.length}}
+Nenhuma ação P1 identificada.
+{{/actionsP1.length}}
+
+### P2, backlog
+
+{{#actionsP2.length}}
+{{#actionsP2}}
+- [ ] {{text}}
+{{/actionsP2}}
+{{/actionsP2.length}}
+{{^actionsP2.length}}
+Nenhuma ação P2 identificada.
+{{/actionsP2.length}}
+
+## Notas técnicas
+
+- Fonte GA4: property `{{ga4PropertyId}}`
+- Fonte GSC: `{{gscSiteUrl}}`
+- Janela: {{periodoAnaliseLabel}}{{^partial}} (mês fechado){{/partial}}
+- Comparação MoM: {{prevPeriodStart}} a {{prevPeriodEnd}}{{#partial}} ({{prevDaysCovered}} dias, janela equivalente){{/partial}}
+- Gerado em: {{generatedAt}} via `/performance`
+- Histórico (3 meses): {{historicalMonths}}
+
+---
+
+**Contexto aplicado**: [[seo-aeo-strategy]] · [[article-pipeline]] · [[blog]] · [[seo-aeo]]

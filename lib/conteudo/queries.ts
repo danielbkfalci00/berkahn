@@ -3,11 +3,14 @@ import "server-only";
 import { createClient } from "@/lib/supabase/server";
 import {
   toPauta,
+  toPautaQuadro,
   type AcaoAutomacao,
   type JobAutomacao,
   type Pauta,
+  type PautaQuadroRow,
   type PautaRow,
   type StatusAutomacao,
+  type StatusWorkerConteudo,
   type TagCatalogo,
   type TagConteudo,
 } from "@/types/conteudo";
@@ -22,6 +25,18 @@ const COLUNAS_PAUTA = `
   linkedin_imagem_prompt, linkedin_imagem_briefing,
   plataformas, criado_por, criado_em, atualizado_em,
   posts ( id, slug, title, status, published_at )
+`;
+
+const COLUNAS_QUADRO = `
+  id, titulo, tipo,
+  status_blog, status_linkedin, ordem_blog, ordem_linkedin,
+  draft_path, linkedin_url, linkedin_publicado_em,
+  keyword, intencao, funil, prioridade, trilha, semana, data_alvo,
+  post_id, capa_blog_url, capa_linkedin_url, plataformas,
+  criado_por, criado_em, atualizado_em,
+  tem_insights, tem_pesquisa, tem_linkedin_texto, tem_linkedin_briefing,
+  tem_linkedin_imagem_prompt, tem_linkedin_imagem_briefing,
+  post_slug, post_title, post_status, post_published_at
 `;
 
 const UUID_PATTERN =
@@ -68,10 +83,9 @@ async function enriquecerPautas(
       .select("pauta_id,tag_slug")
       .in("pauta_id", ids),
     supabase
-      .from("conteudo_automation_jobs")
+      .from("conteudo_automation_jobs_latest")
       .select("id,pauta_id,acao,status,tentativas,erro,criado_em,atualizado_em")
-      .in("pauta_id", ids)
-      .order("criado_em", { ascending: false }),
+      .in("pauta_id", ids),
   ]);
 
   const tagsPorPauta = new Map<string, TagConteudo[]>();
@@ -96,16 +110,38 @@ async function enriquecerPautas(
 export async function listarPautas(): Promise<ResultadoPautas> {
   const supabase = await createClient();
   const { data, error } = await supabase
-    .from("conteudo_pautas")
-    .select(COLUNAS_PAUTA)
+    .from("conteudo_pautas_quadro")
+    .select(COLUNAS_QUADRO)
     .order("data_alvo", { ascending: true, nullsFirst: false })
     .order("ordem_blog", { ascending: true, nullsFirst: false });
 
   if (error) return { pautas: [], erro: error.message };
   if (!data) return { pautas: [], erro: null };
 
-  const pautas = (data as unknown as PautaRow[]).map(toPauta);
+  const pautas = (data as unknown as PautaQuadroRow[]).map(toPautaQuadro);
   return { pautas: await enriquecerPautas(supabase, pautas), erro: null };
+}
+
+export async function obterStatusWorkerConteudo(): Promise<StatusWorkerConteudo> {
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("conteudo_worker_heartbeats")
+    .select("worker_id,versao,visto_em")
+    .order("visto_em", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+  if (!data) {
+    return { online: false, workerId: null, versao: null, vistoEm: null };
+  }
+
+  const vistoEm = new Date(data.visto_em);
+  const limite = new Date(Date.now() - 20 * 60 * 1000);
+  return {
+    online: Number.isFinite(vistoEm.getTime()) && vistoEm >= limite,
+    workerId: data.worker_id,
+    versao: data.versao,
+    vistoEm: data.visto_em,
+  };
 }
 
 export async function getPauta(id: string): Promise<Pauta | null> {

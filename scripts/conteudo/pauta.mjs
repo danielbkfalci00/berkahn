@@ -519,6 +519,24 @@ async function validarPauta(id, json) {
   console.log(json ? JSON.stringify(resultado, null, 2) : `válida; ${payload.gaps.length} gap(s)`);
 }
 
+async function registrarHeartbeat(workerId, versao, dryRun) {
+  if (!workerId) abortar("--worker ? obrigat?rio");
+  if (dryRun) {
+    console.log("?? --dry-run: registraria heartbeat do worker.");
+    return;
+  }
+  const { data, error } = await db.rpc("registrar_conteudo_worker_heartbeat", {
+    p_worker_id: workerId,
+    p_versao: versao || "codex-automation-v1",
+    p_detalhes: {
+      cwd: process.cwd(),
+      node: process.version,
+    },
+  });
+  if (error) abortar(error.message);
+  console.log(JSON.stringify(data, null, 2));
+}
+
 async function claimJob(workerId, leaseSeconds, dryRun) {
   if (!workerId) abortar("--worker é obrigatório");
   if (dryRun) {
@@ -585,6 +603,9 @@ switch (comando) {
   case "job-claim":
     await claimJob(flags.worker, flags.lease, dryRun);
     break;
+  case "worker-heartbeat":
+    await registrarHeartbeat(flags.worker, flags.versao, dryRun);
+    break;
   case "job-complete":
     await finalizarJob(posicional[0], flags.worker, flags.status || "concluido", flags);
     break;
@@ -641,6 +662,7 @@ uso:
   pauta.mjs job-complete <job-id> --worker=<id> --run-id=<uuid> [--status=concluido|aguardando-aprovacao]
   pauta.mjs job-fail <job-id> --worker=<id> --run-id=<uuid> --erro="<mensagem>"
   pauta.mjs criar --titulo="<título>" [--plataformas=blog,linkedin] --confirmar-aprovacao [--dry-run]
+  pauta.mjs worker-heartbeat --worker=<id> [--versao=<versao>] [--dry-run]
   pauta.mjs gravar <id> --bloco=<bloco> --arquivo=<path> [--forcar --confirmar-substituicao] [--expected-updated-at=<iso>] [--dry-run]
   pauta.mjs registrar-draft <id> --arquivo=<markdown> [--expected-updated-at=<iso>] [--dry-run]
   pauta.mjs produzir <id> --arquivo=<draft.md> --dados=<post.json> [--usar-existente] [--expected-updated-at=<iso>] [--dry-run]

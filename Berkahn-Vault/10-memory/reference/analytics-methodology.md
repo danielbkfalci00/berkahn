@@ -18,6 +18,23 @@ subtipo: reference
 
 Este documento explica como os números são calculados. Atualize sempre que ajustar pesos ou thresholds.
 
+## Aprendizado editorial em 28 dias
+
+O pipeline versionado em `scripts/analytics/` cruza GA4, GSC, conteúdo e leads
+atribuídos. A unidade é pauta+artigo e a métrica norte é **leads qualificados
+por 100 sessões engajadas**. Abaixo de 30 sessões engajadas, a amostra é
+insuficiente e nenhuma recomendação é criada.
+
+`article_progress` mede 25%, 50%, 75% e 90% uma vez por sessão, somente após
+consentimento. O snapshot armazena agregados, tamanho, headings e evidências;
+não armazena nome, email, telefone nem fingerprint. Recomendações entram em
+`analytics_tasks` com aprovação pendente e deduplicação por `origin_signal`.
+Nenhum prompt, pauta ou artigo é alterado automaticamente.
+
+O run mensal executa esse ciclo com janela móvel de 28 dias e lag de 3 dias. A
+falha do aprendizado não invalida o relatório mensal: fica explícita no log e
+pode ser repetida com `npm run analytics:learning`.
+
 ## Health Score (0-100)
 
 Implementado em [`lib/analytics/health-score.ts`](../../scripts/../../lib/analytics/health-score.ts). Aplicado no Hero do Ato 0.

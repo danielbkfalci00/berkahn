@@ -53,10 +53,11 @@ function GoogleAnalytics({ consent }: { consent: ConsentLevel }) {
 // Renderers de PDF onde o cookie banner não deve aparecer (puppeteer rasteriza
 // e o banner ficaria gravado no PDF). Allowlist explícita — NÃO usar prefixo
 // solto `/orcamento` porque quebraria a página LSF pública.
-function ehRendererPdf(pathname: string | null): boolean {
+function ehRotaSemConsentimento(pathname: string | null): boolean {
   if (!pathname) return false;
   return (
     pathname.startsWith("/orcamento/estimativa/") ||
+    pathname.startsWith("/admin") ||
     pathname.startsWith("/institucional/")
   );
 }
@@ -77,10 +78,15 @@ export function CookieConsentProvider({ children }: { children: ReactNode }) {
   const [consent, setConsent] = useState<ConsentLevel>(null);
   const [isVisible, setIsVisible] = useState(false);
   const pathname = usePathname();
+  const consentimentoDesabilitado = ehRotaSemConsentimento(pathname);
 
   useEffect(() => {
     // Skip banner em renderers de PDF — puppeteer rasteriza e ficaria no PDF
-    if (ehRendererPdf(pathname)) return;
+    if (consentimentoDesabilitado) {
+      setIsVisible(false);
+      setConsent(null);
+      return;
+    }
 
     const stored = localStorage.getItem(CONSENT_STORAGE_KEY);
     if (stored) {
@@ -99,7 +105,7 @@ export function CookieConsentProvider({ children }: { children: ReactNode }) {
     }
     const timer = setTimeout(() => setIsVisible(true), 1500);
     return () => clearTimeout(timer);
-  }, [pathname]);
+  }, [pathname, consentimentoDesabilitado]);
 
   const saveConsent = useCallback((level: ConsentLevel) => {
     const data: StoredConsent = {
@@ -126,7 +132,7 @@ export function CookieConsentProvider({ children }: { children: ReactNode }) {
       value={{ consent, hasConsented, acceptAll, acceptNecessary, isVisible }}
     >
       {children}
-      <GoogleAnalytics consent={consent} />
+      <GoogleAnalytics consent={consentimentoDesabilitado ? null : consent} />
     </CookieConsentContext.Provider>
   );
 }

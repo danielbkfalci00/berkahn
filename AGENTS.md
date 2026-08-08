@@ -127,8 +127,9 @@ Todos referenciam prompts em `Berkahn-Vault/30-prompts/` e contexto em `Berkahn-
 Listáveis via skill `scheduled-tasks` (MCP) ou em `~/.Codex/scheduled-tasks/`:
 - `berkahn-standup-semanal` — cron `0 9 * * 1` (segunda 9h)
 - `berkahn-wrapup-semanal` — cron `0 17 * * 5` (sexta 17h)
+- `worker-de-conte-do-berkahn` — a cada 15 min; processa no máximo 1 job do quadro, sem aprovar/publicar
 
-Cada um roda em sessão fresca lendo `.Codex/commands/{standup,wrap-up}.md`. Notifica Bruno ao completar.
+Standup e wrap-up rodam em sessão fresca lendo `.Codex/commands/{standup,wrap-up}.md`. O worker segue [[workflow-conteudo]] e só notifica em falha.
 
 ---
 
