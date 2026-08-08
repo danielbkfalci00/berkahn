@@ -41,7 +41,7 @@ vault. Só então exercitar a próxima pauta ponta a ponta em sessão autenticad
 |---------|--------|--------------------|--------------|
 | [[blog]] | active | Fluxo editorial completo ainda não exercitado | Rodar pesquisa → draft → aprovação na próxima pauta |
 | [[linkedin]] | active | Publicação externa manual | Registrar URL/data reais no próximo post |
-| [[site]] | active | Apps Script 1.1 e dimensões GA4 exigem configuração externa | Monitorar leads e fila Codex em produção |
+| [[site]] | active | Apps Script 1.2, segredo compartilhado e Key Events GA4 exigem configuração externa | Monitorar leads e fila Codex em produção |
 | [[seo-aeo]] | active | 3 URLs fora do índice (ação manual no GSC) | Pedir indexação das 3 |
 | [[apresentacoes]] | active | Roteiros não versionados (parcial) | Validar 16 slides em live env |
 | [[materiais]] | active | **Institucional PDF v4** aguarda briefing atualizado + distribuição | Atualizar briefing v3→v4; distribuir; preencher `usado_em` |
@@ -77,7 +77,7 @@ vault. Só então exercitar a próxima pauta ponta a ponta em sessão autenticad
 - [x] **Higiene da service key histórica verificada**: varredura em 405 arquivos
   de `scripts/` encontrou zero JWT Supabase e zero chave `sb_secret_` hardcoded
 - [x] **4 erros de frontmatter em `40-content/curadoria/`** (vault health): corrigidos em 2026-07-02 (PR #11) — `status`/`tipo` inválidos normalizados. `vault-validate.mjs` → 0 issues. Chip `task_abaacde6` fechado.
-- [x] **Google Sheets SPOF de leads encerrado**: Supabase é primário; planilha é espelho retryável. Apps Script 1.1 aguarda redeploy manual
+- [x] **Google Sheets SPOF de leads encerrado**: Supabase é primário; planilha é espelho retryável. Apps Script 1.2 está pronto no código e aguarda segredo compartilhado + redeploy externo
 - [x] ~~**9 posts sem meta_title/meta_description**~~ ✅ 2026-07-30 — eram os 9 artigos com menos de 55 palavras. 5 em 301, 4 em noindex. Ver [[2026-07-thin-content-mapa]]
 - [x] ~~**4 posts sem answer_summary**~~ ✅ 2026-07-30 — preenchidos, 98 a 102 palavras cada
 
@@ -192,7 +192,7 @@ A linha de base de CTR de cada página ficou registrada em [[2026-08-calendario-
 - [x] ~~Desbloquear `Google-Extended`~~ ✅ 2026-07-30 — liberado, verificado no robots.txt de produção
 - [x] ~~Corrigir a descrição do robots.txt em [[seo-aeo-strategy]]~~ ✅ 2026-07-30
 - [x] ~~Publicar o OAuth consent screen~~ — feito em 2026-07-30. App em produção, refresh voltou a funcionar e token reemitido sob o novo regime. Detalhes em [[google-apis-setup]]
-- [x] ~~Registrar custom dimensions no GA4~~ ✅ 2026-07-30 — `cta_location`, `channel` e `segment` criadas com escopo Evento. Falta marcar `generate_lead`/`contact_click` como Evento principal, o que só é possível depois da Fase 3
+- [x] ~~Registrar custom dimensions no GA4~~ ✅ 2026-07-30 — `cta_location`, `channel` e `segment` criadas com escopo Evento. Falta marcar `generate_lead`/`whatsapp_click` como Evento principal, o que só é possível depois da Fase 3
 - [ ] Conferir visualmente `/admin/analytics` (badge, tooltip do Comparar, ponto vazado) — não verificável sem login
 - [x] ~~Resolver contradição de preço~~ ✅ 2026-07-30 — faixa canônica **R$ 3.015 a R$ 6.091/m²** (Sudeste). Só o `answer_summary` divergia
 - [ ] Classificar os 6 arquivos do vault que não estão em produção (despublicados? renomeados? nunca publicados?) — ver [[blog]]

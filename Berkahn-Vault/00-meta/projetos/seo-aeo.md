@@ -1,12 +1,12 @@
 ---
 tipo: projeto
 criado: 2026-05-22
-atualizado: 2026-07-30
+atualizado: 2026-08-07
 tags:
   - project/site
   - project/blog
   - status/active
-ai_summary: Hub do projeto SEO/AEO — acervo saneado em 2026-07-30 (9 artigos vazios: 5 em 301, 4 em noindex), meta tags e answer_summary zerados, Google-Extended liberado. Metas refeitas para medir concentração e conversão, não mais indexação. P0 restante — 3 URLs fora do índice, zero backlinks, concentração de 78% num artigo só. Estratégia em 20-context, diagnósticos em 40-content/auditorias-seo.
+ai_summary: Hub SEO/AEO — julho fechado: 1.370 cliques, 42.011 impressões, CTR 3,26% e posição 4,5. Crawl técnico 47/47 verde em 2026-08-07; conversão e IA agora têm baseline, mas decisões exigem 7/28 dias. Diagnóstico atual em 2026-08-diagnostico-integrado-site.
 status: active
 projeto: seo-aeo
 kpi_posts_sem_answer_summary: 0
@@ -20,11 +20,11 @@ kpi_trafego_cliques_90d: 1281
 kpi_pct_branded: 1.2
 kpi_dominio_idade_meses: 6
 kpi_backlinks: 0
-kpi_trafego_cliques_30d: 850
-kpi_trafego_impressoes_30d: 34396
-kpi_ctr_medio: 2.47
+kpi_trafego_cliques_30d: 1370
+kpi_trafego_impressoes_30d: 42011
+kpi_ctr_medio: 3.26
 kpi_posicao_media: 4.5
-kpi_atualizado_em: 2026-07-30
+kpi_atualizado_em: 2026-08-07
 contextos_aplicados:
   - seo-aeo-strategy
   - article-pipeline
@@ -44,7 +44,7 @@ subagents_uteis: []
 
 ## Status atual
 
-Dados de 2026-07-29 (junho fechado + julho parcial 01-26).
+Dados fechados de julho de 2026, consolidados em [[2026-08-diagnostico-integrado-site]].
 
 **A indexação deixou de ser o bloqueio crítico**: 34 de 38 artigos indexados (89%), contra 6/44 em abril. As 4 restantes estão em "Crawled/Discovered - currently not indexed" e viraram P0 nominal, não estrutural.
 
@@ -83,7 +83,7 @@ Dados de 2026-07-29 (junho fechado + julho parcial 01-26).
 - [x] ~~**Título truncado na SERP**~~ — `quanto-custa-construir-...` saiu de 70 para 50 caracteres. O `title` (H1) não foi alterado: com a meta_title dentro do limite, o Google tende a usá-la, e mexer no H1 seria reposicionar a página, não corrigir meta
 - [ ] **Reposicionar `quanto-custa-construir-...` para metragem** (decisão pendente): hoje as duas páginas de custo disputam a mesma intenção. Reavaliar em 60 dias — se o CTR não subir de 1,15%, aí vale 301 para a página-mãe
 - [ ] **Lacunas com demanda medida e zero clique**: `telhado steel frame preço m2` (163 imp), queries por metragem (70/100/150 m²), e 682 impressões em queries com **"2023"** que o artigo de 2026 não atende
-- [ ] Normalizar 11 categorias → 5
+- [x] ~~Normalizar categorias → 5~~ — concluído em 2026-08-06, com 40 posts migrados e taxonomia canônica ponta a ponta
 - [x] ~~Adicionar `lastModified` a páginas estáticas no sitemap~~ — revisto em 2026-07-30. O problema não era ausência: home e `/atualidades` usavam `new Date()`, ou seja, declaravam "modificado agora" a cada crawl, o que ensina o Google a ignorar o campo. Agora a listagem usa a data do artigo mais recente e a home omite; artigos sem `published_at` omitem em vez de inventar
 - [ ] Registrar em diretórios de construção brasileiros (3-5)
 
@@ -140,14 +140,17 @@ O **Score geral (52/100)** é de abril e nunca foi recomputado. Não vale como m
 
 - (nenhum subagent específico — `/seo` cobre auditoria)
 
-## Diagnósticos arquivados
+## Diagnósticos
+
+- [[2026-08-diagnostico-integrado-site]] — diagnóstico vigente de performance, UX, SEO, AEO e conversão; substitui a fotografia de abril
 
 Migrados de `Docs/SEO & AEO/` para `40-content/auditorias-seo/` (Sprint 1.6):
 - [[2026-04-diagnostico-integrado]] — score 52/100, 9 posts sem meta, plano P0/P1/P2
-- [[2026-04-diagnostico-integrado]] — diagnóstico inicial (substitui [[2026-03-diagnostico-base]])
 - [[research-seo-aeo]] — pesquisa de fundamentos (passage-level, ski ramp, AEO)
 
 ## Histórico recente
+
+- 2026-08-07: crawl 47/47 verde, 28 cenários axe sem violações sérias/críticas e baseline de julho consolidado; AEO tratado como extensão de SEO, sem llms.txt ou markup artificial
 
 - 2026-07-29: saneamento — KPIs de abril substituídos por valores verificados. Indexação 14%→89%, branded 100%→1,2%, cliques 90d 41→1.281. Bloqueio P0 de indexação encerrado. Corrigido bug que contava "not indexed" como indexado (inflava a contagem em 1 todo mês desde fevereiro).
 - 2026-05-22: hub criado, diagnósticos migrados de `Docs/SEO & AEO/`

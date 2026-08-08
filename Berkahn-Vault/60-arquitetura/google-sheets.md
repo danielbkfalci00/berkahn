@@ -1,12 +1,12 @@
 ---
 tipo: context
 criado: 2025-12-16
-atualizado: 2026-05-21
+atualizado: 2026-08-07
 tags:
   - ai/context
   - project/site
   - domain/integrations
-ai_summary: Integração formulário de contato Berkahn → Google Sheets via Apps Script. Captura leads do site (POST /exec) e gravar em planilha + notifica email. Sheet ID em .env (gitignored).
+ai_summary: Integração de leads com Supabase como fonte primária e Google Sheets como espelho idempotente. Apps Script 1.2 exige segredo em Script Properties; backend envia o segredo server-side e mantém PII fora do GA4. Redeploy externo 1.2 ainda é necessário.
 status: active
 secrets_redacted: 2026-05-21
 escopo: berkahn
@@ -17,7 +17,7 @@ escopo: berkahn
 > [!info] Migração para vault
 > Migrado de `Docs/integracoes/INTEGRACAO_GOOGLE_SHEETS.md`. Sanitizado: Sheet ID e email removidos. Apps Script code mantido em `scripts/` (gitignored). Ver [[stack-nextjs-supabase]] para visão geral.
 
-**Status**: ✅ Implementado
+**Status**: código 1.2 pronto; redeploy externo pendente
 **Data**: 2025-12-16
 **Autor**: Claude Code + Bruno Falci
 
@@ -25,146 +25,48 @@ escopo: berkahn
 
 ## 📋 Visão Geral
 
-Sistema de captura de leads do formulário de contato do site Berkahn integrado com Google Sheets via Google Apps Script. Inclui notificações automáticas por email.
+O navegador envia o formulário para POST /api/leads. A rota valida o payload, aplica honeypot e limite por fingerprint, grava primeiro na tabela leads do Supabase e tenta espelhar no Apps Script. Falha no espelho não perde o contato: o admin pode reenviar depois.
 
-### Fluxo de Dados
+Fluxo atual:
 
-```
-┌─────────────────┐
-│  Site Berkahn   │
-│  (Next.js)      │
-└────────┬────────┘
-         │
-         │ POST /exec
-         │ {name, email, phone, message}
-         │
-         ▼
-┌─────────────────┐
-│  Apps Script    │
-│  (Web App)      │
-└────────┬────────┘
-         │
-         ├──────────────────┐
-         │                  │
-         ▼                  ▼
-┌─────────────┐    ┌──────────────┐
-│ Google      │    │ Gmail        │
-│ Sheets      │    │ (Notify)     │
-└─────────────┘    └──────────────┘
-```
-
----
+Site → POST /api/leads → Supabase (fonte primária)
+                         → Apps Script 1.2 autenticado → Google Sheets + email
 
 ## 🔧 Configuração
 
-### 1. Planilha Google Sheets
+### Planilha Google Sheets
 
-**ID da Planilha**: `{{GOOGLE_SHEETS_ID}}` (valor real em `.env` → `GOOGLE_SHEETS_ID`)
-**Nome**: Captura_Leads_Berkahn
-**Aba**: Formulário
-**URL**: `https://docs.google.com/spreadsheets/d/{{GOOGLE_SHEETS_ID}}`
+A planilha mantém os dados de contato e pode receber, de forma compatível, lead_id, page_path, cta_location, channel, segment, status_qualificacao, motivo_desqualificacao e atualizado_em. Os campos manuais não são enviados ao GA4.
 
-#### Estrutura das Colunas
+### Apps Script
 
-| Coluna | Campo       | Tipo      | Obrigatório | Formato                  |
-|--------|-------------|-----------|-------------|--------------------------|
-| A      | Data/Hora   | Timestamp | Sim         | `dd/MM/yyyy HH:mm:ss`    |
-| B      | Nome        | String    | Sim         | Texto livre              |
-| C      | Email       | String    | Sim         | Validado com regex       |
-| D      | Telefone    | String    | Não         | `(00) 00000-0000`        |
-| E      | Mensagem    | String    | Sim         | Texto livre (multiline)  |
+- Código versionado: Berkahn-Vault/60-arquitetura/integracoes/apps-script-code.js.
+- Tipo: Web App, executado pela conta proprietária.
+- Acesso da implantação: Qualquer pessoa; a autorização real ocorre no payload servidor-servidor.
+- Script Property obrigatória: LEAD_SYNC_SECRET.
+- O segredo nunca deve ser registrado em log, email ou planilha.
 
-### 2. Apps Script (Servidor)
+### Next.js e Vercel
 
-**Localização**: Extensões → Apps Script (na planilha)
-**Nome do Projeto**: Berkahn_Leads_API
-**Código**: Ver `apps-script-code.js` neste diretório
+- Formulário compartilhado: components/forms/ContactForm.tsx.
+- Endpoint público: app/api/leads/route.ts.
+- Retry autenticado: app/admin/analytics/actions.ts.
+- Variáveis server-side: GOOGLE_SHEETS_LEAD_ENDPOINT e GOOGLE_SHEETS_LEAD_SECRET.
+- Nunca usar prefixo NEXT_PUBLIC_ para endpoint ou segredo.
 
-#### Configurações do Deployment
+## 🔌 Endpoints
 
-```javascript
-CONFIG = {
-  SHEET_NAME: 'Formulário',
-  NOTIFICATION_EMAIL: '{{NOTIFICATION_EMAIL}}',
-  SEND_NOTIFICATION: true
-}
-```
+### POST /api/leads
 
-**Deploy Settings**:
-- Tipo: Web App
-- Executar como: Eu (sua conta Google)
-- Quem tem acesso: Qualquer pessoa
-- URL gerada: `https://script.google.com/macros/s/{DEPLOYMENT_ID}/exec`
-
-### 3. Frontend (Next.js)
-
-**Arquivo**: `components/forms/ContactFormDialog.tsx`
-**Função modificada**: `handleSubmit()` (linhas 61-73)
-
----
-
-## 🔌 API Endpoints
+Endpoint consumido pelo navegador. Valida os dados, grava no Supabase e responde com o lead recebido. O espelho da planilha é best-effort e pode ser refeito pelo admin.
 
 ### POST /exec
 
-Recebe dados do formulário e salva na planilha.
-
-**Request Headers**:
-```
-Content-Type: text/plain
-```
-
-**Request Body**:
-```json
-{
-  "name": "João Silva",
-  "email": "joao@example.com",
-  "phone": "(11) 99999-9999",
-  "message": "Gostaria de um orçamento para construção..."
-}
-```
-
-**Response Success (200)**:
-```json
-{
-  "success": true,
-  "message": "Dados salvos com sucesso",
-  "timestamp": "2025-12-16T14:30:00.000Z",
-  "data": {
-    "row": 15,
-    "timestamp": "16/12/2025 14:30:00"
-  }
-}
-```
-
-**Response Error (400)**:
-```json
-{
-  "success": false,
-  "message": "Campos obrigatórios faltando",
-  "timestamp": "2025-12-16T14:30:00.000Z"
-}
-```
+Endpoint privado por segredo compartilhado, chamado somente pelo backend. O payload inclui lead_id, sync_secret, dados de contato e dimensões opcionais de atribuição. Requisição sem segredo ou com segredo incorreto deve retornar success false e não gravar linha.
 
 ### GET /exec
 
-Health check endpoint para testar se a API está funcionando.
-
-**Response (200)**:
-```json
-{
-  "success": true,
-  "message": "API Berkahn funcionando!",
-  "timestamp": "2025-12-16T14:30:00.000Z",
-  "data": {
-    "timestamp": "2025-12-16T14:30:00.000Z",
-    "version": "1.0.0"
-  }
-}
-```
-
----
-
+Health check do Apps Script. Não revela configuração nem segredos.
 ## ✉️ Notificações por Email
 
 ### Template HTML
@@ -188,222 +90,101 @@ Email enviado automaticamente para `danielbkfalci@gmail.com` a cada novo lead.
 
 ## 🧪 Testes
 
-### 1. Teste Manual do Apps Script
+### Local
 
-Execute no Editor de Scripts:
+1. Executar npm run build e iniciar o preview de produção.
+2. Enviar um formulário válido e confirmar resposta de /api/leads.
+3. Confirmar o registro na tabela leads do Supabase.
+4. Com endpoint e segredo configurados, confirmar sheet_synced_at e a linha na planilha.
+5. Testar nome, email e mensagem inválidos, honeypot e envio rápido demais.
+6. Validar generate_lead apenas após sucesso; não enviar PII ao GA4.
 
-```javascript
-testSaveData()
-```
+### Rollout do Apps Script 1.2
 
-**Resultado esperado**:
-- ✅ Nova linha adicionada na aba "Formulário"
-- ✅ Email recebido em danielbkfalci@gmail.com
-- ✅ Console.log mostra: `{ row: N, timestamp: "..." }`
-
-### 2. Teste via Frontend (Local)
-
-```bash
-npm run dev
-```
-
-1. Abrir http://localhost:3000
-2. Clicar em "FALE CONOSCO"
-3. Preencher formulário:
-   - Nome: Teste Local
-   - Email: teste@example.com
-   - Telefone: (11) 99999-9999
-   - Mensagem: Teste de integração
-4. Clicar em "Enviar Mensagem"
-
-**Resultado esperado**:
-- ✅ Spinner de loading aparece
-- ✅ Dialog mostra "Mensagem Enviada!"
-- ✅ Dados aparecem na planilha
-- ✅ Email de notificação recebido
-
-### 3. Teste de Erros
-
-**Teste A: Campos vazios**
-- Ação: Enviar formulário com campos vazios
-- Esperado: Mensagens de validação no frontend
-
-**Teste B: Email inválido**
-- Ação: Digitar email sem @ ou domínio
-- Esperado: "Email inválido"
-
-**Teste C: URL incorreta**
-- Ação: Modificar URL do Apps Script para URL inexistente
-- Esperado: "Erro de conexão. Tente novamente."
-
----
+1. Gerar um segredo aleatório.
+2. Configurar GOOGLE_SHEETS_LEAD_SECRET na Vercel.
+3. Configurar o mesmo valor em Apps Script → Project Settings → Script Properties → LEAD_SYNC_SECRET.
+4. Colar a versão atual de apps-script-code.js e criar nova implantação.
+5. Testar POST sem segredo, que deve falhar.
+6. Testar POST autenticado pelo backend e retry pelo admin.
+7. Confirmar idempotência pelo lead_id e recebimento do email escapado.
 
 ## 🛠️ Troubleshooting
 
-### Problema: "Campos obrigatórios faltando"
+### Lead existe no Supabase, mas não na planilha
 
-**Causa**: Frontend não está enviando todos os campos obrigatórios (name, email, message)
+- Conferir GOOGLE_SHEETS_LEAD_ENDPOINT e GOOGLE_SHEETS_LEAD_SECRET no ambiente server-side.
+- Conferir LEAD_SYNC_SECRET nas Script Properties.
+- Confirmar que a nova implantação aponta para a versão 1.2.
+- Usar o retry autenticado no admin e consultar Apps Script → Executions.
 
-**Solução**:
-1. Verificar se `ContactFormDialog.tsx` está enviando os 3 campos
-2. Verificar se `validateForm()` está permitindo envio
-3. Inspecionar payload no Network tab (DevTools)
+### Erro de autenticação do espelho
 
----
+Endpoint e Script Property precisam conter exatamente o mesmo segredo. Não corrigir tornando o segredo público nem removendo a validação.
 
-### Problema: "Aba 'Formulário' não encontrada"
+### Email não enviado
 
-**Causa**: Nome da aba no Sheets não corresponde ao CONFIG.SHEET_NAME
+Conferir NOTIFICATION_EMAIL, SEND_NOTIFICATION, quota e permissões do MailApp. A falha de email não deve apagar a linha nem alterar o lead primário.
 
-**Solução**:
-1. Abrir planilha e verificar nome exato da aba
-2. Modificar `CONFIG.SHEET_NAME` no Apps Script se necessário
-3. Fazer redeploy da Web App
+### Limite de requisições
 
----
-
-### Problema: Email não está sendo enviado
-
-**Causa 1**: Flag `SEND_NOTIFICATION` está false
-**Solução**: Alterar `CONFIG.SEND_NOTIFICATION = true`
-
-**Causa 2**: Email do destinatário está incorreto
-**Solução**: Verificar `CONFIG.NOTIFICATION_EMAIL`
-
-**Causa 3**: Permissões do Apps Script
-**Solução**: Reautorizar permissões (Gmail.send)
-
----
-
-### Problema: CORS Error no frontend
-
-**Causa**: Apps Script não aceita JSON direto em requisições POST
-
-**Solução**: Usar `Content-Type: text/plain` (já implementado)
-
-```typescript
-headers: {
-  'Content-Type': 'text/plain', // ✅ Correto
-  // 'Content-Type': 'application/json', // ❌ Causa CORS
-}
-```
-
----
-
-### Problema: Dialog mostra "Erro de conexão"
-
-**Possíveis causas**:
-1. URL do Apps Script incorreta
-2. Deploy não está público ("Qualquer pessoa")
-3. Rede bloqueando script.google.com
-
-**Solução**:
-1. Verificar URL em `ContactFormDialog.tsx`
-2. Refazer deploy com acesso "Qualquer pessoa"
-3. Testar URL diretamente no navegador (GET /exec)
-4. Verificar Console do navegador para erro específico
-
----
-
+O limitador atual é best-effort e não atômico. Se houver rajadas ou abuso, migrar a decisão para RPC transacional; não ampliar complexidade sem evidência de volume.
 ## 🔒 Segurança
 
-### Validações Implementadas
+### Controles implementados
 
-**Frontend** (`ContactFormDialog.tsx`):
-- Nome: não vazio
-- Email: regex `/^[^\s@]+@[^\s@]+\.[^\s@]+$/`
-- Mensagem: não vazia
-- Telefone: opcional (sem validação)
+- O navegador envia leads somente para `POST /api/leads`; a URL do Apps Script não é pública no bundle.
+- Supabase é a fonte primária, com validação server-side, honeypot, tempo mínimo e limite por fingerprint.
+- O Apps Script 1.2 é apenas espelho e exige `sync_secret` igual à Script Property `LEAD_SYNC_SECRET`.
+- O backend usa `GOOGLE_SHEETS_LEAD_SECRET`; nunca usar prefixo `NEXT_PUBLIC_` nem registrar o valor.
+- O espelho é idempotente por `lead_id` e o e-mail escapa HTML recebido.
+- PII permanece no Supabase/planilha; GA4 recebe somente dimensões de atribuição.
 
-**Backend** (Apps Script):
-- Verifica presença de `name`, `email`, `message`
-- Retorna erro 400 se campos obrigatórios faltarem
+### Risco residual
 
-### Considerações
+O limitador do endpoint Next.js usa contagem seguida de insert, portanto não é atômico contra rajadas paralelas. Corrigir exigiria RPC/migration própria; acompanhar volume antes de ampliar o escopo. CAPTCHA continua dispensável enquanto honeypot, segredo e volume forem suficientes.
 
-⚠️ **Limitações de Segurança**:
-- Apps Script com acesso "Qualquer pessoa" pode receber spam
-- Não há rate limiting nativo
-- Não há verificação de CAPTCHA
+### Rollout 1.2
 
-🛡️ **Melhorias Futuras**:
-- Implementar Google reCAPTCHA v3
-- Adicionar rate limiting (Apps Script Properties)
-- Adicionar honeypot field (campo invisível anti-bot)
+1. Gerar segredo aleatório e configurar `GOOGLE_SHEETS_LEAD_SECRET` na Vercel.
+2. Configurar o mesmo valor em Apps Script → Project Settings → Script Properties → `LEAD_SYNC_SECRET`.
+3. Colar `integracoes/apps-script-code.js`, criar nova implantação e manter acesso “Qualquer pessoa” somente porque a autenticação ocorre no payload servidor-servidor.
+4. Testar POST sem segredo (deve falhar) e retry autenticado pelo admin (deve sincronizar).
+5. Rotacionar o segredo se a URL ou o payload forem expostos.
 
 ---
-
 ## 📊 Monitoramento
 
-### KPIs Importantes
+- Contatos recebidos: generate_lead.
+- Intenção via WhatsApp: whatsapp_click.
+- Qualificação: status_qualificacao na operação; nunca inferir qualificação a partir do clique.
+- Saúde do espelho: sheet_synced_at, erros de retry e Apps Script → Executions.
+- Não registrar PII em GA4 ou logs.
 
-1. **Taxa de conversão de formulário**
-   - Métrica: Envios bem-sucedidos / Visualizações do dialog
-   - Ferramenta: Google Analytics (a implementar)
+## 🚀 Deploy Checklist 1.2
 
-2. **Tempo de resposta do Apps Script**
-   - Métrica: Duração do POST /exec
-   - Ferramenta: Apps Script Logs (View → Executions)
+### Código
 
-3. **Taxa de erro**
-   - Métrica: Erros / Total de tentativas
-   - Ferramenta: Browser Console + Apps Script Logs
+- [x] Supabase como fonte primária.
+- [x] Espelho idempotente por lead_id.
+- [x] Apps Script exige segredo e escapa HTML.
+- [x] Backend e retry enviam o segredo server-side.
+- [x] Build, typecheck e revisão de segurança concluídos.
 
-### Logs do Apps Script
+### Configuração externa
 
-Acessar: Apps Script Editor → View → Executions
-
-**Eventos registrados**:
-- Cada execução de `doPost()` ou `doGet()`
-- Erros com stack trace
-- Duração da execução
-- Dados enviados (disponíveis em `console.log`)
-
----
-
-## 🚀 Deploy Checklist
-
-### Pré-Deploy
-
-- [x] Apps Script criado e testado
-- [x] Web App deployed com acesso público
-- [x] Teste manual com `testSaveData()` passou
-- [x] Email de notificação recebido
-- [ ] URL da Web App copiada
-- [ ] URL adicionada em `ContactFormDialog.tsx`
-
-### Deploy do Frontend
-
-```bash
-# 1. Adicionar URL no código
-# Editar: components/forms/ContactFormDialog.tsx
-# Linha ~67: Substituir 'URL_DA_WEB_APP_AQUI'
-
-# 2. Testar localmente
-npm run dev
-
-# 3. Build de produção
-npm run build
-
-# 4. Commit
-git add components/forms/ContactFormDialog.tsx
-git commit -m "feat: Integra formulário com Google Sheets via Apps Script"
-
-# 5. Deploy (Vercel)
-git push origin main
-```
-
-### Pós-Deploy
-
-- [ ] Testar formulário em produção (berkahn.vercel.app)
-- [ ] Verificar se dados aparecem na planilha
-- [ ] Verificar se email é recebido
-- [ ] Testar em mobile (responsividade)
-- [ ] Verificar Console para erros JavaScript
-
----
-
+- [ ] @bruno Configurar GOOGLE_SHEETS_LEAD_ENDPOINT e GOOGLE_SHEETS_LEAD_SECRET na Vercel #pendencia
+- [ ] @bruno Configurar LEAD_SYNC_SECRET nas Script Properties e publicar o Apps Script 1.2 #pendencia
+- [ ] @bruno Validar formulário real, linha na planilha, email e retry do admin em produção #pendencia
 ## 📝 Changelog
+
+### v1.2.0 — 2026-08-07
+
+- Supabase consolidado como fonte primária; planilha permanece espelho retryável.
+- Segredo obrigatório entre Next.js e Apps Script.
+- HTML de email escapado e assunto protegido contra quebra de linha.
+- Dimensões opcionais de atribuição documentadas sem PII no GA4.
+- Runbook substituído pelo fluxo atual; instruções antigas de fetch direto do navegador foram removidas.
 
 ### v1.0.0 - 2025-12-16
 

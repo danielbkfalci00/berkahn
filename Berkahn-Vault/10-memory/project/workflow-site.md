@@ -1,15 +1,15 @@
 ---
 tipo: memory
 criado: 2026-05-22
-atualizado: 2026-05-22
+atualizado: 2026-08-07
 tags:
   - ai/memory
   - status/active
   - project/site
-ai_summary: Workflow do projeto Site — manutenção contínua Next.js 15 + Supabase + Vercel. Ajustes, novas páginas, refactors, bugs. Sem cadência fixa — disparado por demanda (issue, bug, request). Subagents @pragmatic-code-review (PRs) e @design-review (UI/UX) críticos.
+ai_summary: Workflow do Site — mudanças exigem configuração de medição registrada, 3 rodadas por arquétipo, lint/typecheck/build, crawl, ISR/404, axe e reviews proporcionais. Pós-deploy usa smoke imediato, 7 dias de tendência e 28 dias para campo conclusivo.
 status: active
 subtipo: project
-why: "Site em produção precisa de evolução contínua sem comprometer Core Web Vitals (LCP<2.5s, FID<100ms, CLS<0.1) e SEO técnico. Workflow definido evita regressões e mantém qualidade arquitetural."
+why: "Site em produção precisa de evolução contínua sem comprometer Core Web Vitals (LCP≤2.5s, INP≤200ms, CLS≤0.1) e SEO técnico. Workflow definido evita regressões e mantém qualidade arquitetural."
 how_to_apply: "Para cada change: ler hub [[site]] + contexto relevante (stack/admin/design/seo) + rodar build local + invocar subagent de review apropriado + validar live env."
 ---
 
@@ -41,10 +41,10 @@ Sem cadência fixa — disparado por:
 
 ### 3. Validação local
 - `npm run dev` — testar em http://localhost:3000+
-- Validar Core Web Vitals (Lighthouse local)
-- Confirmar build limpo: `npm run build`
+- Fixar commit, viewport, throttling, cache e consentimento; usar 3 rodadas e mediana
+- Rodar `npm run lint`, `npm run typecheck` e `npm run build`
+- Em mudança estrutural, crawlear sitemap, confirmar ISR/404 e executar axe nos arquétipos e superfícies públicas `noindex`
 - gitleaks scan automático pre-commit (já ativo)
-
 ### 4. Review
 - Para PRs com mudança em arquitetura/lógica: invocar `@pragmatic-code-review` (Opus, framework Net Positive)
 - Para mudanças visuais/UX: invocar `@design-review` (Sonnet + Playwright em live env)
@@ -56,10 +56,10 @@ Sem cadência fixa — disparado por:
 - Merge para main → produção
 
 ### 6. Pós-deploy
-- Monitorar Vercel Analytics + Speed Insights
-- Confirmar Core Web Vitals em produção (24-48h depois)
-- Se SEO/AEO afetado, ver impacto no GSC (1-7 dias)
-
+- Fazer smoke imediato
+- Monitorar Vercel Analytics + Speed Insights por 7 dias
+- Avaliar CWV de campo p75 em 28 dias; 24–48 h não são campo conclusivo
+- Se SEO/AEO for afetado, acompanhar GSC sem atribuir causalidade antes de volume suficiente
 ## Prompts e bases
 
 - Prompt direto: nenhum específico ainda (usar `/seo` para auditoria após mudança)
