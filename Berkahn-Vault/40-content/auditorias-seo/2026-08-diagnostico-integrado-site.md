@@ -155,8 +155,16 @@ Concluídos:
 - Masters de mídia intactos e nenhum artefato bruto versionado.
 - Smoke HTTP local: home, listagem, artigo líder e contato 200; slug falso 404.
 
-Pendências externas:
+### Rollout remoto verificado
 
+- PR #52 criado e sincronizado com a main; Quality, Vercel berkahn e Vercel berkahn-admin passaram.
+- Preview do admin respondeu 200 em /admin/login.
+- Preview público do site está protegido por Vercel SSO; o smoke de rotas públicas foi concluído no build de produção local.
+- A CLI está autenticada no escopo brunofalci00s-projects, que não lista os projetos Berkahn da equipe daniel-falcis-projects. Sem esse acesso não é possível configurar o segredo antes do merge.
+- A Google Analytics Admin API está desabilitada no projeto 428077950039; a service account existente recebeu permission denied ao tentar habilitá-la.
+- Produção permanece em origin/main: o PR não foi mergeado para evitar uma pausa do espelho Google Sheets antes do rollout Apps Script-first.
+
+Pendências externas:
 - [ ] @bruno Definir generate_lead e whatsapp_click como Key Events no GA4 e validar em DebugView/Realtime após consentimento #pendencia
 - [ ] @bruno Criar o mesmo segredo em GOOGLE_SHEETS_LEAD_SECRET na Vercel e LEAD_SYNC_SECRET nas Script Properties, depois publicar o Apps Script 1.2 #pendencia
 - [ ] @bruno Confirmar as colunas opcionais de atribuição e qualificação na planilha real após o redeploy #pendencia
