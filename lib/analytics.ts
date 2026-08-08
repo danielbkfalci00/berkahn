@@ -18,9 +18,8 @@
  * ficou `[]` em todos os meses.
  *
  * Ao adicionar um nome aqui, adicionar também em EVENTOS_RASTREADOS no
- * `scripts/analytics/fetch-ga4.mjs`. Atenção: `/scripts/` é gitignored, então
- * aquele arquivo **não** viaja neste repositório — a alteração precisa ser
- * feita na máquina que roda o cron `berkahn-performance-mensal`.
+ * `scripts/analytics/fetch-ga4.mjs`. O pipeline operacional de analytics é
+ * versionado seletivamente; mantenha a allowlist dos dois arquivos alinhada.
  */
 export type EventName =
   // Conversão

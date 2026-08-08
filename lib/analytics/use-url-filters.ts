@@ -3,6 +3,8 @@
 import { useCallback, useMemo } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
+const EMPTY_DEFAULTS = Object.freeze({});
+
 interface UseUrlFiltersOptions<TKey extends string> {
   /** Valores default por key. Quando o valor === default, a key é removida da URL (clean). */
   defaults?: Partial<Record<TKey, string>>;
@@ -13,6 +15,8 @@ interface UseUrlFiltersReturn<TKey extends string> {
   values: Record<TKey, string>;
   /** Define um valor; remove a key se valor vazio ou igual ao default. */
   setValue: (key: TKey, value: string) => void;
+  /** Remove um subconjunto das keys em uma unica navegacao. */
+  clearValues: (keys: readonly TKey[]) => void;
   /** Remove todas as keys gerenciadas da URL. */
   clearAll: () => void;
   /** True se qualquer key gerenciada está presente na URL. */
@@ -34,7 +38,8 @@ export function useUrlFilters<TKey extends string>(
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const defaults: Partial<Record<TKey, string>> = options?.defaults ?? {};
+  const defaults = options?.defaults
+    ?? (EMPTY_DEFAULTS as Partial<Record<TKey, string>>);
 
   const values = useMemo(() => {
     const out = {} as Record<TKey, string>;
@@ -59,6 +64,15 @@ export function useUrlFilters<TKey extends string>(
     [searchParams, router, pathname, defaults]
   );
 
+  const clearValues = useCallback((targetKeys: readonly TKey[]) => {
+    const params = new URLSearchParams(searchParams.toString());
+    for (const key of targetKeys) {
+      params.delete(key);
+    }
+    const qs = params.toString();
+    router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
+  }, [searchParams, router, pathname]);
+
   const clearAll = useCallback(() => {
     const params = new URLSearchParams(searchParams.toString());
     for (const key of keys) {
@@ -77,5 +91,5 @@ export function useUrlFilters<TKey extends string>(
     });
   }, [keys, searchParams, defaults]);
 
-  return { values, setValue, clearAll, hasActive };
+  return { values, setValue, clearAll, clearValues, hasActive };
 }

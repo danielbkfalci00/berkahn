@@ -1,4 +1,4 @@
-// Verificação transacional da migration 012 em produção.
+// Verificação transacional das migrations 012–023 em produção.
 // Toda escrita fica dentro de BEGIN/ROLLBACK; nenhuma pauta é persistida.
 import { existsSync, readFileSync } from "node:fs";
 import pg from "pg";
@@ -235,11 +235,96 @@ try {
   `);
   checar("nenhuma tabela nova exposta a anon", anonPolicies.length === 0);
 
+  console.log("\nHARDENING 021–023");
+  const { rows: [quadro] } = await client.query(`
+    SELECT
+      count(*)::int AS total,
+      bool_and(tem_pesquisa IS NOT NULL)::boolean AS resumos_validos
+    FROM conteudo_pautas_quadro
+  `);
+  checar("view leve preserva as 66 pautas", quadro.total === 66 && quadro.resumos_validos);
+  const { rows: colunasPesadas } = await client.query(`
+    SELECT column_name FROM information_schema.columns
+    WHERE table_schema='public' AND table_name='conteudo_pautas_quadro'
+      AND column_name IN ('pesquisa_conteudo','linkedin_texto','insights')
+  `);
+  checar("view do quadro não expõe blocos pesados", colunasPesadas.length === 0);
+
+  await client.query("SELECT set_config('request.jwt.claim.sub', gen_random_uuid()::text, true)");
+  await client.query("SELECT set_config('request.jwt.claim.role', 'authenticated', true)");
+  const { rows: [antesMetadados] } = await client.query(
+    "SELECT titulo FROM conteudo_pautas WHERE id=$1", [alvo.id]
+  );
+  await client.query("SAVEPOINT metadados_tags");
+  let metadadosFalharam = false;
+  try {
+    await client.query(
+      "SELECT atualizar_pauta_metadados($1,$2::jsonb,$3::text[])",
+      [alvo.id, JSON.stringify({ titulo: "Título que deve reverter" }), ["domain/inexistente"]]
+    );
+  } catch {
+    metadadosFalharam = true;
+    await client.query("ROLLBACK TO SAVEPOINT metadados_tags");
+  }
+  const { rows: [depoisMetadados] } = await client.query(
+    "SELECT titulo FROM conteudo_pautas WHERE id=$1", [alvo.id]
+  );
+  checar("metadados e tags revertem juntos", metadadosFalharam && depoisMetadados.titulo === antesMetadados.titulo);
+
+  const { rows: [tarefa] } = await client.query(
+    "INSERT INTO analytics_tasks(title,priority,sort_order) VALUES('Teste reorder 021','p1',21) RETURNING id,priority,sort_order"
+  );
+  await client.query("SAVEPOINT reorder_analytics");
+  let reorderFalhou = false;
+  try {
+    await client.query(
+      "SELECT reordenar_analytics_tasks($1::jsonb)",
+      [JSON.stringify([
+        { id: tarefa.id, priority: "p0", sort_order: 1 },
+        { id: "00000000-0000-0000-0000-000000000000", priority: "p2", sort_order: 2 },
+      ])]
+    );
+  } catch {
+    reorderFalhou = true;
+    await client.query("ROLLBACK TO SAVEPOINT reorder_analytics");
+  }
+  const { rows: [tarefaDepois] } = await client.query(
+    "SELECT priority,sort_order FROM analytics_tasks WHERE id=$1", [tarefa.id]
+  );
+  checar("reorder de analytics é transacional", reorderFalhou && tarefaDepois.priority === "p1" && tarefaDepois.sort_order === 21);
+
+  await client.query("SELECT set_config('request.jwt.claim.role', 'service_role', true)");
+  const { rows: heartbeat } = await client.query(
+    "SELECT worker_id FROM registrar_conteudo_worker_heartbeat('verificador-023','teste',$1::jsonb)",
+    [JSON.stringify({ dry_run: true })]
+  );
+  checar("worker registra heartbeat", heartbeat[0]?.worker_id === "verificador-023");
+
+  await client.query("SAVEPOINT snapshot_constraint");
+  let snapshotRecusado = false;
+  try {
+    await client.query(
+      `INSERT INTO conteudo_performance_snapshots
+       (pauta_id,janela_inicio,janela_fim,sessoes,sessoes_engajadas)
+       VALUES($1,CURRENT_DATE - 27,CURRENT_DATE,1,2)`,
+      [alvo.id]
+    );
+  } catch {
+    snapshotRecusado = true;
+    await client.query("ROLLBACK TO SAVEPOINT snapshot_constraint");
+  }
+  checar("snapshot recusa engajadas acima de sessões", snapshotRecusado);
+
+  const { rows: [integracoes] } = await client.query(
+    "SELECT label FROM conteudo_tags WHERE slug='domain/integrations'"
+  );
+  checar("rótulo de integrações está em UTF-8", integracoes.label === "Integrações", integracoes.label);
+
   await client.query("ROLLBACK");
 } finally {
   await client.query("ROLLBACK").catch(() => {});
   await client.end();
 }
 
-console.log(falhas === 0 ? "\n✅ schema 012–020 verificado" : `\n❌ ${falhas} falha(s)`);
+console.log(falhas === 0 ? "\n✅ schema 012–023 verificado" : `\n❌ ${falhas} falha(s)`);
 process.exit(falhas === 0 ? 0 : 1);

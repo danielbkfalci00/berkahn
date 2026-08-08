@@ -45,10 +45,13 @@ interface Props {
 
 
 function acaoAutomacao(pauta: ItemQuadro): AcaoAutomacao {
-  if (pauta.statusBlog && !pauta.pesquisaConteudo) return "pesquisar";
+  const temPesquisa = pauta.artefatosResumo?.pesquisa ?? Boolean(pauta.pesquisaConteudo?.trim());
+  const temLinkedinTexto = pauta.artefatosResumo?.linkedinTexto
+    ?? Boolean(pauta.linkedinTexto?.trim());
+  if (pauta.statusBlog && !temPesquisa) return "pesquisar";
   if (pauta.statusBlog && !pauta.draftPath) return "criar-draft";
   if (pauta.statusBlog && (!pauta.artigo || !pauta.capaBlogUrl)) return "produzir-artigo";
-  if (pauta.statusLinkedin && (!pauta.linkedinTexto || !pauta.capaLinkedinUrl))
+  if (pauta.statusLinkedin && (!temLinkedinTexto || !pauta.capaLinkedinUrl))
     return "produzir-linkedin";
   return "revisar";
 }
@@ -90,6 +93,8 @@ export function CartaoPauta({
   const hoje = new Date().toISOString().slice(0, 10);
   const atrasada = Boolean(local.dataAlvo && local.dataAlvo < hoje && gaps.length);
 
+  const tagVisivel = tagsCatalogo.find((tag) => tag.slug === local.tags[0])?.label;
+
   function salvar(patch: Parameters<typeof atualizarPauta>[1]) {
     const versao = ++versaoEdicao.current;
     const otimista = { ...localRef.current, ...patch };
@@ -103,7 +108,6 @@ export function CartaoPauta({
         const resultado = await atualizarPauta(localRef.current.id, patch);
         if (resultado.error || !resultado.data) {
           setErro(resultado.error ?? "Não foi possível salvar.");
-          router.refresh();
           return;
         }
         if (versao === versaoEdicao.current) {
@@ -111,12 +115,11 @@ export function CartaoPauta({
           localRef.current = confirmado;
           setLocal(confirmado);
         }
-        router.refresh();
       } catch {
         setErro("Não foi possível salvar.");
-        router.refresh();
       } finally {
         salvamentosAtivos.current -= 1;
+        if (salvamentosAtivos.current === 0) router.refresh();
       }
     });
     filaSalvamento.current = tarefa.catch(() => undefined);
@@ -138,7 +141,6 @@ export function CartaoPauta({
         const resultado = await alterarStatusPauta(localRef.current.id, canal, status);
         if (resultado.error || !resultado.data) {
           setErro(resultado.error ?? "Não foi possível mover.");
-          router.refresh();
           return;
         }
         if (versao === versaoEdicao.current) {
@@ -146,12 +148,11 @@ export function CartaoPauta({
           localRef.current = confirmado;
           setLocal(confirmado);
         }
-        router.refresh();
       } catch {
         setErro("Não foi possível mover.");
-        router.refresh();
       } finally {
         salvamentosAtivos.current -= 1;
+        if (salvamentosAtivos.current === 0) router.refresh();
       }
     });
     filaSalvamento.current = tarefa.catch(() => undefined);
@@ -260,7 +261,7 @@ export function CartaoPauta({
         )}
         <button type="button" onClick={() => setEditandoTitulo(true)}
           aria-label="Renomear pauta"
-          className="rounded p-0.5 text-neutral-300 opacity-0 hover:bg-neutral-100 hover:text-neutral-700 focus-visible:opacity-100 group-hover/card:opacity-100">
+          className="rounded p-1 text-neutral-400 opacity-100 hover:bg-neutral-100 hover:text-neutral-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 md:opacity-0 md:group-hover/card:opacity-100 md:focus-visible:opacity-100">
           <Pencil className="h-3.5 w-3.5" aria-hidden />
         </button>
 
@@ -286,7 +287,7 @@ export function CartaoPauta({
             )}
             <DropdownMenuItem onSelect={enviarAoCodex}>
               <Sparkles className="mr-2 h-3.5 w-3.5" aria-hidden />
-              Enviar próxima ação ao Codex
+              Adicionar próxima ação à fila
             </DropdownMenuItem>
             <DropdownMenuItem onSelect={() => void copiarContexto()}>
               <Clipboard className="mr-2 h-3.5 w-3.5" aria-hidden />
@@ -309,6 +310,9 @@ export function CartaoPauta({
         </DropdownMenu>
       </div>
 
+      {erro && <p role="alert" className="mt-2 rounded bg-red-50 px-2 py-1 text-[11px] font-medium text-red-700">
+        {erro}
+      </p>}
       <div className="mt-2 space-y-2 pl-[22px]">
         <div className="rounded-md bg-[#F7F5EF] px-2 py-1.5 text-[11px]">
           <TrilhaMini nome="Blog" status={local.statusBlog} cor="bg-amber-500"
@@ -324,7 +328,7 @@ export function CartaoPauta({
 
         <div className="flex flex-wrap items-center gap-1.5">
           <label className={cn(
-            "inline-flex items-center gap-1 rounded border px-1.5 py-1 text-[11px]",
+            "inline-flex min-h-8 items-center gap-1 rounded border px-2 py-1 text-[11px]",
             atrasada ? "border-red-200 bg-red-50 text-red-700" : "border-neutral-200 text-neutral-600"
           )}>
             <Calendar className="h-3 w-3" aria-hidden />
@@ -338,9 +342,12 @@ export function CartaoPauta({
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <button type="button"
-                className="inline-flex items-center gap-1 rounded border border-neutral-200 px-1.5 py-1 text-[11px] text-neutral-600 hover:bg-neutral-50">
+                className="inline-flex min-h-8 max-w-full items-center gap-1 truncate rounded border border-neutral-200 px-2 py-1 text-[11px] text-neutral-600 hover:bg-neutral-50">
                 <Tags className="h-3 w-3" aria-hidden />
-                Propriedades
+                <span className="truncate">
+                  {local.prioridade ? `P${local.prioridade}` : "Propriedades"}
+                  {tagVisivel ? ` / ${tagVisivel}${local.tags.length > 1 ? ` +${local.tags.length - 1}` : ""}` : ""}
+                </span>
               </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="start" className="w-64">
@@ -432,7 +439,6 @@ export function CartaoPauta({
             {gaps.length > 2 ? ` +${gaps.length - 2}` : ""}
           </p>
         )}
-        {erro && <p role="alert" className="text-[11px] font-medium text-red-600">{erro}</p>}
         {pendente && (
           <p className="flex items-center gap-1 text-[11px] text-neutral-400">
             <Loader2 className="h-3 w-3 animate-spin" aria-hidden /> Salvando…
@@ -458,10 +464,10 @@ function TrilhaMini({
       <span className={cn("h-1.5 w-1.5 rounded-full", status ? cor : "bg-neutral-300")} aria-hidden />
       <span className="w-14 text-neutral-500">{nome}</span>
       {status ? (
-        <select value={status}
+        <select value={status} aria-label={`Status de ${nome}`}
           onPointerDown={(e) => e.stopPropagation()}
           onChange={(e) => aoMudar(e.target.value)}
-          className="min-w-0 flex-1 bg-transparent font-medium text-neutral-800 outline-none">
+          className="min-h-8 min-w-0 flex-1 rounded bg-transparent px-1 font-medium text-neutral-800 outline-none focus-visible:ring-2 focus-visible:ring-neutral-900">
           {opcoes.map((opcao) => (
             <option key={opcao} value={opcao}>{STATUS_LABEL[opcao as StatusQuadro]}</option>
           ))}

@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{docTitle}}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<style>
+:root {
+  --bg: #FFFFFF;
+  --bg-soft: #F4F2EC;
+  --bg-zebra: #FAF8F2;
+  --text: #0A0A0A;
+  --text-soft: #4A4A4A;
+  --text-muted: #8A8A8A;
+  --border: #E5E2D9;
+  --border-strong: #0A0A0A;
+  --accent-up: #1F6F3D;
+  --accent-up-bg: #E8F3EC;
+  --accent-down: #B83A3A;
+  --accent-down-bg: #F8E8E8;
+  --accent-neutral: #6A6A6A;
+  --accent-warn: #8A5A00;
+  --accent-warn-bg: #FDF3E0;
+  --shadow: 0 1px 2px rgba(0,0,0,.04), 0 4px 12px rgba(0,0,0,.04);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { font-size: 16px; }
+
+body {
+  font-family: 'Manrope', system-ui, -apple-system, sans-serif;
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--text);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 56px 48px 96px;
+}
+
+/* Header */
+.header {
+  border-bottom: 1px solid var(--border-strong);
+  padding-bottom: 32px;
+  margin-bottom: 48px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+
+.header-brand {
+  font-weight: 800;
+  font-size: 14px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.header-tagline {
+  font-size: 12px;
+  color: var(--text-muted);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+.header-meta {
+  text-align: right;
+  font-size: 13px;
+  color: var(--text-soft);
+}
+
+.header-meta strong {
+  display: block;
+  color: var(--text);
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+}
+
+h1 {
+  font-size: 44px;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 24px 0 8px;
+}
+
+h2 {
+  font-size: 26px;
+  font-weight: 700;
+  margin: 56px 0 24px;
+  letter-spacing: -0.01em;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+h3 {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 32px 0 16px;
+  letter-spacing: -0.005em;
+  color: var(--text);
+}
+
+p {
+  margin: 12px 0;
+  color: var(--text-soft);
+}
+
+ul, ol {
+  margin: 12px 0 12px 24px;
+}
+
+li {
+  margin: 6px 0;
+  color: var(--text-soft);
+}
+
+li::marker {
+  color: var(--text-muted);
+}
+
+a {
+  color: var(--text);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+code {
+  font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.85em;
+  background: var(--bg-soft);
+  padding: 2px 6px;
+  border-radius: 3px;
+  color: var(--text);
+}
+
+strong { font-weight: 600; color: var(--text); }
+
+/* Hero summary cards */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin: 24px 0 32px;
+}
+
+.kpi-card {
+  background: var(--bg-soft);
+  padding: 20px 22px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+}
+
+.kpi-card-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.kpi-card-value {
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+
+.kpi-card-delta {
+  display: inline-block;
+  margin-top: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 3px 9px;
+  border-radius: 999px;
+  letter-spacing: -0.005em;
+}
+
+.delta-up   { background: var(--accent-up-bg);   color: var(--accent-up);   }
+.delta-down { background: var(--accent-down-bg); color: var(--accent-down); }
+.delta-flat { background: var(--bg-zebra);       color: var(--accent-neutral); }
+
+/* Tables */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0 32px;
+  font-size: 14px;
+  background: var(--bg);
+}
+
+thead th {
+  text-align: left;
+  font-weight: 600;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  padding: 10px 14px;
+  border-bottom: 2px solid var(--border-strong);
+  background: var(--bg);
+}
+
+thead th:not(:first-child) { text-align: right; }
+
+tbody td {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-soft);
+  vertical-align: top;
+}
+
+tbody td:first-child { color: var(--text); font-weight: 500; }
+tbody td:not(:first-child) { text-align: right; font-variant-numeric: tabular-nums; }
+
+tbody tr:nth-child(even) td { background: var(--bg-zebra); }
+tbody tr:last-child td { border-bottom: none; }
+
+/* Chart container */
+.chart-block {
+  background: var(--bg-soft);
+  padding: 24px;
+  border-radius: 6px;
+  margin: 24px 0;
+  border: 1px solid var(--border);
+}
+
+.chart-block canvas { max-height: 320px; }
+
+.chart-title {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+/* Insights & actions */
+.insights-list, .actions-list {
+  list-style: none;
+  margin: 16px 0;
+  padding: 0;
+}
+
+.insights-list li {
+  background: var(--bg-soft);
+  padding: 16px 20px;
+  margin: 10px 0;
+  border-radius: 4px;
+  border-left: 3px solid var(--border-strong);
+  color: var(--text);
+}
+
+.insights-list li::before {
+  content: counter(insight) ".";
+  counter-increment: insight;
+  font-weight: 700;
+  color: var(--text-muted);
+  margin-right: 10px;
+}
+
+.insights-list { counter-reset: insight; }
+
+.actions-list li {
+  padding: 14px 18px;
+  margin: 8px 0;
+  border-radius: 4px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  color: var(--text);
+}
+
+.actions-list li::before {
+  content: "□";
+  font-size: 18px;
+  line-height: 1;
+  color: var(--text-muted);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.actions-p0 li { background: var(--accent-down-bg); border-left: 3px solid var(--accent-down); }
+.actions-p1 li { background: var(--bg-soft);       border-left: 3px solid var(--text-soft);    }
+.actions-p2 li { background: var(--bg-zebra);      border-left: 3px solid var(--border-strong); }
+
+.priority-tag {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  padding: 3px 10px;
+  border-radius: 3px;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+}
+
+.priority-p0 { background: var(--accent-down); color: var(--bg); }
+.priority-p1 { background: var(--text);        color: var(--bg); }
+.priority-p2 { background: var(--text-muted);  color: var(--bg); }
+
+/* Status pills for indexation */
+.status-pill {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 999px;
+  letter-spacing: 0.04em;
+}
+
+.status-indexed     { background: var(--accent-up-bg);   color: var(--accent-up);   }
+.status-not-indexed { background: var(--accent-down-bg); color: var(--accent-down); }
+.status-pending     { background: var(--bg-zebra);       color: var(--accent-neutral); }
+.status-partial     { background: var(--accent-warn-bg); color: var(--accent-warn); }
+
+/* Banner de relatório parcial */
+.partial-banner {
+  background: var(--accent-warn-bg);
+  border-left: 3px solid var(--accent-warn);
+  color: var(--accent-warn);
+  padding: 14px 18px;
+  margin: 20px 0;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.partial-banner-title {
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  font-size: 12px;
+}
+
+/* Footer */
+.footer {
+  margin-top: 80px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+  font-size: 12px;
+  color: var(--text-muted);
+  text-align: center;
+  letter-spacing: 0.04em;
+}
+
+/* Índice — só documentos longos (build-doc.mjs) emitem este bloco */
+.doc-toc {
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 24px 28px;
+  margin: 40px 0 56px;
+}
+.doc-toc-title {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+}
+.doc-toc ol { list-style: none; counter-reset: toc; margin: 0; padding: 0; }
+.doc-toc li { counter-increment: toc; margin: 0 0 8px; padding-left: 32px; position: relative; }
+.doc-toc li::before {
+  content: counter(toc, decimal-leading-zero);
+  position: absolute;
+  left: 0;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-muted);
+  top: 3px;
+}
+.doc-toc a { color: var(--text); text-decoration: none; border-bottom: 1px solid transparent; }
+.doc-toc a:hover { border-bottom-color: var(--text); }
+
+/* Âncora de heading: o offset evita que o título fique sob a borda ao pular */
+h2[id], h3[id] { scroll-margin-top: 24px; }
+
+/* Print */
+@media print {
+  body { font-size: 11pt; }
+  .doc-toc { page-break-inside: avoid; background: none; }
+  .container { padding: 24px 32px; max-width: none; }
+  h1 { font-size: 28pt; }
+  h2 { font-size: 18pt; page-break-after: avoid; margin-top: 32px; }
+  h3 { font-size: 13pt; page-break-after: avoid; }
+  table, .chart-block, .kpi-grid { page-break-inside: avoid; }
+  .header { padding-bottom: 16px; margin-bottom: 24px; }
+  .kpi-card { box-shadow: none; }
+  .chart-block { background: var(--bg); border: 1px solid var(--border); }
+  @page { margin: 1.5cm; size: A4; }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .container { padding: 32px 20px; }
+  h1 { font-size: 32px; }
+  h2 { font-size: 22px; }
+  .header { flex-direction: column; align-items: flex-start; }
+  .header-meta { text-align: left; }
+  table { font-size: 12px; }
+  thead th, tbody td { padding: 8px 10px; }
+}
+</style>
+</head>
+<body>
+<div class="container" id="report-root">
+{{{bodyHtml}}}
+</div>
+
+<script>
+// Charts são populados pelo render-html.mjs via dataset
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('canvas[data-chart]').forEach(canvas => {
+    try {
+      const cfg = JSON.parse(canvas.dataset.chart);
+      new Chart(canvas, cfg);
+    } catch (e) {
+      console.error('Chart config error', e);
+    }
+  });
+});
+</script>
+</body>
+</html>

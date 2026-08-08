@@ -162,14 +162,10 @@ export async function deleteTask(id: string): Promise<ActionResult> {
 export async function reorderTasks(
   updates: { id: string; sort_order: number; priority: TaskPriority }[]
 ): Promise<ActionResult> {
+  if (updates.length === 0) return { data: null, error: null }
   const supabase = await createClient()
-  for (const u of updates) {
-    const { error } = await supabase
-      .from('analytics_tasks')
-      .update({ sort_order: u.sort_order, priority: u.priority })
-      .eq('id', u.id)
-    if (error) return { data: null, error: error.message }
-  }
+  const { error } = await supabase.rpc('reordenar_analytics_tasks', { p_updates: updates })
+  if (error) return { data: null, error: error.message }
   return { data: null, error: null }
 }
 
