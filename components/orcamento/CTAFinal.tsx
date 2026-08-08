@@ -89,7 +89,7 @@ export function CTAFinal({
             {/* Linha decorativa com label */}
             <div className="flex items-center justify-center gap-4 mb-8">
               <div className="w-16 h-px bg-white/20" />
-              <span className="text-xs uppercase tracking-[0.3em] text-white/40">
+              <span className="text-xs uppercase tracking-[0.3em] text-white/60">
                 Entre em Contato
               </span>
               <div className="w-16 h-px bg-white/20" />
@@ -101,7 +101,7 @@ export function CTAFinal({
                 <div className={cn("rounded-full bg-white/10 flex items-center justify-center", isPDFMode ? "w-8 h-8" : "w-12 h-12")}>
                   <Phone className="w-5 h-5 text-white/60" />
                 </div>
-                <p className="text-xs uppercase tracking-widest text-white/40">
+                <p className="text-xs uppercase tracking-widest text-white/60">
                   Telefone
                 </p>
                 <p className="text-white font-medium">{contatos.telefone}</p>
@@ -111,7 +111,7 @@ export function CTAFinal({
                 <div className={cn("rounded-full bg-white/10 flex items-center justify-center", isPDFMode ? "w-8 h-8" : "w-12 h-12")}>
                   <Mail className="w-5 h-5 text-white/60" />
                 </div>
-                <p className="text-xs uppercase tracking-widest text-white/40">
+                <p className="text-xs uppercase tracking-widest text-white/60">
                   E-mail
                 </p>
                 <p className="text-white font-medium">{contatos.email}</p>
@@ -121,7 +121,7 @@ export function CTAFinal({
                 <div className={cn("rounded-full bg-white/10 flex items-center justify-center", isPDFMode ? "w-8 h-8" : "w-12 h-12")}>
                   <MapPin className="w-5 h-5 text-white/60" />
                 </div>
-                <p className="text-xs uppercase tracking-widest text-white/40">
+                <p className="text-xs uppercase tracking-widest text-white/60">
                   Endereço
                 </p>
                 <p className="text-white font-medium text-center">{contatos.endereco}</p>
@@ -173,7 +173,7 @@ export function CTAFinal({
               >
                 BERKAHN
               </motion.h3>
-              <p className="text-xs text-white/40 mb-6">
+              <p className="text-xs text-white/60 mb-6">
                 Especialistas em Light Steel Frame
               </p>
 

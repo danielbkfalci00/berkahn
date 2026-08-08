@@ -33,12 +33,12 @@ export function ItensInclususSubsection({ itensInclusos, isPDFMode = false }: It
                 }}
               >
                 {/* Numeração técnica */}
-                <span className="font-mono text-[10px] text-white/40 mt-1 w-6 flex-shrink-0">
+                <span className="font-mono text-[10px] text-white/60 mt-1 w-6 flex-shrink-0">
                   {String(index + 1).padStart(2, '0')}
                 </span>
 
                 {/* Bullet minimalista */}
-                <span className="text-white/40 text-lg font-light leading-none mt-0.5 flex-shrink-0">
+                <span className="text-white/60 text-lg font-light leading-none mt-0.5 flex-shrink-0">
                   +
                 </span>
 

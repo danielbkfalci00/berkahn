@@ -69,7 +69,7 @@ export function ComoTrabalhamosPDF() {
                   style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}
                 />
               </figure>
-              <div style={{ fontSize: 30, fontWeight: 800, letterSpacing: "-0.02em", color: "#c9c6bc", lineHeight: 1, marginBottom: 10 }}>
+              <div style={{ fontSize: 30, fontWeight: 800, letterSpacing: "-0.02em", color: "#77736b", lineHeight: 1, marginBottom: 10 }}>
                 {fase.numero}
               </div>
               <h3 style={{ fontSize: 13.5, fontWeight: 700, color: "#1A1A1A", margin: "0 0 4px", lineHeight: 1.2 }}>{fase.title}</h3>

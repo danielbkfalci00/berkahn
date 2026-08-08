@@ -48,7 +48,7 @@ export function ModelosContratacaoPDF() {
                     fontWeight: 500,
                     letterSpacing: "0.2em",
                     textTransform: "uppercase",
-                    color: dark ? "#888" : "#999",
+                    color: dark ? "#888" : "#666",
                     marginBottom: 12,
                   }}
                 >

@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "motion/react";
 import { useMenu } from "@/components/providers/MenuProvider";
 import { NAV_LINKS, NavLinkItem, NavLinkChild } from "@/lib/constants";
 import { cn } from "@/lib/utils";
@@ -94,17 +93,8 @@ function NavItemWithChildren({ link, isActive, close, pathname }: NavItemWithChi
       {/* Sub-links */}
       <AccordionContent className="pb-0">
         <ul className="pl-4 border-l border-black-10 ml-4 space-y-1">
-          {link.children.map((child, childIndex) => (
-            <motion.li
-              key={child.href}
-              initial={{ opacity: 0, x: -10 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{
-                delay: 0.05 * childIndex,
-                duration: 0.2,
-                ease: [0.19, 1, 0.22, 1],
-              }}
-            >
+          {link.children.map((child) => (
+            <li key={child.href}>
               <Link
                 href={child.href}
                 onClick={() => handleSubLinkClick(child.href)}
@@ -117,7 +107,7 @@ function NavItemWithChildren({ link, isActive, close, pathname }: NavItemWithChi
               >
                 {child.label}
               </Link>
-            </motion.li>
+            </li>
           ))}
         </ul>
       </AccordionContent>
@@ -135,29 +125,18 @@ export function Sidebar() {
   )?.href;
 
   return (
-    <AnimatePresence>
+    <>
       {isOpen && (
         <>
           {/* Backdrop */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            className="fixed inset-0 bg-black-50 z-[200]"
+          <div
+            className="fixed inset-0 bg-black-50 z-[200] animate-in fade-in-0 duration-300 motion-reduce:animate-none"
             onClick={close}
           />
 
           {/* Sidebar */}
-          <motion.aside
-            initial={{ x: "-100%" }}
-            animate={{ x: 0 }}
-            exit={{ x: "-100%" }}
-            transition={{
-              duration: 0.5,
-              ease: [0.65, 0, 0.35, 1], // ease-in-out
-            }}
-            className="fixed top-0 left-0 bottom-0 w-80 max-w-[85vw] bg-white z-[201] shadow-luxury-xl"
+          <aside
+            className="fixed top-0 left-0 bottom-0 w-80 max-w-[85vw] bg-white z-[201] shadow-luxury-xl animate-in slide-in-from-left-full duration-500 motion-reduce:animate-none"
           >
             <div className="flex flex-col h-full p-6">
               {/* Logo */}
@@ -175,20 +154,11 @@ export function Sidebar() {
               <nav className="flex-1">
                 <Accordion type="single" collapsible defaultValue={defaultAccordionValue} className="w-full">
                   <ul className="space-y-0">
-                    {NAV_LINKS.map((link, index) => {
+                    {NAV_LINKS.map((link) => {
                       const isActive = pathname === link.href;
 
                       return (
-                        <motion.li
-                          key={link.href}
-                          initial={{ opacity: 0, x: -20 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          transition={{
-                            delay: 0.1 + index * 0.05,
-                            duration: 0.3,
-                            ease: [0.19, 1, 0.22, 1],
-                          }}
-                        >
+                        <li key={link.href}>
                           {hasChildren(link) ? (
                             <NavItemWithChildren
                               link={link}
@@ -210,7 +180,7 @@ export function Sidebar() {
                               {link.label}
                             </Link>
                           )}
-                        </motion.li>
+                        </li>
                       );
                     })}
                   </ul>
@@ -218,22 +188,13 @@ export function Sidebar() {
               </nav>
 
               {/* CTA Button - Mobile Only */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{
-                  delay: 0.1 + NAV_LINKS.length * 0.05,
-                  duration: 0.3,
-                  ease: [0.19, 1, 0.22, 1],
-                }}
-                className="mt-4 px-4"
-              >
+              <div className="mt-4 px-4">
                 <ContactFormDialog ctaLocation="menu_lateral">
                   <button className="w-full py-2.5 bg-black text-white text-sm uppercase tracking-wider hover:bg-black-90 transition-colors duration-300 border border-black">
                     Fale Conosco
                   </button>
                 </ContactFormDialog>
-              </motion.div>
+              </div>
 
               {/* Footer */}
               <div className="pt-4 border-t border-black-10">
@@ -242,9 +203,9 @@ export function Sidebar() {
                 </p>
               </div>
             </div>
-          </motion.aside>
+          </aside>
         </>
       )}
-    </AnimatePresence>
+    </>
   );
 }

@@ -40,14 +40,14 @@ export function CategoryFilter({
                   "focus-visible:z-10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-3px] focus-visible:outline-black",
                   isActive
                     ? "bg-black text-white"
-                    : "text-black-50 hover:bg-white hover:text-black"
+                    : "text-black-70 hover:bg-white hover:text-black"
                 )}
               >
                 <span>{category}</span>
                 <span
                   className={cn(
                     "tabular-nums",
-                    isActive ? "text-white-50" : "text-black-30"
+                    isActive ? "text-white-70" : "text-black-60"
                   )}
                 >
                   {String(count).padStart(2, "0")}

@@ -236,7 +236,7 @@ export function SlideProject({
                 <p
                   className={cn(
                     "text-xs uppercase tracking-[0.15em] mt-1",
-                    dark ? "text-white/40" : "text-black/40"
+                    dark ? "text-white/60" : "text-black/60"
                   )}
                 >
                   Área Total
@@ -254,7 +254,7 @@ export function SlideProject({
                 <p
                   className={cn(
                     "text-xs uppercase tracking-[0.15em] mt-1",
-                    dark ? "text-white/40" : "text-black/40"
+                    dark ? "text-white/60" : "text-black/60"
                   )}
                 >
                   Sistema Construtivo

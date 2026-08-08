@@ -81,7 +81,7 @@ export function LSFDiagram() {
 
           {/* Legend */}
           <div className="mt-6 pt-6 border-t border-black-10">
-            <p className="text-xs text-black-50 text-center">
+            <p className="text-xs text-black-70 text-center">
               Clique em cada camada para ver detalhes completos
             </p>
           </div>

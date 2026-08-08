@@ -61,7 +61,7 @@ export function SlidePartners() {
       <div ref={containerRef} className="container max-w-6xl mx-auto">
         {/* Header */}
         <RevealOnScroll className="text-center mb-12 lg:mb-16">
-          <p className="text-xs sm:text-sm uppercase tracking-[0.3em] text-white/40 mb-4">
+          <p className="text-xs sm:text-sm uppercase tracking-[0.3em] text-white/60 mb-4">
             Marcas Parceiras
           </p>
           <h2 className="font-heading text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-white mb-6">

@@ -159,7 +159,7 @@ export function MiniGaleria({
         {/* Section Header */}
         <RevealOnScroll>
           <div className="text-center mb-12">
-            <span className="inline-block text-xs uppercase tracking-[0.3em] text-black/40 mb-4">
+            <span className="inline-block text-xs uppercase tracking-[0.3em] text-black/60 mb-4">
               Portfólio
             </span>
             <h2 className="headline-md text-black mb-4">{titulo}</h2>

@@ -15,6 +15,7 @@
     "test:conteudo:db": "node scripts/db/verificar-012.mjs"
   },
   "eslintConfig": {
+    "root": true,
     "extends": "next/core-web-vitals"
   },
   "dependencies": {

@@ -83,6 +83,7 @@ export function ArticleImage({ image, className = "" }: ArticleImageProps) {
                 src={image.src}
                 alt={image.alt}
                 fill
+                sizes="95vw"
                 className="object-contain"
                 quality={95}
               />

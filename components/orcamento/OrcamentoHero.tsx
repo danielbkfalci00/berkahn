@@ -24,7 +24,7 @@ export function OrcamentoHero({
       className="relative h-screen flex overflow-hidden bg-black"
     >
       {/* Background Image (static — no parallax for smooth scroll) */}
-      <div className="absolute -inset-1 z-0">
+      <div className="absolute inset-0 z-0">
         <Image
           src={projeto.imagemRender || "/images/hero/hero-home-2.webp"}
           alt={projeto.titulo}
@@ -62,6 +62,7 @@ export function OrcamentoHero({
         <div className="flex flex-col items-center">
           {/* Project Title - DESTAQUE PRINCIPAL */}
           <motion.div
+            className="motion-reduce:!opacity-100 motion-reduce:!transform-none motion-reduce:!transition-none"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}
@@ -76,7 +77,7 @@ export function OrcamentoHero({
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5, duration: 0.6, ease: [0.19, 1, 0.22, 1] }}
-            className="flex flex-col items-center gap-2 mb-6"
+            className="flex flex-col items-center gap-2 mb-6 motion-reduce:!opacity-100 motion-reduce:!transform-none motion-reduce:!transition-none"
           >
             <p className="text-lg sm:text-xl text-white/90">
               <span className="text-white/60">Local:</span> {projeto.localizacao}
@@ -90,6 +91,7 @@ export function OrcamentoHero({
 
           {/* Revisão */}
           <motion.div
+            className="motion-reduce:!opacity-100 motion-reduce:!transform-none motion-reduce:!transition-none"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.7, duration: 0.6, ease: [0.19, 1, 0.22, 1] }}
@@ -102,7 +104,7 @@ export function OrcamentoHero({
             initial={{ scaleX: 0 }}
             animate={{ scaleX: 1 }}
             transition={{ delay: 0.9, duration: 1, ease: [0.19, 1, 0.22, 1] }}
-            className="w-24 h-px bg-gradient-to-r from-transparent via-white/50 to-transparent mx-auto mt-6"
+            className="w-24 h-px bg-gradient-to-r from-transparent via-white/50 to-transparent mx-auto mt-6 motion-reduce:!opacity-100 motion-reduce:!transform-none motion-reduce:!transition-none"
           />
         </div>
 
@@ -114,7 +116,7 @@ export function OrcamentoHero({
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.1, duration: 0.8, ease: [0.19, 1, 0.22, 1] }}
-          className="flex flex-col items-center"
+          className="flex flex-col items-center motion-reduce:!opacity-100 motion-reduce:!transform-none motion-reduce:!transition-none"
         >
           <Image
             src="/images/orcamento/logo-berkahn-construtora-branco.webp"

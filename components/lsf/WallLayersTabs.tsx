@@ -75,18 +75,18 @@ export function WallLayersTabs() {
                   {/* Especificações */}
                   <div className="pt-4 border-t border-black-10 space-y-3">
                     <div className="flex justify-between text-sm">
-                      <span className="text-black-50">Espessura</span>
+                      <span className="text-black-70">Espessura</span>
                       <span className="font-medium">{layer.thickness}</span>
                     </div>
                     <div className="flex justify-between text-sm">
-                      <span className="text-black-50">Material</span>
+                      <span className="text-black-70">Material</span>
                       <span className="font-medium">{layer.material}</span>
                     </div>
                   </div>
 
                   {/* Função */}
                   <div className="bg-black-5 rounded-lg p-3 mt-2">
-                    <p className="text-xs font-medium text-black-50 mb-1">Função principal:</p>
+                    <p className="text-xs font-medium text-black-70 mb-1">Função principal:</p>
                     <p className="text-sm text-black-70">{layer.function}</p>
                   </div>
                 </div>
@@ -189,11 +189,11 @@ export function WallLayersTabs() {
                         {/* Specs Grid */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t border-black-10">
                           <div>
-                            <p className="text-sm font-medium text-black-50 mb-1">Espessura</p>
+                            <p className="text-sm font-medium text-black-70 mb-1">Espessura</p>
                             <p className="font-medium">{layer.thickness}</p>
                           </div>
                           <div>
-                            <p className="text-sm font-medium text-black-50 mb-1">Material</p>
+                            <p className="text-sm font-medium text-black-70 mb-1">Material</p>
                             <p className="font-medium">{layer.material}</p>
                           </div>
                         </div>

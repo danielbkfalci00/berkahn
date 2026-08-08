@@ -8,7 +8,7 @@ import type { ReactNode } from "react";
 export const INK = "#1A1A1A";
 export const OFFWHITE = "#F4F2EC";
 export const MUTED = "#666666";
-export const FAINT = "#999999";
+export const FAINT = "#666666";
 export const PHOTO_BG = "#E9E7DF";
 
 // Cabeçalho corrido: wordmark BERKAHN + label da seção.

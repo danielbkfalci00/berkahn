@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Manrope, Caveat, Playfair_Display, Archivo, Space_Mono } from "next/font/google";
+import { Manrope } from "next/font/google";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { ClientLayout } from "@/components/layout/ClientLayout";
 import { ConditionalFooter } from "@/components/layout/ConditionalFooter";
@@ -15,33 +15,9 @@ const manrope = Manrope({
   display: "swap",
 });
 
-const caveat = Caveat({
-  subsets: ["latin"],
-  weight: ["400", "700"],
-  variable: "--font-caveat",
-  display: "swap",
-});
 
-const playfair = Playfair_Display({
-  subsets: ["latin"],
-  weight: ["400", "600", "700", "800"],
-  variable: "--font-playfair",
-  display: "swap",
-});
 
-// Fonte variável (eixo completo de peso) — display da home "luxo de engenharia"
-const archivo = Archivo({
-  subsets: ["latin"],
-  variable: "--font-archivo",
-  display: "swap",
-});
 
-const spaceMono = Space_Mono({
-  subsets: ["latin"],
-  weight: ["400"],
-  variable: "--font-space-mono",
-  display: "swap",
-});
 
 export const metadata: Metadata = {
   title: "Construtora Berkahn",
@@ -109,7 +85,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-BR" className={`${manrope.variable} ${caveat.variable} ${playfair.variable} ${archivo.variable} ${spaceMono.variable}`}>
+    <html lang="pt-BR" className={manrope.variable}>
       <head>
         <link rel="preconnect" href="https://sfqaknxomxwmviarpwfy.supabase.co" />
         <link rel="dns-prefetch" href="https://images.unsplash.com" />

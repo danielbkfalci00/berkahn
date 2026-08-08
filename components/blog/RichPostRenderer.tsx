@@ -1,17 +1,34 @@
 'use client';
 
-import { useMemo, Fragment } from 'react';
+import { useMemo, Fragment, lazy, Suspense, type ComponentProps, type ReactNode } from 'react';
+import { useInViewAnimation } from '@/hooks/useInViewAnimation';
 import dynamic from 'next/dynamic';
 import type { Post, PostComponents } from '@/types/admin';
 // Lightweight components — keep as static imports (fast, used in most articles)
 import { StatsGrid } from '@/components/article/StatHighlight';
-import { DataTable } from '@/components/article/DataTable';
+import { DataTable, DeferredChartData, DeferredComparisonData } from '@/components/article/DataTable';
 import { FAQSection } from '@/components/article/FAQSection';
 import { ArticleImage } from '@/components/article/ArticleImage';
 // Heavy / rarely-used components — lazy loaded to reduce initial bundle
-const ChartSection = dynamic(() =>
-  import('@/components/article/ChartSection').then((m) => m.ChartSection)
+const LazyChartSection = lazy(() =>
+  import('@/components/article/ChartSection').then((module) => ({
+    default: module.ChartSection,
+  }))
 );
+
+function DeferredWidget({ children, fallback }: { children: ReactNode; fallback: ReactNode }) {
+  const { ref, isInView } = useInViewAnimation({ margin: "300px 0px", amount: "some" });
+  return <div ref={ref}>{isInView ? <Suspense fallback={fallback}>{children}</Suspense> : fallback}</div>;
+}
+
+function ChartSection(props: ComponentProps<typeof LazyChartSection>) {
+  const fallback = <DeferredChartData charts={[props.chart]} heightClass="h-80" />;
+  return (
+    <DeferredWidget fallback={fallback}>
+      <LazyChartSection {...props} />
+    </DeferredWidget>
+  );
+}
 const MythBuster = dynamic(() =>
   import('@/components/article/MythBuster').then((m) => m.MythBuster)
 );
@@ -42,9 +59,20 @@ const TestimonialCard = dynamic(() =>
 const ResourceDownload = dynamic(() =>
   import('@/components/article/ResourceDownload').then((m) => m.ResourceDownload)
 );
-const Comparison3DMatrix = dynamic(() =>
-  import('@/components/article/Comparison3DMatrix').then((m) => m.Comparison3DMatrix)
+const LazyComparison3DMatrix = lazy(() =>
+  import('@/components/article/Comparison3DMatrix').then((module) => ({
+    default: module.Comparison3DMatrix,
+  }))
 );
+
+function Comparison3DMatrix(props: ComponentProps<typeof LazyComparison3DMatrix>) {
+  const fallback = <DeferredComparisonData matrix={props.matrix} heightClass="h-96" />;
+  return (
+    <DeferredWidget fallback={fallback}>
+      <LazyComparison3DMatrix {...props} />
+    </DeferredWidget>
+  );
+}
 const SpecificationSheet = dynamic(() =>
   import('@/components/article/SpecificationSheet').then((m) => m.SpecificationSheet)
 );

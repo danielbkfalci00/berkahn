@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import Image from "next/image";
-import { motion, useScroll, useTransform } from "motion/react";
+import { motion, useReducedMotion, useScroll, useTransform } from "motion/react";
 import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
 import { HOW_WE_WORK_TIMELINE } from "@/lib/servicos-data";
 import { CheckIcon } from "lucide-react";
@@ -14,6 +14,7 @@ import {
 import Autoplay from "embla-carousel-autoplay";
 
 export function HowWeWorkTimeline() {
+  const prefersReducedMotion = useReducedMotion();
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Track scroll position for progress indicator
@@ -80,13 +81,14 @@ export function HowWeWorkTimeline() {
                       }`}
                     >
                       <motion.div
-                        initial={{ opacity: 0, x: isEven ? 40 : -40 }}
+                        className="motion-reduce:!transform-none motion-reduce:!opacity-100"
+                        initial={prefersReducedMotion ? false : { opacity: 0, x: isEven ? 40 : -40 }}
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true, margin: "-100px" }}
-                        transition={{
-                          duration: 0.6,
-                          ease: [0.19, 1, 0.22, 1],
-                        }}
+                        transition={prefersReducedMotion
+                          ? { duration: 0 }
+                          : { duration: 0.6, ease: [0.19, 1, 0.22, 1] }
+                        }
                       >
                         <div className="inline-block mb-3">
                           <span className="label-text bg-black-5 px-4 py-2 rounded-full">

@@ -76,7 +76,7 @@ export function SlideGallery() {
       <div className="absolute inset-0 flex flex-col">
         {/* Header */}
         <div className="text-center pt-8 pb-4 z-10 relative">
-          <p className="text-xs sm:text-sm uppercase tracking-[0.3em] text-white/40 mb-2">
+          <p className="text-xs sm:text-sm uppercase tracking-[0.3em] text-white/60 mb-2">
             Portfólio
           </p>
           <h2 className="font-heading text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-white">
@@ -102,7 +102,7 @@ export function SlideGallery() {
 
         {/* Instruction */}
         <div className="text-center pt-2 pb-6 z-10 relative">
-          <p className="text-xs text-white/40">
+          <p className="text-xs text-white/60">
             Arraste para explorar • Clique para ampliar
           </p>
         </div>

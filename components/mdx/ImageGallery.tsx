@@ -74,6 +74,7 @@ export function ImageGallery({
                 src={image.src}
                 alt={image.alt}
                 fill
+                sizes={columns === 4 ? "(max-width: 767px) 50vw, 25vw" : columns === 2 ? "(max-width: 639px) 100vw, 50vw" : "(max-width: 639px) 100vw, (max-width: 767px) 50vw, 33vw"}
                 className="object-cover transition-transform duration-300 group-hover:scale-105"
               />
             </div>
@@ -104,6 +105,7 @@ export function ImageGallery({
                   src={images[selectedIndex].src}
                   alt={images[selectedIndex].alt}
                   fill
+                  sizes="(max-width: 1024px) 100vw, 1024px"
                   className="object-contain"
                 />
               </div>

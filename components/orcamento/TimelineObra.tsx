@@ -35,7 +35,7 @@ export function TimelineObra({ etapas, cronogramaPacote }: TimelineObraProps) {
         {/* Section Header */}
         <RevealOnScroll>
           <div className="text-center mb-16">
-            <span className="inline-block text-xs uppercase tracking-[0.3em] text-black/40 mb-4">
+            <span className="inline-block text-xs uppercase tracking-[0.3em] text-black/60 mb-4">
               Cronograma
             </span>
             <h2 className="headline-md text-black mb-4">
@@ -192,7 +192,7 @@ export function TimelineObra({ etapas, cronogramaPacote }: TimelineObraProps) {
 
         {/* Bottom note */}
         <RevealOnScroll delay={0.5}>
-          <p className="text-center text-sm text-black/40 mt-12">
+          <p className="text-center text-sm text-black/60 mt-12">
             * Prazos podem variar de acordo com condições climáticas e
             aprovações de prefeitura
           </p>

@@ -39,7 +39,7 @@ export function FundadoresParceirosPDF() {
                 />
               </figure>
               <h3 style={{ fontSize: 18, fontWeight: 700, color: "#1A1A1A", margin: "0 0 4px" }}>{f.name}</h3>
-              <div style={{ fontSize: 9.5, fontWeight: 500, letterSpacing: "0.18em", textTransform: "uppercase", color: "#999", marginBottom: 16 }}>
+              <div style={{ fontSize: 9.5, fontWeight: 500, letterSpacing: "0.18em", textTransform: "uppercase", color: "#666", marginBottom: 16 }}>
                 {f.role}
               </div>
               <p style={{ fontSize: 11, lineHeight: 1.6, color: "#666", margin: 0 }}>{f.bio}</p>
@@ -49,7 +49,7 @@ export function FundadoresParceirosPDF() {
       </div>
 
       <div style={{ borderTop: "1px solid #e2e0d8", paddingTop: 20, marginBottom: 16 }}>
-        <div style={{ fontSize: 9, fontWeight: 500, letterSpacing: "0.2em", textTransform: "uppercase", color: "#999", marginBottom: 16 }}>
+        <div style={{ fontSize: 9, fontWeight: 500, letterSpacing: "0.2em", textTransform: "uppercase", color: "#666", marginBottom: 16 }}>
           Marcas parceiras
         </div>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 20 }}>

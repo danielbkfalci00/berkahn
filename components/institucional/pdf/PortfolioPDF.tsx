@@ -46,7 +46,7 @@ export function PortfolioPDF() {
                     style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}
                   />
                 </figure>
-                <div style={{ fontSize: 9, fontWeight: 800, color: "#666", marginBottom: 8 }}>{obra.number}</div>
+                <div style={{ fontSize: 9, fontWeight: 800, color: "#aaa", marginBottom: 8 }}>{obra.number}</div>
                 <h3 style={{ fontSize: 16, fontWeight: 700, color: "#fff", margin: "0 0 16px" }}>{obra.title}</h3>
                 <div style={{ borderTop: "1px solid #3a3a3a" }}>
                   {specs.map(([k, v], j) => (
@@ -60,7 +60,7 @@ export function PortfolioPDF() {
                         borderBottom: j < specs.length - 1 ? "1px solid #2a2a2a" : undefined,
                       }}
                     >
-                      <span style={{ fontSize: 9, letterSpacing: "0.1em", textTransform: "uppercase", color: "#777", flexShrink: 0 }}>{k}</span>
+                      <span style={{ fontSize: 9, letterSpacing: "0.1em", textTransform: "uppercase", color: "#aaa", flexShrink: 0 }}>{k}</span>
                       <span style={{ fontSize: 10, color: "#ccc", textAlign: "right" }}>{v}</span>
                     </div>
                   ))}

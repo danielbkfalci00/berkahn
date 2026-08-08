@@ -42,7 +42,7 @@ export function OQueFazemosPDF() {
                   borderBottom: row === 0 ? "1px solid #d9d7cf" : undefined,
                 }}
               >
-                <div style={{ fontSize: 34, fontWeight: 800, letterSpacing: "-0.02em", color: "#c9c6bc", lineHeight: 1, marginBottom: 16 }}>
+                <div style={{ fontSize: 34, fontWeight: 800, letterSpacing: "-0.02em", color: "#77736b", lineHeight: 1, marginBottom: 16 }}>
                   {serv.numero}
                 </div>
                 <h3 style={{ fontSize: 17, fontWeight: 600, color: "#1A1A1A", margin: "0 0 10px" }}>{serv.title}</h3>

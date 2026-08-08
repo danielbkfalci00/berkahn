@@ -50,7 +50,7 @@ export function SlideAbout() {
       <div className="container max-w-3xl mx-auto px-6">
         {/* Label */}
         <RevealOnScroll className="text-center mb-12 lg:mb-16">
-          <p className="text-xs sm:text-sm uppercase tracking-[0.3em] text-black/40 mb-6">
+          <p className="text-xs sm:text-sm uppercase tracking-[0.3em] text-black/60 mb-6">
             Quem Somos
           </p>
           <div className="w-12 h-px bg-black/20 mx-auto" />

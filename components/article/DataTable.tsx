@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import { motion, useInView } from "motion/react";
-import { ArticleTable } from "@/types/article";
+import type { ArticleTable, ChartData, Comparison3DMatrix } from "@/types/article";
 
 interface DataTableProps {
   table: ArticleTable;
@@ -16,6 +16,9 @@ export function DataTable({ table, className = "" }: DataTableProps) {
   return (
     <motion.div
       ref={ref}
+      tabIndex={0}
+      role="region"
+      aria-label="Tabela de dados do artigo"
       className={`overflow-x-auto ${className}`}
       initial={{ opacity: 0, y: 30 }}
       animate={isInView ? { opacity: 1, y: 0 } : {}}
@@ -97,6 +100,9 @@ export function CompactTable({ headers, rows, className = "" }: CompactTableProp
   return (
     <motion.div
       ref={ref}
+      tabIndex={0}
+      role="region"
+      aria-label="Tabela comparativa do artigo"
       className={`overflow-x-auto rounded-lg border border-black-10 ${className}`}
       initial={{ opacity: 0 }}
       animate={isInView ? { opacity: 1 } : {}}
@@ -138,5 +144,74 @@ export function CompactTable({ headers, rows, className = "" }: CompactTableProp
         </tbody>
       </table>
     </motion.div>
+  );
+}
+
+interface DeferredChartDataProps {
+  charts: ChartData[];
+  heightClass: string;
+}
+
+/**
+ * Server-rendered, no-JS-readable data shown until the interactive chart is near
+ * the viewport. Keeps chart facts indexable without loading Recharts eagerly.
+ */
+export function DeferredChartData({ charts, heightClass }: DeferredChartDataProps) {
+  return (
+    <div tabIndex={0} role="region" aria-label="Dados dos gráficos do artigo" className={`my-8 ${heightClass} overflow-auto rounded-lg border border-black-10 bg-white p-4 md:p-6`}>
+      {charts.map((chart) => {
+        if (!chart.data?.length) return null;
+        const keys = Object.keys(chart.data[0]).filter((key) => key !== "fill");
+
+        return (
+          <div key={chart.id} className="mb-6 last:mb-0">
+            {chart.title && <h3 className="mb-3 text-base font-semibold">{chart.title}</h3>}
+            <table className="w-full min-w-[32rem] text-sm">
+              <caption className="sr-only">Dados do gráfico {chart.title || chart.id}</caption>
+              <thead className="bg-black text-white">
+                <tr>
+                  {keys.map((key) => <th key={key} className="px-3 py-2 text-left">{key}</th>)}
+                </tr>
+              </thead>
+              <tbody>
+                {chart.data.map((row: Record<string, unknown>, rowIndex: number) => (
+                  <tr key={rowIndex} className="border-b border-black-10 last:border-b-0">
+                    {keys.map((key) => <td key={key} className="px-3 py-2">{String(row[key] ?? "")}</td>)}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+export function DeferredComparisonData({ matrix, heightClass }: { matrix: Comparison3DMatrix; heightClass: string }) {
+  return (
+    <div tabIndex={0} role="region" aria-label="Dados da comparação do artigo" className={`my-8 ${heightClass} overflow-auto rounded-lg border border-black-10 bg-white p-4 md:p-6`}>
+      <h3 className="mb-2 text-base font-semibold">{matrix.title}</h3>
+      {matrix.description && <p className="mb-4 text-sm text-black-70">{matrix.description}</p>}
+      <table className="w-full min-w-[32rem] text-sm">
+        <caption className="sr-only">Dados da comparação {matrix.title}</caption>
+        <thead className="bg-black text-white">
+          <tr>
+            <th className="px-3 py-2 text-left">Dimensão</th>
+            {matrix.options.map((option) => <th key={option.name} className="px-3 py-2 text-center">{option.name}</th>)}
+          </tr>
+        </thead>
+        <tbody>
+          {matrix.dimensions.map((dimension, dimensionIndex) => (
+            <tr key={dimension} className="border-b border-black-10 last:border-b-0">
+              <th className="px-3 py-2 text-left font-medium">{dimension}</th>
+              {matrix.options.map((option) => (
+                <td key={option.name} className="px-3 py-2 text-center">{option.scores[dimensionIndex] ?? 0}</td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 }

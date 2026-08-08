@@ -62,7 +62,7 @@ export function OrcamentoHeader({ projeto }: OrcamentoHeaderProps) {
                     transition={{ duration: 0.2 }}
                     className="flex items-center gap-2"
                   >
-                    <span className="font-mono text-[10px] sm:text-xs text-black/40">
+                    <span className="font-mono text-[10px] sm:text-xs text-black/60">
                       {activeSection.number}
                     </span>
                     <span className="text-[10px] sm:text-xs uppercase tracking-[0.15em] text-black/60 font-medium">
@@ -97,7 +97,7 @@ export function OrcamentoHeader({ projeto }: OrcamentoHeaderProps) {
                     <span className="text-[10px] sm:text-xs uppercase tracking-[0.15em] text-black/60 font-medium">
                       {activeSection.label}
                     </span>
-                    <span className="font-mono text-[10px] sm:text-xs text-black/40">
+                    <span className="font-mono text-[10px] sm:text-xs text-black/60">
                       {activeSection.number}
                     </span>
                   </motion.div>

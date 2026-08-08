@@ -1,10 +1,24 @@
 import { Metadata } from "next";
+import { Archivo, Space_Mono } from "next/font/google";
 import { AtualidadeContent } from "./AtualidadeContent";
 import { Breadcrumb } from "@/components/layout/Breadcrumb";
 import { createPublicClient } from "@/lib/supabase/public";
 import { normalizeBlogCategory, type BlogPost } from "@/types/blog";
 import { HeroEditorial } from "@/components/atualidade/HeroEditorial";
 import { CTA } from "@/components/sections/CTA";
+
+const archivo = Archivo({
+  subsets: ["latin"],
+  variable: "--font-archivo",
+  display: "swap",
+});
+
+const spaceMono = Space_Mono({
+  subsets: ["latin"],
+  weight: ["400"],
+  variable: "--font-space-mono",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "Atualidades | Berkahn Steel Frame",
@@ -90,7 +104,7 @@ export default async function AtualidadePage() {
   const featuredPost = posts.find((post) => post.featured) ?? posts[0];
 
   return (
-    <>
+    <div className={`${archivo.variable} ${spaceMono.variable}`}>
       <script type="application/ld+json">
         {JSON.stringify({
           "@context": "https://schema.org",
@@ -134,6 +148,6 @@ export default async function AtualidadePage() {
           <CTA />
         </main>
       </div>
-    </>
+    </div>
   );
 }

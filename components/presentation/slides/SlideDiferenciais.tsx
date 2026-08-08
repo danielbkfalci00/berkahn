@@ -35,7 +35,7 @@ export function SlideDiferenciais() {
       <div className="container max-w-6xl mx-auto">
         {/* Header */}
         <RevealOnScroll className="text-center mb-12 lg:mb-16">
-          <p className="text-xs sm:text-sm uppercase tracking-[0.3em] text-white/40 mb-4">
+          <p className="text-xs sm:text-sm uppercase tracking-[0.3em] text-white/60 mb-4">
             Light Steel Frame
           </p>
           <h2 className="font-heading text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-white mb-6">
@@ -146,7 +146,7 @@ export function SlideDiferenciais() {
                 {/* Icon */}
                 {Icon && (
                   <div className="flex justify-center mb-4">
-                    <Icon className="w-6 h-6 sm:w-8 sm:h-8 text-white/40" />
+                    <Icon className="w-6 h-6 sm:w-8 sm:h-8 text-white/60" />
                   </div>
                 )}
 

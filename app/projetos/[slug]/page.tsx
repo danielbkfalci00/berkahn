@@ -374,6 +374,7 @@ export default async function ProjectPage({ params }: Props) {
                               src={relatedProject.cardImage}
                               alt={relatedProject.name}
                               fill
+                              sizes="(max-width: 767px) 100vw, (max-width: 1023px) 50vw, 33vw"
                               className="object-cover group-hover:scale-105 transition-transform duration-700"
                             />
                           </div>

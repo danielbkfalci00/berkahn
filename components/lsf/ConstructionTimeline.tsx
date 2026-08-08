@@ -93,7 +93,7 @@ export function ConstructionTimeline() {
 
                         {/* Duration */}
                         <div
-                          className={`flex items-center gap-2 text-sm text-black-50 ${
+                          className={`flex items-center gap-2 text-sm text-black-70 ${
                             isEven ? "md:justify-end" : ""
                           }`}
                         >
@@ -161,7 +161,7 @@ export function ConstructionTimeline() {
               </strong>{" "}
               3 a 6 meses, dependendo do porte da edificação.
             </p>
-            <p className="text-sm text-black-50">
+            <p className="text-sm text-black-70">
               50% mais rápido que construção tradicional em alvenaria
             </p>
           </div>

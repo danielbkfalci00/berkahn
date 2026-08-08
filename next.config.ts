@@ -9,6 +9,8 @@ import type { NextConfig } from "next";
 // Supabase, e `/atualidades/[slug]` depende de ISR, que não existe sob
 // `output: "export"`.
 const nextConfig: NextConfig = {
+  // Keep tracing scoped to this app instead of the global user lockfile.
+  outputFileTracingRoot: process.cwd(),
   serverExternalPackages: ["xlsx-js-style"],
   images: {
     qualities: [65, 70, 75, 78, 80, 85, 90],

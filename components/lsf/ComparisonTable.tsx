@@ -11,7 +11,7 @@ export function ComparisonTable({ data }: ComparisonTableProps = {}) {
   const rows = data || COMPARISON_DATA;
 
   return (
-    <div className="overflow-x-auto">
+    <div className="overflow-x-auto" tabIndex={0} role="region" aria-label="Comparativo entre Light Steel Frame e construção tradicional">
       <table className="w-full bg-white rounded-lg shadow-luxury-lg overflow-hidden">
         {/* Header */}
         <thead className="bg-black text-white">

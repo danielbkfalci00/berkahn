@@ -71,7 +71,7 @@ export function PacoteCard({
         transformStyle: "preserve-3d",
       }}
       className={cn(
-        "group relative flex flex-col h-full overflow-hidden rounded-xl transition-all duration-500",
+        "group relative flex flex-col h-full overflow-hidden rounded-xl transition-all duration-500 motion-reduce:!transform-none motion-reduce:!opacity-100 motion-reduce:!transition-none",
         isDestaque
           ? "bg-white border-2 border-black/50 shadow-luxury-lg hover:shadow-luxury-xl scale-[1.01] z-10"
           : "bg-white border border-black/10 hover:border-black/20",
@@ -140,7 +140,7 @@ export function PacoteCard({
       <div className={cn("flex-1 flex flex-col p-6 lg:p-8", isDestaque && !pacote.imagemRepresentativa && "pt-14")}>
         {/* Header */}
         <div className="mb-6">
-          <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-black/40 mb-1">
+          <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-black/60 mb-1">
             Opção {String.fromCharCode(65 + index)}
           </p>
           <h3 className="text-2xl lg:text-3xl font-bold text-black mb-2">{pacote.nome}</h3>
@@ -158,7 +158,7 @@ export function PacoteCard({
           >
             {formatarValor(pacote.valorTotal)}
           </motion.p>
-          <p className="text-sm text-black/50">
+          <p className="text-sm text-black/70">
             {formatarValor(pacote.valorM2)}/m² | {metragem}m²
           </p>
         </div>

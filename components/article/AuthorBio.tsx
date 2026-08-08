@@ -45,7 +45,7 @@ export function AuthorBio({ authorName }: AuthorBioProps) {
   return (
     <>
       <div className="border-t border-neutral-200 pt-8 mt-12">
-        <p className="text-xs tracking-widest text-neutral-400 uppercase mb-4">Sobre o autor</p>
+        <p className="text-xs tracking-widest text-neutral-600 uppercase mb-4">Sobre o autor</p>
         <div className="flex items-start gap-4">
           <Image
             src={author.image}

@@ -31,7 +31,7 @@ export function SectionLabel({
         <span
           className={cn(
             "block text-xs sm:text-sm uppercase tracking-[0.25em] mt-1.5",
-            isDark ? "text-white/40" : "text-black/40"
+            isDark ? "text-white/60" : "text-black/60"
           )}
         >
           {subtitle}

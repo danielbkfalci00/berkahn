@@ -101,7 +101,7 @@ export function MetodologiaSubsection({ data }: MetodologiaSubsectionProps) {
                     ease: [0.19, 1, 0.22, 1],
                   }}
                   viewport={{ once: true }}
-                  className="flex gap-md"
+                  className="flex gap-4 sm:gap-md motion-reduce:!transform-none motion-reduce:!opacity-100"
                 >
                   {/* Circular letter marker */}
                   <div className="flex-shrink-0">
