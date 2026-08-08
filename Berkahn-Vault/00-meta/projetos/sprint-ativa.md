@@ -61,6 +61,8 @@ vault. Só então exercitar a próxima pauta ponta a ponta em sessão autenticad
   rotas internas
 - [x] Gates de CI versionados: lint, typecheck, testes de conteúdo, testes do
   aprendizado e build
+- [x] Worker local ativo a cada 15 minutos, com heartbeat verificado e limite de
+  um job por execução; aprovação e publicação continuam humanas
 - [ ] Integrações externas: registrar dimensões GA4 e redeployar Apps Script
 - [ ] Exercitar pesquisa → draft → produção → aprovação → publicação na próxima
   pauta real
