@@ -6,6 +6,7 @@ import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
 import { CharReveal } from "@/components/animations/TextReveal";
 import { Mail, Phone, ArrowUpRight, Linkedin } from "lucide-react";
 import Link from "next/link";
+import { trackEvent } from "@/lib/analytics";
 
 const contactInfo = {
   email: "contato.berkahn@gmail.com",
@@ -64,6 +65,13 @@ export function SlideContact() {
               href={`https://wa.me/${contactInfo.phoneRaw}`}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() =>
+                trackEvent("whatsapp_click", {
+                  page_path: "/apresentacao-executiva",
+                  cta_location: "apresentacao_contato",
+                  channel: "whatsapp",
+                })
+              }
               className="flex items-center gap-3 text-white/60 hover:text-white transition-colors duration-300 group"
               whileHover={{ x: 5 }}
             >
@@ -101,7 +109,7 @@ export function SlideContact() {
 
         {/* CNPJ */}
         <RevealOnScroll delay={1.1}>
-          <p className="text-white/40 text-xs sm:text-sm mt-4">
+          <p className="text-white/60 text-xs sm:text-sm mt-4">
             CNPJ: {contactInfo.cnpj}
           </p>
         </RevealOnScroll>

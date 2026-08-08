@@ -9,14 +9,16 @@ const WINDOW_MS = 15 * 60 * 1000;
 const MAX_REQUESTS = 5;
 
 function clientFingerprint(request: NextRequest): string {
-  const forwarded = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "";
-  const userAgent = request.headers.get("user-agent") ?? "";
+  const forwarded =
+    request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
+    request.headers.get("x-real-ip")?.trim() ??
+    "unknown";
   const salt =
     process.env.LEAD_FINGERPRINT_SALT ??
     process.env.SUPABASE_SERVICE_KEY ??
     process.env.SUPABASE_SERVICE_ROLE_KEY ??
     "berkahn-lead";
-  return createHash("sha256").update(`${salt}:${forwarded}:${userAgent}`).digest("hex");
+  return createHash("sha256").update(`${salt}:${forwarded}`).digest("hex");
 }
 
 function slugFromPath(path?: string | null): string | null {
@@ -154,12 +156,14 @@ export async function POST(request: NextRequest) {
   }
 
   const sheetEndpoint = process.env.GOOGLE_SHEETS_LEAD_ENDPOINT?.trim();
-  if (sheetEndpoint) {
+  const sheetSecret = process.env.GOOGLE_SHEETS_LEAD_SECRET?.trim();
+  if (sheetEndpoint && sheetSecret) {
     try {
       const response = await fetch(sheetEndpoint, {
         method: "POST",
         headers: { "Content-Type": "text/plain" },
         body: JSON.stringify({
+          sync_secret: sheetSecret,
           lead_id: saved.id,
           name: lead.name,
           email: lead.email ?? "",
@@ -199,6 +203,8 @@ export async function POST(request: NextRequest) {
         })
         .eq("id", saved.id);
     }
+  } else if (sheetEndpoint) {
+    console.error("lead sheet sync: GOOGLE_SHEETS_LEAD_SECRET não configurado");
   }
 
   return NextResponse.json({ success: true, leadId: saved.id });

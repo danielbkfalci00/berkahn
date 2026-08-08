@@ -4,6 +4,7 @@ import { useRef } from "react";
 import { motion, useInView } from "motion/react";
 import { ArrowUpRight } from "lucide-react";
 import { MagneticButton } from "./MagneticButton";
+import { TrackedWhatsAppLink } from "@/components/layout/WhatsAppButton";
 
 const WHATSAPP_NUMBER = "5511966415742";
 const WHATSAPP_MESSAGE = encodeURIComponent(
@@ -57,8 +58,9 @@ export function UnifiedCTA() {
           className="mt-14 flex flex-col sm:flex-row gap-4 justify-center items-center"
         >
           <MagneticButton intensity={14}>
-            <a
+            <TrackedWhatsAppLink
               href={WHATSAPP_URL}
+              ctaLocation="curadoria_cta"
               target="_blank"
               rel="noopener noreferrer"
               className="group inline-flex items-center gap-3 bg-black text-white px-8 py-4 hover:bg-black-90 transition-colors duration-300"
@@ -67,7 +69,7 @@ export function UnifiedCTA() {
                 Falar no WhatsApp
               </span>
               <ArrowUpRight className="w-4 h-4 transition-transform duration-500 ease-expo group-hover:translate-x-1 group-hover:-translate-y-1" />
-            </a>
+            </TrackedWhatsAppLink>
           </MagneticButton>
 
           <a

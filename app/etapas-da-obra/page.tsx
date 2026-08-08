@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import { FluxogramaEtapasObra } from "@/components/fluxograma/FluxogramaEtapasObra";
+import { TrackedWhatsAppLink } from "@/components/layout/WhatsAppButton";
 
 // Página limpa para envio direto a clientes (sem Header/Footer do site — ver
 // ClientLayout/ConditionalFooter). noindex, mas com OG para o link preview no WhatsApp.
@@ -68,14 +69,15 @@ export default function EtapasDaObraPage() {
       <footer className="mt-2 border-t border-black/10 px-6 py-8 pb-10 text-center">
         <p className="text-xs font-extrabold uppercase tracking-[0.26em]">Berkahn</p>
         <p className="mt-1.5 text-[10.5px] font-medium text-black/40">© 2026</p>
-        <a
+        <TrackedWhatsAppLink
           href={WHATSAPP_URL}
+          ctaLocation="etapas_rodape"
           target="_blank"
           rel="noopener noreferrer"
           className="mt-5 inline-flex items-center gap-2 rounded-full border border-black px-5 py-2.5 text-[11px] font-bold uppercase tracking-[0.14em] transition-colors duration-300 ease-expo hover:bg-black hover:text-white print:hidden"
         >
           Falar com a Berkahn
-        </a>
+        </TrackedWhatsAppLink>
       </footer>
     </div>
   );

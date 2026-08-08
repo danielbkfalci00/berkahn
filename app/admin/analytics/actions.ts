@@ -211,7 +211,9 @@ export async function updateLeadStatus(
 
 export async function retryLeadSheetSync(id: string): Promise<ActionResult> {
   const endpoint = process.env.GOOGLE_SHEETS_LEAD_ENDPOINT?.trim()
+  const syncSecret = process.env.GOOGLE_SHEETS_LEAD_SECRET?.trim()
   if (!endpoint) return { data: null, error: 'GOOGLE_SHEETS_LEAD_ENDPOINT não configurado.' }
+  if (!syncSecret) return { data: null, error: 'GOOGLE_SHEETS_LEAD_SECRET não configurado.' }
 
   const supabase = await createClient()
   const { data: lead, error } = await supabase
@@ -226,6 +228,7 @@ export async function retryLeadSheetSync(id: string): Promise<ActionResult> {
       method: 'POST',
       headers: { 'Content-Type': 'text/plain' },
       body: JSON.stringify({
+        sync_secret: syncSecret,
         lead_id: lead.id,
         name: lead.nome,
         email: lead.email ?? '',

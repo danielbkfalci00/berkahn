@@ -16,7 +16,7 @@
  * 6. Quem tem acesso: Qualquer pessoa
  * 7. Copiar URL gerada
  *
- * @version 1.1.0
+ * @version 1.2.0
  * @date 2026-08-07
  * @author Claude Code + Bruno Falci
  */
@@ -45,6 +45,13 @@ function doPost(e) {
   try {
     // Parse dos dados recebidos
     const data = JSON.parse(e.postData.contents);
+
+    // Autenticação servidor-servidor. Configure LEAD_SYNC_SECRET em
+    // Configurações do projeto → Propriedades do script antes do deploy.
+    const expectedSecret = PropertiesService.getScriptProperties().getProperty('LEAD_SYNC_SECRET');
+    if (!expectedSecret || data.sync_secret !== expectedSecret) {
+      return createResponse(false, 'Não autorizado');
+    }
 
     // Validação básica
     if (!data.name || !data.phone || !data.message) {
@@ -76,7 +83,7 @@ function doPost(e) {
 function doGet(e) {
   return createResponse(true, 'API Berkahn funcionando!', {
     timestamp: new Date().toISOString(),
-    version: '1.1.0'
+    version: '1.2.0'
   });
 }
 
@@ -151,7 +158,14 @@ function saveToSheet(data) {
  * @param {Object} data - Dados do lead {name, email, phone, message}
  */
 function sendNotificationEmail(data) {
-  const subject = `🏗️ Novo Lead Berkahn: ${data.name}`;
+  const safe = {
+    name: escapeHtml(data.name || ''),
+    email: escapeHtml(data.email || ''),
+    phone: escapeHtml(data.phone || ''),
+    message: escapeHtml(data.message || '').replace(/\n/g, '<br>')
+  };
+  const subjectName = String(data.name || '').replace(/[\r\n]+/g, ' ').slice(0, 160);
+  const subject = `🏗️ Novo Lead Berkahn: ${subjectName}`;
 
   const htmlBody = `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
@@ -166,23 +180,23 @@ function sendNotificationEmail(data) {
         <table style="width: 100%; border-collapse: collapse;">
           <tr>
             <td style="padding: 10px 0; border-bottom: 1px solid #eee; font-weight: bold; width: 120px;">Nome:</td>
-            <td style="padding: 10px 0; border-bottom: 1px solid #eee;">${data.name}</td>
+            <td style="padding: 10px 0; border-bottom: 1px solid #eee;">${safe.name}</td>
           </tr>
           <tr>
             <td style="padding: 10px 0; border-bottom: 1px solid #eee; font-weight: bold;">Email:</td>
             <td style="padding: 10px 0; border-bottom: 1px solid #eee;">
-              ${data.email ? `<a href="mailto:${data.email}" style="color: #000;">${data.email}</a>` : '<span style="color: #999;">Não informado</span>'}
+              ${data.email ? `<a href="mailto:${safe.email}" style="color: #000;">${safe.email}</a>` : '<span style="color: #999;">Não informado</span>'}
             </td>
           </tr>
           <tr>
             <td style="padding: 10px 0; border-bottom: 1px solid #eee; font-weight: bold;">Telefone:</td>
             <td style="padding: 10px 0; border-bottom: 1px solid #eee;">
-              ${data.phone ? `<a href="tel:${data.phone}" style="color: #000;">${data.phone}</a>` : '<span style="color: #999;">Não informado</span>'}
+              ${data.phone ? `<a href="tel:${safe.phone}" style="color: #000;">${safe.phone}</a>` : '<span style="color: #999;">Não informado</span>'}
             </td>
           </tr>
           <tr>
             <td style="padding: 10px 0; font-weight: bold; vertical-align: top;">Mensagem:</td>
-            <td style="padding: 10px 0;">${data.message.replace(/\n/g, '<br>')}</td>
+            <td style="padding: 10px 0;">${safe.message}</td>
           </tr>
         </table>
 
@@ -239,6 +253,14 @@ Acesse a planilha: https://docs.google.com/spreadsheets/d/1C0xAuEPB5KwyR8YhZl0mK
  * @param {Object} data - Dados adicionais (opcional)
  * @returns {TextOutput} Resposta JSON formatada
  */
+function escapeHtml(value) {
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
 function createResponse(success, message, data = null) {
   const response = {
     success: success,
