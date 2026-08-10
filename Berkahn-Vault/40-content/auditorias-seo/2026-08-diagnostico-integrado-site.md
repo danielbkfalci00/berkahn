@@ -1,14 +1,14 @@
 ---
 tipo: auditoria
 criado: 2026-08-07
-atualizado: 2026-08-07
+atualizado: 2026-08-10
 tags:
   - project/site
   - project/blog
   - domain/seo
   - status/active
   - source/manual
-ai_summary: "Diagnóstico integrado 2026-08-07: crawl 47/47 verde, SSG/ISR preservado, JS do artigo -41,2%, axe sério/crítico zerado em 28 cenários e telemetria de contato normalizada. Mobile segue limitado por LCP em 7/8 arquétipos; campo e qualificação exigem janelas de 7/28 dias."
+ai_summary: "Diagnóstico integrado: crawl 47/47 verde, SSG/ISR preservado e JS do artigo -41,2%. Extensão 2026-08-10 aplica CRM Supabase 024/025 com RLS/atomicidade verdes; deploy da Edge Function, importação Google e rollout Vercel/Apps Script aguardam acesso."
 status: active
 projeto: seo-aeo
 kpi_crawl_urls_ok: 47
@@ -129,7 +129,15 @@ Eventos padronizados e preservados:
 
 As propriedades comuns são page_path, cta_location, channel e segment quando aplicável. O WhatsApp direto de /contato e demais CTAs Berkahn agora entram nessa cobertura. Nenhuma PII é enviada ao GA4.
 
-Supabase continua sendo a fonte primária de leads; a planilha é espelho retryável. Apps Script 1.2 exige segredo compartilhado, escapa HTML da notificação e remove quebras do assunto. O rate limit permanece best-effort e não atômico, aceitável no volume atual.
+Supabase é a única custódia operacional de leads e PII. O Apps Script 1.3 recebe somente `lead_id` e segredo, grava ledger mínimo e envia email genérico com link ao admin. A rota responde após o insert no Supabase e executa a notificação em pós-resposta; falha fica retryável.
+
+### Extensão do diagnóstico — CRM Supabase (2026-08-10)
+
+As migrations 024/025 foram aplicadas em produção. O banco agora possui funil completo, atribuição consentida, visualização, próxima ação, arquivamento, vínculos comerciais, importação idempotente e funções de retenção. RPCs tornam status, contato, nota e arquivamento atômicos; a matriz anon / authenticated não autorizado / admin / service role e a reversão quando o log falha passaram em transação revertida.
+
+`/admin/leads` foi separado de Analytics com paginação de 25, filtros, KPIs de 28 dias, detalhe, timeline, retry e cadastro manual com alerta de duplicidade. Orçamento reutiliza o wizard atual com `lead_id`; propostas recebem apenas a FK preparatória. O build de produção preserva SSG/ISR público.
+
+A conta Supabase CLI disponível devolve 403 ao publicar Edge Functions, e as credenciais Google disponíveis não acessam a planilha histórica. Portanto, a função não foi publicada/agendada e a importação/sanitização não foi simulada como concluída. Fontes canônicas e pendências: [[admin-setup]], [[google-sheets]] e [[site]].
 
 ## SEO e AEO
 
@@ -166,8 +174,9 @@ Concluídos:
 
 Pendências externas:
 - [ ] @bruno Definir generate_lead e whatsapp_click como Key Events no GA4 e validar em DebugView/Realtime após consentimento #pendencia
-- [ ] @bruno Criar o mesmo segredo em GOOGLE_SHEETS_LEAD_SECRET na Vercel e LEAD_SYNC_SECRET nas Script Properties, depois publicar o Apps Script 1.2 #pendencia
-- [ ] @bruno Confirmar as colunas opcionais de atribuição e qualificação na planilha real após o redeploy #pendencia
+- [ ] @bruno Criar o mesmo segredo em GOOGLE_SHEETS_LEAD_SECRET na Vercel e LEAD_SYNC_SECRET nas Script Properties, depois publicar o Apps Script 1.3 #pendencia
+- [ ] @bruno Liberar acesso à planilha para importação/reconciliação e remoção final de PII #pendencia
+- [ ] @bruno Liberar acesso Supabase Functions para publicar/agendar a retenção mensal #pendencia
 - [ ] @bruno Monitorar Speed Insights por sete dias e consolidar p75 de campo em 28 dias sem misturar a série pré e pós-Consent Mode #pendencia
 - [ ] @bruno Repetir as 15 consultas no Claude autenticado e completar as duas consultas instáveis do ChatGPT #pendencia
 - [ ] @bruno Realizar cinco testes de tarefa antes de qualquer A/B test ou decisão definitiva de CRO #pendencia

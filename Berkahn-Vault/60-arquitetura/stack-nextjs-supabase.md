@@ -1,12 +1,12 @@
 ---
 tipo: context
 criado: 2026-05-21
-atualizado: 2026-08-06
+atualizado: 2026-08-10
 tags:
   - ai/context
   - project/site
   - domain/architecture
-ai_summary: Stack técnica do site Berkahn (visão executiva). Next.js + React + Tailwind no frontend, Supabase como CMS + auth, Vercel deploy. Integrações Google Sheets, Apps Script. Componentes interativos via JSONB.
+ai_summary: Stack do site Berkahn. Supabase concentra CMS, Auth e CRM de leads com RPCs/RLS; GA4 fica sem PII e Apps Script é apenas notificação genérica com ledger mínimo. Retenção usa Edge Function, Storage, pg_cron e pg_net.
 status: active
 escopo: berkahn
 ---
@@ -34,7 +34,7 @@ Visão executiva da arquitetura técnica do site Berkahn.
 
 | Camada | Tecnologia |
 |--------|-----------|
-| CMS | Supabase (PostgreSQL) — tabelas `posts`, `proposals`, `presentations`, `analytics_snapshots`, `analytics_tasks`, `orcamentos` (esta última: estimativas preliminares PDF, ver [[orcamento-automacao]]) |
+| CMS + CRM | Supabase (PostgreSQL) — `posts`, `leads`, `proposals`, `presentations`, `analytics_snapshots`, `analytics_tasks` e `orcamentos` |
 | Auth | Supabase Auth (admin panel) |
 | RLS | Row Level Security ativo em todas as tabelas |
 | API | Supabase REST + Server Actions Next.js |
@@ -49,7 +49,8 @@ Painel Next.js separado para gerenciar posts, leads, dashboard, **orçamentos** 
 
 | Integração | Função | Doc |
 |------------|--------|-----|
-| Google Sheets via Apps Script | Captura leads do formulário de contato | [[google-sheets]] |
+| Google Sheets via Apps Script | Ledger mínimo sem PII + email genérico; Supabase recebe o lead primeiro | [[google-sheets]] |
+| Edge Function + pg_cron/pg_net | Retenção e anonimização de leads inativos após 24 meses | [[admin-setup]] |
 | Quadro admin | Hub operacional de pautas, Blog e LinkedIn | [[quadro-conteudo]] |
 | Canva | Materiais visuais (briefing manual) | [[canva-briefing]] |
 | Google Search Console | Indexação + analytics | — |

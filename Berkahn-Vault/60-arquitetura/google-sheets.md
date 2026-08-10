@@ -156,7 +156,7 @@ O limitador do endpoint Next.js usa contagem seguida de insert, portanto não é
 
 - Contatos recebidos: generate_lead.
 - Intenção via WhatsApp: whatsapp_click.
-- Qualificação: status_qualificacao na operação; nunca inferir qualificação a partir do clique.
+- Qualificação: estados canônicos em `/admin/leads`; nunca inferir qualificação a partir do clique.
 - Saúde da notificação: sheet_synced_at, erros de retry e Apps Script → Executions.
 - Não registrar PII em GA4 ou logs.
 
@@ -175,6 +175,8 @@ O limitador do endpoint Next.js usa contagem seguida de insert, portanto não é
 - [ ] @bruno Configurar GOOGLE_SHEETS_LEAD_ENDPOINT e GOOGLE_SHEETS_LEAD_SECRET na Vercel #pendencia
 - [ ] @bruno Configurar LEAD_SYNC_SECRET nas Script Properties e publicar o Apps Script 1.3 #pendencia
 - [ ] @bruno Validar formulário real, ledger sem PII, email genérico e retry do admin em produção #pendencia
+- [ ] @bruno Após importar e reconciliar o histórico, remover PII da planilha e apagar o CSV temporário #pendencia
+- [ ] @bruno Apagar emails legados com PII anteriores a 24 meses e registrar a data do email legado mais recente para a última revisão #pendencia
 ## 📝 Changelog
 
 ### v1.3.0 — 2026-08-10
@@ -185,7 +187,7 @@ O limitador do endpoint Next.js usa contagem seguida de insert, portanto não é
 
 ### v1.2.0 — 2026-08-07
 
-- Supabase consolidado como fonte primária; planilha permanece espelho retryável.
+- Supabase consolidado como fonte primária; esta versão foi substituída pelo ledger mínimo sem PII da v1.3.
 - Segredo obrigatório entre Next.js e Apps Script.
 - HTML de email escapado e assunto protegido contra quebra de linha.
 - Dimensões opcionais de atribuição documentadas sem PII no GA4.

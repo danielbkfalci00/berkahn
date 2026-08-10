@@ -1,11 +1,11 @@
 ---
 tipo: projeto
 criado: 2026-05-22
-atualizado: 2026-08-07
+atualizado: 2026-08-10
 tags:
   - project/site
   - status/active
-ai_summary: "Hub do Site — migrations 014–023 e quadro de conteúdo endurecido em produção; sprint de performance reduziu o JS do artigo em 41,2%, preservou SSG/ISR e zerou axe sério/crítico em 28 cenários. Pendências externas: Apps Script 1.2, Key Events GA4 e campo 7/28 dias."
+ai_summary: "Hub do Site — CRM Supabase implementado na branch codex/supabase-leads-admin; migrations 024/025 aplicadas e RLS/atomicidade verdes. Pendem publicação da Edge Function, segredo/Apps Script, importação da planilha e deploy do código por falta de acesso às contas corretas."
 status: active
 projeto: site
 kpi_paginas_indexadas: 34
@@ -45,7 +45,7 @@ code_paths:
 
 ## Status atual
 
-Site em produção (Next.js App Router + Supabase + Vercel + Tailwind + shadcn/ui). 16 rotas em `app/` (atualidades, empresa, admin, apresentacao-executiva, etc.). Admin com painel de posts ativo (`app/admin/`). Integração Google Sheets para leads via Apps Script.
+Site em produção (Next.js App Router + Supabase + Vercel + Tailwind + shadcn/ui). O CRM leve em `/admin/leads` está implementado na branch `codex/supabase-leads-admin`; arquitetura e runbook vivem em [[admin-setup]]. Google Sheets deixa de custodiar PII e permanece apenas como ledger/notificação em [[google-sheets]].
 
 **Diagnóstico integrado 2026-08-07**: o crawl agora cobre as 47 URLs do sitemap e superfícies públicas `noindex`; o artigo caiu de 371 para 218 kB de First Load JS (-41,2%), com home em 241 kB e `/atualidades` em 179 kB. SSG/ISR de 60 s e 404 foram preservados. Evidências, limites de laboratório e baseline de conversão vivem em [[2026-08-diagnostico-integrado-site]].
 
@@ -59,7 +59,10 @@ Site em produção (Next.js App Router + Supabase + Vercel + Tailwind + shadcn/u
 - [x] ~~**Seis rotas `/api/admin/*` sem autenticação**~~ — resolvido em 2026-08-05. O matcher do middleware era `['/', '/admin/:path*']` e não cobria `/api/admin/*`; três das rotas usavam `createServiceClient()`, que bypassa RLS. Sem login dava para listar todos os orçamentos com dado pessoal do cliente, apagar por id, e pegar signed URL do PDF. Fechado com matcher + `exigirSessao()` nos 10 handlers. Verificado: as 9 combinações devolvem 401
 - [x] ~~**Dupla escrita dos comandos de conteúdo**~~ — resolvido em 2026-08-06. `/pesquisa` e `/linkedin` gravam na pauta via `scripts/conteudo/pauta.mjs` e não criam mais `.md` no vault. `/criacao` e `/calendario` foram corrigidos junto: um procurava a pesquisa na pasta que deixou de ser alimentada, o outro contava posts pendentes varrendo uma pasta congelada. Ver [[quadro-conteudo]]
 - [ ] **Contas Supabase por pessoa**: hoje todos entram com a mesma conta compartilhada, então `auth.uid()` não distingue ninguém e o autor dos comentários é nome digitado no localStorage. Projeto próprio — ver [[comentarios-inline-documentacoes]], seção "Identidade"
-- [x] **Google Sheets SPOF encerrado**: `leads` no Supabase é primário e a planilha é espelho com retry. Apps Script 1.2 está pronto no código; segredo compartilhado, Script Property e redeploy ainda são rollout externo
+- [x] **Banco do CRM aplicado**: migrations 024/025 em produção; funil, RPCs, vínculos, RLS, funções de retenção, `pg_cron` e `pg_net` instalados. Matriz RLS e rollback atômico verdes
+- [ ] @bruno Conceder acesso Supabase para publicar `lead-retention`, configurar segredo no Vault/Edge e agendar o job mensal #pendencia
+- [ ] @bruno Conceder acesso à planilha histórica para importar/reconciliar, apagar o CSV temporário e remover PII do Google #pendencia
+- [ ] @bruno Configurar segredo na Vercel e Script Properties, publicar Apps Script 1.3 e validar ledger/email/retry #pendencia
 - [ ] **Core Web Vitals de campo**: otimizações estruturais entregues em [[2026-08-diagnostico-integrado-site]], sem inferir campo a partir de laboratório. Monitorar Speed Insights por 7 dias e avaliar p75 em 28 dias. Metas: LCP ≤ 2,5 s, INP ≤ 200 ms e CLS ≤ 0,1
 
 ## Próximos 7 dias
@@ -67,6 +70,7 @@ Site em produção (Next.js App Router + Supabase + Vercel + Tailwind + shadcn/u
 - [x] ~~**Home redesign — fechar o PR #43**~~ — mergeado em 2026-08-06 com hub reconciliado; `@design-review` executado e follow-up PR #44 mergeado
 - [x] ~~**Trocar take e restaurar copy institucional da home**~~ — 1080p integral convertido em 72/36 frames; copy conferida contra `bc6515f`; rail de projetos preservado no código e desmontado da composição
 - [ ] **CWV de campo pós-sprint**: medir no Speed Insights por 7 dias e consolidar em 28 dias; não comparar GA4 anterior e posterior ao Consent Mode de 2026-07-30 como séries equivalentes. Baseline e laboratório: [[2026-08-diagnostico-integrado-site]]
+- [ ] **CRM de leads**: revisar PR da branch `codex/supabase-leads-admin`, publicar site/admin e executar smoke autenticado após fechar os acessos externos em [[google-sheets]] e [[admin-setup]]
 - [x] ~~**Próxima página do redesign: `/atualidades`**~~ — concluída em 2026-08-06: abertura fundida, bento, categorias canônicas, payload 141/26 KB e ISR 60 preservado
 - [ ] Importar Clube Quinta dos Lagos para o banco de imagens antes de reativar o rail de projetos
 - [ ] Validar `/institucional/pdf` gerando PDF em produção (pós-merge do #17)

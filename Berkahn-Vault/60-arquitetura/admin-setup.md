@@ -1,12 +1,12 @@
 ---
 tipo: context
 criado: 2025-12-01
-atualizado: 2026-05-21
+atualizado: 2026-08-10
 tags:
   - ai/context
   - project/site
   - domain/admin
-ai_summary: Sistema Admin Berkahn (Next.js + Supabase) — painel administrativo para gerenciar posts, leads, dashboard. Stack, setup inicial, RLS, autenticação, comandos de dev. Deduplicado de Docs/site/ (única fonte agora).
+ai_summary: Sistema Admin Berkahn com CRM leve em /admin/leads. Supabase é a única custódia de PII; status, notas, contatos, visualização e arquivamento usam RPCs transacionais e RLS do admin canônico. Orçamentos podem ser vinculados ao lead.
 status: active
 escopo: berkahn
 ---
@@ -177,6 +177,20 @@ Configure um único projeto Vercel com o build completo:
    - Aponta para: `cname.vercel-dns.com`
 
 ## Módulos
+
+### CRM de leads
+
+`/admin/leads` é a fila operacional única. A lista usa paginação server-side de 25, busca, filtros, badge de não visualizados e KPIs por coorte de 28 dias. O detalhe concentra contato, origem consentida, funil, próxima ação, timeline, retry da notificação e vínculos comerciais. A lista antiga foi removida de `/admin/analytics`, que mantém somente agregados e aprendizado.
+
+O funil canônico é `novo` → `em_contato` → `qualificado` → `proposta_enviada` → `convertido`, com `desqualificado` exigindo motivo. `qualificado_em` registra a primeira qualificação e não é apagado por regressão posterior; `convertido_em` representa fechamento efetivo. Cadastro manual aceita WhatsApp, telefone, email e indicação, mostra candidatos a duplicidade e nunca dispara GA4.
+
+As mutações vivem em RPCs transacionais da migration `024_leads_crm_supabase.sql`. Logs de lead usam `Lead <prefixo-do-UUID>` em `entity_name`; PII e notas ficam em `details` e seguem a retenção do registro. A RLS de `activity_logs` preserva os demais tipos, mas exige o mesmo administrador autorizado de `leads` quando `entity_type = lead`. A matriz anon / authenticated não autorizado / admin / service role e a reversão atômica são verificadas por `npm run test:leads`.
+
+Orçamentos e propostas têm `lead_id`. “Criar orçamento” abre o wizard existente com contato e vínculo preenchidos; salvar rascunho não move o funil e finalizar somente registra atividade. O módulo de propostas continua placeholder.
+
+Importação histórica: `node --env-file=.env.local scripts/leads/import-leads-csv.mjs --file=C:\\caminho-fora-do-repo\\leads.csv --dry-run`, seguido de `--apply`. O identificador `sheet:<hash-do-arquivo>:<linha>` torna a repetição idempotente sem fundir linhas repetidas. O script não imprime PII.
+
+Retenção: leads não convertidos, sem exceção e sem atualização por 24 meses são candidatos. A RPC revalida e bloqueia o registro, anonimiza transacionalmente lead, logs, orçamentos e propostas e persiste os paths de PDF numa fila de cleanup. Só depois a Edge Function `lead-retention` remove os objetos de `orcamento-pdfs`; falhas de Storage mantêm os paths para retry, evitando apagar um documento antes da revalidação ou perder a referência do objeto. A migration `025_schedule_lead_retention.sql` habilita `pg_cron`/`pg_net`, mas não agenda nada automaticamente; publicar a função, criar `lead_retention_cron_secret` no Vault e só então executar `schedule_monthly_lead_retention()`.
 
 ### Posts de Blog
 

@@ -1,18 +1,18 @@
 ---
 tipo: legal
 criado: 2025-02-01
-atualizado: 2026-05-22
+atualizado: 2026-08-10
 tags:
   - project/site
   - status/active
   - source/manual
-ai_summary: Política de Privacidade Berkahn — fev 2025. Em conformidade com LGPD (Lei 13.709/2018). Documento legal canonical. Renderizado em /privacidade no site. Atualizar com cautela (impacto legal).
+ai_summary: Política de Privacidade Berkahn — agosto de 2026. Supabase é a custódia de PII comercial; Google recebe apenas ledger técnico sem PII. Leads não convertidos e inativos são anonimizados após 24 meses, com exceções legais documentadas.
 status: active
 projeto: site
 url_publicado: https://www.berkahn.com.br/privacidade
 projetos_relacionados:
   - site
-data_atualizacao_doc: 2025-02-01
+data_atualizacao_doc: 2026-08-10
 documento_legal: politica-de-privacidade
 ---
 
@@ -20,7 +20,7 @@ documento_legal: politica-de-privacidade
 
 # Política de Privacidade
 
-*Última atualização: fevereiro de 2025*
+*Última atualização: agosto de 2026*
 
 A Construtora Berkahn ("Berkahn", "nós") leva a proteção dos seus dados pessoais a sério. Esta Política de Privacidade explica como coletamos, utilizamos, armazenamos e protegemos as informações que você nos fornece ao acessar o site berkahn.com.br, em conformidade com a Lei Geral de Proteção de Dados Pessoais (Lei nº 13.709/2018 — LGPD) e demais normas aplicáveis.
 
@@ -76,9 +76,9 @@ Você pode gerenciar suas preferências de cookies a qualquer momento através d
 
 ## 4. Armazenamento e segurança dos dados
 
-Os dados pessoais coletados são armazenados em plataformas seguras, incluindo Google Workspace (Google Sheets), PostHog e Supabase. Adotamos medidas técnicas e organizacionais adequadas para proteger seus dados contra acesso não autorizado, perda, destruição ou qualquer forma de tratamento inadequado.
+Os dados pessoais de solicitações comerciais são armazenados no Supabase, que é a fonte operacional única desses registros. O Google Workspace recebe somente um identificador técnico do lead, horário e resultado da notificação, sem nome, e-mail, telefone, mensagem ou dados de atribuição. Adotamos medidas técnicas e organizacionais adequadas para proteger seus dados contra acesso não autorizado, perda, destruição ou qualquer forma de tratamento inadequado.
 
-O período de armazenamento varia conforme a finalidade da coleta. Dados de solicitações de orçamento são mantidos pelo tempo necessário para atendimento comercial e eventual formalização contratual. Dados de newsletter são mantidos enquanto durar sua inscrição. Dados de navegação coletados por cookies seguem as políticas de retenção de cada ferramenta utilizada.
+Leads não convertidos e sem atualização por 24 meses são anonimizados, incluindo notas, dados pessoais em orçamentos ou propostas vinculados e arquivos relacionados. Registros convertidos ou documentos sujeitos a obrigação legal podem ser preservados pelo prazo aplicável, com exceção documentada. Dados de newsletter são mantidos enquanto durar sua inscrição. Dados de navegação coletados por cookies seguem as políticas de retenção de cada ferramenta utilizada.
 
 ---
 

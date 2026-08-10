@@ -51,7 +51,7 @@ export default function PrivacidadePage() {
   return (
     <LegalPageLayout
       title="Política de Privacidade"
-      lastUpdated="fevereiro de 2025"
+      lastUpdated="agosto de 2026"
       introContent={
         <>
           <p>
@@ -251,20 +251,21 @@ export default function PrivacidadePage() {
           content: (
             <>
               <p>
-                Os dados pessoais coletados são armazenados em plataformas
-                seguras, incluindo Google Workspace (Google Sheets), PostHog e
-                Supabase. Adotamos medidas técnicas e organizacionais adequadas
-                para proteger seus dados contra acesso não autorizado, perda,
-                destruição ou qualquer forma de tratamento inadequado.
+                Os dados pessoais de solicitações comerciais são armazenados no
+                Supabase, que é a fonte operacional única desses registros. O
+                Google Workspace recebe somente um identificador técnico do
+                lead, horário e resultado da notificação, sem nome, e-mail,
+                telefone, mensagem ou dados de atribuição. Adotamos medidas
+                técnicas e organizacionais adequadas para proteger seus dados.
               </p>
               <p>
-                O período de armazenamento varia conforme a finalidade da
-                coleta. Dados de solicitações de orçamento são mantidos pelo
-                tempo necessário para atendimento comercial e eventual
-                formalização contratual. Dados de newsletter são mantidos
-                enquanto durar sua inscrição. Dados de navegação coletados por
-                cookies seguem as políticas de retenção de cada ferramenta
-                utilizada.
+                Leads não convertidos e sem atualização por 24 meses são
+                anonimizados, incluindo notas, dados pessoais em orçamentos ou
+                propostas vinculados e arquivos relacionados. Registros
+                convertidos ou documentos sujeitos a obrigação legal podem ser
+                preservados pelo prazo aplicável, com exceção documentada.
+                Dados de newsletter são mantidos enquanto durar sua inscrição.
+                Dados de navegação seguem as políticas de cada ferramenta.
               </p>
             </>
           ),
