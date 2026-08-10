@@ -22,6 +22,11 @@ export interface LeadInput {
   utmSource?: string;
   utmMedium?: string;
   utmCampaign?: string;
+  utmContent?: string;
+  utmTerm?: string;
+  landingPage?: string;
+  referrer?: string;
+  attributionConsent?: boolean;
   website?: string;
   startedAt?: number;
 }
@@ -68,8 +73,69 @@ export function validateLeadInput(input: unknown):
       utmSource: text("utmSource", 160) || undefined,
       utmMedium: text("utmMedium", 160) || undefined,
       utmCampaign: text("utmCampaign", 160) || undefined,
+      utmContent: text("utmContent", 160) || undefined,
+      utmTerm: text("utmTerm", 160) || undefined,
+      landingPage: text("landingPage", 500) || undefined,
+      referrer: text("referrer", 500) || undefined,
+      attributionConsent: value.attributionConsent === true,
       website: text("website", 300) || undefined,
       startedAt: typeof value.startedAt === "number" ? value.startedAt : undefined,
     },
   };
+}
+
+const LEAD_ATTRIBUTION_STORAGE = "berkahn-lead-attribution-v1";
+
+export interface LeadAttributionInput {
+  utmSource?: string;
+  utmMedium?: string;
+  utmCampaign?: string;
+  utmContent?: string;
+  utmTerm?: string;
+  landingPage?: string;
+  referrer?: string;
+  attributionConsent: boolean;
+}
+
+/** Persiste o primeiro toque somente depois do consentimento analítico. */
+export function persistLeadAttribution(): void {
+  if (typeof window === "undefined") return;
+  if (sessionStorage.getItem(LEAD_ATTRIBUTION_STORAGE)) return;
+
+  const url = new URL(window.location.href);
+  const payload: LeadAttributionInput = {
+    utmSource: url.searchParams.get("utm_source")?.slice(0, 160) || undefined,
+    utmMedium: url.searchParams.get("utm_medium")?.slice(0, 160) || undefined,
+    utmCampaign: url.searchParams.get("utm_campaign")?.slice(0, 160) || undefined,
+    utmContent: url.searchParams.get("utm_content")?.slice(0, 160) || undefined,
+    utmTerm: url.searchParams.get("utm_term")?.slice(0, 160) || undefined,
+    landingPage: url.pathname.slice(0, 500),
+    referrer: sanitizeReferrer(document.referrer),
+    attributionConsent: true,
+  };
+
+  sessionStorage.setItem(LEAD_ATTRIBUTION_STORAGE, JSON.stringify(payload));
+}
+
+function sanitizeReferrer(value: string): string | undefined {
+  if (!value) return undefined;
+  try {
+    const url = new URL(value);
+    return `${url.origin}${url.pathname}`.slice(0, 500);
+  } catch {
+    return undefined;
+  }
+}
+
+export function getLeadAttribution(): LeadAttributionInput {
+  if (typeof window === "undefined") return { attributionConsent: false };
+  const stored = sessionStorage.getItem(LEAD_ATTRIBUTION_STORAGE);
+  if (!stored) return { attributionConsent: false };
+  try {
+    const parsed = JSON.parse(stored) as Partial<LeadAttributionInput>;
+    return { ...parsed, attributionConsent: parsed.attributionConsent === true };
+  } catch {
+    sessionStorage.removeItem(LEAD_ATTRIBUTION_STORAGE);
+    return { attributionConsent: false };
+  }
 }

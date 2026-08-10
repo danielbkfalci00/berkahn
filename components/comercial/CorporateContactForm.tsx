@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/select";
 import { COMERCIAL_FORM_PROJECT_TYPES } from "@/lib/comercial-data";
 import { usePathname } from "next/navigation";
-import { LEAD_ENDPOINT } from "@/lib/contact";
+import { getLeadAttribution, LEAD_ENDPOINT } from "@/lib/contact";
 import { trackEvent } from "@/lib/analytics";
 
 /* ─── Types ─── */
@@ -122,6 +122,7 @@ export function CorporateContactForm() {
           message: formData.description,
           pagePath: pathname ?? undefined,
           ctaLocation: "comercial",
+          ...getLeadAttribution(),
           website,
           startedAt,
         }),

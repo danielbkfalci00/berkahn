@@ -15,7 +15,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { usePathname } from "next/navigation";
-import { LEAD_ENDPOINT, WHATSAPP_URL } from "@/lib/contact";
+import { getLeadAttribution, LEAD_ENDPOINT, WHATSAPP_URL } from "@/lib/contact";
 import { trackEvent } from "@/lib/analytics";
 
 export type Segment = "residencial" | "comercial" | "";
@@ -130,8 +130,8 @@ export function ContactForm({
     setStatus("loading");
     setErrors({});
 
-    // Tentativa. Comparado com generate_lead, revela quanto se perde entre
-    // enviar e o Apps Script confirmar.
+    // Tentativa. Comparado com generate_lead, revela quanto se perde antes
+    // de o Supabase confirmar o recebimento.
     trackEvent("form_submit", { ...contexto(), channel: "form" });
 
     try {
@@ -148,6 +148,7 @@ export function ContactForm({
           message: formData.message,
           pagePath: pathname ?? undefined,
           ctaLocation,
+          ...getLeadAttribution(),
           website,
           startedAt,
         }),
@@ -157,7 +158,7 @@ export function ContactForm({
 
       if (result.success) {
         setStatus("success");
-        // Conversão confirmada — o lead chegou na planilha.
+        // Conversão confirmada — o lead foi persistido no Supabase.
         trackEvent("generate_lead", { ...contexto(), channel: "form" });
       } else {
         setStatus("error");

@@ -489,79 +489,136 @@ export type Database = {
       }
       leads: {
         Row: {
-          id: string
-          nome: string
-          email: string | null
-          telefone: string
-          segmento: string
-          mensagem: string
+          anonimizado_em: string | null
+          arquivado_em: string | null
+          atualizado_em: string
           canal: string
-          status: string
-          pagina_origem: string | null
-          slug_origem: string | null
+          cargo: string | null
+          convertido_em: string | null
+          criado_em: string
           cta_location: string | null
-          utm: Json
-          post_id: string | null
+          desqualificado_em: string | null
+          email: string | null
+          empresa: string | null
+          id: string
+          importado_em: string | null
+          landing_page: string | null
+          mensagem: string | null
+          nome: string
+          motivo_desqualificacao: string | null
+          origem_legado: string | null
+          pagina_origem: string | null
           pauta_id: string | null
-          request_fingerprint: string | null
-          qualificado_por: string | null
+          post_id: string | null
+          proxima_acao_em: string | null
           qualificado_em: string | null
+          qualificado_por: string | null
+          referrer: string | null
+          request_fingerprint: string | null
+          retencao_excecao: boolean
+          retencao_excecao_motivo: string | null
+          retencao_storage_pendente: string[]
+          segmento: string
           sheet_sync_status: string
           sheet_sync_tentativas: number
           sheet_synced_at: string | null
           sheet_sync_error: string | null
-          criado_em: string
-          atualizado_em: string
+          slug_origem: string | null
+          status: string
+          telefone: string | null
+          telefone_normalizado: string | null
+          tipo_projeto: string | null
+          ultimo_contato_em: string | null
+          utm: Json
+          visualizado_em: string | null
         }
         Insert: {
-          id?: string
-          nome: string
-          email?: string | null
-          telefone: string
-          segmento: string
-          mensagem: string
+          anonimizado_em?: string | null
+          arquivado_em?: string | null
+          atualizado_em?: string
           canal?: string
-          status?: string
-          pagina_origem?: string | null
-          slug_origem?: string | null
+          cargo?: string | null
+          convertido_em?: string | null
+          criado_em?: string
           cta_location?: string | null
-          utm?: Json
-          post_id?: string | null
+          desqualificado_em?: string | null
+          email?: string | null
+          empresa?: string | null
+          id?: string
+          importado_em?: string | null
+          landing_page?: string | null
+          mensagem?: string | null
+          nome: string
+          motivo_desqualificacao?: string | null
+          origem_legado?: string | null
+          pagina_origem?: string | null
           pauta_id?: string | null
-          request_fingerprint?: string | null
-          qualificado_por?: string | null
+          post_id?: string | null
+          proxima_acao_em?: string | null
           qualificado_em?: string | null
+          qualificado_por?: string | null
+          referrer?: string | null
+          request_fingerprint?: string | null
+          retencao_excecao?: boolean
+          retencao_excecao_motivo?: string | null
+          retencao_storage_pendente?: string[]
+          segmento: string
           sheet_sync_status?: string
           sheet_sync_tentativas?: number
           sheet_synced_at?: string | null
           sheet_sync_error?: string | null
-          criado_em?: string
-          atualizado_em?: string
+          slug_origem?: string | null
+          status?: string
+          telefone?: string | null
+          telefone_normalizado?: string | null
+          tipo_projeto?: string | null
+          ultimo_contato_em?: string | null
+          utm?: Json
+          visualizado_em?: string | null
         }
         Update: {
-          id?: string
-          nome?: string
-          email?: string | null
-          telefone?: string
-          segmento?: string
-          mensagem?: string
+          anonimizado_em?: string | null
+          arquivado_em?: string | null
+          atualizado_em?: string
           canal?: string
-          status?: string
-          pagina_origem?: string | null
-          slug_origem?: string | null
+          cargo?: string | null
+          convertido_em?: string | null
+          criado_em?: string
           cta_location?: string | null
-          utm?: Json
-          post_id?: string | null
+          desqualificado_em?: string | null
+          email?: string | null
+          empresa?: string | null
+          id?: string
+          importado_em?: string | null
+          landing_page?: string | null
+          mensagem?: string | null
+          nome?: string
+          motivo_desqualificacao?: string | null
+          origem_legado?: string | null
+          pagina_origem?: string | null
           pauta_id?: string | null
-          request_fingerprint?: string | null
-          qualificado_por?: string | null
+          post_id?: string | null
+          proxima_acao_em?: string | null
           qualificado_em?: string | null
+          qualificado_por?: string | null
+          referrer?: string | null
+          request_fingerprint?: string | null
+          retencao_excecao?: boolean
+          retencao_excecao_motivo?: string | null
+          retencao_storage_pendente?: string[]
+          segmento?: string
           sheet_sync_status?: string
           sheet_sync_tentativas?: number
           sheet_synced_at?: string | null
           sheet_sync_error?: string | null
-          criado_em?: string
-          atualizado_em?: string
+          slug_origem?: string | null
+          status?: string
+          telefone?: string | null
+          telefone_normalizado?: string | null
+          tipo_projeto?: string | null
+          ultimo_contato_em?: string | null
+          utm?: Json
+          visualizado_em?: string | null
         }
         Relationships: [
           {
@@ -595,6 +652,7 @@ export type Database = {
           exclusoes_extras: Json
           hero_image_url: string | null
           id: string
+          lead_id: string | null
           numero: string
           obra_cidade: string
           obra_endereco: string
@@ -629,6 +687,7 @@ export type Database = {
           exclusoes_extras?: Json
           hero_image_url?: string | null
           id?: string
+          lead_id?: string | null
           numero: string
           obra_cidade: string
           obra_endereco: string
@@ -663,6 +722,7 @@ export type Database = {
           exclusoes_extras?: Json
           hero_image_url?: string | null
           id?: string
+          lead_id?: string | null
           numero?: string
           obra_cidade?: string
           obra_endereco?: string
@@ -821,6 +881,7 @@ export type Database = {
           discount_value: number
           id: string
           internal_notes: string | null
+          lead_id: string | null
           items: Json
           notes: string | null
           payment_terms: string | null
@@ -848,6 +909,7 @@ export type Database = {
           discount_value?: number
           id?: string
           internal_notes?: string | null
+          lead_id?: string | null
           items?: Json
           notes?: string | null
           payment_terms?: string | null
@@ -875,6 +937,7 @@ export type Database = {
           discount_value?: number
           id?: string
           internal_notes?: string | null
+          lead_id?: string | null
           items?: Json
           notes?: string | null
           payment_terms?: string | null
@@ -948,6 +1011,42 @@ export type Database = {
       }
     }
     Functions: {
+      anonymize_expired_lead: { Args: { p_id: string }; Returns: string[] }
+      complete_lead_storage_cleanup: { Args: { p_id: string }; Returns: undefined }
+      create_manual_lead: {
+        Args: {
+          p_canal: string
+          p_cargo: string
+          p_cta_location: string
+          p_email: string
+          p_empresa: string
+          p_mensagem: string
+          p_nome: string
+          p_pagina_origem: string
+          p_proxima_acao_em: string | null
+          p_segmento: string
+          p_telefone: string
+          p_tipo_projeto: string
+        }
+        Returns: string
+      }
+      get_lead_retention_candidates: {
+        Args: never
+        Returns: { lead_id: string; pdf_paths: string[]; requires_anonymization: boolean }[]
+      }
+      is_berkahn_admin: { Args: never; Returns: boolean }
+      mark_lead_viewed: { Args: { p_id: string }; Returns: undefined }
+      register_lead_activity: {
+        Args: { p_id: string; p_nota: string; p_proxima_acao_em?: string | null; p_tipo: string }
+        Returns: undefined
+      }
+      schedule_monthly_lead_retention: { Args: { p_function_url: string }; Returns: number }
+      set_lead_archived: { Args: { p_arquivado: boolean; p_id: string }; Returns: undefined }
+      set_lead_next_action: { Args: { p_id: string; p_proxima_acao_em: string | null }; Returns: undefined }
+      update_lead_status: {
+        Args: { p_id: string; p_motivo?: string | null; p_status: string }
+        Returns: Database["public"]["Tables"]["leads"]["Row"]
+      }
       gerar_numero_orcamento: { Args: never; Returns: string }
       get_dashboard_stats: { Args: never; Returns: Json }
       mover_pautas_conteudo: {
