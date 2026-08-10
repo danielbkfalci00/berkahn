@@ -1,27 +1,17 @@
 "use client";
 
-import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 import { useCookieConsent } from "@/components/providers/CookieConsentProvider";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 export function CookieBanner() {
   const { isVisible, acceptAll, acceptNecessary } = useCookieConsent();
-  const prefersReducedMotion = useReducedMotion();
-
   return (
-    <AnimatePresence>
+    <>
       {isVisible && (
-        <motion.div
-          initial={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: 100 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: 100 }}
-          transition={{
-            duration: 0.5,
-            ease: [0.19, 1, 0.22, 1],
-          }}
+        <div
           className={cn(
-            "fixed bottom-0 left-0 right-0 z-[140]",
+            "fixed bottom-0 left-0 right-0 z-[140] animate-in fade-in-0 slide-in-from-bottom-4 duration-500 motion-reduce:animate-none",
             "px-4 pb-4 md:pb-6",
             "md:left-auto md:right-6 md:w-auto md:max-w-md"
           )}
@@ -76,8 +66,8 @@ export function CookieBanner() {
               </div>
             </div>
           </div>
-        </motion.div>
+        </div>
       )}
-    </AnimatePresence>
+    </>
   );
 }

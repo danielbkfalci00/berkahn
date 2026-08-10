@@ -12,7 +12,7 @@ export function AnswerSummary({ summary, articleTitle }: AnswerSummaryProps) {
         <div className="flex items-start gap-3">
           <Lightbulb className="w-5 h-5 text-black mt-0.5 shrink-0" />
           <div>
-            <p className="text-xs tracking-widest text-neutral-400 uppercase mb-2">
+            <p className="text-xs tracking-widest text-neutral-600 uppercase mb-2">
               Resposta direta
             </p>
             <p className="text-neutral-800 leading-relaxed">{summary}</p>

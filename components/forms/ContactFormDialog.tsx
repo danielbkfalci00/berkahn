@@ -8,9 +8,21 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import dynamic from "next/dynamic";
 import { usePathname } from "next/navigation";
-import { ContactForm, type Segment } from "./ContactForm";
+import type { Segment } from "./ContactForm";
 import { trackEvent } from "@/lib/analytics";
+
+const ContactForm = dynamic(
+  () => import("./ContactForm").then((module) => module.ContactForm),
+  {
+    loading: () => (
+      <p className="p-8 text-center text-sm text-black-50" role="status">
+        Carregando formulário…
+      </p>
+    ),
+  }
+);
 
 interface ContactFormDialogProps {
   children: React.ReactNode;

@@ -47,7 +47,7 @@ export function MateriaisSection() {
           transition={{ delay: 0.2 }}
           className="bg-white rounded-xl shadow-luxury-sm overflow-hidden"
         >
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto" tabIndex={0} role="region" aria-label="Tabela de composição técnica dos materiais">
             <table className="w-full text-sm">
               <thead>
                 <tr className="bg-black text-white">
@@ -185,7 +185,7 @@ export function MateriaisSection() {
             <p className="text-xs text-black/50 italic">
               * Especificações sujeitas a alterações conforme projeto executivo final
             </p>
-            <p className="text-xs text-black/40 mt-1">
+            <p className="text-xs text-black/60 mt-1">
               Todos os materiais seguem normas ABNT e possuem certificação de qualidade
             </p>
           </motion.div>
@@ -211,29 +211,29 @@ export function MateriaisSection() {
           <div className="px-6 py-5">
             <div className="grid sm:grid-cols-2 gap-4 mb-5">
               <div>
-                <p className="text-xs text-black/40 uppercase tracking-wider mb-1">CNAE do CNPJ</p>
+                <p className="text-xs text-black/60 uppercase tracking-wider mb-1">CNAE do CNPJ</p>
                 <p className="text-sm text-black/80 font-medium">{IMPOSTO_INFO.cnae}</p>
               </div>
               <div>
-                <p className="text-xs text-black/40 uppercase tracking-wider mb-1">Enquadramento</p>
+                <p className="text-xs text-black/60 uppercase tracking-wider mb-1">Enquadramento</p>
                 <p className="text-sm text-black/80 font-medium">{IMPOSTO_INFO.anexo}</p>
               </div>
               <div>
-                <p className="text-xs text-black/40 uppercase tracking-wider mb-1">Faixa</p>
+                <p className="text-xs text-black/60 uppercase tracking-wider mb-1">Faixa</p>
                 <p className="text-sm text-black/80 font-medium">{IMPOSTO_INFO.faixaDescricao}</p>
               </div>
               <div>
-                <p className="text-xs text-black/40 uppercase tracking-wider mb-1">Alíquota Nominal</p>
+                <p className="text-xs text-black/60 uppercase tracking-wider mb-1">Alíquota Nominal</p>
                 <p className="text-sm text-black/80 font-medium">{IMPOSTO_INFO.aliquotaNominal}</p>
               </div>
             </div>
             <div className="flex items-center justify-between pt-4 border-t border-black/10">
               <div>
-                <p className="text-xs text-black/40 uppercase tracking-wider">Alíquota Efetiva</p>
+                <p className="text-xs text-black/60 uppercase tracking-wider">Alíquota Efetiva</p>
                 <p className="text-lg font-bold text-black">{IMPOSTO_INFO.aliquotaEfetiva}%</p>
               </div>
               <div className="text-right">
-                <p className="text-xs text-black/40 uppercase tracking-wider">Valor Total Imposto</p>
+                <p className="text-xs text-black/60 uppercase tracking-wider">Valor Total Imposto</p>
                 <p className="text-lg font-bold text-black">R$ {formatCurrency(IMPOSTO_INFO.valorTotal)}</p>
               </div>
             </div>

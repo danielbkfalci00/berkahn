@@ -61,7 +61,7 @@ export function PremissasSection({
               <div className="w-12 h-px bg-black/20" />
             </div>
 
-            <span className="inline-block text-xs uppercase tracking-[0.3em] text-black/40 mb-4">
+            <span className="inline-block text-xs uppercase tracking-[0.3em] text-black/60 mb-4">
               Detalhes da Proposta
             </span>
             <h2 className="headline-md text-black mb-4">
@@ -87,13 +87,13 @@ export function PremissasSection({
               />
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 <div className="bg-black/[0.02] rounded-xl p-4 border border-black/5">
-                  <p className="text-xs text-black/40 uppercase tracking-wider mb-2">
+                  <p className="text-xs text-black/60 uppercase tracking-wider mb-2">
                     Projeto
                   </p>
                   <p className="font-semibold text-black">{projeto.titulo}</p>
                 </div>
                 <div className="bg-black/[0.02] rounded-xl p-4 border border-black/5">
-                  <p className="text-xs text-black/40 uppercase tracking-wider mb-2">
+                  <p className="text-xs text-black/60 uppercase tracking-wider mb-2">
                     Tipo
                   </p>
                   <p className="font-semibold text-black capitalize">
@@ -101,7 +101,7 @@ export function PremissasSection({
                   </p>
                 </div>
                 <div className="bg-black/[0.02] rounded-xl p-4 border border-black/5">
-                  <p className="text-xs text-black/40 uppercase tracking-wider mb-2">
+                  <p className="text-xs text-black/60 uppercase tracking-wider mb-2">
                     Localização
                   </p>
                   <p className="font-semibold text-black flex items-center gap-2">
@@ -110,7 +110,7 @@ export function PremissasSection({
                   </p>
                 </div>
                 <div className="bg-black/[0.02] rounded-xl p-4 border border-black/5">
-                  <p className="text-xs text-black/40 uppercase tracking-wider mb-2">
+                  <p className="text-xs text-black/60 uppercase tracking-wider mb-2">
                     Área Construída
                   </p>
                   <p className="font-semibold text-black flex items-center gap-2">
@@ -121,7 +121,7 @@ export function PremissasSection({
                 {projeto.terreno && (
                   <>
                     <div className="bg-black/[0.02] rounded-xl p-4 border border-black/5">
-                      <p className="text-xs text-black/40 uppercase tracking-wider mb-2">
+                      <p className="text-xs text-black/60 uppercase tracking-wider mb-2">
                         Dimensões do Terreno
                       </p>
                       <p className="font-semibold text-black">
@@ -129,7 +129,7 @@ export function PremissasSection({
                       </p>
                     </div>
                     <div className="bg-black/[0.02] rounded-xl p-4 border border-black/5">
-                      <p className="text-xs text-black/40 uppercase tracking-wider mb-2">
+                      <p className="text-xs text-black/60 uppercase tracking-wider mb-2">
                         Topografia
                       </p>
                       <p className="font-semibold text-black capitalize flex items-center gap-2">
@@ -212,7 +212,7 @@ export function PremissasSection({
                     className="flex items-start gap-3 p-3 bg-black/[0.02] rounded-lg border border-black/5"
                   >
                     <div className="w-5 h-5 rounded-full bg-black/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-                      <XCircle className="w-3 h-3 text-black/40" />
+                      <XCircle className="w-3 h-3 text-black/60" />
                     </div>
                     <span className="text-sm text-black/60">{item}</span>
                   </motion.li>
@@ -258,7 +258,7 @@ export function PremissasSection({
             {/* Decoração */}
             <div className="flex items-center gap-3 mb-6">
               <div className="w-8 h-px bg-black/20" />
-              <span className="text-xs uppercase tracking-[0.3em] text-black/40 font-semibold">
+              <span className="text-xs uppercase tracking-[0.3em] text-black/60 font-semibold">
                 Condições do Terreno Consideradas
               </span>
               <div className="flex-1 h-px bg-black/20" />

@@ -20,7 +20,7 @@ export function ProjetoEscopoSection({ projeto }: ProjetoEscopoSectionProps) {
       <div className="container max-w-5xl">
         <RevealOnScroll>
           <div className="text-center mb-12">
-            <span className="inline-block text-xs uppercase tracking-[0.3em] text-black/40 mb-4">
+            <span className="inline-block text-xs uppercase tracking-[0.3em] text-black/60 mb-4">
               Sobre o Projeto
             </span>
             <h2 className="headline-md text-black mb-4">Escopo da Proposta</h2>
@@ -154,7 +154,7 @@ export function ProjetoEscopoSection({ projeto }: ProjetoEscopoSectionProps) {
 
               {/* Benefícios do Isolamento */}
               <div className="mt-6 pt-4 border-t border-black/5">
-                <p className="text-xs font-semibold text-black/40 uppercase tracking-wider mb-3">
+                <p className="text-xs font-semibold text-black/60 uppercase tracking-wider mb-3">
                   Benefícios
                 </p>
                 <ul className="space-y-2">

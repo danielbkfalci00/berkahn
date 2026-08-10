@@ -73,7 +73,7 @@ export function MaterialsTableSubsection({ data, isNested }: MaterialsTableSubse
           viewport={{ once: true }}
           className="overflow-hidden bg-white rounded-lg shadow-sm"
         >
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto" tabIndex={0} role="region" aria-label="Tabela de materiais do orçamento">
             <table className="w-full text-sm">
               <thead>
                 <tr className="bg-black text-white">

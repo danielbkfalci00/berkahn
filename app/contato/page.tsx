@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Breadcrumb } from "@/components/layout/Breadcrumb";
 import { ContactForm } from "@/components/forms/ContactForm";
+import { TrackedWhatsAppLink } from "@/components/layout/WhatsAppButton";
 import { CONTATOS } from "@/lib/orcamento-data";
 import { WHATSAPP_URL } from "@/lib/contact";
 
@@ -74,7 +75,7 @@ export default function ContatoPage() {
         <div className="mt-10 grid gap-12 lg:grid-cols-[1fr_380px] lg:gap-16">
           {/* Coluna editorial */}
           <div className="max-w-xl">
-            <p className="text-[11px] uppercase tracking-[0.2em] text-black-30">
+            <p className="text-[11px] uppercase tracking-[0.2em] text-black-60">
               Fale conosco
             </p>
             <h1 className="mt-4 font-heading text-4xl font-semibold tracking-tight sm:text-5xl">
@@ -93,20 +94,29 @@ export default function ContatoPage() {
                   key={canal.rotulo}
                   className="grid gap-1 py-5 sm:grid-cols-[140px_1fr] sm:gap-6"
                 >
-                  <dt className="text-[11px] uppercase tracking-[0.15em] text-black-30 sm:pt-1">
+                  <dt className="text-[11px] uppercase tracking-[0.15em] text-black-60 sm:pt-1">
                     {canal.rotulo}
                   </dt>
                   <dd>
                     {canal.href ? (
-                      <a
-                        href={canal.href}
-                        {...(canal.externo
-                          ? { target: "_blank", rel: "noopener noreferrer" }
-                          : {})}
-                        className="text-base font-medium underline decoration-black-10 underline-offset-4 transition-colors hover:decoration-black"
-                      >
-                        {canal.valor}
-                      </a>
+                      canal.rotulo === "WhatsApp" ? (
+                        <TrackedWhatsAppLink
+                          href={canal.href}
+                          ctaLocation="contato_canais"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-base font-medium underline decoration-black-10 underline-offset-4 transition-colors hover:decoration-black"
+                        >
+                          {canal.valor}
+                        </TrackedWhatsAppLink>
+                      ) : (
+                        <a
+                          href={canal.href}
+                          className="text-base font-medium underline decoration-black-10 underline-offset-4 transition-colors hover:decoration-black"
+                        >
+                          {canal.valor}
+                        </a>
+                      )
                     ) : (
                       <span className="text-base font-medium">{canal.valor}</span>
                     )}

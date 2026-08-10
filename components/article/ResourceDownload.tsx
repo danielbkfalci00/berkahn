@@ -192,6 +192,7 @@ export function ResourceDownload({
                           src={resource.thumbnail}
                           alt={resource.title}
                           fill
+                          sizes="(max-width: 767px) calc(100vw - 2rem), (max-width: 1023px) 50vw, 33vw"
                           className="object-cover"
                         />
                       </div>

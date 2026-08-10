@@ -6,7 +6,6 @@ import { Breadcrumb } from "@/components/layout/Breadcrumb";
 import { AuthorBio } from "@/components/article/AuthorBio";
 import { createPublicClient } from "@/lib/supabase/public";
 import { getArticleBySlug, richArticles } from "@/data/articles/steel-frame-futuro";
-import { ArticleContent } from "./ArticleContent";
 import { RichPostRenderer } from "@/components/blog/RichPostRenderer";
 import { AnswerSummary } from "@/components/article/AnswerSummary";
 import { RelatedArticlesCarousel } from "@/components/article/RelatedArticlesCarousel";
@@ -316,5 +315,6 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
     notFound();
   }
 
+  const { ArticleContent } = await import("./ArticleContent");
   return <ArticleContent article={article} />;
 }

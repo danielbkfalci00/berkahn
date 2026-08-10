@@ -24,7 +24,7 @@ export function IndiceSection() {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <span className="inline-block text-sm uppercase tracking-[0.3em] text-black/40 mb-2">
+          <span className="inline-block text-sm uppercase tracking-[0.3em] text-black/60 mb-2">
             Sumário
           </span>
           <h2 className="font-heading text-4xl lg:text-6xl font-bold tracking-tight text-black">

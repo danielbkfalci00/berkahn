@@ -116,7 +116,7 @@ export function CharReveal({ text, className = "", delay = 0 }: CharRevealProps)
 
   // Respect user's reduced motion preference
   if (prefersReducedMotion) {
-    return <span className={`block ${className}`}>{text}</span>;
+    return <span className={`block motion-reduce:!opacity-100 motion-reduce:!transform-none motion-reduce:!transition-none ${className}`}>{text}</span>;
   }
 
   return (
@@ -126,13 +126,13 @@ export function CharReveal({ text, className = "", delay = 0 }: CharRevealProps)
       animate={isInView ? "visible" : "hidden"}
       variants={charContainerVariants}
       custom={delay}
-      className={`block ${className}`}
+      className={`block motion-reduce:!opacity-100 motion-reduce:!transform-none motion-reduce:!transition-none ${className}`}
     >
       {text.split("").map((char, index) => (
         <motion.span
           key={index}
           variants={charVariants}
-          className="inline-block"
+          className="inline-block motion-reduce:!opacity-100 motion-reduce:!transform-none motion-reduce:!transition-none"
           style={{ whiteSpace: char === " " ? "pre" : "normal" }}
         >
           {char}

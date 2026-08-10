@@ -5,6 +5,7 @@ import { Globe, Instagram, Mail, MessageCircle, ArrowUpRight } from "lucide-reac
 import { MagneticButton } from "./MagneticButton";
 import type { Architect } from "@/lib/architects-data";
 import { trackEvent } from "@/lib/analytics";
+import { TrackedWhatsAppLink } from "@/components/layout/WhatsAppButton";
 
 interface Props {
   architect: Architect;
@@ -138,8 +139,9 @@ export function ArchitectContactBlock({ architect }: Props) {
 
             <div className="mt-12 space-y-3">
               <MagneticButton intensity={12}>
-                <a
+                <TrackedWhatsAppLink
                   href={`https://wa.me/${BERKAHN_WHATSAPP}?text=${whatsappMessage}`}
+                  ctaLocation="curadoria_arquiteto_berkahn"
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={() =>
@@ -156,7 +158,7 @@ export function ArchitectContactBlock({ architect }: Props) {
                     </span>
                   </span>
                   <ArrowUpRight className="w-4 h-4 transition-transform duration-500 ease-expo group-hover:translate-x-1 group-hover:-translate-y-1" />
-                </a>
+                </TrackedWhatsAppLink>
               </MagneticButton>
               <p className="text-xs text-white/50 px-2">
                 Berkahn · {BERKAHN_WHATSAPP_DISPLAY}

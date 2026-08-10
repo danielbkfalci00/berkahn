@@ -18,6 +18,7 @@
     "analytics:learning": "node --env-file=.env.local scripts/analytics/generate-report.mjs --learning"
   },
   "eslintConfig": {
+    "root": true,
     "extends": "next/core-web-vitals"
   },
   "dependencies": {

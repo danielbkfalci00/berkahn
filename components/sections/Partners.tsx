@@ -25,7 +25,7 @@ function LogoMarquee({ partners }: { partners: { name: string; logo: string }[] 
 
   return (
     <div className="overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
-      <div className="flex w-max animate-marquee-fast md:animate-marquee hover:[animation-play-state:paused] motion-reduce:w-full motion-reduce:flex-wrap motion-reduce:justify-center motion-reduce:animate-none">
+      <div className="flex w-max animate-marquee-fast md:animate-marquee hover:[animation-play-state:paused] motion-reduce:w-full motion-reduce:flex-wrap motion-reduce:justify-center motion-reduce:!animate-none">
         {doubled.map((partner, i) => (
           <div
             key={`${partner.name}-${i}`}

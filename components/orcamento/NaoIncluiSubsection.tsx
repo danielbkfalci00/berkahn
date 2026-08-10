@@ -27,7 +27,7 @@ export function NaoIncluiSubsection({ itensExclusos, isPDFMode = false }: NaoInc
               <h3 className="text-lg font-bold text-white uppercase tracking-wider">
                 Não Inclui
               </h3>
-              <p className="text-xs text-white/40">
+              <p className="text-xs text-white/60">
                 Itens listados abaixo não fazem parte deste orçamento
               </p>
             </div>

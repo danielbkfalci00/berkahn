@@ -63,7 +63,7 @@ export function QuemSomosPDF() {
             </ul>
           </div>
           <div style={{ padding: "22px 24px", background: "#fff" }}>
-            <div style={{ fontSize: 9.5, fontWeight: 500, letterSpacing: "0.2em", textTransform: "uppercase", color: "#999", marginBottom: 16 }}>
+            <div style={{ fontSize: 9.5, fontWeight: 500, letterSpacing: "0.2em", textTransform: "uppercase", color: "#666", marginBottom: 16 }}>
               Empreiteira
             </div>
             <ul style={{ listStyle: "none", margin: 0, padding: 0 }}>

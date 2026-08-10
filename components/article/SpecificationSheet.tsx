@@ -45,6 +45,7 @@ export function SpecificationSheet({
                   src={specSheet.image}
                   alt={specSheet.material}
                   fill
+                  sizes="(max-width: 767px) 80px, 96px"
                   className="object-contain"
                 />
               </div>

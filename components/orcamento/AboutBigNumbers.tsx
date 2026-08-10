@@ -106,7 +106,7 @@ export function AboutBigNumbers() {
           <div className="text-center mb-20">
             <div className="flex items-center justify-center gap-4 mb-8">
               <div className="w-16 h-[1px] bg-black/20" />
-              <span className="text-[9px] font-semibold uppercase tracking-[0.3em] text-black/40">
+              <span className="text-[9px] font-semibold uppercase tracking-[0.3em] text-black/60">
                 Experiência Comprovada
               </span>
               <div className="w-16 h-[1px] bg-black/20" />

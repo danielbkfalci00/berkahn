@@ -29,7 +29,7 @@ export function PacotesInvestimento({
 }: PacotesInvestimentoProps) {
 
   return (
-    <section className={cn("relative bg-white", isPDFMode ? "py-8" : "py-xl")}>
+    <section className={cn("relative overflow-hidden bg-white", isPDFMode ? "py-8" : "py-xl")}>
       <OrcamentoWatermark variant="light" logoPosition="center" />
       <div className="container max-w-7xl relative z-10">
         {/* Section Header */}
@@ -119,7 +119,7 @@ export function PacotesInvestimento({
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ delay: 0.8 }}
-            className={cn("text-center text-sm text-black/40", isPDFMode ? "mt-4" : "mt-12")}
+            className={cn("text-center text-sm text-black/60", isPDFMode ? "mt-4" : "mt-12")}
           >
             * Valores calculados para {metragemProjeto}m². Consulte-nos para projetos com
             metragem diferente.

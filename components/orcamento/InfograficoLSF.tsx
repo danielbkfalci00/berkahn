@@ -125,7 +125,7 @@ function AnimatedBarChart({
 
       {/* Traditional Bar */}
       <div className="flex items-center gap-3">
-        <span className="text-xs text-white/40 w-16">Alvenaria</span>
+        <span className="text-xs text-white/60 w-16">Alvenaria</span>
         <div className="flex-1 h-6 bg-white/5 rounded-full overflow-hidden">
           <motion.div
             initial={{ width: 0 }}
@@ -142,7 +142,7 @@ function AnimatedBarChart({
           initial={{ opacity: 0 }}
           animate={isInView ? { opacity: 1 } : { opacity: 0 }}
           transition={{ duration: 0.5, delay: delay + 1 }}
-          className="text-sm text-white/40 w-16 text-right"
+          className="text-sm text-white/60 w-16 text-right"
         >
           {tradValue} {unidade}
         </motion.span>
@@ -322,7 +322,7 @@ export function InfograficoLSF() {
                 {/* Bar Chart Section */}
                 {beneficio.comparativo && (
                   <div className={cn(!isEven && "lg:order-1")}>
-                    <p className="text-xs text-white/40 uppercase tracking-wider mb-4">
+                    <p className="text-xs text-white/60 uppercase tracking-wider mb-4">
                       Comparativo Visual
                     </p>
                     <AnimatedBarChart

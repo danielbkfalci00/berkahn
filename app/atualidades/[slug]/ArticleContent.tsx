@@ -3,7 +3,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion, useScroll, useTransform } from "motion/react";
-import { useRef } from "react";
+import { lazy, Suspense, useRef, type ComponentProps, type ReactNode } from "react";
+import { useInViewAnimation } from "@/hooks/useInViewAnimation";
 import {
   Clock,
   Calendar,
@@ -18,15 +19,13 @@ import {
 import { RichArticle } from "@/types/article";
 import { ReadingProgress } from "@/components/article/ReadingProgress";
 import { StatsGrid } from "@/components/article/StatHighlight";
-import { DataTable } from "@/components/article/DataTable";
+import { DataTable, DeferredChartData } from "@/components/article/DataTable";
 import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
 import { RelatedArticlesCarousel } from "@/components/article/RelatedArticlesCarousel";
-import { ChartSection } from "@/components/article/ChartSection";
 import { ComparisonTabs } from "@/components/article/ComparisonTabs";
 import { DecisionGuideSection } from "@/components/article/DecisionGuideSection";
 import { FinancingCalculator } from "@/components/article/FinancingCalculator";
 import { MythBuster } from "@/components/article/MythBuster";
-import { MarketGrowthChart } from "@/components/article/MarketGrowthChart";
 import { ViabilityMatrix } from "@/components/article/ViabilityMatrix";
 import { CaseStudyCard } from "@/components/article/CaseStudyCard";
 import {
@@ -45,6 +44,41 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { CTA } from "@/components/sections/CTA";
+
+const LazyChartSection = lazy(() =>
+  import("@/components/article/ChartSection").then((module) => ({
+    default: module.ChartSection,
+  }))
+);
+
+function DeferredWidget({ children, fallback }: { children: ReactNode; fallback: ReactNode }) {
+  const { ref, isInView } = useInViewAnimation({ margin: "300px 0px", amount: "some" });
+  return <div ref={ref}>{isInView ? <Suspense fallback={fallback}>{children}</Suspense> : fallback}</div>;
+}
+
+function ChartSection(props: ComponentProps<typeof LazyChartSection>) {
+  const fallback = <DeferredChartData charts={[props.chart]} heightClass="h-80" />;
+  return (
+    <DeferredWidget fallback={fallback}>
+      <LazyChartSection {...props} />
+    </DeferredWidget>
+  );
+}
+
+const LazyMarketGrowthChart = lazy(() =>
+  import("@/components/article/MarketGrowthChart").then((module) => ({
+    default: module.MarketGrowthChart,
+  }))
+);
+
+function MarketGrowthChart(props: ComponentProps<typeof LazyMarketGrowthChart>) {
+  const fallback = <DeferredChartData charts={props.charts} heightClass="h-96" />;
+  return (
+    <DeferredWidget fallback={fallback}>
+      <LazyMarketGrowthChart {...props} />
+    </DeferredWidget>
+  );
+}
 
 interface ArticleContentProps {
   article: RichArticle;
@@ -537,6 +571,7 @@ export function ArticleContent({ article }: ArticleContentProps) {
                                     src={img.url}
                                     alt={img.alt}
                                     fill
+                                    sizes="(max-width: 767px) 100vw, (max-width: 1023px) 50vw, 33vw"
                                     className="object-cover transition-transform duration-700 group-hover:scale-105"
                                   />
                                   {img.caption && (

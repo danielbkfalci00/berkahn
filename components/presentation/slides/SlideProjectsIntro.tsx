@@ -8,7 +8,7 @@ export function SlideProjectsIntro() {
     <SlideSection dark className="flex items-center justify-center">
       <div className="container max-w-4xl mx-auto px-6 text-center">
         <RevealOnScroll>
-          <p className="text-xs sm:text-sm uppercase tracking-[0.3em] text-white/40 mb-6">
+          <p className="text-xs sm:text-sm uppercase tracking-[0.3em] text-white/60 mb-6">
             Experiência dos Fundadores
           </p>
           <h2 className="font-heading text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-white mb-6">

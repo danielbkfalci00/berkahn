@@ -5,17 +5,17 @@ atualizado: 2026-08-07
 tags:
   - project/site
   - status/active
-ai_summary: "Hub do Site — migrations 014–023 e hardening do quadro em produção: agenda leve, escrita atômica, fila observável e snapshots de aprendizado sem PII. Banco e smoke autenticado verdes com 66 pautas. Pendem somente integrações externas: Apps Script e dimensões GA4."
+ai_summary: "Hub do Site — migrations 014–023 e quadro de conteúdo endurecido em produção; sprint de performance reduziu o JS do artigo em 41,2%, preservou SSG/ISR e zerou axe sério/crítico em 28 cenários. Pendências externas: Apps Script 1.2, Key Events GA4 e campo 7/28 dias."
 status: active
 projeto: site
 kpi_paginas_indexadas: 34
 kpi_paginas_total: 38
 kpi_lcp_target_ms: 2500
-kpi_fid_target_ms: 100
+kpi_inp_target_ms: 200
 kpi_cls_target: 0.1
 kpi_isr_revalidate_s: 60
 kpi_componentes_article: 19
-kpi_atualizado_em: 2026-07-29
+kpi_atualizado_em: 2026-08-07
 contextos_aplicados:
   - stack-nextjs-supabase
   - admin-setup
@@ -47,7 +47,7 @@ code_paths:
 
 Site em produção (Next.js App Router + Supabase + Vercel + Tailwind + shadcn/ui). 16 rotas em `app/` (atualidades, empresa, admin, apresentacao-executiva, etc.). Admin com painel de posts ativo (`app/admin/`). Integração Google Sheets para leads via Apps Script.
 
-**Indexação**: 34 de 38 artigos indexados (89%) em 2026-07-29, contra 6/44 em abril. O pipeline `/performance` inspeciona **só URLs de artigo** — as páginas institucionais (`/empresa`, `/servicos`, `/lsf`, `/portfolio`, etc.) nunca foram medidas. Se isso importar, ampliar `getAllPostUrls()` em `scripts/analytics/lib/posts.mjs`. Ver [[seo-aeo]].
+**Diagnóstico integrado 2026-08-07**: o crawl agora cobre as 47 URLs do sitemap e superfícies públicas `noindex`; o artigo caiu de 371 para 218 kB de First Load JS (-41,2%), com home em 241 kB e `/atualidades` em 179 kB. SSG/ISR de 60 s e 404 foram preservados. Evidências, limites de laboratório e baseline de conversão vivem em [[2026-08-diagnostico-integrado-site]].
 
 ## Bloqueios ativos
 
@@ -59,14 +59,14 @@ Site em produção (Next.js App Router + Supabase + Vercel + Tailwind + shadcn/u
 - [x] ~~**Seis rotas `/api/admin/*` sem autenticação**~~ — resolvido em 2026-08-05. O matcher do middleware era `['/', '/admin/:path*']` e não cobria `/api/admin/*`; três das rotas usavam `createServiceClient()`, que bypassa RLS. Sem login dava para listar todos os orçamentos com dado pessoal do cliente, apagar por id, e pegar signed URL do PDF. Fechado com matcher + `exigirSessao()` nos 10 handlers. Verificado: as 9 combinações devolvem 401
 - [x] ~~**Dupla escrita dos comandos de conteúdo**~~ — resolvido em 2026-08-06. `/pesquisa` e `/linkedin` gravam na pauta via `scripts/conteudo/pauta.mjs` e não criam mais `.md` no vault. `/criacao` e `/calendario` foram corrigidos junto: um procurava a pesquisa na pasta que deixou de ser alimentada, o outro contava posts pendentes varrendo uma pasta congelada. Ver [[quadro-conteudo]]
 - [ ] **Contas Supabase por pessoa**: hoje todos entram com a mesma conta compartilhada, então `auth.uid()` não distingue ninguém e o autor dos comentários é nome digitado no localStorage. Projeto próprio — ver [[comentarios-inline-documentacoes]], seção "Identidade"
-- [x] **Google Sheets SPOF encerrado**: `leads` no Supabase é primário e a planilha é espelho com retry. Apps Script 1.1 aguarda redeploy manual
-- [ ] **Core Web Vitals de campo**: `/atualidades` preserva SSG/ISR e CLS = 0. Após GA condicionado ao consentimento, prioridade da imagem LCP e boundary interativo menor, 3 rodadas em produção ficaram em LCP 3,04–3,54 s e TBT 304–756 ms (baseline chegava a 5,38 s/1.736 ms). O sintético ainda oscila acima da meta; validar Speed Insights antes de ampliar a refatoração global. Meta: LCP < 2,5 s, CLS < 0,1 e TBT < 200 ms
+- [x] **Google Sheets SPOF encerrado**: `leads` no Supabase é primário e a planilha é espelho com retry. Apps Script 1.2 está pronto no código; segredo compartilhado, Script Property e redeploy ainda são rollout externo
+- [ ] **Core Web Vitals de campo**: otimizações estruturais entregues em [[2026-08-diagnostico-integrado-site]], sem inferir campo a partir de laboratório. Monitorar Speed Insights por 7 dias e avaliar p75 em 28 dias. Metas: LCP ≤ 2,5 s, INP ≤ 200 ms e CLS ≤ 0,1
 
 ## Próximos 7 dias
 
 - [x] ~~**Home redesign — fechar o PR #43**~~ — mergeado em 2026-08-06 com hub reconciliado; `@design-review` executado e follow-up PR #44 mergeado
 - [x] ~~**Trocar take e restaurar copy institucional da home**~~ — 1080p integral convertido em 72/36 frames; copy conferida contra `bc6515f`; rail de projetos preservado no código e desmontado da composição
-- [ ] **CWV da home nova**: medir no Speed Insights após deploy. Build local: First Load 264 kB; hero carrega 5,28 MB no desktop ou 1,01 MB no mobile, com 580 KB imediatos no desktop. Lighthouse local final (3×): LCP 2,80–4,24 s, CLS 0–0,001, TBT 682–1.226 ms; não há baseline local comparável para cravar regressão
+- [ ] **CWV de campo pós-sprint**: medir no Speed Insights por 7 dias e consolidar em 28 dias; não comparar GA4 anterior e posterior ao Consent Mode de 2026-07-30 como séries equivalentes. Baseline e laboratório: [[2026-08-diagnostico-integrado-site]]
 - [x] ~~**Próxima página do redesign: `/atualidades`**~~ — concluída em 2026-08-06: abertura fundida, bento, categorias canônicas, payload 141/26 KB e ISR 60 preservado
 - [ ] Importar Clube Quinta dos Lagos para o banco de imagens antes de reativar o rail de projetos
 - [ ] Validar `/institucional/pdf` gerando PDF em produção (pós-merge do #17)
@@ -128,6 +128,8 @@ Site em produção (Next.js App Router + Supabase + Vercel + Tailwind + shadcn/u
 - [[paginas-conteudo-v2]] — estratégia de páginas (migrado de Docs/)
 
 ## Histórico recente
+
+- 2026-08-07: sprint integrado de performance/UX/SEO/AEO — fontes escopadas por rota, shell sem Motion, formulário lazy, charts sob demanda, sizes corrigidos, tracking de WhatsApp padronizado e axe sério/crítico zerado em 28 cenários. Ver [[2026-08-diagnostico-integrado-site]]
 
 - 2026-08-06: home atualizada com take integral 1080p (72/36 WebPs), preload reduzido a seis frames, copy institucional restaurada de `bc6515f`, quatro fases canônicas e `ProjectsRail` temporariamente desmontado sem afetar `/portfolio`; `@design-review` fechou sobreposição do CTA com consentimento e reduced-motion dos parceiros
 - 2026-08-06: PRs #43/#44 mergeados; `/atualidades` redesenhada na linguagem [[home-redesign-direcao]], migration 012 aplicada (40 posts, cinco categorias, featured único), payload ~83% menor bruto, analytics condicionado ao consentimento e SSG/ISR preservado

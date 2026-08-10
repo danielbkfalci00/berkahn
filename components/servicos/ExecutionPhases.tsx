@@ -33,7 +33,7 @@ export function ExecutionPhases() {
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-extrabold tracking-tighter text-center mb-3">
             EXECUÇÃO DE OBRAS
           </h2>
-          <p className="text-xs md:text-sm text-center text-black-50 max-w-2xl mx-auto uppercase tracking-wider leading-relaxed mb-6 md:mb-8 lg:mb-10">
+          <p className="text-xs md:text-sm text-center text-black-70 max-w-2xl mx-auto uppercase tracking-wider leading-relaxed mb-6 md:mb-8 lg:mb-10">
             Da concepção à entrega, com foco em qualidade, prazo e excelência técnica
           </p>
         </RevealOnScroll>
@@ -70,7 +70,7 @@ export function ExecutionPhases() {
                     {/* Key Points */}
                     {phase.keyPoints && phase.keyPoints.length > 0 && (
                       <div className="pt-4 border-t border-black-10">
-                        <h4 className="text-[10px] font-semibold uppercase tracking-widest text-black-50 mb-3">
+                        <h4 className="text-[10px] font-semibold uppercase tracking-widest text-black-70 mb-3">
                           Principais Atividades
                         </h4>
                         <ul className="space-y-2">
@@ -89,7 +89,7 @@ export function ExecutionPhases() {
                     {/* Deliverables */}
                     {phase.deliverables && phase.deliverables.length > 0 && (
                       <div className="pt-4 border-t border-black-10">
-                        <h4 className="text-[10px] font-semibold uppercase tracking-widest text-black-50 mb-3">
+                        <h4 className="text-[10px] font-semibold uppercase tracking-widest text-black-70 mb-3">
                           Entregáveis
                         </h4>
                         <ul className="space-y-2">
@@ -138,14 +138,14 @@ export function ExecutionPhases() {
                         </CarouselContent>
                         <div className="flex items-center justify-center gap-4 mt-3">
                           <CarouselPrevious className="static translate-x-0 translate-y-0 h-8 w-8" />
-                          <span className="text-xs text-black-50">1 / 2</span>
+                          <span className="text-xs text-black-70">1 / 2</span>
                           <CarouselNext className="static translate-x-0 translate-y-0 h-8 w-8" />
                         </div>
                       </Carousel>
                     </div>
 
                     {/* Duration */}
-                    <p className="text-xs text-black-50 pt-2">
+                    <p className="text-xs text-black-70 pt-2">
                       Duração estimada: {phase.duration}
                     </p>
                   </div>
@@ -205,7 +205,7 @@ export function ExecutionPhases() {
                     {/* Key Points */}
                     {phase.keyPoints && phase.keyPoints.length > 0 && (
                       <div className="pt-6 border-t border-black-10">
-                        <h4 className="text-xs font-semibold uppercase tracking-widest text-black-50 mb-4">
+                        <h4 className="text-xs font-semibold uppercase tracking-widest text-black-70 mb-4">
                           Principais Atividades
                         </h4>
                         <ul className="space-y-2.5">
@@ -224,7 +224,7 @@ export function ExecutionPhases() {
                     {/* Deliverables */}
                     {phase.deliverables && phase.deliverables.length > 0 && (
                       <div className="pt-6 border-t border-black-10">
-                        <h4 className="text-xs font-semibold uppercase tracking-widest text-black-50 mb-4">
+                        <h4 className="text-xs font-semibold uppercase tracking-widest text-black-70 mb-4">
                           Entregáveis
                         </h4>
                         <ul className="space-y-2">
@@ -241,7 +241,7 @@ export function ExecutionPhases() {
                     )}
 
                     {/* Duration */}
-                    <p className="text-xs text-black-50 pt-4">
+                    <p className="text-xs text-black-70 pt-4">
                       Duração estimada: {phase.duration}
                     </p>
                   </div>
@@ -279,7 +279,7 @@ export function ExecutionPhases() {
                       </CarouselContent>
                       <div className="flex items-center justify-center gap-4 mt-4">
                         <CarouselPrevious className="static translate-x-0 translate-y-0 h-8 w-8" />
-                        <span className="text-xs text-black-50">1 / 2</span>
+                        <span className="text-xs text-black-70">1 / 2</span>
                         <CarouselNext className="static translate-x-0 translate-y-0 h-8 w-8" />
                       </div>
                     </Carousel>

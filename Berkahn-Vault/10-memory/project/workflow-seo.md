@@ -1,14 +1,14 @@
 ---
 tipo: memory
 criado: 2026-05-22
-atualizado: 2026-07-29
+atualizado: 2026-08-07
 tags:
   - ai/memory
   - status/active
   - project/site
   - project/blog
   - domain/seo
-ai_summary: Workflow do projeto SEO/AEO — auditoria periódica + remediação P0/P1/P2. Cadência sugerida quinzenal. Indexação resolvida em 2026-07-29 (89%); foco atual são as 9 páginas sem meta tags e a conversão do tráfego, que virou 98,8% não-branded. Cross-projeto (afeta blog e site). Output em 40-content/auditorias-seo/.
+ai_summary: Workflow SEO/AEO — auditoria quinzenal e após mudanças estruturais, com crawl técnico, comparação ao diagnóstico vigente e remediação P0/P1/P2. Tendência usa 7 dias; CTR, conversão e campo exigem 28 dias ou volume suficiente.
 status: active
 subtipo: project
 why: "SEO/AEO é trabalho contínuo, não pontual. Indexação Google e citações por IA decidem visibilidade. Workflow definido garante regressões não passam batido e P0s são resolvidos antes de virarem crônicos."
@@ -38,10 +38,10 @@ Disparado por:
 - Frontmatter: `tipo: auditoria`, `data_diagnostico:`, `kpi_*` snapshot
 
 ### 2. Comparação com diagnóstico anterior
-- Ler [[2026-04-diagnostico-integrado]] (último)
-- Comparar KPIs: score, indexação, posts sem meta, etc.
-- Identificar: resolvidos, regressões, novos problemas
-
+- Ler [[2026-08-diagnostico-integrado-site]] (vigente)
+- Comparar KPIs de indexabilidade, CTR, concentração, conversão e presença em respostas de IA
+- Separar dado observado, dado de campo, laboratório e hipótese
+- Identificar resolvidos, regressões e novos problemas
 ### 3. Classificação P0/P1/P2
 - **P0** (urgente, esta semana): indexação, bugs críticos de schema, meta tags faltantes em posts ativos
 - **P1** (1-2 semanas): categorias, sitemap, robots, backlinks
@@ -60,10 +60,10 @@ Disparado por:
 - Documentar em commits + atualizar hub
 
 ### 6. Validação
-- Aguardar 1-7 dias pós-ação para Google reagir
-- Verificar GSC: novas indexações? regressões?
+- Fazer smoke técnico e crawl imediatamente após a ação
+- Observar 7 dias para tendência e usar 28 dias ou volume suficiente para decisão de CTR/conversão
+- Verificar GSC sem substituir dado indisponível de rota por dado de origem
 - Atualizar `kpi_atualizado_em` no hub
-
 ## Prompts e bases
 
 - Prompt: [[seo-page-audit]] (não-locked) — auditoria de página específica
@@ -85,6 +85,7 @@ Disparado por:
 
 ## Auditorias arquivadas
 
-- [[2026-04-diagnostico-integrado]] — score 52/100, 9 posts sem meta, P0 indexação
+- [[2026-08-diagnostico-integrado-site]] — diagnóstico vigente de performance, UX, SEO, AEO e conversão
+- [[2026-04-diagnostico-integrado]] — score 52/100, fotografia histórica substituída
 - [[2026-03-diagnostico-base]] — score teórico 74/100 (superado)
 - [[research-seo-aeo]] — blueprint teórico SEO+AEO 2026

@@ -46,7 +46,7 @@ interface FormData {
 type FormStatus = "idle" | "loading" | "success" | "error";
 
 const CAMPO_CLASS =
-  "h-10 text-sm bg-white border border-black-10 placeholder:text-black-30 focus:border-black-30 focus:ring-0 transition-colors";
+  "h-10 text-sm bg-white border border-black-10 placeholder:text-black-30 focus-visible:border-black focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 transition-colors";
 
 /** Mensagem de erro sob um campo. */
 function FieldError({ message }: { message?: string }) {
@@ -261,7 +261,7 @@ export function ContactForm({
             {/* Email */}
             <div className="space-y-1.5">
               <Label htmlFor="email" className="text-xs text-black-70 font-medium">
-                Email <span className="text-[10px] text-black-30">(Opcional)</span>
+                Email <span className="text-[10px] text-black-60">(Opcional)</span>
               </Label>
               <Input
                 id="email"
@@ -298,13 +298,13 @@ export function ContactForm({
 
             {/* Segmento */}
             <div className="space-y-1.5">
-              <Label className="text-xs text-black-70 font-medium">Segmento</Label>
+              <Label htmlFor="contact-segment" className="text-xs text-black-70 font-medium">Segmento</Label>
               <Select
                 value={formData.segment || undefined}
                 onValueChange={(value) => setFormData({ ...formData, segment: value })}
                 disabled={status === "loading"}
               >
-                <SelectTrigger className="h-10 text-sm bg-white border border-black-10 rounded-md px-3 py-2 shadow-none focus:border-black-30 focus:ring-0 transition-colors data-[placeholder]:text-black-30">
+                <SelectTrigger id="contact-segment" aria-label="Segmento" className="h-10 text-sm bg-white border border-black-10 rounded-md px-3 py-2 shadow-none focus:border-black focus:ring-2 focus:ring-black focus:ring-offset-2 transition-colors data-[placeholder]:text-black-60">
                   <SelectValue placeholder="Selecione o segmento" />
                 </SelectTrigger>
                 <SelectContent
@@ -335,7 +335,7 @@ export function ContactForm({
                 rows={2}
                 required
                 disabled={status === "loading"}
-                className="text-sm bg-white border border-black-10 placeholder:text-black-30 focus:border-black-30 focus:ring-0 transition-colors resize-none min-h-[60px]"
+                className="text-sm bg-white border border-black-10 placeholder:text-black-30 focus-visible:border-black focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 transition-colors resize-none min-h-[60px]"
               />
               <FieldError message={errors.message} />
             </div>
@@ -387,7 +387,7 @@ export function ContactForm({
               )}
             </AnimatePresence>
 
-            <p className="text-[10px] text-black-30 text-center mt-4">
+            <p className="text-[10px] text-black-60 text-center mt-4">
               Seus dados estão protegidos.
             </p>
           </form>

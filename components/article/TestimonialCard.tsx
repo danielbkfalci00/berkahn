@@ -86,6 +86,7 @@ export function TestimonialCard({
                   src={item.avatar}
                   alt={item.author}
                   fill
+                  sizes="48px"
                   className="object-cover"
                 />
               </div>

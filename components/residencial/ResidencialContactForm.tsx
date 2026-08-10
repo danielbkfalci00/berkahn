@@ -259,7 +259,7 @@ export function ResidencialContactForm() {
 
           {/* Row 3: Tipo de projeto (full width) */}
           <LabelInputContainer>
-            <label className={labelClasses}>Tipo de projeto</label>
+            <label htmlFor="res-project-type" className={labelClasses}>Tipo de projeto</label>
             <Select
               value={formData.projectType}
               onValueChange={(value) =>
@@ -267,7 +267,7 @@ export function ResidencialContactForm() {
               }
               disabled={status === "loading"}
             >
-              <SelectTrigger className={inputClasses}>
+              <SelectTrigger id="res-project-type" aria-label="Tipo de projeto" className={inputClasses}>
                 <SelectValue placeholder="Selecione o tipo" />
               </SelectTrigger>
               <SelectContent className="bg-white border border-black-10 shadow-luxury-md">

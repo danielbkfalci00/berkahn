@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import Image from "next/image";
-import { motion, useScroll, useTransform } from "motion/react";
+import { motion, useReducedMotion, useScroll, useTransform } from "motion/react";
 import { ImagesSlider } from "@/components/ui/images-slider";
 
 interface ParallaxHeroProps {
@@ -29,6 +29,7 @@ export function ParallaxHero({
   ctaHref,
 }: ParallaxHeroProps) {
   const ref = useRef<HTMLElement>(null);
+  const prefersReducedMotion = useReducedMotion();
 
   // Track scroll position
   const { scrollY } = useScroll({
@@ -51,14 +52,14 @@ export function ParallaxHero({
     >
       {/* Background Image Layer (slowest parallax) */}
       <motion.div
-        className="absolute inset-0 z-0"
-        style={{ y: yBackground, top: "-20%", bottom: "-20%", height: "140%" }}
+        className="absolute inset-0 z-0 motion-reduce:!transform-none"
+        style={{ y: prefersReducedMotion ? 0 : yBackground, top: "-20%", bottom: "-20%", height: "140%" }}
       >
         {images && images.length > 1 ? (
           <ImagesSlider
             images={images}
             overlay={false}
-            autoplay
+            autoplay={!prefersReducedMotion}
             direction="up"
             className="h-full w-full"
           />
@@ -80,7 +81,7 @@ export function ParallaxHero({
 
       {/* Content Layer (normal scroll speed) */}
       <div className="relative z-20 text-left">
-        <div className="hero-content-left">
+        <div className="hero-content-left motion-reduce:[&_*]:!transform-none motion-reduce:[&_*]:!opacity-100 motion-reduce:[&_*]:!transition-none">
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}

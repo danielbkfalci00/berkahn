@@ -96,7 +96,7 @@ export function AboutInstitucional() {
               {/* Label superior */}
               <div className="flex items-center gap-4 mb-8">
                 <div className="w-12 h-[1px] bg-black/20" />
-                <span className="text-[9px] font-semibold uppercase tracking-[0.3em] text-black/40">
+                <span className="text-[9px] font-semibold uppercase tracking-[0.3em] text-black/60">
                   Institucional
                 </span>
               </div>
@@ -232,7 +232,7 @@ export function AboutInstitucional() {
                       <div className="text-3xl font-black text-black mb-1">
                         {stat.valor}
                       </div>
-                      <div className="text-[8px] font-semibold uppercase tracking-[0.25em] text-black/40">
+                      <div className="text-[8px] font-semibold uppercase tracking-[0.25em] text-black/60">
                         {stat.label}
                       </div>
                     </motion.div>

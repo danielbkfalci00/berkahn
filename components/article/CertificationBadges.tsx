@@ -64,6 +64,7 @@ export function CertificationBadges({
                 src={cert.logo}
                 alt={cert.name}
                 fill
+                sizes="80px"
                 className="object-contain"
               />
             </div>
@@ -200,6 +201,7 @@ export function CertificationBadges({
                         src={cert.logo}
                         alt={cert.name}
                         fill
+                        sizes="64px"
                         className="object-contain"
                       />
                     </div>

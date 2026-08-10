@@ -11,7 +11,7 @@ export function SlideServices() {
     <SlideSection dark>
       <div className="container max-w-7xl mx-auto">
         <RevealOnScroll className="text-center mb-12 lg:mb-16">
-          <p className="text-xs sm:text-sm uppercase tracking-[0.3em] text-white/40 mb-4">
+          <p className="text-xs sm:text-sm uppercase tracking-[0.3em] text-white/60 mb-4">
             Soluções
           </p>
           <h2 className="font-heading text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-white mb-6">
