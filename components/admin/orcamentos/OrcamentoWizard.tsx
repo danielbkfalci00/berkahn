@@ -39,6 +39,7 @@ import {
 
 interface Props {
   orcamentoInicial?: Orcamento
+  dadosIniciais?: Partial<OrcamentoInsert>
 }
 
 const STEPS: { id: StepId; titulo: string }[] = [
@@ -102,9 +103,9 @@ function errosDoStep(
   return {}
 }
 
-export function OrcamentoWizard({ orcamentoInicial }: Props) {
+export function OrcamentoWizard({ orcamentoInicial, dadosIniciais }: Props) {
   const router = useRouter()
-  const [state, dispatch] = useReducer(reducer, initialState(orcamentoInicial))
+  const [state, dispatch] = useReducer(reducer, initialState(orcamentoInicial, dadosIniciais))
   const [stepAtivo, setStepAtivo] = useState<StepId>(1)
   const [salvar, setSalvar] = useState<SaveState>({
     status: "idle",

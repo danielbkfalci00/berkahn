@@ -65,7 +65,7 @@ async function loadContentRows(startDate, endDate) {
     ),
     serviceRequest(
       'GET',
-      `/rest/v1/leads?select=pauta_id,slug_origem,status,criado_em&status=in.(qualificado,convertido)&criado_em=gte.${encodeURIComponent(startDate)}&criado_em=lte.${encodeURIComponent(`${endDate}T23:59:59Z`)}`,
+      `/rest/v1/leads?select=pauta_id,slug_origem,qualificado_em,criado_em&qualificado_em=not.is.null&criado_em=gte.${encodeURIComponent(startDate)}&criado_em=lte.${encodeURIComponent(`${endDate}T23:59:59Z`)}`,
       null
     ),
   ]);

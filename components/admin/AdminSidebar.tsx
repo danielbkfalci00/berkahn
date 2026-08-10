@@ -16,9 +16,10 @@ import {
   BarChart3,
   BookOpen,
   KanbanSquare,
+  Inbox,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 
@@ -32,6 +33,11 @@ const navigation = [
     name: "Analytics",
     href: "/admin/analytics",
     icon: BarChart3,
+  },
+  {
+    name: "Leads",
+    href: "/admin/leads",
+    icon: Inbox,
   },
   {
     name: "Documentações",
@@ -75,6 +81,17 @@ export function AdminSidebar() {
   const router = useRouter();
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [unseenLeads, setUnseenLeads] = useState(0);
+
+  useEffect(() => {
+    const supabase = createClient();
+    void supabase
+      .from("leads")
+      .select("id", { count: "exact", head: true })
+      .is("visualizado_em", null)
+      .is("arquivado_em", null)
+      .then(({ count }) => setUnseenLeads(count ?? 0));
+  }, [pathname]);
 
   const handleLogout = async () => {
     const supabase = createClient();
@@ -144,7 +161,7 @@ export function AdminSidebar() {
                 href={item.href}
                 onClick={() => setMobileOpen(false)}
                 className={cn(
-                  "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors",
+                  "relative flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors",
                   isActive
                     ? "bg-neutral-900 text-white"
                     : "text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900"
@@ -152,6 +169,15 @@ export function AdminSidebar() {
               >
                 <item.icon className="h-5 w-5 flex-shrink-0" />
                 {!collapsed && <span>{item.name}</span>}
+                {item.name === "Leads" && unseenLeads > 0 && (
+                  <span className={cn(
+                    "ml-auto min-w-5 rounded-full px-1.5 py-0.5 text-center text-[10px] font-semibold",
+                    isActive ? "bg-white text-neutral-900" : "bg-blue-600 text-white",
+                    collapsed && "absolute left-9 top-1"
+                  )}>
+                    {unseenLeads > 99 ? "99+" : unseenLeads}
+                  </span>
+                )}
               </Link>
             );
           })}

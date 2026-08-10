@@ -2,7 +2,7 @@
 
 import { createClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
-import type { AnalyticsTask, LeadStatus, TaskPriority } from '@/types/analytics'
+import type { AnalyticsTask, TaskPriority } from '@/types/analytics'
 
 type ActionResult<T = null> = { data: T; error: string | null }
 
@@ -166,107 +166,5 @@ export async function reorderTasks(
   const supabase = await createClient()
   const { error } = await supabase.rpc('reordenar_analytics_tasks', { p_updates: updates })
   if (error) return { data: null, error: error.message }
-  return { data: null, error: null }
-}
-
-export async function updateLeadStatus(
-  id: string,
-  status: LeadStatus
-): Promise<ActionResult> {
-  const supabase = await createClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-  if (!user) return { data: null, error: 'Sessão expirada.' }
-
-  const qualified = status === 'qualificado' || status === 'convertido'
-  const { data, error } = await supabase
-    .from('leads')
-    .update({
-      status,
-      qualificado_por: qualified ? user.id : null,
-      qualificado_em: qualified ? new Date().toISOString() : null,
-    })
-    .eq('id', id)
-    .select('id,nome')
-    .single()
-
-  if (error) return { data: null, error: error.message }
-  await supabase.from('activity_logs').insert({
-    user_id: user.id,
-    user_name: user.email || 'Admin',
-    action: 'Status do lead alterado',
-    entity_type: 'lead',
-    entity_id: data.id,
-    entity_name: data.nome,
-    details: { status },
-  })
-  revalidatePath('/admin/analytics')
-  return { data: null, error: null }
-}
-
-export async function retryLeadSheetSync(id: string): Promise<ActionResult> {
-  const endpoint = process.env.GOOGLE_SHEETS_LEAD_ENDPOINT?.trim()
-  const syncSecret = process.env.GOOGLE_SHEETS_LEAD_SECRET?.trim()
-  if (!endpoint) return { data: null, error: 'GOOGLE_SHEETS_LEAD_ENDPOINT não configurado.' }
-  if (!syncSecret) return { data: null, error: 'GOOGLE_SHEETS_LEAD_SECRET não configurado.' }
-
-  const supabase = await createClient()
-  const { data: lead, error } = await supabase
-    .from('leads')
-    .select('id,nome,email,telefone,segmento,mensagem,pagina_origem,pauta_id,status,sheet_sync_tentativas')
-    .eq('id', id)
-    .single()
-  if (error || !lead) return { data: null, error: error?.message || 'Lead não encontrado.' }
-
-  try {
-    const response = await fetch(endpoint, {
-      method: 'POST',
-      headers: { 'Content-Type': 'text/plain' },
-      body: JSON.stringify({
-        sync_secret: syncSecret,
-        lead_id: lead.id,
-        name: lead.nome,
-        email: lead.email ?? '',
-        phone: lead.telefone,
-        segmento: lead.segmento,
-        origem: lead.pagina_origem ?? '',
-        pauta: lead.pauta_id ?? '',
-        status: lead.status,
-        message: lead.mensagem,
-      }),
-      signal: AbortSignal.timeout(8_000),
-    })
-    const sheetResult = await response.json().catch(() => null) as
-      | { success?: boolean; message?: string }
-      | null
-    if (!response.ok || sheetResult?.success !== true) {
-      throw new Error(sheetResult?.message || `HTTP ${response.status}`)
-    }
-    await supabase
-      .from('leads')
-      .update({
-        sheet_sync_status: 'sincronizado',
-        sheet_sync_tentativas: lead.sheet_sync_tentativas + 1,
-        sheet_synced_at: new Date().toISOString(),
-        sheet_sync_error: null,
-      })
-      .eq('id', id)
-  } catch (syncError) {
-    const message =
-      syncError instanceof Error ? syncError.message.slice(0, 500) : 'Falha desconhecida'
-    await supabase
-      .from('leads')
-      .update({
-        sheet_sync_status: 'falhou',
-        sheet_sync_tentativas: lead.sheet_sync_tentativas + 1,
-        sheet_sync_error: message,
-      })
-      .eq('id', id)
-    revalidatePath('/admin/analytics')
-    return { data: null, error: message }
-  }
-
-  revalidatePath('/admin/analytics')
   return { data: null, error: null }
 }

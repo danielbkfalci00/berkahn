@@ -30,7 +30,10 @@ export type WizardAction =
 
 const HOJE = () => new Date().toISOString().slice(0, 10)
 
-export function initialState(orcamentoInicial?: Orcamento): WizardState {
+export function initialState(
+  orcamentoInicial?: Orcamento,
+  dadosIniciais?: Partial<OrcamentoInsert>
+): WizardState {
   if (orcamentoInicial) {
     const {
       id: _id,
@@ -80,6 +83,8 @@ export function initialState(orcamentoInicial?: Orcamento): WizardState {
       pdf_url: null,
       pdf_storage_path: null,
       criado_por: null,
+      lead_id: null,
+      ...dadosIniciais,
     },
     hasUnsavedChanges: false,
     ultimoStepVisitado: 1,
