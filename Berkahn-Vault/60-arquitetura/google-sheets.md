@@ -136,7 +136,7 @@ O limitador atual é best-effort e não atômico. Se houver rajadas ou abuso, mi
 - Supabase é a fonte primária, com validação server-side, honeypot, tempo mínimo e limite por fingerprint.
 - O Apps Script 1.3 é apenas adaptador de notificação e exige `sync_secret` igual à Script Property `LEAD_SYNC_SECRET`.
 - O backend usa `GOOGLE_SHEETS_LEAD_SECRET`; nunca usar prefixo `NEXT_PUBLIC_` nem registrar o valor.
-- O ledger é idempotente por `lead_id`; o link do admin é montado pelo próprio script a partir de UUID validado.
+- O ledger e o envio de email são idempotentes por `lead_id`: retries só enviam quando o estado ainda está `pendente`; o link do admin é montado pelo próprio script a partir de UUID validado.
 - PII permanece exclusivamente no Supabase; GA4 recebe somente dimensões de atribuição.
 
 ### Risco residual
@@ -179,11 +179,12 @@ O limitador do endpoint Next.js usa contagem seguida de insert, portanto não é
 - [ ] @bruno Apagar emails legados com PII anteriores a 24 meses e registrar a data do email legado mais recente para a última revisão #pendencia
 ## 📝 Changelog
 
-### v1.3.0 — 2026-08-10
+### v1.3.1 — 2026-08-10
 
 - Supabase passa a ser a única custódia de PII.
 - Apps Script recebe apenas `lead_id` e segredo.
 - Planilha vira ledger mínimo; email aponta para o admin sem expor dados pessoais.
+- Lock e estado `pendente`/`enviado` tornam o retry idempotente também para o email.
 
 ### v1.2.0 — 2026-08-07
 

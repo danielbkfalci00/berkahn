@@ -180,7 +180,7 @@ export async function resendLeadNotification(id: string): Promise<LeadActionResu
       revalidateLead(id);
       return {
         ok: false,
-        error: "Notificação enviada, mas o estado não foi salvo. O adaptador é idempotente por lead_id; tente novamente.",
+        error: "Notificação processada, mas o estado não foi salvo. O adaptador evita email duplicado por lead_id; tente novamente.",
       };
     }
   } catch (notificationError) {

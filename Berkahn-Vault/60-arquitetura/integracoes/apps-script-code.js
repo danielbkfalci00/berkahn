@@ -5,7 +5,7 @@
  * recebe somente o UUID do lead, mantém um ledger mínimo e envia um aviso com
  * link para o admin autenticado.
  *
- * @version 1.3.0
+ * @version 1.3.1
  * @date 2026-08-10
  */
 
@@ -28,12 +28,19 @@ function doPost(e) {
       return createResponse(false, 'lead_id inválido');
     }
 
-    const result = saveNotification(data.lead_id);
-    if (CONFIG.SEND_NOTIFICATION) {
-      sendNotificationEmail(data.lead_id);
-    }
+    const lock = LockService.getScriptLock();
+    lock.waitLock(10000);
+    try {
+      const result = saveNotification(data.lead_id);
+      if (CONFIG.SEND_NOTIFICATION && result.shouldSend) {
+        sendNotificationEmail(data.lead_id);
+        markNotificationSent(result.row);
+      }
 
-    return createResponse(true, 'Notificação processada', result);
+      return createResponse(true, 'Notificação processada', result);
+    } finally {
+      lock.releaseLock();
+    }
   } catch (error) {
     console.error('Erro no doPost:', error);
     return createResponse(false, error.message);
@@ -43,7 +50,7 @@ function doPost(e) {
 function doGet() {
   return createResponse(true, 'API Berkahn funcionando!', {
     timestamp: new Date().toISOString(),
-    version: '1.3.0'
+    version: '1.3.1'
   });
 }
 
@@ -65,8 +72,6 @@ function saveNotification(leadId) {
     'America/Sao_Paulo',
     'dd/MM/yyyy HH:mm:ss'
   );
-  const rowData = [timestamp, leadId, 'enviado'];
-
   let existingRow = 0;
   if (sheet.getLastRow() > 1) {
     const ids = sheet.getRange(2, 2, sheet.getLastRow() - 1, 1).getDisplayValues();
@@ -75,15 +80,26 @@ function saveNotification(leadId) {
   }
 
   if (existingRow) {
-    sheet.getRange(existingRow, 1, 1, rowData.length).setValues([rowData]);
+    const status = sheet.getRange(existingRow, 3).getDisplayValue();
+    if (status === 'enviado') {
+      return { row: existingRow, timestamp: timestamp, shouldSend: false };
+    }
+    sheet.getRange(existingRow, 1, 1, 3).setValues([[timestamp, leadId, 'pendente']]);
   } else {
-    sheet.appendRow(rowData);
+    sheet.appendRow([timestamp, leadId, 'pendente']);
   }
 
   return {
     row: existingRow || sheet.getLastRow(),
-    timestamp: timestamp
+    timestamp: timestamp,
+    shouldSend: true
   };
+}
+
+function markNotificationSent(row) {
+  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(CONFIG.SHEET_NAME);
+  if (!sheet) throw new Error('Aba de notificações não encontrada');
+  sheet.getRange(row, 3).setValue('enviado');
 }
 
 function sendNotificationEmail(leadId) {
