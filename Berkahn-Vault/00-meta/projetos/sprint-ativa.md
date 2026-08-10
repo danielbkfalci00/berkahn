@@ -6,7 +6,7 @@ tags:
   - project/site
   - project/blog
   - status/active
-ai_summary: "Sprint 03–10/08: CRM Supabase implementado e migrations 024/025 aplicadas; RLS e atomicidade verdes. Edge Function, importação histórica, Apps Script/Vercel e deploy aguardam acesso às contas externas corretas."
+ai_summary: "Sprint 03–10/08: CRM Supabase ampliado e migrations 024–029 aplicadas; RLS, atomicidade, arquivos e outbox sem PII verdes. Deploy do PR #53, VAPID, Edge Function, importação histórica e Apps Script 1.4 aguardam acessos externos."
 status: active
 projetos_em_curso:
   - blog
@@ -41,7 +41,7 @@ vault. Só então exercitar a próxima pauta ponta a ponta em sessão autenticad
 |---------|--------|--------------------|--------------|
 | [[blog]] | active | Fluxo editorial completo ainda não exercitado | Rodar pesquisa → draft → aprovação na próxima pauta |
 | [[linkedin]] | active | Publicação externa manual | Registrar URL/data reais no próximo post |
-| [[site]] | active | Acessos Supabase Functions, Vercel e planilha impedem fechar rollout do CRM | Publicar função/Apps Script, importar histórico e deployar branch |
+| [[site]] | active | Sessão Vercel não acessa o escopo da Berkahn; Supabase Functions e planilha também bloqueados | Liberar acessos, configurar VAPID/Apps Script, importar histórico e deployar PR #53 |
 | [[seo-aeo]] | active | 3 URLs fora do índice (ação manual no GSC) | Pedir indexação das 3 |
 | [[apresentacoes]] | active | Roteiros não versionados (parcial) | Validar 16 slides em live env |
 | [[materiais]] | active | **Institucional PDF v4** aguarda briefing atualizado + distribuição | Atualizar briefing v3→v4; distribuir; preencher `usado_em` |
@@ -64,7 +64,7 @@ vault. Só então exercitar a próxima pauta ponta a ponta em sessão autenticad
 - [x] Worker local ativo a cada 15 minutos, com heartbeat verificado e limite de
   um job por execução; aprovação e publicação continuam humanas
 - [ ] Integrações externas: registrar dimensões GA4 e redeployar Apps Script
-- [x] Migrations 024/025 do CRM aplicadas; RLS e atomicidade verificadas em transação revertida
+- [x] Migrations 024–029 do CRM aplicadas; RLS canônica, atomicidade, retenção/remoção de anexos e outbox push sem PII verificadas em transação revertida
 - [ ] @bruno Liberar os acessos externos listados em [[site]] para fechar Edge Function, importação, Apps Script e deploy #pendencia
 - [ ] Exercitar pesquisa → draft → produção → aprovação → publicação na próxima
   pauta real
@@ -96,7 +96,7 @@ vault. Só então exercitar a próxima pauta ponta a ponta em sessão autenticad
 - [x] **Higiene da service key histórica verificada**: varredura em 405 arquivos
   de `scripts/` encontrou zero JWT Supabase e zero chave `sb_secret_` hardcoded
 - [x] **4 erros de frontmatter em `40-content/curadoria/`** (vault health): corrigidos em 2026-07-02 (PR #11) — `status`/`tipo` inválidos normalizados. `vault-validate.mjs` → 0 issues. Chip `task_abaacde6` fechado.
-- [x] **Supabase consolidado como custódia de PII**: banco do CRM em produção e admin implementado; Apps Script 1.3 recebe somente `lead_id`
+- [x] **Supabase consolidado como custódia de PII**: banco do CRM em produção e admin implementado; Apps Script 1.4 recebe somente `lead_id` e retry consulta Gmail Enviados
 - [x] ~~**9 posts sem meta_title/meta_description**~~ ✅ 2026-07-30 — eram os 9 artigos com menos de 55 palavras. 5 em 301, 4 em noindex. Ver [[2026-07-thin-content-mapa]]
 - [x] ~~**4 posts sem answer_summary**~~ ✅ 2026-07-30 — preenchidos, 98 a 102 palavras cada
 

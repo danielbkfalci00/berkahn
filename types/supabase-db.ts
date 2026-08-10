@@ -487,6 +487,222 @@ export type Database = {
           },
         ]
       }
+      lead_responsaveis: {
+        Row: {
+          ativo: boolean
+          atualizado_em: string
+          criado_em: string
+          id: string
+          nome: string
+          ordem: number
+        }
+        Insert: {
+          ativo?: boolean
+          atualizado_em?: string
+          criado_em?: string
+          id?: string
+          nome: string
+          ordem?: number
+        }
+        Update: {
+          ativo?: boolean
+          atualizado_em?: string
+          criado_em?: string
+          id?: string
+          nome?: string
+          ordem?: number
+        }
+        Relationships: []
+      }
+      lead_artifacts: {
+        Row: {
+          atualizado_em: string
+          criado_em: string
+          criado_por: string | null
+          estado: string
+          external_url: string | null
+          id: string
+          lead_id: string
+          mime_type: string | null
+          nome: string
+          size_bytes: number | null
+          storage_bucket: string | null
+          storage_path: string | null
+          tipo: string
+        }
+        Insert: {
+          atualizado_em?: string
+          criado_em?: string
+          criado_por?: string | null
+          estado?: string
+          external_url?: string | null
+          id?: string
+          lead_id: string
+          mime_type?: string | null
+          nome: string
+          size_bytes?: number | null
+          storage_bucket?: string | null
+          storage_path?: string | null
+          tipo: string
+        }
+        Update: {
+          atualizado_em?: string
+          criado_em?: string
+          criado_por?: string | null
+          estado?: string
+          external_url?: string | null
+          id?: string
+          lead_id?: string
+          mime_type?: string | null
+          nome?: string
+          size_bytes?: number | null
+          storage_bucket?: string | null
+          storage_path?: string | null
+          tipo?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lead_artifacts_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      lead_storage_cleanup: {
+        Row: {
+          bucket: string
+          criado_em: string
+          id: string
+          lead_id: string
+          path: string
+          tentativas: number
+          ultimo_erro: string | null
+        }
+        Insert: {
+          bucket: string
+          criado_em?: string
+          id?: string
+          lead_id: string
+          path: string
+          tentativas?: number
+          ultimo_erro?: string | null
+        }
+        Update: {
+          bucket?: string
+          criado_em?: string
+          id?: string
+          lead_id?: string
+          path?: string
+          tentativas?: number
+          ultimo_erro?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lead_storage_cleanup_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      admin_push_subscriptions: {
+        Row: {
+          ativo: boolean
+          auth_key: string
+          atualizado_em: string
+          criado_em: string
+          device_label: string
+          endpoint: string
+          id: string
+          p256dh: string
+          ultimo_uso_em: string
+          user_agent: string | null
+          user_id: string
+        }
+        Insert: {
+          ativo?: boolean
+          auth_key: string
+          atualizado_em?: string
+          criado_em?: string
+          device_label?: string
+          endpoint: string
+          id?: string
+          p256dh: string
+          ultimo_uso_em?: string
+          user_agent?: string | null
+          user_id: string
+        }
+        Update: {
+          ativo?: boolean
+          auth_key?: string
+          atualizado_em?: string
+          criado_em?: string
+          device_label?: string
+          endpoint?: string
+          id?: string
+          p256dh?: string
+          ultimo_uso_em?: string
+          user_agent?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      lead_notification_outbox: {
+        Row: {
+          atualizado_em: string
+          criado_em: string
+          dedupe_key: string
+          enviado_em: string | null
+          estado: string
+          id: string
+          lead_id: string | null
+          payload: Json
+          proxima_tentativa_em: string
+          tentativas: number
+          tipo: string
+          ultimo_erro: string | null
+        }
+        Insert: {
+          atualizado_em?: string
+          criado_em?: string
+          dedupe_key: string
+          enviado_em?: string | null
+          estado?: string
+          id?: string
+          lead_id?: string | null
+          payload: Json
+          proxima_tentativa_em?: string
+          tentativas?: number
+          tipo: string
+          ultimo_erro?: string | null
+        }
+        Update: {
+          atualizado_em?: string
+          criado_em?: string
+          dedupe_key?: string
+          enviado_em?: string | null
+          estado?: string
+          id?: string
+          lead_id?: string | null
+          payload?: Json
+          proxima_tentativa_em?: string
+          tentativas?: number
+          tipo?: string
+          ultimo_erro?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lead_notification_outbox_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       leads: {
         Row: {
           anonimizado_em: string | null
@@ -510,11 +726,15 @@ export type Database = {
           pagina_origem: string | null
           pauta_id: string | null
           post_id: string | null
+          prioridade: string
           proxima_acao_em: string | null
           qualificado_em: string | null
           qualificado_por: string | null
           referrer: string | null
           request_fingerprint: string | null
+          responsavel_id: string | null
+          resumo_status: string | null
+          resumo_status_em: string | null
           retencao_excecao: boolean
           retencao_excecao_motivo: string | null
           retencao_storage_pendente: string[]
@@ -554,11 +774,15 @@ export type Database = {
           pagina_origem?: string | null
           pauta_id?: string | null
           post_id?: string | null
+          prioridade?: string
           proxima_acao_em?: string | null
           qualificado_em?: string | null
           qualificado_por?: string | null
           referrer?: string | null
           request_fingerprint?: string | null
+          responsavel_id?: string | null
+          resumo_status?: string | null
+          resumo_status_em?: string | null
           retencao_excecao?: boolean
           retencao_excecao_motivo?: string | null
           retencao_storage_pendente?: string[]
@@ -598,11 +822,15 @@ export type Database = {
           pagina_origem?: string | null
           pauta_id?: string | null
           post_id?: string | null
+          prioridade?: string
           proxima_acao_em?: string | null
           qualificado_em?: string | null
           qualificado_por?: string | null
           referrer?: string | null
           request_fingerprint?: string | null
+          responsavel_id?: string | null
+          resumo_status?: string | null
+          resumo_status_em?: string | null
           retencao_excecao?: boolean
           retencao_excecao_motivo?: string | null
           retencao_storage_pendente?: string[]
@@ -633,6 +861,13 @@ export type Database = {
             columns: ["pauta_id"]
             isOneToOne: false
             referencedRelation: "conteudo_pautas"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "leads_responsavel_id_fkey"
+            columns: ["responsavel_id"]
+            isOneToOne: false
+            referencedRelation: "lead_responsaveis"
             referencedColumns: ["id"]
           },
         ]
@@ -1012,6 +1247,10 @@ export type Database = {
     }
     Functions: {
       anonymize_expired_lead: { Args: { p_id: string }; Returns: string[] }
+      claim_lead_push_notifications: {
+        Args: { p_limit?: number }
+        Returns: Database["public"]["Tables"]["lead_notification_outbox"]["Row"][]
+      }
       complete_lead_storage_cleanup: { Args: { p_id: string }; Returns: undefined }
       create_manual_lead: {
         Args: {
@@ -1030,6 +1269,14 @@ export type Database = {
         }
         Returns: string
       }
+      create_lead_external_artifact: {
+        Args: { p_lead_id: string; p_nome: string; p_tipo: string; p_url: string }
+        Returns: string
+      }
+      delete_lead_artifact: {
+        Args: { p_id: string; p_pending_only: boolean }
+        Returns: Array<{ lead_id: string; bucket: string | null; path: string | null }>
+      }
       get_lead_retention_candidates: {
         Args: never
         Returns: { lead_id: string; pdf_paths: string[]; requires_anonymization: boolean }[]
@@ -1041,10 +1288,21 @@ export type Database = {
         Returns: undefined
       }
       schedule_monthly_lead_retention: { Args: { p_function_url: string }; Returns: number }
+      enqueue_overdue_lead_pushes: { Args: never; Returns: number }
+      schedule_lead_push_dispatch: { Args: { p_dispatch_url: string }; Returns: number }
       set_lead_archived: { Args: { p_arquivado: boolean; p_id: string }; Returns: undefined }
       set_lead_next_action: { Args: { p_id: string; p_proxima_acao_em: string | null }; Returns: undefined }
       update_lead_status: {
         Args: { p_id: string; p_motivo?: string | null; p_status: string }
+        Returns: Database["public"]["Tables"]["leads"]["Row"]
+      }
+      update_lead_operations: {
+        Args: {
+          p_id: string
+          p_prioridade: string
+          p_responsavel_id: string | null
+          p_resumo_status: string
+        }
         Returns: Database["public"]["Tables"]["leads"]["Row"]
       }
       gerar_numero_orcamento: { Args: never; Returns: string }

@@ -5,7 +5,7 @@
  * recebe somente o UUID do lead, mantém um ledger mínimo e envia um aviso com
  * link para o admin autenticado.
  *
- * @version 1.3.1
+ * @version 1.4.0
  * @date 2026-08-10
  */
 
@@ -50,7 +50,7 @@ function doPost(e) {
 function doGet() {
   return createResponse(true, 'API Berkahn funcionando!', {
     timestamp: new Date().toISOString(),
-    version: '1.3.1'
+    version: '1.4.0'
   });
 }
 
@@ -104,7 +104,10 @@ function markNotificationSent(row) {
 
 function sendNotificationEmail(leadId) {
   const adminUrl = `${CONFIG.ADMIN_BASE_URL}/${encodeURIComponent(leadId)}`;
-  const subject = 'Novo lead Berkahn';
+  const subject = notificationSubject(leadId);
+  // A busca no Sent torna o retry idempotente mesmo se o email tiver sido
+  // enviado e a atualização do ledger falhar logo depois.
+  if (hasSentNotification(subject)) return;
   const htmlBody = `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
       <div style="background: #000; color: #fff; padding: 20px; text-align: center;">
@@ -130,12 +133,21 @@ function sendNotificationEmail(leadId) {
   `;
   const textBody = `Novo lead Berkahn\n\nOs dados pessoais permanecem no Supabase.\nAcesse o admin: ${adminUrl}`;
 
-  MailApp.sendEmail({
-    to: CONFIG.NOTIFICATION_EMAIL,
-    subject: subject,
-    body: textBody,
+  GmailApp.sendEmail(CONFIG.NOTIFICATION_EMAIL, subject, textBody, {
     htmlBody: htmlBody
   });
+}
+
+function notificationSubject(leadId) {
+  return `Novo lead Berkahn [${leadId}]`;
+}
+
+function hasSentNotification(subject) {
+  const escaped = subject.replace(/"/g, '\\"');
+  const threads = GmailApp.search(`in:sent subject:"${escaped}"`, 0, 5);
+  return threads.some((thread) => thread.getMessages().some((message) =>
+    message.getSubject() === subject
+  ));
 }
 
 function isUuid(value) {

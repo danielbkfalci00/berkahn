@@ -1,11 +1,11 @@
 import { LeadsQueue, type LeadKpis } from "@/components/admin/analytics/LeadsQueue";
 import { createClient } from "@/lib/supabase/server";
-import type { AnalyticsLead, LeadChannel, LeadSegment, LeadStatus } from "@/types/analytics";
+import type { AnalyticsLead, LeadChannel, LeadPriority, LeadResponsible, LeadSegment, LeadStatus } from "@/types/analytics";
 
 export const dynamic = "force-dynamic";
 
 const PAGE_SIZE = 25;
-const LEAD_COLUMNS = "id,nome,email,telefone,telefone_normalizado,segmento,mensagem,canal,status,tipo_projeto,empresa,cargo,pagina_origem,landing_page,referrer,slug_origem,cta_location,utm,post_id,pauta_id,visualizado_em,ultimo_contato_em,proxima_acao_em,motivo_desqualificacao,qualificado_em,desqualificado_em,convertido_em,arquivado_em,anonimizado_em,origem_legado,importado_em,sheet_sync_status,sheet_sync_tentativas,sheet_sync_error,criado_em";
+const LEAD_COLUMNS = "id,nome,email,telefone,telefone_normalizado,segmento,mensagem,canal,status,prioridade,responsavel_id,resumo_status,resumo_status_em,tipo_projeto,empresa,cargo,pagina_origem,landing_page,referrer,slug_origem,cta_location,utm,post_id,pauta_id,visualizado_em,ultimo_contato_em,proxima_acao_em,motivo_desqualificacao,qualificado_em,desqualificado_em,convertido_em,arquivado_em,anonimizado_em,origem_legado,importado_em,sheet_sync_status,sheet_sync_tentativas,sheet_sync_error,criado_em,lead_responsaveis(id,nome),lead_artifacts(count)";
 
 interface PageProps {
   searchParams: Promise<{
@@ -13,16 +13,20 @@ interface PageProps {
     status?: LeadStatus;
     canal?: LeadChannel;
     segmento?: LeadSegment;
+    prioridade?: LeadPriority;
+    responsavel?: string;
     periodo?: string;
     vencida?: string;
     arquivados?: string;
     page?: string;
+    view?: "inbox" | "kanban";
   }>;
 }
 
 export default async function LeadsPage({ searchParams }: PageProps) {
   const params = await searchParams;
   const page = Math.max(1, Number.parseInt(params.page || "1", 10) || 1);
+  const view = params.view === "kanban" ? "kanban" : "inbox";
   const supabase = await createClient();
   let query = supabase
     .from("leads")
@@ -45,6 +49,8 @@ export default async function LeadsPage({ searchParams }: PageProps) {
   if (params.status) query = query.eq("status", params.status);
   if (params.canal) query = query.eq("canal", params.canal);
   if (params.segmento) query = query.eq("segmento", params.segmento);
+  if (params.prioridade) query = query.eq("prioridade", params.prioridade);
+  if (params.responsavel) query = query.eq("responsavel_id", params.responsavel);
   if (params.periodo && ["7", "28", "90"].includes(params.periodo)) {
     const from = new Date();
     from.setUTCDate(from.getUTCDate() - Number(params.periodo));
@@ -53,21 +59,37 @@ export default async function LeadsPage({ searchParams }: PageProps) {
   if (params.vencida === "1") query = query.lt("proxima_acao_em", new Date().toISOString());
   query = params.arquivados === "1" ? query.not("arquivado_em", "is", null) : query.is("arquivado_em", null);
 
-  const from = (page - 1) * PAGE_SIZE;
-  const [{ data, count, error }, kpis] = await Promise.all([
-    query.range(from, from + PAGE_SIZE - 1),
+  const from = view === "kanban" ? 0 : (page - 1) * PAGE_SIZE;
+  const limit = view === "kanban" ? 150 : PAGE_SIZE;
+  const [{ data, count, error }, kpis, responsiblesResult] = await Promise.all([
+    query.range(from, from + limit - 1),
     getLeadKpis(),
+    supabase.from("lead_responsaveis").select("id,nome,ativo,ordem").eq("ativo", true).order("ordem").order("nome"),
   ]);
   if (error) throw new Error(`Falha ao carregar leads: ${error.message}`);
+  if (responsiblesResult.error) throw new Error(`Falha ao carregar responsáveis: ${responsiblesResult.error.message}`);
 
   const total = count ?? 0;
+  const leads = (data ?? []).map((row) => {
+    const raw = row as unknown as Omit<AnalyticsLead, "responsavel" | "artifact_count"> & {
+      lead_responsaveis: { id: string; nome: string } | null;
+      lead_artifacts: Array<{ count: number }>;
+    };
+    return {
+      ...raw,
+      responsavel: raw.lead_responsaveis,
+      artifact_count: raw.lead_artifacts?.[0]?.count ?? 0,
+    } as AnalyticsLead;
+  });
   return (
     <LeadsQueue
-      initialLeads={(data ?? []) as unknown as AnalyticsLead[]}
+      initialLeads={leads}
       total={total}
       page={page}
       pageCount={Math.ceil(total / PAGE_SIZE)}
       kpis={kpis}
+      responsibles={(responsiblesResult.data ?? []) as LeadResponsible[]}
+      view={view}
     />
   );
 }

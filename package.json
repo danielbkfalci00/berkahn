@@ -66,6 +66,7 @@
     "sharp": "^0.34.5",
     "tailwind-merge": "^2.2.0",
     "topojson-client": "^3.1.0",
+    "web-push": "^3.6.7",
     "xlsx-js-style": "^1.2.0"
   },
   "devDependencies": {
@@ -75,6 +76,7 @@
     "@types/react-dom": "^18.2.0",
     "@types/react-simple-maps": "^3.0.6",
     "@types/topojson-client": "^3.1.5",
+    "@types/web-push": "^3.6.4",
     "autoprefixer": "^10.4.0",
     "eslint": "^8.55.0",
     "eslint-config-next": "^15.0.0",

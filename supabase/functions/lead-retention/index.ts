@@ -1,6 +1,6 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 
-const BUCKET = "orcamento-pdfs";
+const BUDGET_BUCKET = "orcamento-pdfs";
 
 Deno.serve(async (request) => {
   if (request.method !== "POST") return response({ error: "method_not_allowed" }, 405);
@@ -35,7 +35,7 @@ Deno.serve(async (request) => {
     }
 
     if (paths.length) {
-      const { error: storageError } = await supabase.storage.from(BUCKET).remove(paths);
+      const { error: storageError } = await supabase.storage.from(BUDGET_BUCKET).remove(paths);
       if (storageError) {
         failed += 1;
         continue;
@@ -49,7 +49,44 @@ Deno.serve(async (request) => {
     if (cleanupError) failed += 1;
   }
 
-  return response({ candidates: candidates?.length || 0, anonymized, failed, removed_objects: removedObjects });
+  const { data: queuedObjects, error: queueError } = await supabase
+    .from("lead_storage_cleanup")
+    .select("id,bucket,path,tentativas")
+    .order("criado_em")
+    .limit(500);
+  if (queueError) return response({ error: "storage_queue_query_failed", anonymized, failed }, 500);
+
+  for (const item of queuedObjects || []) {
+    const { error: storageError } = await supabase.storage.from(item.bucket).remove([item.path]);
+    if (storageError) {
+      failed += 1;
+      await supabase
+        .from("lead_storage_cleanup")
+        .update({
+          tentativas: item.tentativas + 1,
+          ultimo_erro: storageError.message.slice(0, 500),
+        })
+        .eq("id", item.id);
+      continue;
+    }
+    const { error: deleteError } = await supabase
+      .from("lead_storage_cleanup")
+      .delete()
+      .eq("id", item.id);
+    if (deleteError) {
+      failed += 1;
+      continue;
+    }
+    removedObjects += 1;
+  }
+
+  return response({
+    candidates: candidates?.length || 0,
+    queued_objects: queuedObjects?.length || 0,
+    anonymized,
+    failed,
+    removed_objects: removedObjects,
+  });
 });
 
 function response(body: Record<string, unknown>, status = 200) {

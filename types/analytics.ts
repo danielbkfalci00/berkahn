@@ -214,6 +214,28 @@ export type LeadStatus =
 
 export type LeadChannel = "form" | "whatsapp" | "telefone" | "email" | "indicacao" | "manual";
 export type LeadSegment = "residencial" | "comercial" | "nao_definido";
+export type LeadPriority = "normal" | "alta" | "urgente";
+
+export interface LeadResponsible {
+  id: string;
+  nome: string;
+  ativo: boolean;
+  ordem: number;
+}
+
+export interface LeadArtifact {
+  id: string;
+  lead_id: string;
+  tipo: "drive_folder" | "external_link" | "upload";
+  estado: "pending" | "ready";
+  nome: string;
+  external_url: string | null;
+  storage_bucket: string | null;
+  storage_path: string | null;
+  mime_type: string | null;
+  size_bytes: number | null;
+  criado_em: string;
+}
 
 export interface AnalyticsLead {
   id: string;
@@ -225,6 +247,12 @@ export interface AnalyticsLead {
   mensagem: string | null;
   canal: LeadChannel;
   status: LeadStatus;
+  prioridade: LeadPriority;
+  responsavel_id: string | null;
+  responsavel: Pick<LeadResponsible, "id" | "nome"> | null;
+  resumo_status: string | null;
+  resumo_status_em: string | null;
+  artifact_count: number;
   tipo_projeto: string | null;
   empresa: string | null;
   cargo: string | null;

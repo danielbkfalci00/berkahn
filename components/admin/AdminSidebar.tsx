@@ -22,6 +22,7 @@ import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
+import { disableCurrentAdminPush } from "@/components/admin/AdminPwa";
 
 const navigation = [
   {
@@ -95,6 +96,7 @@ export function AdminSidebar() {
 
   const handleLogout = async () => {
     const supabase = createClient();
+    await disableCurrentAdminPush();
     await supabase.auth.signOut();
     router.push("/admin/login");
   };

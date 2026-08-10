@@ -41,7 +41,9 @@ try {
   await client.query("SELECT set_config('request.jwt.claims', $1, true)", [JSON.stringify({ sub: "00000000-0000-0000-0000-000000000001", email: "nao-autorizado@example.invalid", role: "authenticated" })]);
   assert(Number((await client.query("SELECT count(*) AS total FROM public.leads WHERE id = $1", [leadId])).rows[0].total) === 0, "Usuário não autorizado visualizou lead.");
   assert(Number((await client.query("SELECT count(*) AS total FROM public.activity_logs WHERE id = $1", [leadLogId])).rows[0].total) === 0, "Usuário não autorizado visualizou log de lead.");
-  assert(Number((await client.query("SELECT count(*) AS total FROM public.activity_logs WHERE id = $1", [normalLogs[0].id])).rows[0].total) === 1, "Policy deixou de preservar logs não relacionados a lead.");
+  assert(Number((await client.query("SELECT count(*) AS total FROM public.activity_logs WHERE id = $1", [normalLogs[0].id])).rows[0].total) === 0, "Usuário não autorizado visualizou log administrativo.");
+  assert(Number((await client.query("SELECT count(*) AS total FROM public.lead_responsaveis")).rows[0].total) === 0, "Usuário não autorizado visualizou responsáveis.");
+  assert(Number((await client.query("SELECT count(*) AS total FROM public.admin_push_subscriptions")).rows[0].total) === 0, "Usuário não autorizado visualizou assinaturas push.");
 
   await client.query("RESET ROLE");
   await client.query("SET LOCAL ROLE authenticated");
@@ -68,6 +70,27 @@ try {
 
   await client.query("RESET ROLE");
   await client.query("DROP TRIGGER fail_lead_log ON public.activity_logs");
+
+  const artifactPath = `${leadId}/atomic-delete-test.pdf`;
+  const { rows: artifacts } = await client.query(`
+    INSERT INTO public.lead_artifacts (
+      lead_id, tipo, estado, nome, storage_bucket, storage_path, mime_type, size_bytes
+    ) VALUES (
+      $1, 'upload', 'ready', 'atomic-delete-test.pdf', 'lead-files', $2, 'application/pdf', 128
+    ) RETURNING id
+  `, [leadId, artifactPath]);
+  await client.query("SET LOCAL ROLE authenticated");
+  await client.query("SELECT set_config('request.jwt.claims', $1, true)", [JSON.stringify({ sub: admin.id, email: admin.email, role: "authenticated" })]);
+  const deletedArtifact = (await client.query(
+    "SELECT * FROM public.delete_lead_artifact($1, FALSE)",
+    [artifacts[0].id]
+  )).rows[0];
+  assert(deletedArtifact?.path === artifactPath, "RPC não retornou o objeto removido.");
+  assert(Number((await client.query("SELECT count(*) AS total FROM public.lead_artifacts WHERE id = $1", [artifacts[0].id])).rows[0].total) === 0, "RPC não removeu o vínculo do arquivo.");
+  assert(Number((await client.query("SELECT count(*) AS total FROM public.lead_storage_cleanup WHERE path = $1", [artifactPath])).rows[0].total) === 0, "Authenticated acessou a fila interna de Storage.");
+
+  await client.query("RESET ROLE");
+  assert(Number((await client.query("SELECT count(*) AS total FROM public.lead_storage_cleanup WHERE path = $1", [artifactPath])).rows[0].total) === 1, "RPC não enfileirou a remoção durável do objeto.");
   const { rows: expiredLeads } = await client.query(`
     INSERT INTO public.leads (
       nome, email, telefone, segmento, mensagem, canal, criado_em, atualizado_em
@@ -101,6 +124,13 @@ try {
       'Rua teste', 'residencial', 'Descrição sintética', 'Nota sintética', 'Nota interna sintética', $1
     )
   `, [expiredId]);
+  await client.query(`
+    INSERT INTO public.lead_artifacts (
+      lead_id, tipo, estado, nome, storage_bucket, storage_path, mime_type, size_bytes
+    ) VALUES (
+      $1, 'upload', 'ready', 'teste.pdf', 'lead-files', $2, 'application/pdf', 128
+    )
+  `, [expiredId, `${expiredId}/teste.pdf`]);
 
   await client.query("SET LOCAL ROLE service_role");
   assert(Number((await client.query("SELECT count(*) AS total FROM public.leads WHERE id = $1", [leadId])).rows[0].total) === 1, "Service role não acessou lead.");
@@ -117,10 +147,16 @@ try {
   assert(anonymizedProposal.client_name === "Cliente anonimizado" && !anonymizedProposal.client_email && !anonymizedProposal.client_phone && !anonymizedProposal.notes && !anonymizedProposal.internal_notes, "Proposta vinculada não foi anonimizada.");
   const anonymizedLog = (await client.query("SELECT details FROM public.activity_logs WHERE entity_type = 'lead' AND entity_id = $1 ORDER BY created_at DESC LIMIT 1", [expiredId])).rows[0];
   assert(anonymizedLog.details?.tipo === "anonimizado_por_retencao", "Log vinculado não foi limpo.");
+  const artifactCleanup = (await client.query("SELECT bucket,path FROM public.lead_storage_cleanup WHERE lead_id = $1", [expiredId])).rows[0];
+  assert(artifactCleanup?.bucket === "lead-files" && artifactCleanup.path === `${expiredId}/teste.pdf`, "Anexo privado não entrou na fila durável de remoção.");
+  assert(Number((await client.query("SELECT count(*) AS total FROM public.lead_artifacts WHERE lead_id = $1", [expiredId])).rows[0].total) === 0, "Vínculo de arquivo sobreviveu à anonimização.");
   const pendingCandidate = await client.query("SELECT * FROM public.get_lead_retention_candidates() WHERE lead_id = $1", [expiredId]);
   assert(pendingCandidate.rows[0]?.requires_anonymization === false, "Cleanup pendente tentou anonimizar novamente o lead.");
   await client.query("SELECT public.complete_lead_storage_cleanup($1)", [expiredId]);
   assert((await client.query("SELECT cardinality(retencao_storage_pendente) AS total FROM public.leads WHERE id = $1", [expiredId])).rows[0].total === 0, "Cleanup concluído não limpou a fila de Storage.");
+
+  const outbox = (await client.query("SELECT payload FROM public.lead_notification_outbox WHERE lead_id = $1 AND tipo = 'novo_lead'", [leadId])).rows[0];
+  assert(outbox && !outbox.payload.nome && !outbox.payload.email && !outbox.payload.telefone && !outbox.payload.leadId && !outbox.payload.lead_id && !JSON.stringify(outbox.payload).includes(leadId), "Outbox push contém PII ou identificador proibido no payload.");
 
   await client.query("RESET ROLE");
   await client.query("ROLLBACK");

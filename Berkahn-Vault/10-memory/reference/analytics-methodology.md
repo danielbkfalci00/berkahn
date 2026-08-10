@@ -240,6 +240,8 @@ O GA4 nunca recebe nome, email, telefone, mensagem ou `leadId`. `whatsapp_click`
 
 `/admin/leads` calcula uma coorte móvel de contatos recebidos nos últimos 28 dias: recebidos, ainda novos, qualificados, convertidos e `qualificados ÷ contatos elegíveis`. Qualificados são registros com `qualificado_em`; convertidos usam `convertido_em`, preservando o resultado mesmo se o funil for revisto depois. Importados com status ausente ou desconhecido entram como `novo`, visualizados e arquivados, ficando fora da taxa. A métrica editorial continua `qualificados ÷ sessões engajadas × 100`; cliques no WhatsApp não entram como lead.
 
+Responsável, prioridade, resumo operacional, arquivos e notificações push são dimensões de trabalho, não conversões. Arrastar um card no Kanban chama a mesma RPC do seletor de status; instalar a PWA, abrir arquivo ou receber push não dispara evento GA4. O payload push é genérico e não contém PII nem identificador do lead.
+
 Relatórios anteriores a agosto/2026 não têm esta seção preenchida — ausência ali é falta de instrumentação, não ausência de conversão.
 
 ## Referências

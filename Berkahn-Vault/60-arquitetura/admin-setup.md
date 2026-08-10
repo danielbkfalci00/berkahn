@@ -6,7 +6,7 @@ tags:
   - ai/context
   - project/site
   - domain/admin
-ai_summary: Sistema Admin Berkahn com CRM leve em /admin/leads. Supabase é a única custódia de PII; status, notas, contatos, visualização e arquivamento usam RPCs transacionais e RLS do admin canônico. Orçamentos podem ser vinculados ao lead.
+ai_summary: Sistema Admin Berkahn com CRM leve em /admin/leads. Inbox e Kanban compartilham Supabase como única custódia de PII; operação inclui responsável, prioridade, último status, arquivos privados/Drive, PWA e push sem PII. Migrations 024–029 estão em produção; deploy do código e configuração VAPID ainda pendem.
 status: active
 escopo: berkahn
 ---
@@ -20,6 +20,9 @@ escopo: berkahn
 
 O Sistema Admin Berkahn é um painel administrativo para gerenciar:
 - **Posts de Blog** (Atualidade)
+- **Leads e operação comercial**
+- **Conteúdo e documentação interna**
+- **Orçamentos vinculados a leads**
 - **Apresentações Executivas**
 - **Propostas de Orçamento**
 
@@ -180,17 +183,30 @@ Configure um único projeto Vercel com o build completo:
 
 ### CRM de leads
 
-`/admin/leads` é a fila operacional única. A lista usa paginação server-side de 25, busca, filtros, badge de não visualizados e KPIs por coorte de 28 dias. O detalhe concentra contato, origem consentida, funil, próxima ação, timeline, retry da notificação e vínculos comerciais. A lista antiga foi removida de `/admin/analytics`, que mantém somente agregados e aprendizado.
+`/admin/leads` é a fila operacional única. A Inbox usa paginação server-side de 25; o Kanban carrega até 150 resultados filtrados e oferece drag-and-drop mais seletor acessível. Busca, filtros, badge de não visualizados e KPIs por coorte de 28 dias são compartilhados. O detalhe concentra contato, origem consentida, funil, responsável, prioridade, último status, próxima ação, timeline, retry da notificação, arquivos e vínculos comerciais. A lista antiga foi removida de `/admin/analytics`, que mantém somente agregados e aprendizado.
 
 O funil canônico é `novo` → `em_contato` → `qualificado` → `proposta_enviada` → `convertido`, com `desqualificado` exigindo motivo. `qualificado_em` registra a primeira qualificação e não é apagado por regressão posterior; `convertido_em` representa fechamento efetivo. Cadastro manual aceita WhatsApp, telefone, email e indicação, mostra candidatos a duplicidade e nunca dispara GA4.
 
-As mutações vivem em RPCs transacionais da migration `024_leads_crm_supabase.sql`. Logs de lead usam `Lead <prefixo-do-UUID>` em `entity_name`; PII e notas ficam em `details` e seguem a retenção do registro. A RLS de `activity_logs` preserva os demais tipos, mas exige o mesmo administrador autorizado de `leads` quando `entity_type = lead`. A matriz anon / authenticated não autorizado / admin / service role e a reversão atômica são verificadas por `npm run test:leads`.
+As mutações de funil vivem em RPCs transacionais da migration `024_leads_crm_supabase.sql`; `027_lead_operations_artifacts.sql` acrescenta equipe, prioridade, resumo operacional e anexos, e `029_lead_artifact_atomic_delete.sql` torna a remoção do vínculo + entrada na fila de Storage uma única transação. Logs usam `Lead <prefixo-do-UUID>` em `entity_name`; PII e notas ficam em `details` e seguem a retenção. A migration 026 restringe leads, logs, orçamentos, propostas, apresentações e documentos ao email administrativo canônico — apenas possuir um JWT `authenticated` não basta. A matriz anon / authenticated não autorizado / admin / service role, a reversão atômica, a fila de arquivos e o payload push sem PII são verificados por `npm run test:leads`.
+
+Arquivos de até 6 MB (`PDF`, `DOCX`, `XLSX`, `JPEG`, `PNG`, `WebP`) usam upload assinado direto ao bucket privado `lead-files`; o arquivo não atravessa a função Vercel. Arquivos grandes e pastas permanecem no Drive e entram como URL HTTPS. O Drive não é duplicado nem sincronizado automaticamente. Ao anonimizar, links externos são removidos e objetos privados entram em `lead_storage_cleanup` até a Edge Function confirmar a exclusão.
+
+A PWA do admin usa `/admin/manifest.webmanifest` e `/admin-sw.js`, sem cachear telas ou PII. Cada dispositivo opta por Web Push. A outbox `lead_notification_outbox` recebe apenas título, texto, URL genérica e tag; não contém nome, contato ou UUID do lead. Novos contatos e próximas ações vencidas são deduplicados. O pg_cron só deve ser agendado depois das chaves abaixo existirem nos dois projetos Vercel:
+
+```text
+NEXT_PUBLIC_VAPID_PUBLIC_KEY
+VAPID_PRIVATE_KEY
+VAPID_SUBJECT=mailto:contato@berkahn.com.br
+LEAD_PUSH_CRON_SECRET
+```
+
+O mesmo `LEAD_PUSH_CRON_SECRET` deve ser gravado no Supabase Vault como `lead_push_cron_secret`; depois executar `schedule_lead_push_dispatch('https://admin.berkahn.com.br/api/admin/push/dispatch')`. O dispatcher é aceito sem cookie somente nessa rota e autentica por segredo constante; no domínio público `/api/admin/**` continua 404.
 
 Orçamentos e propostas têm `lead_id`. “Criar orçamento” abre o wizard existente com contato e vínculo preenchidos; salvar rascunho não move o funil e finalizar somente registra atividade. O módulo de propostas continua placeholder.
 
 Importação histórica: `node --env-file=.env.local scripts/leads/import-leads-csv.mjs --file=C:\\caminho-fora-do-repo\\leads.csv --dry-run`, seguido de `--apply`. O identificador `sheet:<hash-do-arquivo>:<linha>` torna a repetição idempotente sem fundir linhas repetidas. O script não imprime PII.
 
-Retenção: leads não convertidos, sem exceção e sem atualização por 24 meses são candidatos. A RPC revalida e bloqueia o registro, anonimiza transacionalmente lead, logs, orçamentos e propostas e persiste os paths de PDF numa fila de cleanup. Só depois a Edge Function `lead-retention` remove os objetos de `orcamento-pdfs`; falhas de Storage mantêm os paths para retry, evitando apagar um documento antes da revalidação ou perder a referência do objeto. A migration `025_schedule_lead_retention.sql` habilita `pg_cron`/`pg_net`, mas não agenda nada automaticamente; publicar a função, criar `lead_retention_cron_secret` no Vault e só então executar `schedule_monthly_lead_retention()`.
+Retenção: leads não convertidos, sem exceção e sem atualização por 24 meses são candidatos. A RPC revalida e bloqueia o registro, anonimiza transacionalmente lead, logs, orçamentos, propostas, resumo operacional e vínculos externos. PDFs de orçamento ficam em `retencao_storage_pendente`; uploads de lead ficam em `lead_storage_cleanup`. Só depois a Edge Function `lead-retention` remove os objetos dos buckets `orcamento-pdfs` e `lead-files`; falhas preservam os paths para retry. A migration `025_schedule_lead_retention.sql` habilita `pg_cron`/`pg_net`, mas não agenda automaticamente; publicar a função, criar `lead_retention_cron_secret` no Vault e só então executar `schedule_monthly_lead_retention()`.
 
 ### Posts de Blog
 
@@ -219,12 +235,12 @@ O módulo de propostas permitirá:
 
 ## Integrações
 
-### n8n (Automação)
+### Integrações operacionais
 
-Configure webhooks no n8n para:
-- Notificações de novas propostas
-- Trigger de rebuild quando posts são publicados
-- Backup automático para Google Sheets
+- Supabase é fonte única de leads e PII.
+- Google Sheets é somente ledger técnico da notificação; não é backup nem CRM.
+- Apps Script envia email genérico e aponta ao admin autenticado — ver [[google-sheets]].
+- n8n não participa do fluxo de leads atual.
 
 ### Vercel Deploy Hook
 

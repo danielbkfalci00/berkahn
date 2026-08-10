@@ -6,7 +6,7 @@ tags:
   - ai/context
   - project/site
   - domain/integrations
-ai_summary: Supabase é a única fonte operacional e custódia de PII de leads. Apps Script 1.3 recebe apenas lead_id, mantém ledger mínimo e envia email genérico com link ao admin; rollout externo ainda depende das credenciais Vercel/Google corretas.
+ai_summary: Supabase é a única fonte operacional e custódia de PII de leads. Apps Script 1.4 recebe apenas lead_id, mantém ledger mínimo e envia email genérico com link ao admin; retry consulta Gmail Enviados para não duplicar email se o ledger falhar. Redeploy externo segue pendente.
 status: active
 secrets_redacted: 2026-05-21
 escopo: berkahn
@@ -17,7 +17,7 @@ escopo: berkahn
 > [!info] Migração para vault
 > Migrado de `Docs/integracoes/INTEGRACAO_GOOGLE_SHEETS.md`. Sanitizado: Sheet ID e email removidos. Apps Script code mantido em `scripts/` (gitignored). Ver [[stack-nextjs-supabase]] para visão geral.
 
-**Status**: código 1.3 pronto; redeploy externo pendente
+**Status**: código 1.4 pronto; redeploy externo pendente
 **Data**: 2025-12-16
 **Autor**: Claude Code + Bruno Falci
 
@@ -30,7 +30,7 @@ O navegador envia o formulário para POST /api/leads. A rota valida o payload, a
 Fluxo atual:
 
 Site → POST /api/leads → Supabase (fonte única de leads e PII)
-                         → Apps Script 1.3 autenticado → ledger sem PII + email com link ao admin
+                         → Apps Script 1.4 autenticado → ledger sem PII + email com link ao admin
 
 ## 🔧 Configuração
 
@@ -50,7 +50,7 @@ A aba `Notificacoes` mantém apenas data/hora, `lead_id` e estado da entrega. A 
 
 - Formulário compartilhado: components/forms/ContactForm.tsx.
 - Endpoint público: app/api/leads/route.ts.
-- Retry autenticado: app/admin/analytics/actions.ts.
+- Retry autenticado: app/admin/leads/actions.ts.
 - Variáveis server-side: GOOGLE_SHEETS_LEAD_ENDPOINT e GOOGLE_SHEETS_LEAD_SECRET.
 - Nunca usar prefixo NEXT_PUBLIC_ para endpoint ou segredo.
 
@@ -73,7 +73,7 @@ Health check do Apps Script. Não revela configuração nem segredos.
 
 Email enviado automaticamente para `danielbkfalci@gmail.com` a cada novo lead.
 
-**Subject**: `Novo lead Berkahn`
+**Subject**: `Novo lead Berkahn [lead_id]`
 
 **Conteúdo**:
 - Header BERKAHN
@@ -82,7 +82,8 @@ Email enviado automaticamente para `danielbkfalci@gmail.com` a cada novo lead.
 
 **Envio**:
 - Função: `sendNotificationEmail(leadId)`
-- API: `MailApp.sendEmail()`
+- API: `GmailApp.sendEmail()`
+- Idempotência: antes de enviar, o script procura o subject exato em `in:sent`; isso cobre a falha entre envio concluído e gravação de `enviado` no ledger.
 - Fallback: Se falhar, não interrompe o fluxo (lead ainda é salvo)
 
 ---
@@ -98,7 +99,7 @@ Email enviado automaticamente para `danielbkfalci@gmail.com` a cada novo lead.
 5. Testar nome, email e mensagem inválidos, honeypot e envio rápido demais.
 6. Validar generate_lead apenas após sucesso; não enviar PII ao GA4.
 
-### Rollout do Apps Script 1.3
+### Rollout do Apps Script 1.4
 
 1. Gerar um segredo aleatório.
 2. Configurar GOOGLE_SHEETS_LEAD_SECRET na Vercel.
@@ -106,7 +107,7 @@ Email enviado automaticamente para `danielbkfalci@gmail.com` a cada novo lead.
 4. Colar a versão atual de apps-script-code.js e criar nova implantação.
 5. Testar POST sem segredo, que deve falhar.
 6. Testar POST autenticado pelo backend e retry pelo admin.
-7. Confirmar idempotência pelo lead_id e ausência de PII no ledger e no email.
+7. Forçar retry depois de um envio e confirmar um único email pelo subject exato; validar ausência de PII no ledger e no corpo.
 
 ## 🛠️ Troubleshooting
 
@@ -114,7 +115,7 @@ Email enviado automaticamente para `danielbkfalci@gmail.com` a cada novo lead.
 
 - Conferir GOOGLE_SHEETS_LEAD_ENDPOINT e GOOGLE_SHEETS_LEAD_SECRET no ambiente server-side.
 - Conferir LEAD_SYNC_SECRET nas Script Properties.
-- Confirmar que a nova implantação aponta para a versão 1.3.
+- Confirmar que a nova implantação aponta para a versão 1.4.
 - Usar o retry autenticado no admin e consultar Apps Script → Executions.
 
 ### Erro de autenticação do espelho
@@ -123,7 +124,7 @@ Endpoint e Script Property precisam conter exatamente o mesmo segredo. Não corr
 
 ### Email não enviado
 
-Conferir NOTIFICATION_EMAIL, SEND_NOTIFICATION, quota e permissões do MailApp. A falha de email não deve apagar a linha nem alterar o lead primário.
+Conferir NOTIFICATION_EMAIL, SEND_NOTIFICATION, quota e permissões do GmailApp. A primeira publicação da v1.4 pode exigir nova autorização OAuth pela troca de `MailApp` para busca/envio via Gmail. A falha de email não deve apagar a linha nem alterar o lead primário.
 
 ### Limite de requisições
 
@@ -134,16 +135,16 @@ O limitador atual é best-effort e não atômico. Se houver rajadas ou abuso, mi
 
 - O navegador envia leads somente para `POST /api/leads`; a URL do Apps Script não é pública no bundle.
 - Supabase é a fonte primária, com validação server-side, honeypot, tempo mínimo e limite por fingerprint.
-- O Apps Script 1.3 é apenas adaptador de notificação e exige `sync_secret` igual à Script Property `LEAD_SYNC_SECRET`.
+- O Apps Script 1.4 é apenas adaptador de notificação e exige `sync_secret` igual à Script Property `LEAD_SYNC_SECRET`.
 - O backend usa `GOOGLE_SHEETS_LEAD_SECRET`; nunca usar prefixo `NEXT_PUBLIC_` nem registrar o valor.
-- O ledger e o envio de email são idempotentes por `lead_id`: retries só enviam quando o estado ainda está `pendente`; o link do admin é montado pelo próprio script a partir de UUID validado.
+- O ledger é idempotente por `lead_id`. O email também é conferido em `in:sent` pelo subject técnico antes de um retry; isso evita duplicidade quando o envio conclui, mas a escrita de `enviado` falha.
 - PII permanece exclusivamente no Supabase; GA4 recebe somente dimensões de atribuição.
 
 ### Risco residual
 
 O limitador do endpoint Next.js usa contagem seguida de insert, portanto não é atômico contra rajadas paralelas. Corrigir exigiria RPC/migration própria; acompanhar volume antes de ampliar o escopo. CAPTCHA continua dispensável enquanto honeypot, segredo e volume forem suficientes.
 
-### Rollout 1.3
+### Rollout 1.4
 
 1. Gerar segredo aleatório e configurar `GOOGLE_SHEETS_LEAD_SECRET` na Vercel.
 2. Configurar o mesmo valor em Apps Script → Project Settings → Script Properties → `LEAD_SYNC_SECRET`.
@@ -160,7 +161,7 @@ O limitador do endpoint Next.js usa contagem seguida de insert, portanto não é
 - Saúde da notificação: sheet_synced_at, erros de retry e Apps Script → Executions.
 - Não registrar PII em GA4 ou logs.
 
-## 🚀 Deploy Checklist 1.3
+## 🚀 Deploy Checklist 1.4
 
 ### Código
 
@@ -173,18 +174,24 @@ O limitador do endpoint Next.js usa contagem seguida de insert, portanto não é
 ### Configuração externa
 
 - [ ] @bruno Configurar GOOGLE_SHEETS_LEAD_ENDPOINT e GOOGLE_SHEETS_LEAD_SECRET na Vercel #pendencia
-- [ ] @bruno Configurar LEAD_SYNC_SECRET nas Script Properties e publicar o Apps Script 1.3 #pendencia
+- [ ] @bruno Configurar LEAD_SYNC_SECRET nas Script Properties, autorizar GmailApp e publicar o Apps Script 1.4 #pendencia
 - [ ] @bruno Validar formulário real, ledger sem PII, email genérico e retry do admin em produção #pendencia
 - [ ] @bruno Após importar e reconciliar o histórico, remover PII da planilha e apagar o CSV temporário #pendencia
 - [ ] @bruno Apagar emails legados com PII anteriores a 24 meses e registrar a data do email legado mais recente para a última revisão #pendencia
 ## 📝 Changelog
+
+### v1.4.0 — 2026-08-10
+
+- Retry do email passa a consultar o subject técnico em Gmail Enviados antes de chamar `sendEmail`.
+- Fecha a janela de duplicidade “email enviado, gravação do ledger falhou”.
+- A publicação exige autorizar o escopo Gmail da conta proprietária.
 
 ### v1.3.1 — 2026-08-10
 
 - Supabase passa a ser a única custódia de PII.
 - Apps Script recebe apenas `lead_id` e segredo.
 - Planilha vira ledger mínimo; email aponta para o admin sem expor dados pessoais.
-- Lock e estado `pendente`/`enviado` tornam o retry idempotente também para o email.
+- Lock e estado `pendente`/`enviado` tornam o ledger idempotente; a idempotência do email foi completada na v1.4.
 
 ### v1.2.0 — 2026-08-07
 
@@ -209,7 +216,7 @@ O limitador do endpoint Next.js usa contagem seguida de insert, portanto não é
 **Tecnologias**:
 - Google Apps Script (JavaScript server-side)
 - Google Sheets API
-- Gmail API (MailApp)
+- GmailApp (envio + consulta idempotente em Enviados)
 - Next.js 14+ (App Router)
 - TypeScript
 

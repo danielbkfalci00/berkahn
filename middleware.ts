@@ -20,6 +20,12 @@ export async function middleware(request: NextRequest) {
     return NextResponse.json({ error: 'Não encontrado' }, { status: 404 })
   }
 
+  // Chamado pelo pg_cron apenas no host canônico. O route handler valida um
+  // segredo dedicado e não depende do cookie da sessão humana.
+  if (pathname === '/api/admin/push/dispatch') {
+    return NextResponse.next()
+  }
+
   // Redirect root to /admin when accessing via admin subdomain
   if (hostname.startsWith('admin.') && pathname === '/') {
     return NextResponse.redirect(new URL('/admin', request.url))

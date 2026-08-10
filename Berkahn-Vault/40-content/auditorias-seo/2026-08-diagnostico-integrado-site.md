@@ -8,7 +8,7 @@ tags:
   - domain/seo
   - status/active
   - source/manual
-ai_summary: "Diagnóstico integrado: crawl 47/47 verde, SSG/ISR preservado e JS do artigo -41,2%. Extensão 2026-08-10 aplica CRM Supabase 024/025 com RLS/atomicidade verdes; deploy da Edge Function, importação Google e rollout Vercel/Apps Script aguardam acesso."
+ai_summary: "Diagnóstico integrado: crawl 47/47 verde, SSG/ISR preservado e JS do artigo -41,2%. Extensão 2026-08-10 aplica CRM Supabase 024–029 com RLS/atomicidade/arquivos/outbox verdes; PR #53 aguarda deploy, VAPID, Edge de retenção, Apps Script 1.4 e importação."
 status: active
 projeto: seo-aeo
 kpi_crawl_urls_ok: 47
@@ -129,15 +129,15 @@ Eventos padronizados e preservados:
 
 As propriedades comuns são page_path, cta_location, channel e segment quando aplicável. O WhatsApp direto de /contato e demais CTAs Berkahn agora entram nessa cobertura. Nenhuma PII é enviada ao GA4.
 
-Supabase é a única custódia operacional de leads e PII. O Apps Script 1.3 recebe somente `lead_id` e segredo, grava ledger mínimo e envia email genérico com link ao admin. A rota responde após o insert no Supabase e executa a notificação em pós-resposta; falha fica retryável.
+Supabase é a única custódia operacional de leads e PII. O Apps Script 1.4 recebe somente `lead_id` e segredo, grava ledger mínimo e envia email genérico com link ao admin; retries consultam Gmail Enviados antes de reenviar. A rota responde após o insert no Supabase e executa a notificação em pós-resposta; falha fica retryável.
 
 ### Extensão do diagnóstico — CRM Supabase (2026-08-10)
 
-As migrations 024/025 foram aplicadas em produção. O banco agora possui funil completo, atribuição consentida, visualização, próxima ação, arquivamento, vínculos comerciais, importação idempotente e funções de retenção. RPCs tornam status, contato, nota e arquivamento atômicos; a matriz anon / authenticated não autorizado / admin / service role e a reversão quando o log falha passaram em transação revertida.
+As migrations 024–029 foram aplicadas em produção. O banco possui funil completo, atribuição consentida, visualização, próxima ação, arquivamento, vínculos comerciais, importação idempotente, responsáveis, prioridade, último status, arquivos e outbox push. RPCs tornam funil, operação e remoção de anexos atômicos; RLS exige o administrador canônico também em logs e entidades comerciais. A matriz anon / authenticated não autorizado / admin / service role, a reversão quando o log falha, a fila de Storage e o payload push sem PII passaram em transação revertida.
 
-`/admin/leads` foi separado de Analytics com paginação de 25, filtros, KPIs de 28 dias, detalhe, timeline, retry e cadastro manual com alerta de duplicidade. Orçamento reutiliza o wizard atual com `lead_id`; propostas recebem apenas a FK preparatória. O build de produção preserva SSG/ISR público.
+`/admin/leads` foi separado de Analytics com Inbox paginada, Kanban, filtros, KPIs de 28 dias, detalhe, timeline, último status, responsável, prioridade, retry e cadastro manual com alerta de duplicidade. Uploads até 6 MB usam Storage privado e arquivos grandes/pastas usam vínculo do Drive. A PWA não cacheia telas e o push mostra somente mensagens operacionais genéricas. Orçamento reutiliza o wizard atual com `lead_id`; propostas recebem apenas a FK preparatória. O build de produção preserva SSG/ISR público.
 
-A conta Supabase CLI disponível devolve 403 ao publicar Edge Functions, e as credenciais Google disponíveis não acessam a planilha histórica. Portanto, a função não foi publicada/agendada e a importação/sanitização não foi simulada como concluída. Fontes canônicas e pendências: [[admin-setup]], [[google-sheets]] e [[site]].
+A conta Supabase CLI disponível devolve 403 ao publicar Edge Functions, as credenciais Google não acessam a planilha histórica e a sessão Vercel pertence ao escopo `brunofalci00s-projects`, não ao `daniel-falcis-projects` da Berkahn. Portanto, retenção e push não foram agendados, chaves VAPID não foram gravadas, o Apps Script 1.4 não foi publicado e a importação/sanitização não foi simulada como concluída. A UI trata push como configuração pendente, sem oferecer um botão quebrado. Fontes canônicas e pendências: [[admin-setup]], [[google-sheets]] e [[site]].
 
 ## SEO e AEO
 
@@ -158,23 +158,24 @@ A amostra muda com data, localização e modelo. Sentimento e concorrentes não 
 
 Concluídos:
 
-- lint, typecheck e build verdes; lint conserva sete warnings preexistentes sem erro.
+- lint, typecheck e build verdes; lint conserva quatro warnings preexistentes sem erro.
 - Crawl, ISR/404, noindex, teclado, reduced-motion e axe verdes.
 - Masters de mídia intactos e nenhum artefato bruto versionado.
 - Smoke HTTP local: home, listagem, artigo líder e contato 200; slug falso 404.
 
 ### Rollout remoto verificado
 
-- PR #52 criado e sincronizado com a main; Quality, Vercel berkahn e Vercel berkahn-admin passaram.
+- PR #52 foi mergeado; PR #53 está retargetado para `main` e recebeu as migrations 026–029 no banco antes do deploy compatível.
 - Preview do admin respondeu 200 em /admin/login.
 - Preview público do site está protegido por Vercel SSO; o smoke de rotas públicas foi concluído no build de produção local.
 - A CLI está autenticada no escopo brunofalci00s-projects, que não lista os projetos Berkahn da equipe daniel-falcis-projects. Sem esse acesso não é possível configurar o segredo antes do merge.
 - A Google Analytics Admin API está desabilitada no projeto 428077950039; a service account existente recebeu permission denied ao tentar habilitá-la.
-- Produção permanece em origin/main: o PR não foi mergeado para evitar uma pausa do espelho Google Sheets antes do rollout Apps Script-first.
+- Produção permanece em `main`: o PR #53 ainda não foi mergeado porque a sessão atual não acessa os dois projetos Vercel da equipe para configurar VAPID e concluir o smoke.
 
 Pendências externas:
 - [ ] @bruno Definir generate_lead e whatsapp_click como Key Events no GA4 e validar em DebugView/Realtime após consentimento #pendencia
-- [ ] @bruno Criar o mesmo segredo em GOOGLE_SHEETS_LEAD_SECRET na Vercel e LEAD_SYNC_SECRET nas Script Properties, depois publicar o Apps Script 1.3 #pendencia
+- [ ] @bruno Criar o mesmo segredo em GOOGLE_SHEETS_LEAD_SECRET na Vercel e LEAD_SYNC_SECRET nas Script Properties, autorizar GmailApp e publicar o Apps Script 1.4 #pendencia
+- [ ] @bruno Dar acesso ao escopo Vercel `daniel-falcis-projects`; configurar VAPID e o segredo do dispatcher nos projetos site/admin #pendencia
 - [ ] @bruno Liberar acesso à planilha para importação/reconciliação e remoção final de PII #pendencia
 - [ ] @bruno Liberar acesso Supabase Functions para publicar/agendar a retenção mensal #pendencia
 - [ ] @bruno Monitorar Speed Insights por sete dias e consolidar p75 de campo em 28 dias sem misturar a série pré e pós-Consent Mode #pendencia

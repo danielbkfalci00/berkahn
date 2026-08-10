@@ -1,6 +1,7 @@
 import { createHash } from "node:crypto";
 import { after, NextResponse, type NextRequest } from "next/server";
 import { validateLeadInput, type LeadInput } from "@/lib/contact";
+import { dispatchLeadPushNotifications } from "@/lib/push/dispatch";
 import { createServiceClient } from "@/lib/supabase/admin";
 
 export const runtime = "nodejs";
@@ -220,6 +221,14 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  after(() => notifyLead(saved.id));
+  after(async () => {
+    const [, pushResult] = await Promise.allSettled([
+      notifyLead(saved.id),
+      dispatchLeadPushNotifications(),
+    ]);
+    if (pushResult.status === "rejected") {
+      console.error("lead push:", pushResult.reason instanceof Error ? pushResult.reason.message : "unknown error");
+    }
+  });
   return NextResponse.json({ success: true, leadId: saved.id });
 }
