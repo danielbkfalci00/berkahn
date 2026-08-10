@@ -5,6 +5,21 @@ export async function middleware(request: NextRequest) {
   const hostname = request.headers.get('host') || ''
   const pathname = request.nextUrl.pathname
 
+  // O mesmo build atende site e painel, mas PWA, service worker, cookies e
+  // push são isolados por origem. Em produção, /admin tem uma origem única.
+  const isPublicProductionHost =
+    hostname === 'berkahn.com.br' || hostname === 'www.berkahn.com.br'
+  if (isPublicProductionHost && pathname.startsWith('/admin')) {
+    const adminUrl = new URL(request.url)
+    adminUrl.protocol = 'https:'
+    adminUrl.host = 'admin.berkahn.com.br'
+    return NextResponse.redirect(adminUrl, 307)
+  }
+
+  if (isPublicProductionHost && pathname.startsWith('/api/admin')) {
+    return NextResponse.json({ error: 'Não encontrado' }, { status: 404 })
+  }
+
   // Redirect root to /admin when accessing via admin subdomain
   if (hostname.startsWith('admin.') && pathname === '/') {
     return NextResponse.redirect(new URL('/admin', request.url))

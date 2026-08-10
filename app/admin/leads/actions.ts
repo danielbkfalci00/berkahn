@@ -180,7 +180,7 @@ export async function resendLeadNotification(id: string): Promise<LeadActionResu
       revalidateLead(id);
       return {
         ok: false,
-        error: "Notificação processada, mas o estado não foi salvo. O adaptador evita email duplicado por lead_id; tente novamente.",
+        error: "A notificação pode ter sido enviada, mas a confirmação local falhou. Verifique o email antes de reenviar.",
       };
     }
   } catch (notificationError) {

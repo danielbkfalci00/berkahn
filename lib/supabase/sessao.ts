@@ -2,6 +2,8 @@ import "server-only";
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 
+export const BERKAHN_ADMIN_EMAIL = "contato.berkahn@gmail.com";
+
 /**
  * Barreira de autenticação para route handlers sob /api/admin.
  *
@@ -22,7 +24,7 @@ export async function exigirSessao(): Promise<NextResponse | null> {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user) {
+  if (!user || user.email?.toLowerCase() !== BERKAHN_ADMIN_EMAIL) {
     return NextResponse.json({ error: "Não autorizado" }, { status: 401 });
   }
   return null;
