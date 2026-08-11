@@ -18,6 +18,7 @@ import {
   type ConsentLevel,
   type StoredConsent,
 } from "@/lib/consent";
+import { persistLeadAttribution } from "@/lib/contact";
 
 // `window.gtag` é declarado em types/global.d.ts — não redeclarar aqui.
 
@@ -97,6 +98,7 @@ export function CookieConsentProvider({ children }: { children: ReactNode }) {
           // foi replayed pelo script inline em app/layout.tsx, antes do
           // primeiro page_view. Repetir aqui seria tarde demais.
           setConsent(parsed.level);
+          if (parsed.level === "all") persistLeadAttribution();
           return;
         }
       } catch {
@@ -114,6 +116,7 @@ export function CookieConsentProvider({ children }: { children: ReactNode }) {
       timestamp: Date.now(),
     };
     localStorage.setItem(CONSENT_STORAGE_KEY, JSON.stringify(data));
+    if (level === "all") persistLeadAttribution();
     setConsent(level);
     setIsVisible(false);
 

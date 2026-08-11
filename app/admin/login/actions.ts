@@ -1,6 +1,7 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
+import { BERKAHN_ADMIN_EMAIL } from "@/lib/supabase/sessao";
 
 /**
  * Autenticação do admin, no servidor.
@@ -25,15 +26,13 @@ import { createClient } from "@/lib/supabase/server";
 // Não é segredo: este endereço está no rodapé do site público. O segredo é a
 // senha. Fica aqui, e não numa env var, para o login não depender de
 // configuração que alguém pode esquecer de definir num ambiente novo.
-const ADMIN_EMAIL = "contato.berkahn@gmail.com";
-
 export async function entrar(senha: string): Promise<{ erro: string | null }> {
   if (!senha) return { erro: "Digite o código de acesso." };
 
   try {
     const supabase = await createClient();
     const { error } = await supabase.auth.signInWithPassword({
-      email: ADMIN_EMAIL,
+      email: BERKAHN_ADMIN_EMAIL,
       password: senha,
     });
 

@@ -1,155 +1,81 @@
+import { Bell, Database, Shield, UserRound } from "lucide-react";
+import { LeadResponsibleSettings } from "@/components/admin/LeadResponsibleSettings";
+import { AdminPushSettings, type AdminPushDevice } from "@/components/admin/AdminPwa";
 import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Separator } from "@/components/ui/separator";
-import { User, Bell, Shield, Database, Webhook } from "lucide-react";
+import { createClient } from "@/lib/supabase/server";
+import type { LeadResponsible } from "@/types/analytics";
 
-export default function ConfiguracoesPage() {
+export default async function ConfiguracoesPage() {
+  const supabase = await createClient();
+  const [{ data: { user } }, { data: responsibles }, { data: pushDevices }] = await Promise.all([
+    supabase.auth.getUser(),
+    supabase
+      .from("lead_responsaveis")
+      .select("id,nome,ativo,ordem")
+      .order("ativo", { ascending: false })
+      .order("ordem")
+      .order("nome"),
+    supabase
+      .from("admin_push_subscriptions")
+      .select("id,device_label,ativo,ultimo_uso_em")
+      .order("ativo", { ascending: false })
+      .order("ultimo_uso_em", { ascending: false }),
+  ]);
+  const pushConfigured = Boolean(
+    process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY?.trim()
+    && process.env.VAPID_PRIVATE_KEY?.trim()
+  );
+
   return (
-    <div className="space-y-6 max-w-3xl">
-      {/* Profile */}
+    <div className="max-w-3xl space-y-6">
+      <div>
+        <p className="font-mono text-xs uppercase tracking-[0.16em] text-neutral-500">Admin · operação</p>
+        <h1 className="mt-2 text-2xl font-semibold text-neutral-950">Configurações</h1>
+        <p className="mt-1 text-sm text-neutral-600">Somente controles que alteram o sistema aparecem nesta tela.</p>
+      </div>
+
       <Card className="p-6">
-        <div className="flex items-center gap-3 mb-6">
-          <div className="p-2 bg-neutral-100 rounded-lg">
-            <User className="h-5 w-5 text-neutral-600" />
-          </div>
-          <div>
-            <h2 className="font-semibold text-neutral-900">Perfil</h2>
-            <p className="text-sm text-neutral-500">
-              Informações da sua conta
-            </p>
-          </div>
-        </div>
-        <div className="space-y-4">
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="name">Nome</Label>
-              <Input id="name" placeholder="Seu nome" />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input id="email" type="email" placeholder="seu@email.com" />
-            </div>
-          </div>
-          <Button>Salvar alterações</Button>
+        <SectionHeading icon={UserRound} title="Equipe comercial" description="Responsáveis disponíveis na Inbox e no Kanban de leads." />
+        <div className="mt-6">
+          <LeadResponsibleSettings initialResponsibles={(responsibles || []) as LeadResponsible[]} />
         </div>
       </Card>
 
-      {/* Notifications */}
       <Card className="p-6">
-        <div className="flex items-center gap-3 mb-6">
-          <div className="p-2 bg-neutral-100 rounded-lg">
-            <Bell className="h-5 w-5 text-neutral-600" />
-          </div>
-          <div>
-            <h2 className="font-semibold text-neutral-900">Notificações</h2>
-            <p className="text-sm text-neutral-500">
-              Configure como deseja receber notificações
-            </p>
-          </div>
-        </div>
-        <div className="space-y-4">
-          <label className="flex items-center justify-between cursor-pointer">
-            <div>
-              <p className="font-medium text-neutral-900">Email de propostas</p>
-              <p className="text-sm text-neutral-500">
-                Receber notificações quando propostas forem visualizadas
-              </p>
-            </div>
-            <input type="checkbox" className="w-5 h-5 rounded" defaultChecked />
-          </label>
-          <Separator />
-          <label className="flex items-center justify-between cursor-pointer">
-            <div>
-              <p className="font-medium text-neutral-900">
-                Email de apresentações
-              </p>
-              <p className="text-sm text-neutral-500">
-                Receber notificações quando apresentações forem visualizadas
-              </p>
-            </div>
-            <input type="checkbox" className="w-5 h-5 rounded" defaultChecked />
-          </label>
+        <SectionHeading icon={Bell} title="Notificações no dispositivo" description="Alertas operacionais do admin, sem dados pessoais na tela bloqueada." />
+        <div className="mt-6">
+          <AdminPushSettings devices={(pushDevices || []) as AdminPushDevice[]} configured={pushConfigured} />
         </div>
       </Card>
 
-      {/* Security */}
       <Card className="p-6">
-        <div className="flex items-center gap-3 mb-6">
-          <div className="p-2 bg-neutral-100 rounded-lg">
-            <Shield className="h-5 w-5 text-neutral-600" />
-          </div>
-          <div>
-            <h2 className="font-semibold text-neutral-900">Segurança</h2>
-            <p className="text-sm text-neutral-500">
-              Gerencie a segurança da sua conta
-            </p>
-          </div>
-        </div>
-        <div className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="current-password">Senha atual</Label>
-            <Input id="current-password" type="password" />
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="new-password">Nova senha</Label>
-              <Input id="new-password" type="password" />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="confirm-password">Confirmar nova senha</Label>
-              <Input id="confirm-password" type="password" />
-            </div>
-          </div>
-          <Button>Alterar senha</Button>
-        </div>
+        <SectionHeading icon={Shield} title="Acesso administrativo" description="O admin aceita apenas a conta canônica autorizada." />
+        <dl className="mt-5 grid gap-4 text-sm sm:grid-cols-2">
+          <SystemField label="Conta ativa" value={user?.email || "Sessão não identificada"} />
+          <SystemField label="Domínio" value="admin.berkahn.com.br" />
+        </dl>
       </Card>
 
-      {/* Integrations */}
       <Card className="p-6">
-        <div className="flex items-center gap-3 mb-6">
-          <div className="p-2 bg-neutral-100 rounded-lg">
-            <Webhook className="h-5 w-5 text-neutral-600" />
-          </div>
-          <div>
-            <h2 className="font-semibold text-neutral-900">Integrações</h2>
-            <p className="text-sm text-neutral-500">
-              Conecte com serviços externos
-            </p>
-          </div>
+        <SectionHeading icon={Database} title="Infraestrutura" description="Estado das integrações usadas pelo CRM leve." />
+        <div className="mt-5 divide-y divide-neutral-200 rounded-md border border-neutral-200">
+          <IntegrationRow icon={Database} name="Supabase" detail="Leads, histórico e arquivos privados" ready />
+          <IntegrationRow icon={Bell} name="Alertas no dispositivo" detail="Web Push sem dados pessoais" ready={pushConfigured} />
         </div>
-        <div className="space-y-4">
-          <div className="flex items-center justify-between p-4 border border-neutral-200 rounded-lg">
-            <div className="flex items-center gap-3">
-              <Database className="h-5 w-5 text-green-600" />
-              <div>
-                <p className="font-medium text-neutral-900">Supabase</p>
-                <p className="text-sm text-neutral-500">
-                  Banco de dados e autenticação
-                </p>
-              </div>
-            </div>
-            <span className="text-sm text-green-600 bg-green-50 px-2 py-1 rounded">
-              Conectado
-            </span>
-          </div>
-          <div className="flex items-center justify-between p-4 border border-neutral-200 rounded-lg">
-            <div className="flex items-center gap-3">
-              <Webhook className="h-5 w-5 text-neutral-400" />
-              <div>
-                <p className="font-medium text-neutral-900">n8n</p>
-                <p className="text-sm text-neutral-500">
-                  Automação de workflows
-                </p>
-              </div>
-            </div>
-            <Button variant="outline" size="sm">
-              Conectar
-            </Button>
-          </div>
-        </div>
+        <p className="mt-3 text-xs leading-relaxed text-neutral-500">O CRM opera somente no Supabase. Integrações Google não participam da captura.</p>
       </Card>
     </div>
   );
+}
+
+function SectionHeading({ icon: Icon, title, description }: { icon: typeof UserRound; title: string; description: string }) {
+  return <div className="flex items-start gap-3"><span className="rounded-md bg-neutral-100 p-2"><Icon className="h-5 w-5 text-neutral-600" /></span><div><h2 className="font-semibold text-neutral-900">{title}</h2><p className="mt-0.5 text-sm text-neutral-500">{description}</p></div></div>;
+}
+
+function SystemField({ label, value }: { label: string; value: string }) {
+  return <div><dt className="text-xs font-medium uppercase tracking-wide text-neutral-400">{label}</dt><dd className="mt-1 break-words text-neutral-800">{value}</dd></div>;
+}
+
+function IntegrationRow({ icon: Icon, name, detail, ready }: { icon: typeof Database; name: string; detail: string; ready: boolean }) {
+  return <div className="flex items-center justify-between gap-4 p-4"><div className="flex min-w-0 items-center gap-3"><Icon className="h-5 w-5 shrink-0 text-neutral-500" /><div className="min-w-0"><p className="font-medium text-neutral-900">{name}</p><p className="truncate text-sm text-neutral-500">{detail}</p></div></div><span className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-medium ${ready ? "bg-emerald-50 text-emerald-700" : "bg-amber-50 text-amber-800"}`}>{ready ? "Ativo" : "Configuração pendente"}</span></div>;
 }

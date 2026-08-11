@@ -102,6 +102,10 @@ tmpgitleaks*.json
 !/scripts/db/testar-ordem.mjs
 !/scripts/db/testar-estados.mjs
 !/scripts/db/verificar-012.mjs
+!/scripts/db/testar-leads-crm.mjs
+!/scripts/leads/
+/scripts/leads/*
+!/scripts/leads/import-leads-csv.mjs
 
 # Transcripts de sessao do Claude Code. Contem output de comandos, e por isso
 # ja carregaram service key do Supabase e token assinado de PDF em texto claro.

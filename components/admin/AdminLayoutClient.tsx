@@ -3,6 +3,7 @@
 import { usePathname } from "next/navigation";
 import { AdminSidebar } from "./AdminSidebar";
 import { AdminHeader } from "./AdminHeader";
+import { AdminPwaRegistration } from "./AdminPwa";
 
 interface AdminLayoutClientProps {
   children: React.ReactNode;
@@ -24,10 +25,11 @@ export function AdminLayoutClient({ children }: AdminLayoutClientProps) {
 
   return (
     <div className="admin-shell min-h-screen bg-neutral-50">
+      <AdminPwaRegistration />
       <AdminSidebar />
       <div className="lg:pl-64">
         <AdminHeader />
-        <main className="p-6">
+        <main className="p-4 sm:p-6">
           {children}
         </main>
       </div>

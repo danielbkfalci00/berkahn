@@ -51,7 +51,7 @@ export default function PrivacidadePage() {
   return (
     <LegalPageLayout
       title="Política de Privacidade"
-      lastUpdated="fevereiro de 2025"
+      lastUpdated="agosto de 2026"
       introContent={
         <>
           <p>
@@ -104,6 +104,15 @@ export default function PrivacidadePage() {
                     pode cancelar o recebimento a qualquer momento através do
                     link de descadastro presente em cada e-mail enviado.
                   </p>
+                  <p>
+                    <strong className="font-semibold">
+                      Download de materiais
+                    </strong>{" "}
+                    â€” quando um material solicita e-mail, registramos o endereço
+                    e o recurso escolhido para liberar o download e medir o
+                    interesse naquele conteúdo. O envio não inscreve você
+                    automaticamente na newsletter.
+                  </p>
                 </>
               ),
             },
@@ -138,6 +147,7 @@ export default function PrivacidadePage() {
                 items={[
                   "Responder solicitações de orçamento e manter contato comercial com potenciais clientes.",
                   "Enviar conteúdos informativos por e-mail aos assinantes da newsletter.",
+                  "Liberar materiais solicitados e registrar o interesse no conteúdo escolhido.",
                   "Analisar o comportamento de navegação no site para melhorar a experiência do usuário, identificar problemas técnicos e aprimorar nossos conteúdos.",
                   "Cumprir obrigações legais e regulatórias quando aplicável.",
                 ]}
@@ -251,20 +261,21 @@ export default function PrivacidadePage() {
           content: (
             <>
               <p>
-                Os dados pessoais coletados são armazenados em plataformas
-                seguras, incluindo Google Workspace (Google Sheets), PostHog e
-                Supabase. Adotamos medidas técnicas e organizacionais adequadas
-                para proteger seus dados contra acesso não autorizado, perda,
-                destruição ou qualquer forma de tratamento inadequado.
+                Os dados pessoais de solicitações comerciais são armazenados no
+                Supabase, que é a fonte operacional única desses registros.
+                Google Sheets e Apps Script não participam da captura. Alertas
+                operacionais opcionais usam Web Push sem nome, e-mail, telefone,
+                mensagem ou outros dados pessoais. Adotamos medidas técnicas e
+                organizacionais adequadas para proteger seus dados.
               </p>
               <p>
-                O período de armazenamento varia conforme a finalidade da
-                coleta. Dados de solicitações de orçamento são mantidos pelo
-                tempo necessário para atendimento comercial e eventual
-                formalização contratual. Dados de newsletter são mantidos
-                enquanto durar sua inscrição. Dados de navegação coletados por
-                cookies seguem as políticas de retenção de cada ferramenta
-                utilizada.
+                Leads não convertidos e sem atualização por 24 meses são
+                anonimizados, incluindo notas, dados pessoais em orçamentos ou
+                propostas vinculados e arquivos relacionados. Registros
+                convertidos ou documentos sujeitos a obrigação legal podem ser
+                preservados pelo prazo aplicável, com exceção documentada.
+                Dados de newsletter são mantidos enquanto durar sua inscrição.
+                Dados de navegação seguem as políticas de cada ferramenta.
               </p>
             </>
           ),

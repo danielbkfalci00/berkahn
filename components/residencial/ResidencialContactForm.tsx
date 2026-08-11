@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/select";
 import { CONTACT_FORM_PROJECT_TYPES } from "@/lib/residencial-data";
 import { usePathname } from "next/navigation";
-import { LEAD_ENDPOINT } from "@/lib/contact";
+import { getLeadAttribution, LEAD_ENDPOINT } from "@/lib/contact";
 import { trackEvent } from "@/lib/analytics";
 
 /* ─── Types ─── */
@@ -113,6 +113,7 @@ export function ResidencialContactForm() {
           message: formData.description,
           pagePath: pathname ?? undefined,
           ctaLocation: "residencial",
+          ...getLeadAttribution(),
           website,
           startedAt,
         }),

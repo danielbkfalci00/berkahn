@@ -1,11 +1,11 @@
 ---
 tipo: projeto
 criado: 2026-05-22
-atualizado: 2026-08-07
+atualizado: 2026-08-11
 tags:
   - project/blog
   - status/active
-ai_summary: Hub do Blog — 40 posts e 44 trilhas. Status do quadro é livre, mas Concluída exige post publicado; card tem edição inline/tags e fila Codex. article_progress e leads atribuídos iniciam o ciclo de aprendizado sem alterar conteúdo automaticamente.
+ai_summary: Hub do Blog — 40 posts e 44 trilhas. A primeira pauta real chegou a draft em 11/08 e reposiciona o slug canibalizado para a intenção de casa de 100 m²; faltam capa, vínculo do post, aprovação e publicação humana.
 status: active
 projeto: blog
 kpi_publicados: 40
@@ -67,7 +67,7 @@ Tráfego seguiu crescendo: 1.179 users em junho, 1.407 nos primeiros 26 dias de 
 
 - [x] ~~**Vault divergente da produção (P0)**~~ — encerrado em 2026-07-30. Os 6 do vault fora do ar foram classificados por similaridade de conteúdo: 3 são renomeações (arquivar) e 3 são artigos completos nunca publicados, dos quais `mitos-verdades-steel-frame` já foi ao ar. Ver seção abaixo
 - [x] ~~**Pipeline vazio (P0)**~~: resolvido em 2026-07-29. 44 pautas planejadas até dez/2026 em [[2026-08-calendario-editorial]], serializadas em `ideias/ideas-2026-{08..12}.md`. Briefing executável em [[2026-08-playbook-pautas]]
-- [ ] **Canibalização de custo (P0, novo)**: `quanto-custa-construir-steel-frame-precos-m2-2026` é suprimida pela página-mãe em **todas** as queries de preço. 17.759 impressões e CTR 1,15% em 90 dias. Ver [[2026-07-diagnostico-editorial]]
+- [ ] **Canibalização de custo (P0, em produção)**: `quanto-custa-construir-steel-frame-precos-m2-2026` acumulou 17.759 impressões e CTR 1,15% em 90 dias. Pesquisa e draft de reposicionamento para casa de 100 m² foram concluídos em 11/08; faltam capa, vínculo com o post existente, aprovação e publicação. Ver [[2026-07-diagnostico-editorial]]
 - [x] ~~**CTR de 8 páginas com impressão alta (P0)**~~ — meta tags reescritas em produção em 2026-07-30. Linha de base registrada em [[2026-08-calendario-editorial]]; o relatório do cron de 01/09 mede o efeito
 - [x] ~~**Contradição de preço** em `custo-steel-frame-m2-2026`~~ — resolvida em 2026-07-30. Faixa canônica: **R$ 3.015 a R$ 6.091/m²** (Sudeste)
 - [x] ~~**4 artigos sem answer_summary** (P1)~~ — preenchidos em 2026-07-30, 98 a 102 palavras cada, com dado quantitativo do próprio corpo
@@ -75,14 +75,14 @@ Tráfego seguiu crescendo: 1.179 users em junho, 1.407 nos primeiros 26 dias de 
 - [x] ~~**9 artigos são carcaças (P0)**~~ — resolvidos em 2026-07-30. **4** sem substituto ficaram no ar com `noindex, follow`; **5** com substituto foram consolidadas por **301**, com 14 links internos reescritos. Backlog de reescrita em [[2026-07-thin-content-mapa]]
 - [ ] **3 artigos fora do índice** (P1): `steel-frame-aguenta-vento-forte` (URL unknown), `steel-frame-laje-de-concreto` (discovered), `steel-frame-vantagens-desvantagens` (crawled). Eram 4; ver [[seo-aeo]]
 - [x] ~~**`quanto-custa-construir-steel-frame-precos-m2-2026` com `published_at` nulo**~~ — corrigido em 2026-07-30 para `created_at` (2026-01-26). Além da ordenação, o nulo tirava o artigo do RSS, deixava o schema Article sem `datePublished` e fazia o sitemap declarar `lastmod` = agora a cada crawl
-- [ ] **Duas séries Arquitecasa no ar ao mesmo tempo (P1, novo)**: `custo-steel-frame-m2-2026` usa dez/2025 para o Sudeste (R$ 3.015–6.091) e a tabela regional de `quanto-custa-construir-...` usa jan/2025 (R$ 2.979–5.926). Mesmo índice, mesma região, snapshots diferentes. **Precisa da série dez/2025 das outras 4 regiões** para rebasear a tabela inteira — atualizar só o Sudeste deixaria a tabela inconsistente no tempo. Ver seção abaixo
+- [ ] **Duas séries Arquitecasa no ar ao mesmo tempo (P1, correção preparada)**: o draft de 11/08 substitui a tabela regional desatualizada por cenários do Sudeste de abril/2026 (R$ 3.042–6.200/m²) e explicita o escopo do índice. A página-mãe ainda precisa ser rebased separadamente para não voltar a divergir.
 
 ## Próximos 7 dias
 
 - [x] Semana S1: artigo de ICMS publicado e reconciliado com a pauta
-- [ ] Exercitar a próxima pauta pelo fluxo
-  `/pesquisa` → `/criacao` → `/artigo produzir` → aprovação →
-  `/artigo publicar`
+- [x] Pesquisa e criação exercitadas na pauta de casa LSF de 100 m²
+- [ ] Subir a capa Blog, vincular o post indexado e executar
+  `/artigo produzir` → aprovação → `/artigo publicar`
 
 > [!note] `orcamento-steel-frame` e `hold-downs-ancoragens` saíram do fluxo semanal
 > Foram para backlog sem data em 2026-07-30, cada um com bloqueio nomeado. Ver "Backlog: os 2 artigos prontos que não vão ao ar agora" abaixo. **Não puxar para a semana sem antes ter os números** — publicar `orcamento-steel-frame` como está adiciona uma terceira faixa de preço ao acervo.

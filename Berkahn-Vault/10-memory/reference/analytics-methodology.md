@@ -1,7 +1,7 @@
 ---
 tipo: memory
 criado: 2026-05-28
-atualizado: 2026-08-07
+atualizado: 2026-08-10
 tags:
   - ai/memory
   - status/active
@@ -9,7 +9,7 @@ tags:
   - project/site
   - project/blog
   - project/seo-aeo
-ai_summary: "Metodologia do /admin/analytics. Leads ficam no Supabase antes da planilha; métrica norte é qualificados por 100 sessões engajadas em 28 dias, com amostra insuficiente abaixo de 30. article_progress mede 25/50/75/90 após consentimento. Recomendações exigem aprovação."
+ai_summary: "Metodologia do /admin/analytics e CRM. Supabase é fonte única de PII; GA4 não recebe lead_id ou contato. generate_lead confirma persistência, whatsapp_click mede intenção. KPIs operacionais usam coorte de 28 dias e excluem legados arquivados incertos."
 status: active
 subtipo: reference
 ---
@@ -228,11 +228,19 @@ Eventos e o que cada um significa:
 |---|---|---|
 | `cta_click` | modal de contato **abre** (qualquer gatilho) | `cta_location`, `page_path`, `segment` |
 | `form_submit` | usuário envia o formulário | + `channel: form` |
-| `generate_lead` | Supabase confirma o lead; planilha é espelho | + `channel: form` |
+| `generate_lead` | Supabase confirma a persistência do contato | + `channel: form` |
 | `article_progress` | leitura cruza 25%, 50%, 75% ou 90% | `article_slug`, `percent_scrolled` |
 | `whatsapp_click` | clique em qualquer link `wa.me` | `cta_location`, `page_path`, `channel` |
 
 `cta_location` responde "qual gatilho" (`header`, `menu_lateral`, `contato_pagina`, `blog:<slug>`); `page_path` responde "em que página". Os dois juntos são o que permite ligar pauta a lead. A diferença entre `form_submit` e `generate_lead` mede a perda entre enviar e confirmar.
+
+O GA4 nunca recebe nome, email, telefone, mensagem ou `leadId`. `whatsapp_click` é intenção; somente um cadastro manual com canal WhatsApp representa conversa recebida.
+
+### KPIs operacionais do CRM
+
+`/admin/leads` calcula uma coorte móvel de contatos recebidos nos últimos 28 dias: recebidos, ainda novos, qualificados, convertidos e `qualificados ÷ contatos elegíveis`. Qualificados são registros com `qualificado_em`; convertidos usam `convertido_em`, preservando o resultado mesmo se o funil for revisto depois. Importados com status ausente ou desconhecido entram como `novo`, visualizados e arquivados, ficando fora da taxa. A métrica editorial continua `qualificados ÷ sessões engajadas × 100`; cliques no WhatsApp não entram como lead.
+
+Responsável, prioridade, resumo operacional, arquivos e notificações push são dimensões de trabalho, não conversões. Arrastar um card no Kanban chama a mesma RPC do seletor de status; instalar a PWA, abrir arquivo ou receber push não dispara evento GA4. O payload push é genérico e não contém PII nem identificador do lead.
 
 Relatórios anteriores a agosto/2026 não têm esta seção preenchida — ausência ali é falta de instrumentação, não ausência de conversão.
 
@@ -245,7 +253,7 @@ Relatórios anteriores a agosto/2026 não têm esta seção preenchida — ausê
 ## Ciclo de aprendizado de conteúdo — série inicia em 2026-08-07
 
 `leads` é a fonte primária. Atribuição de página, slug, CTA, UTMs, `post_id` e
-`pauta_id` é resolvida no servidor; Google Sheets é espelho com retry. Analytics
+`pauta_id` é resolvida no servidor; Google Sheets e Apps Script estão desativados. Analytics
 não recebe nome, email, telefone nem fingerprint.
 
 A métrica norte é:

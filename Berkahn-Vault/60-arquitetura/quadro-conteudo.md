@@ -76,7 +76,9 @@ As migrations 021–023 não mudam o modelo editorial. Elas reduzem custo e risc
 - `atualizar_pauta_metadados` salva propriedades e tags na mesma transação;
 - reordenação de `analytics_tasks` também é transacional;
 - `conteudo_worker_heartbeats` diferencia fila vazia de worker desligado;
-- o cron local `worker-de-conte-do-berkahn` roda a cada 15 minutos e pega um job;
+- `worker-de-conte-do-berkahn` está pausado: o agendamento antigo de 15 minutos
+  aponta para um worktree removido e não deve ser reativado. Jobs permanecem na
+  fila até execução manual ou até existir um worker leve, estável e aprovado;
 - `conteudo_performance_snapshots` guarda janelas de 28 dias sem PII;
 - recomendações entram pendentes em `analytics_tasks`, nunca alteram conteúdo;
 - a migration 023 corrige apenas o label UTF-8 de `domain/integrations`.

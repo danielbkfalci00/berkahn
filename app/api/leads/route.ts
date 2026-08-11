@@ -1,9 +1,11 @@
 import { createHash } from "node:crypto";
-import { NextResponse, type NextRequest } from "next/server";
-import { validateLeadInput } from "@/lib/contact";
+import { after, NextResponse, type NextRequest } from "next/server";
+import { validateLeadInput, type LeadInput } from "@/lib/contact";
+import { dispatchLeadPushNotifications } from "@/lib/push/dispatch";
 import { createServiceClient } from "@/lib/supabase/admin";
 
 export const runtime = "nodejs";
+export const maxDuration = 15;
 
 const WINDOW_MS = 15 * 60 * 1000;
 const MAX_REQUESTS = 5;
@@ -32,24 +34,48 @@ function slugFromPath(path?: string | null): string | null {
   }
 }
 
-function attributionFromRequest(request: NextRequest, fallbackPath?: string) {
-  let pagePath = fallbackPath ?? null;
-  let utmSource: string | undefined;
-  let utmMedium: string | undefined;
-  let utmCampaign: string | undefined;
+function attributionFromRequest(request: NextRequest, lead: LeadInput) {
+  let pagePath = lead.pagePath ?? null;
   const referer = request.headers.get("referer");
   if (referer) {
     try {
-      const url = new URL(referer);
-      pagePath = url.pathname;
-      utmSource = url.searchParams.get("utm_source")?.slice(0, 160) || undefined;
-      utmMedium = url.searchParams.get("utm_medium")?.slice(0, 160) || undefined;
-      utmCampaign = url.searchParams.get("utm_campaign")?.slice(0, 160) || undefined;
+      pagePath = new URL(referer).pathname;
     } catch {
-      // Referer inválido: mantém o path validado enviado pelo formulário.
+      // Referer inválido: preserva o path validado enviado pelo formulário.
     }
   }
-  return { pagePath, utmSource, utmMedium, utmCampaign };
+
+  if (!lead.attributionConsent) {
+    return { pagePath, landingPage: null, referrer: null, utm: {} };
+  }
+
+  return {
+    pagePath,
+    landingPage: safeLandingPath(lead.landingPage),
+    referrer: safeReferrer(lead.referrer),
+    utm: {
+      source: lead.utmSource,
+      medium: lead.utmMedium,
+      campaign: lead.utmCampaign,
+      content: lead.utmContent,
+      term: lead.utmTerm,
+    },
+  };
+}
+
+function safeLandingPath(value?: string): string | null {
+  if (!value?.startsWith("/")) return null;
+  return value.split(/[?#]/, 1)[0].slice(0, 500);
+}
+
+function safeReferrer(value?: string): string | null {
+  if (!value) return null;
+  try {
+    const url = new URL(value);
+    return `${url.origin}${url.pathname}`.slice(0, 500);
+  } catch {
+    return null;
+  }
 }
 
 export async function POST(request: NextRequest) {
@@ -96,16 +122,14 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const attribution = attributionFromRequest(request, lead.pagePath);
-  const slug = slugFromPath(attribution.pagePath);
+  const attribution = attributionFromRequest(request, lead);
+  const conversionSlug = slugFromPath(attribution.pagePath);
+  const landingSlug = slugFromPath(attribution.landingPage);
+  const slug = conversionSlug ?? landingSlug;
   let postId: string | null = null;
   let pautaId: string | null = null;
   if (slug) {
-    const { data: post } = await supabase
-      .from("posts")
-      .select("id")
-      .eq("slug", slug)
-      .maybeSingle();
+    const { data: post } = await supabase.from("posts").select("id").eq("slug", slug).maybeSingle();
     postId = post?.id ?? null;
     if (postId) {
       const { data: pauta } = await supabase
@@ -117,32 +141,26 @@ export async function POST(request: NextRequest) {
     }
   }
 
-  const message = [
-    lead.message,
-    lead.projectType ? `Tipo: ${lead.projectType}` : null,
-    lead.company ? `Empresa: ${lead.company}` : null,
-    lead.role ? `Cargo: ${lead.role}` : null,
-  ]
-    .filter(Boolean)
-    .join(" | ") || "Contato pelo formulário";
-
   const { data: saved, error } = await supabase
     .from("leads")
     .insert({
-      nome: lead.name,
-      email: lead.email ?? null,
-      telefone: lead.phone,
-      segmento: lead.segment,
-      mensagem: message,
-      canal: "form",
+      nome: lead.kind === "resource" ? "Download de material" : lead.name,
+      email: lead.email?.trim().toLowerCase() ?? null,
+      telefone: lead.kind === "resource" ? null : lead.phone,
+      segmento: lead.kind === "resource" ? "nao_definido" : lead.segment,
+      mensagem: lead.kind === "resource"
+        ? `Material solicitado: ${lead.resourceTitle}`
+        : lead.message || "Contato pelo formulário",
+      canal: lead.kind === "resource" ? "email" : "form",
+      tipo_projeto: lead.kind === "resource" ? null : lead.projectType ?? null,
+      empresa: lead.kind === "resource" ? null : lead.company ?? null,
+      cargo: lead.kind === "resource" ? null : lead.role ?? null,
       pagina_origem: attribution.pagePath,
+      landing_page: attribution.landingPage,
+      referrer: attribution.referrer,
       slug_origem: slug,
       cta_location: lead.ctaLocation ?? null,
-      utm: {
-        source: attribution.utmSource ?? lead.utmSource,
-        medium: attribution.utmMedium ?? lead.utmMedium,
-        campaign: attribution.utmCampaign ?? lead.utmCampaign,
-      },
+      utm: attribution.utm,
       post_id: postId,
       pauta_id: pautaId,
       request_fingerprint: fingerprint,
@@ -152,60 +170,18 @@ export async function POST(request: NextRequest) {
 
   if (error || !saved) {
     console.error("lead insert:", error?.message);
-    return NextResponse.json({ success: false, message: "Não foi possível salvar o contato." }, { status: 503 });
+    return NextResponse.json(
+      { success: false, message: "Não foi possível salvar o contato." },
+      { status: 503 }
+    );
   }
 
-  const sheetEndpoint = process.env.GOOGLE_SHEETS_LEAD_ENDPOINT?.trim();
-  const sheetSecret = process.env.GOOGLE_SHEETS_LEAD_SECRET?.trim();
-  if (sheetEndpoint && sheetSecret) {
+  after(async () => {
     try {
-      const response = await fetch(sheetEndpoint, {
-        method: "POST",
-        headers: { "Content-Type": "text/plain" },
-        body: JSON.stringify({
-          sync_secret: sheetSecret,
-          lead_id: saved.id,
-          name: lead.name,
-          email: lead.email ?? "",
-          phone: lead.phone,
-          segmento: lead.segment,
-          origem: attribution.pagePath ?? "",
-          pauta: pautaId ?? "",
-          status: "novo",
-          message,
-        }),
-        signal: AbortSignal.timeout(8_000),
-      });
-      const sheetResult = await response.json().catch(() => null) as
-        | { success?: boolean; message?: string }
-        | null;
-      if (!response.ok || sheetResult?.success !== true) {
-        throw new Error(sheetResult?.message || `HTTP ${response.status}`);
-      }
-      await supabase
-        .from("leads")
-        .update({
-          sheet_sync_status: "sincronizado",
-          sheet_sync_tentativas: 1,
-          sheet_synced_at: new Date().toISOString(),
-          sheet_sync_error: null,
-        })
-        .eq("id", saved.id);
-    } catch (sheetError) {
-      const message =
-        sheetError instanceof Error ? sheetError.message.slice(0, 500) : "Falha desconhecida";
-      await supabase
-        .from("leads")
-        .update({
-          sheet_sync_status: "falhou",
-          sheet_sync_tentativas: 1,
-          sheet_sync_error: message,
-        })
-        .eq("id", saved.id);
+      await dispatchLeadPushNotifications();
+    } catch (pushError) {
+      console.error("lead push:", pushError instanceof Error ? pushError.message : "unknown error");
     }
-  } else if (sheetEndpoint) {
-    console.error("lead sheet sync: GOOGLE_SHEETS_LEAD_SECRET não configurado");
-  }
-
+  });
   return NextResponse.json({ success: true, leadId: saved.id });
 }

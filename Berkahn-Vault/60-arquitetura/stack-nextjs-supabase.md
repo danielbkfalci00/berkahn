@@ -1,12 +1,12 @@
 ---
 tipo: context
 criado: 2026-05-21
-atualizado: 2026-08-06
+atualizado: 2026-08-10
 tags:
   - ai/context
   - project/site
   - domain/architecture
-ai_summary: Stack técnica do site Berkahn (visão executiva). Next.js + React + Tailwind no frontend, Supabase como CMS + auth, Vercel deploy. Integrações Google Sheets, Apps Script. Componentes interativos via JSONB.
+ai_summary: Stack do site Berkahn. Supabase concentra CMS, Auth e CRM com RPCs/RLS, arquivos privados e outbox push; GA4 fica sem PII. Apps Script/Sheets são legado desativado. PWA admin não cacheia telas; retenção usa Edge Function, Storage, pg_cron e pg_net.
 status: active
 escopo: berkahn
 ---
@@ -34,7 +34,7 @@ Visão executiva da arquitetura técnica do site Berkahn.
 
 | Camada | Tecnologia |
 |--------|-----------|
-| CMS | Supabase (PostgreSQL) — tabelas `posts`, `proposals`, `presentations`, `analytics_snapshots`, `analytics_tasks`, `orcamentos` (esta última: estimativas preliminares PDF, ver [[orcamento-automacao]]) |
+| CMS + CRM | Supabase (PostgreSQL) — `posts`, `leads`, `proposals`, `presentations`, `analytics_snapshots`, `analytics_tasks` e `orcamentos` |
 | Auth | Supabase Auth (admin panel) |
 | RLS | Row Level Security ativo em todas as tabelas |
 | API | Supabase REST + Server Actions Next.js |
@@ -43,13 +43,15 @@ Visão executiva da arquitetura técnica do site Berkahn.
 
 ## Painel Admin
 
-Painel Next.js separado para gerenciar posts, leads, dashboard, **orçamentos** (`/admin/orcamentos` — wizard de 5 steps + upload de hero + geração de PDF). Detalhes em [[admin-setup]] e [[orcamento-automacao]].
+Painel Next.js separado para gerenciar posts, conteúdo, leads, dashboard e **orçamentos** (`/admin/orcamentos` — wizard de 5 steps + upload de hero + geração de PDF). O CRM tem Inbox/Kanban, responsáveis, arquivos privados/Drive e PWA instalável sem cache de PII. Detalhes em [[admin-setup]] e [[orcamento-automacao]].
 
 ## Integrações Externas
 
 | Integração | Função | Doc |
 |------------|--------|-----|
-| Google Sheets via Apps Script | Captura leads do formulário de contato | [[google-sheets]] |
+| Google Sheets via Apps Script | Legado desativado; não participa da captura nem da notificação | [[google-sheets]] |
+| Edge Function + pg_cron/pg_net | Retenção e anonimização de leads inativos após 24 meses | [[admin-setup]] |
+| Web Push + outbox Supabase | Alertas genéricos de novo lead e próxima ação vencida | [[admin-setup]] |
 | Quadro admin | Hub operacional de pautas, Blog e LinkedIn | [[quadro-conteudo]] |
 | Canva | Materiais visuais (briefing manual) | [[canva-briefing]] |
 | Google Search Console | Indexação + analytics | — |

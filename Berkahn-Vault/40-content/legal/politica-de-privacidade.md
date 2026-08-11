@@ -1,18 +1,18 @@
 ---
 tipo: legal
 criado: 2025-02-01
-atualizado: 2026-05-22
+atualizado: 2026-08-10
 tags:
   - project/site
   - status/active
   - source/manual
-ai_summary: Política de Privacidade Berkahn — fev 2025. Em conformidade com LGPD (Lei 13.709/2018). Documento legal canonical. Renderizado em /privacidade no site. Atualizar com cautela (impacto legal).
+ai_summary: Política de Privacidade Berkahn — agosto de 2026. Supabase é a custódia de PII comercial; Google recebe apenas ledger técnico sem PII. Leads não convertidos e inativos são anonimizados após 24 meses, com exceções legais documentadas.
 status: active
 projeto: site
 url_publicado: https://www.berkahn.com.br/privacidade
 projetos_relacionados:
   - site
-data_atualizacao_doc: 2025-02-01
+data_atualizacao_doc: 2026-08-10
 documento_legal: politica-de-privacidade
 ---
 
@@ -20,7 +20,7 @@ documento_legal: politica-de-privacidade
 
 # Política de Privacidade
 
-*Última atualização: fevereiro de 2025*
+*Última atualização: agosto de 2026*
 
 A Construtora Berkahn ("Berkahn", "nós") leva a proteção dos seus dados pessoais a sério. Esta Política de Privacidade explica como coletamos, utilizamos, armazenamos e protegemos as informações que você nos fornece ao acessar o site berkahn.com.br, em conformidade com a Lei Geral de Proteção de Dados Pessoais (Lei nº 13.709/2018 — LGPD) e demais normas aplicáveis.
 
@@ -38,6 +38,8 @@ Coletamos dados pessoais que você nos fornece voluntariamente nas seguintes sit
 
 **Cadastro na newsletter** — ao se inscrever em nossa newsletter, coletamos seu nome e endereço de e-mail para envio periódico de conteúdos sobre construção, Light Steel Frame e novidades da Berkahn. Você pode cancelar o recebimento a qualquer momento através do link de descadastro presente em cada e-mail enviado.
 
+**Download de materiais** — quando um material solicita e-mail, registramos o endereço e o recurso escolhido para liberar o download e medir o interesse naquele conteúdo. Isso não inscreve o visitante automaticamente na newsletter.
+
 ### 1.2 Dados coletados automaticamente
 
 Quando você acessa nosso site, algumas informações são coletadas automaticamente por meio de cookies e tecnologias similares. Esses dados incluem endereço IP, tipo de navegador, sistema operacional, páginas visitadas, tempo de permanência, origem do acesso e interações com elementos do site. Essas informações não identificam você individualmente e são utilizadas para melhorar a experiência de navegação e compreender como nosso site é utilizado.
@@ -48,7 +50,7 @@ Quando você acessa nosso site, algumas informações são coletadas automaticam
 
 Os dados pessoais coletados são utilizados para as seguintes finalidades:
 
-Responder solicitações de orçamento e manter contato comercial com potenciais clientes. Enviar conteúdos informativos por e-mail aos assinantes da newsletter. Analisar o comportamento de navegação no site para melhorar a experiência do usuário, identificar problemas técnicos e aprimorar nossos conteúdos. Cumprir obrigações legais e regulatórias quando aplicável.
+Responder solicitações de orçamento e manter contato comercial com potenciais clientes. Liberar materiais solicitados e registrar o interesse no conteúdo escolhido. Enviar conteúdos informativos por e-mail aos assinantes da newsletter. Analisar o comportamento de navegação no site para melhorar a experiência do usuário, identificar problemas técnicos e aprimorar nossos conteúdos. Cumprir obrigações legais e regulatórias quando aplicável.
 
 Não utilizamos seus dados para finalidades diferentes das descritas acima sem o seu consentimento prévio.
 
@@ -76,9 +78,9 @@ Você pode gerenciar suas preferências de cookies a qualquer momento através d
 
 ## 4. Armazenamento e segurança dos dados
 
-Os dados pessoais coletados são armazenados em plataformas seguras, incluindo Google Workspace (Google Sheets), PostHog e Supabase. Adotamos medidas técnicas e organizacionais adequadas para proteger seus dados contra acesso não autorizado, perda, destruição ou qualquer forma de tratamento inadequado.
+Os dados pessoais de solicitações comerciais e downloads são armazenados no Supabase, que é a fonte operacional única desses registros. Google Sheets e Apps Script não participam da captura. Alertas operacionais opcionais usam Web Push sem dados pessoais. Adotamos medidas técnicas e organizacionais adequadas para proteger seus dados contra acesso não autorizado, perda, destruição ou qualquer forma de tratamento inadequado.
 
-O período de armazenamento varia conforme a finalidade da coleta. Dados de solicitações de orçamento são mantidos pelo tempo necessário para atendimento comercial e eventual formalização contratual. Dados de newsletter são mantidos enquanto durar sua inscrição. Dados de navegação coletados por cookies seguem as políticas de retenção de cada ferramenta utilizada.
+Leads não convertidos e sem atualização por 24 meses são anonimizados, incluindo notas, dados pessoais em orçamentos ou propostas vinculados e arquivos relacionados. Registros convertidos ou documentos sujeitos a obrigação legal podem ser preservados pelo prazo aplicável, com exceção documentada. Dados de newsletter são mantidos enquanto durar sua inscrição. Dados de navegação coletados por cookies seguem as políticas de retenção de cada ferramenta utilizada.
 
 ---
 

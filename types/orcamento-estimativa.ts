@@ -71,6 +71,7 @@ export interface Orcamento {
   criado_em: string;
   atualizado_em: string;
   criado_por: string | null;
+  lead_id: string | null;
 }
 
 export type OrcamentoInsert = Omit<

@@ -186,6 +186,7 @@ export interface ProposalItem {
 }
 
 export interface Proposal extends BaseEntity {
+  lead_id: string | null;
   proposal_number: string; // BRK-2024-001
   client_name: string;
   client_email: string | null;
@@ -211,6 +212,7 @@ export interface Proposal extends BaseEntity {
 }
 
 export interface ProposalInsert {
+  lead_id?: string | null;
   client_name: string;
   client_email?: string | null;
   client_phone?: string | null;

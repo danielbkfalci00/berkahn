@@ -204,21 +204,77 @@ export interface AnalyticsTask {
   approval_status: "pendente" | "aprovada" | "rejeitada";
 }
 
-export type LeadStatus = "novo" | "qualificado" | "desqualificado" | "convertido";
+export type LeadStatus =
+  | "novo"
+  | "em_contato"
+  | "qualificado"
+  | "proposta_enviada"
+  | "convertido"
+  | "desqualificado";
+
+export type LeadChannel = "form" | "whatsapp" | "telefone" | "email" | "indicacao" | "manual";
+export type LeadSegment = "residencial" | "comercial" | "nao_definido";
+export type LeadPriority = "normal" | "alta" | "urgente";
+
+export interface LeadResponsible {
+  id: string;
+  nome: string;
+  ativo: boolean;
+  ordem: number;
+}
+
+export interface LeadArtifact {
+  id: string;
+  lead_id: string;
+  tipo: "drive_folder" | "external_link" | "upload";
+  estado: "pending" | "ready";
+  nome: string;
+  external_url: string | null;
+  storage_bucket: string | null;
+  storage_path: string | null;
+  mime_type: string | null;
+  size_bytes: number | null;
+  criado_em: string;
+}
 
 export interface AnalyticsLead {
   id: string;
   nome: string;
   email: string | null;
-  telefone: string;
-  segmento: string;
-  mensagem: string;
-  canal: string;
+  telefone: string | null;
+  telefone_normalizado: string | null;
+  segmento: LeadSegment;
+  mensagem: string | null;
+  canal: LeadChannel;
   status: LeadStatus;
+  prioridade: LeadPriority;
+  responsavel_id: string | null;
+  responsavel: Pick<LeadResponsible, "id" | "nome"> | null;
+  resumo_status: string | null;
+  resumo_status_em: string | null;
+  artifact_count: number;
+  tipo_projeto: string | null;
+  empresa: string | null;
+  cargo: string | null;
   pagina_origem: string | null;
+  landing_page: string | null;
+  referrer: string | null;
   slug_origem: string | null;
   cta_location: string | null;
+  utm: Record<string, string | undefined>;
+  post_id: string | null;
   pauta_id: string | null;
+  visualizado_em: string | null;
+  ultimo_contato_em: string | null;
+  proxima_acao_em: string | null;
+  motivo_desqualificacao: string | null;
+  qualificado_em: string | null;
+  desqualificado_em: string | null;
+  convertido_em: string | null;
+  arquivado_em: string | null;
+  anonimizado_em: string | null;
+  origem_legado: string | null;
+  importado_em: string | null;
   sheet_sync_status: "pendente" | "sincronizado" | "falhou";
   sheet_sync_tentativas: number;
   sheet_sync_error: string | null;

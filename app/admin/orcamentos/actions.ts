@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache"
 import { createServiceClient } from "@/lib/supabase/admin"
+import { createClient } from "@/lib/supabase/server"
 import { rowParaInsert } from "@/lib/orcamento-planilha"
 import type {
   OrcamentoInsert,
@@ -15,9 +16,24 @@ type ActionResultCreate =
 
 type ActionResultUpdate = { ok: true } | { ok: false; erro: string }
 
+const ADMIN_EMAIL = "contato.berkahn@gmail.com"
+
+async function getAuthorizedAdmin() {
+  const supabase = await createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
+  if (user?.email?.toLowerCase() !== ADMIN_EMAIL) return null
+  return { supabase, user }
+}
+
 export async function criarOrcamento(
   input: OrcamentoInsert
 ): Promise<ActionResultCreate> {
+  const admin = await getAuthorizedAdmin()
+  if (!admin) return { ok: false, erro: "Não autorizado" }
+
   const supabase = createServiceClient()
   // Cast: JSONB columns (condicionantes_extras, exclusoes_extras, entrega_categorias_ativas)
   // tipam como Json no Database gerado, mas mantemos shapes específicos no domínio.
@@ -40,6 +56,9 @@ export async function atualizarOrcamento(
   id: string,
   patch: OrcamentoUpdate
 ): Promise<ActionResultUpdate> {
+  const admin = await getAuthorizedAdmin()
+  if (!admin) return { ok: false, erro: "Não autorizado" }
+
   const supabase = createServiceClient()
   const { error } = await supabase
     .from("orcamentos")
@@ -77,6 +96,9 @@ export async function finalizarOrcamento(
   id: string,
   patch: OrcamentoUpdate
 ): Promise<ActionResultUpdate> {
+  const admin = await getAuthorizedAdmin()
+  if (!admin) return { ok: false, erro: "Não autorizado" }
+
   const supabase = createServiceClient()
   const { error } = await supabase
     .from("orcamentos")
@@ -85,6 +107,24 @@ export async function finalizarOrcamento(
 
   if (error) {
     return { ok: false, erro: error.message }
+  }
+  const { data: budget } = await admin.supabase
+    .from("orcamentos")
+    .select("lead_id")
+    .eq("id", id)
+    .maybeSingle()
+  if (budget?.lead_id) {
+    const { error: logError } = await admin.supabase.from("activity_logs").insert({
+      user_id: admin.user.id,
+      user_name: admin.user.email || "Admin",
+      action: "Orçamento finalizado",
+      entity_type: "lead",
+      entity_id: budget.lead_id,
+      entity_name: `Lead ${budget.lead_id.slice(0, 8)}`,
+      details: { tipo: "orcamento_finalizado", orcamento_id: id },
+    })
+    if (logError) console.error("lead budget activity:", logError.message)
+    revalidatePath(`/admin/leads/${budget.lead_id}`)
   }
   revalidatePath("/admin/orcamentos")
   revalidatePath(`/admin/orcamentos/${id}`)

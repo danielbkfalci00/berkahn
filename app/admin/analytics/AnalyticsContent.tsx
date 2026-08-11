@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { AnalyticsHeader } from "@/components/admin/analytics/AnalyticsHeader";
 import { Act0Status } from "@/components/admin/analytics/acts/Act0Status";
@@ -9,12 +8,10 @@ import { Act2Origin } from "@/components/admin/analytics/acts/Act2Origin";
 import { Act3Posts } from "@/components/admin/analytics/acts/Act3Posts";
 import { Act4Action } from "@/components/admin/analytics/acts/Act4Action";
 import { ComparisonView } from "@/components/admin/analytics/ComparisonView";
-import { LeadsQueue } from "@/components/admin/analytics/LeadsQueue";
 import { computeMonthlyGoals, computeGoalProgress, formatGoalLabel, formulaLabel, goalStatusColor } from "@/lib/analytics/goals";
 import { detectRedFlags } from "@/lib/analytics/red-flags";
 import type { TimelineEvent } from "@/lib/analytics/timeline-events";
 import type {
-  AnalyticsLead,
   AnalyticsSnapshot,
   AnalyticsTask,
   KpiCardData,
@@ -33,7 +30,6 @@ interface AnalyticsContentProps {
   currentMonth: string;
   timelineEvents: TimelineEvent[];
   tasks: AnalyticsTask[];
-  leads: AnalyticsLead[];
 }
 
 function deltaDirection(deltaPct?: number): "up" | "down" | "flat" {
@@ -154,9 +150,7 @@ export function AnalyticsContent({
   currentMonth,
   timelineEvents,
   tasks,
-  leads,
 }: AnalyticsContentProps) {
-  const [section, setSection] = useState<"performance" | "leads">("performance");
   const searchParams = useSearchParams();
   const comparisonMode = searchParams.get("compare") === "1";
 
@@ -175,27 +169,6 @@ export function AnalyticsContent({
 
   return (
     <div className="space-y-12 max-w-[1400px]">
-      <div className="inline-flex rounded-lg bg-neutral-100 p-1">
-        <button
-          type="button"
-          onClick={() => setSection("performance")}
-          className={`rounded-md px-4 py-2 text-sm transition ${section === "performance" ? "bg-white font-medium shadow-sm" : "text-neutral-500"}`}
-        >
-          Desempenho
-        </button>
-        <button
-          type="button"
-          onClick={() => setSection("leads")}
-          className={`rounded-md px-4 py-2 text-sm transition ${section === "leads" ? "bg-white font-medium shadow-sm" : "text-neutral-500"}`}
-        >
-          Leads
-        </button>
-      </div>
-
-      {section === "leads" ? (
-        <LeadsQueue initialLeads={leads} />
-      ) : (
-        <>
       <AnalyticsHeader
         monthLabel={ctx.monthLabel}
         periodStart={ctx.periodStart}
@@ -230,10 +203,6 @@ export function AnalyticsContent({
           <Act4Action context={ctx} posts={postPerformance} tasks={tasks} />
         </>
       )}
-
-        </>
-      )}
-
       <footer className="text-xs text-neutral-400 pt-8 border-t border-neutral-100 print:pt-3">
         Atualizado em {ctx.generatedAt}
         <span className="hidden print:inline">

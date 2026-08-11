@@ -14,6 +14,7 @@
     "test:conteudo": "node scripts/db/testar-ordem.mjs && node scripts/db/testar-autosave.mjs && node scripts/db/testar-estados.mjs && node --check scripts/conteudo/pauta.mjs",
     "test:conteudo:db": "node scripts/db/verificar-012.mjs",
     "test:analytics": "node --check scripts/analytics/fetch-ga4.mjs && node --check scripts/analytics/fetch-gsc.mjs && node --check scripts/analytics/generate-report.mjs && node scripts/analytics/test-learning.mjs",
+    "test:leads": "node --env-file=.env.local scripts/db/testar-leads-crm.mjs && node --check scripts/leads/import-leads-csv.mjs",
     "analytics:report": "node --env-file=.env.local scripts/analytics/generate-report.mjs",
     "analytics:learning": "node --env-file=.env.local scripts/analytics/generate-report.mjs --learning"
   },
@@ -65,6 +66,7 @@
     "sharp": "^0.34.5",
     "tailwind-merge": "^2.2.0",
     "topojson-client": "^3.1.0",
+    "web-push": "^3.6.7",
     "xlsx-js-style": "^1.2.0"
   },
   "devDependencies": {
@@ -74,6 +76,7 @@
     "@types/react-dom": "^18.2.0",
     "@types/react-simple-maps": "^3.0.6",
     "@types/topojson-client": "^3.1.5",
+    "@types/web-push": "^3.6.4",
     "autoprefixer": "^10.4.0",
     "eslint": "^8.55.0",
     "eslint-config-next": "^15.0.0",
