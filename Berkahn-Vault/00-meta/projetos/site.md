@@ -5,7 +5,7 @@ atualizado: 2026-08-10
 tags:
   - project/site
   - status/active
-ai_summary: "Hub do Site — CRM Supabase ampliado no PR #53; migrations 024–029 aplicadas e checks verdes. GA4 está configurado e Apps Script foi retirado do caminho. Pendem merge/deploy, smoke autenticado e Edge de retenção; Web Push é opcional."
+ai_summary: "Hub do Site — PR #53 mergeada e deployada em 11/08; CRM Supabase, GA4 e captura sem Apps Script estão em produção. Smoke público passou. Pendem smoke autenticado, Edge de retenção e despublicar o GitHub Pages legado com uma conta admin; Web Push é opcional."
 status: active
 projeto: site
 kpi_paginas_indexadas: 34
@@ -45,7 +45,7 @@ code_paths:
 
 ## Status atual
 
-Site em produção (Next.js App Router + Supabase + Vercel + Tailwind + shadcn/ui). O CRM leve em `/admin/leads` está implementado na branch `codex/supabase-leads-admin`; arquitetura e runbook vivem em [[admin-setup]]. Supabase é a única fonte operacional; Google Sheets e Apps Script são legado desativado em [[google-sheets]].
+Site em produção (Next.js App Router + Supabase + Vercel + Tailwind + shadcn/ui). O CRM leve em `/admin/leads` foi mergeado pela PR #53 no commit `5121941` e está deployado nos projetos `berkahn` e `berkahn-admin`; arquitetura e runbook vivem em [[admin-setup]]. Supabase é a única fonte operacional; Google Sheets e Apps Script são legado desativado em [[google-sheets]].
 
 **Diagnóstico integrado 2026-08-07**: o crawl agora cobre as 47 URLs do sitemap e superfícies públicas `noindex`; o artigo caiu de 371 para 218 kB de First Load JS (-41,2%), com home em 241 kB e `/atualidades` em 179 kB. SSG/ISR de 60 s e 404 foram preservados. Evidências, limites de laboratório e baseline de conversão vivem em [[2026-08-diagnostico-integrado-site]].
 
@@ -71,7 +71,8 @@ Site em produção (Next.js App Router + Supabase + Vercel + Tailwind + shadcn/u
 - [x] ~~**Home redesign — fechar o PR #43**~~ — mergeado em 2026-08-06 com hub reconciliado; `@design-review` executado e follow-up PR #44 mergeado
 - [x] ~~**Trocar take e restaurar copy institucional da home**~~ — 1080p integral convertido em 72/36 frames; copy conferida contra `bc6515f`; rail de projetos preservado no código e desmontado da composição
 - [ ] **CWV de campo pós-sprint**: medir no Speed Insights por 7 dias e consolidar em 28 dias; não comparar GA4 anterior e posterior ao Consent Mode de 2026-07-30 como séries equivalentes. Baseline e laboratório: [[2026-08-diagnostico-integrado-site]]
-- [ ] **CRM de leads**: revisar PR #53, publicar site/admin e executar smoke autenticado de Inbox, Kanban, upload/Drive, responsável, PWA e retry após fechar os acessos externos em [[google-sheets]] e [[admin-setup]]
+- [ ] **CRM de leads**: PR #53 mergeada, deploys verdes e smoke público concluído. Executar smoke autenticado de Inbox, Kanban, upload, responsável, PWA e configurações conforme [[admin-setup]]
+- [ ] **GitHub Pages legado**: a hospedagem `legacy` continua habilitada e com build em erro. A API recusou o DELETE porque a conta CLI não tem `admin`; despublicar em `https://github.com/danielbkfalci00/berkahn/settings/pages` com a conta proprietária
 - [x] ~~**Próxima página do redesign: `/atualidades`**~~ — concluída em 2026-08-06: abertura fundida, bento, categorias canônicas, payload 141/26 KB e ISR 60 preservado
 - [ ] Importar Clube Quinta dos Lagos para o banco de imagens antes de reativar o rail de projetos
 - [ ] Validar `/institucional/pdf` gerando PDF em produção (pós-merge do #17)

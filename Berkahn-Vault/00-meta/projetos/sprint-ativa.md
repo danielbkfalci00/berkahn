@@ -6,7 +6,7 @@ tags:
   - project/site
   - project/blog
   - status/active
-ai_summary: "Sprint 10–14/08: GA4 configurado, CRM Supabase no PR #53 e primeira pauta real avançada até draft + LinkedIn em produção. Faltam merge/deploy, capas, vínculo do post existente, aprovação e publicação humana; worker de 15 min permanece pausado."
+ai_summary: "Sprint 10–14/08: PR #53 mergeada e deployada nos dois projetos Vercel; GA4 e CRM Supabase ativos. A primeira pauta real está em draft + LinkedIn em produção. Faltam capas, vínculo, aprovação/publicação humana e smoke autenticado; worker de 15 min permanece pausado."
 status: active
 projetos_em_curso:
   - blog
@@ -35,15 +35,15 @@ semana_fim: 2026-08-14
 **Fechar o modelo operacional do conteúdo**: separar Blog e LinkedIn, tornar
 reordenação/publicação atômicas, versionar a automação genérica e alinhar o
 vault. A primeira pauta real já chegou a draft; resta concluir produção,
-aprovação e publicação após o deploy compatível.
+aprovação e publicação no rollout já deployado.
 
 ## Status por projeto
 
 | Projeto | Status | Bloqueio principal | Próxima ação |
 |---------|--------|--------------------|--------------|
-| [[blog]] | active | Capa staging e vínculo com post existente dependem do deploy | Produzir o artigo existente e levar à aprovação manual |
+| [[blog]] | active | Capa staging e vínculo com post existente ainda pendentes | Produzir o artigo existente e levar à aprovação manual |
 | [[linkedin]] | active | Capa 4:5 pronta localmente; upload e publicação externa pendentes | Subir a capa, aprovar e depois registrar URL/data reais |
-| [[site]] | active | PR #53 ainda está draft; migrations 024–029 já estão em produção | Remover legado Google, smoke autenticado e deployar PR #53 |
+| [[site]] | active | Smoke autenticado pendente; Pages legado exige conta com admin | Exercitar CRM logado e despublicar Pages em Settings |
 | [[seo-aeo]] | active | 3 URLs fora do índice (ação manual no GSC) | Pedir indexação das 3 |
 | [[apresentacoes]] | active | Roteiros não versionados (parcial) | Validar 16 slides em live env |
 | [[materiais]] | active | **Institucional PDF v4** aguarda briefing atualizado + distribuição | Atualizar briefing v3→v4; distribuir; preencher `usado_em` |
@@ -69,7 +69,9 @@ aprovação e publicação após o deploy compatível.
   para execução sob demanda ou heartbeat leve antes de qualquer reativação
 - [x] **GA4 fechado em 10/08**: OAuth com `analytics.edit`; dimensões `article_slug` e `percent_scrolled` registradas na propriedade 516973519
 - [x] Migrations 024–029 do CRM aplicadas; RLS canônica, atomicidade, retenção/remoção de anexos e outbox push sem PII verificadas em transação revertida
-- [ ] Fechar PR #53: Supabase puro, smoke autenticado e deploy; VAPID não bloqueia o CRM
+- [x] **PR #53 mergeada e deployada em 11/08**: commit `5121941`, Quality verde e deploys `berkahn` + `berkahn-admin` concluídos. Smoke público confirmou site 200, política Supabase-only e redirecionamento do admin para login
+- [ ] **Smoke autenticado pós-deploy**: Inbox, Kanban, upload, responsável e configurações exigem sessão humana real; nenhum harness com credenciais é versionado
+- [ ] **GitHub Pages legado**: DELETE recusado porque `brunofalci00` tem push, mas não admin. O Pages continua `legacy/errored`; despublicar em `Settings → Pages` com a conta proprietária
 - [ ] **Primeira pauta real em andamento**: pesquisa e draft gravados; texto,
   prompt e briefing de LinkedIn gravados; capa 4:5 gerada e validada em
   1080×1350. Restam upload das capas, vínculo com o post existente,
