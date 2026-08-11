@@ -1,7 +1,7 @@
 ---
 tipo: linkedin-post
 criado: 2026-08-05
-atualizado: 2026-08-05
+atualizado: 2026-08-11
 tags:
   - project/linkedin
   - status/draft
@@ -27,7 +27,7 @@ hashtags:
   - EficienciaEnergetica
 ---
 
-> **Artigo blog**: [[isencao-icms-energia-solar-sp]] · **Hub**: [[linkedin]] · **Briefing imagem**: [[briefing-imagem]]
+> **Artigo blog**: [[isencao-icms-energia-solar-sp]] · **Hub**: [[linkedin]] · **Briefing imagem**: [[40-content/linkedin/2026-08-05-icms-solar-sp/briefing-imagem|briefing-imagem]]
 
 Se você tem casa em São Paulo e já pensou em energia solar, provavelmente ouviu que precisa instalar antes de dezembro.
 

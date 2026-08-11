@@ -1,7 +1,7 @@
 ---
 tipo: context
 criado: 2026-04-13
-atualizado: 2026-08-07
+atualizado: 2026-08-11
 tags:
   - ai/context
   - project/blog
@@ -65,6 +65,13 @@ Capas vivem em `public/images/img_blog/[slug]/cover.webp` (consumido pelo Next.j
 4. Aguardar aprovação manual no quadro
 5. `/artigo publicar`: mover o markdown para `publicados/` e publicar
    post+pauta pela RPC idempotente; em falha, restaurar o markdown
+
+Atualizações de artigo indexado preservam o slug. Nesse caso, draft e fonte
+publicada coexistem temporariamente com o mesmo basename; use wikilink com
+caminho completo para apontar o draft. O CLI deve substituir a fonte publicada
+atomicamente e preservar rollback. Enquanto `pauta.mjs` ainda recusar um destino
+existente, a tarefa bloqueadora vive em [[blog#Próximos 7 dias]]; não apagar nem
+sobrescrever manualmente o publicado para contornar o gate.
 
 ### Passos obrigatórios no /linkedin
 1. Gravar texto, prompt e briefing nos blocos da pauta

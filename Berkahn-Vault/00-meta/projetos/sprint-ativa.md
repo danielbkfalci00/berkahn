@@ -46,7 +46,7 @@ aprovação e publicação no rollout já deployado.
 | [[site]] | active | Smoke autenticado pendente; Pages legado exige conta com admin | Exercitar CRM logado e despublicar Pages em Settings |
 | [[seo-aeo]] | active | 3 URLs fora do índice (ação manual no GSC) | Pedir indexação das 3 |
 | [[apresentacoes]] | active | Roteiros não versionados (parcial) | Validar 16 slides em live env |
-| [[materiais]] | active | **Institucional PDF v4** aguarda briefing atualizado + distribuição | Atualizar briefing v3→v4; distribuir; preencher `usado_em` |
+| [[00-meta/projetos/materiais|materiais]] | active | **Institucional PDF v4** aguarda briefing atualizado + distribuição | Atualizar briefing v3→v4; distribuir; preencher `usado_em` |
 | [[pesquisas]] | active | Nenhum bloqueio operacional no card | Validar a composição de custos com uma planilha Berkahn anonimizada |
 | [[orcamento-automacao]] | published | Smoke test E2E prod pendente (Bruno) | Gerar PDF BRK-2026-0001 (checar pgs/peso) |
 
@@ -63,19 +63,12 @@ aprovação e publicação no rollout já deployado.
   rotas internas
 - [x] Gates de CI versionados: lint, typecheck, testes de conteúdo, testes do
   aprendizado e build
-- [ ] **Worker de 15 minutos permanece pausado**: o agendamento antigo aponta
-  para um worktree removido, o heartbeat está obsoleto e uma task completa a
-  cada 15 minutos tem custo desnecessário de processo/histórico. Redesenhar
-  para execução sob demanda ou heartbeat leve antes de qualquer reativação
+- [ ] @bruno Redesenhar o worker para execução sob demanda ou heartbeat leve antes de reativá-lo; o agendamento antigo aponta para worktree removido, o heartbeat está obsoleto e uma task completa a cada 15 minutos tem custo desnecessário #pendencia
 - [x] **GA4 fechado em 10/08**: OAuth com `analytics.edit`; dimensões `article_slug` e `percent_scrolled` registradas na propriedade 516973519
 - [x] Migrations 024–029 do CRM aplicadas; RLS canônica, atomicidade, retenção/remoção de anexos e outbox push sem PII verificadas em transação revertida
 - [x] **PR #53 mergeada e deployada em 11/08**: commit `5121941`, Quality verde e deploys `berkahn` + `berkahn-admin` concluídos. Smoke público confirmou site 200, política Supabase-only e redirecionamento do admin para login
-- [ ] **Smoke autenticado pós-deploy**: Inbox, Kanban, upload, responsável e configurações exigem sessão humana real; nenhum harness com credenciais é versionado
-- [ ] **GitHub Pages legado**: DELETE recusado porque `brunofalci00` tem push, mas não admin. O Pages continua `legacy/errored`; despublicar em `Settings → Pages` com a conta proprietária
-- [ ] **Primeira pauta real em andamento**: pesquisa e draft gravados; texto,
-  prompt e briefing de LinkedIn gravados; capa 4:5 gerada e validada em
-  1080×1350. Restam upload das capas, vínculo com o post existente,
-  produção, aprovação e publicação humana
+- **Pendências de rollout**: smoke autenticado e GitHub Pages vivem uma única vez em [[site#Próximos 7 dias]].
+- **Primeira pauta real**: estado e tarefas vivem em [[blog#Próximos 7 dias]], [[linkedin#Próximos 7 dias]] e [[pesquisas#Bloqueios ativos]].
 
 ### P0 — Esta semana
 - [x] **Migration 012 aplicada**: 66 pautas preservadas, distribuição 44/22,
@@ -90,13 +83,13 @@ aprovação e publicação no rollout já deployado.
   livre sem gaps, tags, clipboard com clique real, upload/troca/remoção das
   capas Blog e LinkedIn 4:5, redirecionamento de sessão expirada e leitura das
   66 pautas. RPC transacional cobre drag/order; ICMS cobre vínculo no banco
-- [ ] **Fluxo editorial E2E restante**: upload das capas, vínculo do artigo
-  indexado, produção → aprovação → publicação. Pesquisa e criação foram
-  exercitadas na pauta `71592c33-9637-49d4-ac1d-153b422188af` em 11/08
-- [x] ~~**Merge PR #17**~~ ✅ 2026-07-30 — #15, #16 e #17 mergeados. **Sobrou**: validar `/institucional/pdf` em prod, atualizar o briefing para v4 e distribuir o PDF. Ver [[site]] e [[materiais]]
+- **Fluxo editorial E2E restante**: acompanhar pelas tarefas canônicas de [[blog]],
+  [[linkedin]] e [[pesquisas]]. Pesquisa e criação foram exercitadas na pauta
+  `71592c33-9637-49d4-ac1d-153b422188af` em 11/08.
+- [x] ~~**Merge PR #17**~~ ✅ 2026-07-30 — #15, #16 e #17 mergeados. **Sobrou**: validar `/institucional/pdf` em prod, atualizar o briefing para v4 e distribuir o PDF. Ver [[site]] e [[00-meta/projetos/materiais|materiais]]
 - [x] **Indexação Google** ([[seo-aeo]]): **encerrado em 2026-07-29** — 34/38 artigos (89%), contra 6/44 em abril. Restam 4 URLs em "Crawled/Discovered - currently not indexed", agora P1
 - [x] ~~**Publicar OAuth consent screen**~~ ✅ 2026-07-30 — app em produção, refresh voltou a funcionar, token reemitido. Ver [[google-apis-setup]]
-- [ ] **Decidir 4 capas órfãs** ([[materiais]]): Reestruturando Concreto, energia_solar, mármore, piscina_arraia
+- [ ] @bruno Decidir o destino das 4 capas órfãs em [[00-meta/projetos/materiais|materiais]]: Reestruturando Concreto, energia_solar, mármore e piscina_arraia #pendencia
 - [x] ~~**Smoke test Supabase**~~ ✅ 2026-07-30 — rodado, 6 slugs vault-only confirmados
 
 ### P1 — Próximas 2 semanas
@@ -233,7 +226,7 @@ A linha de base de CTR de cada página ficou registrada em [[2026-08-calendario-
 
 ## Wins / decisões (2026-07-01)
 
-- **Banco de imagens consolidado + catalogado** ([[materiais]]): 160 arquivos organizados em `Docs/banco-imagens/` (9 categorias, 11 duplicatas apagadas por sha256), catálogo reescrito (MOC [[banco-imagens]] + 9 índices + 8 galerias visuais + [[banco-imagens.base]]), script `vault-images.mjs`. `public/images/` intocado. PRs #5/#6.
+- **Banco de imagens consolidado + catalogado** ([[00-meta/projetos/materiais|materiais]]): 160 arquivos organizados em `Docs/banco-imagens/` (9 categorias, 11 duplicatas apagadas por sha256), catálogo reescrito (MOC [[40-content/materiais/banco-imagens|banco-imagens]] + 9 índices + 8 galerias visuais + [[banco-imagens.base]]), script `vault-images.mjs`. `public/images/` intocado. PRs #5/#6.
 - **Marca d'água BERKAHN** em 26 imagens do Clube Quinta dos Lagos ([[watermark-clube-quinta-dos-lagos]]): wordmark centralizado, 15% (máx-discreto, decisão do Bruno), cor adaptativa por região; script reutilizável `watermark-images.mjs`. PRs #7/#8. Zip pronto para Drive.
 - **Achado (dívida)**: arquivo `nul` (nome reservado Windows) na raiz trava `git add -A` — commits desta sessão foram por-caminho. `scripts/` é gitignored (tools ficam locais). `claude.md` tracked em minúsculo (case-mismatch resolvido).
 - **Cron mensal `berkahn-performance-mensal` falhou silenciosamente**: disparou 10:23 BRT mas `test-auth.mjs` retornou `invalid_grant` (2ª ocorrência — mesma raiz do incidente Maio/2026). Recuperado manualmente: `oauth-login.mjs` → novo refresh token → `generate-report.mjs` completou → snapshot Junho/2026 no Supabase + MD/HTML em `40-content/auditorias-seo/2026-06-performance-blog.*`.
@@ -298,5 +291,5 @@ A linha de base de CTR de cada página ficou registrada em [[2026-08-calendario-
 - SEO: [[seo-aeo-strategy]]
 - Dashboards: [[projetos.base]] · [[kpis.base]] · [[conhecimento.base]] · [[materiais.base]]
 - Scripts vault: `scripts/VAULT-SCRIPTS-README.md`
-- 7 hubs: [[blog]] · [[linkedin]] · [[site]] · [[seo-aeo]] · [[apresentacoes]] · [[materiais]] · [[pesquisas]]
+- 7 hubs: [[blog]] · [[linkedin]] · [[site]] · [[seo-aeo]] · [[apresentacoes]] · [[00-meta/projetos/materiais|materiais]] · [[pesquisas]]
 - MOC: [[MOC]]

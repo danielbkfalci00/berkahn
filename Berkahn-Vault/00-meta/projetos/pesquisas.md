@@ -48,7 +48,7 @@ anonimizada antes de publicar percentuais por etapa.
 - [x] **70-knowledge/ populado** — 10 atomic notes LSF criadas; a pendência agora é conectá-las às pesquisas novas quando houver aprendizado reutilizável
 - [ ] **Pesquisas brutas não viram atomic notes** — fluxo `/pesquisa → /criacao` descarta destilação
 - [ ] **Apenas 1 competitor documentado** (Stalart) — concorrência LSF brasileira é maior
-- [ ] **Composição por etapa da pauta de 100 m²** — validar com uma planilha real anonimizada; os indicadores públicos não sustentam percentuais precisos por etapa
+- [ ] @bruno Validar a composição por etapa da pauta de 100 m² com uma planilha Berkahn real anonimizada; os indicadores públicos não sustentam percentuais precisos por etapa #pendencia
 
 ## Próximos 7 dias
 

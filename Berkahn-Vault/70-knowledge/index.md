@@ -1,11 +1,11 @@
 ---
 tipo: meta
 criado: 2026-05-22
-atualizado: 2026-05-22
+atualizado: 2026-08-11
 tags:
   - status/active
   - domain/lsf
-ai_summary: Hub das atomic notes em 70-knowledge/. Cada nota = 1 conceito reutilizável (200-400 palavras com dados-chave). Linkadas em artigos via [[wikilink]]. Origem: destiladas de pesquisas e artigos publicados. Atualizado conforme atomic notes são criadas.
+ai_summary: Hub das atomic notes em 70-knowledge/. Cada nota representa um conceito reutilizável de 200–400 palavras, ligado a artigos e à pesquisa de origem por wikilinks reais. Atualizado conforme atomic notes são criadas.
 status: active
 ---
 
@@ -69,7 +69,7 @@ Espera-se +5-8 notas: ex `lsf-conceitos-basicos`, `lsf-componentes-drywall`, `ls
   usado_em: [<slugs dos artigos fonte/destino>]
   origem_pesquisa: <slug pesquisa raw ou ''>
   ```
-- **Rodapé padrão**: `**Contexto pai**: [[<dominio>]] · **Usado em**: <wikilinks artigos> · **Origem**: [[<pesquisa>]]`
+- **Rodapé padrão**: contexto pai, artigos que usam a nota e pesquisa de origem devem apontar para wikilinks reais, nunca placeholders.
 - **Wikilinks**: cada atomic note DEVE linkar para [[steel-frame-domain]] (ou contexto pai apropriado) + ≥1 artigo que a usa
 
 ## Manutenção

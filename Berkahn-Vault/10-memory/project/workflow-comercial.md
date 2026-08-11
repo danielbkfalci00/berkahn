@@ -1,7 +1,7 @@
 ---
 tipo: memory
 criado: 2026-05-22
-atualizado: 2026-08-10
+atualizado: 2026-08-11
 tags:
   - ai/memory
   - status/active
@@ -69,7 +69,7 @@ how_to_apply: "Lead chega → triar segmento (residencial/comercial) → puxar /
 ### 5. Pós-followup
 - Atualizar último status, próxima ação e funil no `/admin/leads`.
 - Marcar `proposta_enviada` somente por ação explícita; `convertido` significa fechamento efetivo.
-- Registrar decisão no hub [[apresentacoes]] ou [[materiais]] se novo material gerado
+- Registrar decisão no hub [[apresentacoes]] ou [[00-meta/projetos/materiais|materiais]] se novo material gerado
 - Se prospect virou cliente: documentar caso em `40-content/casos/` (criar pasta futura)
 
 ## Prompts e bases
@@ -93,14 +93,14 @@ how_to_apply: "Lead chega → triar segmento (residencial/comercial) → puxar /
 ## Materiais relacionados
 
 - [[guia-orcamento]] — guia completo de pesquisa de mercado para template orçamento premium
-- [[indices-imagens-orcamento]] — protótipos Chalé + estrutura LSF
-- [[indices-imagens-equipe]] — fotos para apresentação
-- [[indices-identidade-visual]] — logos e brand assets
-- [[steel-frame-no-mundo]] — roteiro com dados de mercado global (US$ 37bi/ano)
+- [[indices-orcamento-prototipos]] — protótipos Chalé + estrutura LSF
+- [[indices-equipe]] — fotos para apresentação
+- [[indices-marca]] — logos e brand assets
+- [[40-content/apresentacoes/steel-frame-no-mundo|steel-frame-no-mundo]] — roteiro com dados de mercado global (US$ 37bi/ano)
 
 ## Gap atual
 
-- CRM leve formalizado no Supabase; ainda falta o deploy do código da Inbox/Kanban e o smoke autenticado.
+- CRM leve formalizado no Supabase e deployado pela PR #53; resta apenas o smoke autenticado descrito em [[site#Próximos 7 dias]].
 - A PWA está implementada, mas alertas push aguardam chaves VAPID e agendamento no ambiente da equipe Vercel.
 - Sem template de proposta padronizado (basear em [[guia-orcamento]])
 - Sem rastreamento bidirecional lead ↔ projeto ↔ apresentação usada

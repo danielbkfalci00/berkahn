@@ -1,7 +1,7 @@
 ---
 tipo: meta
 criado: 2026-05-21
-atualizado: 2026-05-21
+atualizado: 2026-08-11
 tags:
   - ai/context
   - status/active
@@ -75,7 +75,7 @@ arquivos_total: <N>
 arquivos_mapeados, arquivos_orfaos, arquivos_duplicados (opcionais)
 ```
 
-**Banco de imagens**: fonte em `Docs/banco-imagens/` (9 categorias, ~160 arquivos). Entry-point [[banco-imagens]] (MOC) → 9 `indices-<categoria>.md` + galerias visuais `galeria-<categoria>.md` (thumbnails em `40-content/materiais/banco-imagens/thumbs/`). Dashboard [[banco-imagens.base]]. Gerido por `scripts/vault-images.mjs` (`--inventory/--dupes/--check/--thumbs`). Rodar `--check` após mexer nos binários.
+**Banco de imagens**: fonte em `Docs/banco-imagens/` (9 categorias, ~160 arquivos). Entry-point [[40-content/materiais/banco-imagens|banco-imagens]] (MOC) → 9 `indices-<categoria>.md` + galerias visuais `galeria-<categoria>.md` (thumbnails em `40-content/materiais/banco-imagens/thumbs/`). Dashboard [[banco-imagens.base]]. Gerido por `scripts/vault-images.mjs` (`--inventory/--dupes/--check/--thumbs`). Rodar `--check` após mexer nos binários.
 
 **`tipo: auditoria`** (em `40-content/auditorias-seo/`):
 ```yaml
@@ -192,7 +192,7 @@ Tag `project/<nome>` segue 1:1 com nome do hub (`project/blog`, `project/linkedi
 | [[site]] | `@pragmatic-code-review`, `@design-review`, `@security-review` |
 | [[seo-aeo]] | — (`/seo` cobre auditoria) |
 | [[apresentacoes]] | `@design-review` (UI/UX em live env) |
-| [[materiais]] | `@design-review` (consistência brand) |
+| [[00-meta/projetos/materiais|materiais]] | `@design-review` (consistência brand) |
 | [[pesquisas]] | — |
 | [[orcamento-automacao]] | `@pragmatic-code-review`, `@design-review`, `@security-review` (admin + renderer PDF + gate HMAC) |
 

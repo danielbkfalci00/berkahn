@@ -178,7 +178,7 @@ O limitador do endpoint Next.js usa contagem seguida de insert, portanto não é
 ### Configuração externa
 
 - [x] Apps Script removido do caminho operacional em 11/08/2026
-- [ ] Higiene opcional: apagar PII histórica da planilha e emails legados conforme a política de retenção
+- [ ] @bruno Apagar, quando houver acesso, PII histórica da planilha e emails legados conforme a política de retenção; isso não bloqueia o CRM Supabase #pendencia
 ## 📝 Changelog
 
 ### v1.4.0 — 2026-08-10

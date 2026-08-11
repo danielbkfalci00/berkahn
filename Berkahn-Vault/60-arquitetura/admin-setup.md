@@ -1,12 +1,12 @@
 ---
 tipo: context
 criado: 2025-12-01
-atualizado: 2026-08-10
+atualizado: 2026-08-11
 tags:
   - ai/context
   - project/site
   - domain/admin
-ai_summary: Sistema Admin Berkahn com CRM leve em /admin/leads. Inbox e Kanban compartilham Supabase como única custódia de PII; operação inclui responsável, prioridade, último status, arquivos privados/Drive, PWA e push sem PII. Migrations 024–029 estão em produção; deploy do código e configuração VAPID ainda pendem.
+ai_summary: Sistema Admin Berkahn com CRM leve em /admin/leads. Migrations 024–029 e PR #53 estão em produção; Supabase é a única custódia de PII. Smoke público passou; pendem smoke autenticado, Edge de retenção e Web Push opcional.
 status: active
 escopo: berkahn
 ---

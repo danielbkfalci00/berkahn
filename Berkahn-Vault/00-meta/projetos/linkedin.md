@@ -53,7 +53,7 @@ Contagem verificada em 2026-07-29 contra `main` — o `kpi_publicados: 1` anteri
 
 - [x] Texto, prompt e briefing da pauta de casa LSF de 100 m² gravados no card
 - [x] Imagem 4:5 gerada e validada em 1080×1350
-- [ ] Subir a imagem no bloco Capa LinkedIn após o deploy compatível, aprovar e publicar manualmente
+- [ ] @bruno Subir a imagem validada no bloco Capa LinkedIn, aprovar e publicar manualmente com URL e data reais #pendencia
 - [ ] Começar o backlog de distribuição: 22 posts derivam de artigos **já publicados** e não exigem escrever artigo nenhum
 
 ## Backlog planejado (2026-07-29)
@@ -96,7 +96,7 @@ Cada post recebe `artigo_slug` no frontmatter, fechando o rastreamento bidirecio
 
 ## Materiais de apoio
 
-- [[indices-pecas-linkedin]] — peças visuais em `Docs/Conteúdo/peças linkedin/` (criado em Sprint 1.7)
+- [[indices-materiais-marketing]] — peças visuais finalizadas de LinkedIn no banco de imagens
 - [[indices-capas-blog]] — capas que podem ser reutilizadas
 
 ## Histórico recente

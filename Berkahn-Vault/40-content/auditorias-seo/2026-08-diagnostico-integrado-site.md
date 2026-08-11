@@ -8,7 +8,7 @@ tags:
   - domain/seo
   - status/active
   - source/manual
-ai_summary: "Diagnóstico integrado: crawl 47/47 verde, SSG/ISR preservado e JS do artigo -41,2%. CRM Supabase 024–029 está aplicado; PR #53 aguarda merge/deploy e Edge de retenção. GA4 foi fechado e Apps Script/planilha foram desativados em 11/08."
+ai_summary: "Diagnóstico integrado: crawl 47/47 verde, SSG/ISR preservado e JS do artigo -41,2%. CRM Supabase 024–029 e PR #53 estão em produção; smoke público passou. Pendem smoke autenticado, Edge de retenção, Web Push opcional e CWV de campo."
 status: active
 projeto: seo-aeo
 kpi_crawl_urls_ok: 47
@@ -165,18 +165,17 @@ Concluídos:
 
 ### Rollout remoto verificado
 
-- PR #52 foi mergeado; PR #53 está retargetado para `main` e recebeu as migrations 026–029 no banco antes do deploy compatível.
-- Preview do admin respondeu 200 em /admin/login.
-- Preview público do site está protegido por Vercel SSO; o smoke de rotas públicas foi concluído no build de produção local.
-- A CLI está autenticada no escopo brunofalci00s-projects, que não lista os projetos Berkahn da equipe daniel-falcis-projects. Sem esse acesso não é possível configurar o segredo antes do merge.
-- A Google Analytics Admin API está desabilitada no projeto 428077950039; a service account existente recebeu permission denied ao tentar habilitá-la.
-- Produção permanece em `main`: o PR #53 ainda não foi mergeado porque a sessão atual não acessa os dois projetos Vercel da equipe para configurar VAPID e concluir o smoke.
+- PR #53 foi mergeado em `main` no commit `5121941`; Quality e os deploys `berkahn` + `berkahn-admin` concluíram com sucesso em 11/08.
+- Smoke público confirmou site 200, política Supabase-only e redirecionamento do admin sem sessão para `/admin/login`.
+- A Google Analytics Admin API foi ativada; OAuth com `analytics.edit` registrou `article_slug` e `percent_scrolled` na propriedade 516973519.
+- A sessão CLI ainda não acessa o escopo Vercel `daniel-falcis-projects`; isso não bloqueou o deploy, mas impede configurar o Web Push opcional.
+- O smoke autenticado continua pendente porque nenhum harness com credenciais é versionado.
 
 Pendências externas:
 - [ ] @bruno Definir generate_lead e whatsapp_click como Key Events no GA4 e validar em DebugView/Realtime após consentimento #pendencia
 - [x] Remover Apps Script/Sheets do caminho operacional
 - [ ] @bruno Dar acesso ao escopo Vercel `daniel-falcis-projects`; configurar VAPID e o segredo do dispatcher nos projetos site/admin #pendencia
-- [ ] @bruno Liberar acesso à planilha para importação/reconciliação e remoção final de PII #pendencia
+- [x] Importação/reconciliação da planilha retirada do rollout pela decisão Supabase-only; higiene de PII histórica permanece opcional em [[google-sheets]]
 - [ ] @bruno Liberar acesso Supabase Functions para publicar/agendar a retenção mensal #pendencia
 - [ ] @bruno Monitorar Speed Insights por sete dias e consolidar p75 de campo em 28 dias sem misturar a série pré e pós-Consent Mode #pendencia
 - [ ] @bruno Repetir as 15 consultas no Claude autenticado e completar as duas consultas instáveis do ChatGPT #pendencia

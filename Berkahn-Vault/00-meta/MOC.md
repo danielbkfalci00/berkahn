@@ -1,28 +1,28 @@
 ---
 tipo: meta
 criado: 2026-05-21
-atualizado: 2026-08-07
+atualizado: 2026-08-11
 tags:
   - status/active
-ai_summary: MOC do vault. Quadro é o hub operacional com status livre, publicação real derivada, edição inline/tags e fila Codex. Leads e article_progress alimentam recomendações aprováveis. calendario.base continua acervo, não pipeline.
+ai_summary: MOC do vault. Quadro é o hub operacional; CRM e aprendizado usam Supabase. Hubs guardam fatos e tarefas canônicas, enquanto MOC_Pendencias agrega #pendencia sem copiar contexto. calendario.base continua acervo, não pipeline.
 status: active
 ---
 
 # MOC — Map of Content
 
-Mapa temático do vault Berkahn. Para visão estrutural (por pasta), ver [[index]].
+Mapa temático do vault Berkahn. Para visão estrutural (por pasta), ver [[../index|index]].
 
 ## 🚀 Projetos Ativos (hubs first-class)
 
 | Projeto | Status | Bloqueio principal | Workflow | Atualizado |
 |---------|--------|--------------------|----------|------------|
-| [[blog]] | active | Exercitar a próxima pauta editorial ponta a ponta | [[workflow-conteudo]] | 2026-08-07 |
-| [[linkedin]] | active | Publicação externa e URL/data continuam manuais | [[workflow-conteudo]] | 2026-08-07 |
+| [[blog]] | active | Atualização do slug existente bloqueada pela substituição do markdown publicado | [[workflow-conteudo]] | 2026-08-11 |
+| [[linkedin]] | active | Capa 4:5 pronta; upload, aprovação e URL/data continuam manuais | [[workflow-conteudo]] | 2026-08-11 |
 | [[site]] | active | Smoke autenticado do CRM + despublicar Pages legado com conta admin | [[workflow-site]] | 2026-08-11 |
 | [[seo-aeo]] | active | **P0**: 9 posts sem meta tags (indexação resolvida: 89%) | [[workflow-seo]] | 2026-07-29 |
 | [[apresentacoes]] | active | Roteiros não versionados (parcial) | [[workflow-comercial]] | 2026-05-22 |
-| [[materiais]] | active | 9 índices criados; 4 capas órfãs | [[workflow-material]] | 2026-05-22 |
-| [[pesquisas]] | active | Destilar insights aprovados em atomic notes | [[workflow-pesquisa]] | 2026-08-07 |
+| [[00-meta/projetos/materiais|materiais]] | active | 9 índices criados; 4 capas órfãs | [[workflow-material]] | 2026-05-22 |
+| [[pesquisas]] | active | Validar custos por etapa com dado interno anonimizado | [[workflow-pesquisa]] | 2026-08-11 |
 | [[orcamento-automacao]] | active | Aguarda Bruno setar `CHROME_LOCAL_PATH` + smoke test E2E em prod | [[workflow-site]] | 2026-06-24 |
 
 **Dashboards dinâmicos**: [[projetos.base]] · [[kpis.base]] · [[conhecimento.base]] · [[materiais.base]]
@@ -87,7 +87,7 @@ Query do acervo: [[artigos.base]] | [[calendario.base]] · Operação: [[quadro-
 - [[admin-setup]] — Painel admin
 - [[comentarios-inline-documentacoes]] — Comentários inline nas documentações
 - [[quadro-conteudo]] — Quadro Kanban de pautas em `/admin/conteudo`, e por que os comandos gravam no banco
-- [[google-sheets]] — Integração formulário
+- [[google-sheets]] — Legado desativado; Supabase é a fonte operacional
 - [[blog-infra-vs-wordpress]] — Comparativo
 
 ## 📊 Queries (Bases)
@@ -113,6 +113,15 @@ Query do acervo: [[artigos.base]] | [[calendario.base]] · Operação: [[quadro-
 - **Workflows por projeto**: [[workflow-conteudo]] · [[workflow-site]] · [[workflow-seo]] · [[workflow-comercial]] · [[workflow-material]] · [[workflow-pesquisa]]
 - **Validação**: `node scripts/vault-validate.mjs` (manual ou via /standup, /wrap-up)
 - **Backfill scripts**: `scripts/vault-backfill-articles.mjs`, `scripts/vault-backfill-ai-summary.mjs`, `scripts/vault-supabase-resync.mjs` — ver `scripts/VAULT-SCRIPTS-README.md`
+
+## MOC_Pendencias
+
+As tarefas vivem uma única vez no hub ou nota responsável, sempre no formato
+`- [ ] @responsavel … #pendencia`. Esta busca nativa apenas as agrega:
+
+```query
+tag:#pendencia
+```
 
 ## 📐 Diagramas
 

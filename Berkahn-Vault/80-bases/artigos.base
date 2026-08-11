@@ -1,6 +1,6 @@
 filters:
   and:
-    - file.inFolder("40-content/blog/publicados")
+    - file.inFolder("40-content/blog")
     - 'tipo == "draft-content"'
 
 formulas:

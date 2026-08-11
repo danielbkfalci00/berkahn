@@ -1,7 +1,7 @@
 ---
 tipo: projeto
 criado: 2026-05-22
-atualizado: 2026-08-10
+atualizado: 2026-08-11
 tags:
   - project/site
   - status/active
@@ -64,15 +64,15 @@ Site em produção (Next.js App Router + Supabase + Vercel + Tailwind + shadcn/u
 - [ ] @bruno Dar acesso ao escopo Vercel `daniel-falcis-projects`; configurar chaves VAPID + `LEAD_PUSH_CRON_SECRET` em site/admin e agendar `schedule_lead_push_dispatch` #pendencia
 - [x] **GA4 Admin concluído**: OAuth de edição validado; `article_slug` e `percent_scrolled` registrados em 10/08
 - [x] **Apps Script encerrado**: nenhuma captura ou notificação depende de Google Sheets; Web Push é o canal opcional do admin
-- [ ] **Core Web Vitals de campo**: otimizações estruturais entregues em [[2026-08-diagnostico-integrado-site]], sem inferir campo a partir de laboratório. Monitorar Speed Insights por 7 dias e avaliar p75 em 28 dias. Metas: LCP ≤ 2,5 s, INP ≤ 200 ms e CLS ≤ 0,1
+- **Core Web Vitals de campo**: otimizações estruturais entregues em [[2026-08-diagnostico-integrado-site]]; a tarefa de medição vive em “Próximos 7 dias”.
 
 ## Próximos 7 dias
 
 - [x] ~~**Home redesign — fechar o PR #43**~~ — mergeado em 2026-08-06 com hub reconciliado; `@design-review` executado e follow-up PR #44 mergeado
 - [x] ~~**Trocar take e restaurar copy institucional da home**~~ — 1080p integral convertido em 72/36 frames; copy conferida contra `bc6515f`; rail de projetos preservado no código e desmontado da composição
-- [ ] **CWV de campo pós-sprint**: medir no Speed Insights por 7 dias e consolidar em 28 dias; não comparar GA4 anterior e posterior ao Consent Mode de 2026-07-30 como séries equivalentes. Baseline e laboratório: [[2026-08-diagnostico-integrado-site]]
-- [ ] **CRM de leads**: PR #53 mergeada, deploys verdes e smoke público concluído. Executar smoke autenticado de Inbox, Kanban, upload, responsável, PWA e configurações conforme [[admin-setup]]
-- [ ] **GitHub Pages legado**: a hospedagem `legacy` continua habilitada e com build em erro. A API recusou o DELETE porque a conta CLI não tem `admin`; despublicar em `https://github.com/danielbkfalci00/berkahn/settings/pages` com a conta proprietária
+- [ ] @bruno Medir CWV no Speed Insights por 7 dias e consolidar em 28 dias, sem misturar as séries anterior e posterior ao Consent Mode de 2026-07-30; baseline em [[2026-08-diagnostico-integrado-site]] #pendencia
+- [ ] @bruno Executar smoke autenticado de Inbox, Kanban, upload, responsável, PWA e configurações conforme [[admin-setup]]; PR #53, deploys e smoke público já estão concluídos #pendencia
+- [ ] @bruno Despublicar o GitHub Pages `legacy/errored` em `Settings → Pages` com a conta proprietária; a API recusou o DELETE porque a conta CLI não tem `admin` #pendencia
 - [x] ~~**Próxima página do redesign: `/atualidades`**~~ — concluída em 2026-08-06: abertura fundida, bento, categorias canônicas, payload 141/26 KB e ISR 60 preservado
 - [ ] Importar Clube Quinta dos Lagos para o banco de imagens antes de reativar o rail de projetos
 - [ ] Validar `/institucional/pdf` gerando PDF em produção (pós-merge do #17)
@@ -130,7 +130,7 @@ Site em produção (Next.js App Router + Supabase + Vercel + Tailwind + shadcn/u
 
 ## Materiais de apoio
 
-- ~~`indices-mockups-remodelacao`~~ — a nota e a pasta `Docs/REMODELAÇÃO/` não existem mais (link órfão desde a consolidação do banco de imagens). Mockups vivos: [[banco-imagens]]
+- ~~`indices-mockups-remodelacao`~~ — a nota e a pasta `Docs/REMODELAÇÃO/` não existem mais (link órfão desde a consolidação do banco de imagens). Mockups vivos: [[40-content/materiais/banco-imagens|banco-imagens]]
 - [[paginas-conteudo-v2]] — estratégia de páginas (migrado de Docs/)
 
 ## Histórico recente

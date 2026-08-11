@@ -1,7 +1,7 @@
 ---
 tipo: memory
 criado: 2026-05-22
-atualizado: 2026-08-07
+atualizado: 2026-08-11
 tags:
   - ai/memory
   - status/active
@@ -80,6 +80,6 @@ Sem cadência fixa — disparado por:
 
 ## Materiais relacionados
 
-- [[indices-mockups-remodelacao]] — mockups e visão de redesign futuro
+- [[40-content/materiais/banco-imagens|banco de imagens]] — catálogo atual de mockups e assets reutilizáveis
 - [[paginas-conteudo-v2]] — estratégia de páginas residencial/comercial
 - [[home-subsecoes]], [[lp-base]], [[area-casa-lote]] — site copy
