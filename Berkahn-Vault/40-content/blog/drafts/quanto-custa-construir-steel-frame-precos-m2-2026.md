@@ -153,16 +153,16 @@ Se você já tem um terreno ou um estudo inicial, a equipe Berkahn pode transfor
 
 **Internal links sugeridos:**
 
-“custo do Steel Frame por m² em 2026” → `/atualidades/custo-steel-frame-m2-2026`  
-“financiamento para construir em Light Steel Frame” → `/atualidades/financiar-construcao-light-steel-frame`  
-“solicitar um orçamento” → `/orcamento`
+- “custo do Steel Frame por m² em 2026” → `/atualidades/custo-steel-frame-m2-2026`
+- “financiamento para construir em Light Steel Frame” → `/atualidades/financiar-construcao-light-steel-frame`
+- “solicitar um orçamento” → `/orcamento`
 
 **External links incluídos:**
 
-Arquitecasa, índice Steel Frame abril de 2026: https://arquitecasa.com.br/construir/indice-arquitecasa-steel-frame-abril-de-2026/  
-Arquitecasa, metodologia: https://arquitecasa.com.br/indice-arquitecasa-steel-frame-quanto-custa-construir-em-cada-regiao/  
-IBGE, SINAPI junho de 2026: https://agenciadenoticias.ibge.gov.br/agencia-sala-de-imprensa/2013-agencia-de-noticias/releases/47537-indice-nacional-da-construcao-civil-acelera-para-1-19-em-junho  
-SindusCon-SP, julho de 2026: https://sindusconsp.com.br/iss-sao-paulo-atualiza-valores-da-mao-de-obra/
+- Arquitecasa, índice Steel Frame abril de 2026: https://arquitecasa.com.br/construir/indice-arquitecasa-steel-frame-abril-de-2026/
+- Arquitecasa, metodologia: https://arquitecasa.com.br/indice-arquitecasa-steel-frame-quanto-custa-construir-em-cada-regiao/
+- IBGE, SINAPI junho de 2026: https://agenciadenoticias.ibge.gov.br/agencia-sala-de-imprensa/2013-agencia-de-noticias/releases/47537-indice-nacional-da-construcao-civil-acelera-para-1-19-em-junho
+- SindusCon-SP, julho de 2026: https://sindusconsp.com.br/iss-sao-paulo-atualiza-valores-da-mao-de-obra/
 
 **Imagens necessárias:**
 
