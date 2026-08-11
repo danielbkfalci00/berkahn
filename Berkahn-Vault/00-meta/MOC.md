@@ -18,7 +18,7 @@ Mapa temático do vault Berkahn. Para visão estrutural (por pasta), ver [[index
 |---------|--------|--------------------|----------|------------|
 | [[blog]] | active | Exercitar a próxima pauta editorial ponta a ponta | [[workflow-conteudo]] | 2026-08-07 |
 | [[linkedin]] | active | Publicação externa e URL/data continuam manuais | [[workflow-conteudo]] | 2026-08-07 |
-| [[site]] | active | Merge/deploy do CRM Supabase + primeira operação real | [[workflow-site]] | 2026-08-11 |
+| [[site]] | active | Smoke autenticado do CRM + despublicar Pages legado com conta admin | [[workflow-site]] | 2026-08-11 |
 | [[seo-aeo]] | active | **P0**: 9 posts sem meta tags (indexação resolvida: 89%) | [[workflow-seo]] | 2026-07-29 |
 | [[apresentacoes]] | active | Roteiros não versionados (parcial) | [[workflow-comercial]] | 2026-05-22 |
 | [[materiais]] | active | 9 índices criados; 4 capas órfãs | [[workflow-material]] | 2026-05-22 |
