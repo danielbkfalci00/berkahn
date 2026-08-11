@@ -49,9 +49,11 @@ Pipeline de artigos tem 4 etapas sequenciais:
 No card, **Enviar ao Codex** cria um job durável para a próxima ação derivada dos
 artefatos. O worker usa `pauta.mjs job-claim`, carrega contexto progressivo com
 `proxima --include` e finaliza com tokens, custo, hashes e `run_id`. Se o
-computador estiver desligado, o job permanece na fila. O cron local
-`worker-de-conte-do-berkahn` roda a cada 15 minutos, registra heartbeat e
-processa no máximo um job por execução. **Copiar contexto** é o fallback manual.
+computador estiver desligado, o job permanece na fila. O agendamento local
+`worker-de-conte-do-berkahn` está **pausado**: a configuração antiga de 15
+minutos aponta para um worktree removido e criava uma task completa por ciclo.
+Até o redesenho para execução sob demanda ou heartbeat leve, use **Copiar
+contexto** como fallback manual e não interprete heartbeat antigo como saúde.
 
 Mover status é sempre permitido e nunca executa publicação. A visão Geral só
 mostra Concluída quando Blog e LinkedIn aplicáveis têm publicação real.

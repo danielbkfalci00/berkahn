@@ -1,12 +1,12 @@
 ---
 tipo: projeto
 criado: 2026-05-22
-atualizado: 2026-08-07
+atualizado: 2026-08-11
 tags:
   - project/blog
   - project/site
   - status/active
-ai_summary: Hub de Pesquisas. Pesquisa editorial vive no card e pode entrar na fila Codex com contexto progressivo; tags domain/* preservam taxonomia. Insights de analytics viram recomendações aprováveis, nunca mudanças automáticas.
+ai_summary: Hub de Pesquisas. A primeira pesquisa editorial real foi gravada no card em 11/08 com fontes de 2026 e limites de escopo; falta validar a composição por etapa com uma planilha Berkahn anonimizada. Recomendações nunca mudam conteúdo automaticamente.
 status: active
 projeto: pesquisas
 kpi_pesquisas_brutas_arquivadas: 0
@@ -38,16 +38,23 @@ Para Blog, `/pesquisa` grava diretamente em `pesquisa_conteudo` na pauta e
 Competitor research, mercado e SEO continuam em pastas próprias. A destilação em
 `70-knowledge/` já começou e permanece a camada reutilizável.
 
+Em 11/08, a pauta de casa LSF de 100 m² validou o fluxo real: pesquisa com
+Arquitecasa abril/2026, SINAPI junho/2026 e SindusCon-SP julho/2026 foi gravada
+no card. O único gap editorial nomeado é obter uma planilha de custos Berkahn
+anonimizada antes de publicar percentuais por etapa.
+
 ## Bloqueios ativos
 
 - [x] **70-knowledge/ populado** — 10 atomic notes LSF criadas; a pendência agora é conectá-las às pesquisas novas quando houver aprendizado reutilizável
 - [ ] **Pesquisas brutas não viram atomic notes** — fluxo `/pesquisa → /criacao` descarta destilação
 - [ ] **Apenas 1 competitor documentado** (Stalart) — concorrência LSF brasileira é maior
+- [ ] **Composição por etapa da pauta de 100 m²** — validar com uma planilha real anonimizada; os indicadores públicos não sustentam percentuais precisos por etapa
 
 ## Próximos 7 dias
 
 - [x] Retirar `40-content/blog/pesquisa/` do fluxo operacional
-- [ ] Inventariar blocos de pesquisa das pautas antes de criar novas atomic notes
+- [x] Primeira pesquisa operacional gravada e relida pelo id da pauta
+- [ ] Inventariar os demais blocos de pesquisa antes de criar novas atomic notes
 - [ ] Identificar 3-5 temas recorrentes para virar atomic notes (Sprint 2)
 
 ## KPIs (snapshot)

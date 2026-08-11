@@ -6,7 +6,7 @@ tags:
   - project/site
   - project/blog
   - status/active
-ai_summary: "Sprint 10–14/08: GA4 configurado, Apps Script retirado do caminho e CRM Supabase no PR #53 com checks verdes. Prioridades: merge/deploy, smoke autenticado, primeira pauta E2E e retenção; Web Push permanece opcional."
+ai_summary: "Sprint 10–14/08: GA4 configurado, CRM Supabase no PR #53 e primeira pauta real avançada até draft + LinkedIn em produção. Faltam merge/deploy, capas, vínculo do post existente, aprovação e publicação humana; worker de 15 min permanece pausado."
 status: active
 projetos_em_curso:
   - blog
@@ -23,9 +23,10 @@ semana_fim: 2026-08-14
 
 # Sprint Ativa — semana de 2026-08-10
 
-> [!info] Infraestrutura editorial antes da próxima pauta
-> A prioridade desta semana é tornar [[quadro-conteudo]] a fonte única do
-> pipeline, sem produzir a próxima pauta sobre um modelo ambíguo.
+> [!info] Infraestrutura editorial exercitada numa pauta real
+> [[quadro-conteudo]] já recebeu pesquisa, draft e texto/briefing de LinkedIn
+> da pauta de casa LSF de 100 m². Status continua livre; aprovação e publicação
+> permanecem humanas.
 
 > Atualizado segunda-feira via `/standup` (auto seg 9h via scheduled-task). Referenciado em [[CLAUDE]] vault-level e em `vault-manifest.json` (`paths.sprint_doc`). Para detalhes por projeto, abrir o hub correspondente. Validação: `node scripts/vault-validate.mjs` → 0 issues.
 
@@ -33,19 +34,20 @@ semana_fim: 2026-08-14
 
 **Fechar o modelo operacional do conteúdo**: separar Blog e LinkedIn, tornar
 reordenação/publicação atômicas, versionar a automação genérica e alinhar o
-vault. Só então exercitar a próxima pauta ponta a ponta em sessão autenticada.
+vault. A primeira pauta real já chegou a draft; resta concluir produção,
+aprovação e publicação após o deploy compatível.
 
 ## Status por projeto
 
 | Projeto | Status | Bloqueio principal | Próxima ação |
 |---------|--------|--------------------|--------------|
-| [[blog]] | active | Fluxo editorial completo ainda não exercitado | Rodar pesquisa → draft → aprovação na próxima pauta |
-| [[linkedin]] | active | Publicação externa manual | Registrar URL/data reais no próximo post |
+| [[blog]] | active | Capa staging e vínculo com post existente dependem do deploy | Produzir o artigo existente e levar à aprovação manual |
+| [[linkedin]] | active | Capa 4:5 pronta localmente; upload e publicação externa pendentes | Subir a capa, aprovar e depois registrar URL/data reais |
 | [[site]] | active | PR #53 ainda está draft; migrations 024–029 já estão em produção | Remover legado Google, smoke autenticado e deployar PR #53 |
 | [[seo-aeo]] | active | 3 URLs fora do índice (ação manual no GSC) | Pedir indexação das 3 |
 | [[apresentacoes]] | active | Roteiros não versionados (parcial) | Validar 16 slides em live env |
 | [[materiais]] | active | **Institucional PDF v4** aguarda briefing atualizado + distribuição | Atualizar briefing v3→v4; distribuir; preencher `usado_em` |
-| [[pesquisas]] | active | Pesquisa editorial migrou para o card | Validar `/pesquisa` ponta a ponta |
+| [[pesquisas]] | active | Nenhum bloqueio operacional no card | Validar a composição de custos com uma planilha Berkahn anonimizada |
 | [[orcamento-automacao]] | published | Smoke test E2E prod pendente (Bruno) | Gerar PDF BRK-2026-0001 (checar pgs/peso) |
 
 ## Bloqueios consolidados (cross-projeto)
@@ -61,13 +63,17 @@ vault. Só então exercitar a próxima pauta ponta a ponta em sessão autenticad
   rotas internas
 - [x] Gates de CI versionados: lint, typecheck, testes de conteúdo, testes do
   aprendizado e build
-- [x] Worker local ativo a cada 15 minutos, com heartbeat verificado e limite de
-  um job por execução; aprovação e publicação continuam humanas
+- [ ] **Worker de 15 minutos permanece pausado**: o agendamento antigo aponta
+  para um worktree removido, o heartbeat está obsoleto e uma task completa a
+  cada 15 minutos tem custo desnecessário de processo/histórico. Redesenhar
+  para execução sob demanda ou heartbeat leve antes de qualquer reativação
 - [x] **GA4 fechado em 10/08**: OAuth com `analytics.edit`; dimensões `article_slug` e `percent_scrolled` registradas na propriedade 516973519
 - [x] Migrations 024–029 do CRM aplicadas; RLS canônica, atomicidade, retenção/remoção de anexos e outbox push sem PII verificadas em transação revertida
 - [ ] Fechar PR #53: Supabase puro, smoke autenticado e deploy; VAPID não bloqueia o CRM
-- [ ] Exercitar pesquisa → draft → produção → aprovação → publicação na próxima
-  pauta real
+- [ ] **Primeira pauta real em andamento**: pesquisa e draft gravados; texto,
+  prompt e briefing de LinkedIn gravados; capa 4:5 gerada e validada em
+  1080×1350. Restam upload das capas, vínculo com o post existente,
+  produção, aprovação e publicação humana
 
 ### P0 — Esta semana
 - [x] **Migration 012 aplicada**: 66 pautas preservadas, distribuição 44/22,
@@ -82,8 +88,9 @@ vault. Só então exercitar a próxima pauta ponta a ponta em sessão autenticad
   livre sem gaps, tags, clipboard com clique real, upload/troca/remoção das
   capas Blog e LinkedIn 4:5, redirecionamento de sessão expirada e leitura das
   66 pautas. RPC transacional cobre drag/order; ICMS cobre vínculo no banco
-- [ ] **Fluxo editorial E2E restante**: criar pauta pela UI, vincular artigo e
-  executar pesquisa → criação → aprovação → publicação na próxima pauta
+- [ ] **Fluxo editorial E2E restante**: upload das capas, vínculo do artigo
+  indexado, produção → aprovação → publicação. Pesquisa e criação foram
+  exercitadas na pauta `71592c33-9637-49d4-ac1d-153b422188af` em 11/08
 - [x] ~~**Merge PR #17**~~ ✅ 2026-07-30 — #15, #16 e #17 mergeados. **Sobrou**: validar `/institucional/pdf` em prod, atualizar o briefing para v4 e distribuir o PDF. Ver [[site]] e [[materiais]]
 - [x] **Indexação Google** ([[seo-aeo]]): **encerrado em 2026-07-29** — 34/38 artigos (89%), contra 6/44 em abril. Restam 4 URLs em "Crawled/Discovered - currently not indexed", agora P1
 - [x] ~~**Publicar OAuth consent screen**~~ ✅ 2026-07-30 — app em produção, refresh voltou a funcionar, token reemitido. Ver [[google-apis-setup]]

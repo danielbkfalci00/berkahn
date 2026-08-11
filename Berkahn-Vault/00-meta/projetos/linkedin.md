@@ -1,11 +1,11 @@
 ---
 tipo: projeto
 criado: 2026-05-22
-atualizado: 2026-08-07
+atualizado: 2026-08-11
 tags:
   - project/linkedin
   - status/active
-ai_summary: Hub do LinkedIn. Status é livre e não comprova publicação; URL+data são o registro real. Texto/capa podem entrar na fila Codex, aprovação e publicação seguem manuais. Quatro pastas antigas permanecem legado congelado.
+ai_summary: Hub do LinkedIn. A pauta de casa LSF de 100 m² já tem texto, prompt, briefing e capa 1080×1350 validados; falta upload, aprovação e publicação manual com URL+data. As quatro pastas antigas seguem congeladas.
 status: active
 projeto: linkedin
 kpi_publicados: 3
@@ -51,8 +51,9 @@ Contagem verificada em 2026-07-29 contra `main` — o `kpi_publicados: 1` anteri
 
 ## Próximos 7 dias
 
-- [ ] Post LinkedIn da semana referenciando artigo recente (`/linkedin` — grava na pauta, não cria pasta no vault)
-- [ ] Gerar a imagem com o prompt em inglês da pauta e subir no bloco Capa Linkedin
+- [x] Texto, prompt e briefing da pauta de casa LSF de 100 m² gravados no card
+- [x] Imagem 4:5 gerada e validada em 1080×1350
+- [ ] Subir a imagem no bloco Capa LinkedIn após o deploy compatível, aprovar e publicar manualmente
 - [ ] Começar o backlog de distribuição: 22 posts derivam de artigos **já publicados** e não exigem escrever artigo nenhum
 
 ## Backlog planejado (2026-07-29)
@@ -82,7 +83,7 @@ Cada post recebe `artigo_slug` no frontmatter, fechando o rastreamento bidirecio
 
 - Workflow: [[workflow-conteudo]] — LinkedIn como sub-pipeline após blog
 - Prompts (LOCKED): [[linkedin-post]] · [[canva-briefing]]
-- Outputs em: `40-content/linkedin/YYYY-MM-DD-tema/{post.md, briefing-imagem.md, imagem-final.png}`
+- Outputs novos em: blocos da pauta no `/admin/conteudo`; `40-content/linkedin/` é legado congelado e não recebe novas pastas
 
 ## Bases relacionadas
 
