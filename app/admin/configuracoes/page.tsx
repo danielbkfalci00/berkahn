@@ -21,10 +21,6 @@ export default async function ConfiguracoesPage() {
       .order("ativo", { ascending: false })
       .order("ultimo_uso_em", { ascending: false }),
   ]);
-  const notificationsReady = Boolean(
-    process.env.GOOGLE_SHEETS_LEAD_ENDPOINT?.trim()
-    && process.env.GOOGLE_SHEETS_LEAD_SECRET?.trim()
-  );
   const pushConfigured = Boolean(
     process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY?.trim()
     && process.env.VAPID_PRIVATE_KEY?.trim()
@@ -64,9 +60,9 @@ export default async function ConfiguracoesPage() {
         <SectionHeading icon={Database} title="Infraestrutura" description="Estado das integrações usadas pelo CRM leve." />
         <div className="mt-5 divide-y divide-neutral-200 rounded-md border border-neutral-200">
           <IntegrationRow icon={Database} name="Supabase" detail="Leads, histórico e arquivos privados" ready />
-          <IntegrationRow icon={Bell} name="Notificação por email" detail="Adaptador mínimo, sem dados pessoais" ready={notificationsReady} />
+          <IntegrationRow icon={Bell} name="Alertas no dispositivo" detail="Web Push sem dados pessoais" ready={pushConfigured} />
         </div>
-        <p className="mt-3 text-xs leading-relaxed text-neutral-500">A planilha não é fonte de leads. Ela mantém apenas o ledger técnico da notificação.</p>
+        <p className="mt-3 text-xs leading-relaxed text-neutral-500">O CRM opera somente no Supabase. Integrações Google não participam da captura.</p>
       </Card>
     </div>
   );

@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
+import { getLeadAttribution, LEAD_ENDPOINT } from "@/lib/contact";
 import {
   Dialog,
   DialogContent,
@@ -40,6 +41,8 @@ export function ResourceDownload({
   const [selectedResource, setSelectedResource] = useState<(typeof resources.resources)[0] | null>(null);
   const [email, setEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const startedAt = useRef(Date.now());
 
   // Get icon for file type
   const getFileIcon = (type: string) => {
@@ -61,6 +64,8 @@ export function ResourceDownload({
   // Handle download
   const handleDownload = async (resource: (typeof resources.resources)[0]) => {
     if (resource.requiresEmail) {
+      startedAt.current = Date.now();
+      setSubmitError(null);
       setSelectedResource(resource);
       return;
     }
@@ -74,23 +79,49 @@ export function ResourceDownload({
   // Handle email submission
   const handleEmailSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!selectedResource) return;
     setIsSubmitting(true);
+    setSubmitError(null);
+    const downloadWindow = selectedResource.downloadUrl
+      ? window.open("about:blank", "_blank")
+      : null;
 
-    // Simulate API call (replace with actual lead capture logic)
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    try {
+      const attribution = getLeadAttribution();
+      const response = await fetch(LEAD_ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          kind: "resource",
+          email,
+          resourceTitle: selectedResource.title,
+          pagePath: window.location.pathname,
+          ctaLocation: "article-resource-download",
+          startedAt: startedAt.current,
+          website: "",
+          ...attribution,
+        }),
+      });
+      const result = (await response.json().catch(() => null)) as
+        | { success?: boolean; message?: string }
+        | null;
+      if (!response.ok || result?.success !== true) {
+        throw new Error(result?.message || "Não foi possível liberar o material.");
+      }
 
-    // Download file
-    if (selectedResource?.downloadUrl) {
-      window.open(selectedResource.downloadUrl, "_blank");
+      if (selectedResource.downloadUrl) {
+        if (downloadWindow) downloadWindow.location.href = selectedResource.downloadUrl;
+        else window.location.assign(selectedResource.downloadUrl);
+      }
+
+      setEmail("");
+      setSelectedResource(null);
+    } catch (error) {
+      downloadWindow?.close();
+      setSubmitError(error instanceof Error ? error.message : "Não foi possível liberar o material.");
+    } finally {
+      setIsSubmitting(false);
     }
-
-    // Reset state
-    setIsSubmitting(false);
-    setEmail("");
-    setSelectedResource(null);
-
-    // TODO: Send email to backend for lead capture
-    // await fetch('/api/leads', { method: 'POST', body: JSON.stringify({ email, resource: selectedResource.title }) });
   };
 
   return (
@@ -285,9 +316,15 @@ export function ResourceDownload({
                 disabled={isSubmitting}
               />
               <p className="text-xs text-black-50">
-                Seu e-mail será usado apenas para enviar o material solicitado.
+                Seu e-mail registra a solicitação e libera o material imediatamente.
               </p>
             </div>
+
+            {submitError && (
+              <p role="alert" className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">
+                {submitError}
+              </p>
+            )}
 
             <div className="flex gap-3">
               <Button
@@ -300,7 +337,7 @@ export function ResourceDownload({
                 Cancelar
               </Button>
               <Button type="submit" disabled={isSubmitting} className="flex-1">
-                {isSubmitting ? "Enviando..." : "Baixar Agora"}
+                {isSubmitting ? "Liberando..." : "Liberar download"}
               </Button>
             </div>
           </form>

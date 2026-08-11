@@ -54,7 +54,7 @@ export function CountUp({
     };
 
     requestAnimationFrame(animate);
-  }, [isInView, end, duration]);
+  }, [isInView, end, duration, decimals]);
 
   return (
     <Component ref={ref} className={className}>

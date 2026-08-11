@@ -19,6 +19,7 @@ const TOKENS_PATH = path.resolve('./secrets/oauth-tokens.json');
 
 const SCOPES = [
   'https://www.googleapis.com/auth/analytics.readonly',
+  'https://www.googleapis.com/auth/analytics.edit',
   'https://www.googleapis.com/auth/webmasters.readonly',
 ];
 
@@ -52,9 +53,10 @@ async function main() {
   console.log('Quando a tela "Berkahn Analytics CLI quer acessar..." aparecer:');
   console.log('  1. Clica em "Avançado" (canto inferior esquerdo)');
   console.log('  2. Clica em "Acessar berkahn-analytics CLI (não seguro)"');
-  console.log('  3. Marca os 2 scopes e clica "Continuar"\n');
+  console.log('  3. Autorize os acessos solicitados e clique em "Continuar"\n');
 
   const code = await new Promise((resolve, reject) => {
+    let authorizationTimeout;
     const server = http.createServer((req, res) => {
       try {
         const url = new URL(req.url, `http://localhost:${port}`);
@@ -67,6 +69,7 @@ async function main() {
         const codeParam = params.get('code');
 
         if (error) {
+          clearTimeout(authorizationTimeout);
           res.writeHead(400, { 'Content-Type': 'text/html; charset=utf-8' }).end(
             `<html><body style="font-family:sans-serif;text-align:center;padding:60px"><h1 style="color:#B83A3A">Erro</h1><p>${error}</p></body></html>`
           );
@@ -87,6 +90,7 @@ async function main() {
             <p style="color:#8A8A8A;font-size:13px;margin-top:32px">Berkahn Analytics</p>
           </body></html>`
         );
+        clearTimeout(authorizationTimeout);
         resolve(codeParam);
         setTimeout(() => server.close(), 500);
       } catch (e) {
@@ -95,8 +99,11 @@ async function main() {
     });
 
     server.listen(port);
-    server.on('error', reject);
-    setTimeout(() => {
+    server.on('error', (error) => {
+      clearTimeout(authorizationTimeout);
+      reject(error);
+    });
+    authorizationTimeout = setTimeout(() => {
       reject(new Error('Timeout: nenhuma autorização recebida em 5 minutos'));
       server.close();
     }, 5 * 60 * 1000);

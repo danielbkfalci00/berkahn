@@ -1,23 +1,27 @@
 ---
 tipo: context
 criado: 2025-12-16
-atualizado: 2026-08-10
+atualizado: 2026-08-11
 tags:
   - ai/context
   - project/site
   - domain/integrations
-ai_summary: Supabase é a única fonte operacional e custódia de PII de leads. Apps Script 1.4 recebe apenas lead_id, mantém ledger mínimo e envia email genérico com link ao admin; retry consulta Gmail Enviados para não duplicar email se o ledger falhar. Redeploy externo segue pendente.
-status: active
+ai_summary: Integração Google Sheets/Apps Script desativada em 11/08/2026. Supabase é a única fonte operacional de leads; alertas opcionais usam Web Push sem PII. O restante da nota é histórico e não deve ser usado como runbook.
+status: archived
 secrets_redacted: 2026-05-21
 escopo: berkahn
 ---
 
-# Notificação de leads via Apps Script
+# Google Sheets e Apps Script — legado desativado
+
+> [!warning] Não configurar nem redeployar
+> Decisão de 11/08/2026: captura, operação e aprendizado ficam no Supabase.
+> O código e as instruções abaixo são preservados somente para rastreabilidade.
 
 > [!info] Migração para vault
 > Migrado de `Docs/integracoes/INTEGRACAO_GOOGLE_SHEETS.md`. Sanitizado: Sheet ID e email removidos. Apps Script code mantido em `scripts/` (gitignored). Ver [[stack-nextjs-supabase]] para visão geral.
 
-**Status**: código 1.4 pronto; redeploy externo pendente
+**Status**: desativado; nenhum deploy pendente
 **Data**: 2025-12-16
 **Autor**: Claude Code + Bruno Falci
 
@@ -25,12 +29,12 @@ escopo: berkahn
 
 ## 📋 Visão Geral
 
-O navegador envia o formulário para POST /api/leads. A rota valida o payload, aplica honeypot e limite por fingerprint e grava primeiro na tabela leads do Supabase. O Apps Script é somente um adaptador retryável de notificação; nunca é fonte operacional.
+O navegador envia o formulário para POST /api/leads. A rota valida o payload, aplica honeypot e limite por fingerprint e grava na tabela `leads` do Supabase. Nenhum Apps Script é chamado.
 
 Fluxo atual:
 
 Site → POST /api/leads → Supabase (fonte única de leads e PII)
-                         → Apps Script 1.4 autenticado → ledger sem PII + email com link ao admin
+                         → Web Push opcional, sem PII
 
 ## 🔧 Configuração
 
@@ -173,11 +177,8 @@ O limitador do endpoint Next.js usa contagem seguida de insert, portanto não é
 
 ### Configuração externa
 
-- [ ] @bruno Configurar GOOGLE_SHEETS_LEAD_ENDPOINT e GOOGLE_SHEETS_LEAD_SECRET na Vercel #pendencia
-- [ ] @bruno Configurar LEAD_SYNC_SECRET nas Script Properties, autorizar GmailApp e publicar o Apps Script 1.4 #pendencia
-- [ ] @bruno Validar formulário real, ledger sem PII, email genérico e retry do admin em produção #pendencia
-- [ ] @bruno Após importar e reconciliar o histórico, remover PII da planilha e apagar o CSV temporário #pendencia
-- [ ] @bruno Apagar emails legados com PII anteriores a 24 meses e registrar a data do email legado mais recente para a última revisão #pendencia
+- [x] Apps Script removido do caminho operacional em 11/08/2026
+- [ ] Higiene opcional: apagar PII histórica da planilha e emails legados conforme a política de retenção
 ## 📝 Changelog
 
 ### v1.4.0 — 2026-08-10

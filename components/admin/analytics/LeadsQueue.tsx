@@ -24,7 +24,6 @@ import {
   markLeadViewed,
   prepareLeadUpload,
   registerLeadActivity,
-  resendLeadNotification,
   setLeadArchived,
   setLeadNextAction,
   updateLeadOperations,
@@ -523,12 +522,6 @@ export function LeadDetail({
           </section>
 
           <LeadArtifacts leadId={lead.id} artifacts={artifacts} onError={setError} onSuccess={(message) => { setSuccess(message); router.refresh(); }} />
-
-          <section className="rounded-lg border border-neutral-200 bg-white p-5">
-            <h2 className="font-medium text-neutral-900">Notificação</h2>
-            <p className="mt-2 text-sm text-neutral-600">{lead.sheet_sync_status === "sincronizado" ? "Email genérico enviado." : lead.sheet_sync_status === "falhou" ? `Falhou: ${lead.sheet_sync_error || "erro não informado"}` : "Pendente de envio."}</p>
-            {lead.sheet_sync_status !== "sincronizado" && <button disabled={isPending} onClick={() => run(() => resendLeadNotification(lead.id))} className="mt-3 inline-flex items-center gap-2 rounded-md border border-neutral-300 px-3 py-2 text-sm"><RefreshCw className="h-4 w-4" /> Reenviar notificação</button>}
-          </section>
 
           <CommercialLinks title="Orçamentos" records={budgets} empty="Nenhum orçamento vinculado." />
           <CommercialLinks title="Propostas" records={proposals} empty="Nenhuma proposta vinculada." />

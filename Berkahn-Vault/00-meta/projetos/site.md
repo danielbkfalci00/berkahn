@@ -5,7 +5,7 @@ atualizado: 2026-08-10
 tags:
   - project/site
   - status/active
-ai_summary: "Hub do Site — CRM Supabase ampliado na branch codex/supabase-leads-admin; migrations 024–029 aplicadas e suíte remota verde. Inbox/Kanban, responsáveis, último status, arquivos e PWA estão no PR #53; pendem credenciais do escopo Vercel, Apps Script 1.4, Edge de retenção e importação histórica."
+ai_summary: "Hub do Site — CRM Supabase ampliado no PR #53; migrations 024–029 aplicadas e checks verdes. GA4 está configurado e Apps Script foi retirado do caminho. Pendem merge/deploy, smoke autenticado e Edge de retenção; Web Push é opcional."
 status: active
 projeto: site
 kpi_paginas_indexadas: 34
@@ -45,7 +45,7 @@ code_paths:
 
 ## Status atual
 
-Site em produção (Next.js App Router + Supabase + Vercel + Tailwind + shadcn/ui). O CRM leve em `/admin/leads` está implementado na branch `codex/supabase-leads-admin`; arquitetura e runbook vivem em [[admin-setup]]. Google Sheets deixa de custodiar PII e permanece apenas como ledger/notificação em [[google-sheets]].
+Site em produção (Next.js App Router + Supabase + Vercel + Tailwind + shadcn/ui). O CRM leve em `/admin/leads` está implementado na branch `codex/supabase-leads-admin`; arquitetura e runbook vivem em [[admin-setup]]. Supabase é a única fonte operacional; Google Sheets e Apps Script são legado desativado em [[google-sheets]].
 
 **Diagnóstico integrado 2026-08-07**: o crawl agora cobre as 47 URLs do sitemap e superfícies públicas `noindex`; o artigo caiu de 371 para 218 kB de First Load JS (-41,2%), com home em 241 kB e `/atualidades` em 179 kB. SSG/ISR de 60 s e 404 foram preservados. Evidências, limites de laboratório e baseline de conversão vivem em [[2026-08-diagnostico-integrado-site]].
 
@@ -61,9 +61,9 @@ Site em produção (Next.js App Router + Supabase + Vercel + Tailwind + shadcn/u
 - [ ] **Contas Supabase por pessoa**: hoje todos entram com a mesma conta compartilhada, então `auth.uid()` não distingue ninguém e o autor dos comentários é nome digitado no localStorage. Projeto próprio — ver [[comentarios-inline-documentacoes]], seção "Identidade"
 - [x] **Banco do CRM aplicado**: migrations 024–029 em produção; funil, RPCs, vínculos, RLS canônica, responsáveis, prioridade, resumo operacional, arquivos, remoção atômica, outbox push, `pg_cron` e `pg_net` instalados. Matriz RLS, rollback atômico, cleanup de arquivos e payload push sem PII verdes
 - [ ] @bruno Conceder acesso Supabase para publicar `lead-retention`, configurar segredo no Vault/Edge e agendar o job mensal #pendencia
-- [ ] @bruno Conceder acesso à planilha histórica para importar/reconciliar, apagar o CSV temporário e remover PII do Google #pendencia
 - [ ] @bruno Dar acesso ao escopo Vercel `daniel-falcis-projects`; configurar chaves VAPID + `LEAD_PUSH_CRON_SECRET` em site/admin e agendar `schedule_lead_push_dispatch` #pendencia
-- [ ] @bruno Configurar segredo na Vercel e Script Properties, autorizar GmailApp, publicar Apps Script 1.4 e validar ledger/email/retry #pendencia
+- [x] **GA4 Admin concluído**: OAuth de edição validado; `article_slug` e `percent_scrolled` registrados em 10/08
+- [x] **Apps Script encerrado**: nenhuma captura ou notificação depende de Google Sheets; Web Push é o canal opcional do admin
 - [ ] **Core Web Vitals de campo**: otimizações estruturais entregues em [[2026-08-diagnostico-integrado-site]], sem inferir campo a partir de laboratório. Monitorar Speed Insights por 7 dias e avaliar p75 em 28 dias. Metas: LCP ≤ 2,5 s, INP ≤ 200 ms e CLS ≤ 0,1
 
 ## Próximos 7 dias
@@ -98,7 +98,7 @@ Site em produção (Next.js App Router + Supabase + Vercel + Tailwind + shadcn/u
 - [[design-principles]] — paleta preto/off-white, Manrope, ícones outline
 - [[home-redesign-direcao]] — direção "luxo de engenharia" da home: paleta mono estrita, Archivo/Space Mono, hero com scrub por canvas, pipeline de troca de take e banco de prompts steel-frame
 - [[seo-aeo-strategy]] — regras técnicas SEO (schema, meta, robots)
-- [[google-sheets]] — integração leads via Apps Script
+- [[google-sheets]] — histórico da integração desativada
 
 ## Workflow & prompts
 

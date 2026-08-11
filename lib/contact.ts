@@ -8,15 +8,7 @@ export const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURICo
   "Olá! Gostaria de saber mais sobre os serviços da Berkahn."
 )}`;
 
-export interface LeadInput {
-  name: string;
-  email?: string;
-  phone: string;
-  segment: "residencial" | "comercial";
-  message?: string;
-  projectType?: string;
-  company?: string;
-  role?: string;
+interface LeadAttributionFields {
   pagePath?: string;
   ctaLocation?: string;
   utmSource?: string;
@@ -30,6 +22,26 @@ export interface LeadInput {
   website?: string;
   startedAt?: number;
 }
+
+export interface ContactLeadInput extends LeadAttributionFields {
+  kind?: "contact";
+  name: string;
+  email?: string;
+  phone: string;
+  segment: "residencial" | "comercial";
+  message?: string;
+  projectType?: string;
+  company?: string;
+  role?: string;
+}
+
+export interface ResourceLeadInput extends LeadAttributionFields {
+  kind: "resource";
+  email: string;
+  resourceTitle: string;
+}
+
+export type LeadInput = ContactLeadInput | ResourceLeadInput;
 
 export function validateLeadInput(input: unknown):
   | { success: true; data: LeadInput }
@@ -45,6 +57,36 @@ export function validateLeadInput(input: unknown):
   const email = text("email", 254);
   const phone = text("phone", 40);
   const segment = text("segment", 32);
+  const kind = text("kind", 32);
+
+  const attribution = {
+    pagePath: text("pagePath", 500) || undefined,
+    ctaLocation: text("ctaLocation", 160) || undefined,
+    utmSource: text("utmSource", 160) || undefined,
+    utmMedium: text("utmMedium", 160) || undefined,
+    utmCampaign: text("utmCampaign", 160) || undefined,
+    utmContent: text("utmContent", 160) || undefined,
+    utmTerm: text("utmTerm", 160) || undefined,
+    landingPage: text("landingPage", 500) || undefined,
+    referrer: text("referrer", 500) || undefined,
+    attributionConsent: value.attributionConsent === true,
+    website: text("website", 300) || undefined,
+    startedAt: typeof value.startedAt === "number" ? value.startedAt : undefined,
+  };
+
+  if (kind === "resource") {
+    const resourceTitle = text("resourceTitle", 200);
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      return { success: false, message: "Email inválido." };
+    }
+    if (!resourceTitle) {
+      return { success: false, message: "Material não identificado." };
+    }
+    return {
+      success: true,
+      data: { kind: "resource", email, resourceTitle, ...attribution },
+    };
+  }
 
   if (!name) return { success: false, message: "Nome é obrigatório." };
   if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
@@ -68,18 +110,7 @@ export function validateLeadInput(input: unknown):
       projectType: text("projectType", 160) || undefined,
       company: text("company", 200) || undefined,
       role: text("role", 160) || undefined,
-      pagePath: text("pagePath", 500) || undefined,
-      ctaLocation: text("ctaLocation", 160) || undefined,
-      utmSource: text("utmSource", 160) || undefined,
-      utmMedium: text("utmMedium", 160) || undefined,
-      utmCampaign: text("utmCampaign", 160) || undefined,
-      utmContent: text("utmContent", 160) || undefined,
-      utmTerm: text("utmTerm", 160) || undefined,
-      landingPage: text("landingPage", 500) || undefined,
-      referrer: text("referrer", 500) || undefined,
-      attributionConsent: value.attributionConsent === true,
-      website: text("website", 300) || undefined,
-      startedAt: typeof value.startedAt === "number" ? value.startedAt : undefined,
+      ...attribution,
     },
   };
 }

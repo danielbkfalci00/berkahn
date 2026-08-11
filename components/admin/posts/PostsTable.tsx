@@ -27,7 +27,7 @@ import {
 } from "lucide-react";
 import type { Post, PostStatus } from "@/types/admin";
 import { cn } from "@/lib/utils";
-import { toggleFeatured } from "@/app/admin/posts/actions";
+import { deletePost, toggleFeatured } from "@/app/admin/posts/actions";
 
 interface PostsTableProps {
   posts: Post[];
@@ -57,6 +57,7 @@ export function PostsTable({ posts }: PostsTableProps) {
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<PostStatus | "all">("all");
   const [togglingFeatured, setTogglingFeatured] = useState<string | null>(null);
+  const [deletingPost, setDeletingPost] = useState<string | null>(null);
 
   const handleToggleFeatured = async (post: Post) => {
     setTogglingFeatured(post.id);
@@ -97,8 +98,20 @@ export function PostsTable({ posts }: PostsTableProps) {
 
   const handleDelete = async (id: string) => {
     if (!confirm("Tem certeza que deseja excluir este post?")) return;
-    // TODO: Implement delete with Supabase
-    console.log("Delete post:", id);
+    setDeletingPost(id);
+    try {
+      const result = await deletePost(id);
+      if (result.error) {
+        alert(`Erro ao excluir post: ${result.error}`);
+        return;
+      }
+      router.refresh();
+    } catch (error) {
+      console.error("Error deleting post:", error);
+      alert("Erro ao excluir post");
+    } finally {
+      setDeletingPost(null);
+    }
   };
 
   return (
@@ -220,8 +233,14 @@ export function PostsTable({ posts }: PostsTableProps) {
                       size="icon"
                       className="text-red-600 hover:text-red-700 hover:bg-red-50"
                       onClick={() => handleDelete(post.id)}
+                      disabled={deletingPost === post.id}
+                      aria-label={`Excluir ${post.title}`}
                     >
-                      <Trash2 className="h-4 w-4" />
+                      {deletingPost === post.id ? (
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                      ) : (
+                        <Trash2 className="h-4 w-4" />
+                      )}
                     </Button>
                   </div>
                 </TableCell>

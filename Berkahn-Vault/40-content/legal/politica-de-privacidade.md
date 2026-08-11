@@ -38,6 +38,8 @@ Coletamos dados pessoais que você nos fornece voluntariamente nas seguintes sit
 
 **Cadastro na newsletter** — ao se inscrever em nossa newsletter, coletamos seu nome e endereço de e-mail para envio periódico de conteúdos sobre construção, Light Steel Frame e novidades da Berkahn. Você pode cancelar o recebimento a qualquer momento através do link de descadastro presente em cada e-mail enviado.
 
+**Download de materiais** — quando um material solicita e-mail, registramos o endereço e o recurso escolhido para liberar o download e medir o interesse naquele conteúdo. Isso não inscreve o visitante automaticamente na newsletter.
+
 ### 1.2 Dados coletados automaticamente
 
 Quando você acessa nosso site, algumas informações são coletadas automaticamente por meio de cookies e tecnologias similares. Esses dados incluem endereço IP, tipo de navegador, sistema operacional, páginas visitadas, tempo de permanência, origem do acesso e interações com elementos do site. Essas informações não identificam você individualmente e são utilizadas para melhorar a experiência de navegação e compreender como nosso site é utilizado.
@@ -48,7 +50,7 @@ Quando você acessa nosso site, algumas informações são coletadas automaticam
 
 Os dados pessoais coletados são utilizados para as seguintes finalidades:
 
-Responder solicitações de orçamento e manter contato comercial com potenciais clientes. Enviar conteúdos informativos por e-mail aos assinantes da newsletter. Analisar o comportamento de navegação no site para melhorar a experiência do usuário, identificar problemas técnicos e aprimorar nossos conteúdos. Cumprir obrigações legais e regulatórias quando aplicável.
+Responder solicitações de orçamento e manter contato comercial com potenciais clientes. Liberar materiais solicitados e registrar o interesse no conteúdo escolhido. Enviar conteúdos informativos por e-mail aos assinantes da newsletter. Analisar o comportamento de navegação no site para melhorar a experiência do usuário, identificar problemas técnicos e aprimorar nossos conteúdos. Cumprir obrigações legais e regulatórias quando aplicável.
 
 Não utilizamos seus dados para finalidades diferentes das descritas acima sem o seu consentimento prévio.
 
@@ -76,7 +78,7 @@ Você pode gerenciar suas preferências de cookies a qualquer momento através d
 
 ## 4. Armazenamento e segurança dos dados
 
-Os dados pessoais de solicitações comerciais são armazenados no Supabase, que é a fonte operacional única desses registros. O Google Workspace recebe somente um identificador técnico do lead, horário e resultado da notificação, sem nome, e-mail, telefone, mensagem ou dados de atribuição. Adotamos medidas técnicas e organizacionais adequadas para proteger seus dados contra acesso não autorizado, perda, destruição ou qualquer forma de tratamento inadequado.
+Os dados pessoais de solicitações comerciais e downloads são armazenados no Supabase, que é a fonte operacional única desses registros. Google Sheets e Apps Script não participam da captura. Alertas operacionais opcionais usam Web Push sem dados pessoais. Adotamos medidas técnicas e organizacionais adequadas para proteger seus dados contra acesso não autorizado, perda, destruição ou qualquer forma de tratamento inadequado.
 
 Leads não convertidos e sem atualização por 24 meses são anonimizados, incluindo notas, dados pessoais em orçamentos ou propostas vinculados e arquivos relacionados. Registros convertidos ou documentos sujeitos a obrigação legal podem ser preservados pelo prazo aplicável, com exceção documentada. Dados de newsletter são mantidos enquanto durar sua inscrição. Dados de navegação coletados por cookies seguem as políticas de retenção de cada ferramenta utilizada.
 

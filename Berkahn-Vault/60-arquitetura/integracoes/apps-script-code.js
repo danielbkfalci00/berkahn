@@ -1,6 +1,9 @@
 /**
  * Berkahn - Notificação de Leads
  *
+ * DESATIVADO em 2026-08-11. Preservado somente como artefato histórico.
+ * Não publicar: captura e alertas operacionais agora usam Supabase/Web Push.
+ *
  * O Supabase é a fonte operacional e a única custódia de PII. Este Apps Script
  * recebe somente o UUID do lead, mantém um ledger mínimo e envia um aviso com
  * link para o admin autenticado.

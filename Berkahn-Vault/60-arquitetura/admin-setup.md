@@ -238,8 +238,7 @@ O módulo de propostas permitirá:
 ### Integrações operacionais
 
 - Supabase é fonte única de leads e PII.
-- Google Sheets é somente ledger técnico da notificação; não é backup nem CRM.
-- Apps Script envia email genérico e aponta ao admin autenticado — ver [[google-sheets]].
+- Google Sheets e Apps Script estão desativados; alertas opcionais usam Web Push sem PII — ver [[google-sheets]].
 - n8n não participa do fluxo de leads atual.
 
 ### Vercel Deploy Hook

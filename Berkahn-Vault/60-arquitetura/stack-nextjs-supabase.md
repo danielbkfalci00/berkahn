@@ -6,7 +6,7 @@ tags:
   - ai/context
   - project/site
   - domain/architecture
-ai_summary: Stack do site Berkahn. Supabase concentra CMS, Auth e CRM com RPCs/RLS, arquivos privados e outbox push; GA4 fica sem PII e Apps Script é apenas notificação genérica com ledger mínimo. PWA admin não cacheia telas; retenção usa Edge Function, Storage, pg_cron e pg_net.
+ai_summary: Stack do site Berkahn. Supabase concentra CMS, Auth e CRM com RPCs/RLS, arquivos privados e outbox push; GA4 fica sem PII. Apps Script/Sheets são legado desativado. PWA admin não cacheia telas; retenção usa Edge Function, Storage, pg_cron e pg_net.
 status: active
 escopo: berkahn
 ---
@@ -49,7 +49,7 @@ Painel Next.js separado para gerenciar posts, conteúdo, leads, dashboard e **or
 
 | Integração | Função | Doc |
 |------------|--------|-----|
-| Google Sheets via Apps Script | Ledger mínimo sem PII + email genérico; Supabase recebe o lead primeiro | [[google-sheets]] |
+| Google Sheets via Apps Script | Legado desativado; não participa da captura nem da notificação | [[google-sheets]] |
 | Edge Function + pg_cron/pg_net | Retenção e anonimização de leads inativos após 24 meses | [[admin-setup]] |
 | Web Push + outbox Supabase | Alertas genéricos de novo lead e próxima ação vencida | [[admin-setup]] |
 | Quadro admin | Hub operacional de pautas, Blog e LinkedIn | [[quadro-conteudo]] |

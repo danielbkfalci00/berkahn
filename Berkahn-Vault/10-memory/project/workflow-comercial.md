@@ -43,7 +43,7 @@ how_to_apply: "Lead chega → triar segmento (residencial/comercial) → puxar /
 ### 1. Lead capture
 - Formulário do site: grava primeiro no Supabase; `generate_lead` só dispara após confirmação.
 - WhatsApp, telefone, email e indicação: cadastrar manualmente apenas quando a conversa foi recebida.
-- Google Sheets não contém dados do contato; mantém somente o ledger do email genérico (ver [[google-sheets]]).
+- Google Sheets e Apps Script estão desativados; captura e operação acontecem somente no Supabase (ver [[google-sheets]]).
 - Abrir o detalhe marca o lead como visualizado; clique de WhatsApp continua intenção analítica, não lead confirmado.
 
 ### 2. Triagem

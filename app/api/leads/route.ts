@@ -78,53 +78,6 @@ function safeReferrer(value?: string): string | null {
   }
 }
 
-async function notifyLead(leadId: string) {
-  const endpoint = process.env.GOOGLE_SHEETS_LEAD_ENDPOINT?.trim();
-  const secret = process.env.GOOGLE_SHEETS_LEAD_SECRET?.trim();
-  if (!endpoint) return;
-  if (!secret) {
-    console.error("lead notification: GOOGLE_SHEETS_LEAD_SECRET não configurado");
-    return;
-  }
-
-  const supabase = createServiceClient();
-  try {
-    const response = await fetch(endpoint, {
-      method: "POST",
-      headers: { "Content-Type": "text/plain" },
-      body: JSON.stringify({ sync_secret: secret, lead_id: leadId }),
-      signal: AbortSignal.timeout(8_000),
-    });
-    const result = (await response.json().catch(() => null)) as
-      | { success?: boolean; message?: string }
-      | null;
-    if (!response.ok || result?.success !== true) {
-      throw new Error(result?.message || `HTTP ${response.status}`);
-    }
-    const { error: syncError } = await supabase
-      .from("leads")
-      .update({
-        sheet_sync_status: "sincronizado",
-        sheet_sync_tentativas: 1,
-        sheet_synced_at: new Date().toISOString(),
-        sheet_sync_error: null,
-      })
-      .eq("id", leadId);
-    if (syncError) console.error("lead notification state:", syncError.message);
-  } catch (error) {
-    const message = error instanceof Error ? error.message.slice(0, 500) : "Falha desconhecida";
-    const { error: syncError } = await supabase
-      .from("leads")
-      .update({
-        sheet_sync_status: "falhou",
-        sheet_sync_tentativas: 1,
-        sheet_sync_error: message,
-      })
-      .eq("id", leadId);
-    if (syncError) console.error("lead notification failure state:", syncError.message);
-  }
-}
-
 export async function POST(request: NextRequest) {
   let body: unknown;
   try {
@@ -191,15 +144,17 @@ export async function POST(request: NextRequest) {
   const { data: saved, error } = await supabase
     .from("leads")
     .insert({
-      nome: lead.name,
+      nome: lead.kind === "resource" ? "Download de material" : lead.name,
       email: lead.email?.trim().toLowerCase() ?? null,
-      telefone: lead.phone,
-      segmento: lead.segment,
-      mensagem: lead.message || "Contato pelo formulário",
-      canal: "form",
-      tipo_projeto: lead.projectType ?? null,
-      empresa: lead.company ?? null,
-      cargo: lead.role ?? null,
+      telefone: lead.kind === "resource" ? null : lead.phone,
+      segmento: lead.kind === "resource" ? "nao_definido" : lead.segment,
+      mensagem: lead.kind === "resource"
+        ? `Material solicitado: ${lead.resourceTitle}`
+        : lead.message || "Contato pelo formulário",
+      canal: lead.kind === "resource" ? "email" : "form",
+      tipo_projeto: lead.kind === "resource" ? null : lead.projectType ?? null,
+      empresa: lead.kind === "resource" ? null : lead.company ?? null,
+      cargo: lead.kind === "resource" ? null : lead.role ?? null,
       pagina_origem: attribution.pagePath,
       landing_page: attribution.landingPage,
       referrer: attribution.referrer,
@@ -222,12 +177,10 @@ export async function POST(request: NextRequest) {
   }
 
   after(async () => {
-    const [, pushResult] = await Promise.allSettled([
-      notifyLead(saved.id),
-      dispatchLeadPushNotifications(),
-    ]);
-    if (pushResult.status === "rejected") {
-      console.error("lead push:", pushResult.reason instanceof Error ? pushResult.reason.message : "unknown error");
+    try {
+      await dispatchLeadPushNotifications();
+    } catch (pushError) {
+      console.error("lead push:", pushError instanceof Error ? pushError.message : "unknown error");
     }
   });
   return NextResponse.json({ success: true, leadId: saved.id });

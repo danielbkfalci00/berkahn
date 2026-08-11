@@ -1,12 +1,12 @@
 ---
 tipo: meta
 criado: 2026-05-21
-atualizado: 2026-08-10
+atualizado: 2026-08-11
 tags:
   - project/site
   - project/blog
   - status/active
-ai_summary: "Sprint 03–10/08: CRM Supabase ampliado e migrations 024–029 aplicadas; RLS, atomicidade, arquivos e outbox sem PII verdes. Deploy do PR #53, VAPID, Edge Function, importação histórica e Apps Script 1.4 aguardam acessos externos."
+ai_summary: "Sprint 10–14/08: GA4 configurado, Apps Script retirado do caminho e CRM Supabase no PR #53 com checks verdes. Prioridades: merge/deploy, smoke autenticado, primeira pauta E2E e retenção; Web Push permanece opcional."
 status: active
 projetos_em_curso:
   - blog
@@ -17,11 +17,11 @@ projetos_em_curso:
   - materiais
   - pesquisas
   - orcamento-automacao
-semana_inicio: 2026-08-03
-semana_fim: 2026-08-07
+semana_inicio: 2026-08-10
+semana_fim: 2026-08-14
 ---
 
-# Sprint Ativa — semana de 2026-08-03
+# Sprint Ativa — semana de 2026-08-10
 
 > [!info] Infraestrutura editorial antes da próxima pauta
 > A prioridade desta semana é tornar [[quadro-conteudo]] a fonte única do
@@ -41,7 +41,7 @@ vault. Só então exercitar a próxima pauta ponta a ponta em sessão autenticad
 |---------|--------|--------------------|--------------|
 | [[blog]] | active | Fluxo editorial completo ainda não exercitado | Rodar pesquisa → draft → aprovação na próxima pauta |
 | [[linkedin]] | active | Publicação externa manual | Registrar URL/data reais no próximo post |
-| [[site]] | active | Sessão Vercel não acessa o escopo da Berkahn; Supabase Functions e planilha também bloqueados | Liberar acessos, configurar VAPID/Apps Script, importar histórico e deployar PR #53 |
+| [[site]] | active | PR #53 ainda está draft; migrations 024–029 já estão em produção | Remover legado Google, smoke autenticado e deployar PR #53 |
 | [[seo-aeo]] | active | 3 URLs fora do índice (ação manual no GSC) | Pedir indexação das 3 |
 | [[apresentacoes]] | active | Roteiros não versionados (parcial) | Validar 16 slides em live env |
 | [[materiais]] | active | **Institucional PDF v4** aguarda briefing atualizado + distribuição | Atualizar briefing v3→v4; distribuir; preencher `usado_em` |
@@ -63,9 +63,9 @@ vault. Só então exercitar a próxima pauta ponta a ponta em sessão autenticad
   aprendizado e build
 - [x] Worker local ativo a cada 15 minutos, com heartbeat verificado e limite de
   um job por execução; aprovação e publicação continuam humanas
-- [ ] Integrações externas: registrar dimensões GA4 e redeployar Apps Script
+- [x] **GA4 fechado em 10/08**: OAuth com `analytics.edit`; dimensões `article_slug` e `percent_scrolled` registradas na propriedade 516973519
 - [x] Migrations 024–029 do CRM aplicadas; RLS canônica, atomicidade, retenção/remoção de anexos e outbox push sem PII verificadas em transação revertida
-- [ ] @bruno Liberar os acessos externos listados em [[site]] para fechar Edge Function, importação, Apps Script e deploy #pendencia
+- [ ] Fechar PR #53: Supabase puro, smoke autenticado e deploy; VAPID não bloqueia o CRM
 - [ ] Exercitar pesquisa → draft → produção → aprovação → publicação na próxima
   pauta real
 
@@ -96,7 +96,7 @@ vault. Só então exercitar a próxima pauta ponta a ponta em sessão autenticad
 - [x] **Higiene da service key histórica verificada**: varredura em 405 arquivos
   de `scripts/` encontrou zero JWT Supabase e zero chave `sb_secret_` hardcoded
 - [x] **4 erros de frontmatter em `40-content/curadoria/`** (vault health): corrigidos em 2026-07-02 (PR #11) — `status`/`tipo` inválidos normalizados. `vault-validate.mjs` → 0 issues. Chip `task_abaacde6` fechado.
-- [x] **Supabase consolidado como custódia de PII**: banco do CRM em produção e admin implementado; Apps Script 1.4 recebe somente `lead_id` e retry consulta Gmail Enviados
+- [x] **Supabase consolidado como custódia de PII**: banco do CRM em produção e admin implementado; planilha e Apps Script foram retirados do caminho operacional em 11/08
 - [x] ~~**9 posts sem meta_title/meta_description**~~ ✅ 2026-07-30 — eram os 9 artigos com menos de 55 palavras. 5 em 301, 4 em noindex. Ver [[2026-07-thin-content-mapa]]
 - [x] ~~**4 posts sem answer_summary**~~ ✅ 2026-07-30 — preenchidos, 98 a 102 palavras cada
 

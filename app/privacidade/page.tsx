@@ -104,6 +104,15 @@ export default function PrivacidadePage() {
                     pode cancelar o recebimento a qualquer momento através do
                     link de descadastro presente em cada e-mail enviado.
                   </p>
+                  <p>
+                    <strong className="font-semibold">
+                      Download de materiais
+                    </strong>{" "}
+                    â€” quando um material solicita e-mail, registramos o endereço
+                    e o recurso escolhido para liberar o download e medir o
+                    interesse naquele conteúdo. O envio não inscreve você
+                    automaticamente na newsletter.
+                  </p>
                 </>
               ),
             },
@@ -138,6 +147,7 @@ export default function PrivacidadePage() {
                 items={[
                   "Responder solicitações de orçamento e manter contato comercial com potenciais clientes.",
                   "Enviar conteúdos informativos por e-mail aos assinantes da newsletter.",
+                  "Liberar materiais solicitados e registrar o interesse no conteúdo escolhido.",
                   "Analisar o comportamento de navegação no site para melhorar a experiência do usuário, identificar problemas técnicos e aprimorar nossos conteúdos.",
                   "Cumprir obrigações legais e regulatórias quando aplicável.",
                 ]}
@@ -252,11 +262,11 @@ export default function PrivacidadePage() {
             <>
               <p>
                 Os dados pessoais de solicitações comerciais são armazenados no
-                Supabase, que é a fonte operacional única desses registros. O
-                Google Workspace recebe somente um identificador técnico do
-                lead, horário e resultado da notificação, sem nome, e-mail,
-                telefone, mensagem ou dados de atribuição. Adotamos medidas
-                técnicas e organizacionais adequadas para proteger seus dados.
+                Supabase, que é a fonte operacional única desses registros.
+                Google Sheets e Apps Script não participam da captura. Alertas
+                operacionais opcionais usam Web Push sem nome, e-mail, telefone,
+                mensagem ou outros dados pessoais. Adotamos medidas técnicas e
+                organizacionais adequadas para proteger seus dados.
               </p>
               <p>
                 Leads não convertidos e sem atualização por 24 meses são

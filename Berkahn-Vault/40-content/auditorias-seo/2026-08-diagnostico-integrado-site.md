@@ -1,14 +1,14 @@
 ---
 tipo: auditoria
 criado: 2026-08-07
-atualizado: 2026-08-10
+atualizado: 2026-08-11
 tags:
   - project/site
   - project/blog
   - domain/seo
   - status/active
   - source/manual
-ai_summary: "Diagnóstico integrado: crawl 47/47 verde, SSG/ISR preservado e JS do artigo -41,2%. Extensão 2026-08-10 aplica CRM Supabase 024–029 com RLS/atomicidade/arquivos/outbox verdes; PR #53 aguarda deploy, VAPID, Edge de retenção, Apps Script 1.4 e importação."
+ai_summary: "Diagnóstico integrado: crawl 47/47 verde, SSG/ISR preservado e JS do artigo -41,2%. CRM Supabase 024–029 está aplicado; PR #53 aguarda merge/deploy e Edge de retenção. GA4 foi fechado e Apps Script/planilha foram desativados em 11/08."
 status: active
 projeto: seo-aeo
 kpi_crawl_urls_ok: 47
@@ -129,7 +129,7 @@ Eventos padronizados e preservados:
 
 As propriedades comuns são page_path, cta_location, channel e segment quando aplicável. O WhatsApp direto de /contato e demais CTAs Berkahn agora entram nessa cobertura. Nenhuma PII é enviada ao GA4.
 
-Supabase é a única custódia operacional de leads e PII. O Apps Script 1.4 recebe somente `lead_id` e segredo, grava ledger mínimo e envia email genérico com link ao admin; retries consultam Gmail Enviados antes de reenviar. A rota responde após o insert no Supabase e executa a notificação em pós-resposta; falha fica retryável.
+Supabase é a única custódia operacional de leads e PII. Google Sheets e Apps Script foram retirados do caminho em 11/08; a rota responde após o insert e tenta apenas Web Push opcional, sem PII.
 
 ### Extensão do diagnóstico — CRM Supabase (2026-08-10)
 
@@ -137,7 +137,7 @@ As migrations 024–029 foram aplicadas em produção. O banco possui funil comp
 
 `/admin/leads` foi separado de Analytics com Inbox paginada, Kanban, filtros, KPIs de 28 dias, detalhe, timeline, último status, responsável, prioridade, retry e cadastro manual com alerta de duplicidade. Uploads até 6 MB usam Storage privado e arquivos grandes/pastas usam vínculo do Drive. A PWA não cacheia telas e o push mostra somente mensagens operacionais genéricas. Orçamento reutiliza o wizard atual com `lead_id`; propostas recebem apenas a FK preparatória. O build de produção preserva SSG/ISR público.
 
-A conta Supabase CLI disponível devolve 403 ao publicar Edge Functions, as credenciais Google não acessam a planilha histórica e a sessão Vercel pertence ao escopo `brunofalci00s-projects`, não ao `daniel-falcis-projects` da Berkahn. Portanto, retenção e push não foram agendados, chaves VAPID não foram gravadas, o Apps Script 1.4 não foi publicado e a importação/sanitização não foi simulada como concluída. A UI trata push como configuração pendente, sem oferecer um botão quebrado. Fontes canônicas e pendências: [[admin-setup]], [[google-sheets]] e [[site]].
+A conta Supabase CLI disponível devolveu 403 ao publicar Edge Functions e a sessão Vercel não expôs as variáveis do escopo Berkahn. Portanto, retenção e push não foram agendados e chaves VAPID não foram gravadas. Apps Script e importação da planilha deixaram de fazer parte do rollout. A UI trata push como opcional, sem oferecer um botão quebrado. Fontes canônicas: [[admin-setup]], [[google-sheets]] e [[site]].
 
 ## SEO e AEO
 
@@ -174,7 +174,7 @@ Concluídos:
 
 Pendências externas:
 - [ ] @bruno Definir generate_lead e whatsapp_click como Key Events no GA4 e validar em DebugView/Realtime após consentimento #pendencia
-- [ ] @bruno Criar o mesmo segredo em GOOGLE_SHEETS_LEAD_SECRET na Vercel e LEAD_SYNC_SECRET nas Script Properties, autorizar GmailApp e publicar o Apps Script 1.4 #pendencia
+- [x] Remover Apps Script/Sheets do caminho operacional
 - [ ] @bruno Dar acesso ao escopo Vercel `daniel-falcis-projects`; configurar VAPID e o segredo do dispatcher nos projetos site/admin #pendencia
 - [ ] @bruno Liberar acesso à planilha para importação/reconciliação e remoção final de PII #pendencia
 - [ ] @bruno Liberar acesso Supabase Functions para publicar/agendar a retenção mensal #pendencia
@@ -184,7 +184,7 @@ Pendências externas:
 
 ## Próximo corte de priorização
 
-1. Fechar o rollout externo de mensuração e Apps Script.
+1. Fechar merge/deploy do CRM e o rollout opcional de Web Push.
 2. Observar Speed Insights por sete dias; separar LCP por rota e elemento.
 3. Atacar LCP mobile de segmento, home e listagem com evidência de waterfall, sem reduzir a qualidade dos masters.
 4. Após 28 dias ou volume suficiente, avaliar taxa de contatos recebidos e qualificados.

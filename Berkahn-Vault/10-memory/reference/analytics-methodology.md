@@ -253,7 +253,7 @@ Relatórios anteriores a agosto/2026 não têm esta seção preenchida — ausê
 ## Ciclo de aprendizado de conteúdo — série inicia em 2026-08-07
 
 `leads` é a fonte primária. Atribuição de página, slug, CTA, UTMs, `post_id` e
-`pauta_id` é resolvida no servidor; Google Sheets é somente ledger técnico e adaptador de notificação. Analytics
+`pauta_id` é resolvida no servidor; Google Sheets e Apps Script estão desativados. Analytics
 não recebe nome, email, telefone nem fingerprint.
 
 A métrica norte é:
