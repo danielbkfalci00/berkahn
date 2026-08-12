@@ -265,6 +265,115 @@ const op = await import(pathToFileURL(join(dir, "op.js")).href);
   ok("21 nao e truncamento", op.construirMapaOportunidade(vinteUm).provavelmenteTruncado === false);
 }
 
+// --- construirFunilLeads -------------------------------------------------
+console.log("construirFunilLeads");
+
+const fonteFunil = readFileSync("lib/analytics/leads-funnel.ts", "utf8")
+  .replace(/:\s*LeadParaFunil\[\]\s*\|\s*undefined/g, ": any[]")
+  .replace(/:\s*LeadParaFunil\[\]/g, ": any[]")
+  .replace(/\(l:\s*LeadParaFunil\)/g, "(l: any)")
+  .replace(/leads:\s*LeadParaFunil\[\]/g, "leads: any[]");
+writeFileSync(join(dir, "funil.ts"), fonteFunil);
+execFileSync(
+  process.execPath,
+  [
+    fileURLToPath(import.meta.resolve("typescript/lib/tsc.js")),
+    join(dir, "funil.ts"),
+    "--module", "esnext", "--target", "es2022",
+    "--moduleResolution", "bundler", "--outDir", dir,
+  ],
+  { stdio: "pipe" }
+);
+const fn = await import(pathToFileURL(join(dir, "funil.js")).href);
+
+const lead = (status, extra = {}) => ({
+  status, canal: null, segmento: null, cta_location: null, pagina_origem: null,
+  post_id: null, utm: null, criado_em: null, qualificado_em: null, convertido_em: null,
+  ...extra,
+});
+
+{
+  const vazio = fn.construirFunilLeads(undefined);
+  ok("undefined nao quebra", vazio.total === 0 && vazio.degraus.length === 5);
+  ok("sem lead => conversao 0, nao NaN", vazio.taxaConversao === 0);
+  ok("sem lead => sem maior perda", vazio.maiorPerda === null);
+  ok("degraus zerados nao viram NaN", vazio.degraus.every((d) => Number.isFinite(d.fracaoDoTopo) && Number.isFinite(d.perda)));
+}
+
+{
+  // Funil cumulativo: quem converteu passou por qualificado. O status guarda so
+  // o ponto atual, entao cada degrau conta quem esta nele OU adiante.
+  const r = fn.construirFunilLeads([
+    lead("novo"), lead("novo"),
+    lead("em_contato"),
+    lead("qualificado"),
+    lead("convertido"),
+    lead("desqualificado"),
+  ]);
+  const alc = Object.fromEntries(r.degraus.map((d) => [d.etapa, d.alcancaram]));
+  ok("topo conta todos no funil", alc.novo === 5, `veio ${alc.novo}`);
+  ok("degrau e cumulativo", alc.qualificado === 2, `veio ${alc.qualificado}`);
+  ok("convertido conta so o fim", alc.convertido === 1, `veio ${alc.convertido}`);
+  ok("desqualificado fora do funil", r.desqualificados === 1 && alc.novo === 5);
+  ok("total inclui desqualificado", r.total === 6);
+  ok("taxa de conversao sobre o topo", perto(r.taxaConversao, 1 / 5));
+  ok("fracao do topo do primeiro degrau e 1", r.degraus[0].fracaoDoTopo === 1);
+}
+
+{
+  // desqualificado empilhado no funil faria a base parecer maior. Nao pode.
+  const so = fn.construirFunilLeads([lead("desqualificado"), lead("desqualificado")]);
+  ok("so desqualificados => funil vazio", so.degraus[0].alcancaram === 0);
+  ok("so desqualificados => conversao 0", so.taxaConversao === 0);
+  ok("mas contam no total", so.total === 2 && so.desqualificados === 2);
+}
+
+{
+  // Status fora do CHECK nao pode entrar em degrau nenhum.
+  const r = fn.construirFunilLeads([lead("novo"), lead("status_inventado")]);
+  ok("status desconhecido ignorado", r.degraus[0].alcancaram === 1, `veio ${r.degraus[0].alcancaram}`);
+}
+
+{
+  const r = fn.construirFunilLeads([
+    lead("novo", { cta_location: "artigo_fim", pagina_origem: "/atualidades/custo" }),
+    lead("convertido", { cta_location: "artigo_fim", pagina_origem: "/atualidades/custo" }),
+    lead("novo", { cta_location: "header", utm: { utm_source: "linkedin" } }),
+    lead("novo", { cta_location: null }),
+  ]);
+  ok("agrupa por cta_location", r.porCtaLocation[0].rotulo === "artigo_fim" && r.porCtaLocation[0].total === 2);
+  ok("conta convertidos por origem", r.porCtaLocation[0].convertidos === 1);
+  ok("cta_location nulo nao vira grupo", !r.porCtaLocation.some((f) => f.rotulo === "(nulo)"));
+  ok("agrupa por pagina", r.porPagina[0].total === 2);
+  ok("conta quem tem UTM", r.comUtm === 1, `veio ${r.comUtm}`);
+  ok("utm vazio nao conta", fn.construirFunilLeads([lead("novo", { utm: {} })]).comUtm === 0);
+}
+
+{
+  // Funil com gente em todas as etapas: 14 -> 13 -> 6 -> 4 -> 2.
+  // A maior perda esta em Qualificados (7 de 13 = 53,8%).
+  const leads = [
+    ...Array.from({ length: 1 }, () => lead("novo")),
+    ...Array.from({ length: 7 }, () => lead("em_contato")),
+    ...Array.from({ length: 2 }, () => lead("qualificado")),
+    ...Array.from({ length: 2 }, () => lead("proposta_enviada")),
+    ...Array.from({ length: 2 }, () => lead("convertido")),
+  ];
+  const r = fn.construirFunilLeads(leads);
+  ok("acha a maior perda", r.maiorPerda?.para === "Qualificados", `veio ${r.maiorPerda?.para}`);
+  ok("quantifica a perda", perto(r.maiorPerda.pct, (13 - 6) / 13), `veio ${r.maiorPerda.pct.toFixed(3)}`);
+  ok("conversao ponta a ponta", perto(r.taxaConversao, 2 / 14));
+}
+
+{
+  // Queda terminal de 100% e sinal legitimo, nao bug: e o estado real do funil
+  // hoje, em que ninguem passa de qualificado. A maior perda tem que apontar
+  // para o degrau onde o funil morre, mesmo que seja o ultimo com gente.
+  const r = fn.construirFunilLeads([lead("novo"), lead("qualificado")]);
+  ok("queda terminal aparece como 100%", r.maiorPerda?.pct === 1, `veio ${r.maiorPerda?.pct}`);
+  ok("aponta o degrau onde morre", r.maiorPerda?.para === "Proposta enviada", `veio ${r.maiorPerda?.para}`);
+}
+
 rmSync(dir, { recursive: true, force: true });
 
 if (falhas === 0) {
