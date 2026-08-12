@@ -206,35 +206,18 @@ export default function PrivacidadePage() {
                     agregadas sobre as buscas que levam ao nosso site.
                   </p>
                   <p>
-                    <strong className="font-semibold">PostHog</strong> —
-                    plataforma de análise de produto que utilizamos para
-                    compreender como os visitantes interagem com o site. O
-                    PostHog pode registrar cliques, rolagem de página e navegação
-                    entre páginas. Para mais informações, consulte a{" "}
+                    <strong className="font-semibold">Vercel Speed Insights</strong>{" "}
+                    — coleta métricas de desempenho de carregamento das páginas
+                    (tempo de renderização, estabilidade visual). Não identifica
+                    visitantes nem registra conteúdo navegado. Para mais
+                    informações, consulte a{" "}
                     <a
-                      href="https://posthog.com/privacy"
+                      href="https://vercel.com/legal/privacy-policy"
                       target="_blank"
                       rel="noopener noreferrer"
                       className={LINK_CLASSES}
                     >
-                      Política de Privacidade do PostHog
-                    </a>
-                    .
-                  </p>
-                  <p>
-                    <strong className="font-semibold">Hotjar</strong> —
-                    ferramenta de análise de experiência do usuário que registra
-                    mapas de calor, gravações de sessão e pesquisas de feedback.
-                    O Hotjar anonimiza dados sensíveis automaticamente e não
-                    coleta informações de identificação pessoal sem
-                    consentimento. Para mais informações, consulte a{" "}
-                    <a
-                      href="https://www.hotjar.com/privacy/"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={LINK_CLASSES}
-                    >
-                      Política de Privacidade do Hotjar
+                      Política de Privacidade da Vercel
                     </a>
                     .
                   </p>

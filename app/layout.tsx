@@ -4,6 +4,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { ClientLayout } from "@/components/layout/ClientLayout";
 import { ConditionalFooter } from "@/components/layout/ConditionalFooter";
 import { CookieConsentProvider } from "@/components/providers/CookieConsentProvider";
+import { scriptBootstrapGa } from "@/lib/consent";
 import { CookieBanner } from "@/components/layout/CookieBanner";
 import { WhatsAppButton } from "@/components/layout/WhatsAppButton";
 import "./globals.css";
@@ -87,6 +88,19 @@ export default function RootLayout({
   return (
     <html lang="pt-BR" className={manrope.variable}>
       <head>
+        {/*
+          Restaura o consentimento de visitas anteriores e sobe o GA antes da
+          hidratação. Sem isso, visitante recorrente que já consentiu só era
+          medido depois do useEffect + afterInteractive, e quem saía antes disso
+          não era contado. Não roda em primeira visita: sem consentimento
+          gravado, o script retorna sem tocar em nada. Ver lib/consent.ts.
+
+          `dangerouslySetInnerHTML` sem sanitização é seguro aqui e só aqui: a
+          string é montada em tempo de build a partir de constantes do módulo,
+          todas passadas por JSON.stringify. Nenhum valor de request, de URL ou
+          de usuário entra nela.
+        */}
+        <script dangerouslySetInnerHTML={{ __html: scriptBootstrapGa() }} />
         <link rel="preconnect" href="https://sfqaknxomxwmviarpwfy.supabase.co" />
         <link rel="dns-prefetch" href="https://images.unsplash.com" />
         <link rel="alternate" type="application/rss+xml" title="Blog Berkahn - Atualidades" href="/feed.xml" />

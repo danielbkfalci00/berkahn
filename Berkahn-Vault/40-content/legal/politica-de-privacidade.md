@@ -66,9 +66,7 @@ Nosso site utiliza cookies e tecnologias similares para coletar dados de navega�
 
 **Google Search Console** — ferramenta utilizada para monitorar o desempenho do site nos resultados de busca do Google. Não coleta dados pessoais dos visitantes diretamente, mas nos fornece informações agregadas sobre as buscas que levam ao nosso site.
 
-**PostHog** — plataforma de análise de produto que utilizamos para compreender como os visitantes interagem com o site. O PostHog pode registrar cliques, rolagem de página e navegação entre páginas. Para mais informações, consulte a [Política de Privacidade do PostHog](https://posthog.com/privacy).
-
-**Hotjar** — ferramenta de análise de experiência do usuário que registra mapas de calor, gravações de sessão e pesquisas de feedback. O Hotjar anonimiza dados sensíveis automaticamente e não coleta informações de identificação pessoal sem consentimento. Para mais informações, consulte a [Política de Privacidade do Hotjar](https://www.hotjar.com/privacy/).
+**Vercel Speed Insights** — coleta métricas de desempenho de carregamento das páginas (tempo de renderização, estabilidade visual). Não identifica visitantes nem registra conteúdo navegado. Para mais informações, consulte a [Política de Privacidade da Vercel](https://vercel.com/legal/privacy-policy).
 
 ### 3.2 Gerenciamento de cookies
 

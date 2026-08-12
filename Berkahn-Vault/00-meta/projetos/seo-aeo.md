@@ -12,7 +12,7 @@ projeto: seo-aeo
 kpi_posts_sem_answer_summary: 0
 kpi_score: 52
 kpi_paginas_indexadas: 34
-kpi_paginas_total: 33
+kpi_paginas_total: 38
 kpi_pct_indexacao: 89
 kpi_posts_sem_meta_title: 0
 kpi_posts_sem_meta_description: 0

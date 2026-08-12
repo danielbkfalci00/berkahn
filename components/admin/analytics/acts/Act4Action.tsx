@@ -5,17 +5,20 @@ import { TaskBoard } from "../TaskBoard";
 import { IndexationStatus } from "../IndexationStatus";
 import { FallingQueriesPanel } from "../FallingQueriesPanel";
 import { ConversionEvents } from "../ConversionEvents";
+import { FunilLeads } from "../FunilLeads";
 import { narrativeAct4Action } from "@/lib/analytics/narrative";
 import { countByStatus, findBestPost } from "@/lib/analytics/post-performance";
+import type { FunilLeads as Funil } from "@/lib/analytics/leads-funnel";
 import type { AnalyticsTask, PostPerformance, SnapshotContext } from "@/types/analytics";
 
 interface Act4ActionProps {
   context: SnapshotContext;
   posts?: PostPerformance[];
   tasks?: AnalyticsTask[];
+  funilLeads: Funil;
 }
 
-export function Act4Action({ context, posts = [], tasks = [] }: Act4ActionProps) {
+export function Act4Action({ context, posts = [], tasks = [], funilLeads }: Act4ActionProps) {
   const counts = countByStatus(posts);
   const best = findBestPost(posts);
 
@@ -50,6 +53,7 @@ export function Act4Action({ context, posts = [], tasks = [] }: Act4ActionProps)
         events={context.ga4.events ?? []}
         monthSlug={context.monthSlug}
       />
+      <FunilLeads funil={funilLeads} monthSlug={context.monthSlug} />
     </section>
   );
 }

@@ -49,6 +49,7 @@ Conhecimento que orienta o trabalho:
 - [[steel-frame-domain]] — Técnica LSF
 - [[design-principles]] — Design system
 - [[article-pipeline]] — Pipeline técnico blog
+- [[analytics-calor]] — Por que o dashboard via 20 de 1.126 queries, e a regra do teto
 - [[quadro-conteudo]] — Fonte operacional, edição inline/tags, fila Codex, leads e aprendizado
 - [[seo-aeo-strategy]] — Estratégia SEO + AEO
 - [[presentation-system]] — Sistema apresentação
@@ -87,6 +88,7 @@ Query do acervo: [[artigos.base]] | [[calendario.base]] · Operação: [[quadro-
 - [[admin-setup]] — Painel admin
 - [[comentarios-inline-documentacoes]] — Comentários inline nas documentações
 - [[quadro-conteudo]] — Quadro Kanban de pautas em `/admin/conteudo`, e por que os comandos gravam no banco
+- [[analytics-calor]] — Coleta truncada em 20 de 1.126 queries, e as três matrizes de calor que isso destravou
 - [[google-sheets]] — Legado desativado; Supabase é a fonte operacional
 - [[blog-infra-vs-wordpress]] — Comparativo
 

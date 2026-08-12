@@ -11,6 +11,9 @@ import { ComparisonView } from "@/components/admin/analytics/ComparisonView";
 import { computeMonthlyGoals, computeGoalProgress, formatGoalLabel, formulaLabel, goalStatusColor } from "@/lib/analytics/goals";
 import { detectRedFlags } from "@/lib/analytics/red-flags";
 import type { TimelineEvent } from "@/lib/analytics/timeline-events";
+import type { MapaLeitura, MatrizArtigoMes } from "@/lib/analytics/heatmaps";
+import type { MapaOportunidade } from "@/lib/analytics/query-opportunity";
+import type { FunilLeads } from "@/lib/analytics/leads-funnel";
 import type {
   AnalyticsSnapshot,
   AnalyticsTask,
@@ -30,6 +33,10 @@ interface AnalyticsContentProps {
   currentMonth: string;
   timelineEvents: TimelineEvent[];
   tasks: AnalyticsTask[];
+  matrizAcervo: MatrizArtigoMes;
+  mapaLeitura: MapaLeitura;
+  oportunidade: MapaOportunidade;
+  funilLeads: FunilLeads;
 }
 
 function deltaDirection(deltaPct?: number): "up" | "down" | "flat" {
@@ -150,6 +157,10 @@ export function AnalyticsContent({
   currentMonth,
   timelineEvents,
   tasks,
+  matrizAcervo,
+  mapaLeitura,
+  oportunidade,
+  funilLeads,
 }: AnalyticsContentProps) {
   const searchParams = useSearchParams();
   const comparisonMode = searchParams.get("compare") === "1";
@@ -197,10 +208,11 @@ export function AnalyticsContent({
             kpis={kpis}
             trendPoints={trendPoints}
             timelineEvents={timelineEvents}
+            matrizAcervo={matrizAcervo}
           />
-          <Act2Origin context={ctx} topQueries={topQueries} />
-          <Act3Posts context={ctx} posts={postPerformance} />
-          <Act4Action context={ctx} posts={postPerformance} tasks={tasks} />
+          <Act2Origin context={ctx} topQueries={topQueries} oportunidade={oportunidade} />
+          <Act3Posts context={ctx} posts={postPerformance} mapaLeitura={mapaLeitura} />
+          <Act4Action context={ctx} posts={postPerformance} tasks={tasks} funilLeads={funilLeads} />
         </>
       )}
       <footer className="text-xs text-neutral-400 pt-8 border-t border-neutral-100 print:pt-3">

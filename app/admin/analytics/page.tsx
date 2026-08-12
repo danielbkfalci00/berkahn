@@ -9,6 +9,10 @@ import {
 import { buildPostPerformance } from "@/lib/analytics/post-performance";
 import { previousMonthSlug } from "@/lib/analytics/period";
 import { buildTimelineEvents } from "@/lib/analytics/timeline-events";
+import { construirMatrizArtigoMes, construirMapaLeitura } from "@/lib/analytics/heatmaps";
+import { construirMapaOportunidade } from "@/lib/analytics/query-opportunity";
+import { construirFunilLeads } from "@/lib/analytics/leads-funnel";
+import { listarLeadsDoMes } from "@/lib/analytics/leads-queries";
 import { getTasks } from "@/lib/analytics/tasks-queries";
 import { AnalyticsContent } from "./AnalyticsContent";
 
@@ -71,6 +75,14 @@ export default async function AnalyticsPage({ searchParams }: PageProps) {
 
   const timelineEvents = buildTimelineEvents(postsMap, trendPoints);
 
+  // Derivações puras das duas matrizes de calor. Reusam dado já buscado acima:
+  // historicalBySlug alimenta a matriz de acervo, e a profundidade de leitura
+  // vem do próprio snapshot do mês.
+  const matrizAcervo = construirMatrizArtigoMes(historicalBySlug, postsMap);
+  const mapaLeitura = construirMapaLeitura(snapshot.ga4_data?.articleProgress, postsMap);
+  const oportunidade = construirMapaOportunidade(snapshot.gsc_data?.topQueries);
+  const funilLeads = construirFunilLeads(await listarLeadsDoMes(currentMonth));
+
   // Conta posts publicados dentro do mês atual (pra detector "no-posts")
   const monthStart = `${currentMonth}-01`;
   const [year, monthNum] = currentMonth.split("-").map(Number);
@@ -95,6 +107,10 @@ export default async function AnalyticsPage({ searchParams }: PageProps) {
       currentMonth={currentMonth}
       timelineEvents={timelineEvents}
       tasks={tasks}
+      matrizAcervo={matrizAcervo}
+      mapaLeitura={mapaLeitura}
+      oportunidade={oportunidade}
+      funilLeads={funilLeads}
     />
   );
 }

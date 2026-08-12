@@ -5,15 +5,15 @@ atualizado: 2026-08-12
 tags:
   - project/blog
   - status/active
-ai_summary: Hub do Blog — 40 posts e 44 trilhas. A primeira pauta real chegou a draft em 11/08 e reposiciona o slug canibalizado para a intenção de casa de 100 m²; faltam capa, vínculo do post, aprovação e publicação humana.
+ai_summary: Hub do Blog — 40 posts e 44 trilhas. A revisão de casa LSF 100 m² está staged com post/capa vinculados; o live antigo segue published. Falta aprovação humana e /artigo publicar.
 status: active
 projeto: blog
 kpi_publicados: 40
 kpi_meta_publicados_semanal: 1
 kpi_indexados_google: 34
 kpi_meta_indexacao_total: 40
-kpi_posts_carcaca: 9
-kpi_posts_sem_meta: 9
+kpi_posts_carcaca: 0
+kpi_posts_sem_meta: 0
 kpi_posts_sem_answer_summary: 0
 kpi_ga4_users_mes: 1681
 kpi_ga4_sessions_mes: 2027

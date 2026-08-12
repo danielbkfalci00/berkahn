@@ -2,8 +2,10 @@
 
 import { KpiCardGrid } from "../KpiCardGrid";
 import { GrowthChart } from "../GrowthChart";
+import { MatrizArtigoMes } from "../MatrizArtigoMes";
 import { narrativeAct1Growth } from "@/lib/analytics/narrative";
 import type { TimelineEvent } from "@/lib/analytics/timeline-events";
+import type { MatrizArtigoMes as Matriz } from "@/lib/analytics/heatmaps";
 import type { SnapshotContext, KpiCardData, TrendPoint } from "@/types/analytics";
 
 interface Act1GrowthProps {
@@ -11,9 +13,10 @@ interface Act1GrowthProps {
   kpis: KpiCardData[];
   trendPoints: TrendPoint[];
   timelineEvents: TimelineEvent[];
+  matrizAcervo: Matriz;
 }
 
-export function Act1Growth({ context, kpis, trendPoints, timelineEvents }: Act1GrowthProps) {
+export function Act1Growth({ context, kpis, trendPoints, timelineEvents, matrizAcervo }: Act1GrowthProps) {
   return (
     <section className="space-y-6" aria-labelledby="act-1-title">
       <div>
@@ -24,6 +27,7 @@ export function Act1Growth({ context, kpis, trendPoints, timelineEvents }: Act1G
       </div>
       <KpiCardGrid kpis={kpis} />
       <GrowthChart data={trendPoints} events={timelineEvents} />
+      <MatrizArtigoMes matriz={matrizAcervo} />
     </section>
   );
 }
