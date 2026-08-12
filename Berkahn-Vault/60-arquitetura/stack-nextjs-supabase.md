@@ -1,12 +1,12 @@
 ---
 tipo: context
 criado: 2026-05-21
-atualizado: 2026-08-10
+atualizado: 2026-08-12
 tags:
   - ai/context
   - project/site
   - domain/architecture
-ai_summary: Stack do site Berkahn. Supabase concentra CMS, Auth e CRM com RPCs/RLS, arquivos privados e outbox push; GA4 fica sem PII. Apps Script/Sheets são legado desativado. PWA admin não cacheia telas; retenção usa Edge Function, Storage, pg_cron e pg_net.
+ai_summary: Stack do site Berkahn. Next 16.3 usa fontes self-hosted e árvore npm sem advisories; Supabase concentra CMS, Auth e CRM com RPCs/RLS, arquivos privados e outbox push. Apps Script/Sheets são legado desativado.
 status: active
 escopo: berkahn
 ---
@@ -19,16 +19,21 @@ Visão executiva da arquitetura técnica do site Berkahn.
 
 | Camada | Tecnologia |
 |--------|-----------|
-| Framework | Next.js (App Router) |
-| UI | React + TypeScript |
+| Framework | Next.js 16.3 (App Router + Turbopack) |
+| UI | React 18.3 + TypeScript; React 18 preservado enquanto `react-simple-maps` não declarar suporte a React 19 |
 | Styling | Tailwind CSS + shadcn/ui |
 | Componentes interativos | 19 componentes React específicos para blog (ver [[article-pipeline]]) |
 | Animações | Framer Motion (motion/react) |
 | Ícones | Lucide React |
 | Charts | Recharts |
-| Tipografia | Manrope (Google Fonts) — ver [[design-principles]] |
+| Tipografia | Manrope, Archivo, Space Mono, Caveat e Playfair Display self-hosted via Fontsource; build não acessa Google Fonts — ver [[design-principles]] |
 | Deploy | Vercel |
 | Domain | `berkahn.vercel.app` (produção) + custom domain |
+
+Baseline de dependências validado em 2026-08-12: Next 16.3, Sharp 0.35.3,
+Puppeteer 25.6 e ESLint 9 flat config; `npm audit` retorna zero. O proxy de
+sessão usa a convenção `proxy.ts` do Next 16 e o harness local é excluído do
+tracing de produção para não empacotar o repositório inteiro.
 
 ## Backend / CMS
 
