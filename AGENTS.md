@@ -108,6 +108,7 @@ Cada projeto tem nota-hub em `Berkahn-Vault/00-meta/projetos/{nome}.md` com `tip
 
 | Comando | O que faz |
 |---------|-----------|
+| `/conteudo` | Orquestra uma pauta até aprovação; após “Aprovo”, publica Blog e entrega pacote manual do LinkedIn |
 | `/artigo` | `produzir` cria draft; `publicar` exige aprovação |
 | `/linkedin` | Grava texto, prompt e briefing no card |
 | `/brainstorm` | Ideias priorizadas (gera `40-content/blog/ideias/`) |
@@ -168,7 +169,7 @@ gitleaks detect      # scan secrets (auto em pre-commit)
 | `vault-backfill-ai-summary.mjs` | Preenche `ai_summary` (de description ou lead) + adiciona rodapé padrão com wikilinks. Detecta marker `<!-- vault-rodape-v1 -->` para idempotência |
 | `vault-supabase-resync.mjs` | Compara slugs vault ↔ Supabase (`--check`) ou faz PATCH `meta_title/meta_description/answer_summary` (`--patch=slug1,slug2`). Requer `$env:SUPABASE_SERVICE_KEY` |
 | `vault-validate.mjs` | Linter de completude vault (9 validações, exit 0/1/2, output ANSI ou `--json`). Rodado manual ou via `/standup`, `/wrap-up` |
-| `conteudo/pauta.mjs` | CLI genérico do quadro: contexto seletivo (`proxima`), validação, escrita com `--expected-updated-at` e ciclo `job-claim|complete|fail`. Publicação continua humana |
+| `conteudo/pauta.mjs` | CLI genérico: seleção por escopo, contexto seletivo, tags/capas, revisão staged de slug publicado, aprovação explícita e ciclo `job-claim|complete|fail` |
 | `vault-images.mjs` | Banco de imagens (`Docs/banco-imagens/`). `--inventory` (manifesto + flag `em_producao` cruzada por sha256 com `public/images/`), `--dupes` (duplicatas exatas + pares PNG/WEBP), `--check` (contagens vs índices), `--thumbs` (gera thumbnails webp). Entry-point do catálogo: `Berkahn-Vault/40-content/materiais/banco-imagens.md` |
 | `watermark-images.mjs` | Marca d'água BERKAHN em lote (Node + sharp). Isola o wordmark "BERKAHN" do logo-texto, centraliza grande com opacidade baixa e cor adaptativa por região. Flags `--src --out --frac --opacity --color --halo --pick --dry-run`. Preserva originais (escreve só em `--out`). Doc de uso: `Berkahn-Vault/40-content/materiais/watermark-clube-quinta-dos-lagos.md` |
 

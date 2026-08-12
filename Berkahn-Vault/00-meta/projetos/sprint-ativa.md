@@ -1,12 +1,12 @@
 ---
 tipo: meta
 criado: 2026-05-21
-atualizado: 2026-08-11
+atualizado: 2026-08-12
 tags:
   - project/site
   - project/blog
   - status/active
-ai_summary: "Sprint 10–14/08: PR #53 mergeada e deployada nos dois projetos Vercel; GA4 e CRM Supabase ativos. A primeira pauta real está em draft + LinkedIn em produção. Faltam capas, vínculo, aprovação/publicação humana e smoke autenticado; worker de 15 min permanece pausado."
+ai_summary: "Sprint 10–14/08: migration 030 e /conteudo validados no primeiro fluxo real. O Blog de casa LSF 100 m² foi atualizado sem retirar a URL do ar; LinkedIn está aprovado e aguarda publicação manual com URL+data."
 status: active
 projetos_em_curso:
   - blog
@@ -24,9 +24,9 @@ semana_fim: 2026-08-14
 # Sprint Ativa — semana de 2026-08-10
 
 > [!info] Infraestrutura editorial exercitada numa pauta real
-> [[quadro-conteudo]] já recebeu pesquisa, draft e texto/briefing de LinkedIn
-> da pauta de casa LSF de 100 m². Status continua livre; aprovação e publicação
-> permanecem humanas.
+> [[quadro-conteudo]] conduziu pesquisa, draft, artigo, LinkedIn e capas da pauta
+> de casa LSF de 100 m². O Blog foi publicado com o slug preservado; LinkedIn
+> está aprovado e aguarda publicação manual com URL+data.
 
 > Atualizado segunda-feira via `/standup` (auto seg 9h via scheduled-task). Referenciado em [[CLAUDE]] vault-level e em `vault-manifest.json` (`paths.sprint_doc`). Para detalhes por projeto, abrir o hub correspondente. Validação: `node scripts/vault-validate.mjs` → 0 issues.
 
@@ -35,14 +35,14 @@ semana_fim: 2026-08-14
 **Fechar o modelo operacional do conteúdo**: separar Blog e LinkedIn, tornar
 reordenação/publicação atômicas, versionar a automação genérica e alinhar o
 vault. A primeira pauta real já chegou a draft; resta concluir produção,
-aprovação e publicação no rollout já deployado.
+publicação manual do LinkedIn e registro de URL+data no rollout já deployado.
 
 ## Status por projeto
 
 | Projeto | Status | Bloqueio principal | Próxima ação |
 |---------|--------|--------------------|--------------|
-| [[blog]] | active | Capa staging e vínculo com post existente ainda pendentes | Produzir o artigo existente e levar à aprovação manual |
-| [[linkedin]] | active | Capa 4:5 pronta localmente; upload e publicação externa pendentes | Subir a capa, aprovar e depois registrar URL/data reais |
+| [[blog]] | active | Sem bloqueio na pauta de 100 m²; revisão publicada com slug preservado | Medir CTR e leads na janela de 28 dias |
+| [[linkedin]] | active | Copy e capa aprovadas; publicação externa é manual | Postar com UTM e registrar URL/data reais |
 | [[site]] | active | Smoke autenticado pendente; Pages legado exige conta com admin | Exercitar CRM logado e despublicar Pages em Settings |
 | [[seo-aeo]] | active | 3 URLs fora do índice (ação manual no GSC) | Pedir indexação das 3 |
 | [[apresentacoes]] | active | Roteiros não versionados (parcial) | Validar 16 slides em live env |

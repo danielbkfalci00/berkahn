@@ -1,16 +1,16 @@
 ---
 tipo: prompt
 criado: 2026-04-13
-atualizado: 2026-05-21
+atualizado: 2026-08-12
 tags:
   - ai/prompt
   - ai/locked
   - project/linkedin
-ai_summary: Criar post LinkedIn Berkahn a partir de artigo ou tema. Calibrado por Bruno — regras específicas sobre LSF vs Steel Frame, tom engenheiro experiente, 100-180 palavras. Usado por /linkedin.
+ai_summary: Criar post LinkedIn Berkahn a partir de artigo ou tema. Calibrado por Bruno — abre numa situação concreta do público, usa tom humano de engenheiro experiente, prioriza 110-140 palavras e CTA útil. Usado por /linkedin.
 status: locked
 locked: true
-versao: 1.0
-calibrado_em: 2026-04-13
+versao: 1.1
+calibrado_em: 2026-08-12
 ---
 
 > [!warning] PROMPT CALIBRADO — NÃO ALTERAR sem permissão de Bruno
@@ -71,6 +71,11 @@ Se a frase parece gerada por IA, reescreva até parecer humana.
 
 **Linha 1-2 (hook):** A frase que aparece antes do "ver mais". Precisa fazer o leitor parar o scroll. Pode ser um dado surpreendente, uma afirmação provocativa com fundamento, uma pergunta genuína ou uma observação inesperada.
 
+Prefira abrir dentro de uma situação que o público reconhece, com pessoa, decisão,
+contraste ou consequência concreta. Quando houver base factual, números podem
+materializar a tensão. Não comece explicando o tema ou anunciando a conclusão.
+O leitor precisa se enxergar no problema antes de receber a explicação técnica.
+
 **Corpo (1-2 parágrafos curtos):** Desenvolva o insight de forma concisa. Explique, contextualize, conecte com a realidade do leitor. Máximo 2-3 linhas por parágrafo. Vá direto ao ponto.
 
 **Fechamento institucional (2-3 linhas):** Conecte o tema do post com o propósito da Berkahn. A Berkahn existe para trazer três coisas para a construção civil: leveza, previsibilidade e limpeza. O Light Steel Frame é o sistema que viabiliza isso na prática.
@@ -116,13 +121,32 @@ NÃO use:
 - Endereçamento direto a um público ("Arquitetos, o que vocês acham?")
 - Perguntas que soem distantes ou filosóficas demais
 
-**CTA para o artigo:** Uma linha simples. O link já está no corpo do post, então basta indicar: "Tem um artigo completo sobre isso no nosso blog." ou variação natural. Sem "clique aqui", sem "link nos comentários", sem "confira". O CTA pode ser fundido com o ponto de reflexão quando isso funcionar melhor.
+**CTA para o artigo:** Uma linha simples que diga qual recurso foi preparado e o
+que ele ajuda o leitor a fazer. Prefira algo específico, como “Fizemos um
+checklist do que precisa estar escrito em cada proposta para elas ficarem
+comparáveis. Está no blog.” Evite o fechamento genérico “Tem um artigo completo
+sobre isso”. Sem “clique aqui”, sem “link nos comentários”, sem “confira”. O CTA
+pode ser fundido com o ponto de reflexão quando isso funcionar melhor.
 
 **Hashtags:** 3 a 5 no final. Sempre incluir #LightSteelFrame. Pode incluir #SteelFrame como hashtag de alcance. Completar com hashtags do tema.
 
 ## EXTENSÃO
 
-100 a 180 palavras no corpo (sem contar hashtags). Se passar, corte.
+Mire 110 a 140 palavras no corpo, sem contar URL e hashtags. O teto continua em
+180 somente quando a compreensão técnica realmente exigir. Depois do primeiro
+rascunho, corte explicações repetidas, transições formais e frases que o exemplo
+concreto já demonstrou.
+
+## FILTRO DE HUMANIZAÇÃO ANTES DE ENTREGAR
+
+- Leia em voz alta. Se parecer texto de company page ou miniartigo, reescreva.
+- O primeiro parágrafo precisa conter uma situação, decisão ou consequência que
+  o público reconheça, não uma tese abstrata.
+- Use “você” quando isso aproximar a cena sem soar publicitário.
+- Prefira substantivos, ações e números verificáveis a conceitos genéricos.
+- Verifique se o CTA oferece uma próxima ajuda concreta, em vez de apenas anunciar
+  que existe conteúdo no blog.
+- Faça uma última redução de 20% a 30% se o texto continuar explicativo demais.
 
 ## O QUE NÃO FAZER
 

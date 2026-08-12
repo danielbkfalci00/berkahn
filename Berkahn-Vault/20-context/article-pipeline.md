@@ -1,12 +1,12 @@
 ---
 tipo: context
 criado: 2026-04-13
-atualizado: 2026-08-11
+atualizado: 2026-08-12
 tags:
   - ai/context
   - project/blog
   - domain/lsf
-ai_summary: Pipeline operacional e técnico do conteúdo. Status é posição livre; publicação real vem dos artefatos. /admin/conteudo oferece edição inline, tags e fila Codex com contexto progressivo; aprovação e publicação permanecem humanas.
+ai_summary: Pipeline operacional e técnico. /conteudo executa pesquisa, draft, artigo, LinkedIn e capas até aprovação; revisões de slug publicado ficam staged e não alteram o live antes de /artigo publicar.
 status: active
 escopo: berkahn
 ---
@@ -27,6 +27,10 @@ Documenta o fluxo completo de criação e publicação de artigos em `/atualidad
 ```
 
 Após publicação: `/linkedin` para criar post de divulgação.
+
+Atalho operacional: `/conteudo produzir` executa as etapas aplicáveis acima até
+o pacote de aprovação. Não cria uma segunda máquina de estados; usa a pauta, o
+CLI e os jobs existentes.
 
 > [!important] O estado do fluxo vive no quadro, não em arquivos soltos
 > Desde 2026-08-06 a unidade de trabalho é a **pauta** (o assunto), em `/admin/conteudo`. Um card agrega pesquisa, artigo, post de LinkedIn e as duas capas.
@@ -61,17 +65,18 @@ Capas vivem em `public/images/img_blog/[slug]/cover.webp` (consumido pelo Next.j
 ### Passos obrigatórios no /artigo
 1. `/artigo produzir`: ler o draft registrado em `draft_path`
 2. Converter a capa staging para `public/images/img_blog/[slug]/cover.webp`
-3. Criar ou atualizar `posts` como `draft` e vincular `post_id`
+3. Criar `posts` como `draft`; se o slug já está publicado, vincular o post sem
+   alterar o live e salvar a revisão estruturada em `post_draft_payload`
 4. Aguardar aprovação manual no quadro
 5. `/artigo publicar`: mover o markdown para `publicados/` e publicar
    post+pauta pela RPC idempotente; em falha, restaurar o markdown
 
-Atualizações de artigo indexado preservam o slug. Nesse caso, draft e fonte
-publicada coexistem temporariamente com o mesmo basename; use wikilink com
-caminho completo para apontar o draft. O CLI deve substituir a fonte publicada
-atomicamente e preservar rollback. Enquanto `pauta.mjs` ainda recusar um destino
-existente, a tarefa bloqueadora vive em [[blog#Próximos 7 dias]]; não apagar nem
-sobrescrever manualmente o publicado para contornar o gate.
+Atualizações de artigo indexado preservam o slug. Draft e fonte publicada
+coexistem temporariamente com o mesmo basename; use wikilink com caminho completo
+para apontar o draft. Desde a migration 030, `produzir --usar-existente` mantém o
+post atual `published`, guarda payload e capa em staging e leva a pauta para
+revisão. Depois da aprovação, `publicar` substitui markdown e capa com backup,
+aplica o payload pela RPC e restaura tudo se o banco recusar.
 
 ### Passos obrigatórios no /linkedin
 1. Gravar texto, prompt e briefing nos blocos da pauta
