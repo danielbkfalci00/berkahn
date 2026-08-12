@@ -14,6 +14,8 @@ import { usePathname } from "next/navigation";
 import {
   CONSENT_STORAGE_KEY,
   CONSENT_VERSION,
+  GA_BOOTSTRAP_FLAG,
+  GA_MEASUREMENT_ID,
   consentPayload,
   type ConsentLevel,
   type StoredConsent,
@@ -22,10 +24,14 @@ import { persistLeadAttribution } from "@/lib/contact";
 
 // `window.gtag` é declarado em types/global.d.ts — não redeclarar aqui.
 
-const GA_MEASUREMENT_ID = "G-RBQJ1D6JHW";
-
 function GoogleAnalytics({ consent }: { consent: ConsentLevel }) {
   if (consent !== "all") return null;
+
+  // O script inline de app/layout.tsx já subiu o GA para quem tinha
+  // consentimento gravado. Renderizar aqui de novo daria dois `config` e
+  // duplicaria o page_view. Este caminho existe para quem acabou de aceitar
+  // o banner nesta sessão, quando o bootstrap não tinha o que restaurar.
+  if (typeof window !== "undefined" && window[GA_BOOTSTRAP_FLAG]) return null;
 
   return (
     <>
