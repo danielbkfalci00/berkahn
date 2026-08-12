@@ -4,15 +4,18 @@ import { AreaDistributionChart } from "../AreaDistributionChart";
 import { TrafficSourcesChart } from "../TrafficSourcesChart";
 import { DevicesMiniChart } from "../DevicesMiniChart";
 import { TopQueriesTable } from "../TopQueriesTable";
+import { QuadranteOportunidade } from "../QuadranteOportunidade";
 import { narrativeAct2Origin } from "@/lib/analytics/narrative";
+import type { MapaOportunidade } from "@/lib/analytics/query-opportunity";
 import type { SnapshotContext, TopQueryWithTrend } from "@/types/analytics";
 
 interface Act2OriginProps {
   context: SnapshotContext;
   topQueries: TopQueryWithTrend[];
+  oportunidade: MapaOportunidade;
 }
 
-export function Act2Origin({ context, topQueries }: Act2OriginProps) {
+export function Act2Origin({ context, topQueries, oportunidade }: Act2OriginProps) {
   return (
     <section className="space-y-6" aria-labelledby="act-2-title">
       <div>
@@ -27,6 +30,7 @@ export function Act2Origin({ context, topQueries }: Act2OriginProps) {
         <DevicesMiniChart data={context.ga4.byDevice} />
       </div>
       <TopQueriesTable queries={topQueries} />
+      <QuadranteOportunidade mapa={oportunidade} />
     </section>
   );
 }

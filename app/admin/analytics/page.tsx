@@ -10,6 +10,7 @@ import { buildPostPerformance } from "@/lib/analytics/post-performance";
 import { previousMonthSlug } from "@/lib/analytics/period";
 import { buildTimelineEvents } from "@/lib/analytics/timeline-events";
 import { construirMatrizArtigoMes, construirMapaLeitura } from "@/lib/analytics/heatmaps";
+import { construirMapaOportunidade } from "@/lib/analytics/query-opportunity";
 import { getTasks } from "@/lib/analytics/tasks-queries";
 import { AnalyticsContent } from "./AnalyticsContent";
 
@@ -77,6 +78,7 @@ export default async function AnalyticsPage({ searchParams }: PageProps) {
   // vem do próprio snapshot do mês.
   const matrizAcervo = construirMatrizArtigoMes(historicalBySlug, postsMap);
   const mapaLeitura = construirMapaLeitura(snapshot.ga4_data?.articleProgress, postsMap);
+  const oportunidade = construirMapaOportunidade(snapshot.gsc_data?.topQueries);
 
   // Conta posts publicados dentro do mês atual (pra detector "no-posts")
   const monthStart = `${currentMonth}-01`;
@@ -104,6 +106,7 @@ export default async function AnalyticsPage({ searchParams }: PageProps) {
       tasks={tasks}
       matrizAcervo={matrizAcervo}
       mapaLeitura={mapaLeitura}
+      oportunidade={oportunidade}
     />
   );
 }

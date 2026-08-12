@@ -12,6 +12,7 @@ import { computeMonthlyGoals, computeGoalProgress, formatGoalLabel, formulaLabel
 import { detectRedFlags } from "@/lib/analytics/red-flags";
 import type { TimelineEvent } from "@/lib/analytics/timeline-events";
 import type { MapaLeitura, MatrizArtigoMes } from "@/lib/analytics/heatmaps";
+import type { MapaOportunidade } from "@/lib/analytics/query-opportunity";
 import type {
   AnalyticsSnapshot,
   AnalyticsTask,
@@ -33,6 +34,7 @@ interface AnalyticsContentProps {
   tasks: AnalyticsTask[];
   matrizAcervo: MatrizArtigoMes;
   mapaLeitura: MapaLeitura;
+  oportunidade: MapaOportunidade;
 }
 
 function deltaDirection(deltaPct?: number): "up" | "down" | "flat" {
@@ -155,6 +157,7 @@ export function AnalyticsContent({
   tasks,
   matrizAcervo,
   mapaLeitura,
+  oportunidade,
 }: AnalyticsContentProps) {
   const searchParams = useSearchParams();
   const comparisonMode = searchParams.get("compare") === "1";
@@ -204,7 +207,7 @@ export function AnalyticsContent({
             timelineEvents={timelineEvents}
             matrizAcervo={matrizAcervo}
           />
-          <Act2Origin context={ctx} topQueries={topQueries} />
+          <Act2Origin context={ctx} topQueries={topQueries} oportunidade={oportunidade} />
           <Act3Posts context={ctx} posts={postPerformance} mapaLeitura={mapaLeitura} />
           <Act4Action context={ctx} posts={postPerformance} tasks={tasks} />
         </>
