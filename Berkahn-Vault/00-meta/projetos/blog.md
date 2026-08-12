@@ -1,19 +1,19 @@
 ---
 tipo: projeto
 criado: 2026-05-22
-atualizado: 2026-08-11
+atualizado: 2026-08-12
 tags:
   - project/blog
   - status/active
-ai_summary: Hub do Blog — 40 posts e 44 trilhas. A primeira pauta real chegou a draft em 11/08 e reposiciona o slug canibalizado para a intenção de casa de 100 m²; faltam capa, vínculo do post, aprovação e publicação humana.
+ai_summary: Hub do Blog — 40 posts e 44 trilhas. A revisão de casa LSF 100 m² está staged com post/capa vinculados; o live antigo segue published. Falta aprovação humana e /artigo publicar.
 status: active
 projeto: blog
 kpi_publicados: 40
 kpi_meta_publicados_semanal: 1
 kpi_indexados_google: 34
 kpi_meta_indexacao_total: 40
-kpi_posts_carcaca: 9
-kpi_posts_sem_meta: 9
+kpi_posts_carcaca: 0
+kpi_posts_sem_meta: 0
 kpi_posts_sem_answer_summary: 0
 kpi_ga4_users_mes: 1681
 kpi_ga4_sessions_mes: 2027
@@ -81,8 +81,9 @@ Tráfego seguiu crescendo: 1.179 users em junho, 1.407 nos primeiros 26 dias de 
 
 - [x] Semana S1: artigo de ICMS publicado e reconciliado com a pauta
 - [x] Pesquisa e criação exercitadas na pauta de casa LSF de 100 m²
-- [ ] @codex Ajustar `/artigo publicar` para substituir atomicamente o markdown já existente em `publicados/` quando o draft atualiza o mesmo slug; hoje `pauta.mjs:398-399` aborta e bloqueia esta pauta #pendencia
-- [ ] @bruno Depois da correção acima, subir a capa Blog, vincular o post indexado e executar `/artigo produzir` → aprovação → `/artigo publicar` #pendencia
+- [x] Migration 030 + CLI substituem markdown/capa com rollback e mantêm a revisão do post staged; o artigo live não saiu de `published`
+- [x] Capa Blog enviada, post indexado vinculado e payload produzido na pauta `71592c33-9637-49d4-ac1d-153b422188af`
+- [ ] @bruno Revisar o pacote de casa LSF 100 m²; se aprovado, responder “Aprovo” para executar `/artigo publicar` #pendencia
 
 > [!note] `orcamento-steel-frame` e `hold-downs-ancoragens` saíram do fluxo semanal
 > Foram para backlog sem data em 2026-07-30, cada um com bloqueio nomeado. Ver "Backlog: os 2 artigos prontos que não vão ao ar agora" abaixo. **Não puxar para a semana sem antes ter os números** — publicar `orcamento-steel-frame` como está adiciona uma terceira faixa de preço ao acervo.
