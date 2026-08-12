@@ -165,6 +165,11 @@ Hook `validate-write` (futuro) bloqueará edits sem flag explícita.
 
 - Sempre usar `Write` tool (UTF-8 sem BOM por default)
 - Se precisar PowerShell: `[System.IO.File]::WriteAllText($path, $content, [System.Text.UTF8Encoding]::new($false))`
+- **A leitura corrompe tanto quanto a escrita.** `Get-Content` sem
+  `-Encoding UTF8` lê como cp1252 no PowerShell 5.1; ler assim e regravar em
+  UTF-8 duplo-codifica o arquivo inteiro. Aconteceu em 2026-08-12 com `blog.md`
+  (341 caracteres corrompidos). A reversão exige o mapa cp1252, porque latin1
+  não cobre 0x80-0x9F, onde ficam travessão e aspas curvas
 - `.gitattributes` já força `eol=lf` em `.md/.json/.canvas/.base`
 
 ## Cross-project guard

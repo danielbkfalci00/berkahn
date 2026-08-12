@@ -142,6 +142,13 @@ tabela **não tem versionamento nem undo**:
   `scripts/.cache/`.
 - **Acima de 60.000 caracteres recusa**, batendo com o teto da UI. A server action corta em silêncio.
 
+`capa --canal=linkedin` move a trilha para `produzido` quando o texto já existe,
+espelhando a regra que `gravar` aplica no sentido inverso. Antes disso a
+transição só disparava ao gravar o texto **depois** da capa, então subir a capa
+por último deixava a trilha presa em `producao` com tudo pronto. `produzir` não
+faz o mesmo no Blog de propósito: lá o `produzido` exige `post_id` e
+`draft_path`, não só a capa.
+
 `publicar` aceita reexecução quando `draft_path` já aponta para `publicados/`,
 e valida o frontmatter antes de mover o arquivo. Em atualização do mesmo slug,
 a migration 030 separa revisão e live: `produzir` guarda o objeto novo em
