@@ -5,6 +5,33 @@ import { getAuth, getGscSiteUrl } from './lib/auth.mjs';
 const GSC_SCOPE = 'https://www.googleapis.com/auth/webmasters.readonly';
 const SITE_BASE = 'https://www.berkahn.com.br';
 
+// Quanto da distribuição o snapshot enxerga.
+//
+// Ficou em 20 queries / 15 páginas de fevereiro a agosto de 2026, enquanto a
+// Search Analytics API aceita 25.000 linhas por chamada. O efeito era invisível
+// porque nada errava: os totais vêm da chamada `overall`, separada, então
+// cliques e impressões sempre bateram. Só a *distribuição* estava truncada — e
+// era justamente ela que respondia "que pauta escrever".
+const LIMITE_QUERIES = 5000;
+const LIMITE_PAGINAS = 200;
+
+// Piso de impressões para uma query entrar no snapshot.
+//
+// Buscar largo e guardar filtrado, não guardar tudo: `getSnapshot` faz
+// `select("*")` e a página carrega dois snapshots (mês corrente + anterior),
+// então cada query armazenada é paga duas vezes a cada carregamento.
+//
+// Medição de 2026-08-12, janela de 28 dias: 1.126 queries no total, 498 com
+// >= 2 impressões e 357 com >= 3. Query de 1-2 impressões tem CTR de 0% ou 100%
+// — ruído que não sustenta leitura de oportunidade nenhuma. O quadrante que
+// interessa (impressões >= 10, posição 5-15, CTR < 2%) tem 61 queries, bem
+// acima do corte.
+//
+// Seguro para o computeDelta: o filtro de baseline exige clicksPrevious >= 5, e
+// cliques nunca passam de impressões, então nenhuma query relevante para delta
+// é descartada aqui.
+const MIN_IMPRESSOES_ARMAZENADAS = 3;
+
 async function searchAnalytics(sc, siteUrl, requestBody) {
   const res = await sc.searchanalytics.query({
     siteUrl,
@@ -31,23 +58,27 @@ async function fetchOverall(sc, siteUrl, startDate, endDate) {
   };
 }
 
-async function fetchTopQueries(sc, siteUrl, startDate, endDate, limit = 20) {
+// `limit` é obrigatório de propósito: um default aqui já ficou seis meses
+// truncando a distribuição sem ninguém notar.
+async function fetchTopQueries(sc, siteUrl, startDate, endDate, limit) {
   const rows = await searchAnalytics(sc, siteUrl, {
     startDate,
     endDate,
     dimensions: ['query'],
     rowLimit: limit,
   });
-  return rows.map((r) => ({
-    query: r.keys[0],
-    clicks: r.clicks,
-    impressions: r.impressions,
-    ctr: parseFloat((r.ctr * 100).toFixed(2)),
-    position: parseFloat(r.position.toFixed(1)),
-  }));
+  return rows
+    .filter((r) => r.impressions >= MIN_IMPRESSOES_ARMAZENADAS)
+    .map((r) => ({
+      query: r.keys[0],
+      clicks: r.clicks,
+      impressions: r.impressions,
+      ctr: parseFloat((r.ctr * 100).toFixed(2)),
+      position: parseFloat(r.position.toFixed(1)),
+    }));
 }
 
-async function fetchTopPages(sc, siteUrl, startDate, endDate, limit = 15) {
+async function fetchTopPages(sc, siteUrl, startDate, endDate, limit) {
   const rows = await searchAnalytics(sc, siteUrl, {
     startDate,
     endDate,
@@ -70,6 +101,10 @@ async function fetchTopPages(sc, siteUrl, startDate, endDate, limit = 15) {
 
 // Filtros de relevância: query precisa ter tido volume mínimo no período anterior
 // e o delta absoluto precisa cruzar o threshold pra não pulsar com "1 query perdeu 1 clique".
+//
+// É este par que impede a subida de 20 → 1000 de inundar risingQueries com
+// falso positivo: query que antes era invisível entra com clicksPrevious = 0 e
+// não passa do MIN_BASELINE_CLICKS.
 const MIN_BASELINE_CLICKS = 5;
 const MIN_ABS_DELTA = 3;
 
@@ -134,11 +169,16 @@ export async function fetchGsc(startDate, endDate, options = {}) {
 
   const [overall, topQueries, topPages] = await Promise.all([
     fetchOverall(sc, siteUrl, startDate, endDate),
-    fetchTopQueries(sc, siteUrl, startDate, endDate, 20),
-    fetchTopPages(sc, siteUrl, startDate, endDate, 15),
+    fetchTopQueries(sc, siteUrl, startDate, endDate, LIMITE_QUERIES),
+    fetchTopPages(sc, siteUrl, startDate, endDate, LIMITE_PAGINAS),
   ]);
 
-  // Comparação MoM com período anterior do mesmo tamanho
+  // Comparação MoM com período anterior do mesmo tamanho.
+  //
+  // Antes havia uma terceira chamada aqui, buscando as mesmas queries do período
+  // corrente com limite 100, porque as 20 armazenadas eram poucas para comparar.
+  // Com topQueries em 1.000 ela virou redundante — reusar corta uma chamada de
+  // API e garante que os dois lados do delta saem do mesmo conjunto.
   let risingQueries = [];
   let fallingQueries = [];
   if (options.previousPeriod) {
@@ -147,11 +187,10 @@ export async function fetchGsc(startDate, endDate, options = {}) {
       siteUrl,
       options.previousPeriod.startDate,
       options.previousPeriod.endDate,
-      100
+      LIMITE_QUERIES
     );
-    const currentQueriesExt = await fetchTopQueries(sc, siteUrl, startDate, endDate, 100);
-    risingQueries = computeDelta(currentQueriesExt, prevQueries, 'rising', 5);
-    fallingQueries = computeDelta(currentQueriesExt, prevQueries, 'falling', 5);
+    risingQueries = computeDelta(topQueries, prevQueries, 'rising', 5);
+    fallingQueries = computeDelta(topQueries, prevQueries, 'falling', 5);
   }
 
   // URL Inspection para indexação de artigos

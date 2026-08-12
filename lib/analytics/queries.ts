@@ -96,25 +96,54 @@ export async function getPublishedPosts(): Promise<Map<string, PostMeta>> {
 }
 
 /**
- * Mapa { monthSlug → Map<slug, pageviews> } para reconstruir sparklines por post.
- * Lê de todos os snapshots disponíveis.
+ * O operador `->` do PostgREST devolve JSON, mas a serialização já chegou como
+ * texto em algumas versões. Normalizar aqui evita o modo de falha silencioso:
+ * um array virando string faria `page.slug` sair undefined e a matriz renderizar
+ * vazia, sem erro nenhum.
+ */
+function comoArray<T>(valor: unknown): T[] {
+  if (Array.isArray(valor)) return valor as T[];
+  if (typeof valor === "string") {
+    try {
+      const parsed = JSON.parse(valor);
+      return Array.isArray(parsed) ? (parsed as T[]) : [];
+    } catch {
+      return [];
+    }
+  }
+  return [];
+}
+
+/** `->>` devolve texto; chave ausente vem null. */
+function comoNumero(valor: unknown): number {
+  const n = Number(valor);
+  return Number.isFinite(n) ? n : 0;
+}
+
+/**
+ * Mapa { monthSlug → Map<slug, pageviews> } para reconstruir sparklines por post
+ * e a matriz artigo × mês. Lê de todos os snapshots disponíveis.
+ *
+ * Seleciona só `topPages` de dentro do JSONB. Puxar `ga4_data` inteiro de todos
+ * os meses custaria ~70 KB por mês depois que os limites de coleta subiram, para
+ * ler um único campo — e esta rota é `force-dynamic`, sem cache absorvendo.
  */
 export async function getHistoricalPageviewsBySlug(): Promise<Map<string, Map<string, number>>> {
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("analytics_snapshots")
-    .select("month, ga4_data")
+    .select("month, topPages:ga4_data->topPages")
     .order("month", { ascending: true });
 
   if (error || !data) return new Map();
 
   const result = new Map<string, Map<string, number>>();
   for (const row of data) {
-    const r = row as { month: string; ga4_data: { topPages?: Array<{ slug: string; pageviews: number }> } };
+    const r = row as { month: string; topPages: unknown };
     const monthSlug = r.month.slice(0, 7);
     const inner = new Map<string, number>();
-    for (const page of r.ga4_data?.topPages ?? []) {
-      if (page.slug) inner.set(page.slug, page.pageviews);
+    for (const page of comoArray<{ slug?: string; pageviews?: number }>(r.topPages)) {
+      if (page.slug) inner.set(page.slug, comoNumero(page.pageviews));
     }
     result.set(monthSlug, inner);
   }
@@ -124,34 +153,57 @@ export async function getHistoricalPageviewsBySlug(): Promise<Map<string, Map<st
 /**
  * Busca todos os snapshots como TrendPoint[] (formato leve, sem dados crus).
  * Usado por GrowthChart.
+ *
+ * Cada escalar vem por `->>` em vez de puxar `ga4_data`/`gsc_data` inteiros.
+ * Antes, esta query baixava os dois JSONB de todos os meses para extrair cinco
+ * números de cada — e depois que os limites de coleta subiram (200 páginas,
+ * 1.000 queries), cada snapshot passou de ~30 KB para ~145 KB. Em doze meses
+ * isso seria ~1,7 MB por carregamento, numa rota `force-dynamic`.
  */
 export async function getAllTrendPoints(): Promise<TrendPoint[]> {
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("analytics_snapshots")
-    // partial vem de dentro do JSONB via operador do PostgREST, evitando puxar
-    // o context inteiro de todos os meses só pra ler um boolean.
-    .select("month, ga4_data, gsc_data, partial:context->>partial")
+    .select(
+      [
+        "month",
+        "users:ga4_data->>users",
+        "sessions:ga4_data->>sessions",
+        "pageviews:ga4_data->>pageviews",
+        "clicks:gsc_data->>clicks",
+        "impressions:gsc_data->>impressions",
+        "partial:context->>partial",
+      ].join(", ")
+    )
     .order("month", { ascending: true });
 
   if (error || !data) return [];
 
   const PT_BR_MONTHS = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
 
-  return data.map((row: { month: string; ga4_data: any; gsc_data: any; partial: string | null }) => {
-    const monthSlug = row.month.slice(0, 7);
+  return data.map((row) => {
+    const r = row as {
+      month: string;
+      users: string | null;
+      sessions: string | null;
+      pageviews: string | null;
+      clicks: string | null;
+      impressions: string | null;
+      partial: string | null;
+    };
+    const monthSlug = r.month.slice(0, 7);
     const [year, m] = monthSlug.split("-");
     const monthIdx = parseInt(m) - 1;
     return {
       monthSlug,
       monthLabel: `${PT_BR_MONTHS[monthIdx]}/${year.slice(2)}`,
-      users: row.ga4_data?.users ?? 0,
-      sessions: row.ga4_data?.sessions ?? 0,
-      pageviews: row.ga4_data?.pageviews ?? 0,
-      clicks: row.gsc_data?.clicks ?? 0,
-      impressions: row.gsc_data?.impressions ?? 0,
+      users: comoNumero(r.users),
+      sessions: comoNumero(r.sessions),
+      pageviews: comoNumero(r.pageviews),
+      clicks: comoNumero(r.clicks),
+      impressions: comoNumero(r.impressions),
       // ->> devolve texto; snapshots antigos não têm a chave e vêm null.
-      partial: row.partial === "true",
+      partial: r.partial === "true",
     };
   });
 }

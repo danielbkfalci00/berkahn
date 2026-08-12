@@ -4,6 +4,18 @@ import { getAuth, getGa4PropertyId } from './lib/auth.mjs';
 
 const GA4_SCOPE = 'https://www.googleapis.com/auth/analytics.readonly';
 
+// Quanto da cauda o snapshot enxerga.
+//
+// topPages ficou em 50 de maio a agosto de 2026 e os três snapshots do período
+// bateram exatamente em 50 — assinatura de teto, não de dado real (fev/mar/abr,
+// com menos tráfego, deram 16/33/41).
+//
+// fetchByArea já agregava sobre 200 páginas, então a distribuição por área e a
+// lista de topPages guardada olhavam populações diferentes. Usar a mesma
+// constante nos dois lugares elimina essa divergência.
+const LIMITE_PAGINAS = 200;
+const LIMITE_FONTES = 50;
+
 const PAGE_AREAS = [
   { pattern: /^\/atualidades\//, area: 'Blog (atualidades)' },
   { pattern: /^\/lsf/, area: 'Pillar LSF' },
@@ -49,7 +61,9 @@ async function fetchOverall(data, propertyId, startDate, endDate) {
   };
 }
 
-async function fetchTopPages(data, propertyId, startDate, endDate, limit = 50) {
+// `limit` sem default de propósito: um default aqui truncou a cauda por três
+// meses sem ninguém notar, porque os totais vinham de outra chamada e batiam.
+async function fetchTopPages(data, propertyId, startDate, endDate, limit) {
   // Query unificada com 7 métricas. Se 400 (combinação inválida no v1beta), split em 2 queries.
   const primaryMetrics = [
     { name: 'screenPageViews' },
@@ -141,7 +155,7 @@ async function fetchTopPages(data, propertyId, startDate, endDate, limit = 50) {
   });
 }
 
-async function fetchTopSources(data, propertyId, startDate, endDate, limit = 10) {
+async function fetchTopSources(data, propertyId, startDate, endDate, limit) {
   const res = await runReport(data, propertyId, {
     dateRanges: [{ startDate, endDate }],
     dimensions: [{ name: 'sessionSourceMedium' }],
@@ -179,7 +193,7 @@ async function fetchByDevice(data, propertyId, startDate, endDate) {
 }
 
 async function fetchByArea(data, propertyId, startDate, endDate) {
-  const pages = await fetchTopPages(data, propertyId, startDate, endDate, 200);
+  const pages = await fetchTopPages(data, propertyId, startDate, endDate, LIMITE_PAGINAS);
   const buckets = {};
   let total = 0;
   pages.forEach((p) => {
@@ -283,8 +297,8 @@ export async function fetchGa4(startDate, endDate) {
 
   const [overall, topPages, topSources, byDevice, byArea, events, articleProgress] = await Promise.all([
     fetchOverall(data, propertyId, startDate, endDate),
-    fetchTopPages(data, propertyId, startDate, endDate, 50),
-    fetchTopSources(data, propertyId, startDate, endDate, 10),
+    fetchTopPages(data, propertyId, startDate, endDate, LIMITE_PAGINAS),
+    fetchTopSources(data, propertyId, startDate, endDate, LIMITE_FONTES),
     fetchByDevice(data, propertyId, startDate, endDate),
     fetchByArea(data, propertyId, startDate, endDate),
     fetchEvents(data, propertyId, startDate, endDate),
