@@ -4,9 +4,10 @@
 // --forcar e --confirmar-substituicao. Publicação é uma operação explícita.
 import { createHash } from "node:crypto";
 import {
-  existsSync, mkdirSync, readFileSync, renameSync, unlinkSync, writeFileSync,
+  existsSync, mkdirSync, readFileSync, renameSync, statSync, unlinkSync, writeFileSync,
 } from "node:fs";
 import { basename, dirname, join, relative, resolve, sep } from "node:path";
+import { pathToFileURL } from "node:url";
 import { createClient } from "@supabase/supabase-js";
 import sharp from "sharp";
 
@@ -44,8 +45,9 @@ const SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const CAMPOS =
   "id,titulo,tipo,status_blog,status_linkedin,ordem_blog,ordem_linkedin," +
   "draft_path,linkedin_url,linkedin_publicado_em,keyword,semana,data_alvo,trilha,insights," +
+  "intencao,funil,prioridade," +
   "pesquisa_conteudo,linkedin_texto,linkedin_briefing,linkedin_imagem_prompt," +
-  "linkedin_imagem_briefing,post_id,plataformas,capa_blog_url,capa_linkedin_url,atualizado_em";
+  "linkedin_imagem_briefing,post_draft_payload,post_id,plataformas,capa_blog_url,capa_linkedin_url,atualizado_em";
 
 function abortar(mensagem, codigo = 1) {
   console.error(`\n❌ ${mensagem}`);
@@ -60,6 +62,14 @@ function garantirVersao(pauta, expected) {
 }
 function hashTexto(valor) {
   return createHash("sha256").update(valor || "").digest("hex");
+}
+// Convenção única do vault (20-context/seo-aeo-strategy.md, seção "Rastreamento de
+// links"): medium `social` cai em Organic Social no GA4, `organic` não. A campanha é
+// fixa em `post-organico`; utm_content fica reservado para teste A/B.
+function urlLinkedinParametrizada(slug) {
+  if (!slug) return null;
+  return `https://www.berkahn.com.br/atualidades/${slug}` +
+    `?utm_source=linkedin&utm_medium=social&utm_campaign=post-organico`;
 }
 function caminhoRelativoSeguro(arquivo, pastaPermitida) {
   if (!arquivo) abortar("--arquivo é obrigatório");
@@ -156,6 +166,96 @@ async function ver(id) {
   }
 }
 
+function publicacaoRealCompleta(pauta) {
+  const blogCompleto = !pauta.status_blog || pauta.post_status === "published";
+  const linkedinCompleto = !pauta.status_linkedin ||
+    Boolean(pauta.linkedin_url && pauta.linkedin_publicado_em);
+  return blogCompleto && linkedinCompleto;
+}
+
+function compararPautas(a, b) {
+  const rankFluxo = (item) => {
+    if (item.job_status === "aguardando-aprovacao") return 0;
+    if (item.job_status === "na-fila") return 1;
+    const blogEmCurso = item.status_blog && item.status_blog !== "planejada";
+    const linkedinEmCurso = item.status_linkedin && item.status_linkedin !== "planejada";
+    return blogEmCurso || linkedinEmCurso ? 2 : 3;
+  };
+  const rank = rankFluxo(a) - rankFluxo(b);
+  if (rank) return rank;
+  const dataA = a.data_alvo || "9999-12-31";
+  const dataB = b.data_alvo || "9999-12-31";
+  if (dataA !== dataB) return dataA.localeCompare(dataB);
+  const prioridade = (a.prioridade ?? 99) - (b.prioridade ?? 99);
+  if (prioridade) return prioridade;
+  const ordemA = Math.min(a.ordem_blog ?? 999999, a.ordem_linkedin ?? 999999);
+  const ordemB = Math.min(b.ordem_blog ?? 999999, b.ordem_linkedin ?? 999999);
+  if (ordemA !== ordemB) return ordemA - ordemB;
+  return a.id.localeCompare(b.id);
+}
+
+async function selecionarProxima({ json = false, escopo = "pacote" } = {}) {
+  if (!["pacote", "blog", "linkedin", "qualquer"].includes(escopo))
+    abortar("--escopo aceita pacote, blog, linkedin ou qualquer");
+  const [{ data: pautas, error }, { data: jobs, error: erroJobs }] = await Promise.all([
+    db.from("conteudo_pautas_quadro").select("*"),
+    db.from("conteudo_automation_jobs_latest")
+      .select("id,pauta_id,acao,status,criado_em")
+      .in("status", ["na-fila", "executando", "aguardando-aprovacao"]),
+  ]);
+  if (error) abortar(error.message);
+  if (erroJobs) abortar(erroJobs.message);
+
+  const jobPorPauta = new Map((jobs || []).map((job) => [job.pauta_id, job]));
+  const candidatas = (pautas || [])
+    .map((pauta) => {
+      const job = jobPorPauta.get(pauta.id);
+      return {
+        ...pauta,
+        job_id: job?.id ?? null,
+        job_acao: job?.acao ?? null,
+        job_status: job?.status ?? null,
+        job_criado_em: job?.criado_em ?? null,
+      };
+    })
+    .filter((pauta) => !publicacaoRealCompleta(pauta))
+    .filter((pauta) => pauta.job_status !== "executando")
+    .sort(compararPautas);
+
+  if (!candidatas.length) abortar("nenhuma pauta elegível; todas concluídas ou já em execução");
+  const noEscopo = candidatas.filter((pauta) => {
+    const blogPendente = Boolean(pauta.status_blog && pauta.post_status !== "published");
+    const linkedinPendente = Boolean(
+      pauta.status_linkedin && !(pauta.linkedin_url && pauta.linkedin_publicado_em)
+    );
+    if (escopo === "blog") return blogPendente;
+    if (escopo === "linkedin") return linkedinPendente;
+    if (escopo === "pacote") return blogPendente && linkedinPendente;
+    return true;
+  });
+  const escolhida = noEscopo[0] || candidatas[0];
+  const contexto = await contextoPauta(escolhida.id, { silent: true });
+  const payload = {
+    ...contexto,
+    selecao: {
+      criterio: "aprovação pendente > fila > trabalho em curso > data > prioridade > ordem",
+      escopo_solicitado: escopo,
+      usou_fallback: noEscopo.length === 0,
+      job_id: escolhida.job_id,
+      job_acao: escolhida.job_acao,
+      job_status: escolhida.job_status,
+    },
+  };
+  if (json) console.log(JSON.stringify(payload, null, 2));
+  else {
+    console.log(`\nPróxima pauta: ${payload.titulo}\nid: ${payload.pauta_id}`);
+    console.log(`ação: ${payload.proxima_acao}`);
+    if (payload.selecao.job_status)
+      console.log(`job: ${payload.selecao.job_status} (${payload.selecao.job_acao})`);
+    console.log("");
+  }
+}
+
 async function criar({ titulo, plataformas, confirmar, dryRun }) {
   const lista = [...new Set((plataformas || "blog,linkedin").split(",").map((p) => p.trim()))];
   if (!titulo?.trim()) abortar("--titulo é obrigatório");
@@ -175,6 +275,104 @@ async function criar({ titulo, plataformas, confirmar, dryRun }) {
     origem: "cli", aprovacao_explicita: true, plataformas: lista,
   });
   console.log(`\n✅ Pauta criada: ${data.id}\n`);
+}
+
+async function subirCapa(id, { canal, arquivo, expected, dryRun }) {
+  garantirId(id);
+  if (!["blog", "linkedin"].includes(canal)) abortar("--canal aceita blog ou linkedin");
+  const imagem = caminhoRelativoSeguro(arquivo, ".");
+  if (statSync(imagem.absoluto).size > 5 * 1024 * 1024)
+    abortar("a imagem passa de 5 MB");
+
+  const coluna = canal === "blog" ? "capa_blog_url" : "capa_linkedin_url";
+  const { data: pauta, error } = await db.from("conteudo_pautas")
+    .select(`id,titulo,plataformas,status_linkedin,linkedin_texto,${coluna},atualizado_em`)
+    .eq("id", id).maybeSingle();
+  if (error) abortar(error.message);
+  if (!pauta) abortar(`nenhuma pauta com id ${id}`);
+  if (!pauta.plataformas?.includes(canal)) abortar(`${canal} não se aplica à pauta`);
+  garantirVersao(pauta, expected);
+
+  const original = readFileSync(imagem.absoluto);
+  let pipeline = sharp(original).rotate();
+  const metadata = await pipeline.metadata();
+  if (!metadata.width || !metadata.height) abortar("não foi possível ler as dimensões da imagem");
+  if (canal === "linkedin") {
+    const proporcao = metadata.width / metadata.height;
+    if (Math.abs(proporcao - 0.8) > 0.02)
+      abortar("a capa do LinkedIn precisa estar em 4:5 (ex.: 1080×1350)");
+    pipeline = pipeline.resize(1080, 1350, { fit: "cover" });
+  } else {
+    pipeline = pipeline.resize(1200, 800, { fit: "cover" });
+  }
+  const buffer = await pipeline
+    .flatten({ background: "#ffffff" })
+    .jpeg({ quality: 86, progressive: true })
+    .toBuffer();
+  const hash = hashTexto(buffer);
+  const caminho = `conteudo/${id}/${canal}/${hash}.jpg`;
+  const caminhoAnterior = caminhoStorageDaUrl(pauta[coluna]);
+
+  if (dryRun) {
+    console.log(`\n🔍 --dry-run: validou ${metadata.width}×${metadata.height}; enviaria ${caminho}.\n`);
+    return;
+  }
+  const { error: erroUpload } = await db.storage.from("post-images")
+    .upload(caminho, buffer, { upsert: true, contentType: "image/jpeg" });
+  if (erroUpload) abortar(erroUpload.message);
+  const { data: { publicUrl } } = db.storage.from("post-images").getPublicUrl(caminho);
+
+  // Simétrico à regra de `gravar`: o LinkedIn fica pronto quando tem texto e capa.
+  // Sem isto, subir a capa depois do texto deixa a trilha presa em `producao`.
+  const campos = { [coluna]: publicUrl };
+  if (canal === "linkedin" && pauta.linkedin_texto
+      && ["planejada", "producao"].includes(pauta.status_linkedin))
+    campos.status_linkedin = "produzido";
+
+  let update = db.from("conteudo_pautas").update(campos).eq("id", id);
+  if (expected) update = update.eq("atualizado_em", expected);
+  const { data: linhas, error: erroUpdate } = await update.select("id");
+  if (erroUpdate || !linhas?.length) {
+    if (caminhoAnterior !== caminho) await db.storage.from("post-images").remove([caminho]);
+    abortar(erroUpdate?.message || "pauta alterada durante o upload; nova imagem removida");
+  }
+
+  let cleanupPendente = null;
+  if (caminhoAnterior && caminhoAnterior !== caminho) {
+    const { error: erroLimpeza } = await db.storage.from("post-images").remove([caminhoAnterior]);
+    if (erroLimpeza) cleanupPendente = caminhoAnterior;
+  }
+  await logAutomacao(pauta, "Capa da pauta atualizada", {
+    origem: "cli", canal, caminho, anterior: caminhoAnterior,
+    cleanup_pendente: cleanupPendente,
+  });
+  if (cleanupPendente)
+    console.warn(`⚠️ Capa salva; limpeza retryável pendente: ${cleanupPendente}`);
+  console.log(`\n✅ Capa ${canal} enviada: ${publicUrl}\n`);
+}
+
+async function atualizarTags(id, { tags, expected, dryRun }) {
+  garantirId(id);
+  const lista = [...new Set(String(tags || "").split(",").map((tag) => tag.trim()).filter(Boolean))];
+  if (!lista.length || lista.some((tag) => !/^domain\/[a-z0-9]+(?:-[a-z0-9]+)*$/.test(tag)))
+    abortar("--tags exige uma lista de tags domain/*");
+  const { data: pauta, error } = await db.from("conteudo_pautas")
+    .select("id,titulo,atualizado_em").eq("id", id).maybeSingle();
+  if (error) abortar(error.message);
+  if (!pauta) abortar(`nenhuma pauta com id ${id}`);
+  garantirVersao(pauta, expected);
+  if (dryRun) {
+    console.log(`\n🔍 --dry-run: substituiria as tags por ${lista.join(", ")}.\n`);
+    return;
+  }
+  const { error: erroRpc } = await db.rpc("atualizar_tags_pauta", {
+    p_pauta_id: id, p_tags: lista,
+  });
+  if (erroRpc) abortar(erroRpc.message);
+  await logAutomacao(pauta, "Tags da pauta atualizadas", {
+    origem: "cli", tags: lista,
+  });
+  console.log(`\n✅ Tags atualizadas: ${lista.join(", ")}.\n`);
 }
 
 async function gravar(id, { bloco, arquivo, forcar, confirmar, expected, dryRun }) {
@@ -257,16 +455,86 @@ async function registrarDraft(id, { arquivo, forcar, confirmar, expected, dryRun
   console.log(`\n✅ Draft registrado: ${caminho.relativoRaiz}\n`);
 }
 
-function dadosPost(arquivo) {
+// Placeholder -> chave do JSONB. `id: false` marca os tipos que o renderer resolve
+// pelo array inteiro (ou por objeto único), ignorando o id do placeholder.
+const COMPONENTE_DO_PLACEHOLDER = {
+  STATS: { chave: "stats", id: true }, TABLE: { chave: "tables", id: true },
+  CHART: { chave: "charts", id: true }, TIMELINE: { chave: "timelines", id: true },
+  FAQ: { chave: "faqs", id: true }, CTA: { chave: "ctas", id: true },
+  VIDEO: { chave: "videos", id: true }, BEFOREAFTER: { chave: "beforeAfters", id: true },
+  IMAGE: { chave: "images", id: true }, CALCULATOR: { chave: "calculators", id: true },
+  CERTIFICATIONS: { chave: "certifications", id: true },
+  TESTIMONIAL: { chave: "testimonials", id: true }, RESOURCES: { chave: "resources", id: true },
+  COMPARISON3D: { chave: "comparison3D", id: true }, SPECSHEET: { chave: "specSheets", id: true },
+  CHECKLIST: { chave: "checklist", id: false }, NORMS: { chave: "norms", id: false },
+  MYTHS: { chave: "myths", id: false }, GALLERY: { chave: "gallery", id: false },
+  PROCESS: { chave: "process", id: false },
+};
+
+function corpoPublicavelDoMarkdown(arquivo) {
+  const markdown = readFileSync(arquivo, "utf8");
+  const semFrontmatter = markdown.startsWith("---")
+    ? markdown.slice(markdown.indexOf("\n---", 3) + 4)
+    : markdown;
+  const marcadorTecnico = "\n---\n\n## ESPECIFICAÇÕES TÉCNICAS PARA IMPLEMENTAÇÃO";
+  const corpo = semFrontmatter
+    .split(marcadorTecnico, 1)[0]
+    // rodapé do vault: wikilinks de contexto que nunca podem ir para o Supabase
+    .replace(/\r?\n---\r?\n\r?\n<!-- vault-rodape-v1 -->[\s\S]*$/, "")
+    .trim();
+
+  if (corpo.startsWith("---")) abortar("o corpo ainda começa com frontmatter");
+  if (corpo.includes("<!-- vault-rodape-v1 -->"))
+    abortar("o rodapé do vault sobrou no corpo");
+  if (corpo.includes("[["))
+    abortar("wikilink [[...]] no corpo; use link markdown, o renderer não interpreta wikilink");
+  if (/^# /m.test(corpo))
+    abortar("H1 no corpo; a página já renderiza o título como hero e o markdown vira H2 duplicado");
+  return corpo;
+}
+
+// O renderer descarta em silêncio placeholder sem componente e joga componente sem
+// placeholder no rodapé do artigo. Os dois viram defeito invisível em produção.
+function conferirPlaceholders(conteudo, componentes) {
+  const usados = [...conteudo.matchAll(/\[([A-Z0-9]+):([^\]\s]+)\]/g)];
+  const faltando = [];
+  for (const [, tipo, id] of usados) {
+    const mapa = COMPONENTE_DO_PLACEHOLDER[tipo];
+    if (!mapa) { faltando.push(`${tipo}:${id} (tipo desconhecido)`); continue; }
+    const valor = componentes?.[mapa.chave];
+    if (valor === undefined || valor === null) { faltando.push(`${tipo}:${id} (sem components.${mapa.chave})`); continue; }
+    if (!mapa.id) continue;
+    const lista = Array.isArray(valor) ? valor : [valor];
+    if (!lista.some((item) => item?.id === id))
+      faltando.push(`${tipo}:${id} (id ausente em components.${mapa.chave})`);
+  }
+  if (faltando.length)
+    abortar(`placeholder sem componente correspondente: ${faltando.join("; ")}`);
+
+  const referenciadas = new Set(usados
+    .map(([, tipo]) => COMPONENTE_DO_PLACEHOLDER[tipo]?.chave)
+    .filter(Boolean));
+  const orfas = Object.entries(componentes || {})
+    .filter(([chave, valor]) => !referenciadas.has(chave)
+      && valor != null && (!Array.isArray(valor) || valor.length))
+    .map(([chave]) => chave);
+  if (orfas.length)
+    console.warn(`⚠️ componentes sem placeholder (renderizam no rodapé do artigo): ${orfas.join(", ")}`);
+}
+
+function dadosPost(arquivo, markdownArquivo) {
   if (!arquivo || !existsSync(arquivo)) abortar("--dados precisa apontar para um JSON");
   let bruto;
   try { bruto = JSON.parse(readFileSync(arquivo, "utf8")); }
   catch { abortar("JSON de --dados inválido"); }
+  if (!bruto.content && markdownArquivo) bruto.content = corpoPublicavelDoMarkdown(markdownArquivo);
   for (const campo of ["title", "slug", "excerpt", "content"]) {
     if (!bruto[campo] || typeof bruto[campo] !== "string")
       abortar(`campo obrigatório no JSON: ${campo}`);
   }
   if (!SLUG.test(bruto.slug)) abortar("slug inválido");
+  if (bruto.content.includes("[[")) abortar("wikilink [[...]] no content do JSON");
+  conferirPlaceholders(bruto.content, bruto.components);
   const permitidos = [
     "title", "slug", "excerpt", "content", "category", "tags", "author",
     "read_time", "featured", "meta_title", "meta_description", "answer_summary",
@@ -278,7 +546,7 @@ function dadosPost(arquivo) {
 async function produzir(id, { arquivo, dados, usarExistente, expected, dryRun }) {
   garantirId(id);
   const draft = caminhoRelativoSeguro(arquivo, "Berkahn-Vault/40-content/blog/drafts");
-  const post = dadosPost(dados);
+  const post = dadosPost(dados, draft.absoluto);
   const { data: pauta, error } = await db.from("conteudo_pautas")
     .select(CAMPOS).eq("id", id).maybeSingle();
   if (error) abortar(error.message);
@@ -289,31 +557,48 @@ async function produzir(id, { arquivo, dados, usarExistente, expected, dryRun })
   const coverRel = `public/images/img_blog/${post.slug}/cover.webp`;
   const coverAbs = resolve(ROOT, coverRel);
   if (dryRun) {
-    console.log(`\n🔍 --dry-run: post draft ${post.slug}, vínculo ${id}, capa ${coverRel}.\n`);
+    const consulta = pauta.post_id
+      ? db.from("posts").select("id,slug,status").eq("id", pauta.post_id).maybeSingle()
+      : db.from("posts").select("id,slug,status").eq("slug", post.slug).maybeSingle();
+    const { data: existente, error: erroExistente } = await consulta;
+    if (erroExistente) abortar(erroExistente.message);
+    if (existente && !pauta.post_id && !usarExistente)
+      abortar("slug já existe; confirme vínculo com --usar-existente");
+    const modo = existente?.status === "published"
+      ? "revisão staged; artigo live permanece publicado"
+      : "post draft";
+    console.log(`\n🔍 --dry-run: ${modo} ${post.slug}, vínculo ${id}, capa ${coverRel}.\n`);
     return;
   }
 
-  const coverAnterior = existsSync(coverAbs) ? readFileSync(coverAbs) : null;
+  const coverOutputAbs = coverAbs;
+  let coverOutputAnterior = existsSync(coverAbs) ? readFileSync(coverAbs) : null;
   let postAnterior = null;
   let postId = pauta.post_id;
   let postCriado = false;
+  let postAlterado = false;
+  let capaAlterada = false;
+  let preservarPublicado = false;
   try {
     const resposta = await fetch(pauta.capa_blog_url);
     if (!resposta.ok) throw new Error(`falha ao baixar capa staging: HTTP ${resposta.status}`);
-    mkdirSync(dirname(coverAbs), { recursive: true });
-    await sharp(Buffer.from(await resposta.arrayBuffer()))
+    const coverNovo = await sharp(Buffer.from(await resposta.arrayBuffer()))
       .rotate().resize(1200, 800, { fit: "cover" })
-      .webp({ quality: 84 }).toFile(coverAbs);
+      .webp({ quality: 84 }).toBuffer();
 
     if (postId) {
       const { data: existente, error: erroLeitura } = await db
         .from("posts").select("*").eq("id", postId).single();
       if (erroLeitura) throw erroLeitura;
       postAnterior = existente;
-      const { error: erroPost } = await db.from("posts")
-        .update({ ...post, status: "draft", cover_image: `/images/img_blog/${post.slug}/cover.webp` })
-        .eq("id", postId);
-      if (erroPost) throw erroPost;
+      preservarPublicado = existente.status === "published";
+      if (!preservarPublicado) {
+        const { error: erroPost } = await db.from("posts")
+          .update({ ...post, status: "draft", cover_image: `/images/img_blog/${post.slug}/cover.webp` })
+          .eq("id", postId);
+        if (erroPost) throw erroPost;
+        postAlterado = true;
+      }
     } else {
       const { data: porSlug, error: erroSlug } = await db
         .from("posts").select("*").eq("slug", post.slug).maybeSingle();
@@ -323,10 +608,14 @@ async function produzir(id, { arquivo, dados, usarExistente, expected, dryRun })
       if (porSlug) {
         postAnterior = porSlug;
         postId = porSlug.id;
-        const { error: erroPost } = await db.from("posts")
-          .update({ ...post, status: "draft", cover_image: `/images/img_blog/${post.slug}/cover.webp` })
-          .eq("id", postId);
-        if (erroPost) throw erroPost;
+        preservarPublicado = porSlug.status === "published";
+        if (!preservarPublicado) {
+          const { error: erroPost } = await db.from("posts")
+            .update({ ...post, status: "draft", cover_image: `/images/img_blog/${post.slug}/cover.webp` })
+            .eq("id", postId);
+          if (erroPost) throw erroPost;
+          postAlterado = true;
+        }
       } else {
         const { data: criado, error: erroPost } = await db.from("posts").insert({
           ...post, status: "draft", cover_image: `/images/img_blog/${post.slug}/cover.webp`,
@@ -337,21 +626,38 @@ async function produzir(id, { arquivo, dados, usarExistente, expected, dryRun })
       }
     }
 
+    if (!preservarPublicado) {
+      mkdirSync(dirname(coverOutputAbs), { recursive: true });
+      writeFileSync(coverOutputAbs, coverNovo);
+      capaAlterada = true;
+    }
+
     const { error: erroPauta } = await db.from("conteudo_pautas").update({
       post_id: postId, draft_path: draft.relativoRaiz, status_blog: "produzido",
+      post_draft_payload: preservarPublicado
+        ? {
+          ...post,
+          cover_image: `/images/img_blog/${post.slug}/cover.webp`,
+        }
+        : null,
     }).eq("id", id);
     if (erroPauta) throw erroPauta;
   } catch (erro) {
     if (postCriado && postId) await db.from("posts").delete().eq("id", postId);
-    else if (postAnterior) await db.from("posts").update(postAnterior).eq("id", postAnterior.id);
-    if (coverAnterior) writeFileSync(coverAbs, coverAnterior);
-    else if (existsSync(coverAbs)) unlinkSync(coverAbs);
+    else if (postAlterado && postAnterior)
+      await db.from("posts").update(postAnterior).eq("id", postAnterior.id);
+    if (capaAlterada) {
+      if (coverOutputAnterior) writeFileSync(coverOutputAbs, coverOutputAnterior);
+      else if (existsSync(coverOutputAbs)) unlinkSync(coverOutputAbs);
+    }
     abortar(erro instanceof Error ? erro.message : String(erro));
   }
 
   await logAutomacao(pauta, "Artigo produzido como draft", {
     origem: "cli", canal: "blog", anterior: pauta.status_blog,
     novo: "produzido", post_id: postId, draft_path: draft.relativoRaiz,
+    revisao_de_publicado: preservarPublicado,
+    capa_staging_storage: preservarPublicado ? pauta.capa_blog_url : null,
   });
   console.log(`\n✅ Artigo produzido como draft e vinculado: ${postId}\n`);
 }
@@ -376,6 +682,113 @@ function frontmatterPublicado(markdown, postId, slug) {
   return `---\n${linhas.join("\n")}\n---${markdown.slice(fim + 4)}`;
 }
 
+function removerSeExiste(caminho) {
+  if (caminho && existsSync(caminho)) unlinkSync(caminho);
+}
+
+function prepararMovimentoPublicado(origemAbs, destinoAbs, conteudoPublicado) {
+  const sufixo = `${process.pid}-${Date.now()}`;
+  const origemStaging = join(dirname(origemAbs), `.${basename(origemAbs)}.${sufixo}.source`);
+  const destinoTemporario = join(dirname(destinoAbs), `.${basename(destinoAbs)}.${sufixo}.tmp`);
+  const destinoBackup = existsSync(destinoAbs)
+    ? join(dirname(destinoAbs), `.${basename(destinoAbs)}.${sufixo}.backup`)
+    : null;
+
+  mkdirSync(dirname(destinoAbs), { recursive: true });
+  writeFileSync(
+    destinoTemporario,
+    conteudoPublicado,
+    Buffer.isBuffer(conteudoPublicado) ? { flag: "wx" } : { encoding: "utf8", flag: "wx" }
+  );
+  try {
+    if (destinoBackup) renameSync(destinoAbs, destinoBackup);
+    renameSync(origemAbs, origemStaging);
+    renameSync(destinoTemporario, destinoAbs);
+  } catch (erro) {
+    removerSeExiste(destinoTemporario);
+    removerSeExiste(destinoAbs);
+    if (existsSync(origemStaging) && !existsSync(origemAbs)) renameSync(origemStaging, origemAbs);
+    if (destinoBackup && existsSync(destinoBackup) && !existsSync(destinoAbs))
+      renameSync(destinoBackup, destinoAbs);
+    throw erro;
+  }
+
+  return {
+    confirmar() {
+      const sobras = [];
+      for (const caminho of [origemStaging, destinoBackup]) {
+        try {
+          removerSeExiste(caminho);
+        } catch {
+          sobras.push(caminho);
+        }
+      }
+      return sobras;
+    },
+    desfazer() {
+      removerSeExiste(destinoAbs);
+      if (existsSync(origemStaging) && !existsSync(origemAbs)) renameSync(origemStaging, origemAbs);
+      if (destinoBackup && existsSync(destinoBackup) && !existsSync(destinoAbs))
+        renameSync(destinoBackup, destinoAbs);
+      removerSeExiste(destinoTemporario);
+    },
+  };
+}
+
+function prepararArquivoPublicado(destinoAbs, conteudoPublicado) {
+  const sufixo = `${process.pid}-${Date.now()}`;
+  const destinoTemporario = join(dirname(destinoAbs), `.${basename(destinoAbs)}.${sufixo}.tmp`);
+  const destinoBackup = existsSync(destinoAbs)
+    ? join(dirname(destinoAbs), `.${basename(destinoAbs)}.${sufixo}.backup`)
+    : null;
+
+  mkdirSync(dirname(destinoAbs), { recursive: true });
+  writeFileSync(
+    destinoTemporario,
+    conteudoPublicado,
+    Buffer.isBuffer(conteudoPublicado) ? { flag: "wx" } : { encoding: "utf8", flag: "wx" }
+  );
+  try {
+    if (destinoBackup) renameSync(destinoAbs, destinoBackup);
+    renameSync(destinoTemporario, destinoAbs);
+  } catch (erro) {
+    removerSeExiste(destinoTemporario);
+    removerSeExiste(destinoAbs);
+    if (destinoBackup && existsSync(destinoBackup) && !existsSync(destinoAbs))
+      renameSync(destinoBackup, destinoAbs);
+    throw erro;
+  }
+
+  return {
+    confirmar() {
+      const sobras = [];
+      try {
+        removerSeExiste(destinoBackup);
+      } catch {
+        if (destinoBackup) sobras.push(destinoBackup);
+      }
+      return sobras;
+    },
+    desfazer() {
+      removerSeExiste(destinoAbs);
+      if (destinoBackup && existsSync(destinoBackup) && !existsSync(destinoAbs))
+        renameSync(destinoBackup, destinoAbs);
+      removerSeExiste(destinoTemporario);
+    },
+  };
+}
+function caminhoStorageDaUrl(url) {
+  if (!url) return null;
+  try {
+    const pathname = new URL(url).pathname;
+    const marcador = "/post-images/";
+    const indice = pathname.indexOf(marcador);
+    return indice === -1 ? null : decodeURIComponent(pathname.slice(indice + marcador.length));
+  } catch {
+    return null;
+  }
+}
+
 async function publicar(id, { expected, dryRun }) {
   garantirId(id);
   const { data: pauta, error } = await db.from("conteudo_pautas")
@@ -391,26 +804,42 @@ async function publicar(id, { expected, dryRun }) {
   const destinoRel = `Berkahn-Vault/40-content/blog/publicados/${nome}`;
   const origemAbs = resolve(ROOT, pauta.draft_path);
   const destinoAbs = resolve(ROOT, destinoRel);
+  const slugFinal = pauta.post_draft_payload?.slug || pauta.posts.slug;
+  const revisaoStaged = Boolean(pauta.post_draft_payload);
+  const capaDestinoAbs = resolve(ROOT, `public/images/img_blog/${slugFinal}/cover.webp`);
   const jaPublicadoPath = resolve(origemAbs) === resolve(destinoAbs);
   const jaMovido =
     (jaPublicadoPath || !existsSync(origemAbs)) && existsSync(destinoAbs);
   if (!existsSync(origemAbs) && !jaMovido) abortar("markdown não existe no draft nem em publicados");
-  if (existsSync(origemAbs) && existsSync(destinoAbs))
-    abortar("destino já existe; resolva a duplicação antes de publicar");
   if (dryRun) {
-    console.log(`\n🔍 --dry-run: moveria ${pauta.draft_path} → ${destinoRel} e publicaria post+pauta.\n`);
+    const operacao = existsSync(origemAbs) && existsSync(destinoAbs)
+      ? "substituiria atomicamente a versão publicada"
+      : "moveria o draft para publicados";
+    const capa = revisaoStaged ? "; regeneraria a capa WebP do Storage" : "";
+    console.log(`\n🔍 --dry-run: ${operacao} (${pauta.draft_path} → ${destinoRel})${capa} e publicaria post+pauta.\n`);
     return;
   }
 
-  let original = null;
-  if (!jaMovido) {
-    original = readFileSync(origemAbs, "utf8");
-    const publicado = frontmatterPublicado(
-      original, pauta.post_id, pauta.posts.slug
-    );
-    mkdirSync(dirname(destinoAbs), { recursive: true });
-    renameSync(origemAbs, destinoAbs);
-    writeFileSync(destinoAbs, publicado, "utf8");
+  const movimentos = [];
+  try {
+    if (revisaoStaged) {
+      if (!pauta.capa_blog_url) throw new Error("revisão sem capa staging no Storage");
+      const respostaCapa = await fetch(pauta.capa_blog_url);
+      if (!respostaCapa.ok)
+        throw new Error(`falha ao baixar capa staging: HTTP ${respostaCapa.status}`);
+      const capaWebp = await sharp(Buffer.from(await respostaCapa.arrayBuffer()))
+        .rotate().resize(1200, 800, { fit: "cover" })
+        .webp({ quality: 84 }).toBuffer();
+      movimentos.push(prepararArquivoPublicado(capaDestinoAbs, capaWebp));
+    }
+    if (!jaMovido) {
+      const original = readFileSync(origemAbs, "utf8");
+      const publicado = frontmatterPublicado(original, pauta.post_id, slugFinal);
+      movimentos.push(prepararMovimentoPublicado(origemAbs, destinoAbs, publicado));
+    }
+  } catch (erro) {
+    for (const item of [...movimentos].reverse()) item.desfazer();
+    abortar(`não foi possível preparar os arquivos publicados: ${erro.message}`);
   }
 
   const { error: erroRpc } = await db.rpc("publicar_artigo_pauta", {
@@ -418,13 +847,55 @@ async function publicar(id, { expected, dryRun }) {
     p_publicado_path: destinoRel,
   });
   if (erroRpc) {
-    if (!jaMovido && original !== null) {
-      renameSync(destinoAbs, origemAbs);
-      writeFileSync(origemAbs, original, "utf8");
+    try {
+      for (const item of [...movimentos].reverse()) item.desfazer();
+    } catch (erroRollback) {
+      abortar(`banco recusou publicação e o rollback local falhou: ${erroRollback.message}`);
     }
     abortar(`banco recusou publicação; markdown restaurado: ${erroRpc.message}`);
   }
+  const sobras = movimentos.flatMap((item) => item.confirmar());
+  if (sobras.length)
+    console.warn(`⚠️ Publicação concluída, mas a limpeza precisa de retry: ${sobras.join(", ")}`);
   console.log(`\n✅ Publicação concluída: ${destinoRel}\n`);
+}
+
+async function aprovar(id, { canais, confirmar, expected, dryRun }) {
+  garantirId(id);
+  if (!confirmar)
+    abortar("aprovação exige --confirmar-aprovacao-humana após decisão explícita do Bruno");
+  const lista = [...new Set(String(canais || "blog,linkedin").split(",").map((c) => c.trim()))];
+  if (!lista.length || lista.some((canal) => !["blog", "linkedin"].includes(canal)))
+    abortar("--canais aceita blog,linkedin");
+
+  const { data: pauta, error } = await db.from("conteudo_pautas")
+    .select(CAMPOS).eq("id", id).maybeSingle();
+  if (error) abortar(error.message);
+  if (!pauta) abortar(`nenhuma pauta com id ${id}`);
+  garantirVersao(pauta, expected);
+  for (const canal of lista) {
+    if (!pauta.plataformas?.includes(canal)) abortar(`${canal} não se aplica à pauta`);
+  }
+  const patch = {};
+  if (lista.includes("blog")) patch.status_blog = "aprovado";
+  if (lista.includes("linkedin")) patch.status_linkedin = "aprovado";
+  if (dryRun) {
+    console.log(`\n🔍 --dry-run: registraria aprovação humana para ${lista.join(" + ")}.\n`);
+    return;
+  }
+  let update = db.from("conteudo_pautas").update(patch).eq("id", id);
+  if (expected) update = update.eq("atualizado_em", expected);
+  const { data: atualizada, error: erroUpdate } = await update.select(CAMPOS).maybeSingle();
+  if (erroUpdate) abortar(erroUpdate.message);
+  if (!atualizada) abortar("pauta mudou ou não pôde ser atualizada");
+  await logAutomacao(atualizada, "Aprovação editorial registrada", {
+    origem: "bruno-via-codex",
+    canais: lista,
+    anterior: { blog: pauta.status_blog, linkedin: pauta.status_linkedin },
+    novo: { blog: atualizada.status_blog, linkedin: atualizada.status_linkedin },
+    gaps: gapsDaPauta(atualizada),
+  });
+  console.log(`\n✅ Aprovação humana registrada para ${lista.join(" + ")}.\n`);
 }
 
 function gapsDaPauta(pauta) {
@@ -434,6 +905,8 @@ function gapsDaPauta(pauta) {
     if (!pauta.draft_path) gaps.push("draft");
     if (!pauta.post_id) gaps.push("artigo");
     if (!pauta.capa_blog_url) gaps.push("capa_blog");
+    if (pauta.post_draft_payload && !["aprovado", "publicado"].includes(pauta.status_blog))
+      gaps.push("revisao_blog_aguarda_aprovacao");
     if (pauta.status_blog === "publicado" && pauta.posts?.status !== "published")
       gaps.push("publicacao_real_blog");
   }
@@ -451,6 +924,8 @@ function proximaAcaoPauta(pauta) {
     if (!pauta.pesquisa_conteudo) return "pesquisar";
     if (!pauta.draft_path) return "criar-draft";
     if (!pauta.post_id || !pauta.capa_blog_url) return "produzir-artigo";
+    if (pauta.post_draft_payload && !["aprovado", "publicado"].includes(pauta.status_blog))
+      return "revisar";
     if (pauta.posts?.status !== "published") return "revisar";
   }
   if (pauta.status_linkedin) {
@@ -468,14 +943,25 @@ async function contextoPauta(id, { include = "", json = false, silent = false } 
   if (error) abortar(error.message);
   if (!pauta) abortar(`nenhuma pauta com id ${id}`);
 
-  const { data: tagRows } = await db.from("conteudo_pauta_tags")
-    .select("tag_slug").eq("pauta_id", id);
+  const [{ data: tagRows }, { data: job }] = await Promise.all([
+    db.from("conteudo_pauta_tags").select("tag_slug").eq("pauta_id", id),
+    db.from("conteudo_automation_jobs_latest")
+      .select("id,acao,status,tentativas,erro,criado_em,atualizado_em")
+      .eq("pauta_id", id).maybeSingle(),
+  ]);
   const inclusoes = new Set(String(include || "").split(",").filter(Boolean));
   const blocos = {};
+  if (inclusoes.has("insights") && pauta.insights)
+    blocos.insights = pauta.insights;
   if (inclusoes.has("pesquisa") && pauta.pesquisa_conteudo)
     blocos.pesquisa = pauta.pesquisa_conteudo;
   if (inclusoes.has("linkedin") && pauta.linkedin_texto)
     blocos.linkedin = pauta.linkedin_texto;
+  if (inclusoes.has("imagem")) {
+    if (pauta.linkedin_imagem_prompt) blocos.linkedin_imagem_prompt = pauta.linkedin_imagem_prompt;
+    if (pauta.linkedin_imagem_briefing)
+      blocos.linkedin_imagem_briefing = pauta.linkedin_imagem_briefing;
+  }
   if (inclusoes.has("draft") && pauta.draft_path) {
     const caminho = resolve(ROOT, pauta.draft_path);
     if (existsSync(caminho)) blocos.draft = readFileSync(caminho, "utf8");
@@ -488,6 +974,10 @@ async function contextoPauta(id, { include = "", json = false, silent = false } 
     status_linkedin: pauta.status_linkedin,
     plataformas: pauta.plataformas,
     keyword: pauta.keyword,
+    intencao: pauta.intencao,
+    funil: pauta.funil,
+    prioridade: pauta.prioridade,
+    trilha: pauta.trilha,
     data_alvo: pauta.data_alvo,
     tags: (tagRows || []).map((row) => row.tag_slug),
     gaps: gapsDaPauta(pauta),
@@ -497,7 +987,10 @@ async function contextoPauta(id, { include = "", json = false, silent = false } 
       pesquisa: hashTexto(pauta.pesquisa_conteudo),
       linkedin: hashTexto(pauta.linkedin_texto),
       draft_path: hashTexto(pauta.draft_path),
+      imagem_prompt: hashTexto(pauta.linkedin_imagem_prompt),
     },
+    url_linkedin_parametrizada: urlLinkedinParametrizada(pauta.posts?.slug),
+    automation_job: job || null,
     blocos,
   };
   if (silent) return payload;
@@ -574,22 +1067,26 @@ async function finalizarJob(id, workerId, status, flags) {
   console.log(JSON.stringify(data, null, 2));
 }
 
-const [comando, ...resto] = process.argv.slice(2);
-const flags = Object.fromEntries(
-  resto.filter((arg) => arg.startsWith("--")).map((arg) => {
-    const [chave, ...valor] = arg.slice(2).split("=");
-    return [chave, valor.length ? valor.join("=") : true];
-  })
-);
-const posicional = resto.filter((arg) => !arg.startsWith("--"));
-const dryRun = Boolean(flags["dry-run"]);
+async function main(argv = process.argv.slice(2)) {
+  const [comando, ...resto] = argv;
+  const flags = Object.fromEntries(
+    resto.filter((arg) => arg.startsWith("--")).map((arg) => {
+      const [chave, ...valor] = arg.slice(2).split("=");
+      return [chave, valor.length ? valor.join("=") : true];
+    })
+  );
+  const posicional = resto.filter((arg) => !arg.startsWith("--"));
+  const dryRun = Boolean(flags["dry-run"]);
 
-switch (comando) {
+  switch (comando) {
   case "buscar":
     await buscar(posicional[0], flags.slug);
     break;
   case "ver":
     await ver(posicional[0]);
+    break;
+  case "selecionar":
+    await selecionarProxima({ json: Boolean(flags.json), escopo: flags.escopo });
     break;
   case "proxima":
     await contextoPauta(posicional[0], {
@@ -651,24 +1148,66 @@ switch (comando) {
   case "publicar":
     await publicar(posicional[0], { expected: flags["expected-updated-at"], dryRun });
     break;
-  default:
-    console.log(`
+  case "aprovar":
+    await aprovar(posicional[0], {
+      canais: flags.canais,
+      confirmar: Boolean(flags["confirmar-aprovacao-humana"]),
+      expected: flags["expected-updated-at"],
+      dryRun,
+    });
+    break;
+  case "capa":
+    await subirCapa(posicional[0], {
+      canal: flags.canal,
+      arquivo: flags.arquivo,
+      expected: flags["expected-updated-at"],
+      dryRun,
+    });
+    break;
+  case "tags":
+    await atualizarTags(posicional[0], {
+      tags: flags.tags,
+      expected: flags["expected-updated-at"],
+      dryRun,
+    });
+    break;
+    default:
+      console.log(`
 uso:
   pauta.mjs buscar "<termo>" [--slug=<artigo>]
   pauta.mjs ver <id>
-  pauta.mjs proxima <id> [--json] [--include=pesquisa,draft,linkedin]
+  pauta.mjs selecionar [--escopo=pacote|blog|linkedin|qualquer] [--json]
+  pauta.mjs proxima <id> [--json] [--include=insights,pesquisa,draft,linkedin,imagem]
   pauta.mjs validar <id> [--json]
   pauta.mjs job-claim --worker=<id> [--lease=900] [--dry-run]
   pauta.mjs job-complete <job-id> --worker=<id> --run-id=<uuid> [--status=concluido|aguardando-aprovacao]
   pauta.mjs job-fail <job-id> --worker=<id> --run-id=<uuid> --erro="<mensagem>"
   pauta.mjs criar --titulo="<título>" [--plataformas=blog,linkedin] --confirmar-aprovacao [--dry-run]
+  pauta.mjs capa <id> --canal=blog|linkedin --arquivo=<imagem> [--expected-updated-at=<iso>] [--dry-run]
+  pauta.mjs tags <id> --tags=domain/lsf,domain/steel-frame [--expected-updated-at=<iso>] [--dry-run]
   pauta.mjs worker-heartbeat --worker=<id> [--versao=<versao>] [--dry-run]
   pauta.mjs gravar <id> --bloco=<bloco> --arquivo=<path> [--forcar --confirmar-substituicao] [--expected-updated-at=<iso>] [--dry-run]
   pauta.mjs registrar-draft <id> --arquivo=<markdown> [--expected-updated-at=<iso>] [--dry-run]
   pauta.mjs produzir <id> --arquivo=<draft.md> --dados=<post.json> [--usar-existente] [--expected-updated-at=<iso>] [--dry-run]
+  pauta.mjs aprovar <id> [--canais=blog,linkedin] --confirmar-aprovacao-humana [--expected-updated-at=<iso>] [--dry-run]
   pauta.mjs publicar <id> [--expected-updated-at=<iso>] [--dry-run]
 
 blocos: ${Object.keys(COLUNA_DO_BLOCO).join(" | ")}
 `);
-    process.exit(comando ? 2 : 0);
+      process.exit(comando ? 2 : 0);
+  }
 }
+
+export {
+  compararPautas,
+  corpoPublicavelDoMarkdown,
+  frontmatterPublicado,
+  gapsDaPauta,
+  prepararArquivoPublicado,
+  prepararMovimentoPublicado,
+  proximaAcaoPauta,
+  urlLinkedinParametrizada,
+};
+
+if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href)
+  await main();
