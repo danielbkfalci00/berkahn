@@ -4,7 +4,7 @@ criado: 2026-08-11
 atualizado: 2026-08-12
 tags:
   - project/blog
-  - status/draft
+  - status/published
   - domain/lsf
 ai_summary: "Uma casa de 100 m² em Light Steel Frame no Sudeste parte de referências de R$ 304 mil, R$ 454 mil ou R$ 620 mil conforme o padrão, antes de projeto e gestão."
 status: published

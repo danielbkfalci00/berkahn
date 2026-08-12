@@ -1,4 +1,4 @@
-// Verificação transacional das migrations 012–023 em produção.
+// Verificação transacional das migrations 012–030 em produção.
 // Toda escrita fica dentro de BEGIN/ROLLBACK; nenhuma pauta é persistida.
 import { existsSync, readFileSync } from "node:fs";
 import pg from "pg";
@@ -320,11 +320,53 @@ try {
   );
   checar("rótulo de integrações está em UTF-8", integracoes.label === "Integrações", integracoes.label);
 
+  console.log("\nREVISÃO SEGURA DE POST PUBLICADO — 030");
+  const { rows: [publicadoAntes] } = await client.query(`
+    SELECT p.id, p.title, p.status
+    FROM conteudo_pautas cp
+    JOIN posts p ON p.id = cp.post_id
+    WHERE cp.id = '63542e4b-8d91-4aba-8f42-2b0c872bd081'
+  `);
+  await client.query(`
+    UPDATE conteudo_pautas
+    SET status_blog='aprovado',
+        post_draft_payload=jsonb_build_object(
+          'title', 'Título staged 030',
+          'slug', 'isencao-icms-energia-solar-sp',
+          'excerpt', 'Teste transacional',
+          'content', 'Conteúdo de teste',
+          'cover_image', '/images/img_blog/isencao-icms-energia-solar-sp/cover.webp'
+        )
+    WHERE id='63542e4b-8d91-4aba-8f42-2b0c872bd081'
+  `);
+  const { rows: [duranteStage] } = await client.query(
+    "SELECT title,status FROM posts WHERE id=$1", [publicadoAntes.id]
+  );
+  checar(
+    "staging não retira nem altera o artigo live",
+    duranteStage.status === "published" && duranteStage.title === publicadoAntes.title
+  );
+  await client.query(
+    "SELECT publicar_artigo_pauta($1,$2)",
+    ["63542e4b-8d91-4aba-8f42-2b0c872bd081", "Berkahn-Vault/40-content/blog/publicados/isencao-icms-energia-solar-sp.md"]
+  );
+  const { rows: [depoisPublicar] } = await client.query(`
+    SELECT p.title,p.status,cp.post_draft_payload
+    FROM conteudo_pautas cp JOIN posts p ON p.id=cp.post_id
+    WHERE cp.id='63542e4b-8d91-4aba-8f42-2b0c872bd081'
+  `);
+  checar(
+    "aprovação aplica revisão e limpa staging atomicamente",
+    depoisPublicar.status === "published" &&
+      depoisPublicar.title === "Título staged 030" &&
+      depoisPublicar.post_draft_payload === null
+  );
+
   await client.query("ROLLBACK");
 } finally {
   await client.query("ROLLBACK").catch(() => {});
   await client.end();
 }
 
-console.log(falhas === 0 ? "\n✅ schema 012–023 verificado" : `\n❌ ${falhas} falha(s)`);
+console.log(falhas === 0 ? "\n✅ schema 012–030 verificado" : `\n❌ ${falhas} falha(s)`);
 process.exit(falhas === 0 ? 0 : 1);

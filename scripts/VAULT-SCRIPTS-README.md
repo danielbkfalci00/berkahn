@@ -71,20 +71,24 @@ node scripts/vault-supabase-resync.mjs --patch=fissuras-steel-frame,quanto-custa
 
 ### 4. `conteudo/pauta.mjs` — quadro operacional de conteúdo
 
-CLI genérico versionado que substitui os scripts descartáveis `add-article-[slug].mjs`. Lê e altera `conteudo_pautas`, cria/atualiza posts como draft, prepara a capa WebP e publica artigo+pauta por RPC idempotente.
+CLI genérico versionado que substitui os scripts descartáveis `add-article-[slug].mjs`. Seleciona a próxima pauta, grava blocos/tags/capas, cria drafts, mantém revisões de posts publicados em staging e publica artigo+pauta por RPC idempotente.
 
 ```powershell
 # Descoberta e leitura
 node scripts/conteudo/pauta.mjs buscar "tema"
 node scripts/conteudo/pauta.mjs ver <id>
+node scripts/conteudo/pauta.mjs selecionar --escopo=pacote --json
 
 # Toda escrita começa em dry-run
-node scripts/conteudo/pauta.mjs registrar-draft <id> --path="Berkahn-Vault/40-content/blog/drafts/slug.md" --dry-run
-node scripts/conteudo/pauta.mjs produzir <id> --dados="post.json" --dry-run
+node scripts/conteudo/pauta.mjs capa <id> --canal=blog --arquivo="capa.png" --dry-run
+node scripts/conteudo/pauta.mjs tags <id> --tags=domain/lsf,domain/steel-frame --dry-run
+node scripts/conteudo/pauta.mjs registrar-draft <id> --arquivo="Berkahn-Vault/40-content/blog/drafts/slug.md" --dry-run
+node scripts/conteudo/pauta.mjs produzir <id> --arquivo="Berkahn-Vault/40-content/blog/drafts/slug.md" --dados="post.json" --dry-run
+node scripts/conteudo/pauta.mjs aprovar <id> --canais=blog,linkedin --confirmar-aprovacao-humana --dry-run
 node scripts/conteudo/pauta.mjs publicar <id> --dry-run
 ```
 
-`criar` exige `--confirmar-aprovacao`. Sobrescrever conteúdo exige `--forcar --confirmar-substituicao`. `publicar` recusa pautas não aprovadas e desfaz a movimentação local do markdown se o banco falhar. Requer `NEXT_PUBLIC_SUPABASE_URL` e `SUPABASE_SERVICE_KEY` no ambiente para operações remotas.
+`criar` exige `--confirmar-aprovacao`. Sobrescrever conteúdo exige `--forcar --confirmar-substituicao`. `aprovar` só aceita confirmação humana explícita. `publicar` recusa pautas não aprovadas e desfaz markdown, capa e versão anterior se o banco falhar. Requer `NEXT_PUBLIC_SUPABASE_URL` e `SUPABASE_SERVICE_KEY` no ambiente para operações remotas.
 
 ### 5. `analytics/` — relatório e aprendizado editorial
 

@@ -23,13 +23,13 @@ if (existsSync(ENV)) {
 }
 const SERVICE_KEY =
   process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY;
-if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !SERVICE_KEY) {
-  console.error("Faltam NEXT_PUBLIC_SUPABASE_URL e a service key no .env.local");
-  process.exit(2);
-}
-const db = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, SERVICE_KEY, {
-  auth: { persistSession: false },
-});
+// A conexão fica lazy para que helpers puros sejam importáveis pela CI sem
+// expor a service role; comandos remotos validam as credenciais em main().
+const db = process.env.NEXT_PUBLIC_SUPABASE_URL && SERVICE_KEY
+  ? createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, SERVICE_KEY, {
+    auth: { persistSession: false },
+  })
+  : null;
 
 const COLUNA_DO_BLOCO = {
   insights: "insights",
@@ -1068,6 +1068,8 @@ async function finalizarJob(id, workerId, status, flags) {
 }
 
 async function main(argv = process.argv.slice(2)) {
+  if (!db)
+    abortar("Faltam NEXT_PUBLIC_SUPABASE_URL e a service key no .env.local", 2);
   const [comando, ...resto] = argv;
   const flags = Object.fromEntries(
     resto.filter((arg) => arg.startsWith("--")).map((arg) => {

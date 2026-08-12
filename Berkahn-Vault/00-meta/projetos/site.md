@@ -1,7 +1,7 @@
 ---
 tipo: projeto
 criado: 2026-05-22
-atualizado: 2026-08-11
+atualizado: 2026-08-12
 tags:
   - project/site
   - status/active
@@ -73,11 +73,12 @@ Site em produção (Next.js App Router + Supabase + Vercel + Tailwind + shadcn/u
 - [ ] @bruno Medir CWV no Speed Insights por 7 dias e consolidar em 28 dias, sem misturar as séries anterior e posterior ao Consent Mode de 2026-07-30; baseline em [[2026-08-diagnostico-integrado-site]] #pendencia
 - [ ] @bruno Executar smoke autenticado de Inbox, Kanban, upload, responsável, PWA e configurações conforme [[admin-setup]]; PR #53, deploys e smoke público já estão concluídos #pendencia
 - [ ] @bruno Despublicar o GitHub Pages `legacy/errored` em `Settings → Pages` com a conta proprietária; a API recusou o DELETE porque a conta CLI não tem `admin` #pendencia
+- [ ] @codex Planejar upgrade compatível de Next 15.5.23, sharp 0.34.5 e dependências D3; `npm audit --omit=dev` reporta 4 vulnerabilidades altas e a correção automática exige versões breaking #pendencia
 - [x] ~~**Próxima página do redesign: `/atualidades`**~~ — concluída em 2026-08-06: abertura fundida, bento, categorias canônicas, payload 141/26 KB e ISR 60 preservado
 - [ ] Importar Clube Quinta dos Lagos para o banco de imagens antes de reativar o rail de projetos
 - [ ] Validar `/institucional/pdf` gerando PDF em produção (pós-merge do #17)
 - [ ] Atualizar o briefing do institucional para **v4** antes de distribuir — o código está em v4, a documentação em v3
-- [ ] Validar build (`npm run build`) sem warnings críticos
+- [x] Validar build (`npm run build`) sem warnings críticos — passou em 2026-08-12; restam três avisos antigos de `<img>` e dados Browserslist desatualizados
 - [ ] gitleaks scan pre-commit ativo
 
 ## KPIs (snapshot)

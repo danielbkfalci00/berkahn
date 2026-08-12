@@ -1,14 +1,14 @@
 ---
 tipo: context
 criado: 2026-08-05
-atualizado: 2026-08-07
+atualizado: 2026-08-12
 tags:
   - project/site
   - project/blog
   - project/linkedin
   - status/active
   - domain/integrations
-ai_summary: "Fonte operacional em /admin/conteudo. Status é posição livre; prontidão, publicação real e próxima ação são derivadas. Migrations 014–023 estão em produção. O quadro lê uma view leve, metadados+tags salvam atomicamente e a visão Geral virou agenda paginada. Schema preserva 66 pautas; smoke autenticado validou edição, tags, clipboard, capas e sessão expirada."
+ai_summary: "Fonte operacional em /admin/conteudo. Status é livre e publicação real é derivada. Migrations 014–030 estão em produção; a 030 mantém revisão de artigo publicado staged até aprovação. /conteudo orquestra o CLI existente com contexto progressivo."
 status: active
 projeto: site
 contextos_aplicados:
@@ -132,8 +132,8 @@ Blog, o CLI `produzir` converte staging para WebP público por slug.
 
 Desde 2026-08-06, `/pesquisa` e `/linkedin` **não criam mais arquivo no vault**. Eles chamam `scripts/conteudo/pauta.mjs`, que grava direto na coluna. Acabou a dupla escrita.
 
-O script é versionado seletivamente e cobre `criar`, `gravar`,
-`registrar-draft`, `produzir` e `publicar`. Três regras existem porque a
+O script é versionado seletivamente e cobre `selecionar`, `criar`, `gravar`,
+`tags`, `capa`, `registrar-draft`, `produzir`, `aprovar` e `publicar`. Três regras existem porque a
 tabela **não tem versionamento nem undo**:
 
 - **O texto vai por `--arquivo`, nunca no argv.** O output do `/pesquisa` tem milhares de caracteres com aspas, `$` e quebras de linha — isso quebra no PowerShell na primeira execução real.
@@ -142,9 +142,27 @@ tabela **não tem versionamento nem undo**:
   `scripts/.cache/`.
 - **Acima de 60.000 caracteres recusa**, batendo com o teto da UI. A server action corta em silêncio.
 
-`publicar` aceita reexecução quando `draft_path` já aponta para
-`publicados/`, e valida o frontmatter antes de mover o arquivo. Em falha da
-RPC, restaura o markdown original.
+`capa --canal=linkedin` move a trilha para `produzido` quando o texto já existe,
+espelhando a regra que `gravar` aplica no sentido inverso. Antes disso a
+transição só disparava ao gravar o texto **depois** da capa, então subir a capa
+por último deixava a trilha presa em `producao` com tudo pronto. `produzir` não
+faz o mesmo no Blog de propósito: lá o `produzido` exige `post_id` e
+`draft_path`, não só a capa.
+
+`publicar` aceita reexecução quando `draft_path` já aponta para `publicados/`,
+e valida o frontmatter antes de mover o arquivo. Em atualização do mesmo slug,
+a migration 030 separa revisão e live: `produzir` guarda o objeto novo em
+`post_draft_payload`, sem mudar o post `published`; `publicar` regenera a WebP a
+partir da capa versionada no Storage, promove markdown+capa com backup e a RPC
+aplica o payload, limpa staging e muda pauta atomicamente. Em falha do banco, os
+arquivos são restaurados. Assim, a aprovação não depende do cache ou da máquina
+que produziu a revisão.
+
+`selecionar --escopo=pacote` evita começar mais trabalho quando já existe WIP e
+usa desempate determinístico: aprovação pendente, fila, trabalho em curso, data,
+prioridade e ordem. O card copia um prompt completo; `.claude/commands/conteudo.md`
+limita o run a uma pauta e oito transições. O worker de 15 minutos continua
+pausado.
 
 O comando **pergunta** quando a busca devolve mais de um resultado ou nenhum — nunca escolhe nem cria pauta sozinho. As 66 vêm de um calendário pensado, e um tema já planejado com fraseado diferente viraria a 67ª duplicada.
 
