@@ -1,6 +1,6 @@
 // Testa o estado geral derivado contra a implementação real em types/conteudo.ts.
 import { execFileSync } from "node:child_process";
-import { mkdtempSync, readFileSync, rmSync } from "node:fs";
+import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -81,6 +81,72 @@ const migration = readFileSync("supabase/migrations/015_conteudo_tags.sql", "utf
 const vaultTags = [...new Set(vault.match(new RegExp("domain/[a-z0-9-]+", "g")) ?? [])].sort();
 const dbTags = [...new Set(migration.match(new RegExp("domain/[a-z0-9-]+", "g")) ?? [])].sort();
 checar("vault e catálogo operacional têm os mesmos domínios", vaultTags.join(","), dbTags.join(","));
+
+console.log("\nORQUESTRAÇÃO E PUBLICAÇÃO LOCAL");
+const {
+  compararPautas, corpoPublicavelDoMarkdown, gapsDaPauta, prepararArquivoPublicado,
+  prepararMovimentoPublicado,
+  proximaAcaoPauta, urlLinkedinParametrizada,
+} = await import(new URL("../conteudo/pauta.mjs", import.meta.url));
+const base = {
+  id: "b", data_alvo: "2026-08-20", prioridade: 2,
+  ordem_blog: 2, ordem_linkedin: 2, status_blog: "planejada",
+  status_linkedin: "planejada", job_status: null,
+};
+const ordenadas = [
+  base,
+  { ...base, id: "curso", status_blog: "draft" },
+  { ...base, id: "fila", job_status: "na-fila" },
+  { ...base, id: "aprovar", job_status: "aguardando-aprovacao" },
+].sort(compararPautas);
+checar("WIP limita pautas novas", ordenadas.map((p) => p.id).join(","), "aprovar,fila,curso,b");
+checar(
+  "URL do LinkedIn recebe UTMs canônicas",
+  urlLinkedinParametrizada("slug-teste"),
+  "https://www.berkahn.com.br/atualidades/slug-teste?utm_source=linkedin&utm_medium=social&utm_campaign=post-organico"
+);
+const corpo = corpoPublicavelDoMarkdown(
+  "Berkahn-Vault/40-content/blog/publicados/quanto-custa-construir-steel-frame-precos-m2-2026.md"
+);
+checar("corpo deriva do markdown sem frontmatter", corpo.startsWith("Para planejar uma casa"), true);
+checar("especificações internas não vazam no post", corpo.includes("ESPECIFICAÇÕES TÉCNICAS"), false);
+const revisaoStaged = {
+  status_blog: "produzido", status_linkedin: null, pesquisa_conteudo: "ok",
+  draft_path: "draft.md", post_id: "post", capa_blog_url: "cover",
+  post_draft_payload: { title: "novo" }, posts: { status: "published" },
+};
+checar("revisão staged volta para revisão", proximaAcaoPauta(revisaoStaged), "revisar");
+checar(
+  "revisão staged expõe aprovação pendente",
+  gapsDaPauta(revisaoStaged).includes("revisao_blog_aguarda_aprovacao"),
+  true
+);
+
+const origem = join(dir, "draft.md");
+const destino = join(dir, "publicado.md");
+writeFileSync(origem, "draft novo", "utf8");
+writeFileSync(destino, "publicado antigo", "utf8");
+const rollback = prepararMovimentoPublicado(origem, destino, "publicado novo");
+checar("substituição prepara a versão nova", readFileSync(destino, "utf8"), "publicado novo");
+checar("draft sai do caminho durante a transação", existsSync(origem), false);
+rollback.desfazer();
+checar("rollback restaura o draft", readFileSync(origem, "utf8"), "draft novo");
+checar("rollback restaura o publicado anterior", readFileSync(destino, "utf8"), "publicado antigo");
+const commit = prepararMovimentoPublicado(origem, destino, "publicado novo");
+checar("commit limpa backups", commit.confirmar().length, 0);
+checar("commit remove o draft", existsSync(origem), false);
+checar("commit preserva somente o novo publicado", readFileSync(destino, "utf8"), "publicado novo");
+
+const capaDestino = join(dir, "cover.webp");
+writeFileSync(capaDestino, "capa antiga", "utf8");
+const capaRollback = prepararArquivoPublicado(capaDestino, Buffer.from("capa nova"));
+checar("capa gerada substitui a versão anterior", readFileSync(capaDestino, "utf8"), "capa nova");
+capaRollback.desfazer();
+checar("rollback restaura a capa anterior", readFileSync(capaDestino, "utf8"), "capa antiga");
+const capaCommit = prepararArquivoPublicado(capaDestino, Buffer.from("capa final"));
+checar("commit da capa limpa backup", capaCommit.confirmar().length, 0);
+checar("commit preserva a capa final", readFileSync(capaDestino, "utf8"), "capa final");
+
 rmSync(dir, { recursive: true, force: true });
 console.log(falhas === 0 ? "\n✅ tudo passou" : `\n❌ ${falhas} falha(s)`);
 process.exit(falhas === 0 ? 0 : 1);

@@ -209,8 +209,18 @@ export function CartaoPauta({
       tags: local.tags,
       atualizado_em: local.atualizadoEm,
     };
+    const prompt = [
+      "Produza esta pauta até o pacote de aprovação, usando o orquestrador de conteúdo da Berkahn.",
+      "Não publique nada antes da minha aprovação explícita. Recarregue a versão antes de cada escrita,",
+      "use contexto progressivo, gere artigo, LinkedIn e capas, e exponha qualquer gap sem bloquear o status.",
+      "",
+      `Pauta: ${local.id}`,
+      `Versão esperada: ${local.atualizadoEm}`,
+      "Contexto inicial:",
+      JSON.stringify(contexto, null, 2),
+    ].join("\n");
     try {
-      await navigator.clipboard.writeText(JSON.stringify(contexto, null, 2));
+      await navigator.clipboard.writeText(prompt);
     } catch {
       setErro("O navegador bloqueou o clipboard. Use HTTPS e clique novamente.");
     }
@@ -291,7 +301,7 @@ export function CartaoPauta({
             </DropdownMenuItem>
             <DropdownMenuItem onSelect={() => void copiarContexto()}>
               <Clipboard className="mr-2 h-3.5 w-3.5" aria-hidden />
-              Copiar contexto
+              Copiar prompt completo
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem className="text-red-600 focus:bg-red-50 focus:text-red-700"

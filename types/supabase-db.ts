@@ -164,6 +164,7 @@ export type Database = {
           ordem_linkedin: number | null
           plataformas: string[]
           post_id: string | null
+          post_draft_payload: Json | null
           prioridade: number | null
           pesquisa_conteudo: string | null
           semana: number | null
@@ -196,6 +197,7 @@ export type Database = {
           ordem_linkedin?: number | null
           plataformas?: string[]
           post_id?: string | null
+          post_draft_payload?: Json | null
           prioridade?: number | null
           pesquisa_conteudo?: string | null
           semana?: number | null
@@ -228,6 +230,7 @@ export type Database = {
           ordem_linkedin?: number | null
           plataformas?: string[]
           post_id?: string | null
+          post_draft_payload?: Json | null
           prioridade?: number | null
           pesquisa_conteudo?: string | null
           semana?: number | null
