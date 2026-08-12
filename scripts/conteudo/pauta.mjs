@@ -23,6 +23,8 @@ if (existsSync(ENV)) {
 }
 const SERVICE_KEY =
   process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY;
+// A conexão fica lazy para que helpers puros sejam importáveis pela CI sem
+// expor a service role; comandos remotos validam as credenciais em main().
 const db = process.env.NEXT_PUBLIC_SUPABASE_URL && SERVICE_KEY
   ? createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, SERVICE_KEY, {
     auth: { persistSession: false },
