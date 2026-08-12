@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Archivo, Space_Mono } from "next/font/google";
 import { preload } from "react-dom";
 import { SmoothScroll } from "@/components/sections/home/SmoothScroll";
 import { HeroCinematic } from "@/components/sections/home/HeroCinematic";
@@ -10,19 +9,6 @@ import { StatsCounter } from "@/components/sections/StatsCounter";
 import { ComparisonCompact } from "@/components/sections/home/ComparisonCompact";
 import { Partners } from "@/components/sections/Partners";
 import { CTA } from "@/components/sections/CTA";
-
-const archivo = Archivo({
-  subsets: ["latin"],
-  variable: "--font-archivo",
-  display: "swap",
-});
-
-const spaceMono = Space_Mono({
-  subsets: ["latin"],
-  weight: ["400"],
-  variable: "--font-space-mono",
-  display: "swap",
-});
 
 export const metadata: Metadata = {
   title: "Berkahn | Construtora Steel Frame em SP",
@@ -46,7 +32,7 @@ export default function Home() {
   preload("/videos/hero/hero-poster.webp", { as: "image", fetchPriority: "high" });
 
   return (
-    <div className={`${archivo.variable} ${spaceMono.variable}`}>
+    <div>
       <SmoothScroll />
       <HeroCinematic />
       <EditorialStatement />

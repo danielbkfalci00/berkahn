@@ -5,6 +5,7 @@ import { DrawingFrame } from "./DrawingFrame";
 import { SectionLabel } from "./SectionLabel";
 import type { ChaleProjeto } from "@/types/orcamento";
 import { useState } from "react";
+import Image from "next/image";
 
 interface PlantasElevacoesSubsectionProps {
   data: ChaleProjeto;
@@ -134,11 +135,16 @@ export function PlantasElevacoesSubsection({ data, isNested }: PlantasElevacoesS
               </svg>
             </button>
 
-            <img
-              src={expandedImage.src}
-              alt={expandedImage.label}
-              className="max-h-[85vh] max-w-[85vw] w-auto h-auto object-contain drop-shadow-2xl"
-            />
+            <div className="relative h-[calc(85vh-2.5rem)] w-[85vw]">
+              <Image
+                src={expandedImage.src}
+                alt={expandedImage.label}
+                fill
+                sizes="85vw"
+                className="object-contain drop-shadow-2xl"
+                unoptimized
+              />
+            </div>
 
             <p className="mt-4 text-center font-mono text-sm tracking-wider uppercase text-white">
               {expandedImage.label}

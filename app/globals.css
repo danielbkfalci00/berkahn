@@ -4,8 +4,11 @@
 
 @layer base {
   :root {
-    --font-manrope: 'Manrope', sans-serif;
-    --font-caveat: 'Caveat', cursive;
+    --font-manrope: 'Manrope Variable', sans-serif;
+    --font-caveat: 'Caveat Variable', cursive;
+    --font-playfair: 'Playfair Display Variable', serif;
+    --font-archivo: 'Archivo Variable', sans-serif;
+    --font-space-mono: 'Space Mono', monospace;
 
     /* Shadcn UI Variables - Design System Preto/Branco */
     --background: 0 0% 100%;          /* Branco puro #FFFFFF */

@@ -21,7 +21,13 @@ export async function GET(request: Request) {
     return new Response("Documento fora da allowlist", { status: 400 });
   }
 
-  const html = await readFile(path.join(process.cwd(), nome), "utf8");
+  // O harness é desligado estruturalmente na Vercel. Ignorar este acesso no
+  // tracing impede que o build inclua todo o repositório no bundle server;
+  // localmente, os dois arquivos da allowlist já existem no workspace.
+  const html = await readFile(
+    path.join(/* turbopackIgnore: true */ process.cwd(), nome),
+    "utf8",
+  );
 
   return new Response(injetarPonte(html, origemDoAdmin(request), "harness"), {
     status: 200,
