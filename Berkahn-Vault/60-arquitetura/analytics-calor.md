@@ -86,6 +86,19 @@ nova e período semanal.
 | Acervo mês a mês | 1 · Crescimento | `getHistoricalPageviewsBySlug` |
 | Quadrante de oportunidade | 2 · Origem | `gsc_data.topQueries` |
 | Até onde leem | 3 · Posts | `ga4_data.articleProgress` |
+| Funil de leads | 4 · Ação | tabela `leads` |
+
+O funil é **cumulativo**, não por status atual: quem converteu passou por
+qualificado, e a coluna guarda só o ponto em que o lead está. Cada degrau conta
+quem está nele ou adiante. `desqualificado` fica **fora da soma** — é saída
+lateral a partir de qualquer ponto, não etapa posterior a `convertido`;
+empilhá-la faria a base parecer maior e a conversão, menor.
+
+> [!warning] Atribuição por UTM é enviesada por construção
+> `utm`, `landing_page` e `referrer` só são gravados para quem aceitou todos os
+> cookies (`app/api/leads/route.ts:48-50` grava `{}` e `NULL` para os demais).
+> Só `pagina_origem`, derivada do header no servidor, sobrevive à recusa. A
+> tela declara isso no rodapé do bloco em vez de esconder.
 
 Derivações puras em `lib/analytics/{heatmaps,query-opportunity}.ts`, sem I/O,
 com 49 asserções em `scripts/analytics/testar-heatmaps.mjs` (roda no CI via
@@ -144,6 +157,34 @@ pontos.
 A base da retenção é o bucket de 25%, não o total de eventos: todo mundo que
 rolou cruzou os 25% antes de chegar aos 50%.
 
+## Correção: o CTA no fim dos artigos existe
+
+Circulava como bloqueio a afirmação de que **não há CTA no fim dos artigos**,
+onde estão 72% dos pageviews. Medido em 2026-08-12 contra o Supabase de
+produção, não procede:
+
+| | |
+|---|---|
+| Artigos publicados | 40 |
+| Com `components.ctas` autorado **e** referenciado no corpo (renderizam) | **39** |
+| Posição mediana do CTA | **100%** do texto |
+| CTA antes dos 85% do texto | 9 de 39 |
+| Blocos órfãos (autorados e nunca referenciados), em 10 tipos | **0** |
+
+O CTA é bloco opcional por artigo, resolvido em
+`RichPostRenderer.tsx:616-630`, que já passa `ctaLocation={`blog:${slug}`}`.
+Adicionar um CTA garantido pela página criaria **CTA duplicado em 39 dos 40
+artigos** — pior que o estado atual.
+
+Sobra um único artigo sem CTA nenhum:
+`construir-ou-comprar-pronto-numeros-grande-sp`. É tarefa editorial, não de
+engenharia.
+
+> [!tip] O que isso ensina
+> O funil não sofre por ausência de CTA. Com 39 de 40 artigos exibindo um e
+> `cta_click: 13` em 28 dias, o problema é **taxa**, não presença. Medir antes
+> de construir evitou uma regressão em 39 páginas.
+
 ## Backfill histórico — a armadilha
 
 O GSC retém 16 meses, então recuperar a cauda é possível. **Mas não com
@@ -158,11 +199,29 @@ e daí ela flui para `insights`, `actions`, `summary` e `indexedCount` dentro de
 Isso desfaria a decisão registrada em [[analytics-methodology]] de **não
 regenerar** os relatórios de fev a jun por causa do `+1` de indexação.
 
-Backfill correto: script dedicado que reescreve só `topQueries` / `topPages`,
-deixando `indexation` e `context` intactos. `scripts/analytics/adhoc-cauda-longa.mjs`
-já puxa com `rowLimit: 25000` e consulta o par `['query','page']` — que diz
-**qual página ranqueia para qual query**, transformando "reescrever o title" em
-"reescrever *este* title".
+Backfill correto: `scripts/analytics/backfill-cauda.mjs`, que reescreve só
+`topQueries` / `topPages` / `topSources` e deixa `indexation`, deltas e
+`context` intactos. Recusa gravar sem `--dry-run` ou `--aplicar`.
+
+Duas guardas, ambas descobertas rodando o dry run contra o banco real — não
+antecipadas no desenho:
+
+**1. O dado do GSC não é imutável.** Junho tem 850 cliques gravados e a API
+devolve 883 hoje: o Google reprocessou o período. Sobrescrever só as listas
+deixaria o snapshot inconsistente com os próprios totais, então pula.
+
+**2. Backfill que encolhe é backfill que apaga.** Fevereiro e março iriam de
+2→1 e 3→1 queries, porque naqueles meses quase toda query ficava em 1-2
+impressões, abaixo do piso que hoje filtra ruído. O piso é correto para o
+volume atual e destrutivo para aquele. Se a coleta nova for menor que a
+gravada, pula.
+
+Dry run de 2026-08-12: abr +10 queries, mai +107, jul +319; fev, mar e jun
+pulados pelas guardas.
+
+`scripts/analytics/adhoc-cauda-longa.mjs` continua útil para análise avulsa:
+consulta o par `['query','page']`, que diz **qual página ranqueia para qual
+query** — transformando "reescrever o title" em "reescrever *este* title".
 
 ## Estado da conversão
 
