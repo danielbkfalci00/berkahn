@@ -182,7 +182,7 @@ export async function getAllTrendPoints(): Promise<TrendPoint[]> {
   const PT_BR_MONTHS = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
 
   return data.map((row) => {
-    const r = row as {
+    const r = row as unknown as {
       month: string;
       users: string | null;
       sessions: string | null;
