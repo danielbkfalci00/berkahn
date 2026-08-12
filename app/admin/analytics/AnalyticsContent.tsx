@@ -11,6 +11,7 @@ import { ComparisonView } from "@/components/admin/analytics/ComparisonView";
 import { computeMonthlyGoals, computeGoalProgress, formatGoalLabel, formulaLabel, goalStatusColor } from "@/lib/analytics/goals";
 import { detectRedFlags } from "@/lib/analytics/red-flags";
 import type { TimelineEvent } from "@/lib/analytics/timeline-events";
+import type { MapaLeitura, MatrizArtigoMes } from "@/lib/analytics/heatmaps";
 import type {
   AnalyticsSnapshot,
   AnalyticsTask,
@@ -30,6 +31,8 @@ interface AnalyticsContentProps {
   currentMonth: string;
   timelineEvents: TimelineEvent[];
   tasks: AnalyticsTask[];
+  matrizAcervo: MatrizArtigoMes;
+  mapaLeitura: MapaLeitura;
 }
 
 function deltaDirection(deltaPct?: number): "up" | "down" | "flat" {
@@ -150,6 +153,8 @@ export function AnalyticsContent({
   currentMonth,
   timelineEvents,
   tasks,
+  matrizAcervo,
+  mapaLeitura,
 }: AnalyticsContentProps) {
   const searchParams = useSearchParams();
   const comparisonMode = searchParams.get("compare") === "1";
@@ -197,9 +202,10 @@ export function AnalyticsContent({
             kpis={kpis}
             trendPoints={trendPoints}
             timelineEvents={timelineEvents}
+            matrizAcervo={matrizAcervo}
           />
           <Act2Origin context={ctx} topQueries={topQueries} />
-          <Act3Posts context={ctx} posts={postPerformance} />
+          <Act3Posts context={ctx} posts={postPerformance} mapaLeitura={mapaLeitura} />
           <Act4Action context={ctx} posts={postPerformance} tasks={tasks} />
         </>
       )}
