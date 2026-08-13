@@ -156,7 +156,9 @@ export const HOW_WE_WORK_TIMELINE: HowWeWorkStep[] = [
   },
   {
     step: 2,
-    title: "Desenvolvimento do Projeto",
+    // Mesmo nome da fase em EXECUTION_PHASES[0] e no slide da apresentação:
+    // "Pré Obra" é o rótulo canônico de tudo que acontece antes da execução.
+    title: "Pré Obra",
     description: "Elaboração completa do projeto arquitetônico, estrutural e complementares. Utilizamos softwares BIM para precisão milimétrica e otimização de materiais.",
     images: [
       "/images/Services/Como-trabalhamos/desenvolvimento-de-projetos-1.webp",
