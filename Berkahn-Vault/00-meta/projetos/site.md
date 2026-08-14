@@ -1,11 +1,11 @@
 ---
 tipo: projeto
 criado: 2026-05-22
-atualizado: 2026-08-12
+atualizado: 2026-08-14
 tags:
   - project/site
   - status/active
-ai_summary: "Hub do Site — Next 16.3, dependências sem advisories e fontes locais estão validados em build. CRM Supabase, GA4 e captura sem Apps Script estão em produção. Pendem smoke autenticado, Edge de retenção e despublicar o GitHub Pages legado com uma conta admin; Web Push é opcional."
+ai_summary: "Hub do Site — Next 16.3, dependências sem advisories e fontes locais estão validados em build. CRM Supabase, GA4, retenção mensal e dispatcher Web Push estão em produção. Pendem smoke autenticado, assinatura push em um dispositivo e despublicar o GitHub Pages legado com uma conta admin."
 status: active
 projeto: site
 kpi_paginas_indexadas: 34
@@ -60,8 +60,8 @@ Site em produção (Next.js 16 App Router + Supabase + Vercel + Tailwind + shadc
 - [x] ~~**Dupla escrita dos comandos de conteúdo**~~ — resolvido em 2026-08-06. `/pesquisa` e `/linkedin` gravam na pauta via `scripts/conteudo/pauta.mjs` e não criam mais `.md` no vault. `/criacao` e `/calendario` foram corrigidos junto: um procurava a pesquisa na pasta que deixou de ser alimentada, o outro contava posts pendentes varrendo uma pasta congelada. Ver [[quadro-conteudo]]
 - [ ] **Contas Supabase por pessoa**: hoje todos entram com a mesma conta compartilhada, então `auth.uid()` não distingue ninguém e o autor dos comentários é nome digitado no localStorage. Projeto próprio — ver [[comentarios-inline-documentacoes]], seção "Identidade"
 - [x] **Banco do CRM aplicado**: migrations 024–029 em produção; funil, RPCs, vínculos, RLS canônica, responsáveis, prioridade, resumo operacional, arquivos, remoção atômica, outbox push, `pg_cron` e `pg_net` instalados. Matriz RLS, rollback atômico, cleanup de arquivos e payload push sem PII verdes
-- [ ] @bruno Conceder acesso Supabase para publicar `lead-retention`, configurar segredo no Vault/Edge e agendar o job mensal #pendencia
-- [ ] @bruno Dar acesso ao escopo Vercel `daniel-falcis-projects`; configurar chaves VAPID + `LEAD_PUSH_CRON_SECRET` em site/admin e agendar `schedule_lead_push_dispatch` #pendencia
+- [x] **Retenção operacional**: `lead-retention` v1 publicada, segredos sincronizados no Edge/Vault e job mensal ativo desde 2026-08-14; rollout sem candidatos ou objetos pendentes
+- [x] **Web Push configurado**: VAPID + `LEAD_PUSH_CRON_SECRET` nos projetos site/admin, segredo homônimo no Vault e dispatcher agendado a cada 15 minutos desde 2026-08-14
 - [x] **GA4 Admin concluído**: OAuth de edição validado; `article_slug` e `percent_scrolled` registrados em 10/08
 - [x] **Apps Script encerrado**: nenhuma captura ou notificação depende de Google Sheets; Web Push é o canal opcional do admin
 - **Core Web Vitals de campo**: otimizações estruturais entregues em [[2026-08-diagnostico-integrado-site]]; a tarefa de medição vive em “Próximos 7 dias”.

@@ -1,12 +1,12 @@
 ---
 tipo: context
 criado: 2025-12-01
-atualizado: 2026-08-11
+atualizado: 2026-08-14
 tags:
   - ai/context
   - project/site
   - domain/admin
-ai_summary: Sistema Admin Berkahn com CRM leve em /admin/leads. Migrations 024–029 e PR #53 estão em produção; Supabase é a única custódia de PII. Smoke público passou; pendem smoke autenticado, Edge de retenção e Web Push opcional.
+ai_summary: Sistema Admin Berkahn com CRM leve em /admin/leads. Migrations 024–029, Edge de retenção e dispatcher Web Push estão ativos em produção; Supabase é a única custódia de PII. Resta o smoke autenticado e ativar a assinatura em um dispositivo do admin.
 status: active
 escopo: berkahn
 ---
@@ -191,22 +191,22 @@ As mutações de funil vivem em RPCs transacionais da migration `024_leads_crm_s
 
 Arquivos de até 6 MB (`PDF`, `DOCX`, `XLSX`, `JPEG`, `PNG`, `WebP`) usam upload assinado direto ao bucket privado `lead-files`; o arquivo não atravessa a função Vercel. Arquivos grandes e pastas permanecem no Drive e entram como URL HTTPS. O Drive não é duplicado nem sincronizado automaticamente. Ao anonimizar, links externos são removidos e objetos privados entram em `lead_storage_cleanup` até a Edge Function confirmar a exclusão.
 
-A PWA do admin usa `/admin/manifest.webmanifest` e `/admin-sw.js`, sem cachear telas ou PII. Cada dispositivo opta por Web Push. A outbox `lead_notification_outbox` recebe apenas título, texto, URL genérica e tag; não contém nome, contato ou UUID do lead. Novos contatos e próximas ações vencidas são deduplicados. O pg_cron só deve ser agendado depois das chaves abaixo existirem nos dois projetos Vercel:
+A PWA do admin usa `/admin/manifest.webmanifest` e `/admin-sw.js`, sem cachear telas ou PII. Cada dispositivo opta por Web Push. A outbox `lead_notification_outbox` recebe apenas título, texto, URL genérica e tag; não contém nome, contato ou UUID do lead. Novos contatos e próximas ações vencidas são deduplicados. As chaves abaixo foram configuradas nos dois projetos Vercel em 2026-08-14:
 
 ```text
 NEXT_PUBLIC_VAPID_PUBLIC_KEY
 VAPID_PRIVATE_KEY
-VAPID_SUBJECT=mailto:contato@berkahn.com.br
+VAPID_SUBJECT=mailto:administrativo@berkahn.com.br
 LEAD_PUSH_CRON_SECRET
 ```
 
-O mesmo `LEAD_PUSH_CRON_SECRET` deve ser gravado no Supabase Vault como `lead_push_cron_secret`; depois executar `schedule_lead_push_dispatch('https://admin.berkahn.com.br/api/admin/push/dispatch')`. O dispatcher é aceito sem cookie somente nessa rota e autentica por segredo constante; no domínio público `/api/admin/**` continua 404.
+O mesmo `LEAD_PUSH_CRON_SECRET` está no Supabase Vault como `lead_push_cron_secret`. O job `berkahn-lead-push-dispatch` (job 1) chama `https://admin.berkahn.com.br/api/admin/push/dispatch` a cada 15 minutos. A primeira execução automática, em 2026-08-14 às 12:30 UTC, terminou como `succeeded` e recebeu HTTP 200, sem timeout ou erro. O dispatcher é aceito sem cookie somente nessa rota e autentica por segredo constante; no domínio público `/api/admin/**` continua 404. Para receber notificações, cada navegador ainda precisa abrir `/admin/configuracoes` autenticado e ativar a assinatura.
 
 Orçamentos e propostas têm `lead_id`. “Criar orçamento” abre o wizard existente com contato e vínculo preenchidos; salvar rascunho não move o funil e finalizar somente registra atividade. O módulo de propostas continua placeholder.
 
 Importação histórica: `node --env-file=.env.local scripts/leads/import-leads-csv.mjs --file=C:\\caminho-fora-do-repo\\leads.csv --dry-run`, seguido de `--apply`. O identificador `sheet:<hash-do-arquivo>:<linha>` torna a repetição idempotente sem fundir linhas repetidas. O script não imprime PII.
 
-Retenção: leads não convertidos, sem exceção e sem atualização por 24 meses são candidatos. A RPC revalida e bloqueia o registro, anonimiza transacionalmente lead, logs, orçamentos, propostas, resumo operacional e vínculos externos. PDFs de orçamento ficam em `retencao_storage_pendente`; uploads de lead ficam em `lead_storage_cleanup`. Só depois a Edge Function `lead-retention` remove os objetos dos buckets `orcamento-pdfs` e `lead-files`; falhas preservam os paths para retry. A migration `025_schedule_lead_retention.sql` habilita `pg_cron`/`pg_net`, mas não agenda automaticamente; publicar a função, criar `lead_retention_cron_secret` no Vault e só então executar `schedule_monthly_lead_retention()`.
+Retenção: leads não convertidos, sem exceção e sem atualização por 24 meses são candidatos. A RPC revalida e bloqueia o registro, anonimiza transacionalmente lead, logs, orçamentos, propostas, resumo operacional e vínculos externos. PDFs de orçamento ficam em `retencao_storage_pendente`; uploads de lead ficam em `lead_storage_cleanup`. Só depois a Edge Function `lead-retention` remove os objetos dos buckets `orcamento-pdfs` e `lead-files`; falhas preservam os paths para retry. Em 2026-08-14, a função foi publicada na versão 1 sem verificação JWT, protegida por `RETENTION_CRON_SECRET` no ambiente da Edge e `lead_retention_cron_secret` no Vault. O job `berkahn-lead-retention-monthly` (job 2) roda às 03:15 no primeiro dia de cada mês. O rollout encontrou zero candidatos e zero objetos pendentes; não foi feita execução destrutiva manual.
 
 ### Posts de Blog
 

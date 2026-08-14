@@ -1,14 +1,14 @@
 ---
 tipo: auditoria
 criado: 2026-08-07
-atualizado: 2026-08-11
+atualizado: 2026-08-14
 tags:
   - project/site
   - project/blog
   - domain/seo
   - status/active
   - source/manual
-ai_summary: "Diagnóstico integrado: crawl 47/47 verde, SSG/ISR preservado e JS do artigo -41,2%. CRM Supabase 024–029 e PR #53 estão em produção; smoke público passou. Pendem smoke autenticado, Edge de retenção, Web Push opcional e CWV de campo."
+ai_summary: "Diagnóstico integrado: crawl 47/47 verde, SSG/ISR preservado e JS do artigo -41,2%. CRM Supabase 024–029, retenção mensal e dispatcher Web Push estão em produção. Pendem smoke autenticado, assinatura push em dispositivo e CWV de campo."
 status: active
 projeto: seo-aeo
 kpi_crawl_urls_ok: 47
@@ -137,7 +137,7 @@ As migrations 024–029 foram aplicadas em produção. O banco possui funil comp
 
 `/admin/leads` foi separado de Analytics com Inbox paginada, Kanban, filtros, KPIs de 28 dias, detalhe, timeline, último status, responsável, prioridade, retry e cadastro manual com alerta de duplicidade. Uploads até 6 MB usam Storage privado e arquivos grandes/pastas usam vínculo do Drive. A PWA não cacheia telas e o push mostra somente mensagens operacionais genéricas. Orçamento reutiliza o wizard atual com `lead_id`; propostas recebem apenas a FK preparatória. O build de produção preserva SSG/ISR público.
 
-A conta Supabase CLI disponível devolveu 403 ao publicar Edge Functions e a sessão Vercel não expôs as variáveis do escopo Berkahn. Portanto, retenção e push não foram agendados e chaves VAPID não foram gravadas. Apps Script e importação da planilha deixaram de fazer parte do rollout. A UI trata push como opcional, sem oferecer um botão quebrado. Fontes canônicas: [[admin-setup]], [[google-sheets]] e [[site]].
+O bloqueio de acesso foi removido em 2026-08-14. As chaves VAPID e `LEAD_PUSH_CRON_SECRET` foram configuradas nos dois projetos Vercel; o mesmo segredo foi gravado no Vault e o dispatcher foi agendado a cada 15 minutos. A Edge Function `lead-retention` v1 foi publicada, recebeu segredo próprio no ambiente e no Vault e ganhou job mensal. O rollout encontrou zero candidatos à anonimização e zero objetos pendentes. Apps Script e importação da planilha continuam fora do rollout. Fontes canônicas: [[admin-setup]], [[google-sheets]] e [[site]].
 
 ## SEO e AEO
 
@@ -168,15 +168,16 @@ Concluídos:
 - PR #53 foi mergeado em `main` no commit `5121941`; Quality e os deploys `berkahn` + `berkahn-admin` concluíram com sucesso em 11/08.
 - Smoke público confirmou site 200, política Supabase-only e redirecionamento do admin sem sessão para `/admin/login`.
 - A Google Analytics Admin API foi ativada; OAuth com `analytics.edit` registrou `article_slug` e `percent_scrolled` na propriedade 516973519.
-- A sessão CLI ainda não acessa o escopo Vercel `daniel-falcis-projects`; isso não bloqueou o deploy, mas impede configurar o Web Push opcional.
+- A configuração VAPID/dispatcher foi concluída manualmente no escopo Vercel; a CLI não precisa expor os valores secretos para a operação normal.
+- A Edge Function `lead-retention` v1 e os jobs `berkahn-lead-push-dispatch` e `berkahn-lead-retention-monthly` estão ativos no Supabase. A primeira chamada automática do dispatcher terminou como `succeeded` e HTTP 200, sem timeout ou erro.
 - O smoke autenticado continua pendente porque nenhum harness com credenciais é versionado.
 
 Pendências externas:
 - [ ] @bruno Definir generate_lead e whatsapp_click como Key Events no GA4 e validar em DebugView/Realtime após consentimento #pendencia
 - [x] Remover Apps Script/Sheets do caminho operacional
-- [ ] @bruno Dar acesso ao escopo Vercel `daniel-falcis-projects`; configurar VAPID e o segredo do dispatcher nos projetos site/admin #pendencia
+- [x] Configurar VAPID e o segredo do dispatcher nos projetos site/admin
 - [x] Importação/reconciliação da planilha retirada do rollout pela decisão Supabase-only; higiene de PII histórica permanece opcional em [[google-sheets]]
-- [ ] @bruno Liberar acesso Supabase Functions para publicar/agendar a retenção mensal #pendencia
+- [x] Publicar a Edge Function e agendar a retenção mensal
 - [ ] @bruno Monitorar Speed Insights por sete dias e consolidar p75 de campo em 28 dias sem misturar a série pré e pós-Consent Mode #pendencia
 - [ ] @bruno Repetir as 15 consultas no Claude autenticado e completar as duas consultas instáveis do ChatGPT #pendencia
 - [ ] @bruno Realizar cinco testes de tarefa antes de qualquer A/B test ou decisão definitiva de CRO #pendencia
