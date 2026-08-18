@@ -1,3 +1,10 @@
+// Client Component de propósito. O botão daqui é passado como `children` para o
+// DialogTrigger `asChild` do Radix; quando o CTA era Server Component, esse filho
+// chegava pelo payload RSC e a hidratação falhava em dev (React 18.3 no cliente,
+// React embutido do Next 16 no servidor): a árvore era regenerada, o botão sumia
+// do DOM e o <script> do layout era reinserido no <head>. Ver app/layout.tsx.
+"use client";
+
 import Link from "next/link";
 import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
 import { ContactFormDialog } from "@/components/forms/ContactFormDialog";
