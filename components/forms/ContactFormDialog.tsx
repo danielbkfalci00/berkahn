@@ -90,9 +90,13 @@ export function ContactFormDialog({
         <ContactForm
           defaultSegment={defaultSegment}
           ctaLocation={ctaLocation}
+          // As classes abaixo reproduzem o que DialogHeader e DialogTitle
+          // injetavam por padrão (`flex flex-col space-y-1.5 text-center
+          // sm:text-left` e `leading-none`). Sem elas o cabeçalho deixaria de
+          // ser centralizado no mobile.
           header={
-            <div className="mb-5">
-              <h2 className="text-lg font-heading font-semibold tracking-tight">
+            <div className="flex flex-col space-y-1.5 text-center sm:text-left mb-5">
+              <h2 className="text-lg font-heading font-semibold leading-none tracking-tight">
                 Fale Conosco
               </h2>
               <p className="text-xs text-black-70 mt-1">
