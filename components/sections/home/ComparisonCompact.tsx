@@ -37,7 +37,7 @@ export function ComparisonCompact() {
             <div className="relative aspect-[4/3] overflow-hidden bg-black-5">
               <Image
                 src="/images/Home/lsf-estrutura.webp"
-                alt="Estrutura em perfis de aço galvanizado montada em obra, formando piso, paredes e cobertura"
+                alt="Esqueleto de Light Steel Frame de uma casa montado sobre o radier, com montantes e tesouras de aço galvanizado"
                 fill
                 sizes="(min-width: 768px) 40vw, 100vw"
                 className="object-cover grayscale"

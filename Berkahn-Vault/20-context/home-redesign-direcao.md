@@ -149,4 +149,8 @@ Feedback do sócio: as fotos das quatro fases são genéricas e denunciam banco 
 
 A imagem da seção LSF entra monocromática por CSS (`grayscale`), então vale escolher a variação com mais contraste de forma e menos dependência de cor.
 
+**Estado (2026-08-18): os cinco prompts foram executados e as imagens estão no ar.** Geradas no ChatGPT Image, convertidas para webp (1440x960 nas fases, 1360x1020 na seção LSF, q82) e instaladas nos caminhos acima. Os originais em resolução cheia ficam em `Docs/banco-imagens/ia-fases-obra/` com prefixo `ia-`, que marca a procedência e evita confundir com foto de obra real. Os `alt` das quatro fases foram reescritos para descrever as fotos novas.
+
+Pendente: as imagens **secundárias** de cada fase (`pre-obra-2`, `terraplanagem_2`, `estrutura-1`, `acabamentos_2`), que aparecem no carrossel de `/servicos`, continuam sendo as genéricas antigas e destoam das novas. Mesmos prompts com outro enquadramento resolvem.
+
 Relacionados: [[berkahn-brand]] · [[guia-design-berkahn]] · [[banco-imagens]]
