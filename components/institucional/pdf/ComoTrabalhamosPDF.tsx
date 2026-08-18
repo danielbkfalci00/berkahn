@@ -8,7 +8,7 @@ const FASES = [
     numero: "01",
     title: "Pré Obra",
     duracao: "2 a 3 semanas",
-    description: "Estruturação técnica e financeira do empreendimento antes do início da construção.",
+    description: "Desenvolvemos e acompanhamos todos os projetos da obra, junto da estruturação técnica e financeira do empreendimento.",
   },
   {
     numero: "02",

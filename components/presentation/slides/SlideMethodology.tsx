@@ -28,7 +28,7 @@ const steps = [
     // "Pré Obra" é o nome canônico desta fase no resto do material
     // (lib/servicos-data.ts EXECUTION_PHASES[0], ComoTrabalhamosPDF fase 01).
     title: "Pré Obra",
-    description: "Gerenciamos o desenvolvimento de todos os projetos necessários para viabilizar a execução da obra",
+    description: "Desenvolvemos todos os projetos necessários para a obra e acompanhamos cada um deles, com a estruturação técnica e financeira do empreendimento",
     icon: PenTool,
   },
   {
