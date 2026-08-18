@@ -1,12 +1,12 @@
 ---
 tipo: memory
 criado: 2026-04-13
-atualizado: 2026-07-31
+atualizado: 2026-08-18
 tags:
   - ai/memory
   - status/active
   - source/manual
-ai_summary: "Config Supabase do projeto Berkahn — keys, tabelas, buckets, tipagem. LEIA O HISTÓRICO DE INCIDENTES ANTES DE MEXER EM CREDENCIAL: três vazamentos até 2026-07-31, dois deles no mesmo dia (senha da conta Auth publicada no bundle do admin por meses, e a mesma string sendo a senha do Postgres). Regra que saiu deles: nenhum segredo em arquivo \"use client\" nem em variável NEXT_PUBLIC_."
+ai_summary: "Config Supabase do projeto Berkahn — keys, tabelas, buckets, tipagem. LEIA O HISTÓRICO DE INCIDENTES ANTES DE MEXER EM CREDENCIAL: três vazamentos, e o de 2026-05-21 continua ABERTO — a service_role key do commit público b638b215 nunca foi rotacionada (verificado por hash em 2026-08-18) e bypassa RLS na base de produção. Regra que saiu deles: nenhum segredo em arquivo use client nem em variável NEXT_PUBLIC_."
 status: active
 subtipo: reference
 ---
@@ -60,7 +60,25 @@ dívida de higiene: ignorado não significa seguro para cópia, backup ou transc
 
 - **2026-07-31: senha da conta Supabase Auth publicada no bundle do admin.** `components/admin/LoginForm.tsx` era um Client Component e declarava `ACCESS_CODE` como constante de módulo — e essa string era passada como `password` para `signInWithPassword`. Não era um portão da aplicação: era a senha da conta `contato.berkahn@gmail.com`. Quem lesse o chunk autenticava direto contra a API do Supabase, sem passar pelo site, e recebia JWT `authenticated` — CRUD via RLS em `posts`, `orcamentos`, `proposals`, `presentations`, `analytics_tasks` e comentários. Legível num `curl` a `/_next/static/chunks/app/admin/login/page-*.js`, HTTP 200, **desde que o admin existe**. Corrigido no PR #42 movendo a autenticação para Server Action, sem segredo no repositório nem no ambiente. Senha rotacionada. **A exposição durou meses — os logs de auth do Supabase são a única forma de saber se foi usada.**
 - **2026-07-31: a senha do Postgres era a mesma string.** Descoberta na mesma sessão, ao configurar `DATABASE_URL` para rodar migrations. Como o `ACCESS_CODE` estava público, a connection string inteira era reconstruível (o project ref e a região também são públicos). Rotacionada. Lição: senha de banco e código de acesso do admin **nunca** devem coincidir.
-- 2026-05-21: Supabase service_role key vazou em git público (commit `b638b21`). Rotacionada. Sanitizado o working tree, mas chave antiga ainda no git history (`.claude/prompts/article-implementation-prompt.md:373` antes do commit `e6972af`).
+- 2026-05-21: Supabase service_role key vazou em git público (commit `b638b21`, criado em 2026-02-26). **Rotação registrada nesta data não aconteceu de fato** (ver alerta abaixo). Working tree sanitizado, chave ainda no git history (`.claude/prompts/article-implementation-prompt.md:373` antes do commit `e6972af`).
+
+> [!danger] ABERTO: a chave do incidente de 2026-05-21 nunca foi rotacionada
+> O registro dizia "Rotacionada". Está errado, e o erro é perigoso porque faz quem
+> lê pular o item. Verificado em 2026-08-18 comparando o SHA-256 do token em
+> `b638b215` com o do `SUPABASE_SERVICE_KEY` do `.env.local`: **hashes idênticos**.
+> É a mesma chave, `role: service_role`, `ref: sfqaknxomxwmviarpwfy`, válida até
+> 2036-01-20, e `service_role` bypassa RLS em toda a base de produção.
+> O commit é de **2026-02-26**, é ancestral de `origin/main`, e o repositório
+> `danielbkfalci00/berkahn` é **público**. O arquivo aparece em 6 commits.
+> Exposição aberta há cerca de seis meses.
+>
+> **Rotacionar tem precedência sobre reescrever histórico.** Reescrita não fecha
+> nada aqui, porque forks, clones e caches de terceiros já podem ter o blob.
+> Depois de rotacionar: atualizar `.env.local`, as variáveis da Vercel e qualquer
+> worktree; e conferir os logs de acesso do Supabase no período.
+>
+> Lição de método, a mesma de [[verificar-antes-de-descartar]]: "Rotacionada"
+> escrito num registro não é prova de rotação. A prova é o hash.
 
 > [!warning] Regra que sai destes três incidentes
 > Nenhum segredo em arquivo com `"use client"`, e nenhum segredo em variável com prefixo `NEXT_PUBLIC_` — os dois vão para o bundle público. Autenticação e comparação de credencial vivem no servidor. Ver [[comentarios-inline-documentacoes]] para o padrão de Server Action já aplicado.

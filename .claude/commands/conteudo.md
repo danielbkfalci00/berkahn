@@ -54,7 +54,28 @@ e “Aprovo”. Nunca trate silêncio, elogio ou pedido de ajuste como aprovaç�
    `na-fila`, faça claim com um `worker` único da sessão, confirme que a pauta e a
    ação retornadas são as selecionadas e finalize o job com seus hashes/tokens/custo.
 
-3. Execute um loop limitado pela `proxima_acao`, sempre relendo a pauta:
+3. **Leia o desempenho antes de escrever.** Pauta de custo, preço ou "quanto
+   custa" quase sempre colide com artigo já indexado, e descobrir isso com o
+   draft pronto custa a semana inteira:
+
+   ```bash
+   node scripts/conteudo/pauta.mjs buscar --slug=<slug-candidato>
+   ```
+
+   Leia também o relatório mais recente em
+   `Berkahn-Vault/40-content/auditorias-seo/YYYY-MM-performance-blog.md`, que o
+   `/performance` já gera com impressões, cliques e indexação por slug. Não chame
+   GA4 nem GSC dentro do run: o relatório do mês é a fonte e custa uma leitura.
+
+   Declare no pacote de aprovação qual dos dois casos é:
+
+   - **artigo novo**: nenhum publicado disputa a intenção da keyword;
+   - **reposicionamento**: já existe URL indexada. O alvo passa a ser o slug
+     existente, `--usar-existente` entra com confirmação humana e a migration 030
+     mantém a revisão staged. Abrir slug novo aqui joga fora o histórico e
+     canibaliza a própria página.
+
+4. Execute um loop limitado pela `proxima_acao`, sempre relendo a pauta:
 
    - `pesquisar`: siga `.claude/commands/pesquisa.md`, pesquise fontes atuais e
      primárias, grave pesquisa e insights pelo CLI.
@@ -83,7 +104,7 @@ e “Aprovo”. Nunca trate silêncio, elogio ou pedido de ajuste como aprovaç�
      publicação real. Não aprove. Pare e entregue o pacote abaixo.
    - `preparar-publicacao`: não publique no LinkedIn; entregue copy, capa e URL UTM.
 
-4. Pacote de aprovação, curto e verificável:
+5. Pacote de aprovação, curto e verificável:
 
    - pauta, título, slug e keyword;
    - resumo das fontes e riscos factuais;
@@ -114,6 +135,21 @@ inequívoca do pacote anterior. Se não houver contexto inequívoco, peça o id.
    registrar no card. Não marque LinkedIn como publicado antes disso.
 4. Informe exatamente o que foi publicado, o que permanece manual e qualquer
    limpeza retryável. Nunca esconda um gap atrás de status.
+5. **Feche a documentação no mesmo run.** O que fica só no chat morre com a
+   sessão. Atualize o que já existe, sem criar nota nova:
+
+   - o hub do canal (`00-meta/projetos/blog.md`, `linkedin.md`): marque o que
+     fechou, cite commit ou URL e bata `atualizado`;
+   - `00-meta/projetos/sprint-ativa.md`, se a pauta era da sprint;
+   - `00-meta/CHANGELOG.md` somente quando o run mudou schema, CLI ou fluxo;
+   - a pendência do LinkedIn em sintaxe canônica, porque URL e data só existem
+     depois que o Bruno posta:
+
+     `- [ ] @bruno Publicar no LinkedIn com a UTM entregue e registrar URL e data reais #pendencia`
+
+   Encerre com `node scripts/vault-validate.mjs`, que precisa sair em 0 issues.
+   Aprendizado de calibragem de copy vai para `30-prompts/`, e ali **exige
+   permissão explícita do Bruno**: aqueles arquivos são locked.
 
 ## Status
 

@@ -100,8 +100,8 @@ export default function ServicosPage() {
             {
               "@type": "HowToStep",
               position: 2,
-              name: "Desenvolvimento do Projeto",
-              text: "Projeto arquitetônico e estrutural completo. Modelagem BIM 3D, orçamento detalhado e cronograma executivo.",
+              name: "Pré Obra",
+              text: "Desenvolvemos todos os projetos necessários para a obra, do arquitetônico ao estrutural e complementares, e acompanhamos cada um até a compatibilização. Modelagem BIM, orçamento detalhado e cronograma executivo.",
               url: "https://www.berkahn.com.br/servicos#projeto",
             },
             {

@@ -1,14 +1,14 @@
 ---
 tipo: projeto
 criado: 2026-05-22
-atualizado: 2026-08-12
+atualizado: 2026-08-18
 tags:
   - project/blog
   - status/active
 ai_summary: Hub do Blog — 40 posts e 44 trilhas. A revisão de casa LSF 100 m² está staged com post/capa vinculados; o live antigo segue published. Falta aprovação humana e /artigo publicar.
 status: active
 projeto: blog
-kpi_publicados: 40
+kpi_publicados: 41
 kpi_meta_publicados_semanal: 1
 kpi_indexados_google: 34
 kpi_meta_indexacao_total: 40
@@ -52,7 +52,9 @@ Dados de publicação verificados em 2026-08-06 contra Supabase; indexação per
 
 **40 artigos publicados**, 34 indexados no último snapshot. O bloqueio P0 de indexação que dominava este hub desde abril **está encerrado** — o texto anterior dizia "1 de 35 indexados", número que já estava errado quando foi escrito.
 
-Último post: `isencao-icms-energia-solar-sp`, publicado em 2026-08-05.
+Último post: `custos-ocultos-construcao-2026`, publicado em 2026-08-18. É o primeiro
+artigo que nasceu inteiro dentro do `/conteudo`, da seleção da pauta até a publicação,
+e o primeiro em que a leitura de métricas entrou **antes** da escrita.
 
 **A divergência vault ↔ produção foi encerrada em 2026-07-30**: dos 6 arquivos do vault fora do ar, 3 eram renomeações (arquivadas) e 3 eram artigos inéditos, dos quais 1 foi publicado e 2 foram para backlog. A seção histórica abaixo fica como registro de como o descompasso foi diagnosticado.
 
@@ -83,6 +85,9 @@ Tráfego seguiu crescendo: 1.179 users em junho, 1.407 nos primeiros 26 dias de 
 - [x] Pesquisa e criação exercitadas na pauta de casa LSF de 100 m²
 - [x] ~~@codex Ajustar `/artigo publicar` para substituir atomicamente o markdown já existente em `publicados/`~~ — entregue em 2026-08-12 (commit `ff01eb0`). `produzir` detecta `status='published'`, não toca no post e guarda a revisão em `conteudo_pautas.post_draft_payload`; `publicar` troca o markdown com backup e `desfazer()`, e a RPC da migration 030 aplica o payload só depois da aprovação. A URL indexada não sai do ar em momento nenhum
 - [x] ~~@bruno Subir a capa Blog, vincular o post indexado e executar `/artigo produzir` → aprovação → `/artigo publicar`~~ — concluído em 2026-08-12. `published_at` original (2026-01-26) preservado: para o Google é a mesma página atualizada, não um artigo novo
+
+- [x] Semana S1 de agosto: `custos-ocultos-construcao-2026` publicado (post `ea61e24e`). Pauta `d29d7fee` fechada nos dois canais
+- [ ] @bruno Fazer o deploy: o artigo já responde 200 porque o conteúdo vem do Supabase, mas `public/images/img_blog/custos-ocultos-construcao-2026/cover.webp` só é servido depois que o arquivo sobe #pendencia
 
 > [!note] `orcamento-steel-frame` e `hold-downs-ancoragens` saíram do fluxo semanal
 > Foram para backlog sem data em 2026-07-30, cada um com bloqueio nomeado. Ver "Backlog: os 2 artigos prontos que não vão ao ar agora" abaixo. **Não puxar para a semana sem antes ter os números** — publicar `orcamento-steel-frame` como está adiciona uma terceira faixa de preço ao acervo.
@@ -228,6 +233,7 @@ O motivo está em comentário no `app/atualidades/[slug]/page.tsx` para o skelet
 
 ## Histórico recente
 
+- 2026-08-18: `custos-ocultos-construcao-2026` publicado (`kpi_publicados` 40 → 41), primeiro artigo produzido de ponta a ponta pelo `/conteudo`. O comando ganhou três passos que faltavam: leitura de métricas antes de escrever, prompt escrito para a capa do Blog e fechamento de documentação no mesmo run. O passo de métricas se pagou na estreia, ao revelar que o cluster de custo já tinha duas páginas indexadas disputando a intenção, o que definiu o recorte do texto. Ver [[quadro-conteudo]]
 - 2026-08-06: taxonomia consolidada em cinco categorias; redesign editorial de `/atualidades` entregue com ISR 60 e payload reduzido. Ver [[home-redesign-direcao]] e [[article-pipeline]]
 
 - 2026-07-20: standup — `kpi_publicados` 37 → 38 (novo: `steel-frame-laje-de-concreto`, publicado 2026-07-08). 3 aprendizados de pipeline adicionados em [[article-pipeline]] (H1 duplica título; `NormsSection` título fixo; `StatHighlight` trunca decimais).
