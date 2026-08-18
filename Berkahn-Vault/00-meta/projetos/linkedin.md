@@ -1,11 +1,11 @@
 ---
 tipo: projeto
 criado: 2026-05-22
-atualizado: 2026-08-12
+atualizado: 2026-08-18
 tags:
   - project/linkedin
   - status/active
-ai_summary: Hub do LinkedIn. A pauta de casa LSF 100 m² está aprovada com copy final humanizada, briefing e capa 1080×1350 no Storage. Falta publicação manual e registro de URL+data.
+ai_summary: Hub do LinkedIn. Duas pautas aprovadas aguardam publicação manual e registro de URL+data, a de casa LSF 100 m² e a de custos ocultos. Cadência segue abaixo da meta.
 status: active
 projeto: linkedin
 kpi_publicados: 3
@@ -57,7 +57,18 @@ Contagem verificada em 2026-07-29 contra `main` — o `kpi_publicados: 1` anteri
 - [x] Copy revisada em 12/08: 125 palavras, hook em situação real e CTA para checklist; aprendizado incorporado em [[linkedin-post]] v1.1
 - [x] Aprovação editorial registrada no card
 - [ ] @bruno Publicar manualmente no LinkedIn com a UTM entregue; depois registrar URL e data reais #pendencia
+- [x] Pauta `d29d7fee` (custos ocultos) aprovada em 18/08 com copy de 142 palavras e capa 1080×1350
+- [ ] @bruno Publicar o post de custos ocultos e registrar URL e data reais no card `d29d7fee` #pendencia
+
 - [ ] Começar o backlog de distribuição: 22 posts derivam de artigos **já publicados** e não exigem escrever artigo nenhum
+
+> [!note] Imagem sem texto foi exceção deliberada
+> A capa da pauta `d29d7fee` é a mesma foto do Blog recortada para 4:5, sem
+> tipografia sobreposta, contrariando o padrão de [[linkedin-post]]. A foto é de
+> obra real e carrega o argumento sozinha; sobrepor os percentuais do CUB
+> repetiria na imagem o empilhamento de números que já tinha sido cortado do
+> texto. Sem foto própria que sustente o argumento, voltar ao padrão com
+> tipografia. Registrado no bloco `imagem-briefing` do card.
 
 ## Backlog planejado (2026-07-29)
 

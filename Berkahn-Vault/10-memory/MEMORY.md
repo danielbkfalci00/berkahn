@@ -19,6 +19,7 @@ status: active
 
 - [[copy-sem-travessao]] — Nunca usar — ou - como separador estilístico em copy
 - [[prompts-calibrados]] — Prompts de conteúdo intocáveis sem permissão
+- [[verificar-antes-de-descartar]] — Check vermelho e dado ausente não viram falso positivo por julgamento de cabeça
 
 ## Project (workflows ativos)
 
