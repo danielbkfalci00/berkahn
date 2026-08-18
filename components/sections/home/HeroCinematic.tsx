@@ -18,7 +18,10 @@ import { Button } from "@/components/ui/button";
  * - Mobile usa sequência própria de 36 frames a 640 px
  * - prefers-reduced-motion: sem runway, sem pin, poster estático + texto
  */
-const FRAME_COUNT_DESKTOP = 72;
+// Resolução nativa da fonte (1920×1080) para o canvas não ampliar em telas
+// grandes. 7 fps em vez de 9 compensa o peso do frame maior; o scrub não
+// perde fluidez porque o runway de 260vh dá ~27 px de scroll por frame.
+const FRAME_COUNT_DESKTOP = 56;
 const FRAME_COUNT_MOBILE = 36;
 
 const framePath = (index: number, isMobile: boolean) =>
@@ -88,7 +91,9 @@ export function HeroCinematic() {
           images[index] = img;
         };
 
-        const EAGER_FRAMES = Math.min(6, frameCount);
+        // Quatro e não seis: com os frames em 1920 cada um pesa ~180 KB, e o
+        // que precisa estar pronto no primeiro scroll são só os iniciais.
+        const EAGER_FRAMES = Math.min(4, frameCount);
         for (let i = 0; i < EAGER_FRAMES; i++) loadFrame(i);
 
         let nextToLoad = EAGER_FRAMES;

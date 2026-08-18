@@ -48,8 +48,10 @@ Hero cinematográfico (canvas/poster 100svh) → expertise institucional (SplitT
 **Parâmetros do take atual** (para reproduzir/trocar):
 - Fonte local: `Downloads/Firefly Slow forward drone glide down the corridor of steel studs toward the glowing finished room, .mp4` (1920×1080, 24fps, 8s); o MP4 não é versionado
 - Sem trim e sem delogo; início e fim foram inspecionados como limpos
-- Frames: desktop `fps=9 scale=1440 q72` (72 frames, 5,28 MB em `public/videos/hero/seq/`), mobile `fps=4.5 scale=640 q80` (36 frames, 1,01 MB em `seq-m/`), poster `scale=1440 q78` (116 KB)
-- Preload imediato limitado a 6 frames (580 KB); restante carrega progressivamente em background
+- Frames (revisão de 2026-08-18, para tirar o borrado): desktop `fps=7 scale=1920 q78` (56 frames, 7,5 MB em `public/videos/hero/seq/`), mobile `fps=4.5 scale=960 q78` (36 frames, 1,8 MB em `seq-m/`), poster = cópia de `seq/f_001.webp` (182 KB)
+- Antes eram 1440×810 q72 no desktop e 640 no mobile, ou seja, a fonte 1080p era reduzida antes de publicar e o canvas ampliava de novo em tela grande (fator 1,33 num monitor de 1920). Agora a resolução do frame bate com o buffer do canvas em 1920 e o desenho passa a ser 1:1
+- Teto restante: a fonte é 1080p. Em tela 4K ou DPR 2 acima de 1920 CSS o canvas volta a ampliar; só resolve com take em resolução maior ou upscale do MP4
+- Preload imediato limitado a 4 frames (~730 KB, era 6 quando o frame pesava 80 KB); restante carrega progressivamente em background
 - Constantes `FRAME_COUNT_DESKTOP/MOBILE` em `components/sections/home/HeroCinematic.tsx` devem bater com a contagem de arquivos
 
 **Como trocar o take** (pipeline validado): apontar o novo MP4 → inspecionar início/fim e marcas → decidir trim/delogo apenas se necessário → extrair sequências → validar pesos/contagens → atualizar contadores → build. ~10 min.
@@ -148,5 +150,9 @@ Feedback do sócio: as fotos das quatro fases são genéricas e denunciam banco 
 `Wide interior view of a completed light steel frame skeleton of a house before closing, rhythmic rows of galvanized studs and roof trusses against an overcast sky, slab floor with chalk layout lines and a few metal offcuts, a ladder leaning against one wall, flat diffuse daylight, no sun flare, chest height, 20mm lens at f/8, slight perspective imperfection, no people`
 
 A imagem da seção LSF entra monocromática por CSS (`grayscale`), então vale escolher a variação com mais contraste de forma e menos dependência de cor.
+
+**Estado (2026-08-18): os cinco prompts foram executados e as imagens estão no ar.** Geradas no ChatGPT Image, convertidas para webp (1440x960 nas fases, 1360x1020 na seção LSF, q82) e instaladas nos caminhos acima. Os originais em resolução cheia ficam em `Docs/banco-imagens/ia-fases-obra/` com prefixo `ia-`, que marca a procedência e evita confundir com foto de obra real. Os `alt` das quatro fases foram reescritos para descrever as fotos novas.
+
+Pendente: as imagens **secundárias** de cada fase (`pre-obra-2`, `terraplanagem_2`, `estrutura-1`, `acabamentos_2`), que aparecem no carrossel de `/servicos`, continuam sendo as genéricas antigas e destoam das novas. Mesmos prompts com outro enquadramento resolvem.
 
 Relacionados: [[berkahn-brand]] · [[guia-design-berkahn]] · [[banco-imagens]]
