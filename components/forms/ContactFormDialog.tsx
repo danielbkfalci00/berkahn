@@ -4,10 +4,10 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import dynamic from "next/dynamic";
 import { usePathname } from "next/navigation";
 import type { Segment } from "./ContactForm";
@@ -65,18 +65,44 @@ export function ContactFormDialog({
         data-lenis-prevent
         className="w-[calc(100%-2rem)] sm:max-w-[360px] p-0 rounded-none sm:rounded-lg bg-white max-h-[90vh] overflow-y-auto"
       >
+        {/*
+          Nome acessível do diálogo. Precisa ser filho DIRETO do DialogContent, e
+          não pode viver dentro do ContactForm, por dois motivos:
+
+          1. ContactForm é next/dynamic. Enquanto o chunk carrega, o content já
+             montou e o título ainda não existe no DOM. É nessa janela que o foco
+             entra no diálogo, e é nela que o Radix acusa
+             "DialogContent requires a DialogTitle".
+          2. Depois do envio, o ContactForm troca para o ramo de sucesso, que não
+             renderiza o `header`. O título desmontava e o diálogo ficava sem nome
+             pelo resto da sessão.
+
+          Fica oculto porque o cabeçalho visível continua dentro do formulário,
+          junto do padding dele. Mover o visível para cá mudaria o desenho do
+          estado de sucesso, que hoje é um painel limpo sem cabeçalho.
+        */}
+        <VisuallyHidden>
+          <DialogTitle>Fale Conosco</DialogTitle>
+          <DialogDescription>
+            Formulário de contato. Retornaremos em até 24 horas.
+          </DialogDescription>
+        </VisuallyHidden>
         <ContactForm
           defaultSegment={defaultSegment}
           ctaLocation={ctaLocation}
+          // As classes abaixo reproduzem o que DialogHeader e DialogTitle
+          // injetavam por padrão (`flex flex-col space-y-1.5 text-center
+          // sm:text-left` e `leading-none`). Sem elas o cabeçalho deixaria de
+          // ser centralizado no mobile.
           header={
-            <DialogHeader className="mb-5">
-              <DialogTitle className="text-lg font-heading font-semibold tracking-tight">
+            <div className="flex flex-col space-y-1.5 text-center sm:text-left mb-5">
+              <h2 className="text-lg font-heading font-semibold leading-none tracking-tight">
                 Fale Conosco
-              </DialogTitle>
-              <DialogDescription className="text-xs text-black-70 mt-1">
+              </h2>
+              <p className="text-xs text-black-70 mt-1">
                 Retornaremos em até 24 horas.
-              </DialogDescription>
-            </DialogHeader>
+              </p>
+            </div>
           }
         />
       </DialogContent>
