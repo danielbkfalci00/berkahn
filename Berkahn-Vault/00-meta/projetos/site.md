@@ -1,7 +1,7 @@
 ---
 tipo: projeto
 criado: 2026-05-22
-atualizado: 2026-08-14
+atualizado: 2026-08-19
 tags:
   - project/site
   - status/active
@@ -73,6 +73,24 @@ Site em produção (Next.js 16 App Router + Supabase + Vercel + Tailwind + shadc
 - [ ] @bruno Medir CWV no Speed Insights por 7 dias e consolidar em 28 dias, sem misturar as séries anterior e posterior ao Consent Mode de 2026-07-30; baseline em [[2026-08-diagnostico-integrado-site]] #pendencia
 - [ ] @bruno Executar smoke autenticado de Inbox, Kanban, upload, responsável, PWA e configurações conforme [[admin-setup]]; PR #53, deploys e smoke público já estão concluídos #pendencia
 - [ ] @bruno Despublicar o GitHub Pages `legacy/errored` em `Settings → Pages` com a conta proprietária; a API recusou o DELETE porque a conta CLI não tem `admin` #pendencia
+
+> [!warning] Não é só ruído no CI: o Pages legado serve conteúdo duplicado
+> Reverificado em 2026-08-18. O status é `errored`, mas `https://danielbkfalci00.github.io/berkahn/`
+> responde **200** e serve um export estático antigo do próprio site. A home e
+> `/servicos` estão de pé; `/atualidades` dá 404 porque o blog é dinâmico.
+> A cópia **não tem canonical e não tem robots.txt**, então é conteúdo duplicado
+> indexável competindo com `berkahn.com.br` nas páginas que existem lá.
+> Não expõe fonte do repositório (README, package.json e CLAUDE.md dão 404).
+>
+> **Não dá para resolver por push.** O `pages-build-deployment` falha em toda
+> execução desde pelo menos 2026-08-12, então o conteúdo servido está congelado
+> num build antigo e commit novo não o atualiza. Adicionar `robots.txt` ou
+> canonical no repositório não teria efeito. Só `Settings → Pages` com conta
+> admin encerra isso.
+>
+> A tentativa de `DELETE /repos/.../pages` volta `404`, que é como o GitHub
+> responde falta de permissão. O token da sessão tem `push` e `triage`,
+> `admin: false`.
 - [x] **Upgrade breaking de dependências concluído em 12/08**: Next 16.3, Sharp 0.35.3, Puppeteer 25.6, ESLint flat e D3 corrigido; `npm audit` retorna zero. Fontes locais retiraram a dependência de Google Fonts no CI. Detalhe em [[stack-nextjs-supabase]]
 - [x] ~~**Próxima página do redesign: `/atualidades`**~~ — concluída em 2026-08-06: abertura fundida, bento, categorias canônicas, payload 141/26 KB e ISR 60 preservado
 - [ ] Importar Clube Quinta dos Lagos para o banco de imagens antes de reativar o rail de projetos
