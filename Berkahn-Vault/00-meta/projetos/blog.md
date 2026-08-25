@@ -81,6 +81,26 @@ Tráfego seguiu crescendo: 1.179 users em junho, 1.407 nos primeiros 26 dias de 
 - [x] ~~**12 categorias inconsistentes**~~ — normalizadas em 2026-08-06 para Guias e Tutoriais, Tecnologia e Inovação, Mercado e Custos, Segurança e Normas e Sustentabilidade. Código tolerante a aliases foi entregue antes da migration 012; migration aplicada e conferida em produção (16/9/8/3/4 = 40 posts, featured único); `/artigo` e [[article-pipeline]] rejeitam valores fora da lista canônica
 - [x] ~~**9 artigos são carcaças (P0)**~~ — resolvidos em 2026-07-30. **4** sem substituto ficaram no ar com `noindex, follow`; **5** com substituto foram consolidadas por **301**, com 14 links internos reescritos. Backlog de reescrita em [[2026-07-thin-content-mapa]]
 - [ ] **3 artigos fora do índice** (P1): `steel-frame-aguenta-vento-forte` (URL unknown), `steel-frame-laje-de-concreto` (discovered), `steel-frame-vantagens-desvantagens` (crawled). Eram 4; ver [[seo-aeo]]
+
+> [!danger] Publicar não indexa, e o fluxo deixava esse passo de fora
+> Descoberto em 2026-08-25, por pergunta do Bruno e não por verificação minha.
+> Os dois artigos publicados pelo `/conteudo`, `custos-ocultos-construcao-2026`
+> (18/08) e `quanto-custa-projeto-casa` (25/08), estavam em
+> `Discovered - currently not indexed` com `lastCrawlTime` **nunca**. O de custos
+> ocultos ficou assim por uma semana. Os dois estavam no sitemap desde a
+> publicação, o que não bastou.
+>
+> A solicitação manual no Search Console levou ambos a `Crawled - currently not
+> indexed` no mesmo dia. Fora do limbo, ainda não indexados.
+>
+> **Causa**: o `/artigo publicar` mandava "lembrar o Bruno de solicitar
+> indexação", e lembrete depende de alguém lembrar. Falhou nas duas publicações
+> seguidas. O passo virou item explícito na etapa de documentação do
+> `/conteudo`, com pendência canônica por artigo publicado. A API de indexação do
+> Google não substitui isso, porque aceita apenas `JobPosting` e
+> `BroadcastEvent`.
+>
+> Conferir com `node --env-file=.env.local scripts/analytics/adhoc-inspect-urls.mjs <slug>`.
 - [x] ~~**`quanto-custa-construir-steel-frame-precos-m2-2026` com `published_at` nulo**~~ — corrigido em 2026-07-30 para `created_at` (2026-01-26). Além da ordenação, o nulo tirava o artigo do RSS, deixava o schema Article sem `datePublished` e fazia o sitemap declarar `lastmod` = agora a cada crawl
 - [ ] @codex Rebasear separadamente a página-mãe de custo na série Arquitecasa de abril/2026, depois da publicação do draft de 11/08, para as duas páginas não voltarem a divergir #pendencia
 
@@ -94,7 +114,9 @@ Tráfego seguiu crescendo: 1.179 users em junho, 1.407 nos primeiros 26 dias de 
 - [x] Semana S1 de agosto: `custos-ocultos-construcao-2026` publicado (post `ea61e24e`). Pauta `d29d7fee` fechada nos dois canais
 - [x] ~~@bruno Fazer o deploy da capa de `custos-ocultos-construcao-2026`~~ — concluído em 2026-08-18 pelo merge do PR #60; a capa passou a responder 200
 - [x] Semana S2 de agosto: `quanto-custa-projeto-casa` publicado (post `b562489f`). Pauta `0fbdbc5d` aprovada nos dois canais
-- [ ] @bruno Fazer o deploy: o artigo já responde 200 porque o conteúdo vem do Supabase, mas `public/images/img_blog/quanto-custa-projeto-casa/cover.webp` só é servido depois que o arquivo sobe #pendencia
+- [x] ~~@bruno Fazer o deploy da capa de `quanto-custa-projeto-casa`~~ — concluído em 2026-08-25 pelo merge do PR #64; capa verificada carregando em 800×533
+- [x] ~~Solicitar indexação dos dois artigos publicados pelo fluxo~~ — feito pelo Bruno em 2026-08-25; os dois saíram de `Discovered` com crawl nunca para `Crawled` no mesmo dia
+- [ ] @bruno Reconferir por volta de 2026-09-01 se `custos-ocultos-construcao-2026` e `quanto-custa-projeto-casa` passaram de `Crawled` para `Submitted and indexed`. Se continuarem fora depois do crawl, o problema deixa de ser submissão e passa a ser qualidade ou canibalização, e aí o diagnóstico é outro #pendencia
 
 > [!note] `orcamento-steel-frame` e `hold-downs-ancoragens` saíram do fluxo semanal
 > Foram para backlog sem data em 2026-07-30, cada um com bloqueio nomeado. Ver "Backlog: os 2 artigos prontos que não vão ao ar agora" abaixo. **Não puxar para a semana sem antes ter os números** — publicar `orcamento-steel-frame` como está adiciona uma terceira faixa de preço ao acervo.
