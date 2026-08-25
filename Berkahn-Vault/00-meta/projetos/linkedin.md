@@ -1,11 +1,11 @@
 ---
 tipo: projeto
 criado: 2026-05-22
-atualizado: 2026-08-18
+atualizado: 2026-08-25
 tags:
   - project/linkedin
   - status/active
-ai_summary: Hub do LinkedIn. Duas pautas aprovadas aguardam publicação manual e registro de URL+data, a de casa LSF 100 m² e a de custos ocultos. Cadência segue abaixo da meta.
+ai_summary: Hub do LinkedIn. Três pautas aprovadas aguardam publicação manual e registro de URL+data, casa LSF 100 m², custos ocultos e quanto custa o projeto. Cadência segue abaixo da meta.
 status: active
 projeto: linkedin
 kpi_publicados: 3
@@ -59,16 +59,24 @@ Contagem verificada em 2026-07-29 contra `main` — o `kpi_publicados: 1` anteri
 - [ ] @bruno Publicar manualmente no LinkedIn com a UTM entregue; depois registrar URL e data reais #pendencia
 - [x] Pauta `d29d7fee` (custos ocultos) aprovada em 18/08 com copy de 142 palavras e capa 1080×1350
 - [ ] @bruno Publicar o post de custos ocultos e registrar URL e data reais no card `d29d7fee` #pendencia
+- [x] Pauta `0fbdbc5d` (quanto custa o projeto) aprovada em 25/08 com copy de 115 palavras e capa 1080×1350
+- [ ] @bruno Publicar o post de quanto custa o projeto e registrar URL e data reais no card `0fbdbc5d` #pendencia
 
 - [ ] Começar o backlog de distribuição: 22 posts derivam de artigos **já publicados** e não exigem escrever artigo nenhum
 
-> [!note] Imagem sem texto foi exceção deliberada
-> A capa da pauta `d29d7fee` é a mesma foto do Blog recortada para 4:5, sem
-> tipografia sobreposta, contrariando o padrão de [[linkedin-post]]. A foto é de
-> obra real e carrega o argumento sozinha; sobrepor os percentuais do CUB
-> repetiria na imagem o empilhamento de números que já tinha sido cortado do
-> texto. Sem foto própria que sustente o argumento, voltar ao padrão com
-> tipografia. Registrado no bloco `imagem-briefing` do card.
+> [!note] Imagem sem texto: decisão tomada em 2026-08-25
+> As capas de `d29d7fee` (18/08) e `0fbdbc5d` (25/08) são fotos do Blog
+> recortadas para 4:5, sem tipografia sobreposta, contrariando o padrão de
+> [[linkedin-post]]. Duas seguidas deixam de ser acaso, então levei a escolha ao
+> Bruno: recalibrar o prompt locked ou seguir caso a caso.
+>
+> **Decisão dele: o prompt calibrado fica como está** e cada exceção continua
+> registrada no `imagem-briefing` do próprio card. O critério em uso é que foto
+> própria de obra real que sustente o argumento do post dispensa tipografia;
+> pauta sem foto assim volta ao padrão com texto.
+>
+> Consequência a vigiar: se a exceção virar a regra na prática, o prompt passa a
+> descrever algo que ninguém faz, e aí a conversa precisa ser retomada.
 
 ## Backlog planejado (2026-07-29)
 
