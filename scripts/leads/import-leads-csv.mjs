@@ -48,6 +48,7 @@ const rows = parsed.data.map((source, index) => {
   const value = (field) => first(source, aliases[field]);
   const rawStatus = slug(value("status"));
   const knownStatus = validStatuses.has(rawStatus);
+  const shouldArchive = Boolean(rawStatus) && !knownStatus;
   const status = knownStatus ? rawStatus : "novo";
   const createdAt = parseDate(value("criado_em")) || now;
   const updatedAt = parseDate(value("atualizado_em")) || createdAt;
@@ -67,7 +68,7 @@ const rows = parsed.data.map((source, index) => {
     empresa: nullable(value("empresa")),
     cargo: nullable(value("cargo")),
     visualizado_em: now,
-    arquivado_em: knownStatus ? null : now,
+    arquivado_em: shouldArchive ? now : null,
     qualificado_em: ["qualificado", "proposta_enviada", "convertido"].includes(status) ? updatedAt : null,
     convertido_em: status === "convertido" ? updatedAt : null,
     desqualificado_em: status === "desqualificado" ? updatedAt : null,
@@ -80,7 +81,8 @@ const rows = parsed.data.map((source, index) => {
 });
 
 const invalidContacts = rows.filter((row) => !row.email && !row.telefone).length;
-console.log(JSON.stringify({ mode: apply ? "apply" : "dry-run", file_sha256: fileHash, rows: rows.length, invalid_contacts: invalidContacts, statuses: Object.fromEntries(counts) }, null, 2));
+const archivedUnknownStatuses = rows.filter((row) => row.arquivado_em).length;
+console.log(JSON.stringify({ mode: apply ? "apply" : "dry-run", file_sha256: fileHash, rows: rows.length, invalid_contacts: invalidContacts, archived_unknown_statuses: archivedUnknownStatuses, statuses: Object.fromEntries(counts) }, null, 2));
 if (!apply) process.exit(0);
 
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
