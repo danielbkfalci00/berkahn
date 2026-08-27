@@ -219,7 +219,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
             ]}
             schemaOnly
           />
-        <section className="relative h-[50vh] min-h-[400px] flex items-end">
+        <section className="relative min-h-[max(50vh,400px)] flex items-end">
           {post.cover_image && (
             <Image
               src={post.cover_image}
@@ -231,16 +231,16 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
             />
           )}
           {post.cover_image && (
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/60 to-black/30" />
           )}
-          <div className="relative z-10 container mx-auto px-4 pb-12">
+          <div className="relative z-10 container mx-auto px-4 pt-12 pb-12">
             <span className="inline-block bg-white text-neutral-900 text-sm font-medium px-3 py-1 rounded-full mb-4">
               {post.category}
             </span>
-            <h1 className="text-3xl md:text-5xl font-bold text-white max-w-4xl mb-4">
+            <h1 className="text-2xl sm:text-3xl md:text-5xl font-bold text-white max-w-4xl mb-3 sm:mb-4">
               {post.title}
             </h1>
-            <p className="text-neutral-300 text-lg max-w-2xl">{post.excerpt}</p>
+            <p className="text-neutral-200 text-sm leading-relaxed sm:text-base md:text-lg max-w-2xl line-clamp-4 sm:line-clamp-none">{post.excerpt}</p>
             <div className="flex flex-wrap items-center gap-4 mt-6 text-neutral-300 text-sm">
               <span>{post.author}</span>
               <span>•</span>

@@ -47,7 +47,21 @@ O item 3 é adição, não substituição: o prompt LOCKED descreve briefing de 
 e a prática migrou para IA. Entregue os dois; mexer no prompt calibrado exige
 permissão explícita do Bruno.
 
-## 3. Gravar na pauta
+## 3. Passar no gate antes de gravar
+
+Escreva o texto num arquivo do scratchpad e rode o verificador. Ele lê as regras
+do prompt calibrado v1.2 e sai em 0 ou 1:
+
+```bash
+node scripts/conteudo/check-linkedin.mjs <arquivo.txt>
+```
+
+Só grave na pauta com saída 0. Se ele reprovar, reescreva o texto inteiro; não
+remende só a frase apontada, porque o problema costuma ser o ritmo do parágrafo.
+A URL com UTM fica em **linha própria entre o CTA e as hashtags**, e não conta
+na extensão. Cole a saída do gate no pacote de aprovação.
+
+## 4. Gravar na pauta
 
 Escreva cada texto num arquivo temporário do scratchpad da sessão (**nunca** no
 vault) e grave:
@@ -68,7 +82,7 @@ mostre ao Bruno e pergunte antes de repetir com
 **Não crie pasta em `40-content/linkedin/`.** As quatro pastas antigas de lá são
 acervo congelado; o texto novo vive na pauta.
 
-## 4. A imagem
+## 5. A imagem
 
 Depois de gerar a imagem com o prompt, diga ao Bruno para subi-la no bloco
 **Capa Linkedin** em `/admin/conteudo/<id>` — o admin comprime e guarda no

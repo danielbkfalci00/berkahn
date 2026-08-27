@@ -92,6 +92,7 @@ tmpgitleaks*.json
 !/scripts/analytics/test-auth.mjs
 !/scripts/analytics/test-learning.mjs
 !/scripts/analytics/update-hub-kpis.mjs
+!/scripts/analytics/adhoc-inspect-urls.mjs
 !/scripts/analytics/lib/
 !/scripts/analytics/lib/*.mjs
 !/scripts/analytics/templates/
