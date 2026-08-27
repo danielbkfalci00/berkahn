@@ -2,20 +2,21 @@ import { Bell, Database, Shield, UserRound } from "lucide-react";
 import { LeadResponsibleSettings } from "@/components/admin/LeadResponsibleSettings";
 import { AdminPushSettings, type AdminPushDevice } from "@/components/admin/AdminPwa";
 import { Card } from "@/components/ui/card";
-import { createClient } from "@/lib/supabase/server";
+import { getAdminSession } from "@/lib/supabase/sessao";
 import type { LeadResponsible } from "@/types/analytics";
+import { redirect } from "next/navigation";
 
 export default async function ConfiguracoesPage() {
-  const supabase = await createClient();
-  const [{ data: { user } }, { data: responsibles }, { data: pushDevices }] = await Promise.all([
-    supabase.auth.getUser(),
-    supabase
+  const session = await getAdminSession();
+  if (!session) redirect("/admin/login");
+  const [{ data: responsibles }, { data: pushDevices }] = await Promise.all([
+    session.supabase
       .from("lead_responsaveis")
-      .select("id,nome,ativo,ordem")
+      .select("id,nome,ativo,ordem,user_id,email,role,recebe_leads,notificar_novos_leads,notificar_acoes_vencidas")
       .order("ativo", { ascending: false })
       .order("ordem")
       .order("nome"),
-    supabase
+    session.supabase
       .from("admin_push_subscriptions")
       .select("id,device_label,ativo,ultimo_uso_em")
       .order("ativo", { ascending: false })
@@ -34,24 +35,32 @@ export default async function ConfiguracoesPage() {
         <p className="mt-1 text-sm text-neutral-600">Somente controles que alteram o sistema aparecem nesta tela.</p>
       </div>
 
-      <Card className="p-6">
-        <SectionHeading icon={UserRound} title="Equipe comercial" description="Responsáveis disponíveis na Inbox e no Kanban de leads." />
+      <Card className="p-6" id="equipe">
+        <SectionHeading icon={UserRound} title="Equipe e acessos" description="Convites, papéis e responsáveis disponíveis na operação." />
         <div className="mt-6">
-          <LeadResponsibleSettings initialResponsibles={(responsibles || []) as LeadResponsible[]} />
+          <LeadResponsibleSettings initialResponsibles={(responsibles || []) as LeadResponsible[]} canManage={session.membership.role === "owner"} />
         </div>
       </Card>
 
-      <Card className="p-6">
+      <Card className="p-6" id="notificacoes">
         <SectionHeading icon={Bell} title="Notificações no dispositivo" description="Alertas operacionais do admin, sem dados pessoais na tela bloqueada." />
         <div className="mt-6">
-          <AdminPushSettings devices={(pushDevices || []) as AdminPushDevice[]} configured={pushConfigured} />
+          <AdminPushSettings
+            devices={(pushDevices || []) as AdminPushDevice[]}
+            configured={pushConfigured}
+            preferences={{
+              novosLeads: session.membership.notificar_novos_leads,
+              acoesVencidas: session.membership.notificar_acoes_vencidas,
+            }}
+          />
         </div>
       </Card>
 
-      <Card className="p-6">
-        <SectionHeading icon={Shield} title="Acesso administrativo" description="O admin aceita apenas a conta canônica autorizada." />
+      <Card className="p-6" id="conta">
+        <SectionHeading icon={Shield} title="Conta administrativa" description="Cada pessoa usa sua própria conta e seus dispositivos." />
         <dl className="mt-5 grid gap-4 text-sm sm:grid-cols-2">
-          <SystemField label="Conta ativa" value={user?.email || "Sessão não identificada"} />
+          <SystemField label="Conta ativa" value={session.user.email || "Sessão não identificada"} />
+          <SystemField label="Papel" value={session.membership.role} />
           <SystemField label="Domínio" value="admin.berkahn.com.br" />
         </dl>
       </Card>

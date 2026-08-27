@@ -243,7 +243,7 @@ export function LeadsQueue({ initialLeads, total, page, pageCount, kpis, respons
 
       <button type="button" aria-expanded={filtersOpen} onClick={() => setFiltersOpen((value) => !value)} className="inline-flex h-10 items-center justify-center gap-2 rounded-md border border-neutral-300 bg-white text-sm font-medium md:hidden"><SlidersHorizontal className="h-4 w-4" /> {filtersOpen ? "Ocultar filtros" : "Filtrar leads"}</button>
 
-      <form className={`${filtersOpen ? "grid" : "hidden"} gap-3 rounded-lg border border-neutral-200 bg-white p-4 md:grid md:grid-cols-4 xl:grid-cols-10`}>
+      <form className={`${filtersOpen ? "grid" : "hidden"} gap-3 rounded-lg border border-neutral-200 bg-white p-4 md:grid md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5`}>
         <input type="hidden" name="view" value={view} />
         <input name="q" defaultValue={searchParams.get("q") || ""} placeholder="Nome, telefone ou email" className={`${INPUT_CLASS} md:col-span-2`} />
         <FilterSelect name="status" label="Todos os status" options={STATUS} current={searchParams.get("status")} />
@@ -253,8 +253,11 @@ export function LeadsQueue({ initialLeads, total, page, pageCount, kpis, respons
         <FilterSelect name="responsavel" label="Toda a equipe" options={responsibles.map((item) => ({ value: item.id, label: item.nome }))} current={searchParams.get("responsavel")} />
         <FilterSelect name="periodo" label="Todo período" options={[{value:"7",label:"7 dias"},{value:"28",label:"28 dias"},{value:"90",label:"90 dias"}]} current={searchParams.get("periodo")} />
         <label className="flex items-center gap-2 text-xs text-neutral-600"><input type="checkbox" name="vencida" value="1" defaultChecked={searchParams.get("vencida") === "1"} /> Ação vencida</label>
+        <label className="flex items-center gap-2 text-xs text-neutral-600"><input type="checkbox" name="semResponsavel" value="1" defaultChecked={searchParams.get("semResponsavel") === "1"} /> Sem responsável</label>
+        <label className="flex items-center gap-2 text-xs text-neutral-600"><input type="checkbox" name="semAcao" value="1" defaultChecked={searchParams.get("semAcao") === "1"} /> Sem próxima ação</label>
         <label className="flex items-center gap-2 text-xs text-neutral-600"><input type="checkbox" name="arquivados" value="1" defaultChecked={searchParams.get("arquivados") === "1"} /> Arquivados</label>
         <button className="inline-flex h-10 items-center justify-center gap-2 rounded-md border border-neutral-300 text-sm font-medium hover:bg-neutral-50"><RefreshCw className="h-4 w-4" /> Aplicar</button>
+        <Link href={`?view=${view}`} className="inline-flex h-10 items-center justify-center text-sm text-neutral-600 underline-offset-4 hover:underline">Limpar filtros</Link>
       </form>
 
       {view === "kanban" ? (

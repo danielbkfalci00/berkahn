@@ -1,5 +1,7 @@
 import { createServerClient, type CookieOptions } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
+import { roleCanAccessPath } from '@/lib/admin/access'
+import type { AdminRole } from '@/types/analytics'
 
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({
@@ -42,6 +44,7 @@ export async function updateSession(request: NextRequest) {
   // Protected admin routes
   const isAdminRoute = request.nextUrl.pathname.startsWith('/admin')
   const isLoginPage = request.nextUrl.pathname === '/admin/login'
+  const isPasswordPage = request.nextUrl.pathname === '/admin/definir-senha'
   const isAdminApi = request.nextUrl.pathname.startsWith('/api/admin')
 
   // API responde 401, nunca redirect: um 302 para /admin/login vira, dentro de
@@ -59,7 +62,33 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(url)
   }
 
-  if (isLoginPage && user) {
+  let membership: { role: AdminRole } | null = null
+  if (user && (isAdminRoute || isAdminApi)) {
+    const { data } = await supabase
+      .from('lead_responsaveis')
+      .select('role')
+      .eq('user_id', user.id)
+      .eq('ativo', true)
+      .maybeSingle()
+    membership = data as { role: AdminRole } | null
+  }
+
+  if (isAdminApi && user && !membership) {
+    return NextResponse.json({ error: 'Acesso administrativo inativo' }, { status: 403 })
+  }
+
+  if (isAdminRoute && !isLoginPage && user && !membership) {
+    const url = request.nextUrl.clone()
+    url.pathname = '/admin/login'
+    url.searchParams.set('erro', 'acesso-inativo')
+    return NextResponse.redirect(url)
+  }
+
+  if (isAdminRoute && !isLoginPage && !isPasswordPage && membership && !roleCanAccessPath(membership.role, request.nextUrl.pathname)) {
+    return NextResponse.redirect(new URL('/admin', request.url))
+  }
+
+  if (isLoginPage && user && membership) {
     // Redirect to dashboard if already authenticated
     const url = request.nextUrl.clone()
     url.pathname = '/admin'

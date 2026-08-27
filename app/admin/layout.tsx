@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { AdminLayoutClient } from "@/components/admin/AdminLayoutClient";
+import { getAdminSession } from "@/lib/supabase/sessao";
 
 export const metadata: Metadata = {
   title: "Admin | Berkahn",
@@ -19,10 +20,11 @@ export const metadata: Metadata = {
   },
 };
 
-export default function AdminLayout({
+export default async function AdminLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  return <AdminLayoutClient>{children}</AdminLayoutClient>;
+  const session = await getAdminSession();
+  return <AdminLayoutClient membership={session?.membership ?? null}>{children}</AdminLayoutClient>;
 }

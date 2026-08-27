@@ -2,18 +2,24 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Bell, BellOff, Smartphone } from "lucide-react";
+import { Bell, BellOff, Download, Smartphone } from "lucide-react";
 import {
   deactivateAdminPushSubscription,
   revokeAdminPushDevice,
   saveAdminPushSubscription,
 } from "@/app/admin/leads/actions";
+import { updateOwnNotificationPreferences } from "@/app/admin/configuracoes/actions";
 
 export interface AdminPushDevice {
   id: string;
   device_label: string;
   ativo: boolean;
   ultimo_uso_em: string;
+}
+
+interface BeforeInstallPromptEvent extends Event {
+  prompt(): Promise<void>;
+  userChoice: Promise<{ outcome: "accepted" | "dismissed" }>;
 }
 
 export function AdminPwaRegistration() {
@@ -24,12 +30,20 @@ export function AdminPwaRegistration() {
   return null;
 }
 
-export function AdminPushSettings({ devices, configured }: { devices: AdminPushDevice[]; configured: boolean }) {
+export function AdminPushSettings({ devices, configured, preferences }: {
+  devices: AdminPushDevice[];
+  configured: boolean;
+  preferences: { novosLeads: boolean; acoesVencidas: boolean };
+}) {
   const router = useRouter();
   const [supported, setSupported] = useState(true);
   const [active, setActive] = useState(false);
   const [pending, setPending] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
+  const [novosLeads, setNovosLeads] = useState(preferences.novosLeads);
+  const [acoesVencidas, setAcoesVencidas] = useState(preferences.acoesVencidas);
+  const [installPrompt, setInstallPrompt] = useState<BeforeInstallPromptEvent | null>(null);
+  const [installed, setInstalled] = useState(false);
 
   useEffect(() => {
     const available = "serviceWorker" in navigator && "PushManager" in window && "Notification" in window;
@@ -39,6 +53,24 @@ export function AdminPushSettings({ devices, configured }: { devices: AdminPushD
       const subscription = await registration?.pushManager.getSubscription();
       setActive(Boolean(subscription));
     });
+  }, []);
+
+  useEffect(() => {
+    setInstalled(window.matchMedia("(display-mode: standalone)").matches);
+    const capture = (event: Event) => {
+      event.preventDefault();
+      setInstallPrompt(event as BeforeInstallPromptEvent);
+    };
+    const complete = () => {
+      setInstalled(true);
+      setInstallPrompt(null);
+    };
+    window.addEventListener("beforeinstallprompt", capture);
+    window.addEventListener("appinstalled", complete);
+    return () => {
+      window.removeEventListener("beforeinstallprompt", capture);
+      window.removeEventListener("appinstalled", complete);
+    };
   }, []);
 
   async function enable() {
@@ -108,8 +140,28 @@ export function AdminPushSettings({ devices, configured }: { devices: AdminPushD
     router.refresh();
   }
 
+  async function savePreferences() {
+    setPending(true);
+    setMessage(null);
+    const result = await updateOwnNotificationPreferences({ novosLeads, acoesVencidas });
+    setPending(false);
+    setMessage(result.ok ? "Preferências de alerta salvas." : result.error || "Não foi possível salvar as preferências.");
+  }
+
+  async function install() {
+    if (!installPrompt) return;
+    await installPrompt.prompt();
+    const choice = await installPrompt.userChoice;
+    if (choice.outcome === "accepted") setMessage("Admin instalado neste dispositivo.");
+    setInstallPrompt(null);
+  }
+
   return (
     <div className="space-y-4">
+      <div className="flex flex-col gap-3 rounded-md border border-neutral-200 p-4 sm:flex-row sm:items-center sm:justify-between">
+        <div><p className="font-medium text-neutral-900">Aplicativo Berkahn Admin</p><p className="mt-0.5 text-sm text-neutral-500">Instale para abrir em tela própria e receber alertas neste dispositivo.</p></div>
+        {installed ? <span className="text-sm font-medium text-emerald-700">Instalado</span> : installPrompt ? <button type="button" onClick={install} className="inline-flex h-10 items-center justify-center gap-2 rounded-md bg-neutral-900 px-4 text-sm font-medium text-white"><Download className="h-4 w-4" />Instalar</button> : <p className="max-w-xs text-xs text-neutral-500">No iPhone, use Compartilhar → Adicionar à Tela de Início. Em outros navegadores, use o menu “Instalar app”.</p>}
+      </div>
       {!configured && <p className="rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-900">A PWA pode ser instalada, mas o envio de alertas aguarda as chaves VAPID no ambiente de produção.</p>}
       {configured && !supported && <p className="rounded-md bg-amber-50 px-3 py-2 text-sm text-amber-900">Este navegador não oferece Web Push. O CRM continua funcionando normalmente.</p>}
       {configured && supported && (
@@ -122,6 +174,14 @@ export function AdminPushSettings({ devices, configured }: { devices: AdminPushD
         </div>
       )}
       {message && <p role="status" className="text-sm text-neutral-600">{message}</p>}
+      <fieldset className="rounded-md border border-neutral-200 p-4">
+        <legend className="px-1 text-xs font-semibold uppercase tracking-wide text-neutral-500">Alertas que quero receber</legend>
+        <div className="mt-2 grid gap-3 sm:grid-cols-2">
+          <label className="flex items-center gap-2 text-sm text-neutral-700"><input type="checkbox" checked={novosLeads} onChange={(event) => setNovosLeads(event.target.checked)} />Novos leads</label>
+          <label className="flex items-center gap-2 text-sm text-neutral-700"><input type="checkbox" checked={acoesVencidas} onChange={(event) => setAcoesVencidas(event.target.checked)} />Ações vencidas</label>
+        </div>
+        <button type="button" disabled={pending} onClick={savePreferences} className="mt-4 rounded-md border border-neutral-300 px-3 py-2 text-xs font-medium disabled:opacity-40">Salvar preferências</button>
+      </fieldset>
       <div>
         <h3 className="text-xs font-semibold uppercase tracking-wide text-neutral-500">Dispositivos registrados</h3>
         <div className="mt-2 divide-y divide-neutral-200 rounded-md border border-neutral-200">

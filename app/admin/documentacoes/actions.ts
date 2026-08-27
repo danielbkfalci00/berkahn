@@ -1,6 +1,7 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
+import { getAdminSession } from "@/lib/supabase/sessao";
 import {
   LIMITES,
   toComentario,
@@ -43,11 +44,10 @@ function validarAncora(ancora: Ancora): string | null {
   return null;
 }
 
-async function autor(supabase: Awaited<ReturnType<typeof createClient>>) {
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  return user;
+async function autor() {
+  const session = await getAdminSession();
+  if (!session || !["owner", "conteudo"].includes(session.membership.role)) return null;
+  return { id: session.user.id, nome: session.membership.nome };
 }
 
 /** Cria uma thread e o primeiro comentário. */
@@ -70,13 +70,12 @@ export async function criarThread(input: {
   const corpo = limpar(input.corpo, LIMITES.corpoMax);
   if (!corpo) return { data: null, error: "Escreva um comentário." };
 
-  const autorNome = limpar(input.autorNome, LIMITES.autorMax);
-  if (!autorNome) return { data: null, error: "Informe seu nome." };
-
   const tipo = isTipoComentario(input.tipo) ? input.tipo : "comentario";
 
   const supabase = await createClient();
-  const user = await autor(supabase);
+  const user = await autor();
+  if (!user) return { data: null, error: "Seu papel não permite comentar." };
+  const autorNome = limpar(user.nome, LIMITES.autorMax);
 
   const { data: thread, error: erroThread } = await supabase
     .from("documento_threads")
@@ -104,7 +103,7 @@ export async function criarThread(input: {
       corpo,
       tipo,
       autor_nome: autorNome,
-      autor_user_id: user?.id ?? null,
+      autor_user_id: user.id,
     });
 
   if (erroComentario) {
@@ -130,11 +129,10 @@ export async function responder(input: {
   const corpo = limpar(input.corpo, LIMITES.corpoMax);
   if (!corpo) return { data: null, error: "Escreva uma resposta." };
 
-  const autorNome = limpar(input.autorNome, LIMITES.autorMax);
-  if (!autorNome) return { data: null, error: "Informe seu nome." };
-
   const supabase = await createClient();
-  const user = await autor(supabase);
+  const user = await autor();
+  if (!user) return { data: null, error: "Seu papel não permite comentar." };
+  const autorNome = limpar(user.nome, LIMITES.autorMax);
 
   const { data, error } = await supabase
     .from("documento_comentarios")
@@ -143,7 +141,7 @@ export async function responder(input: {
       corpo,
       tipo: isTipoComentario(input.tipo) ? input.tipo : "comentario",
       autor_nome: autorNome,
-      autor_user_id: user?.id ?? null,
+      autor_user_id: user.id,
     })
     .select(COLUNAS_COMENTARIO)
     .single();
@@ -216,7 +214,9 @@ export async function alternarResolucao(input: {
   autorNome: string;
 }): Promise<Resultado<Thread | null>> {
   const supabase = await createClient();
-  const autorNome = limpar(input.autorNome, LIMITES.autorMax);
+  const user = await autor();
+  if (!user) return { data: null, error: "Seu papel não permite resolver comentários." };
+  const autorNome = limpar(user.nome, LIMITES.autorMax);
 
   const { error } = await supabase
     .from("documento_threads")

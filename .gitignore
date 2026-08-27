@@ -119,3 +119,4 @@ tmpgitleaks*.json
 # e NAO pode ir para producao (bypassa RLS e expoe rota publica).
 # Ignorado desde a criacao, para nao depender de lembrar de apagar.
 /app/dev-harness/
+/.worktrees/

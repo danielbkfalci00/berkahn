@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { DashboardContent } from "@/components/admin/DashboardContent";
 import { DashboardStats } from "@/types/admin";
+import { getAdminSession } from "@/lib/supabase/sessao";
 
 // Default stats when tables don't exist yet
 const defaultStats: DashboardStats = {
@@ -26,6 +27,7 @@ function formatRelativeTime(date: string): string {
 
 export default async function AdminDashboard() {
   const supabase = await createClient();
+  const session = await getAdminSession();
 
   // Fetch user info
   const {
@@ -77,6 +79,7 @@ export default async function AdminDashboard() {
       user={user}
       stats={stats}
       recentActivity={recentActivity}
+      membership={session?.membership ?? null}
     />
   );
 }

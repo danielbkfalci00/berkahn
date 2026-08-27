@@ -495,27 +495,53 @@ export type Database = {
           ativo: boolean
           atualizado_em: string
           criado_em: string
+          email: string | null
           id: string
           nome: string
+          notificar_acoes_vencidas: boolean
+          notificar_novos_leads: boolean
           ordem: number
+          recebe_leads: boolean
+          role: string
+          user_id: string | null
         }
         Insert: {
           ativo?: boolean
           atualizado_em?: string
           criado_em?: string
+          email?: string | null
           id?: string
           nome: string
+          notificar_acoes_vencidas?: boolean
+          notificar_novos_leads?: boolean
           ordem?: number
+          recebe_leads?: boolean
+          role?: string
+          user_id?: string | null
         }
         Update: {
           ativo?: boolean
           atualizado_em?: string
           criado_em?: string
+          email?: string | null
           id?: string
           nome?: string
+          notificar_acoes_vencidas?: boolean
+          notificar_novos_leads?: boolean
           ordem?: number
+          recebe_leads?: boolean
+          role?: string
+          user_id?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "lead_responsaveis_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       lead_artifacts: {
         Row: {

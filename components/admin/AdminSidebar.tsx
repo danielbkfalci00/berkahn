@@ -23,6 +23,8 @@ import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import { disableCurrentAdminPush } from "@/components/admin/AdminPwa";
+import { roleCanAccessPath } from "@/lib/admin/access";
+import type { AdminMembership } from "@/types/analytics";
 
 const navigation = [
   {
@@ -77,7 +79,7 @@ const navigation = [
   },
 ];
 
-export function AdminSidebar() {
+export function AdminSidebar({ membership }: { membership: AdminMembership | null }) {
   const pathname = usePathname();
   const router = useRouter();
   const [collapsed, setCollapsed] = useState(false);
@@ -106,6 +108,8 @@ export function AdminSidebar() {
       {/* Mobile menu button */}
       <button
         type="button"
+        aria-label={mobileOpen ? "Fechar menu" : "Abrir menu"}
+        aria-expanded={mobileOpen}
         className="fixed top-4 left-4 z-50 lg:hidden p-2 rounded-lg bg-white shadow-md"
         onClick={() => setMobileOpen(!mobileOpen)}
       >
@@ -139,6 +143,8 @@ export function AdminSidebar() {
             </Link>
           )}
           <button
+            type="button"
+            aria-label={collapsed ? "Expandir menu" : "Recolher menu"}
             onClick={() => setCollapsed(!collapsed)}
             className="hidden lg:flex p-1.5 rounded-lg hover:bg-neutral-100 transition-colors"
           >
@@ -153,7 +159,7 @@ export function AdminSidebar() {
 
         {/* Navigation */}
         <nav className="flex-1 py-4 px-2 space-y-1 overflow-y-auto">
-          {navigation.map((item) => {
+          {navigation.filter((item) => membership && roleCanAccessPath(membership.role, item.href)).map((item) => {
             const isActive =
               pathname === item.href ||
               (item.href !== "/admin" && pathname?.startsWith(item.href));
@@ -187,6 +193,12 @@ export function AdminSidebar() {
 
         {/* User section */}
         <div className="p-2 border-t border-neutral-200">
+          {!collapsed && membership && (
+            <div className="mb-2 px-3 py-2">
+              <p className="truncate text-xs font-medium text-neutral-800">{membership.nome}</p>
+              <p className="truncate text-[11px] text-neutral-500">{membership.email}</p>
+            </div>
+          )}
           <Button
             variant="ghost"
             className={cn(

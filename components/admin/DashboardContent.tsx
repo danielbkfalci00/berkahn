@@ -15,8 +15,12 @@ import {
   CheckCircle,
   DollarSign,
   Eye,
+  Inbox,
+  Calculator,
+  BarChart3,
 } from "lucide-react";
 import type { DashboardStats } from "@/types/admin";
+import type { AdminMembership } from "@/types/analytics";
 
 interface Activity {
   id: string;
@@ -29,15 +33,20 @@ interface DashboardContentProps {
   user: User | null;
   stats: DashboardStats;
   recentActivity: Activity[];
+  membership: AdminMembership | null;
 }
 
 export function DashboardContent({
   user,
   stats,
   recentActivity,
+  membership,
 }: DashboardContentProps) {
   const greeting = getGreeting();
-  const firstName = user?.email?.split("@")[0] || "Admin";
+  const firstName = membership?.nome.split(" ")[0] || user?.email?.split("@")[0] || "Admin";
+  const canManageContent = membership?.role === "owner" || membership?.role === "conteudo";
+  const canManageCommercial = membership?.role === "owner" || membership?.role === "comercial";
+  const canReadContent = canManageContent || membership?.role === "viewer";
 
   return (
     <div className="space-y-8">
@@ -51,20 +60,20 @@ export function DashboardContent({
             Aqui está um resumo do seu painel
           </p>
         </div>
-        <div className="flex gap-2">
+        {canManageContent && <div className="flex gap-2">
           <Link href="/admin/posts/new">
             <Button className="bg-neutral-900 hover:bg-neutral-800">
               <Plus className="h-4 w-4 mr-2" />
               Novo Post
             </Button>
           </Link>
-        </div>
+        </div>}
       </div>
 
       {/* Stats grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Posts */}
-        <Card className="p-6 hover:shadow-luxury-md transition-shadow">
+        {canReadContent && <Card className="p-6 hover:shadow-luxury-md transition-shadow">
           <div className="flex items-center justify-between">
             <div className="p-2 bg-blue-50 rounded-lg">
               <FileText className="h-5 w-5 text-blue-600" />
@@ -92,10 +101,10 @@ export function DashboardContent({
               {stats.posts.drafts} rascunhos
             </span>
           </div>
-        </Card>
+        </Card>}
 
         {/* Proposals */}
-        <Card className="p-6 hover:shadow-luxury-md transition-shadow">
+        {canManageCommercial && <Card className="p-6 hover:shadow-luxury-md transition-shadow">
           <div className="flex items-center justify-between">
             <div className="p-2 bg-green-50 rounded-lg">
               <FileSpreadsheet className="h-5 w-5 text-green-600" />
@@ -123,10 +132,10 @@ export function DashboardContent({
               {stats.proposals.approved} aprovadas
             </span>
           </div>
-        </Card>
+        </Card>}
 
         {/* Presentations */}
-        <Card className="p-6 hover:shadow-luxury-md transition-shadow">
+        {canReadContent && <Card className="p-6 hover:shadow-luxury-md transition-shadow">
           <div className="flex items-center justify-between">
             <div className="p-2 bg-purple-50 rounded-lg">
               <Presentation className="h-5 w-5 text-purple-600" />
@@ -154,10 +163,10 @@ export function DashboardContent({
               {stats.presentations.viewed} visualizadas
             </span>
           </div>
-        </Card>
+        </Card>}
 
         {/* Revenue (Proposals) */}
-        <Card className="p-6 hover:shadow-luxury-md transition-shadow">
+        {canManageCommercial && <Card className="p-6 hover:shadow-luxury-md transition-shadow">
           <div className="flex items-center justify-between">
             <div className="p-2 bg-amber-50 rounded-lg">
               <DollarSign className="h-5 w-5 text-amber-600" />
@@ -169,11 +178,11 @@ export function DashboardContent({
             </p>
             <p className="text-sm text-neutral-500">Em propostas aprovadas</p>
           </div>
-          <div className="mt-4 flex items-center text-xs text-green-600">
-            <TrendingUp className="h-3 w-3 mr-1" />
-            <span>+12% este mês</span>
+          <div className="mt-4 flex items-center text-xs text-neutral-500">
+            <CheckCircle className="h-3 w-3 mr-1" />
+            <span>{stats.proposals.approved} propostas aprovadas</span>
           </div>
-        </Card>
+        </Card>}
       </div>
 
       {/* Quick actions and recent activity */}
@@ -182,24 +191,25 @@ export function DashboardContent({
         <Card className="p-6 lg:col-span-1">
           <h3 className="font-semibold text-neutral-900 mb-4">Ações Rápidas</h3>
           <div className="space-y-2">
-            <Link href="/admin/posts/new">
+            {canManageContent && <Link href="/admin/posts/new">
               <Button variant="outline" className="w-full justify-start">
                 <FileText className="h-4 w-4 mr-2" />
                 Novo Post
               </Button>
-            </Link>
-            <Link href="/admin/propostas/new">
+            </Link>}
+            {canManageCommercial && <Link href="/admin/leads">
               <Button variant="outline" className="w-full justify-start">
-                <FileSpreadsheet className="h-4 w-4 mr-2" />
-                Nova Proposta
+                <Inbox className="h-4 w-4 mr-2" />
+                Operar Leads
               </Button>
-            </Link>
-            <Link href="/admin/apresentacoes/new">
+            </Link>}
+            {canManageCommercial && <Link href="/admin/orcamentos/novo">
               <Button variant="outline" className="w-full justify-start">
-                <Presentation className="h-4 w-4 mr-2" />
-                Nova Apresentação
+                <Calculator className="h-4 w-4 mr-2" />
+                Novo Orçamento
               </Button>
-            </Link>
+            </Link>}
+            <Link href="/admin/analytics"><Button variant="outline" className="w-full justify-start"><BarChart3 className="h-4 w-4 mr-2" />Ver Analytics</Button></Link>
           </div>
         </Card>
 

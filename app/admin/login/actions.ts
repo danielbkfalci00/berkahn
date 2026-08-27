@@ -1,7 +1,7 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
-import { BERKAHN_ADMIN_EMAIL } from "@/lib/supabase/sessao";
+import { getAdminSession } from "@/lib/supabase/sessao";
 
 /**
  * Autenticação do admin, no servidor.
@@ -26,13 +26,13 @@ import { BERKAHN_ADMIN_EMAIL } from "@/lib/supabase/sessao";
 // Não é segredo: este endereço está no rodapé do site público. O segredo é a
 // senha. Fica aqui, e não numa env var, para o login não depender de
 // configuração que alguém pode esquecer de definir num ambiente novo.
-export async function entrar(senha: string): Promise<{ erro: string | null }> {
-  if (!senha) return { erro: "Digite o código de acesso." };
+export async function entrar(email: string, senha: string): Promise<{ erro: string | null }> {
+  if (!email.trim() || !senha) return { erro: "Informe email e senha." };
 
   try {
     const supabase = await createClient();
     const { error } = await supabase.auth.signInWithPassword({
-      email: BERKAHN_ADMIN_EMAIL,
+      email: email.trim().toLowerCase(),
       password: senha,
     });
 
@@ -41,7 +41,13 @@ export async function entrar(senha: string): Promise<{ erro: string | null }> {
       // inexistente" ou de erro de configuração entrega informação a quem
       // está tentando adivinhar. O detalhe fica no log do servidor.
       console.error("[admin login] falha na autenticação:", error.message);
-      return { erro: "Código de acesso inválido." };
+      return { erro: "Email ou senha inválidos." };
+    }
+
+    const session = await getAdminSession();
+    if (!session) {
+      await supabase.auth.signOut();
+      return { erro: "Esta conta não possui acesso ativo ao admin." };
     }
 
     return { erro: null };
@@ -51,4 +57,18 @@ export async function entrar(senha: string): Promise<{ erro: string | null }> {
     console.error("[admin login] erro inesperado:", e);
     return { erro: "Não foi possível entrar. Tente novamente." };
   }
+}
+
+export async function solicitarRedefinicao(email: string): Promise<{ erro: string | null; mensagem?: string }> {
+  const clean = email.trim().toLowerCase();
+  if (!clean) return { erro: "Informe seu email." };
+  const supabase = await createClient();
+  const adminUrl = process.env.NEXT_PUBLIC_ADMIN_URL?.trim() || "https://admin.berkahn.com.br";
+  const { error } = await supabase.auth.resetPasswordForEmail(clean, {
+    redirectTo: `${adminUrl}/auth/callback?next=/admin/definir-senha`,
+  });
+  if (error) {
+    console.error("[admin reset] falha:", error.message);
+  }
+  return { erro: null, mensagem: "Se a conta estiver ativa, você receberá um link para definir uma nova senha." };
 }
