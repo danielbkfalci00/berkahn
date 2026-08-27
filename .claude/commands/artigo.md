@@ -30,7 +30,15 @@ Antes de cada escrita, rode `node scripts/conteudo/pauta.mjs proxima <id> --json
    - 1200×800, assunto deslocado para um dos terços laterais, porque o gradient
      overlay escurece o centro e engole o que estiver lá;
    - obra real de Light Steel Frame com luz natural. Nada de render de banco de
-     imagem, nada de pessoa posando com EPI;
+     imagem;
+   - **nada encenado**: sem prancheta, projeto aberto sobre a mesa, ferramenta
+     posada, capacete apoiado no perfil ou pessoa de EPI olhando para o horizonte.
+     Liste as exclusões no prompt, porque o gerador inventa prop sozinho quando o
+     enquadramento fica vazio. A regra completa está em
+     `30-prompts/linkedin-post.md` v1.2, fonte única das regras de imagem dos dois
+     canais;
+   - **a mesma foto serve os dois canais**: o enquadramento sai em 1200x800 para o
+     Blog e em 1080x1350 para o LinkedIn. Gere uma vez e recorte;
    - o tema precisa ser reconhecível na miniatura, que é do tamanho de um
      card no Discover e no compartilhamento.
 

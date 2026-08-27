@@ -1,16 +1,16 @@
 ---
 tipo: prompt
 criado: 2026-04-13
-atualizado: 2026-08-12
+atualizado: 2026-08-27
 tags:
   - ai/prompt
   - ai/locked
   - project/linkedin
-ai_summary: Criar post LinkedIn Berkahn a partir de artigo ou tema. Calibrado por Bruno — abre numa situação concreta do público, usa tom humano de engenheiro experiente, prioriza 110-140 palavras e CTA útil. Usado por /linkedin.
+ai_summary: Criar post LinkedIn Berkahn a partir de artigo ou tema. Calibrado por Bruno. Abre numa situação concreta do público, exige texto contínuo sem frase de impacto isolada, prioriza 110-140 palavras, CTA útil e imagem de fotografia documental sem props encenados. Usado por /linkedin, com gate em check-linkedin.mjs.
 status: locked
 locked: true
-versao: 1.1
-calibrado_em: 2026-08-12
+versao: 1.2
+calibrado_em: 2026-08-27
 ---
 
 > [!warning] PROMPT CALIBRADO — NÃO ALTERAR sem permissão de Bruno
@@ -43,7 +43,7 @@ Regras:
 
 Educativo, leve e com personalidade. Como se um engenheiro experiente estivesse compartilhando algo interessante que aprendeu, não dando aula.
 
-- Frases curtas e médias. Parágrafos de 1-3 linhas (LinkedIn é leitura vertical no celular)
+- Texto contínuo. As frases se ligam por conectivos e constroem um raciocínio, em vez de virem soltas uma atrás da outra. Parágrafos de 1-3 linhas continuam valendo, porque leitura no celular é vertical, mas o corte é entre parágrafos e nunca dentro do raciocínio
 - Pode usar uma ou duas quebras de expectativa: um dado contraintuitivo, um senso comum desmontado
 - Sem emojis. Sem hashtags no meio do texto
 - Sem bullet points
@@ -59,7 +59,7 @@ Estes padrões denunciam texto gerado por IA. Evite todos:
 - "Não é apenas X, é Y" ou "Mais do que X, é Y"
 - "E" ou "Mas" isolados no início de parágrafo como efeito dramático
 - Superlativos vazios: "incrível", "revolucionário", "game changer", "divisor de águas"
-- Frases curtas com ponto final dramático em sequência (tom de manifesto)
+- Frase de impacto isolada: qualquer sentença de até 6 palavras usada como golpe de efeito, **mesmo uma única por parágrafo**. Calibrado em 2026-08-25, com estas palavras: "para de ficar fazendo frasezinha de 5,5 palavras, essas frases de impacto que você sempre coloca, quebra todo o storytelling". A regra antiga só proibia duas em sequência, então uma por parágrafo passava e o tom de manifesto continuava
 - "Genuinamente", "honestamente", "de forma straightforward"
 - Qualquer estrutura que pareça retórica artificial ou clichê corporativo
 - Endereçar público antes de pergunta no fechamento (ex: "Pra quem gerencia obra:", "Arquitetos:")
@@ -147,6 +147,15 @@ concreto já demonstrou.
 - Verifique se o CTA oferece uma próxima ajuda concreta, em vez de apenas anunciar
   que existe conteúdo no blog.
 - Faça uma última redução de 20% a 30% se o texto continuar explicativo demais.
+- Rode o verificador antes de gravar na pauta. Ele é gate, não sugestão:
+
+  ```bash
+  node scripts/conteudo/check-linkedin.mjs <arquivo.txt>
+  ```
+
+  Precisa sair em 0. Ele confere extensão, os vícios listados acima,
+  terminologia LSF, hashtags, a URL com UTM e a frase de impacto isolada.
+  Se ele reprovar, o texto é reescrito, não remendado no ponto que ele apontou.
 
 ## O QUE NÃO FAZER
 
@@ -168,9 +177,33 @@ Entregue o post pronto para copiar e colar. Um post. Pronto.
 
 Após o post, em seção separada:
 
-### Imagem do post (briefing para Canva)
+### Imagem do post
 
 Toda publicação vai acompanhada de uma imagem. Cada imagem é uma peça única. Não existe template, não existe layout padrão, não existe fórmula.
+
+**PADRÃO ATUAL, calibrado em 2026-08-27: fotografia documental sem texto.**
+
+A peça padrão é uma fotografia de obra real de Light Steel Frame, sem texto
+embutido, gerada por IA a partir de um prompt em inglês e aproveitada nos dois
+canais. O mesmo enquadramento vira capa do Blog em 1200x800 e post do LinkedIn
+em 1080x1350. Foi assim nas pautas de 18/08 e 25/08, e foi o que passou.
+
+Regras que vieram do feedback "achei muito falso essa prancheta", de 18/08:
+
+- **Nada encenado.** Sem prancheta, sem projeto aberto sobre a mesa, sem
+  ferramenta posada, sem capacete apoiado no perfil, sem pessoa de EPI olhando
+  para o horizonte. O prompt precisa listar isso como exclusão explícita, porque
+  o gerador inventa prop sozinho quando o enquadramento fica vazio.
+- **Obra real, luz natural.** Nada de render nem de foto de banco de imagem.
+- **Assunto reconhecível na miniatura.** No Blog ela aparece do tamanho de um
+  card no Discover e no compartilhamento; no LinkedIn, no feed.
+- **Assunto deslocado para um dos terços laterais** quando a foto for servir de
+  capa do Blog, porque o gradient overlay escurece o centro e engole o que
+  estiver lá.
+
+A peça com texto continua permitida e as regras abaixo seguem valendo para ela.
+Ela deixou de ser o padrão. Escolha-a quando o argumento do post não couber numa
+foto, e registre a escolha no bloco `imagem-briefing` da pauta.
 
 **Sobre o texto na imagem:**
 - O texto da imagem NÃO é um resumo do post. É um ângulo complementar que funciona sozinho no feed e gera curiosidade para ler o post.
