@@ -1,7 +1,7 @@
 ---
 tipo: projeto
 criado: 2026-05-22
-atualizado: 2026-08-19
+atualizado: 2026-08-27
 tags:
   - project/site
   - status/active
@@ -58,6 +58,8 @@ Site em produção (Next.js 16 App Router + Supabase + Vercel + Tailwind + shadc
 - [x] ~~**Senha da conta Supabase no bundle público do admin**~~ — resolvido em 2026-07-31 (#42). `LoginForm.tsx` era Client Component e a constante `ACCESS_CODE` era, na verdade, a senha passada para `signInWithPassword`. Autenticação movida para Server Action; não há mais segredo no repositório nem no ambiente. Senha rotacionada. Detalhes e o que ainda cabe fazer em [[supabase-config]] (Histórico de incidentes)
 - [x] ~~**Seis rotas `/api/admin/*` sem autenticação**~~ — resolvido em 2026-08-05. O matcher do middleware era `['/', '/admin/:path*']` e não cobria `/api/admin/*`; três das rotas usavam `createServiceClient()`, que bypassa RLS. Sem login dava para listar todos os orçamentos com dado pessoal do cliente, apagar por id, e pegar signed URL do PDF. Fechado com matcher + `exigirSessao()` nos 10 handlers. Verificado: as 9 combinações devolvem 401
 - [x] ~~**Dupla escrita dos comandos de conteúdo**~~ — resolvido em 2026-08-06. `/pesquisa` e `/linkedin` gravam na pauta via `scripts/conteudo/pauta.mjs` e não criam mais `.md` no vault. `/criacao` e `/calendario` foram corrigidos junto: um procurava a pesquisa na pasta que deixou de ser alimentada, o outro contava posts pendentes varrendo uma pasta congelada. Ver [[quadro-conteudo]]
+- [x] ~~**CTA sumia do DOM em dev**~~ — resolvido em 2026-08-18 (PR #60). `components/sections/CTA.tsx` era Server Component e o botão ia como `children` para o `DialogTrigger asChild` do Radix; o filho chegava pelo payload RSC e a hidratação falhava, regenerando a árvore, sumindo com o botão e reinserindo o `<script>` do layout no `<head>`. Marcado como Client Component. **Só reproduzia em dev**, o build de produção não pegava, então o sintoma passou meses sem diagnóstico. O casamento React 18.3.1 com Next 16.3 continua valendo uma revisão à parte
+- [x] ~~**Modal de contato sem nome acessível**~~ — resolvido em 2026-08-25 (PR #62). O `DialogContent` disparava em produção o aviso do Radix pedindo `DialogTitle`. Duas causas somadas: `ContactForm` é `next/dynamic`, então durante o carregamento do chunk o título ainda não existe no DOM, que é exatamente quando o foco entra no diálogo; e o `{header}` só renderiza no ramo do formulário, então **depois do envio o título desmontava** e o diálogo ficava sem nome pelo resto da sessão. `DialogTitle` e `DialogDescription` passaram a filhos diretos do content dentro de `VisuallyHidden`, com o cabeçalho visível seguindo no formulário. Verificado em produção
 - [ ] **Contas Supabase por pessoa**: hoje todos entram com a mesma conta compartilhada, então `auth.uid()` não distingue ninguém e o autor dos comentários é nome digitado no localStorage. Projeto próprio — ver [[comentarios-inline-documentacoes]], seção "Identidade"
 - [x] **Banco do CRM aplicado**: migrations 024–029 em produção; funil, RPCs, vínculos, RLS canônica, responsáveis, prioridade, resumo operacional, arquivos, remoção atômica, outbox push, `pg_cron` e `pg_net` instalados. Matriz RLS, rollback atômico, cleanup de arquivos e payload push sem PII verdes
 - [x] **Retenção operacional**: `lead-retention` v1 publicada, segredos sincronizados no Edge/Vault e job mensal ativo desde 2026-08-14; rollout sem candidatos ou objetos pendentes

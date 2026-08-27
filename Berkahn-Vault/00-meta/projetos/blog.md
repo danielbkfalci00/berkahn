@@ -1,7 +1,7 @@
 ---
 tipo: projeto
 criado: 2026-05-22
-atualizado: 2026-08-25
+atualizado: 2026-08-27
 tags:
   - project/blog
   - status/active
@@ -90,8 +90,10 @@ Tráfego seguiu crescendo: 1.179 users em junho, 1.407 nos primeiros 26 dias de 
 > ocultos ficou assim por uma semana. Os dois estavam no sitemap desde a
 > publicação, o que não bastou.
 >
-> A solicitação manual no Search Console levou ambos a `Crawled - currently not
-> indexed` no mesmo dia. Fora do limbo, ainda não indexados.
+> A solicitação manual no Search Console levou ambos a `Crawled` no mesmo dia e a
+> **`Submitted and indexed`** em 48 horas, verificado em 27/08. O caminho completo
+> serve de linha de base: `Discovered` com crawl nunca, `Crawled` no dia do
+> pedido, indexado em dois dias.
 >
 > **Causa**: o `/artigo publicar` mandava "lembrar o Bruno de solicitar
 > indexação", e lembrete depende de alguém lembrar. Falhou nas duas publicações
@@ -116,7 +118,7 @@ Tráfego seguiu crescendo: 1.179 users em junho, 1.407 nos primeiros 26 dias de 
 - [x] Semana S2 de agosto: `quanto-custa-projeto-casa` publicado (post `b562489f`). Pauta `0fbdbc5d` aprovada nos dois canais
 - [x] ~~@bruno Fazer o deploy da capa de `quanto-custa-projeto-casa`~~ — concluído em 2026-08-25 pelo merge do PR #64; capa verificada carregando em 800×533
 - [x] ~~Solicitar indexação dos dois artigos publicados pelo fluxo~~ — feito pelo Bruno em 2026-08-25; os dois saíram de `Discovered` com crawl nunca para `Crawled` no mesmo dia
-- [ ] @bruno Reconferir por volta de 2026-09-01 se `custos-ocultos-construcao-2026` e `quanto-custa-projeto-casa` passaram de `Crawled` para `Submitted and indexed`. Se continuarem fora depois do crawl, o problema deixa de ser submissão e passa a ser qualidade ou canibalização, e aí o diagnóstico é outro #pendencia
+- [x] ~~Reconferir se os dois artigos passaram de `Crawled` para indexado~~ — verificado em 2026-08-27: os dois estão **`Submitted and indexed`** com veredito `PASS`, dois dias depois da submissão. O caminho completo foi `Discovered` com crawl nunca, depois `Crawled` no dia do pedido, depois indexado em 48 h. Serve de linha de base para a próxima publicação
 
 > [!note] `orcamento-steel-frame` e `hold-downs-ancoragens` saíram do fluxo semanal
 > Foram para backlog sem data em 2026-07-30, cada um com bloqueio nomeado. Ver "Backlog: os 2 artigos prontos que não vão ao ar agora" abaixo. **Não puxar para a semana sem antes ter os números** — publicar `orcamento-steel-frame` como está adiciona uma terceira faixa de preço ao acervo.
