@@ -8,7 +8,7 @@ tags:
 ai_summary: Hub do Blog — 40 posts e 44 trilhas. A revisão de casa LSF 100 m² está staged com post/capa vinculados; o live antigo segue published. Falta aprovação humana e /artigo publicar.
 status: active
 projeto: blog
-kpi_publicados: 42
+kpi_publicados: 43
 kpi_meta_publicados_semanal: 1
 kpi_indexados_google: 34
 kpi_meta_indexacao_total: 40
@@ -118,6 +118,9 @@ Tráfego seguiu crescendo: 1.179 users em junho, 1.407 nos primeiros 26 dias de 
 - [x] Semana S2 de agosto: `quanto-custa-projeto-casa` publicado (post `b562489f`). Pauta `0fbdbc5d` aprovada nos dois canais
 - [x] ~~@bruno Fazer o deploy da capa de `quanto-custa-projeto-casa`~~ — concluído em 2026-08-25 pelo merge do PR #64; capa verificada carregando em 800×533
 - [x] ~~Solicitar indexação dos dois artigos publicados pelo fluxo~~ — feito pelo Bruno em 2026-08-25; os dois saíram de `Discovered` com crawl nunca para `Crawled` no mesmo dia
+- [x] Semana S3 de agosto: `terreno-em-declive-quanto-encarece` publicado (post `421d4f51`). Pauta `9c51c605` aprovada nos dois canais
+- [ ] @bruno Solicitar indexação de https://www.berkahn.com.br/atualidades/terreno-em-declive-quanto-encarece no Search Console #pendencia
+- [ ] @bruno Publicar no LinkedIn com a UTM entregue e registrar URL e data reais #pendencia
 - [x] ~~Reconferir se os dois artigos passaram de `Crawled` para indexado~~ — verificado em 2026-08-27: os dois estão **`Submitted and indexed`** com veredito `PASS`, dois dias depois da submissão. O caminho completo foi `Discovered` com crawl nunca, depois `Crawled` no dia do pedido, depois indexado em 48 h. Serve de linha de base para a próxima publicação
 
 > [!note] `orcamento-steel-frame` e `hold-downs-ancoragens` saíram do fluxo semanal
@@ -263,6 +266,8 @@ O motivo está em comentário no `app/atualidades/[slug]/page.tsx` para o skelet
 - Capas em produção: `public/images/img_blog/[slug]/cover.webp`
 
 ## Histórico recente
+
+- 2026-08-27: `terreno-em-declive-quanto-encarece` publicado (`kpi_publicados` 42 → 43). Terceira volta completa do `/conteudo`. O passo de métricas devolveu "artigo novo" de novo, e desta vez o argumento é forte: nenhuma query de terreno ou declive aparece no top 20 do GSC de julho, que é inteiro de custo por m². Os dois vizinhos, `fundacao-steel-frame` com 2 cliques e `fundacao-steel-frame-vs-alvenaria` com 10, tocam o tema de passagem, então o artigo manda a decisão de tipo de fundação para eles por link interno e fica com a quantificação. Descartada de propósito a composição SINAPI 100350 de muro de arrimo, que **não tem preço publicado para São Paulo** em julho de 2026: usar a média nacional de agosto de 2024 seria o mesmo erro que o artigo critica nos agregadores, e dizer isso no texto virou diferencial. Fontes: SINAPI São Paulo julho/2026 com código de composição e a Lei de Obras 16.642/17, que obriga licenciamento acima de 1,50 m de desnível ou 1.000 m³
 
 - 2026-08-25: `quanto-custa-projeto-casa` publicado (`kpi_publicados` 41 → 42). Segunda volta completa do `/conteudo`, e a primeira em que o passo de métricas devolveu "artigo novo" em vez de reposicionamento: a keyword é de custo, mas nenhum dos 41 publicados tratava do preço dos **projetos**, só do preço da obra. Descartados na pesquisa a tabela do DER-ES (referencial de obra pública rodoviária, precisão falsa para casa) e a alegação de que o CADE proibiu tabela mínima do CAU (a página oficial do conselho não sustenta). Fonte usada: Resolução nº 64 do CAU/BR de 8/11/2013 mais o CUB do Sinduscon-SP
 - 2026-08-18: `custos-ocultos-construcao-2026` publicado (`kpi_publicados` 40 → 41), primeiro artigo produzido de ponta a ponta pelo `/conteudo`. O comando ganhou três passos que faltavam: leitura de métricas antes de escrever, prompt escrito para a capa do Blog e fechamento de documentação no mesmo run. O passo de métricas se pagou na estreia, ao revelar que o cluster de custo já tinha duas páginas indexadas disputando a intenção, o que definiu o recorte do texto. Ver [[quadro-conteudo]]

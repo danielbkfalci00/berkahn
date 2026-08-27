@@ -1,7 +1,7 @@
 ---
 tipo: projeto
 criado: 2026-05-22
-atualizado: 2026-08-25
+atualizado: 2026-08-27
 tags:
   - project/linkedin
   - status/active
@@ -61,6 +61,8 @@ Contagem verificada em 2026-07-29 contra `main` — o `kpi_publicados: 1` anteri
 - [ ] @bruno Publicar o post de custos ocultos e registrar URL e data reais no card `d29d7fee` #pendencia
 - [x] Pauta `0fbdbc5d` (quanto custa o projeto) aprovada em 25/08 com copy de 115 palavras e capa 1080×1350
 - [ ] @bruno Publicar o post de quanto custa o projeto e registrar URL e data reais no card `0fbdbc5d` #pendencia
+- [x] Pauta `9c51c605` (terreno em declive) aprovada em 27/08 com copy de 157 palavras e capa 1080×1350, a primeira escrita sob a v1.2
+- [ ] @bruno Publicar o post de terreno em declive e registrar URL e data reais no card `9c51c605` #pendencia
 
 - [ ] Começar o backlog de distribuição: 22 posts derivam de artigos **já publicados** e não exigem escrever artigo nenhum
 
@@ -70,13 +72,17 @@ Contagem verificada em 2026-07-29 contra `main` — o `kpi_publicados: 1` anteri
 > [[linkedin-post]]. Duas seguidas deixam de ser acaso, então levei a escolha ao
 > Bruno: recalibrar o prompt locked ou seguir caso a caso.
 >
-> **Decisão dele: o prompt calibrado fica como está** e cada exceção continua
-> registrada no `imagem-briefing` do próprio card. O critério em uso é que foto
-> própria de obra real que sustente o argumento do post dispensa tipografia;
-> pauta sem foto assim volta ao padrão com texto.
+> **Decisão dele em 25/08: o prompt calibrado fica como está** e cada exceção
+> continua registrada no `imagem-briefing` do próprio card. O critério em uso é
+> que foto própria de obra real que sustente o argumento do post dispensa
+> tipografia; pauta sem foto assim volta ao padrão com texto.
 >
-> Consequência a vigiar: se a exceção virar a regra na prática, o prompt passa a
-> descrever algo que ninguém faz, e aí a conversa precisa ser retomada.
+> **Retomada em 27/08, como este callout previa.** A exceção virou regra na
+> terceira pauta seguida, e o Bruno autorizou recalibrar. A fotografia
+> documental sem props encenados passou a ser o padrão escrito em
+> [[linkedin-post]] v1.2, com uma foto servindo os dois canais em 1200x800 e
+> 1080x1350. A peça com texto continua permitida e deixou de ser o default.
+> Delta em [[prompts-calibrados]].
 
 ## Backlog planejado (2026-07-29)
 
