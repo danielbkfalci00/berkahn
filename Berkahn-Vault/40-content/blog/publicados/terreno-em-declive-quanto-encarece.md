@@ -8,7 +8,7 @@ tags:
   - domain/lsf
   - domain/normas
 ai_summary: "Pauta S3 de agosto. Quanto encarece construir em terreno em declive, separando o que é índice publicado do que é faixa de mercado. Ancorado no SINAPI de São Paulo de julho de 2026. O argumento é que mover terra é barato e conter terra é caro, porque o empuxo cresce com o quadrado da altura, então a decisão que define o preço é a altura da contenção e não o volume escavado."
-status: draft
+status: published
 projeto: blog
 slug: terreno-em-declive-quanto-encarece
 data_publicacao: 2026-08-27
@@ -31,6 +31,8 @@ contextos_aplicados:
   - berkahn-brand
   - seo-aeo-strategy
   - steel-frame-domain
+supabase_id: 421d4f51-0b59-47a7-9d20-be4a12414adc
+url_final: "https://www.berkahn.com.br/atualidades/terreno-em-declive-quanto-encarece"
 ---
 
 Lote em declive costuma sair mais barato que o vizinho plano na mesma rua. O desconto é real e a conta que decide se ele compensa também é, só que quase ninguém faz essa conta antes de assinar. O que se encontra sobre o assunto são faixas do tipo "de R$ 250 a R$ 2.800 por metro de muro", sem dizer a altura do muro, que é justamente a variável que multiplica o preço.
