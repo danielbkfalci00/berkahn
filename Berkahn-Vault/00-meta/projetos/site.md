@@ -95,7 +95,7 @@ Site em produção (Next.js 16 App Router + Supabase + Vercel + Tailwind + shadc
 - [ ] Validar `/institucional/pdf` gerando PDF em produção (pós-merge do #17)
 - [ ] Atualizar o briefing do institucional para **v4** antes de distribuir — o código está em v4, a documentação em v3
 - [x] Validar build (`npm run build`) sem warnings — passou em 2026-08-12 com Next 16.3; três `<img>` migrados, Browserslist atualizado, `middleware` migrado para `proxy` e tracing integral do harness removido
-- [ ] gitleaks scan pre-commit ativo
+- [x] **gitleaks pre-commit ativo** — reverificado em 2026-08-27 nos commits das PRs #72 e #73; o hook escaneou apenas o staged e encontrou zero leaks antes de liberar cada commit
 
 ## KPIs (snapshot)
 
