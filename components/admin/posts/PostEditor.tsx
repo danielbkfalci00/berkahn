@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -625,11 +626,14 @@ export function PostEditor({ post }: PostEditorProps) {
               Imagem de capa
             </h3>
             {formData.cover_image ? (
-              <div className="relative">
-                <img
+              <div className="relative h-32 overflow-hidden rounded-lg">
+                <Image
                   src={formData.cover_image}
-                  alt="Cover"
-                  className="w-full h-32 object-cover rounded-lg"
+                  alt="Prévia da imagem de capa"
+                  fill
+                  sizes="(min-width: 1024px) 320px, 100vw"
+                  className="object-cover"
+                  unoptimized
                 />
                 <Button
                   variant="destructive"

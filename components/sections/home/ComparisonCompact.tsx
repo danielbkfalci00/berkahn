@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
 import { COMPARISON_DATA } from "@/lib/lsf-data";
@@ -29,9 +30,28 @@ export function ComparisonCompact() {
           </h2>
         </RevealOnScroll>
 
-        <div className="mt-10 md:mt-14 grid gap-8 md:grid-cols-12 md:gap-10">
-          <div className="h-[3px] w-14 bg-black md:col-span-2" aria-hidden="true" />
-          <div className="md:col-span-8 md:col-start-5 space-y-6 text-base md:text-lg leading-relaxed text-black-70">
+        <div className="mt-10 md:mt-14 grid gap-8 md:grid-cols-12 md:gap-12 md:items-center">
+          {/* Imagem sustenta a coluna esquerda, que antes ficava vazia no desktop.
+              Monocromática por CSS para não brigar com a paleta da home. */}
+          <figure className="md:col-span-5">
+            <div className="relative aspect-[4/3] overflow-hidden bg-black-5">
+              <Image
+                src="/images/Home/lsf-estrutura.webp"
+                alt="Esqueleto de Light Steel Frame de uma casa montado sobre o radier, com montantes e tesouras de aço galvanizado"
+                fill
+                sizes="(min-width: 768px) 40vw, 100vw"
+                className="object-cover grayscale"
+              />
+            </div>
+            <figcaption className="mt-4 flex items-center gap-3">
+              <span className="h-[3px] w-10 bg-black" aria-hidden="true" />
+              <span className="font-tech text-xs lowercase tracking-wide text-black-50">
+                perfis de aço galvanizado, montagem a seco
+              </span>
+            </figcaption>
+          </figure>
+
+          <div className="md:col-span-6 md:col-start-7 space-y-6 text-base md:text-lg leading-relaxed text-black-70">
             <p>
               O Light Steel Frame (LSF) é um sistema versátil de alta
               performance. Utilizamos perfis de aço galvanizado, gesso

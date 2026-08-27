@@ -118,6 +118,7 @@ Cada projeto tem nota-hub em `Berkahn-Vault/00-meta/projetos/{nome}.md` com `tip
 | `/material` | Briefing material Canva |
 | `/calendario` | Pipeline do quadro; `calendario.base` é acervo |
 | `/seo` | Auditoria SEO/AEO (gera `40-content/auditorias-seo/`) |
+| `/performance` | Relatório mensal GA4+GSC (MD+HTML em `40-content/auditorias-seo/`, atualiza KPIs dos hubs). É a fonte de métricas que o `/conteudo` lê antes de escrever |
 | `/standup` | Standup semanal — atualiza sprint-ativa + 7 hubs (auto seg 9h) |
 | `/wrap-up` | Wrap-up semanal — consolida KPIs deltas + atualiza hubs (auto sex 17h) |
 

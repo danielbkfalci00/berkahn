@@ -19,10 +19,26 @@ Antes de cada escrita, rode `node scripts/conteudo/pauta.mjs proxima <id> --json
    ```bash
    node scripts/conteudo/pauta.mjs ver <pauta-id>
    ```
-2. Confirme que o markdown está em
+2. **Entregue o prompt da capa em inglês**, do mesmo jeito que o `/linkedin`
+   entrega o da imagem do post. Não existe capa sem direção escrita: o prompt
+   locked só define caminho, formato e alt text. Âncora em
+   `Berkahn-Vault/50-brand/guia-design-berkahn.md` — preto `#000000`, branco
+   `#FFFFFF`, cinzas `#1A1A1A` e `#666666`, sem cor de acento. Regras da capa:
+
+   - **sem texto na imagem.** A página renderiza o título como hero por cima da
+     capa; texto embutido duplica o título e quebra no mobile;
+   - 1200×800, assunto deslocado para um dos terços laterais, porque o gradient
+     overlay escurece o centro e engole o que estiver lá;
+   - obra real de Light Steel Frame com luz natural. Nada de render de banco de
+     imagem, nada de pessoa posando com EPI;
+   - o tema precisa ser reconhecível na miniatura, que é do tamanho de um
+     card no Discover e no compartilhamento.
+
+   Gere, salve dentro do workspace e suba a capa pelo card antes de produzir.
+3. Confirme que o markdown está em
    `Berkahn-Vault/40-content/blog/drafts/[slug].md`, registrado em `draft_path`,
    e que a capa staging foi enviada no card.
-3. Execute o prompt LOCKED: transforme placeholders em `components` JSONB e
+4. Execute o prompt LOCKED: transforme placeholders em `components` JSONB e
    monte o objeto do post. Valide antes de gravar:
    - `meta_title` até 60 caracteres, keyword nos primeiros 30;
    - `meta_description` entre 150 e 160 caracteres;
@@ -31,9 +47,9 @@ Antes de cada escrita, rode `node scripts/conteudo/pauta.mjs proxima <id> --json
    - categoria em: Guias e Tutoriais, Tecnologia e Inovação, Mercado e
      Custos, Segurança e Normas ou Sustentabilidade. Esta lista canônica
      substitui apenas a taxonomia antiga do prompt locked, sem editá-lo.
-4. Grave o objeto do post em JSON temporário no scratchpad da sessão, nunca em
+5. Grave o objeto do post em JSON temporário no scratchpad da sessão, nunca em
    scripts descartáveis por artigo.
-5. Faça primeiro o dry-run e, se passar, produza:
+6. Faça primeiro o dry-run e, se passar, produza:
    ```bash
    node scripts/conteudo/pauta.mjs produzir <pauta-id> --arquivo=<draft.md> --dados=<post.json> --expected-updated-at=<atualizado_em> --dry-run
    node scripts/conteudo/pauta.mjs produzir <pauta-id> --arquivo=<draft.md> --dados=<post.json> --expected-updated-at=<atualizado_em>
@@ -42,7 +58,7 @@ Antes de cada escrita, rode `node scripts/conteudo/pauta.mjs proxima <id> --json
    a capa para `public/images/img_blog/[slug]/cover.webp` e avança Blog para
    `produzido`. Se o slug já existir sem vínculo, pare; `--usar-existente`
    exige confirmação humana.
-6. Entregue o link do card para aprovação manual. Não altere para `aprovado`
+7. Entregue o link do card para aprovação manual. Não altere para `aprovado`
    por automação.
 
 ## /artigo publicar <pauta-id>

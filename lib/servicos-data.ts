@@ -22,16 +22,17 @@ export const EXECUTION_PHASES: ExecutionPhase[] = [
     number: 1,
     title: 'Pré Obra',
     shortTitle: 'Pré Obra',
-    description: 'Nessa fase, realizamos a análise dos projetos, definição de escopo, orçamento detalhado e planejamento da obra. O objetivo é reduzir incertezas e dar previsibilidade de custo, prazo e qualidade antes do início da execução.',
-    summary: 'Estruturação técnica e financeira do empreendimento antes do início da construção.',
+    description: 'Nessa fase desenvolvemos todos os projetos necessários para a obra, do arquitetônico ao estrutural e complementares, e acompanhamos cada um deles até a compatibilização final. Em paralelo, fazemos a estruturação técnica e financeira do empreendimento, com escopo definido, orçamento detalhado e cronograma executivo, para que a execução comece com previsibilidade de custo, prazo e qualidade.',
+    summary: 'Desenvolvemos e acompanhamos todos os projetos da obra, junto da estruturação técnica e financeira do empreendimento.',
     keyPoints: [
-      'Análise crítica de projetos arquitetônicos e complementares',
+      'Desenvolvimento dos projetos arquitetônico, estrutural e complementares',
+      'Acompanhamento dos projetos até a compatibilização e a aprovação final',
       'Orçamento detalhado com especificações técnicas e quantitativos',
       'Planejamento de cronograma executivo e definição de marcos',
-      'Estudo de viabilidade técnica e aprovações necessárias',
-      'Compatibilização de projetos e identificação de interferências'
+      'Estudo de viabilidade técnica e condução das aprovações necessárias'
     ],
     deliverables: [
+      'Projetos completos e compatibilizados',
       'Cronograma executivo detalhado da obra',
       'Orçamento consolidado e memorial descritivo',
       'Plano de gestão de qualidade e segurança'
@@ -40,7 +41,7 @@ export const EXECUTION_PHASES: ExecutionPhase[] = [
     images: {
       primary: '/images/Services/Execução-de-obras/Pre-obra/pre-obra-1.webp',
       secondary: '/images/Services/Execução-de-obras/Pre-obra/pre-obra-2.webp',
-      primaryAlt: 'Planejamento e análise de projetos de construção',
+      primaryAlt: 'Duas pessoas conferindo projetos impressos sobre a mesa, com rolos de pranchas e escalímetro ao lado',
       secondaryAlt: 'Reunião de equipe para orçamento e definição de escopo'
     }
   },
@@ -67,7 +68,7 @@ export const EXECUTION_PHASES: ExecutionPhase[] = [
     images: {
       primary: '/images/Services/Execução-de-obras/Terraplanagem/terraplanagem_1.webp',
       secondary: '/images/Services/Execução-de-obras/Terraplanagem/terraplanagem_2.webp',
-      primaryAlt: 'Terraplanagem e preparação do terreno para construção',
+      primaryAlt: 'Operário sarrafeando o concreto fresco do radier em obra residencial',
       secondaryAlt: 'Execução de fundações e estrutura de concreto'
     }
   },
@@ -94,7 +95,7 @@ export const EXECUTION_PHASES: ExecutionPhase[] = [
     images: {
       primary: '/images/Services/Execução-de-obras/Estrutura/estrutura-2.webp',
       secondary: '/images/Services/Execução-de-obras/Estrutura/estrutura-1.webp',
-      primaryAlt: 'Instalação de sistemas prediais elétricos e hidráulicos',
+      primaryAlt: 'Interior de casa em Light Steel Frame na fase de fechamento, com placas cimentícias de um lado e montantes, lã de vidro e eletrodutos aparentes do outro',
       secondaryAlt: 'Montagem de estrutura em steel frame e vedações'
     }
   },
@@ -121,7 +122,7 @@ export const EXECUTION_PHASES: ExecutionPhase[] = [
     images: {
       primary: '/images/Services/Execução-de-obras/Acabamentos/acabamentos_1.webp',
       secondary: '/images/Services/Execução-de-obras/Acabamentos/acabamentos_2.webp',
-      primaryAlt: 'Aplicação de revestimentos e acabamentos finais',
+      primaryAlt: 'Pintor aplicando a última demão em parede interna, com fita crepe no rodapé e bandeja de tinta no chão',
       secondaryAlt: 'Obra finalizada com detalhes de acabamento'
     }
   }
@@ -156,17 +157,19 @@ export const HOW_WE_WORK_TIMELINE: HowWeWorkStep[] = [
   },
   {
     step: 2,
-    title: "Desenvolvimento do Projeto",
-    description: "Elaboração completa do projeto arquitetônico, estrutural e complementares. Utilizamos softwares BIM para precisão milimétrica e otimização de materiais.",
+    // Mesmo nome da fase em EXECUTION_PHASES[0] e no slide da apresentação:
+    // "Pré Obra" é o rótulo canônico de tudo que acontece antes da execução.
+    title: "Pré Obra",
+    description: "Desenvolvemos todos os projetos necessários para a obra, do arquitetônico ao estrutural e complementares, e acompanhamos cada um deles até a compatibilização. Modelagem BIM para precisão milimétrica e otimização de materiais.",
     images: [
       "/images/Services/Como-trabalhamos/desenvolvimento-de-projetos-1.webp",
       "/images/Services/Como-trabalhamos/desenvolvimento-de-projetos-2.webp"
     ],
     highlights: [
       "Projeto arquitetônico personalizado",
-      "Projeto estrutural em Steel Frame",
+      "Projeto estrutural em Light Steel Frame",
       "Projetos complementares (elétrico, hidráulico)",
-      "Modelagem BIM 3D",
+      "Acompanhamento e compatibilização dos projetos",
       "Orçamento detalhado e cronograma"
     ]
   },

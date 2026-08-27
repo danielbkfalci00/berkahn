@@ -1,13 +1,13 @@
 ---
 tipo: context
 criado: 2026-08-05
-atualizado: 2026-08-06
+atualizado: 2026-08-18
 tags:
   - domain/brand
   - domain/architecture
   - project/site
   - status/active
-ai_summary: Direção visual do redesign do site (2026-08-05/06) — "luxo de engenharia" em paleta estritamente mono, Archivo display + Space Mono técnica e motion contido. Aplicada na home e em /atualidades, cuja abertura funde masthead e destaque editorial sem regredir SSG/ISR. Contém o estado do PR 43, pipeline do hero e decisões reutilizáveis para as próximas rotas.
+ai_summary: Direção visual do redesign do site (2026-08-05/06) — "luxo de engenharia" em paleta estritamente mono, Archivo display + Space Mono técnica e motion contido. Aplicada na home e em /atualidades, cuja abertura funde masthead e destaque editorial sem regredir SSG/ISR. Contém o estado do PR 43, pipeline do hero, o banco de prompts de fotografia documental de obra e decisões reutilizáveis para as próximas rotas.
 status: active
 projeto: site
 contextos_aplicados:
@@ -48,8 +48,10 @@ Hero cinematográfico (canvas/poster 100svh) → expertise institucional (SplitT
 **Parâmetros do take atual** (para reproduzir/trocar):
 - Fonte local: `Downloads/Firefly Slow forward drone glide down the corridor of steel studs toward the glowing finished room, .mp4` (1920×1080, 24fps, 8s); o MP4 não é versionado
 - Sem trim e sem delogo; início e fim foram inspecionados como limpos
-- Frames: desktop `fps=9 scale=1440 q72` (72 frames, 5,28 MB em `public/videos/hero/seq/`), mobile `fps=4.5 scale=640 q80` (36 frames, 1,01 MB em `seq-m/`), poster `scale=1440 q78` (116 KB)
-- Preload imediato limitado a 6 frames (580 KB); restante carrega progressivamente em background
+- Frames (revisão de 2026-08-18, para tirar o borrado): desktop `fps=7 scale=1920 q78` (56 frames, 7,5 MB em `public/videos/hero/seq/`), mobile `fps=4.5 scale=960 q78` (36 frames, 1,8 MB em `seq-m/`), poster = cópia de `seq/f_001.webp` (182 KB)
+- Antes eram 1440×810 q72 no desktop e 640 no mobile, ou seja, a fonte 1080p era reduzida antes de publicar e o canvas ampliava de novo em tela grande (fator 1,33 num monitor de 1920). Agora a resolução do frame bate com o buffer do canvas em 1920 e o desenho passa a ser 1:1
+- Teto restante: a fonte é 1080p. Em tela 4K ou DPR 2 acima de 1920 CSS o canvas volta a ampliar; só resolve com take em resolução maior ou upscale do MP4
+- Preload imediato limitado a 4 frames (~730 KB, era 6 quando o frame pesava 80 KB); restante carrega progressivamente em background
 - Constantes `FRAME_COUNT_DESKTOP/MOBILE` em `components/sections/home/HeroCinematic.tsx` devem bater com a contagem de arquivos
 
 **Como trocar o take** (pipeline validado): apontar o novo MP4 → inspecionar início/fim e marcas → decidir trim/delogo apenas se necessário → extrair sequências → validar pesos/contagens → atualizar contadores → build. ~10 min.
@@ -109,3 +111,48 @@ Relacionados: [[article-pipeline]] · [[seo-aeo-strategy]] · [[site]] · [[blog
 - [x] ~~**Próxima página do redesign: `/atualidades`**~~ — concluída em 2026-08-06 com abertura editorial fundida, taxonomia 5 categorias, bento, payload reduzido e ISR 60 preservado. CWV pós-deploy segue como gate aberto
 
 Relacionados: [[site]] · [[berkahn-brand]] · [[design-principles]] · [[guia-design-berkahn]]
+
+## Banco de prompts · fotografia de obra (2026-08-18)
+
+Feedback do sócio: as fotos das quatro fases são genéricas e denunciam banco de imagem ou IA. O alvo é fotografia documental de canteiro brasileiro, não publicidade. O que quebra o visual de IA é imperfeição deliberada: enquadramento torto, sujeira, cabo no chão, pessoa cortada pela borda, luz mista, nada simétrico.
+
+**Sufixo de estilo (colar no fim de todo prompt)**
+
+`documentary photograph, handheld with a slight tilt, ISO 800, natural mixed lighting, muted neutral colors, visible grain, unposed, no perfect symmetry, no glossy CGI look, no lens flare, no stock-photo smiles, no logos, no text, no watermark`
+
+**Regras que mais importam**
+
+- Rosto nunca nítido de frente. Pessoa de costas, cortada pela borda ou só a mão. Rosto em foco é onde a IA entrega o jogo.
+- Luz difusa de dia nublado ou mistura de luz fria de janela com lâmpada quente. Golden hour em tudo vira anúncio.
+- Sempre pedir dois defeitos concretos: poeira no ar, respingo, marca de bota, cabo laranja no chão, sobra de perfil, fita crepe.
+- Superfície nova demais denuncia. Pedir arranhão, digital no metal, barro na botina.
+- Gerar 4 variações e escolher a menos limpa. Se vier plastificado, acrescentar `straight out of camera JPEG, no retouching`.
+- Proporção: `--ar 3:2` para as fases (home e `/servicos`), `--ar 4:3` para a imagem da seção LSF da home.
+
+### 01 · Pré Obra — substitui `Services/Execução-de-obras/Pre-obra/pre-obra-1.webp`
+
+`Two people leaning over a large printed architectural blueprint spread across a scratched wooden table, hands pointing at a detail, rolled drawings, a scale ruler and a half-empty coffee cup beside them, one person cropped by the frame edge, faces not visible, cool daylight from a window on the left mixing with warm tungsten overhead, slightly uneven white balance, 35mm lens at f/2`
+
+### 02 · Terraplanagem, Fundação e Superestrutura — substitui `Terraplanagem/terraplanagem_1.webp`
+
+`Concrete slab foundation being finished on a residential site in Brazil, a worker in a dusty helmet and reflective vest seen from behind pulling a screed board across wet concrete, footprints and tire tracks in the red-brown earth around it, rebar offcuts and a wheelbarrow at the frame edge, overcast diffuse midday light, no dramatic sky, mud on boots and equipment, 28mm lens at f/5.6`
+
+### 03 · Estrutura, Vedação e Instalações — substitui `Estrutura/estrutura-2.webp`
+
+`Interior of a light steel frame house at closing stage, cement board panels screwed to galvanized steel studs on one side and open insulation cavity on the other, electrical conduits and blue water pipes running through the studs, screws scattered on the dusty floor, an orange extension cord snaking across the slab, a stepladder in the corner, daylight from an unfinished window opening mixing with a bare work lamp, one worker's arm entering the frame, 24mm lens at f/4`
+
+### 04 · Acabamentos — substitui `Acabamentos/acabamentos_1.webp`
+
+`A painter's hand rolling the last coat on a smooth interior wall of a nearly finished house, masking tape along the baseboard, a paint tray and a drop cloth on the floor with a few dried drips, soft late afternoon daylight from a window out of frame, face not visible, slight vignetting, 50mm lens at f/2`
+
+### 05 · Seção LSF da home — substitui `Home/lsf-estrutura.webp`
+
+`Wide interior view of a completed light steel frame skeleton of a house before closing, rhythmic rows of galvanized studs and roof trusses against an overcast sky, slab floor with chalk layout lines and a few metal offcuts, a ladder leaning against one wall, flat diffuse daylight, no sun flare, chest height, 20mm lens at f/8, slight perspective imperfection, no people`
+
+A imagem da seção LSF entra monocromática por CSS (`grayscale`), então vale escolher a variação com mais contraste de forma e menos dependência de cor.
+
+**Estado (2026-08-18): os cinco prompts foram executados e as imagens estão no ar.** Geradas no ChatGPT Image, convertidas para webp (1440x960 nas fases, 1360x1020 na seção LSF, q82) e instaladas nos caminhos acima. Os originais em resolução cheia ficam em `Docs/banco-imagens/ia-fases-obra/` com prefixo `ia-`, que marca a procedência e evita confundir com foto de obra real. Os `alt` das quatro fases foram reescritos para descrever as fotos novas.
+
+Pendente: as imagens **secundárias** de cada fase (`pre-obra-2`, `terraplanagem_2`, `estrutura-1`, `acabamentos_2`), que aparecem no carrossel de `/servicos`, continuam sendo as genéricas antigas e destoam das novas. Mesmos prompts com outro enquadramento resolvem.
+
+Relacionados: [[berkahn-brand]] · [[guia-design-berkahn]] · [[banco-imagens]]

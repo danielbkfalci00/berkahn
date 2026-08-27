@@ -1,5 +1,9 @@
 import type { Metadata } from "next";
-import { Manrope } from "next/font/google";
+import "@fontsource-variable/archivo";
+import "@fontsource-variable/caveat";
+import "@fontsource-variable/manrope";
+import "@fontsource-variable/playfair-display";
+import "@fontsource/space-mono/400.css";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { ClientLayout } from "@/components/layout/ClientLayout";
 import { ConditionalFooter } from "@/components/layout/ConditionalFooter";
@@ -8,17 +12,6 @@ import { scriptBootstrapGa } from "@/lib/consent";
 import { CookieBanner } from "@/components/layout/CookieBanner";
 import { WhatsAppButton } from "@/components/layout/WhatsAppButton";
 import "./globals.css";
-
-const manrope = Manrope({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700", "800"],
-  variable: "--font-manrope",
-  display: "swap",
-});
-
-
-
-
 
 export const metadata: Metadata = {
   title: "Construtora Berkahn",
@@ -86,7 +79,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-BR" className={manrope.variable}>
+    <html lang="pt-BR" data-scroll-behavior="smooth">
       <head>
         {/*
           Restaura o consentimento de visitas anteriores e sobe o GA antes da

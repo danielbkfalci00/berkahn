@@ -11,22 +11,24 @@ import Autoplay from "embla-carousel-autoplay";
 const shimmerPlaceholder =
   "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMjIyIi8+PC9zdmc+";
 
+// Logos vivem em public/images/parceiros/ (mesma pasta usada por
+// components/sections/Partners.tsx e lib/institucional-data.ts PARCEIROS).
 const partners = [
   {
     name: "Brand 01",
-    logo: "/images/Apresentação/Marcas Parceiras/brand-01.webp",
+    logo: "/images/parceiros/brand-01.webp",
   },
   {
     name: "Lumen",
-    logo: "/images/Apresentação/Marcas Parceiras/lumen.webp",
+    logo: "/images/parceiros/lumen.webp",
   },
   {
     name: "Knauf",
-    logo: "/images/Apresentação/Marcas Parceiras/knauf.webp",
+    logo: "/images/parceiros/knauf.webp",
   },
   {
     name: "Aquapanel",
-    logo: "/images/Apresentação/Marcas Parceiras/aquapanel.webp",
+    logo: "/images/parceiros/aquapanel.webp",
   },
 ];
 

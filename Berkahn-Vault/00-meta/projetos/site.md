@@ -1,11 +1,11 @@
 ---
 tipo: projeto
 criado: 2026-05-22
-atualizado: 2026-08-12
+atualizado: 2026-08-19
 tags:
   - project/site
   - status/active
-ai_summary: "Hub do Site — PR #53 mergeada e deployada em 11/08; CRM Supabase, GA4 e captura sem Apps Script estão em produção. Smoke público passou. Pendem smoke autenticado, Edge de retenção e despublicar o GitHub Pages legado com uma conta admin; Web Push é opcional."
+ai_summary: "Hub do Site — Next 16.3, dependências sem advisories e fontes locais estão validados em build. CRM Supabase, GA4, retenção mensal e dispatcher Web Push estão em produção. Pendem smoke autenticado, assinatura push em um dispositivo e despublicar o GitHub Pages legado com uma conta admin."
 status: active
 projeto: site
 kpi_paginas_indexadas: 34
@@ -45,7 +45,7 @@ code_paths:
 
 ## Status atual
 
-Site em produção (Next.js App Router + Supabase + Vercel + Tailwind + shadcn/ui). O CRM leve em `/admin/leads` foi mergeado pela PR #53 no commit `5121941` e está deployado nos projetos `berkahn` e `berkahn-admin`; arquitetura e runbook vivem em [[admin-setup]]. Supabase é a única fonte operacional; Google Sheets e Apps Script são legado desativado em [[google-sheets]].
+Site em produção (Next.js 16 App Router + Supabase + Vercel + Tailwind + shadcn/ui). O CRM leve em `/admin/leads` foi mergeado pela PR #53 no commit `5121941` e está deployado nos projetos `berkahn` e `berkahn-admin`; arquitetura e runbook vivem em [[admin-setup]]. Supabase é a única fonte operacional; Google Sheets e Apps Script são legado desativado em [[google-sheets]].
 
 **Diagnóstico integrado 2026-08-07**: o crawl agora cobre as 47 URLs do sitemap e superfícies públicas `noindex`; o artigo caiu de 371 para 218 kB de First Load JS (-41,2%), com home em 241 kB e `/atualidades` em 179 kB. SSG/ISR de 60 s e 404 foram preservados. Evidências, limites de laboratório e baseline de conversão vivem em [[2026-08-diagnostico-integrado-site]].
 
@@ -60,8 +60,8 @@ Site em produção (Next.js App Router + Supabase + Vercel + Tailwind + shadcn/u
 - [x] ~~**Dupla escrita dos comandos de conteúdo**~~ — resolvido em 2026-08-06. `/pesquisa` e `/linkedin` gravam na pauta via `scripts/conteudo/pauta.mjs` e não criam mais `.md` no vault. `/criacao` e `/calendario` foram corrigidos junto: um procurava a pesquisa na pasta que deixou de ser alimentada, o outro contava posts pendentes varrendo uma pasta congelada. Ver [[quadro-conteudo]]
 - [ ] **Contas Supabase por pessoa**: hoje todos entram com a mesma conta compartilhada, então `auth.uid()` não distingue ninguém e o autor dos comentários é nome digitado no localStorage. Projeto próprio — ver [[comentarios-inline-documentacoes]], seção "Identidade"
 - [x] **Banco do CRM aplicado**: migrations 024–029 em produção; funil, RPCs, vínculos, RLS canônica, responsáveis, prioridade, resumo operacional, arquivos, remoção atômica, outbox push, `pg_cron` e `pg_net` instalados. Matriz RLS, rollback atômico, cleanup de arquivos e payload push sem PII verdes
-- [ ] @bruno Conceder acesso Supabase para publicar `lead-retention`, configurar segredo no Vault/Edge e agendar o job mensal #pendencia
-- [ ] @bruno Dar acesso ao escopo Vercel `daniel-falcis-projects`; configurar chaves VAPID + `LEAD_PUSH_CRON_SECRET` em site/admin e agendar `schedule_lead_push_dispatch` #pendencia
+- [x] **Retenção operacional**: `lead-retention` v1 publicada, segredos sincronizados no Edge/Vault e job mensal ativo desde 2026-08-14; rollout sem candidatos ou objetos pendentes
+- [x] **Web Push configurado**: VAPID + `LEAD_PUSH_CRON_SECRET` nos projetos site/admin, segredo homônimo no Vault e dispatcher agendado a cada 15 minutos desde 2026-08-14
 - [x] **GA4 Admin concluído**: OAuth de edição validado; `article_slug` e `percent_scrolled` registrados em 10/08
 - [x] **Apps Script encerrado**: nenhuma captura ou notificação depende de Google Sheets; Web Push é o canal opcional do admin
 - **Core Web Vitals de campo**: otimizações estruturais entregues em [[2026-08-diagnostico-integrado-site]]; a tarefa de medição vive em “Próximos 7 dias”.
@@ -73,12 +73,30 @@ Site em produção (Next.js App Router + Supabase + Vercel + Tailwind + shadcn/u
 - [ ] @bruno Medir CWV no Speed Insights por 7 dias e consolidar em 28 dias, sem misturar as séries anterior e posterior ao Consent Mode de 2026-07-30; baseline em [[2026-08-diagnostico-integrado-site]] #pendencia
 - [ ] @bruno Executar smoke autenticado de Inbox, Kanban, upload, responsável, PWA e configurações conforme [[admin-setup]]; PR #53, deploys e smoke público já estão concluídos #pendencia
 - [ ] @bruno Despublicar o GitHub Pages `legacy/errored` em `Settings → Pages` com a conta proprietária; a API recusou o DELETE porque a conta CLI não tem `admin` #pendencia
-- [ ] @codex Planejar upgrade compatível de Next 15.5.23, sharp 0.34.5 e dependências D3; `npm audit --omit=dev` reporta 4 vulnerabilidades altas e a correção automática exige versões breaking #pendencia
+
+> [!warning] Não é só ruído no CI: o Pages legado serve conteúdo duplicado
+> Reverificado em 2026-08-18. O status é `errored`, mas `https://danielbkfalci00.github.io/berkahn/`
+> responde **200** e serve um export estático antigo do próprio site. A home e
+> `/servicos` estão de pé; `/atualidades` dá 404 porque o blog é dinâmico.
+> A cópia **não tem canonical e não tem robots.txt**, então é conteúdo duplicado
+> indexável competindo com `berkahn.com.br` nas páginas que existem lá.
+> Não expõe fonte do repositório (README, package.json e CLAUDE.md dão 404).
+>
+> **Não dá para resolver por push.** O `pages-build-deployment` falha em toda
+> execução desde pelo menos 2026-08-12, então o conteúdo servido está congelado
+> num build antigo e commit novo não o atualiza. Adicionar `robots.txt` ou
+> canonical no repositório não teria efeito. Só `Settings → Pages` com conta
+> admin encerra isso.
+>
+> A tentativa de `DELETE /repos/.../pages` volta `404`, que é como o GitHub
+> responde falta de permissão. O token da sessão tem `push` e `triage`,
+> `admin: false`.
+- [x] **Upgrade breaking de dependências concluído em 12/08**: Next 16.3, Sharp 0.35.3, Puppeteer 25.6, ESLint flat e D3 corrigido; `npm audit` retorna zero. Fontes locais retiraram a dependência de Google Fonts no CI. Detalhe em [[stack-nextjs-supabase]]
 - [x] ~~**Próxima página do redesign: `/atualidades`**~~ — concluída em 2026-08-06: abertura fundida, bento, categorias canônicas, payload 141/26 KB e ISR 60 preservado
 - [ ] Importar Clube Quinta dos Lagos para o banco de imagens antes de reativar o rail de projetos
 - [ ] Validar `/institucional/pdf` gerando PDF em produção (pós-merge do #17)
 - [ ] Atualizar o briefing do institucional para **v4** antes de distribuir — o código está em v4, a documentação em v3
-- [x] Validar build (`npm run build`) sem warnings críticos — passou em 2026-08-12; restam três avisos antigos de `<img>` e dados Browserslist desatualizados
+- [x] Validar build (`npm run build`) sem warnings — passou em 2026-08-12 com Next 16.3; três `<img>` migrados, Browserslist atualizado, `middleware` migrado para `proxy` e tracing integral do harness removido
 - [ ] gitleaks scan pre-commit ativo
 
 ## KPIs (snapshot)
@@ -93,7 +111,7 @@ Site em produção (Next.js App Router + Supabase + Vercel + Tailwind + shadcn/u
 
 ## Contexto aplicado
 
-- [[stack-nextjs-supabase]] — arquitetura geral (Next.js 15 + Supabase + RLS + Vercel)
+- [[stack-nextjs-supabase]] — arquitetura geral (Next.js 16 + Supabase + RLS + Vercel)
 - [[admin-setup]] — painel admin, autenticação, schema `posts`
 - [[comentarios-inline-documentacoes]] — comentários inline em `/admin/documentacoes`: ponte com o iframe, ancoragem por texto e a restrição de minificação
 - [[quadro-conteudo]] — quadro de pautas em `/admin/conteudo`: por que a pauta é entidade separada de `posts`, por que o quadro nunca escreve `posts.status`, e por que toda mutação confere a linha afetada (a RLS não devolve erro, devolve zero linhas)

@@ -3,6 +3,7 @@
 import { useMemo, Fragment, lazy, Suspense, type ComponentProps, type ReactNode } from 'react';
 import { useInViewAnimation } from '@/hooks/useInViewAnimation';
 import dynamic from 'next/dynamic';
+import Image from 'next/image';
 import type { Post, PostComponents } from '@/types/admin';
 // Lightweight components — keep as static imports (fast, used in most articles)
 import { StatsGrid } from '@/components/article/StatHighlight';
@@ -446,11 +447,12 @@ function GallerySection({ gallery }: { gallery: NonNullable<PostComponents['gall
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {gallery.images.map((image, index) => (
           <figure key={index} className="relative aspect-video overflow-hidden rounded-lg">
-            <img
+            <Image
               src={image.url}
               alt={image.alt}
-              className="w-full h-full object-cover transition-transform hover:scale-105"
-              loading="lazy"
+              fill
+              sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+              className="object-cover transition-transform hover:scale-105"
             />
             {image.caption && (
               <figcaption className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4 text-white text-sm">

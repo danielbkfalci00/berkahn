@@ -1,7 +1,7 @@
 ---
 tipo: meta
 criado: 2026-05-21
-atualizado: 2026-08-12
+atualizado: 2026-08-14
 tags:
   - project/site
   - project/blog
@@ -43,7 +43,7 @@ publicação manual do LinkedIn e registro de URL+data no rollout já deployado.
 |---------|--------|--------------------|--------------|
 | [[blog]] | active | Sem bloqueio na pauta de 100 m²; revisão publicada com slug preservado | Medir CTR e leads na janela de 28 dias |
 | [[linkedin]] | active | Copy e capa aprovadas; publicação externa é manual | Postar com UTM e registrar URL/data reais |
-| [[site]] | active | Smoke autenticado pendente; Pages legado exige conta com admin | Exercitar CRM logado e despublicar Pages em Settings |
+| [[site]] | active | Smoke autenticado e assinatura push em dispositivo pendentes; Pages legado exige conta com admin | Exercitar CRM logado, ativar push e despublicar Pages em Settings |
 | [[seo-aeo]] | active | 3 URLs fora do índice (ação manual no GSC) | Pedir indexação das 3 |
 | [[apresentacoes]] | active | Roteiros não versionados (parcial) | Validar 16 slides em live env |
 | [[00-meta/projetos/materiais|materiais]] | active | **Institucional PDF v4** aguarda briefing atualizado + distribuição | Atualizar briefing v3→v4; distribuir; preencher `usado_em` |
@@ -67,6 +67,7 @@ publicação manual do LinkedIn e registro de URL+data no rollout já deployado.
 - [x] **GA4 fechado em 10/08**: OAuth com `analytics.edit`; dimensões `article_slug` e `percent_scrolled` registradas na propriedade 516973519
 - [x] Migrations 024–029 do CRM aplicadas; RLS canônica, atomicidade, retenção/remoção de anexos e outbox push sem PII verificadas em transação revertida
 - [x] **PR #53 mergeada e deployada em 11/08**: commit `5121941`, Quality verde e deploys `berkahn` + `berkahn-admin` concluídos. Smoke público confirmou site 200, política Supabase-only e redirecionamento do admin para login
+- [x] **Retenção e Web Push ativados em 14/08**: Edge Function `lead-retention` v1 e cron mensal ativos; VAPID/segredo configurados e dispatcher agendado a cada 15 minutos. O rollout encontrou zero candidatos e zero objetos pendentes
 - **Pendências de rollout**: smoke autenticado e GitHub Pages vivem uma única vez em [[site#Próximos 7 dias]].
 - **Primeira pauta real**: estado e tarefas vivem em [[blog#Próximos 7 dias]], [[linkedin#Próximos 7 dias]] e [[pesquisas#Bloqueios ativos]].
 
