@@ -1,7 +1,7 @@
 ---
 tipo: meta
 criado: 2026-05-21
-atualizado: 2026-08-11
+atualizado: 2026-08-27
 tags:
   - status/active
 ai_summary: MOC do vault. Quadro é o hub operacional; CRM e aprendizado usam Supabase. Hubs guardam fatos e tarefas canônicas, enquanto MOC_Pendencias agrega #pendencia sem copiar contexto. calendario.base continua acervo, não pipeline.
@@ -18,7 +18,7 @@ Mapa temático do vault Berkahn. Para visão estrutural (por pasta), ver [[../in
 |---------|--------|--------------------|----------|------------|
 | [[blog]] | active | Atualização do slug existente bloqueada pela substituição do markdown publicado | [[workflow-conteudo]] | 2026-08-11 |
 | [[linkedin]] | active | Capa 4:5 pronta; upload, aprovação e URL/data continuam manuais | [[workflow-conteudo]] | 2026-08-11 |
-| [[site]] | active | Smoke autenticado do CRM + despublicar Pages legado com conta admin | [[workflow-site]] | 2026-08-11 |
+| [[site]] | active | Smoke multidispositivo; Pages neutralizado, falta encerramento administrativo | [[workflow-site]] | 2026-08-27 |
 | [[seo-aeo]] | active | **P0**: 9 posts sem meta tags (indexação resolvida: 89%) | [[workflow-seo]] | 2026-07-29 |
 | [[apresentacoes]] | active | Roteiros não versionados (parcial) | [[workflow-comercial]] | 2026-05-22 |
 | [[00-meta/projetos/materiais|materiais]] | active | 9 índices criados; 4 capas órfãs | [[workflow-material]] | 2026-05-22 |
