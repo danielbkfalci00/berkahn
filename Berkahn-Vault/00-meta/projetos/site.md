@@ -5,7 +5,7 @@ atualizado: 2026-08-27
 tags:
   - project/site
   - status/active
-ai_summary: "Hub do Site — Admin agora tem contas individuais, quatro papéis, PWA/push por usuário e analytics mensal hospedado. Migration 031 está aplicada e validada; pendem smoke multidispositivo e despublicar o GitHub Pages legado."
+ai_summary: "Hub do Site — Admin tem contas individuais, quatro papéis, PWA/push por usuário e analytics mensal hospedado. O clone do GitHub Pages foi neutralizado; pendem smoke multidispositivo e o encerramento administrativo do host legado."
 status: active
 projeto: site
 kpi_paginas_indexadas: 34
@@ -75,32 +75,27 @@ Site em produção (Next.js 16 App Router + Supabase + Vercel + Tailwind + shadc
 - [x] ~~**Trocar take e restaurar copy institucional da home**~~ — 1080p integral convertido em 72/36 frames; copy conferida contra `bc6515f`; rail de projetos preservado no código e desmontado da composição
 - [ ] @bruno Medir CWV no Speed Insights por 7 dias e consolidar em 28 dias, sem misturar as séries anterior e posterior ao Consent Mode de 2026-07-30; baseline em [[2026-08-diagnostico-integrado-site]] #pendencia
 - [ ] @bruno Executar smoke multidispositivo com uma segunda conta convidada: login, restrição por papel, Inbox, Kanban, upload, instalação PWA e recebimento Web Push conforme [[admin-setup]] #pendencia
-- [ ] @bruno Despublicar o GitHub Pages `legacy/errored` em `Settings → Pages` com a conta proprietária; a API recusou o DELETE porque a conta CLI não tem `admin` #pendencia
+- [ ] @bruno Desativar definitivamente o GitHub Pages em `Settings → Pages` quando houver conta proprietária/admin; o risco SEO e a exposição já foram neutralizados pela PR #72, restando eliminar builds desnecessários #pendencia
 
-> [!warning] Não é só ruído no CI: o Pages legado serve conteúdo duplicado
-> Reverificado em 2026-08-18. O status é `errored`, mas `https://danielbkfalci00.github.io/berkahn/`
-> responde **200** e serve um export estático antigo do próprio site. A home e
-> `/servicos` estão de pé; `/atualidades` dá 404 porque o blog é dinâmico.
-> A cópia **não tem canonical e não tem robots.txt**, então é conteúdo duplicado
-> indexável competindo com `berkahn.com.br` nas páginas que existem lá.
-> Não expõe fonte do repositório (README, package.json e CLAUDE.md dão 404).
+> [!success] Conteúdo duplicado do Pages neutralizado em 2026-08-27
+> A PR #72 removeu o gitlink órfão `claude-code-workflows`, que fazia todo
+> `pages-build-deployment` falhar, e substituiu o export antigo por duas páginas
+> estáticas com `noindex,nofollow,noarchive`, canonical e redirecionamento para
+> `berkahn.com.br`. O primeiro build passou (`33104672960`) e a API mudou de
+> `errored` para `built`. Smoke pós-deploy: home 200 com 950 bytes; `package.json`,
+> `Berkahn-Vault/index.md` e uma rota de artigo retornam 404 sem expor o monorepo.
 >
-> **Não dá para resolver por push.** O `pages-build-deployment` falha em toda
-> execução desde pelo menos 2026-08-12, então o conteúdo servido está congelado
-> num build antigo e commit novo não o atualiza. Adicionar `robots.txt` ou
-> canonical no repositório não teria efeito. Só `Settings → Pages` com conta
-> admin encerra isso.
->
-> A tentativa de `DELETE /repos/.../pages` volta `404`, que é como o GitHub
-> responde falta de permissão. O token da sessão tem `push` e `triage`,
-> `admin: false`.
+> O host ainda está tecnicamente ativo porque a conta CLI tem `push`, mas não
+> `admin`. Isso deixou de ser bloqueio de SEO e virou higiene administrativa.
+> A allowlist do `_config.yml` é explícita: todo novo item rastreado na raiz deve
+> ser excluído ou deliberadamente publicado.
 - [x] **Upgrade breaking de dependências concluído em 12/08**: Next 16.3, Sharp 0.35.3, Puppeteer 25.6, ESLint flat e D3 corrigido; `npm audit` retorna zero. Fontes locais retiraram a dependência de Google Fonts no CI. Detalhe em [[stack-nextjs-supabase]]
 - [x] ~~**Próxima página do redesign: `/atualidades`**~~ — concluída em 2026-08-06: abertura fundida, bento, categorias canônicas, payload 141/26 KB e ISR 60 preservado
 - [ ] Importar Clube Quinta dos Lagos para o banco de imagens antes de reativar o rail de projetos
 - [ ] Validar `/institucional/pdf` gerando PDF em produção (pós-merge do #17)
 - [ ] Atualizar o briefing do institucional para **v4** antes de distribuir — o código está em v4, a documentação em v3
 - [x] Validar build (`npm run build`) sem warnings — passou em 2026-08-12 com Next 16.3; três `<img>` migrados, Browserslist atualizado, `middleware` migrado para `proxy` e tracing integral do harness removido
-- [ ] gitleaks scan pre-commit ativo
+- [x] **gitleaks pre-commit ativo** — reverificado em 2026-08-27 nos commits das PRs #72 e #73; o hook escaneou apenas o staged e encontrou zero leaks antes de liberar cada commit
 
 ## KPIs (snapshot)
 
