@@ -37,8 +37,8 @@ distribuição mensurável**, sem reabrir decisões arquiteturais concluídas.
 
 | Projeto | Estado | Próxima ação canônica |
 |---------|--------|-----------------------|
-| [[blog]] | Revisão da pauta de casa LSF 100 m² staged | Aprovação humana e `/artigo publicar` |
-| [[linkedin]] | Três posts aprovados | Publicar manualmente e registrar URL/data |
+| [[blog]] | Terreno em declive publicado, 43 artigos no ar | Solicitar indexação no Search Console |
+| [[linkedin]] | Quatro posts aprovados, nenhum publicado | Publicar manualmente e registrar URL/data |
 | [[site]] | Pages neutralizado; admin multiusuário em produção | Smokes humanos e encerramento administrativo |
 | [[seo-aeo]] | Baseline técnico e de conversão disponível | Observar janelas de 7/28 dias |
 | [[apresentacoes]] | Apresentação executiva ativa | Smoke visual dos 16 slides |

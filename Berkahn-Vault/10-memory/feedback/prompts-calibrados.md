@@ -56,6 +56,35 @@ Em 25/08 o Bruno respondeu "deixa como está, sigo registrando" quando levei só
 parte de imagem. Em 27/08 ele mudou de posição e pediu que o feedback entrasse no
 processo, o que autorizou as duas partes.
 
+### [[linkedin-post]] v1.2 → v1.2.1 (2026-08-27)
+
+O texto escrito logo depois da v1.2 passou no `check-linkedin.mjs` em 20 de 20 e o
+Bruno reprovou por confuso. Ele estava certo, e o defeito não era checável por
+regex: o post abria falando em altura de muro antes de o leitor saber que altura
+importava, e usava "empuxo" e "platô" sem apresentar nenhum dos dois.
+
+A causa foi compressão para chegar perto de 140 palavras, e as palavras cortadas
+eram justamente as que ligavam uma ideia na outra. Três posts seguidos deste fluxo
+fecharam em 148, 146 e 157 palavras, sempre acima do alvo, o que sugere que para
+assunto denso de número o alvo de 110 a 140 briga com a compreensão.
+
+A v1.2.1 escreve duas coisas no filtro de humanização: **o gate confere
+conformidade e não legibilidade**, então releia depois do 0; e não comprima para
+bater a contagem, prefira 140 a 160 com o raciocínio inteiro.
+
+### [[linkedin-post]] v1.2.1 → v1.2.2 (2026-08-27)
+
+Feedback do Bruno ao gerador de imagem, trazido para o prompt: "gere 5 versões
+separadas em cenários completamente diferentes" e "precisa parecer imperfeito e
+não feito por IA".
+
+Duas correções de processo. A primeira é de método: pedir **cinco cenários
+distintos de uma vez** em vez de refinar um enquadramento, porque com uma imagem
+só não dá para saber se o enquadramento certo era outro. A segunda corrige uma
+contradição que a própria v1.2 introduziu: o prompt pedia obra "varrida e quieta",
+e canteiro varrido demais é justamente o que denuncia imagem gerada. Imperfeição
+passou a ser requisito escrito.
+
 ## Como sinalizar no vault
 
 Notas com `locked: true` no frontmatter têm essa proteção. Hook `validate-write` (futuro) bloqueia edits sem flag explícita.

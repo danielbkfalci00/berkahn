@@ -62,6 +62,8 @@ dívida de higiene: ignorado não significa seguro para cópia, backup ou transc
 - **2026-07-31: a senha do Postgres era a mesma string.** Descoberta na mesma sessão, ao configurar `DATABASE_URL` para rodar migrations. Como o `ACCESS_CODE` estava público, a connection string inteira era reconstruível (o project ref e a região também são públicos). Rotacionada. Lição: senha de banco e código de acesso do admin **nunca** devem coincidir.
 - 2026-05-21: Supabase service_role key vazou em git público (commit `b638b21`, criado em 2026-02-26). **Rotação registrada nesta data não aconteceu de fato** (ver alerta abaixo). Working tree sanitizado, chave ainda no git history (`.claude/prompts/article-implementation-prompt.md:373` antes do commit `e6972af`).
 
+- [ ] @bruno Rotacionar a service_role key do Supabase exposta no commit público `b638b215` e atualizar `.env.local` e as variáveis da Vercel #pendencia
+
 > [!danger] ABERTO: a chave do incidente de 2026-05-21 nunca foi rotacionada
 > O registro dizia "Rotacionada". Está errado, e o erro é perigoso porque faz quem
 > lê pular o item. Verificado em 2026-08-18 comparando o SHA-256 do token em

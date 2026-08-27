@@ -39,6 +39,12 @@ Antes de cada escrita, rode `node scripts/conteudo/pauta.mjs proxima <id> --json
      canais;
    - **a mesma foto serve os dois canais**: o enquadramento sai em 1200x800 para o
      Blog e em 1080x1350 para o LinkedIn. Gere uma vez e recorte;
+   - **peça cinco cenários distintos numa rodada só**, não um enquadramento
+     refinado. Com uma imagem só não dá para saber se a certa era outra;
+   - **a foto precisa parecer imperfeita**: barro, poça, sobra de material fora de
+     lugar, enquadramento levemente torto. Canteiro impecável e luz uniforme são o
+     que denuncia imagem gerada, e "nada encenado" é sobre prop posado, não sobre
+     limpar a obra;
    - o tema precisa ser reconhecível na miniatura, que é do tamanho de um
      card no Discover e no compartilhamento.
 

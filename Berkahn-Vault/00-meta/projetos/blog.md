@@ -120,7 +120,6 @@ Tráfego seguiu crescendo: 1.179 users em junho, 1.407 nos primeiros 26 dias de 
 - [x] ~~Solicitar indexação dos dois artigos publicados pelo fluxo~~ — feito pelo Bruno em 2026-08-25; os dois saíram de `Discovered` com crawl nunca para `Crawled` no mesmo dia
 - [x] Semana S3 de agosto: `terreno-em-declive-quanto-encarece` publicado (post `421d4f51`). Pauta `9c51c605` aprovada nos dois canais
 - [ ] @bruno Solicitar indexação de https://www.berkahn.com.br/atualidades/terreno-em-declive-quanto-encarece no Search Console #pendencia
-- [ ] @bruno Publicar no LinkedIn com a UTM entregue e registrar URL e data reais #pendencia
 - [x] ~~Reconferir se os dois artigos passaram de `Crawled` para indexado~~ — verificado em 2026-08-27: os dois estão **`Submitted and indexed`** com veredito `PASS`, dois dias depois da submissão. O caminho completo foi `Discovered` com crawl nunca, depois `Crawled` no dia do pedido, depois indexado em 48 h. Serve de linha de base para a próxima publicação
 
 > [!note] `orcamento-steel-frame` e `hold-downs-ancoragens` saíram do fluxo semanal

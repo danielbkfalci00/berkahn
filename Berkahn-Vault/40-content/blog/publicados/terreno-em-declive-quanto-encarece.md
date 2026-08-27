@@ -27,12 +27,12 @@ category: Mercado e Custos
 read_time: 7 min
 author: Equipe Berkahn
 answer_summary: "Construir em terreno em declive encarece pela contenção, não pelo movimento de terra. Pelo SINAPI de São Paulo de julho de 2026, escavar com carga e transporte custa R$ 14,03 por metro cúbico e o aterro compactado sai por R$ 13,69, valores pequenos diante do total de uma obra. O custo alto está no muro de arrimo, porque o empuxo do solo cresce com o quadrado da altura, então dobrar a altura do muro mais que quadruplica o esforço que ele precisa resistir. No município de São Paulo, alteração topográfica acima de 1,50 m de desnível ou 1.000 m³ exige licenciamento pela Lei de Obras 16.642/17. Em Light Steel Frame, o peso cinco vezes menor reduz a contenção necessária."
+supabase_id: 421d4f51-0b59-47a7-9d20-be4a12414adc
+url_final: "https://www.berkahn.com.br/atualidades/terreno-em-declive-quanto-encarece"
 contextos_aplicados:
   - berkahn-brand
   - seo-aeo-strategy
   - steel-frame-domain
-supabase_id: 421d4f51-0b59-47a7-9d20-be4a12414adc
-url_final: "https://www.berkahn.com.br/atualidades/terreno-em-declive-quanto-encarece"
 ---
 
 Lote em declive costuma sair mais barato que o vizinho plano na mesma rua. O desconto é real e a conta que decide se ele compensa também é, só que quase ninguém faz essa conta antes de assinar. O que se encontra sobre o assunto são faixas do tipo "de R$ 250 a R$ 2.800 por metro de muro", sem dizer a altura do muro, que é justamente a variável que multiplica o preço.

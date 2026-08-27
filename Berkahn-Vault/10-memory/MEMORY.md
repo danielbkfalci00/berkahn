@@ -20,6 +20,7 @@ status: active
 - [[copy-sem-travessao]] — Nunca usar — ou - como separador estilístico em copy
 - [[prompts-calibrados]] — Prompts de conteúdo intocáveis sem permissão
 - [[verificar-antes-de-descartar]] — Check vermelho e dado ausente não viram falso positivo por julgamento de cabeça
+- [[worktree-longa-fica-para-tras]] — Veredito verde com diagnóstico estranho não é verde; sessão longa em worktree não recebe correção de ferramenta
 
 ## Project (workflows ativos)
 
