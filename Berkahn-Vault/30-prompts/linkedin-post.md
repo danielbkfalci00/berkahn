@@ -9,7 +9,7 @@ tags:
 ai_summary: Criar post LinkedIn Berkahn a partir de artigo ou tema. Calibrado por Bruno. Abre numa situação concreta do público, exige texto contínuo sem frase de impacto isolada, prioriza 110-140 palavras, CTA útil e imagem de fotografia documental sem props encenados. Usado por /linkedin, com gate em check-linkedin.mjs.
 status: locked
 locked: true
-versao: 1.2.1
+versao: 1.2.2
 calibrado_em: 2026-08-27
 ---
 
@@ -212,6 +212,23 @@ Regras que vieram do feedback "achei muito falso essa prancheta", de 18/08:
 - **Assunto deslocado para um dos terços laterais** quando a foto for servir de
   capa do Blog, porque o gradient overlay escurece o centro e engole o que
   estiver lá.
+
+**Peça cinco cenários, não uma imagem.** Calibrado em 2026-08-27, com estas
+palavras do Bruno: "gere 5 versões separadas em cenários completamente
+diferentes". Refinar um enquadramento só esconde que o enquadramento certo podia
+ser outro, e comparar cinco custa uma rodada e resolve. Cada variação muda o
+cenário de verdade, não o ângulo: obra em outro estágio, outro tipo de terreno,
+outro momento do dia, interior em vez de exterior, detalhe fechado em vez de
+plano geral.
+
+**A foto precisa parecer imperfeita.** "Precisa parecer imperfeito e não feito por
+IA", mesma data. Canteiro varrido, luz uniforme e enquadramento centrado são o que
+denuncia imagem gerada, então a imperfeição entra escrita no prompt: barro,
+poça, sobra de material fora de lugar, marca de pneu, enquadramento levemente
+torto, horizonte que não passa exatamente no terço. Cuidado com a regra de "nada
+encenado" logo acima, que é sobre prop posado para a câmera e **não** sobre
+limpar o canteiro. Pedir obra impecável contradiz esta regra e foi o erro da
+primeira leva.
 
 A peça com texto continua permitida e as regras abaixo seguem valendo para ela.
 Ela deixou de ser o padrão. Escolha-a quando o argumento do post não couber numa
