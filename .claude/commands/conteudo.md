@@ -147,6 +147,27 @@ inequívoca do pacote anterior. Se não houver contexto inequívoco, peça o id.
 
      `- [ ] @bruno Publicar no LinkedIn com a UTM entregue e registrar URL e data reais #pendencia`
 
+   - **a pendência de indexação, sempre que um artigo for publicado:**
+
+     `- [ ] @bruno Solicitar indexação de <url> no Search Console #pendencia`
+
+     Publicar não coloca o artigo na busca, e estar no sitemap também não. Em
+     2026-08-25 os dois artigos publicados por este fluxo estavam em
+     `Discovered - currently not indexed` com `lastCrawlTime` **nunca**, um deles
+     havia uma semana, os dois no sitemap desde a publicação. O pedido manual no
+     Search Console levou ambos a `Crawled` no mesmo dia.
+
+     A API de indexação do Google não resolve, porque aceita apenas `JobPosting`
+     e `BroadcastEvent`. O passo é do Bruno, então precisa estar escrito e não
+     lembrado: o `/artigo publicar` já pedia para "lembrar o Bruno" e isso falhou
+     nas duas publicações seguidas.
+
+     Confira o estado antes e depois com:
+
+     ```bash
+     node --env-file=.env.local scripts/analytics/adhoc-inspect-urls.mjs <slug>
+     ```
+
    Encerre com `node scripts/vault-validate.mjs`, que precisa sair em 0 issues.
    Aprendizado de calibragem de copy vai para `30-prompts/`, e ali **exige
    permissão explícita do Bruno**: aqueles arquivos são locked.
