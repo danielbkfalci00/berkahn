@@ -120,3 +120,5 @@ tmpgitleaks*.json
 # Ignorado desde a criacao, para nao depender de lembrar de apagar.
 /app/dev-harness/
 /.worktrees/
+# Clone auxiliar antigo, removido do índice por nunca ter tido .gitmodules.
+/claude-code-workflows/
