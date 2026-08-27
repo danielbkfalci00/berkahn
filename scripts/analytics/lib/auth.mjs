@@ -6,6 +6,9 @@ import os from 'node:os';
 const SA_PATH = process.env.GOOGLE_SERVICE_ACCOUNT_PATH || './secrets/google-service-account.json';
 const OAUTH_CLIENT_PATH = path.resolve('./secrets/oauth-client.json');
 const OAUTH_TOKENS_PATH = path.resolve('./secrets/oauth-tokens.json');
+const OAUTH_CLIENT_JSON = process.env.GOOGLE_OAUTH_CLIENT_JSON;
+const OAUTH_TOKENS_JSON = process.env.GOOGLE_OAUTH_TOKENS_JSON;
+const SERVICE_ACCOUNT_JSON = process.env.GOOGLE_SERVICE_ACCOUNT_JSON;
 const ADC_PATH_WIN = path.join(os.homedir(), 'AppData', 'Roaming', 'gcloud', 'application_default_credentials.json');
 const ADC_PATH_UNIX = path.join(os.homedir(), '.config', 'gcloud', 'application_default_credentials.json');
 
@@ -19,7 +22,8 @@ const AUTH_MODE = (process.env.GOOGLE_AUTH_MODE || 'auto').toLowerCase();
 let cachedAuth = null;
 
 function oauthExists() {
-  return fs.existsSync(OAUTH_CLIENT_PATH) && fs.existsSync(OAUTH_TOKENS_PATH);
+  return Boolean(OAUTH_CLIENT_JSON && OAUTH_TOKENS_JSON)
+    || (fs.existsSync(OAUTH_CLIENT_PATH) && fs.existsSync(OAUTH_TOKENS_PATH));
 }
 
 function adcExists() {
@@ -27,11 +31,12 @@ function adcExists() {
 }
 
 function saExists() {
-  return fs.existsSync(SA_PATH);
+  return Boolean(SERVICE_ACCOUNT_JSON) || fs.existsSync(SA_PATH);
 }
 
 export function getServiceAccountInfo() {
   if (!saExists()) return null;
+  if (SERVICE_ACCOUNT_JSON) return JSON.parse(SERVICE_ACCOUNT_JSON);
   return JSON.parse(fs.readFileSync(SA_PATH, 'utf-8'));
 }
 
@@ -47,14 +52,19 @@ export function getActiveAuthMode() {
 }
 
 function buildOAuth2Client() {
-  const credentials = JSON.parse(fs.readFileSync(OAUTH_CLIENT_PATH, 'utf-8'));
-  const tokens = JSON.parse(fs.readFileSync(OAUTH_TOKENS_PATH, 'utf-8'));
+  const credentials = OAUTH_CLIENT_JSON
+    ? JSON.parse(OAUTH_CLIENT_JSON)
+    : JSON.parse(fs.readFileSync(OAUTH_CLIENT_PATH, 'utf-8'));
+  const tokens = OAUTH_TOKENS_JSON
+    ? JSON.parse(OAUTH_TOKENS_JSON)
+    : JSON.parse(fs.readFileSync(OAUTH_TOKENS_PATH, 'utf-8'));
   const { client_id, client_secret } = credentials.installed || credentials.web;
   const oauth2Client = new google.auth.OAuth2(client_id, client_secret);
   oauth2Client.setCredentials(tokens);
 
   // Atualizar tokens.json quando refresh acontecer
   oauth2Client.on('tokens', (newTokens) => {
+    if (OAUTH_TOKENS_JSON) return;
     const merged = { ...tokens, ...newTokens };
     fs.writeFileSync(OAUTH_TOKENS_PATH, JSON.stringify(merged, null, 2));
   });
@@ -78,7 +88,9 @@ export function getAuth(scopes) {
 
   if (mode === 'sa') {
     cachedAuth = new google.auth.GoogleAuth({
-      keyFile: path.resolve(SA_PATH),
+      ...(SERVICE_ACCOUNT_JSON
+        ? { credentials: JSON.parse(SERVICE_ACCOUNT_JSON) }
+        : { keyFile: path.resolve(SA_PATH) }),
       scopes,
     });
     return cachedAuth;

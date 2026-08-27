@@ -2,7 +2,6 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { useDocumentoBridge } from "@/hooks/use-documento-bridge";
-import { useAutor } from "@/hooks/use-autor";
 import { criarMotorAncoragem } from "@/lib/documentacoes/ancoragem";
 import { ComentariosRail } from "@/components/admin/documentacoes/ComentariosRail";
 import type { Ancora, Thread } from "@/types/comentario";
@@ -21,7 +20,6 @@ export function HarnessPonte({ docs }: Props) {
   const [colar, setColar] = useState("");
   const [modo, setModo] = useState<"ponte" | "painel">("ponte");
   const [fixtures, setFixtures] = useState<Thread[]>(() => threadsDeExemplo(AGORA));
-  const { nome, carregado, salvar } = useAutor();
   const [pendente, setPendente] = useState<{ ancora: Ancora; rect: RectSelecao } | null>(null);
   const [salvas, setSalvas] = useState<Salva[]>([]);
   const [orfaos, setOrfaos] = useState<string[]>([]);
@@ -127,9 +125,8 @@ export function HarnessPonte({ docs }: Props) {
           threads={fixtures}
           orfas={new Set(["fix-2"])}
           documentoAtualizadoEm={AGORA}
-          autorNome={nome}
-          autorCarregado={carregado}
-          onSalvarAutor={salvar}
+          autorNome="Pessoa de teste"
+          canComment
           pendente={pendente?.ancora ?? null}
           pendenteEnviando={false}
           pendenteErro={null}

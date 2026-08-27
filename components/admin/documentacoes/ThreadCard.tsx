@@ -20,6 +20,7 @@ import { APARENCIA_TIPO, tempoRelativo } from "./tipos-ui";
 type Props = {
   thread: Thread;
   autorNome: string;
+  canComment: boolean;
   orfa: boolean;
   documentoMudou: boolean;
   ativa: boolean;
@@ -32,6 +33,7 @@ type Props = {
 export function ThreadCard({
   thread,
   autorNome,
+  canComment,
   orfa,
   documentoMudou,
   ativa,
@@ -205,7 +207,7 @@ export function ThreadCard({
                     {ap.rotulo}
                   </span>
                 )}
-                <div className="flex gap-1.5 opacity-0 transition-opacity group-hover:opacity-100 focus-within:opacity-100">
+                {canComment && <div className="flex gap-1.5 opacity-0 transition-opacity group-hover:opacity-100 focus-within:opacity-100">
                   <button
                     type="button"
                     onClick={() => setEditando(c.id)}
@@ -222,7 +224,7 @@ export function ThreadCard({
                   >
                     <Trash2 className="h-3 w-3" />
                   </button>
-                </div>
+                </div>}
               </div>
             </li>
           );
@@ -231,7 +233,7 @@ export function ThreadCard({
 
       {erro && <p className="px-3 pt-1 text-xs text-red-600">{erro}</p>}
 
-      <div className="mt-2 flex items-center justify-between border-t border-neutral-100 px-3 py-1.5">
+      {canComment && <div className="mt-2 flex items-center justify-between border-t border-neutral-100 px-3 py-1.5">
         {respondendo ? null : (
           <button
             type="button"
@@ -257,9 +259,9 @@ export function ThreadCard({
             </>
           )}
         </button>
-      </div>
+      </div>}
 
-      {respondendo && (
+      {canComment && respondendo && (
         <div className="px-3 pb-2.5">
           <Composer
             rotuloAcao="Responder"

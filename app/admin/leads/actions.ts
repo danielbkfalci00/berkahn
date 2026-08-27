@@ -4,7 +4,7 @@ import { randomUUID } from "node:crypto";
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { createServiceClient } from "@/lib/supabase/admin";
-import { BERKAHN_ADMIN_EMAIL } from "@/lib/supabase/sessao";
+import { getAdminSession } from "@/lib/supabase/sessao";
 import type { LeadChannel, LeadPriority, LeadSegment, LeadStatus } from "@/types/analytics";
 
 export interface LeadActionResult {
@@ -34,11 +34,10 @@ const LEAD_FILE_TYPES = new Set([
   "image/webp",
 ]);
 
-async function requireCanonicalAdmin() {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user || user.email?.toLowerCase() !== BERKAHN_ADMIN_EMAIL) return null;
-  return { supabase, user };
+async function requireCommercialAdmin() {
+  const session = await getAdminSession();
+  if (!session || !["owner", "comercial"].includes(session.membership.role)) return null;
+  return session;
 }
 
 function safeStorageName(value: string): string {
@@ -199,37 +198,8 @@ export async function updateLeadOperations(
   return { ok: true };
 }
 
-export async function createLeadResponsible(nome: string): Promise<LeadActionResult> {
-  const clean = nome.trim();
-  if (clean.length < 2 || clean.length > 80) {
-    return { ok: false, error: "Informe um nome entre 2 e 80 caracteres." };
-  }
-  const supabase = await createClient();
-  const { data, error } = await supabase
-    .from("lead_responsaveis")
-    .insert({ nome: clean })
-    .select("id")
-    .single();
-  if (error || !data) return { ok: false, error: error?.message || "Não foi possível cadastrar." };
-  revalidatePath("/admin/configuracoes");
-  revalidatePath("/admin/leads");
-  return { ok: true, id: data.id };
-}
-
-export async function setLeadResponsibleActive(id: string, ativo: boolean): Promise<LeadActionResult> {
-  const supabase = await createClient();
-  const { error } = await supabase
-    .from("lead_responsaveis")
-    .update({ ativo, atualizado_em: new Date().toISOString() })
-    .eq("id", id);
-  if (error) return { ok: false, error: error.message };
-  revalidatePath("/admin/configuracoes");
-  revalidatePath("/admin/leads");
-  return { ok: true };
-}
-
 export async function saveAdminPushSubscription(input: PushSubscriptionInput): Promise<LeadActionResult> {
-  const admin = await requireCanonicalAdmin();
+  const admin = await requireCommercialAdmin();
   if (!admin) return { ok: false, error: "Não autorizado." };
   let endpoint: URL;
   try {
@@ -263,7 +233,7 @@ export async function saveAdminPushSubscription(input: PushSubscriptionInput): P
 }
 
 export async function deactivateAdminPushSubscription(endpoint: string): Promise<LeadActionResult> {
-  const admin = await requireCanonicalAdmin();
+  const admin = await requireCommercialAdmin();
   if (!admin) return { ok: false, error: "Não autorizado." };
   const { error } = await admin.supabase
     .from("admin_push_subscriptions")
@@ -276,7 +246,7 @@ export async function deactivateAdminPushSubscription(endpoint: string): Promise
 }
 
 export async function revokeAdminPushDevice(id: string): Promise<LeadActionResult> {
-  const admin = await requireCanonicalAdmin();
+  const admin = await requireCommercialAdmin();
   if (!admin) return { ok: false, error: "Não autorizado." };
   const { error } = await admin.supabase
     .from("admin_push_subscriptions")
@@ -320,7 +290,7 @@ export async function prepareLeadUpload(
   leadId: string,
   file: { name: string; type: string; size: number }
 ): Promise<LeadActionResult> {
-  const admin = await requireCanonicalAdmin();
+  const admin = await requireCommercialAdmin();
   if (!admin) return { ok: false, error: "Não autorizado." };
   if (!LEAD_FILE_TYPES.has(file.type)) return { ok: false, error: "Formato de arquivo não permitido." };
   if (!Number.isFinite(file.size) || file.size <= 0 || file.size > LEAD_FILE_MAX_BYTES) {
@@ -353,7 +323,7 @@ export async function prepareLeadUpload(
 }
 
 export async function finalizeLeadUpload(id: string): Promise<LeadActionResult> {
-  const admin = await requireCanonicalAdmin();
+  const admin = await requireCommercialAdmin();
   if (!admin) return { ok: false, error: "Não autorizado." };
   const { data: artifact, error } = await admin.supabase
     .from("lead_artifacts")
@@ -390,7 +360,7 @@ export async function finalizeLeadUpload(id: string): Promise<LeadActionResult> 
 }
 
 export async function cancelLeadUpload(id: string): Promise<LeadActionResult> {
-  const admin = await requireCanonicalAdmin();
+  const admin = await requireCommercialAdmin();
   if (!admin) return { ok: false, error: "Não autorizado." };
   const { data, error } = await admin.supabase.rpc("delete_lead_artifact", {
     p_id: id,
@@ -402,7 +372,7 @@ export async function cancelLeadUpload(id: string): Promise<LeadActionResult> {
 }
 
 export async function getLeadArtifactUrl(id: string): Promise<LeadActionResult> {
-  const admin = await requireCanonicalAdmin();
+  const admin = await requireCommercialAdmin();
   if (!admin) return { ok: false, error: "Não autorizado." };
   const { data: artifact, error } = await admin.supabase
     .from("lead_artifacts")
@@ -419,7 +389,7 @@ export async function getLeadArtifactUrl(id: string): Promise<LeadActionResult> 
 }
 
 export async function deleteLeadArtifact(id: string): Promise<LeadActionResult> {
-  const admin = await requireCanonicalAdmin();
+  const admin = await requireCommercialAdmin();
   if (!admin) return { ok: false, error: "Não autorizado." };
   const { data, error } = await admin.supabase.rpc("delete_lead_artifact", {
     p_id: id,

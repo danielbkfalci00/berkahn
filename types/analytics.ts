@@ -212,6 +212,19 @@ export type LeadStatus =
   | "convertido"
   | "desqualificado";
 
+export type AdminRole = "owner" | "comercial" | "conteudo" | "viewer";
+
+export interface AdminMembership {
+  id: string;
+  nome: string;
+  email: string | null;
+  role: AdminRole;
+  ativo: boolean;
+  recebe_leads: boolean;
+  notificar_novos_leads: boolean;
+  notificar_acoes_vencidas: boolean;
+}
+
 export type LeadChannel = "form" | "whatsapp" | "telefone" | "email" | "indicacao" | "manual";
 export type LeadSegment = "residencial" | "comercial" | "nao_definido";
 export type LeadPriority = "normal" | "alta" | "urgente";
@@ -221,6 +234,12 @@ export interface LeadResponsible {
   nome: string;
   ativo: boolean;
   ordem: number;
+  user_id?: string | null;
+  email?: string | null;
+  role?: AdminRole;
+  recebe_leads?: boolean;
+  notificar_novos_leads?: boolean;
+  notificar_acoes_vencidas?: boolean;
 }
 
 export interface LeadArtifact {

@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { getDocumentoMeta } from "@/lib/documentacoes/queries";
 import { listarThreads } from "@/lib/documentacoes/comentarios";
 import { DocumentoViewer } from "./DocumentoViewer";
+import { getAdminSession } from "@/lib/supabase/sessao";
 
 export const dynamic = "force-dynamic";
 
@@ -21,6 +22,8 @@ export default async function DocumentoPage({ params }: Props) {
   // estado local: revalidar remontaria o iframe e refaria o handshake da ponte
   // a cada comentário.
   const threads = await listarThreads(slug);
+  const session = await getAdminSession();
+  const canComment = session?.membership.role === "owner" || session?.membership.role === "conteudo";
 
-  return <DocumentoViewer meta={meta} threadsIniciais={threads} />;
+  return <DocumentoViewer meta={meta} threadsIniciais={threads} authorName={session?.membership.nome || ""} canComment={canComment} />;
 }

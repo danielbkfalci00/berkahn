@@ -1,12 +1,12 @@
 ---
 tipo: meta
 criado: 2026-05-21
-atualizado: 2026-08-14
+atualizado: 2026-08-27
 tags:
   - project/site
   - project/blog
   - status/active
-ai_summary: "Sprint 10–14/08: migration 030 e /conteudo validados no primeiro fluxo real. O Blog de casa LSF 100 m² foi atualizado sem retirar a URL do ar; LinkedIn está aprovado e aguarda publicação manual com URL+data."
+ai_summary: "Sprint corrente: admin multiusuário, papéis, PWA/Web Push por conta e analytics mensal hospedado foram implementados; migration 031 passou em produção. Rollout final vive no hub Site."
 status: active
 projetos_em_curso:
   - blog
@@ -65,10 +65,10 @@ publicação manual do LinkedIn e registro de URL+data no rollout já deployado.
   aprendizado e build
 - [ ] @bruno Redesenhar o worker para execução sob demanda ou heartbeat leve antes de reativá-lo; o agendamento antigo aponta para worktree removido, o heartbeat está obsoleto e uma task completa a cada 15 minutos tem custo desnecessário #pendencia
 - [x] **GA4 fechado em 10/08**: OAuth com `analytics.edit`; dimensões `article_slug` e `percent_scrolled` registradas na propriedade 516973519
-- [x] Migrations 024–029 do CRM aplicadas; RLS canônica, atomicidade, retenção/remoção de anexos e outbox push sem PII verificadas em transação revertida
+- [x] Migrations 024–031 do CRM aplicadas; contas individuais, papéis, RLS, atomicidade, retenção/remoção de anexos e outbox push sem PII verificadas em transação revertida
 - [x] **PR #53 mergeada e deployada em 11/08**: commit `5121941`, Quality verde e deploys `berkahn` + `berkahn-admin` concluídos. Smoke público confirmou site 200, política Supabase-only e redirecionamento do admin para login
 - [x] **Retenção e Web Push ativados em 14/08**: Edge Function `lead-retention` v1 e cron mensal ativos; VAPID/segredo configurados e dispatcher agendado a cada 15 minutos. O rollout encontrou zero candidatos e zero objetos pendentes
-- **Pendências de rollout**: smoke autenticado e GitHub Pages vivem uma única vez em [[site#Próximos 7 dias]].
+- **Pendências de rollout**: smoke multidispositivo e GitHub Pages vivem uma única vez em [[site#Próximos 7 dias]].
 - **Primeira pauta real**: estado e tarefas vivem em [[blog#Próximos 7 dias]], [[linkedin#Próximos 7 dias]] e [[pesquisas#Bloqueios ativos]].
 
 ### P0 — Esta semana

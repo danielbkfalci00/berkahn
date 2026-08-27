@@ -1,0 +1,44 @@
+name: Analytics Monthly
+
+on:
+  schedule:
+    - cron: "0 12 4 * *"
+  workflow_dispatch:
+    inputs:
+      month:
+        description: "Mês fechado opcional (AAAA-MM)"
+        required: false
+        type: string
+
+concurrency:
+  group: analytics-monthly
+  cancel-in-progress: false
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    env:
+      NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+      SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+      GA4_PROPERTY_ID: ${{ secrets.GA4_PROPERTY_ID }}
+      GSC_SITE_URL: ${{ secrets.GSC_SITE_URL }}
+      GOOGLE_AUTH_MODE: oauth
+      GOOGLE_OAUTH_CLIENT_JSON: ${{ secrets.GOOGLE_OAUTH_CLIENT_JSON }}
+      GOOGLE_OAUTH_TOKENS_JSON: ${{ secrets.GOOGLE_OAUTH_TOKENS_JSON }}
+      REQUESTED_MONTH: ${{ inputs.month }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Generate closed-month snapshot
+        shell: bash
+        run: |
+          args=()
+          if [[ -n "$REQUESTED_MONTH" ]]; then args+=(--month "$REQUESTED_MONTH"); fi
+          node scripts/analytics/generate-report.mjs "${args[@]}"

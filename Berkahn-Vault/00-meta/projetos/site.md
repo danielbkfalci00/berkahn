@@ -5,7 +5,7 @@ atualizado: 2026-08-27
 tags:
   - project/site
   - status/active
-ai_summary: "Hub do Site — Next 16.3, dependências sem advisories e fontes locais estão validados em build. CRM Supabase, GA4, retenção mensal e dispatcher Web Push estão em produção. Pendem smoke autenticado, assinatura push em um dispositivo e despublicar o GitHub Pages legado com uma conta admin."
+ai_summary: "Hub do Site — Admin agora tem contas individuais, quatro papéis, PWA/push por usuário e analytics mensal hospedado. Migration 031 está aplicada e validada; pendem smoke multidispositivo e despublicar o GitHub Pages legado."
 status: active
 projeto: site
 kpi_paginas_indexadas: 34
@@ -60,10 +60,11 @@ Site em produção (Next.js 16 App Router + Supabase + Vercel + Tailwind + shadc
 - [x] ~~**Dupla escrita dos comandos de conteúdo**~~ — resolvido em 2026-08-06. `/pesquisa` e `/linkedin` gravam na pauta via `scripts/conteudo/pauta.mjs` e não criam mais `.md` no vault. `/criacao` e `/calendario` foram corrigidos junto: um procurava a pesquisa na pasta que deixou de ser alimentada, o outro contava posts pendentes varrendo uma pasta congelada. Ver [[quadro-conteudo]]
 - [x] ~~**CTA sumia do DOM em dev**~~ — resolvido em 2026-08-18 (PR #60). `components/sections/CTA.tsx` era Server Component e o botão ia como `children` para o `DialogTrigger asChild` do Radix; o filho chegava pelo payload RSC e a hidratação falhava, regenerando a árvore, sumindo com o botão e reinserindo o `<script>` do layout no `<head>`. Marcado como Client Component. **Só reproduzia em dev**, o build de produção não pegava, então o sintoma passou meses sem diagnóstico. O casamento React 18.3.1 com Next 16.3 continua valendo uma revisão à parte
 - [x] ~~**Modal de contato sem nome acessível**~~ — resolvido em 2026-08-25 (PR #62). O `DialogContent` disparava em produção o aviso do Radix pedindo `DialogTitle`. Duas causas somadas: `ContactForm` é `next/dynamic`, então durante o carregamento do chunk o título ainda não existe no DOM, que é exatamente quando o foco entra no diálogo; e o `{header}` só renderiza no ramo do formulário, então **depois do envio o título desmontava** e o diálogo ficava sem nome pelo resto da sessão. `DialogTitle` e `DialogDescription` passaram a filhos diretos do content dentro de `VisuallyHidden`, com o cabeçalho visível seguindo no formulário. Verificado em produção
-- [ ] **Contas Supabase por pessoa**: hoje todos entram com a mesma conta compartilhada, então `auth.uid()` não distingue ninguém e o autor dos comentários é nome digitado no localStorage. Projeto próprio — ver [[comentarios-inline-documentacoes]], seção "Identidade"
+- [x] **Contas Supabase por pessoa**: migration 031 aplicada em 2026-08-27; `lead_responsaveis` virou cadastro de membros vinculado a `auth.users`, com convite, senha individual e papéis `owner`, `comercial`, `conteudo` e `viewer`. Comentários agora resolvem a autoria pela sessão no servidor. Matriz e operação em [[admin-setup]] e [[comentarios-inline-documentacoes]].
 - [x] **Banco do CRM aplicado**: migrations 024–029 em produção; funil, RPCs, vínculos, RLS canônica, responsáveis, prioridade, resumo operacional, arquivos, remoção atômica, outbox push, `pg_cron` e `pg_net` instalados. Matriz RLS, rollback atômico, cleanup de arquivos e payload push sem PII verdes
 - [x] **Retenção operacional**: `lead-retention` v1 publicada, segredos sincronizados no Edge/Vault e job mensal ativo desde 2026-08-14; rollout sem candidatos ou objetos pendentes
 - [x] **Web Push configurado**: VAPID + `LEAD_PUSH_CRON_SECRET` nos projetos site/admin, segredo homônimo no Vault e dispatcher agendado a cada 15 minutos desde 2026-08-14
+- [x] **Analytics mensal hospedado**: workflow GitHub Actions no dia 4 reutiliza o pipeline GA4/GSC e elimina dependência do computador local; operação e segredos em [[admin-setup]].
 - [x] **GA4 Admin concluído**: OAuth de edição validado; `article_slug` e `percent_scrolled` registrados em 10/08
 - [x] **Apps Script encerrado**: nenhuma captura ou notificação depende de Google Sheets; Web Push é o canal opcional do admin
 - **Core Web Vitals de campo**: otimizações estruturais entregues em [[2026-08-diagnostico-integrado-site]]; a tarefa de medição vive em “Próximos 7 dias”.
@@ -73,7 +74,7 @@ Site em produção (Next.js 16 App Router + Supabase + Vercel + Tailwind + shadc
 - [x] ~~**Home redesign — fechar o PR #43**~~ — mergeado em 2026-08-06 com hub reconciliado; `@design-review` executado e follow-up PR #44 mergeado
 - [x] ~~**Trocar take e restaurar copy institucional da home**~~ — 1080p integral convertido em 72/36 frames; copy conferida contra `bc6515f`; rail de projetos preservado no código e desmontado da composição
 - [ ] @bruno Medir CWV no Speed Insights por 7 dias e consolidar em 28 dias, sem misturar as séries anterior e posterior ao Consent Mode de 2026-07-30; baseline em [[2026-08-diagnostico-integrado-site]] #pendencia
-- [ ] @bruno Executar smoke autenticado de Inbox, Kanban, upload, responsável, PWA e configurações conforme [[admin-setup]]; PR #53, deploys e smoke público já estão concluídos #pendencia
+- [ ] @bruno Executar smoke multidispositivo com uma segunda conta convidada: login, restrição por papel, Inbox, Kanban, upload, instalação PWA e recebimento Web Push conforme [[admin-setup]] #pendencia
 - [ ] @bruno Despublicar o GitHub Pages `legacy/errored` em `Settings → Pages` com a conta proprietária; a API recusou o DELETE porque a conta CLI não tem `admin` #pendencia
 
 > [!warning] Não é só ruído no CI: o Pages legado serve conteúdo duplicado

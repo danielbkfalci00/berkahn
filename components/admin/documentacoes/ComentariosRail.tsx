@@ -19,9 +19,8 @@ type Props = {
   threads: Thread[];
   orfas: Set<string>;
   documentoAtualizadoEm: string;
-  autorNome: string | null;
-  autorCarregado: boolean;
-  onSalvarAutor: (nome: string) => void;
+  autorNome: string;
+  canComment: boolean;
   /** Trecho recém-selecionado no documento, aguardando o primeiro comentário. */
   pendente: Ancora | null;
   pendenteEnviando: boolean;
@@ -40,8 +39,7 @@ export function ComentariosRail({
   orfas,
   documentoAtualizadoEm,
   autorNome,
-  autorCarregado,
-  onSalvarAutor,
+  canComment,
   pendente,
   pendenteEnviando,
   pendenteErro,
@@ -55,7 +53,6 @@ export function ComentariosRail({
 }: Props) {
   const [filtro, setFiltro] = useState<Filtro>("abertos");
   const [tipos, setTipos] = useState<Set<TipoComentario>>(new Set());
-  const [nomeDigitado, setNomeDigitado] = useState("");
 
   const visiveis = useMemo(() => {
     return threads.filter((t) => {
@@ -82,8 +79,6 @@ export function ComentariosRail({
       return proximo;
     });
   }
-
-  const precisaNome = autorCarregado && !autorNome;
 
   return (
     <aside className="flex h-full min-h-0 flex-col border-l border-neutral-200 bg-neutral-50 print:hidden">
@@ -134,40 +129,7 @@ export function ComentariosRail({
       </header>
 
       <div className="min-h-0 flex-1 space-y-2 overflow-y-auto p-3">
-        {precisaNome && (
-          <div className="rounded-lg border border-neutral-200 bg-white p-2.5">
-            <label
-              htmlFor="autor-nome"
-              className="text-xs font-medium text-neutral-700"
-            >
-              Como você assina?
-            </label>
-            <p className="mt-0.5 text-[11px] text-neutral-400">
-              Fica salvo neste navegador. Todos entram no admin com a mesma
-              conta, então é o nome que distingue quem comentou.
-            </p>
-            <div className="mt-1.5 flex gap-1.5">
-              <input
-                id="autor-nome"
-                value={nomeDigitado}
-                onChange={(e) => setNomeDigitado(e.target.value)}
-                onKeyDown={(e) => e.key === "Enter" && onSalvarAutor(nomeDigitado)}
-                maxLength={80}
-                placeholder="Seu nome"
-                className="min-w-0 flex-1 rounded-md border border-neutral-200 px-2 py-1 text-sm outline-none focus:border-neutral-400"
-              />
-              <button
-                type="button"
-                onClick={() => onSalvarAutor(nomeDigitado)}
-                className="rounded-md bg-neutral-900 px-2.5 py-1 text-xs text-white"
-              >
-                Salvar
-              </button>
-            </div>
-          </div>
-        )}
-
-        {pendente && !precisaNome && (
+        {pendente && canComment && (
           <Composer
             citacao={pendente.textoExato}
             rotuloAcao="Comentar"
@@ -183,7 +145,8 @@ export function ComentariosRail({
           <ThreadCard
             key={t.id}
             thread={t}
-            autorNome={autorNome ?? ""}
+            autorNome={autorNome}
+            canComment={canComment}
             orfa={false}
             documentoMudou={documentoMudouDesde(t, documentoAtualizadoEm)}
             ativa={threadAtiva === t.id}
@@ -203,7 +166,8 @@ export function ComentariosRail({
               <ThreadCard
                 key={t.id}
                 thread={t}
-                autorNome={autorNome ?? ""}
+                autorNome={autorNome}
+                canComment={canComment}
                 orfa
                 documentoMudou={false}
                 ativa={threadAtiva === t.id}
@@ -221,7 +185,7 @@ export function ComentariosRail({
             <MessageSquareOff className="h-6 w-6 text-neutral-300" />
             <p className="text-xs text-neutral-400">
               {threads.length === 0
-                ? "Selecione um trecho do documento para comentar."
+                ? canComment ? "Selecione um trecho do documento para comentar." : "Nenhum comentário neste documento."
                 : "Nenhum comentário com estes filtros."}
             </p>
           </div>

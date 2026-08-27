@@ -27,7 +27,7 @@ export default async function LeadDetailPage({ params }: { params: Promise<{ id:
     supabase.from("orcamentos").select("id,numero,status").eq("lead_id", id).order("criado_em", { ascending: false }),
     supabase.from("proposals").select("id,proposal_number,status").eq("lead_id", id).order("created_at", { ascending: false }),
     supabase.from("lead_artifacts").select("id,lead_id,tipo,estado,nome,external_url,storage_bucket,storage_path,mime_type,size_bytes,criado_em").eq("lead_id", id).order("criado_em", { ascending: false }),
-    supabase.from("lead_responsaveis").select("id,nome,ativo,ordem").order("ativo", { ascending: false }).order("ordem").order("nome"),
+    supabase.from("lead_responsaveis").select("id,nome,ativo,ordem").eq("recebe_leads", true).order("ativo", { ascending: false }).order("ordem").order("nome"),
   ]);
 
   if (leadResult.error || !leadResult.data) notFound();

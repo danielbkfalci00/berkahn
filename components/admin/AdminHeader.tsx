@@ -1,8 +1,11 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { Bell, Search, User } from "lucide-react";
+import Link from "next/link";
+import { Bell, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ADMIN_ROLE_LABELS } from "@/lib/admin/access";
+import type { AdminMembership } from "@/types/analytics";
 
 const pageTitles: Record<string, string> = {
   "/admin": "Dashboard",
@@ -14,6 +17,10 @@ const pageTitles: Record<string, string> = {
   "/admin/propostas/new": "Nova Proposta",
   "/admin/configuracoes": "Configurações",
   "/admin/documentacoes": "Documentações",
+  "/admin/analytics": "Analytics",
+  "/admin/leads": "Leads",
+  "/admin/conteudo": "Conteúdo",
+  "/admin/orcamentos": "Orçamentos",
 };
 
 function getPageTitle(pathname: string): string {
@@ -39,7 +46,7 @@ function getPageTitle(pathname: string): string {
   return "Admin";
 }
 
-export function AdminHeader() {
+export function AdminHeader({ membership }: { membership: AdminMembership | null }) {
   const pathname = usePathname();
   const title = getPageTitle(pathname || "");
 
@@ -52,20 +59,11 @@ export function AdminHeader() {
       </div>
 
       <div className="flex items-center gap-2">
-        {/* Search button */}
-        <Button variant="ghost" size="icon" className="text-neutral-600">
-          <Search className="h-5 w-5" />
+        <Button asChild variant="ghost" size="icon" className="text-neutral-600">
+          <Link href="/admin/configuracoes#notificacoes" aria-label="Configurar notificações"><Bell className="h-5 w-5" /></Link>
         </Button>
-
-        {/* Notifications */}
-        <Button variant="ghost" size="icon" className="text-neutral-600 relative">
-          <Bell className="h-5 w-5" />
-          <span className="absolute top-1 right-1 h-2 w-2 bg-red-500 rounded-full" />
-        </Button>
-
-        {/* User menu */}
-        <Button variant="ghost" size="icon" className="text-neutral-600">
-          <User className="h-5 w-5" />
+        <Button asChild variant="ghost" className="hidden gap-2 text-neutral-600 sm:inline-flex">
+          <Link href="/admin/configuracoes#conta"><User className="h-4 w-4" /><span>{membership ? ADMIN_ROLE_LABELS[membership.role] : "Conta"}</span></Link>
         </Button>
       </div>
     </header>

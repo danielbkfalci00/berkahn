@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { entrar } from "@/app/admin/login/actions";
+import { entrar, solicitarRedefinicao } from "@/app/admin/login/actions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -32,22 +32,35 @@ export function LoginForm() {
   const searchParams = useSearchParams();
   const destino = destinoSeguro(searchParams.get("redirectTo"));
 
-  const [codigo, setCodigo] = useState("");
+  const [email, setEmail] = useState("");
+  const [senha, setSenha] = useState("");
   const [erro, setErro] = useState<string | null>(null);
+  const [mensagem, setMensagem] = useState<string | null>(null);
   const [enviando, iniciar] = useTransition();
 
   function aoEnviar(e: React.FormEvent) {
     e.preventDefault();
     setErro(null);
+    setMensagem(null);
 
     iniciar(async () => {
-      const res = await entrar(codigo);
+      const res = await entrar(email, senha);
       if (res.erro) {
         setErro(res.erro);
         return;
       }
       router.push(destino);
       router.refresh();
+    });
+  }
+
+  function redefinir() {
+    setErro(null);
+    setMensagem(null);
+    iniciar(async () => {
+      const result = await solicitarRedefinicao(email);
+      if (result.erro) setErro(result.erro);
+      else setMensagem(result.mensagem || null);
     });
   }
 
@@ -61,20 +74,26 @@ export function LoginForm() {
           </div>
         )}
 
+        {mensagem && <p role="status" className="rounded-lg bg-emerald-50 p-3 text-sm text-emerald-800">{mensagem}</p>}
+
         <div className="space-y-2">
-          <Label htmlFor="code" className="flex items-center gap-2">
+          <Label htmlFor="email">Email</Label>
+          <Input id="email" type="email" value={email} onChange={(event) => setEmail(event.target.value)} required disabled={enviando} autoComplete="email" />
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="password" className="flex items-center gap-2">
             <Lock className="h-4 w-4" />
-            Código de Acesso
+            Senha
           </Label>
           <Input
-            id="code"
+            id="password"
             type="password"
-            placeholder="Digite o código de acesso"
-            value={codigo}
-            onChange={(e) => setCodigo(e.target.value)}
+            value={senha}
+            onChange={(e) => setSenha(e.target.value)}
             required
             disabled={enviando}
-            className="h-12 text-center text-lg tracking-wider"
+            className="h-12"
             autoComplete="current-password"
           />
         </div>
@@ -93,6 +112,7 @@ export function LoginForm() {
             "Entrar"
           )}
         </Button>
+        <button type="button" onClick={redefinir} disabled={enviando} className="w-full text-sm text-neutral-600 underline-offset-4 hover:text-neutral-900 hover:underline disabled:opacity-50">Esqueci minha senha</button>
       </form>
     </div>
   );

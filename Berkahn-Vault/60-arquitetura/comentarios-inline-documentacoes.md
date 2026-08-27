@@ -1,12 +1,12 @@
 ---
 tipo: context
 criado: 2026-07-31
-atualizado: 2026-07-31
+atualizado: 2026-08-27
 tags:
   - ai/context
   - project/site
   - domain/admin
-ai_summary: Comentários inline em /admin/documentacoes, estilo Notion. Três decisões que não são óbvias e custam caro se reabertas — a ponte por postMessage (o documento roda em iframe de origem opaca), a ancoragem por texto e não por id (o HTML é regenerado por upsert), e as funções serializadas com toString() precisarem ser autossuficientes (o bundle de servidor do Next é minificado, e a falha só aparece em produção). Tabelas documento_threads e documento_comentarios, migration 009.
+ai_summary: Comentários inline em /admin/documentacoes com autoria pela conta individual. Preserva três decisões críticas: ponte postMessage para iframe opaco, ancoragem por texto e funções serializadas autossuficientes. Tabelas da migration 009; papéis e identidade na migration 031.
 status: active
 escopo: berkahn
 ---
@@ -70,13 +70,11 @@ Daí a forma do código, que sem esta nota parece capricho:
 
 `doc_versao` guarda `documentos.atualizado_em` no momento da criação. Quando defasado, o card avisa "o documento mudou depois deste comentário" — funciona porque `upsertDocumento` grava `atualizado_em` a cada upsert.
 
-RLS `FOR ALL TO authenticated`, no padrão de `analytics_tasks`. **Obrigatória**: o middleware protege a rota, não a tabela, e a anon key alcança o PostgREST direto.
+RLS separa leitura para qualquer membro ativo e mutação para `owner`/`conteudo`. **Obrigatória**: o middleware protege a rota, não a tabela, e a anon key alcança o PostgREST direto.
 
-## Identidade — limitação conhecida
+## Identidade
 
-Todo mundo entra no admin com a **mesma conta compartilhada**, então `auth.uid()` não distingue ninguém. A atribuição é um nome digitado, guardado no `localStorage` (`hooks/use-autor.ts`). Não é identidade verificada e a interface não finge que é.
-
-`autor_user_id` é gravado mesmo assim, para que migrar para contas reais depois não exija migration nem backfill. Migrar é um projeto próprio: hoje o código de acesso está hardcoded no bundle client (`components/admin/LoginForm.tsx`), o que é uma exposição independente desta feature.
+A migration 031 vinculou `lead_responsaveis` a `auth.users`. As server actions ignoram qualquer nome enviado pelo cliente e resolvem `autor_nome` e `autor_user_id` pela associação ativa da sessão. O hook `use-autor.ts` e o nome em `localStorage` foram removidos. `viewer` continua vendo threads, mas não recebe Composer nem controles de edição, resposta ou resolução. Comentários históricos preservam a autoria existente; novas escritas têm identidade verificada.
 
 ## Fora de escopo, deliberado
 

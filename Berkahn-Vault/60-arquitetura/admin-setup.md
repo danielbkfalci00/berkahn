@@ -1,12 +1,12 @@
 ---
 tipo: context
 criado: 2025-12-01
-atualizado: 2026-08-14
+atualizado: 2026-08-27
 tags:
   - ai/context
   - project/site
   - domain/admin
-ai_summary: Sistema Admin Berkahn com CRM leve em /admin/leads. Migrations 024–029, Edge de retenção e dispatcher Web Push estão ativos em produção; Supabase é a única custódia de PII. Resta o smoke autenticado e ativar a assinatura em um dispositivo do admin.
+ai_summary: Sistema Admin Berkahn com contas individuais, quatro papéis, CRM em /admin/leads e PWA/Web Push por usuário e dispositivo. Migrations 024–031, retenção e dispatcher estão ativos; analytics mensal roda hospedado no GitHub Actions.
 status: active
 escopo: berkahn
 ---
@@ -187,11 +187,24 @@ Configure um único projeto Vercel com o build completo:
 
 O funil canônico é `novo` → `em_contato` → `qualificado` → `proposta_enviada` → `convertido`, com `desqualificado` exigindo motivo. `qualificado_em` registra a primeira qualificação e não é apagado por regressão posterior; `convertido_em` representa fechamento efetivo. Cadastro manual aceita WhatsApp, telefone, email e indicação, mostra candidatos a duplicidade e nunca dispara GA4.
 
-As mutações de funil vivem em RPCs transacionais da migration `024_leads_crm_supabase.sql`; `027_lead_operations_artifacts.sql` acrescenta equipe, prioridade, resumo operacional e anexos, e `029_lead_artifact_atomic_delete.sql` torna a remoção do vínculo + entrada na fila de Storage uma única transação. Logs usam `Lead <prefixo-do-UUID>` em `entity_name`; PII e notas ficam em `details` e seguem a retenção. A migration 026 restringe leads, logs, orçamentos, propostas, apresentações e documentos ao email administrativo canônico — apenas possuir um JWT `authenticated` não basta. A matriz anon / authenticated não autorizado / admin / service role, a reversão atômica, a fila de arquivos e o payload push sem PII são verificados por `npm run test:leads`.
+As mutações de funil vivem em RPCs transacionais da migration `024_leads_crm_supabase.sql`; `027_lead_operations_artifacts.sql` acrescenta equipe, prioridade, resumo operacional e anexos, e `029_lead_artifact_atomic_delete.sql` torna a remoção do vínculo + entrada na fila de Storage uma única transação. A migration `031_admin_members_multiuser.sql` reaproveita `lead_responsaveis` como cadastro de membros, vincula cada linha a `auth.users` e substitui o email canônico por papéis ativos. Logs usam `Lead <prefixo-do-UUID>` em `entity_name`; PII e notas ficam em `details` e seguem a retenção. A matriz anon / membro sem papel / comercial / conteúdo / proprietário / service role, a reversão atômica, a fila de arquivos e o payload push sem PII são cobertos por RLS e pelos testes transacionais do CRM.
+
+### Identidade e papéis
+
+O acesso é por convite no Supabase Auth. Cada pessoa recebe email, define a própria senha em `/admin/definir-senha` e usa o mesmo login em todos os dispositivos. A conta `contato.berkahn@gmail.com` foi preservada como `owner`; não existe mais senha compartilhada na UX. `/admin/configuracoes` concentra convite, ativação e papel:
+
+| Papel | Acesso principal |
+|---|---|
+| `owner` | Todos os módulos, convites e configuração da equipe |
+| `comercial` | Leads, orçamentos, propostas e analytics |
+| `conteudo` | Conteúdo, posts, documentações, apresentações e analytics |
+| `viewer` | Dashboard, analytics e documentações em leitura |
+
+O `proxy.ts` bloqueia rotas incompatíveis antes da renderização; RLS e RPCs repetem a autorização no banco. `is_berkahn_admin()` permanece como guarda comercial para RPCs legados, enquanto `has_admin_role()` expressa leituras e mutações dos outros domínios.
 
 Arquivos de até 6 MB (`PDF`, `DOCX`, `XLSX`, `JPEG`, `PNG`, `WebP`) usam upload assinado direto ao bucket privado `lead-files`; o arquivo não atravessa a função Vercel. Arquivos grandes e pastas permanecem no Drive e entram como URL HTTPS. O Drive não é duplicado nem sincronizado automaticamente. Ao anonimizar, links externos são removidos e objetos privados entram em `lead_storage_cleanup` até a Edge Function confirmar a exclusão.
 
-A PWA do admin usa `/admin/manifest.webmanifest` e `/admin-sw.js`, sem cachear telas ou PII. Cada dispositivo opta por Web Push. A outbox `lead_notification_outbox` recebe apenas título, texto, URL genérica e tag; não contém nome, contato ou UUID do lead. Novos contatos e próximas ações vencidas são deduplicados. As chaves abaixo foram configuradas nos dois projetos Vercel em 2026-08-14:
+A PWA do admin usa `/admin/manifest.webmanifest` e `/admin-sw.js`, sem cachear telas ou PII. A tela de configurações oferece instalação quando o navegador expõe `beforeinstallprompt` e orientação manual no iPhone. Cada usuário escolhe os tipos de alerta e cada dispositivo opta separadamente por Web Push. A outbox `lead_notification_outbox` recebe apenas título, texto, URL genérica e tag; não contém nome, contato ou UUID do lead. Novos contatos e próximas ações vencidas são deduplicados. As chaves abaixo foram configuradas nos dois projetos Vercel em 2026-08-14:
 
 ```text
 NEXT_PUBLIC_VAPID_PUBLIC_KEY
@@ -200,7 +213,11 @@ VAPID_SUBJECT=mailto:administrativo@berkahn.com.br
 LEAD_PUSH_CRON_SECRET
 ```
 
-O mesmo `LEAD_PUSH_CRON_SECRET` está no Supabase Vault como `lead_push_cron_secret`. O job `berkahn-lead-push-dispatch` (job 1) chama `https://admin.berkahn.com.br/api/admin/push/dispatch` a cada 15 minutos. A primeira execução automática, em 2026-08-14 às 12:30 UTC, terminou como `succeeded` e recebeu HTTP 200, sem timeout ou erro. O dispatcher é aceito sem cookie somente nessa rota e autentica por segredo constante; no domínio público `/api/admin/**` continua 404. Para receber notificações, cada navegador ainda precisa abrir `/admin/configuracoes` autenticado e ativar a assinatura.
+O mesmo `LEAD_PUSH_CRON_SECRET` está no Supabase Vault como `lead_push_cron_secret`. O job `berkahn-lead-push-dispatch` (job 1) chama `https://admin.berkahn.com.br/api/admin/push/dispatch` a cada 15 minutos. O dispatcher é aceito sem cookie somente nessa rota e autentica por segredo constante; no domínio público `/api/admin/**` continua 404. Ele envia apenas para membros `owner`/`comercial` ativos, respeita a preferência individual e registra `skipped_no_subscribers` quando não há dispositivo elegível, em vez de marcar falsamente como enviado. Para receber notificações, cada navegador precisa abrir `/admin/configuracoes`, instalar a PWA se desejado e ativar a assinatura.
+
+### Analytics mensal hospedado
+
+`.github/workflows/analytics-monthly.yml` executa no dia 4 de cada mês, às 12:00 UTC, quando o mês anterior já está fechado e o atraso do GSC foi absorvido. O workflow reutiliza `scripts/analytics/generate-report.mjs`, grava `analytics_snapshots` no Supabase e também aceita disparo manual com `month=AAAA-MM`. OAuth pode vir dos arquivos locais ou dos segredos JSON `GOOGLE_OAUTH_CLIENT_JSON` e `GOOGLE_OAUTH_TOKENS_JSON`; o job também exige `GA4_PROPERTY_ID`, `GSC_SITE_URL`, `NEXT_PUBLIC_SUPABASE_URL` e `SUPABASE_SERVICE_KEY`. Uma falha deixa o workflow vermelho e não depende de tarefa local, computador ligado ou worktree persistente.
 
 Orçamentos e propostas têm `lead_id`. “Criar orçamento” abre o wizard existente com contato e vínculo preenchidos; salvar rascunho não move o funil e finalizar somente registra atividade. O módulo de propostas continua placeholder.
 
@@ -252,7 +269,7 @@ Configure um deploy hook no Vercel para rebuild automático:
 
 ## Segurança
 
-- **Autenticação**: Supabase Auth com email/senha
+- **Autenticação**: Supabase Auth por convite, email/senha individual e recuperação de senha
 - **RLS**: Row Level Security em todas as tabelas
 - **Middleware**: Proteção de rotas `/admin/*`
 - **HTTPS**: Obrigatório via Vercel

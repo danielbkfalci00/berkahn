@@ -17,6 +17,8 @@ interface PageProps {
     responsavel?: string;
     periodo?: string;
     vencida?: string;
+    semResponsavel?: string;
+    semAcao?: string;
     arquivados?: string;
     page?: string;
     view?: "inbox" | "kanban";
@@ -50,13 +52,15 @@ export default async function LeadsPage({ searchParams }: PageProps) {
   if (params.canal) query = query.eq("canal", params.canal);
   if (params.segmento) query = query.eq("segmento", params.segmento);
   if (params.prioridade) query = query.eq("prioridade", params.prioridade);
-  if (params.responsavel) query = query.eq("responsavel_id", params.responsavel);
+  if (params.semResponsavel === "1") query = query.is("responsavel_id", null);
+  else if (params.responsavel) query = query.eq("responsavel_id", params.responsavel);
   if (params.periodo && ["7", "28", "90"].includes(params.periodo)) {
     const from = new Date();
     from.setUTCDate(from.getUTCDate() - Number(params.periodo));
     query = query.gte("criado_em", from.toISOString());
   }
   if (params.vencida === "1") query = query.lt("proxima_acao_em", new Date().toISOString());
+  if (params.semAcao === "1") query = query.is("proxima_acao_em", null);
   query = params.arquivados === "1" ? query.not("arquivado_em", "is", null) : query.is("arquivado_em", null);
 
   const from = view === "kanban" ? 0 : (page - 1) * PAGE_SIZE;
@@ -64,7 +68,7 @@ export default async function LeadsPage({ searchParams }: PageProps) {
   const [{ data, count, error }, kpis, responsiblesResult] = await Promise.all([
     query.range(from, from + limit - 1),
     getLeadKpis(),
-    supabase.from("lead_responsaveis").select("id,nome,ativo,ordem").eq("ativo", true).order("ordem").order("nome"),
+    supabase.from("lead_responsaveis").select("id,nome,ativo,ordem").eq("ativo", true).eq("recebe_leads", true).order("ordem").order("nome"),
   ]);
   if (error) throw new Error(`Falha ao carregar leads: ${error.message}`);
   if (responsiblesResult.error) throw new Error(`Falha ao carregar responsáveis: ${responsiblesResult.error.message}`);

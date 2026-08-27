@@ -15,7 +15,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { ComentariosRail } from "@/components/admin/documentacoes/ComentariosRail";
 import { criarThread } from "@/app/admin/documentacoes/actions";
-import { useAutor } from "@/hooks/use-autor";
 import { useDocumentoBridge } from "@/hooks/use-documento-bridge";
 import type { RectSelecao } from "@/lib/documentacoes/protocolo";
 import { CATEGORIA_LABEL, type DocumentoMeta } from "@/types/documentacao";
@@ -24,6 +23,8 @@ import type { Ancora, Thread, TipoComentario } from "@/types/comentario";
 type Props = {
   meta: DocumentoMeta;
   threadsIniciais: Thread[];
+  authorName: string;
+  canComment: boolean;
 };
 
 function formatarDataHora(iso: string): string {
@@ -38,7 +39,7 @@ function formatarDataHora(iso: string): string {
   });
 }
 
-export function DocumentoViewer({ meta, threadsIniciais }: Props) {
+export function DocumentoViewer({ meta, threadsIniciais, authorName, canComment }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const molduraRef = useRef<HTMLDivElement>(null);
   const [emTelaCheia, setEmTelaCheia] = useState(false);
@@ -63,7 +64,6 @@ export function DocumentoViewer({ meta, threadsIniciais }: Props) {
   const [criando, iniciarCriacao] = useTransition();
   const [erroCriacao, setErroCriacao] = useState<string | null>(null);
 
-  const { nome, carregado, salvar } = useAutor();
   const rawUrl = `/admin/documentacoes/${meta.slug}/raw`;
 
   useEffect(() => {
@@ -138,7 +138,7 @@ export function DocumentoViewer({ meta, threadsIniciais }: Props) {
   }
 
   function criar(corpo: string, tipo: TipoComentario) {
-    if (!pendente || !nome) return;
+    if (!pendente || !canComment) return;
     setErroCriacao(null);
     iniciarCriacao(async () => {
       const res = await criarThread({
@@ -146,7 +146,7 @@ export function DocumentoViewer({ meta, threadsIniciais }: Props) {
         ancora: pendente,
         corpo,
         tipo,
-        autorNome: nome,
+        autorNome: authorName,
         docVersao: meta.atualizadoEm,
       });
       if (res.error || !res.data) {
@@ -169,7 +169,7 @@ export function DocumentoViewer({ meta, threadsIniciais }: Props) {
   // moldura tem overflow-hidden.
   const molduraRect = molduraRef.current?.getBoundingClientRect();
   const pilula =
-    rect && molduraRect && typeof document !== "undefined"
+    canComment && rect && molduraRect && typeof document !== "undefined"
       ? createPortal(
           <button
             type="button"
@@ -294,9 +294,8 @@ export function DocumentoViewer({ meta, threadsIniciais }: Props) {
               threads={threads}
               orfas={orfas}
               documentoAtualizadoEm={meta.atualizadoEm}
-              autorNome={nome}
-              autorCarregado={carregado}
-              onSalvarAutor={salvar}
+              autorNome={authorName}
+              canComment={canComment}
               pendente={pendente}
               pendenteEnviando={criando}
               pendenteErro={erroCriacao}

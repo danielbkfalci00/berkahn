@@ -1,8 +1,21 @@
 import "server-only";
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import type { AdminMembership, AdminRole } from "@/types/analytics";
 
-export const BERKAHN_ADMIN_EMAIL = "contato.berkahn@gmail.com";
+export async function getAdminSession() {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return null;
+  const { data: membership, error } = await supabase
+    .from("lead_responsaveis")
+    .select("id,nome,email,role,ativo,recebe_leads,notificar_novos_leads,notificar_acoes_vencidas")
+    .eq("user_id", user.id)
+    .eq("ativo", true)
+    .maybeSingle();
+  if (error || !membership) return null;
+  return { supabase, user, membership: membership as AdminMembership };
+}
 
 /**
  * Barreira de autenticação para route handlers sob /api/admin.
@@ -18,13 +31,11 @@ export const BERKAHN_ADMIN_EMAIL = "contato.berkahn@gmail.com";
  *   const barrado = await exigirSessao()
  *   if (barrado) return barrado
  */
-export async function exigirSessao(): Promise<NextResponse | null> {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user || user.email?.toLowerCase() !== BERKAHN_ADMIN_EMAIL) {
+export async function exigirSessao(
+  roles: AdminRole[] = ["owner", "comercial"]
+): Promise<NextResponse | null> {
+  const session = await getAdminSession();
+  if (!session || !roles.includes(session.membership.role)) {
     return NextResponse.json({ error: "Não autorizado" }, { status: 401 });
   }
   return null;
