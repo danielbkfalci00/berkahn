@@ -9,7 +9,7 @@ tags:
 ai_summary: Criar post LinkedIn Berkahn a partir de artigo ou tema. Calibrado por Bruno. Abre numa situação concreta do público, exige texto contínuo sem frase de impacto isolada, prioriza 110-140 palavras, CTA útil e imagem de fotografia documental sem props encenados. Usado por /linkedin, com gate em check-linkedin.mjs.
 status: locked
 locked: true
-versao: 1.2
+versao: 1.2.1
 calibrado_em: 2026-08-27
 ---
 
@@ -156,6 +156,18 @@ concreto já demonstrou.
   Precisa sair em 0. Ele confere extensão, os vícios listados acima,
   terminologia LSF, hashtags, a URL com UTM e a frase de impacto isolada.
   Se ele reprovar, o texto é reescrito, não remendado no ponto que ele apontou.
+- **Passar no gate não é o mesmo que estar legível.** Depois do 0, leia de novo
+  perguntando se cada frase entrega o que a seguinte precisa. Em 27/08 um texto
+  passou em 20 de 20 e o Bruno reprovou por confuso: abria falando de altura de
+  muro antes de o leitor saber que altura importava, e usava "empuxo" e "platô"
+  sem apresentar nenhum dos dois. O gate confere conformidade, não legibilidade.
+- **Não comprima para bater a contagem.** Foi a compressão que produziu aquele
+  texto, porque as palavras cortadas eram justamente as que ligavam uma ideia na
+  outra. Quando o assunto é denso de número e de termo técnico, prefira ficar
+  entre 140 e 160 com o raciocínio inteiro a entregar 140 em taquigrafia. Trocar
+  o termo técnico por explicação em português custa palavra e vale a pena: "um
+  muro com o dobro da altura aguenta quatro vezes mais empurrão de terra" no
+  lugar de "o empuxo cresce com o quadrado da altura".
 
 ## O QUE NÃO FAZER
 
