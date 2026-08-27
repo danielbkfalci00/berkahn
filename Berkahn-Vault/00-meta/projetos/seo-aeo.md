@@ -1,7 +1,7 @@
 ---
 tipo: projeto
 criado: 2026-05-22
-atualizado: 2026-08-07
+atualizado: 2026-08-27
 tags:
   - project/site
   - project/blog
@@ -47,6 +47,19 @@ subagents_uteis: []
 Dados fechados de julho de 2026, consolidados em [[2026-08-diagnostico-integrado-site]].
 
 **A indexação deixou de ser o bloqueio crítico**: 34 de 38 artigos indexados (89%), contra 6/44 em abril. As 4 restantes estão em "Crawled/Discovered - currently not indexed" e viraram P0 nominal, não estrutural.
+
+> [!important] Artigo novo não indexa sozinho, nem estando no sitemap
+> Publicar coloca a URL no ar e no sitemap, e isso **não basta**. Em 2026-08-25 os
+> dois artigos publicados pelo `/conteudo` estavam em `Discovered` com crawl
+> nunca, um deles havia uma semana. A submissão manual no Search Console levou os
+> dois a `Crawled` no mesmo dia e a `Submitted and indexed` em dois dias.
+>
+> O passo virou item explícito da etapa de documentação do `/conteudo`. O
+> diagnóstico completo e o critério de quando parar de tratar como problema de
+> submissão vivem em [[blog]], no callout "Publicar não indexa". Aqui fica só o
+> ponteiro, para o fato não existir em dois lugares.
+>
+> Conferir com `node --env-file=.env.local scripts/analytics/adhoc-inspect-urls.mjs <slug>`.
 
 **O tráfego deixou de ser branded**: 98,8% dos cliques das top queries vêm de termos genéricos ("steel frame valor m2", "casas steel frame preço m2"), contra 100% branded em abril. A meta de chegar a 40% branded foi superada com folga — o que muda a pergunta de "como ser descoberto" para "como converter quem já chega".
 
