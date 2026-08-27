@@ -217,7 +217,7 @@ O mesmo `LEAD_PUSH_CRON_SECRET` está no Supabase Vault como `lead_push_cron_sec
 
 ### Analytics mensal hospedado
 
-`.github/workflows/analytics-monthly.yml` executa no dia 4 de cada mês, às 12:00 UTC, quando o mês anterior já está fechado e o atraso do GSC foi absorvido. O workflow reutiliza `scripts/analytics/generate-report.mjs`, grava `analytics_snapshots` no Supabase e também aceita disparo manual com `month=AAAA-MM`. OAuth pode vir dos arquivos locais ou dos segredos JSON `GOOGLE_OAUTH_CLIENT_JSON` e `GOOGLE_OAUTH_TOKENS_JSON`; o job também exige `GA4_PROPERTY_ID`, `GSC_SITE_URL`, `NEXT_PUBLIC_SUPABASE_URL` e `SUPABASE_SERVICE_KEY`. Uma falha deixa o workflow vermelho e não depende de tarefa local, computador ligado ou worktree persistente.
+`.github/workflows/analytics-monthly.yml` executa no dia 4 de cada mês, às 12:00 UTC, quando o mês anterior já está fechado e o atraso do GSC foi absorvido. O workflow reutiliza `scripts/analytics/generate-report.mjs`, grava `analytics_snapshots` no Supabase e também aceita disparo manual com `month=AAAA-MM`. OAuth pode vir dos arquivos locais ou dos segredos JSON `GOOGLE_OAUTH_CLIENT_JSON` e `GOOGLE_OAUTH_TOKENS_JSON`; o job também exige `GA4_PROPERTY_ID`, `GSC_SITE_URL`, `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` e `SUPABASE_SERVICE_KEY`. Uma falha deixa o workflow vermelho e não depende de tarefa local, computador ligado ou worktree persistente.
 
 Orçamentos e propostas têm `lead_id`. “Criar orçamento” abre o wizard existente com contato e vínculo preenchidos; salvar rascunho não move o funil e finalizar somente registra atividade. O módulo de propostas continua placeholder.
 
