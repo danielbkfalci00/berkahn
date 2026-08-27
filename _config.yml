@@ -1,0 +1,41 @@
+title: Berkahn — endereço legado
+url: https://danielbkfalci00.github.io
+baseurl: /berkahn
+
+# O Pages legado ainda aponta para a raiz de main. Publicamos somente duas
+# páginas de redirecionamento; o site real continua exclusivamente na Vercel.
+exclude:
+  - .agents
+  - .claude
+  - .codex
+  - .env.example
+  - .github
+  - .gitignore
+  - .gitleaks.toml
+  - .playwright-mcp
+  - AGENTS.md
+  - Berkahn-Vault
+  - Docs
+  - app
+  - claude-code-workflows
+  - claude.md
+  - components
+  - components.json
+  - data
+  - eslint.config.mjs
+  - hooks
+  - lib
+  - next.config.ts
+  - package-lock.json
+  - package.json
+  - postcss.config.mjs
+  - proxy.ts
+  - public
+  - scripts
+  - supabase
+  - tailwind.config.ts
+  - tests-playwright
+  - tsconfig.json
+  - types
+  - vault-manifest.json
+  - vercel.json
