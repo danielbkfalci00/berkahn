@@ -81,6 +81,7 @@ tmpgitleaks*.json
 !/scripts/conteudo/
 /scripts/conteudo/*
 !/scripts/conteudo/pauta.mjs
+!/scripts/conteudo/check-linkedin.mjs
 !/scripts/analytics/
 /scripts/analytics/*
 !/scripts/analytics/fetch-ga4.mjs
