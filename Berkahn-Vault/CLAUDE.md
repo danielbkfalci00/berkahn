@@ -1,7 +1,7 @@
 ---
 tipo: meta
 criado: 2026-05-21
-atualizado: 2026-08-11
+atualizado: 2026-08-27
 tags:
   - ai/context
   - status/active
@@ -208,6 +208,6 @@ Tag `project/<nome>` segue 1:1 com nome do hub (`project/blog`, `project/linkedi
 | `vault-backfill-articles.mjs` | Normaliza frontmatter artigos publicados + rename slugs canonical |
 | `vault-backfill-ai-summary.mjs` | Preenche ai_summary + rodapé wikilinks (idempotente via marker) |
 | `vault-supabase-resync.mjs` | GET check ou PATCH meta tags Supabase (`$env:SUPABASE_SERVICE_KEY`) |
-| `vault-validate.mjs` | Linter de completude (9 validações, exit 0/1/2, ANSI ou `--json`) |
+| `vault-validate.mjs` | Gate fail-closed de frontmatter, taxonomia, pendências e wikilinks; aceita `--single`, `--type`, `--json` e retorna 0/1/2 |
 
 Documentação: `scripts/VAULT-SCRIPTS-README.md`

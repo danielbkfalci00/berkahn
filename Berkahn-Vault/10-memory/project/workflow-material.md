@@ -1,7 +1,7 @@
 ---
 tipo: memory
 criado: 2026-05-22
-atualizado: 2026-05-22
+atualizado: 2026-08-27
 tags:
   - ai/memory
   - status/active
@@ -56,7 +56,7 @@ how_to_apply: "Output (artigo/post) demanda visual → rodar /material com tema 
 ### 3. Criação no Canva
 - Bruno acessa Canva e cria visual seguindo briefing
 - Usar templates Berkahn quando existirem (manter consistência)
-- Aplicar logo de [[indices-identidade-visual]] (escolher variação por fundo)
+- Aplicar logo de [[indices-marca]] (escolher variação por fundo)
 - Exportar: PNG (alta qualidade) ou WebP (web)
 
 ### 4. Arquivamento
@@ -68,8 +68,8 @@ how_to_apply: "Output (artigo/post) demanda visual → rodar /material com tema 
 ### 5. Catalogação
 - Atualizar índice correspondente em `40-content/materiais/indices/`:
   - [[indices-capas-blog]] para capas
-  - [[indices-pecas-linkedin]] para peças LinkedIn
-  - [[indices-imagens-equipe]], [[indices-imagens-gerais]], etc. para outros
+  - [[indices-materiais-marketing]] para peças LinkedIn
+  - [[indices-equipe]], [[indices-obras-projetos]] ou outra categoria de [[banco-imagens]] para os demais usos
 - Adicionar linha na tabela: arquivo + uso/artigo
 - Atualizar `arquivos_total` no frontmatter
 
@@ -100,7 +100,7 @@ how_to_apply: "Output (artigo/post) demanda visual → rodar /material com tema 
 ## Manutenção e qualidade
 
 - Padronizar naming: `[slug-do-artigo].webp` para capa blog, `YYYY-MM-DD-tema.png` para LinkedIn
-- Consolidar variações duplicadas em [[indices-capas-blog]] e [[indices-identidade-visual]]
+- Consolidar variações duplicadas em [[indices-capas-blog]] e [[indices-marca]]
 - Pasta `Docs/Marketing Materials/` (Assets, Business Card, Flyer) está VAZIA — popular conforme demanda
 
 ## Gap atual

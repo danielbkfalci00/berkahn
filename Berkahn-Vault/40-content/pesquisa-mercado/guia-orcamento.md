@@ -1,7 +1,7 @@
 ---
 tipo: pesquisa
 criado: 2025-12-01
-atualizado: 2026-05-22
+atualizado: 2026-08-27
 tags:
   - project/comercial
   - project/material
@@ -17,7 +17,7 @@ projetos_relacionados:
 data_pesquisa: 2025-12-01
 ---
 
-> Migrado de `Docs/Orçamento/pesquisa_guia_orçamento_berkahn.md` em 2026-05-22 (Sprint 1.6). Sales-critical: serve de base para orçamentos comerciais. Imagens técnicas (30+) em `Docs/Orçamento/` — ver [[indices-orcamento-imagens]]. Hub: [[pesquisas]] · [[apresentacoes]].
+> Migrado de `Docs/Orçamento/pesquisa_guia_orçamento_berkahn.md` em 2026-05-22 (Sprint 1.6). Sales-critical: serve de base para orçamentos comerciais. Protótipos e imagens técnicas consolidados em [[indices-orcamento-prototipos]]. Hub: [[pesquisas]] · [[apresentacoes]].
 
 # Template de Orçamento Premium para Berkahn: Guia Completo de Pesquisa de Mercado
 

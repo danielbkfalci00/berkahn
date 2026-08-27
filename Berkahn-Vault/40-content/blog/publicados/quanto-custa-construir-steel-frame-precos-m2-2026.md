@@ -13,24 +13,24 @@ slug: quanto-custa-construir-steel-frame-precos-m2-2026
 publicado_em: ""
 data_publicacao: 2026-08-12
 title: "Quanto custa uma casa de 100 m² em Steel Frame em 2026"
+seo_title: "Casa Steel Frame 100 m²: preço em 2026"
 description: "Veja quanto custa uma casa de 100 m² em Light Steel Frame em 2026, o que entra no cálculo e como comparar propostas sem esconder despesas."
+seo_description: "Veja o preço de uma casa Steel Frame de 100 m² em 2026, o que entra no cálculo e como comparar propostas sem deixar despesas importantes fora da conta."
 palavras_chave:
   - casa steel frame 100m2 preço
   - casa de 100 m² em Light Steel Frame
   - custo LSF 2026
-seo_title: "Casa Steel Frame 100 m²: preço em 2026"
-seo_description: "Veja o preço de uma casa Steel Frame de 100 m² em 2026, o que entra no cálculo e como comparar propostas sem deixar despesas importantes fora da conta."
+answer_summary: "Para planejar uma casa de 100 m² em Light Steel Frame no Sudeste, a referência de abril de 2026 equivale a cerca de R$ 304 mil no padrão popular, R$ 454 mil no médio e R$ 620 mil no alto padrão, considerando materiais e mão de obra. No padrão médio, acrescentar projeto e gestão leva a uma faixa indicativa de R$ 523 mil a R$ 600 mil. Terreno, muro, piscina e paisagismo ficam fora."
 supabase_id: 4c8f654e-5275-46c4-bc09-b919f8ceaf45
 url_final: "https://www.berkahn.com.br/atualidades/quanto-custa-construir-steel-frame-precos-m2-2026"
-linkedin_slug: ""
-material_visual_slug: ""
-answer_summary: "Para planejar uma casa de 100 m² em Light Steel Frame no Sudeste, a referência de abril de 2026 equivale a cerca de R$ 304 mil no padrão popular, R$ 454 mil no médio e R$ 620 mil no alto padrão, considerando materiais e mão de obra. No padrão médio, acrescentar projeto e gestão leva a uma faixa indicativa de R$ 523 mil a R$ 600 mil. Terreno, muro, piscina e paisagismo ficam fora."
 contextos_aplicados:
   - berkahn-brand
   - seo-aeo-strategy
   - article-pipeline
   - copy-sem-travessao
   - steel-frame-domain
+linkedin_slug: ""
+material_visual_slug: ""
 ---
 
 Para planejar uma casa de 100 m² em Light Steel Frame no Sudeste, a referência pública mais recente equivale a cerca de **R$ 304 mil no padrão popular, R$ 454 mil no médio e R$ 620 mil no alto padrão**. Esses valores consideram materiais e mão de obra. No cenário médio, incluir projeto e gestão leva a uma faixa indicativa de **R$ 523 mil a R$ 600 mil**.

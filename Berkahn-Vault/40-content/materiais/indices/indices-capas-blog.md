@@ -1,7 +1,7 @@
 ---
 tipo: indice
 criado: 2026-07-01
-atualizado: 2026-07-01
+atualizado: 2026-08-27
 tags:
   - project/materiais
   - status/active
@@ -41,8 +41,8 @@ arquivos_duplicados: 3
 | `georgetown-2.webp` | [[construir-hospital-em-operacao]] | canonical WEBP |
 | `georgetown.png` | [[construir-hospital-em-operacao]] | par PNG de `georgetown-2.webp` (consolidar) |
 | `lsf-alvenaria.png` | [[steel-frame-vs-alvenaria]] | |
-| `lsf-mundial.webp` | [[steel-frame-no-mundo]] | canonical; já em produção → `public/images/blog/steel-frame-no-mundo/cover.webp` |
-| `lsf-mundial.png` | [[steel-frame-no-mundo]] | par PNG de `lsf-mundial.webp` (consolidar) |
+| `lsf-mundial.webp` | [[40-content/blog/publicados/steel-frame-no-mundo|steel-frame-no-mundo]] | canonical; já em produção → `public/images/blog/steel-frame-no-mundo/cover.webp` |
+| `lsf-mundial.png` | [[40-content/blog/publicados/steel-frame-no-mundo|steel-frame-no-mundo]] | par PNG de `lsf-mundial.webp` (consolidar) |
 | `mito-verdade-lsf.png` | [[mitos-verdades-steel-frame]] | |
 | `normas-lsf.png` | [[certificacoes-steel-frame]] / [[normas-light-steel-frame-brasil]] | já em produção → `public/images/img_blog/Normas LSF/normas_lsf.png` |
 | `protecao-contra-queda.png` | [[protecao-contra-quedas-construcao-civil]] | |

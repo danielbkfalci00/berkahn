@@ -16,14 +16,14 @@ Mapa temático do vault Berkahn. Para visão estrutural (por pasta), ver [[../in
 
 | Projeto | Status | Bloqueio principal | Workflow | Atualizado |
 |---------|--------|--------------------|----------|------------|
-| [[blog]] | active | Atualização do slug existente bloqueada pela substituição do markdown publicado | [[workflow-conteudo]] | 2026-08-11 |
-| [[linkedin]] | active | Capa 4:5 pronta; upload, aprovação e URL/data continuam manuais | [[workflow-conteudo]] | 2026-08-11 |
+| [[blog]] | active | Revisão de casa LSF 100 m² staged; falta aprovação humana e publicação | [[workflow-conteudo]] | 2026-08-27 |
+| [[linkedin]] | active | Três pautas aprovadas aguardam publicação manual e URL/data | [[workflow-conteudo]] | 2026-08-25 |
 | [[site]] | active | Smoke multidispositivo; Pages neutralizado, falta encerramento administrativo | [[workflow-site]] | 2026-08-27 |
-| [[seo-aeo]] | active | **P0**: 9 posts sem meta tags (indexação resolvida: 89%) | [[workflow-seo]] | 2026-07-29 |
-| [[apresentacoes]] | active | Roteiros não versionados (parcial) | [[workflow-comercial]] | 2026-05-22 |
-| [[00-meta/projetos/materiais|materiais]] | active | 9 índices criados; 4 capas órfãs | [[workflow-material]] | 2026-05-22 |
+| [[seo-aeo]] | active | Baselines de conversão/IA prontos; decisões aguardam janelas de 7/28 dias | [[workflow-seo]] | 2026-08-27 |
+| [[apresentacoes]] | active | Roteiros parcialmente versionados; falta smoke dos 16 slides | [[workflow-comercial]] | 2026-08-27 |
+| [[00-meta/projetos/materiais|materiais]] | active | Banco catalogado; institucional v4 e 4 capas órfãs pendentes | [[workflow-material]] | 2026-07-20 |
 | [[pesquisas]] | active | Validar custos por etapa com dado interno anonimizado | [[workflow-pesquisa]] | 2026-08-11 |
-| [[orcamento-automacao]] | active | Aguarda Bruno setar `CHROME_LOCAL_PATH` + smoke test E2E em prod | [[workflow-site]] | 2026-06-24 |
+| [[orcamento-automacao]] | active | MVP em produção; falta smoke E2E do PDF | [[workflow-site]] | 2026-06-30 |
 
 **Dashboards dinâmicos**: [[projetos.base]] · [[kpis.base]] · [[conhecimento.base]] · [[materiais.base]]
 **Sprint atual**: [[sprint-ativa]] · **Standups**: `00-meta/standup/` · **Wrap-ups**: `00-meta/wrap-up/`

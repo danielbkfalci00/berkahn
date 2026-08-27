@@ -1,7 +1,7 @@
 ---
 tipo: meta
 criado: 2026-05-21
-atualizado: 2026-07-01
+atualizado: 2026-08-27
 tags:
   - ai/memory
   - status/active

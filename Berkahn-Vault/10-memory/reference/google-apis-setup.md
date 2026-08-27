@@ -1,7 +1,7 @@
 ---
 tipo: memory
 criado: 2026-05-27
-atualizado: 2026-07-30
+atualizado: 2026-08-27
 tags:
   - ai/memory
   - status/active
@@ -51,7 +51,7 @@ O `test-auth.mjs` no início do cron mensal avisa se a chave estiver perto de ex
 
 ## Como usar
 
-Comando: `/performance` (ver [[performance]] em `.claude/commands/`)
+Comando: `/performance` (definição em `.claude/commands/performance.md`)
 
 ```bash
 # Último mês fechado (default)

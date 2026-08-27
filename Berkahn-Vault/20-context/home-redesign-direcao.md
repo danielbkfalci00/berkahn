@@ -1,7 +1,7 @@
 ---
 tipo: context
 criado: 2026-08-05
-atualizado: 2026-08-18
+atualizado: 2026-08-27
 tags:
   - domain/brand
   - domain/architecture
@@ -104,10 +104,10 @@ Relacionados: [[article-pipeline]] · [[seo-aeo-strategy]] · [[site]] · [[blog
 - [x] ~~**Trocar o take do hero por fonte 1080p/HD**~~ — concluído em 2026-08-06 com 72/36 frames, poster de 116 KB e seis eager em 580 KB
 - [x] ~~**Review visual humano completo + `@design-review`**~~ — repetido em 2026-08-06 para o novo take; os dois gaps materiais foram corrigidos: CTA mobile acima do consentimento e marquee estático em reduced-motion. Verificado em 390, 768, 1024 e 1440 px
 - [x] ~~**Mergear PR #43**~~ — mergeado em 2026-08-06; o follow-up PR #44 fechou progresso de leitura, featured único e carregamento de analytics por consentimento. Migration 012 aplicada: 16/9/8/3/4 posts nas cinco categorias e um único destaque
-- [ ] Importar Clube Quinta dos Lagos (26 imagens em `C:\Users\bruno\Downloads\Arquitetura\originais\`) para o banco; o `ProjectsRail` está preservado, mas desmontado da home até haver portfólio curado para reativá-lo
-- [ ] Otimização de fontes: mover Playfair + Caveat do layout root para a rota `/orcamento` (únicos consumidores) — menos 2 famílias em todas as demais páginas
-- [ ] Medir CWV do novo take em produção. Três rodadas Lighthouse mobile locais com os assets finais: LCP 2,80–4,24 s, CLS 0–0,001 e TBT 682–1.226 ms; sem baseline local comparável, o gate de não regressão fica para Speed Insights. Payload por dispositivo: 5,28 MB desktop / 1,01 MB mobile, com 580 KB imediatos no desktop
-- [ ] First Load JS da home: 264 kB (stack GSAP+Lenis; antes documentado em 271 kB) — avaliar lazy-load das seções GSAP abaixo da dobra
+- A importação do Clube Quinta dos Lagos e a reativação do `ProjectsRail` têm owner em [[site#Próximos 7 dias]].
+- A otimização de Playfair/Caveat e o lazy-load das seções GSAP têm owner em [[site#Próximos 7 dias]].
+- O baseline local do novo take foi LCP 2,80–4,24 s, CLS 0–0,001 e TBT 682–1.226 ms; payload de 5,28 MB desktop / 1,01 MB mobile, com 580 KB imediatos no desktop. A tarefa de campo vive em [[site#Próximos 7 dias]].
+- First Load JS observado: 264 kB com GSAP+Lenis, contra 271 kB antes do redesign.
 - [x] ~~**Próxima página do redesign: `/atualidades`**~~ — concluída em 2026-08-06 com abertura editorial fundida, taxonomia 5 categorias, bento, payload reduzido e ISR 60 preservado. CWV pós-deploy segue como gate aberto
 
 Relacionados: [[site]] · [[berkahn-brand]] · [[design-principles]] · [[guia-design-berkahn]]
