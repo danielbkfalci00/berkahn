@@ -1,7 +1,7 @@
 ---
 tipo: projeto
 criado: 2026-05-22
-atualizado: 2026-07-06
+atualizado: 2026-08-27
 tags:
   - project/apresentacao
   - status/active
@@ -89,9 +89,9 @@ Ver [[presentation-system]] para tabela completa. Resumo: Cover, About, Methodol
 
 ## Materiais de apoio
 
-- [[indices-imagens-comercial]] — imagens comerciais em `Docs/Imagens/Comercial/`
-- [[indices-imagens-projetos]] — imagens de obras em `Docs/Imagens/projetos/`
-- [[steel-frame-no-mundo]] — roteiro migrado de `Docs/apresentacoes/`
+- [[indices-tecnico-lsf]] — diagramas e imagens técnicas para contexto comercial
+- [[indices-obras-projetos]] — fotos e renders de obras/projetos
+- [[40-content/apresentacoes/steel-frame-no-mundo|steel-frame-no-mundo]] — roteiro migrado de `Docs/apresentacoes/`
 
 ## Como adicionar slide novo
 

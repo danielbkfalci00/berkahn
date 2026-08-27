@@ -1,7 +1,7 @@
 ---
 tipo: auditoria
 criado: 2026-08-07
-atualizado: 2026-08-14
+atualizado: 2026-08-27
 tags:
   - project/site
   - project/blog
@@ -178,7 +178,7 @@ Pendências externas:
 - [x] Configurar VAPID e o segredo do dispatcher nos projetos site/admin
 - [x] Importação/reconciliação da planilha retirada do rollout pela decisão Supabase-only; higiene de PII histórica permanece opcional em [[google-sheets]]
 - [x] Publicar a Edge Function e agendar a retenção mensal
-- [ ] @bruno Monitorar Speed Insights por sete dias e consolidar p75 de campo em 28 dias sem misturar a série pré e pós-Consent Mode #pendencia
+- A medição de CWV tem owner único em [[site#Próximos 7 dias]]; este diagnóstico preserva somente o baseline.
 - [ ] @bruno Repetir as 15 consultas no Claude autenticado e completar as duas consultas instáveis do ChatGPT #pendencia
 - [ ] @bruno Realizar cinco testes de tarefa antes de qualquer A/B test ou decisão definitiva de CRO #pendencia
 

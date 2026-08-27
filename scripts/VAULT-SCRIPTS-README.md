@@ -1,7 +1,7 @@
 ---
 tipo: documentacao
 criado: 2026-05-22
-atualizado: 2026-08-06
+atualizado: 2026-08-27
 tags:
   - project/site
   - status/active
@@ -106,6 +106,28 @@ O modo de aprendizado exige as custom dimensions de evento `article_slug` e
 `percent_scrolled` no GA4. Sem elas, o relatório continua e marca profundidade
 como indisponível.
 
+### 6. `vault-validate.mjs` — gate do vault
+
+Valida frontmatter obrigatório e não vazio, ordem canônica do Obsidian Linter,
+tipos/status/tags, campos por tipo, pendências canônicas, paths externos e
+wikilinks/anchors. O gate falha se a configuração do Linter não puder ser lida
+ou se receber uma flag desconhecida; não existe fallback silencioso.
+
+```bash
+# Vault inteiro
+node scripts/vault-validate.mjs
+
+# Uma nota, de verdade
+node scripts/vault-validate.mjs --single Berkahn-Vault/00-meta/projetos/site.md
+
+# Filtros e saída para CI
+node scripts/vault-validate.mjs --type=projeto
+node scripts/vault-validate.mjs --json
+```
+
+Exit codes: `0` sem issues, `1` com erro e `2` somente warnings. O validator
+canônico é Node; não existe `validar_vault.py` nem wrapper Python paralelo.
+
 ## Segurança
 
 - Todos os scripts usam `process.env.SUPABASE_SERVICE_KEY` (não hardcoded). Allowlist `.gitleaks.toml` cobre `process.env.[A-Z_]+`.
@@ -114,7 +136,7 @@ como indisponível.
 - `conteudo/pauta.mjs` usa a service role somente no processo local/server-side e registra eventos de automação com `user_id = NULL`.
 - Nenhum script tem fallback para hardcoded key.
 
-### 5. `vault-images.mjs` — Banco de Imagens (2026-07)
+### 7. `vault-images.mjs` — Banco de Imagens (2026-07)
 
 Gerencia o banco de imagens consolidado em `Docs/banco-imagens/` (9 categorias, ~160 arquivos). Fonte de verdade fora do vault; catálogo em `Berkahn-Vault/40-content/materiais/` (MOC `banco-imagens.md` + 9 `indices-*.md` + galerias). `public/images/` (produção Next.js) **nunca** é modificado — só lido para cruzar `em_producao` por sha256.
 
@@ -135,7 +157,7 @@ node scripts/vault-images.mjs --thumbs --list=<arquivo.txt> --outdir=<dir> --wid
 
 **Dependência**: `sharp` (já no `package.json`) para dimensões e thumbnails. **Read-only** exceto `--thumbs`. Log de-para da migração inicial em `Docs/banco-imagens/_migracao-log.json`.
 
-### 6. `watermark-images.mjs` — Marca d'agua BERKAHN (2026-07)
+### 8. `watermark-images.mjs` — Marca d'agua BERKAHN (2026-07)
 
 Aplica marca d'agua "BERKAHN" (wordmark) em lote sobre imagens. Isola so "BERKAHN" (sem tagline) do logo-texto `Docs/banco-imagens/marca/escrito-preto-logo-png.png` via projecao de alpha por linha, recoloriza (branco/preto adaptativo pela regiao central) com opacidade baixa, posiciona grande e centralizado. Preserva orientacao EXIF e os originais (escreve so em `--out`).
 
@@ -171,4 +193,4 @@ operacionais seguros são versionados.
 1. 4 bases novas em `Berkahn-Vault/80-bases/`: `projetos.base`, `kpis.base`, `conhecimento.base`, `materiais.base`
 2. MOC update com seção "Projetos Ativos"
 3. CLAUDE.md (projeto + vault) com novas regras
-4. `scripts/vault-validate.sh` linter de completude
+4. `scripts/vault-validate.mjs` gate de completude e integridade

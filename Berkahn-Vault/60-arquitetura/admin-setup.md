@@ -41,6 +41,10 @@ berkahn.com.br (Site Público)     admin.berkahn.com.br (Painel Admin)
               (Database + Auth + Storage)
 ```
 
+O admin é uma superfície operacional autocontida: `ConditionalFooter` não
+renderiza em nenhuma rota `/admin/**`. O footer institucional permanece apenas
+nas páginas públicas, onde navegação legal e social fazem sentido.
+
 > [!warning] Corrigido em 2026-07-31
 > Este diagrama dizia `output: "export"` para o site público, e a seção de
 > produção mandava usar `npm run build:static` com output `out`. **Nunca foi o

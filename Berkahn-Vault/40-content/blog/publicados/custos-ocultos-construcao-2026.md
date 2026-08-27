@@ -28,12 +28,12 @@ category: Mercado e Custos
 read_time: 8 min
 author: Equipe Berkahn
 answer_summary: "O custo oculto de uma obra raramente é um item esquecido na planilha. É a duração. O CUB paulista R8-N fechou junho de 2026 em R$ 2.221,44 por metro quadrado, e a decomposição do índice mostra por quê: em doze meses a mão de obra subiu 7,05% e as despesas administrativas 7,63%, enquanto os materiais subiram 5,65%. Os dois componentes que correm junto com o calendário sobem mais rápido que o componente que se compra à vista. Cada mês adicional de canteiro aberto compra inflação nos dois itens mais caros do orçamento, e nenhum orçamento inicial precifica prazo."
+supabase_id: ea61e24e-fa71-4563-a2c2-7d3fc082c070
+url_final: "https://www.berkahn.com.br/atualidades/custos-ocultos-construcao-2026"
 contextos_aplicados:
   - berkahn-brand
   - seo-aeo-strategy
   - steel-frame-domain
-supabase_id: ea61e24e-fa71-4563-a2c2-7d3fc082c070
-url_final: "https://www.berkahn.com.br/atualidades/custos-ocultos-construcao-2026"
 ---
 
 Quando uma obra estoura o orçamento, a explicação mais comum é que faltou item na planilha. Taxa de prefeitura, ART, ligação definitiva de água, seguro, limpeza final. Nós vemos essa lista circular há anos, e ela não está errada. Só é pequena demais para explicar um estouro de 30%.

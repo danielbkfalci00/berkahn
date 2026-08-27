@@ -62,9 +62,10 @@ Site em produção (Next.js 16 App Router + Supabase + Vercel + Tailwind + shadc
 - [x] ~~**Modal de contato sem nome acessível**~~ — resolvido em 2026-08-25 (PR #62). O `DialogContent` disparava em produção o aviso do Radix pedindo `DialogTitle`. Duas causas somadas: `ContactForm` é `next/dynamic`, então durante o carregamento do chunk o título ainda não existe no DOM, que é exatamente quando o foco entra no diálogo; e o `{header}` só renderiza no ramo do formulário, então **depois do envio o título desmontava** e o diálogo ficava sem nome pelo resto da sessão. `DialogTitle` e `DialogDescription` passaram a filhos diretos do content dentro de `VisuallyHidden`, com o cabeçalho visível seguindo no formulário. Verificado em produção
 - [x] **Contas Supabase por pessoa**: migration 031 aplicada em 2026-08-27; `lead_responsaveis` virou cadastro de membros vinculado a `auth.users`, com convite, senha individual e papéis `owner`, `comercial`, `conteudo` e `viewer`. Comentários agora resolvem a autoria pela sessão no servidor. Matriz e operação em [[admin-setup]] e [[comentarios-inline-documentacoes]].
 - [x] **Banco do CRM aplicado**: migrations 024–029 em produção; funil, RPCs, vínculos, RLS canônica, responsáveis, prioridade, resumo operacional, arquivos, remoção atômica, outbox push, `pg_cron` e `pg_net` instalados. Matriz RLS, rollback atômico, cleanup de arquivos e payload push sem PII verdes
+- [x] **Importação histórica concluída**: 29 linhas do CSV legado estão no Supabase, todas ativas em `novo` e nenhuma arquivada. O identificador `origem_legado` mantém reexecução idempotente; procedimento em [[admin-setup#CRM de leads]].
 - [x] **Retenção operacional**: `lead-retention` v1 publicada, segredos sincronizados no Edge/Vault e job mensal ativo desde 2026-08-14; rollout sem candidatos ou objetos pendentes
 - [x] **Web Push configurado**: VAPID + `LEAD_PUSH_CRON_SECRET` nos projetos site/admin, segredo homônimo no Vault e dispatcher agendado a cada 15 minutos desde 2026-08-14
-- [x] **Analytics mensal hospedado**: workflow GitHub Actions no dia 4 reutiliza o pipeline GA4/GSC e elimina dependência do computador local; operação e segredos em [[admin-setup]].
+- [x] **Analytics mensal hospedado**: workflow GitHub Actions no dia 4 reutiliza o pipeline GA4/GSC e elimina dependência do computador local. Validado em 2026-08-27 com Julho/2026: run verde e snapshot persistido no Supabase às 14:42 BRT. A primeira tentativa revelou que a anon key já armazenada não estava exposta ao job; corrigido pela PR #70. Operação e segredos em [[admin-setup]].
 - [x] **GA4 Admin concluído**: OAuth de edição validado; `article_slug` e `percent_scrolled` registrados em 10/08
 - [x] **Apps Script encerrado**: nenhuma captura ou notificação depende de Google Sheets; Web Push é o canal opcional do admin
 - **Core Web Vitals de campo**: otimizações estruturais entregues em [[2026-08-diagnostico-integrado-site]]; a tarefa de medição vive em “Próximos 7 dias”.
@@ -87,13 +88,15 @@ Site em produção (Next.js 16 App Router + Supabase + Vercel + Tailwind + shadc
 >
 > O host ainda está tecnicamente ativo porque a conta CLI tem `push`, mas não
 > `admin`. Isso deixou de ser bloqueio de SEO e virou higiene administrativa.
-> A allowlist do `_config.yml` é explícita: todo novo item rastreado na raiz deve
-> ser excluído ou deliberadamente publicado.
+> O `_config.yml` usa uma **denylist fail-open**, não uma allowlist: todo novo
+> item rastreado na raiz precisa ser excluído explicitamente ou será publicado.
 - [x] **Upgrade breaking de dependências concluído em 12/08**: Next 16.3, Sharp 0.35.3, Puppeteer 25.6, ESLint flat e D3 corrigido; `npm audit` retorna zero. Fontes locais retiraram a dependência de Google Fonts no CI. Detalhe em [[stack-nextjs-supabase]]
 - [x] ~~**Próxima página do redesign: `/atualidades`**~~ — concluída em 2026-08-06: abertura fundida, bento, categorias canônicas, payload 141/26 KB e ISR 60 preservado
-- [ ] Importar Clube Quinta dos Lagos para o banco de imagens antes de reativar o rail de projetos
-- [ ] Validar `/institucional/pdf` gerando PDF em produção (pós-merge do #17)
-- [ ] Atualizar o briefing do institucional para **v4** antes de distribuir — o código está em v4, a documentação em v3
+- [ ] @bruno Importar Clube Quinta dos Lagos para o banco de imagens antes de reativar o rail de projetos #pendencia
+- [ ] @bruno Validar `/institucional/pdf` gerando PDF em produção após o merge da PR #17 #pendencia
+- [ ] @bruno Atualizar o briefing do institucional para v4 antes de distribuir; o código está em v4 e a documentação em v3 #pendencia
+- [ ] @codex Mover Playfair e Caveat do layout raiz para a rota de orçamento, os únicos consumidores, e medir a redução no payload global #pendencia
+- [ ] @codex Avaliar lazy-load das seções GSAP abaixo da dobra da home, preservando Lenis, acessibilidade e a narrativa visual #pendencia
 - [x] Validar build (`npm run build`) sem warnings — passou em 2026-08-12 com Next 16.3; três `<img>` migrados, Browserslist atualizado, `middleware` migrado para `proxy` e tracing integral do harness removido
 - [x] **gitleaks pre-commit ativo** — reverificado em 2026-08-27 nos commits das PRs #72 e #73; o hook escaneou apenas o staged e encontrou zero leaks antes de liberar cada commit
 

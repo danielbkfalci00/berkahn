@@ -1,7 +1,7 @@
 ---
 tipo: meta
 criado: 2026-05-21
-atualizado: 2026-05-21
+atualizado: 2026-08-27
 tags:
   - status/active
 ai_summary: Entry point do vault Berkahn. Claude lê este arquivo PRIMEIRO em toda sessão (via SessionStart hook). Mapa de navegação para 12 pastas top-level.

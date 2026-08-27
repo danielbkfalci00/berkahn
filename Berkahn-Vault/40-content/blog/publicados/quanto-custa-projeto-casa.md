@@ -28,12 +28,12 @@ category: Mercado e Custos
 read_time: 9 min
 author: Equipe Berkahn
 answer_summary: "O pacote de projetos de uma casa é cobrado como percentual do custo estimado da obra, tipicamente entre 5% e 15% conforme porte e complexidade. Aplicando essa faixa ao CUB paulista R8-N de junho de 2026, de R$ 2.221,44 por metro quadrado, uma casa de 100 m² tem referência de obra de R$ 222.144 e pacote completo de projetos entre R$ 11.100 e R$ 33.300. A referência profissional é a Tabela de Honorários aprovada pela Resolução nº 64 do CAU/BR, de 8 de novembro de 2013, que estabelece parâmetros de remuneração. O que move dentro da faixa é escopo entregue, não a cidade do escritório."
+supabase_id: b562489f-4b8d-416a-8bfe-6fe36334d4fa
+url_final: "https://www.berkahn.com.br/atualidades/quanto-custa-projeto-casa"
 contextos_aplicados:
   - berkahn-brand
   - seo-aeo-strategy
   - steel-frame-domain
-supabase_id: b562489f-4b8d-416a-8bfe-6fe36334d4fa
-url_final: "https://www.berkahn.com.br/atualidades/quanto-custa-projeto-casa"
 ---
 
 Quem pede orçamento de projeto recebe números que não conversam. Um escritório cobra R$ 8 mil pela casa inteira, outro cobra R$ 30 mil, e a descrição do serviço nos dois cabe em três linhas. A diferença raramente é ganância de um ou generosidade do outro. É escopo.

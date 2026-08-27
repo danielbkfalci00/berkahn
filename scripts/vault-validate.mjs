@@ -2,7 +2,8 @@
 /**
  * vault-validate.mjs - Sprint 3.5 linter de completude do vault
  *
- * 9 validacoes com severidade ERROR/WARN. Exit codes: 0 OK, 1 ERROR, 2 WARN-only.
+ * Validacoes de frontmatter, taxonomia, wikilinks e pendencias.
+ * Exit codes: 0 OK, 1 ERROR, 2 WARN-only.
  *
  * Uso:
  *   node scripts/vault-validate.mjs
@@ -10,6 +11,7 @@
  *   node scripts/vault-validate.mjs --json
  *   node scripts/vault-validate.mjs --quiet
  *   node scripts/vault-validate.mjs --fix-suggestions
+ *   node scripts/vault-validate.mjs --single Berkahn-Vault/00-meta/MOC.md
  */
 
 import fs from 'node:fs/promises';
@@ -22,13 +24,33 @@ const ROOT = path.resolve(__dirname, '..');
 const VAULT = path.join(ROOT, 'Berkahn-Vault');
 const LINTER_CFG = path.join(VAULT, '.obsidian', 'plugins', 'obsidian-linter', 'data.json');
 
-const ARGS = process.argv.slice(2);
-const FLAGS = {
-  json: ARGS.includes('--json'),
-  quiet: ARGS.includes('--quiet'),
-  fixSuggestions: ARGS.includes('--fix-suggestions'),
-  type: ARGS.find(a => a.startsWith('--type='))?.slice(7),
-};
+function parseArgs(args) {
+  const flags = { json: false, quiet: false, fixSuggestions: false, type: undefined, single: undefined };
+  for (let i = 0; i < args.length; i++) {
+    const arg = args[i];
+    if (arg === '--json') flags.json = true;
+    else if (arg === '--quiet') flags.quiet = true;
+    else if (arg === '--fix-suggestions') flags.fixSuggestions = true;
+    else if (arg.startsWith('--type=')) flags.type = arg.slice(7);
+    else if (arg.startsWith('--single=')) flags.single = arg.slice(9);
+    else if (arg === '--single') {
+      flags.single = args[++i];
+      if (!flags.single || flags.single.startsWith('--')) throw new Error('--single exige o caminho de uma nota');
+    } else {
+      throw new Error(`argumento desconhecido: ${arg}`);
+    }
+  }
+  if (flags.type && flags.single) throw new Error('--type e --single nao podem ser usados juntos');
+  return flags;
+}
+
+let FLAGS;
+try {
+  FLAGS = parseArgs(process.argv.slice(2));
+} catch (error) {
+  console.error(error.message);
+  process.exit(1);
+}
 
 const VALID_TYPES = new Set([
   'memory', 'prompt', 'context', 'atomic', 'draft-content', 'meta',
@@ -38,6 +60,7 @@ const VALID_TYPES = new Set([
 const VALID_STATUS = new Set(['draft', 'active', 'review', 'published', 'archived', 'locked', 'stale']);
 const VALID_TAG_ROOTS = new Set(['domain', 'project', 'status', 'ai', 'source', 'tipo']);
 const SKIP_DIRS = new Set(['.obsidian', '.trash', 'node_modules', '.git', '.claude', '91-templates', '99-archive']);
+const INDEX_SKIP_DIRS = new Set(['.obsidian', '.trash', 'node_modules', '.git', '.claude']);
 // 91-templates skipado: arquivos Templater começam com <%* ... %> em vez de YAML
 // 99-archive skipado: arquivos legacy preservados como-foram
 
@@ -50,21 +73,30 @@ const C = {
 let canonicalOrder = [];
 
 async function loadLinterOrder() {
+  let cfg;
   try {
-    const cfg = JSON.parse(await fs.readFile(LINTER_CFG, 'utf-8'));
-    const orderStr = cfg.ruleConfigs?.['yaml-key-sort']?.['yaml-key-priority-sort-order'] || '';
-    canonicalOrder = orderStr.split('\n').filter(Boolean);
-  } catch (e) {
-    canonicalOrder = [];
+    cfg = JSON.parse(await fs.readFile(LINTER_CFG, 'utf-8'));
+  } catch (error) {
+    throw new Error(`config do Obsidian Linter invalida (${relativePath(LINTER_CFG)}): ${error.message}`);
   }
+  const yamlSort = cfg.ruleConfigs?.['yaml-key-sort'];
+  if (yamlSort?.enabled !== true) throw new Error('regra yaml-key-sort do Obsidian Linter esta desativada');
+  const orderStr = yamlSort['yaml-key-priority-sort-order'];
+  if (typeof orderStr !== 'string' || !orderStr.trim()) throw new Error('ordem canonica do Obsidian Linter esta vazia');
+  canonicalOrder = orderStr.split('\n').map(key => key.trim()).filter(Boolean);
+  const requiredOrderKeys = ['tipo', 'criado', 'atualizado', 'tags', 'ai_summary', 'status'];
+  const missingRequired = requiredOrderKeys.filter(key => !canonicalOrder.includes(key));
+  if (missingRequired.length) throw new Error(`ordem canonica nao cobre keys obrigatorias: ${missingRequired.join(', ')}`);
+  const duplicates = canonicalOrder.filter((key, index) => canonicalOrder.indexOf(key) !== index);
+  if (duplicates.length) throw new Error(`ordem canonica tem keys duplicadas: ${[...new Set(duplicates)].join(', ')}`);
 }
 
 function parseFm(content) {
   // Normaliza CRLF -> LF para parser consistente
   const norm = content.replace(/\r\n/g, '\n');
-  if (!norm.startsWith('---\n')) return { fm: {}, body: norm, keys: [], hadYaml: false };
+  if (!norm.startsWith('---\n')) return { fm: {}, body: norm, yaml: '', keys: [], hadYaml: false };
   const end = norm.indexOf('\n---\n', 4);
-  if (end === -1) return { fm: {}, body: norm, keys: [], hadYaml: false };
+  if (end === -1) return { fm: {}, body: norm, yaml: '', keys: [], hadYaml: false };
   const yaml = norm.slice(4, end);
   const body = norm.slice(end + 5);
   const fm = {};
@@ -89,23 +121,28 @@ function parseFm(content) {
     }
     currentArrayKey = null;
   }
-  return { fm, body, keys, hadYaml: true };
+  return { fm, body, yaml, keys, hadYaml: true };
 }
 
-async function walk(dir) {
+async function walk(dir, markdownOnly = true) {
   const out = [];
   const ents = await fs.readdir(dir, { withFileTypes: true });
   for (const e of ents) {
-    if (SKIP_DIRS.has(e.name)) continue;
+    if ((markdownOnly ? SKIP_DIRS : INDEX_SKIP_DIRS).has(e.name)) continue;
     const full = path.join(dir, e.name);
-    if (e.isDirectory()) out.push(...await walk(full));
-    else if (e.isFile() && e.name.endsWith('.md')) out.push(full);
+    if (e.isDirectory()) out.push(...await walk(full, markdownOnly));
+    else if (e.isFile() && (!markdownOnly || e.name.endsWith('.md'))) out.push(full);
   }
   return out;
 }
 
 function relativePath(p) {
   return path.relative(ROOT, p).replace(/\\/g, '/');
+}
+
+function isEmptyValue(value) {
+  if (Array.isArray(value)) return value.length === 0;
+  return value === undefined || value === null || String(value).trim() === '';
 }
 
 function validate(file, parsed) {
@@ -121,6 +158,13 @@ function validate(file, parsed) {
   for (const required of ['tipo', 'criado', 'atualizado', 'tags', 'ai_summary', 'status']) {
     if (!(required in fm)) {
       issues.push({ rule: 1, severity: 'ERROR', file: rel, msg: `campo obrigatorio '${required}' ausente`, fix: `adicionar '${required}:' ao frontmatter` });
+    } else if (isEmptyValue(fm[required])) {
+      issues.push({ rule: 1, severity: 'ERROR', file: rel, msg: `campo obrigatorio '${required}' vazio`, fix: `preencher '${required}' com valor canonico` });
+    }
+  }
+  for (const dateKey of ['criado', 'atualizado']) {
+    if (!isEmptyValue(fm[dateKey]) && !/^\d{4}-\d{2}-\d{2}$/.test(String(fm[dateKey]))) {
+      issues.push({ rule: 1, severity: 'ERROR', file: rel, msg: `campo '${dateKey}' fora de YYYY-MM-DD`, fix: `normalizar '${dateKey}'` });
     }
   }
 
@@ -134,14 +178,16 @@ function validate(file, parsed) {
         break;
       }
     }
-    const unknownKeys = keys.filter(k => !canonicalOrder.includes(k));
+    const unknownKeys = keys.filter(k => !canonicalOrder.includes(k) && !k.startsWith('kpi_'));
     if (unknownKeys.length) {
       issues.push({ rule: 2, severity: 'WARN', file: rel, msg: `keys fora da ordem canonica: ${unknownKeys.join(', ')}`, fix: 'adicionar essas keys a yaml-key-priority-sort-order no data.json do linter' });
     }
   }
 
   // 3. Tags root validos
-  if (Array.isArray(fm.tags)) {
+  if ('tags' in fm && !Array.isArray(fm.tags)) {
+    issues.push({ rule: 3, severity: 'ERROR', file: rel, msg: 'tags deve ser array YAML', fix: 'usar tags em lista multi-line' });
+  } else if (Array.isArray(fm.tags)) {
     for (const t of fm.tags) {
       const root = t.split('/')[0];
       if (!VALID_TAG_ROOTS.has(root)) {
@@ -180,16 +226,11 @@ function validate(file, parsed) {
     }
   }
 
-  // 7. Wikilinks suspeitos
-  const wikilinkRegex = /\[\[([^\]\|#]+?)(?:\||#|\])/g;
-  let match;
-  const wlinks = new Set();
-  while ((match = wikilinkRegex.exec(body)) !== null) {
-    wlinks.add(match[1].trim());
-  }
-  for (const w of wlinks) {
-    if (w.length < 3) {
-      issues.push({ rule: 7, severity: 'WARN', file: rel, msg: `wikilink suspeito (muito curto): [[${w}]]`, fix: 'revisar' });
+  // 7. Sintaxe das pendencias que alimentam MOC_Pendencias
+  for (const line of stripCode(body).split('\n')) {
+    if (!line.includes('#pendencia')) continue;
+    if (!/^- \[ \] @\S+ .+ #pendencia\s*$/.test(line)) {
+      issues.push({ rule: 7, severity: 'ERROR', file: rel, msg: `pendencia fora da sintaxe canonica: ${line.trim()}`, fix: 'usar - [ ] @responsavel ... #pendencia' });
     }
   }
 
@@ -209,6 +250,156 @@ function validate(file, parsed) {
   }
 
   return issues;
+}
+
+function stripCode(content) {
+  return content
+    .replace(/```[\s\S]*?```/g, '')
+    .replace(/~~~[\s\S]*?~~~/g, '')
+    .replace(/`[^`\n]*`/g, '');
+}
+
+function extractWikilinks(body) {
+  const links = [];
+  const seen = new Set();
+  const regex = /!?\[\[([^\]\n]+)\]\]/g;
+  let match;
+  const searchable = stripCode(body);
+  while ((match = regex.exec(searchable)) !== null) {
+    const raw = match[1].split('|', 1)[0].trim().replace(/\\$/, '');
+    const hashAt = raw.indexOf('#');
+    const target = (hashAt === -1 ? raw : raw.slice(0, hashAt)).trim();
+    const anchor = hashAt === -1 ? '' : raw.slice(hashAt + 1).trim();
+    const key = `${target}#${anchor}`;
+    if (!seen.has(key)) links.push({ raw: match[0], target, anchor });
+    seen.add(key);
+  }
+  return links;
+}
+
+function normalizeHeading(value) {
+  return value
+    .replace(/[*_~`]/g, '')
+    .replace(/\s+#+\s*$/, '')
+    .trim()
+    .toLocaleLowerCase('pt-BR');
+}
+
+function headingsAndBlocks(content) {
+  const headings = new Set();
+  const blocks = new Set();
+  for (const line of stripCode(content).split('\n')) {
+    const heading = line.match(/^#{1,6}\s+(.+?)\s*$/);
+    if (heading) headings.add(normalizeHeading(heading[1]));
+    for (const block of line.matchAll(/\^([a-zA-Z0-9-]+)(?:\s|$)/g)) blocks.add(block[1]);
+  }
+  return { headings, blocks };
+}
+
+function vaultRelative(file) {
+  return path.relative(VAULT, file).replace(/\\/g, '/');
+}
+
+function buildLinkIndex(allFiles) {
+  const exact = new Map();
+  const markdownByBase = new Map();
+  const anyByName = new Map();
+  for (const file of allFiles) {
+    const rel = vaultRelative(file).toLocaleLowerCase('pt-BR');
+    exact.set(rel, file);
+    const fileName = path.basename(file).toLocaleLowerCase('pt-BR');
+    const sameName = anyByName.get(fileName) || [];
+    sameName.push(file);
+    anyByName.set(fileName, sameName);
+    if (file.endsWith('.md')) {
+      exact.set(rel.slice(0, -3), file);
+      const base = path.basename(file, '.md').toLocaleLowerCase('pt-BR');
+      const matches = markdownByBase.get(base) || [];
+      matches.push(file);
+      markdownByBase.set(base, matches);
+    }
+  }
+  return { exact, markdownByBase, anyByName };
+}
+
+function resolveWikilink(source, target, index) {
+  if (!target) return [source];
+  const normalized = target.replace(/\\/g, '/').replace(/^\.\//, '');
+  if (/^[a-z]+:\/\//i.test(normalized)) return [];
+  const hitsFor = values => {
+    const hits = [];
+    for (const value of values) {
+      const hit = index.exact.get(value.toLocaleLowerCase('pt-BR'));
+      if (hit && !hits.includes(hit)) hits.push(hit);
+    }
+    return hits;
+  };
+  const direct = hitsFor([normalized, `${normalized}.md`]);
+  if (direct.length) return direct;
+  const sourceRelative = path.relative(VAULT, path.resolve(path.dirname(source), normalized)).replace(/\\/g, '/');
+  if (!sourceRelative.startsWith('../')) {
+    const local = hitsFor([sourceRelative, `${sourceRelative}.md`]);
+    if (local.length) return local;
+  }
+  const candidates = [];
+  const addCandidate = hit => {
+    if (hit && !candidates.includes(hit)) candidates.push(hit);
+  };
+  if (!normalized.includes('/')) {
+    for (const hit of index.anyByName.get(normalized.toLocaleLowerCase('pt-BR')) || []) addCandidate(hit);
+    if (candidates.length) return candidates;
+    for (const hit of index.markdownByBase.get(normalized.toLocaleLowerCase('pt-BR')) || []) addCandidate(hit);
+  }
+  return candidates;
+}
+
+async function validateWikilinks(files, allFiles, parsedByFile) {
+  const issues = [];
+  const index = buildLinkIndex(allFiles);
+  const contentCache = new Map();
+  for (const file of files) {
+    const parsed = parsedByFile.get(file);
+    for (const link of extractWikilinks(`${parsed.yaml}\n${parsed.body}`)) {
+      const matches = resolveWikilink(file, link.target, index);
+      if (matches.length === 0) {
+        issues.push({ rule: 10, severity: 'ERROR', file: relativePath(file), msg: `wikilink nao resolvido: ${link.raw}`, fix: 'apontar para nota existente ou usar code span se for exemplo literal' });
+        continue;
+      }
+      if (matches.length > 1) {
+        issues.push({ rule: 10, severity: 'ERROR', file: relativePath(file), msg: `wikilink ambiguo: ${link.raw}`, fix: 'usar o path relativo da nota' });
+        continue;
+      }
+      if (!link.anchor || !matches[0].endsWith('.md')) continue;
+      let targetContent = contentCache.get(matches[0]);
+      if (!targetContent) {
+        targetContent = await fs.readFile(matches[0], 'utf-8');
+        contentCache.set(matches[0], targetContent);
+      }
+      const { headings, blocks } = headingsAndBlocks(targetContent);
+      const exists = link.anchor.startsWith('^')
+        ? blocks.has(link.anchor.slice(1))
+        : headings.has(normalizeHeading(link.anchor));
+      if (!exists) {
+        issues.push({ rule: 10, severity: 'ERROR', file: relativePath(file), msg: `anchor nao resolvido: ${link.raw}`, fix: 'corrigir o heading/block de destino' });
+      }
+    }
+  }
+  return issues;
+}
+
+async function resolveSingle(single) {
+  if (!single) return null;
+  const attempts = path.isAbsolute(single)
+    ? [path.resolve(single)]
+    : [path.resolve(ROOT, single), path.resolve(VAULT, single)];
+  for (const candidate of attempts) {
+    const relative = path.relative(VAULT, candidate);
+    if (relative.startsWith('..') || path.isAbsolute(relative) || !candidate.endsWith('.md')) continue;
+    try {
+      if ((await fs.stat(candidate)).isFile()) return candidate;
+    } catch {}
+  }
+  throw new Error(`--single nao encontrou uma nota dentro do vault: ${single}`);
 }
 
 async function validateIndices(files) {
@@ -248,27 +439,44 @@ function printIssue(issue) {
 
 async function main() {
   await loadLinterOrder();
+  if (FLAGS.type && !VALID_TYPES.has(FLAGS.type)) throw new Error(`tipo desconhecido em --type: ${FLAGS.type}`);
+  const singleFile = await resolveSingle(FLAGS.single);
   if (!FLAGS.json) {
     console.log(`${C.bold}vault-validate.mjs${C.reset}`);
     console.log(`   Source: ${VAULT}`);
     if (FLAGS.type) console.log(`   Filter: tipo == "${FLAGS.type}"`);
+    if (singleFile) console.log(`   Single: ${relativePath(singleFile)}`);
     console.log(`   Linter order: ${canonicalOrder.length} keys carregadas`);
     console.log('');
   }
 
   const allFiles = await walk(VAULT);
+  const allVaultFiles = await walk(VAULT, false);
+  const filesToValidate = singleFile ? [singleFile] : allFiles;
   let scanned = 0;
   let issues = [];
+  const parsedByFile = new Map();
 
-  for (const file of allFiles) {
+  for (const file of filesToValidate) {
     const content = await fs.readFile(file, 'utf-8');
     const parsed = parseFm(content);
     if (FLAGS.type && parsed.fm.tipo !== FLAGS.type) continue;
+    parsedByFile.set(file, parsed);
     scanned++;
     issues.push(...validate(file, parsed));
   }
 
-  issues.push(...await validateIndices(allFiles));
+  const selectedFiles = [...parsedByFile.keys()];
+  issues.push(...await validateIndices(selectedFiles));
+  issues.push(...await validateWikilinks(selectedFiles, allVaultFiles, parsedByFile));
+
+  if (!singleFile && !FLAGS.type) {
+    const mocPath = path.join(VAULT, '00-meta', 'MOC.md');
+    const moc = await fs.readFile(mocPath, 'utf-8');
+    if (!/^## MOC_Pendencias\s*$/m.test(moc) || !/tag:#pendencia/.test(moc)) {
+      issues.push({ rule: 11, severity: 'ERROR', file: relativePath(mocPath), msg: 'MOC_Pendencias ou query tag:#pendencia ausente', fix: 'restaurar a secao agregadora no MOC' });
+    }
+  }
 
   const errors = issues.filter(i => i.severity === 'ERROR');
   const warns = issues.filter(i => i.severity === 'WARN');
@@ -294,4 +502,8 @@ async function main() {
   process.exit(errors.length > 0 ? 1 : warns.length > 0 ? 2 : 0);
 }
 
-main().catch(e => { console.error(C.red + e.message + C.reset); process.exit(1); });
+main().catch(e => {
+  if (FLAGS?.json) console.error(JSON.stringify({ error: e.message }));
+  else console.error(C.red + e.message + C.reset);
+  process.exit(1);
+});

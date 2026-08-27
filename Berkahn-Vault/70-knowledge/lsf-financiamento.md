@@ -1,7 +1,7 @@
 ---
 tipo: atomic
 criado: 2026-05-22
-atualizado: 2026-05-22
+atualizado: 2026-08-27
 tags:
   - ai/context
   - status/active
@@ -87,4 +87,4 @@ Bom para construção LSF rápida (3-6 meses): liberação acompanha o ritmo.
 - [[lsf-custos]] — valores típicos para dimensionar financiamento
 
 ---
-**Contexto pai**: [[steel-frame-domain]] · **Hub**: [[blog]] · [[comercial]]
+**Contexto pai**: [[steel-frame-domain]] · **Hub**: [[blog]] · [[apresentacoes]]

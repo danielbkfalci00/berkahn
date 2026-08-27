@@ -1,7 +1,7 @@
 ---
 tipo: meta
 criado: 2026-05-21
-atualizado: 2026-05-21
+atualizado: 2026-08-27
 tags:
   - status/active
 ai_summary: Auditoria de mudanças estruturais do vault Berkahn. Append-only — toda decisão arquitetural significativa é registrada aqui.
@@ -11,6 +11,17 @@ status: active
 # Vault CHANGELOG
 
 Histórico de mudanças estruturais do vault. Append-only.
+
+## 2026-08-27 — Gate documental fail-closed
+
+- `vault-validate.mjs` passou a rejeitar configuração inválida e flags
+  desconhecidas, validar uma nota com `--single` e resolver wikilinks/anchors
+- A ordem canônica voltou a ser carregada do Obsidian Linter; o JSON inválido
+  que produzia falso verde foi corrigido
+- Pendências operacionais foram consolidadas nos hubs, com MOC apenas como
+  ponteiro/query; sprint histórica foi reduzida ao estado vigente
+- Links legados de materiais, apresentação e conhecimento foram reconciliados
+  com os índices atuais
 
 ## 2026-08-07 — Quadro observável e aprendizado editorial
 

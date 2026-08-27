@@ -1,7 +1,7 @@
 ---
 tipo: draft-content
 criado: 2026-07-20
-atualizado: 2026-07-20
+atualizado: 2026-08-27
 tags:
   - project/blog
   - status/published
@@ -133,6 +133,6 @@ Se você está avaliando construir em steel frame e quer uma leitura técnica do
 
 <!-- vault-rodape-v1 -->
 **Contexto aplicado**: [[berkahn-brand]] · [[seo-aeo-strategy]] · [[article-pipeline]] · [[copy-sem-travessao]] · [[steel-frame-domain]]
-**Atomic knowledge usado**: [[lsf-normas-nbr]] · [[lsf-acustica]] · [[lsf-desempenho-termico]]
+**Atomic knowledge usado**: [[lsf-normas-nbr]] · [[lsf-acustica]]
 **Hub**: [[blog]]
 **Workflow**: [[workflow-conteudo]]
