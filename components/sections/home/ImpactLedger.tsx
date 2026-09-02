@@ -23,9 +23,12 @@ const SUPERSCRIPT = ["¹", "²", "³", "⁴", "⁵", "⁶", "⁷", "⁸", "⁹"]
 export function ImpactLedger() {
   const section = IMPACT_SECTION;
   const sources = impactSources(section);
-  const indexOf = (source: DataSource) => sources.findIndex((s) => s.id === source.id);
-  const mark = (source?: DataSource) =>
-    source ? SUPERSCRIPT[indexOf(source)] ?? "" : "";
+  const sourceIndex = new Map(sources.map((source, index) => [source.id, index]));
+  const noteOf = (source?: DataSource): Note | null => {
+    const index = source ? sourceIndex.get(source.id) : undefined;
+    if (index === undefined) return null;
+    return { n: index + 1, glyph: SUPERSCRIPT[index] ?? String(index + 1) };
+  };
 
   return (
     <section id="impacto" className="bg-carbon text-white py-2xl md:py-3xl">
@@ -37,9 +40,7 @@ export function ImpactLedger() {
           <h2 className="headline-md text-white max-w-3xl">{section.headline}</h2>
           <p className="mt-6 max-w-2xl text-base md:text-lg leading-relaxed text-white-70">
             {section.lede}
-            <sup className="ml-1 font-tech text-[10px] text-white-50">
-              {mark(section.ledeSource)}
-            </sup>
+            <Sup note={noteOf(section.ledeSource)} />
           </p>
         </RevealOnScroll>
 
@@ -77,12 +78,12 @@ export function ImpactLedger() {
                 </div>
 
                 <div className="grid grid-cols-2 gap-x-6 gap-y-8 md:col-span-6 md:col-start-7 md:gap-x-10">
-                  {block.figures.map((figure) => (
+                  {block.figures.map((figure, figureIndex) => (
                     <Figure
-                      key={figure.label}
+                      key={`${block.id}-${figureIndex}`}
                       figure={figure}
-                      mark={mark(figure.source)}
-                      compareMark={mark(figure.compareSource)}
+                      note={noteOf(figure.source)}
+                      compareNote={noteOf(figure.compareSource)}
                     />
                   ))}
                 </div>
@@ -102,7 +103,10 @@ export function ImpactLedger() {
             </Link>
           </RevealOnScroll>
 
-          <p className="md:col-span-6 md:col-start-7 font-tech text-[11px] md:text-xs tracking-wide leading-relaxed text-white-50">
+          <p
+            id="fontes"
+            className="md:col-span-6 md:col-start-7 font-tech text-[11px] md:text-xs tracking-wide leading-relaxed text-white-50"
+          >
             fontes
             {sources.map((source, index) => (
               <span key={source.id}>
@@ -130,14 +134,28 @@ export function ImpactLedger() {
   );
 }
 
+type Note = { n: number; glyph: string };
+
+/** Marcador de fonte com rótulo para leitor de tela; aponta para o rodapé. */
+function Sup({ note }: { note: Note | null }) {
+  if (!note) return null;
+  return (
+    <sup className="ml-1 font-tech text-[10px] normal-case text-white-50">
+      <a href="#fontes" aria-label={`fonte ${note.n}`} className="no-underline">
+        {note.glyph}
+      </a>
+    </sup>
+  );
+}
+
 function Figure({
   figure,
-  mark,
-  compareMark,
+  note,
+  compareNote,
 }: {
   figure: ImpactFigure;
-  mark: string;
-  compareMark: string;
+  note: Note | null;
+  compareNote: Note | null;
 }) {
   return (
     <div className="min-w-0">
@@ -154,14 +172,12 @@ function Figure({
         <div>
           <p className="text-xs uppercase tracking-wider text-white-70 font-medium">
             {figure.label}
-            <sup className="ml-1 font-tech text-[10px] normal-case text-white-50">{mark}</sup>
+            <Sup note={note} />
           </p>
           {figure.compare && (
             <p className="mt-1 text-xs text-white-50">
               {figure.compare}
-              {compareMark && (
-                <sup className="ml-1 font-tech text-[10px] text-white-50">{compareMark}</sup>
-              )}
+              <Sup note={compareNote} />
             </p>
           )}
         </div>
