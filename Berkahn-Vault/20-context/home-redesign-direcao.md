@@ -1,7 +1,7 @@
 ---
 tipo: context
 criado: 2026-08-05
-atualizado: 2026-08-27
+atualizado: 2026-09-02
 tags:
   - domain/brand
   - domain/architecture
@@ -39,7 +39,7 @@ Registro da direção aprovada pelo Bruno em 2026-08-05 para a repaginada da hom
 
 ## Narrativa da home (9 blocos)
 
-Hero cinematográfico (canvas/poster 100svh) → expertise institucional (SplitText scrub) → segmentos (parallax) → processo em 4 fases (sticky + crossfade) → números de engenharia (CountUp) → introdução LSF + comparativo enxuto → parceiros → CTA. O rail de projetos está preservado no código, mas desmontado temporariamente da home. Scroll global: Lenis escopado à home (lerp 0.12, anchors), GSAP ScrollTrigger só nos momentos-assinatura.
+Hero cinematográfico (canvas/poster 100svh) → expertise institucional (SplitText scrub) → segmentos (parallax) → processo em 4 fases (sticky + crossfade) → introdução LSF + comparativo enxuto (04) → **impacto para quem mora, quem paga e a cidade (05, desde 2026-09-02; substituiu o bloco de números CountUp)** → parceiros → CTA. O rail de projetos está preservado no código, mas desmontado temporariamente da home. Scroll global: Lenis escopado à home (lerp 0.12, anchors), GSAP ScrollTrigger só nos momentos-assinatura.
 
 ## Estado de entrega (2026-08-06 — PR #43 mergeado)
 
@@ -156,3 +156,25 @@ A imagem da seção LSF entra monocromática por CSS (`grayscale`), então vale 
 Pendente: as imagens **secundárias** de cada fase (`pre-obra-2`, `terraplanagem_2`, `estrutura-1`, `acabamentos_2`), que aparecem no carrossel de `/servicos`, continuam sendo as genéricas antigas e destoam das novas. Mesmos prompts com outro enquadramento resolvem.
 
 Relacionados: [[berkahn-brand]] · [[guia-design-berkahn]] · [[banco-imagens]]
+
+## 05 · impacto (2026-09-02)
+
+Seção nova entre o comparativo (04) e os parceiros, inspirada em "Nosso impacto" da AD Barbieri, mas com recortes de construtora, não de fabricante: **para quem vai morar · para quem paga a obra · para o terreno e a cidade**. Substituiu o `StatsCounter`, que ficava antes do 04, sem label na série numerada e com os mesmos quatro números que o comparativo já mostrava.
+
+- Componente: `components/sections/home/ImpactLedger.tsx` (Server Component; `RevealOnScroll` por linha; `.sda-scale-in` estreando na foto; sem count-up de propósito).
+- Dados: `lib/impact-data.ts` com `IMPACT_SECTION`, o registro `SOURCES` e `impactSources()`, que gera a linha de fontes do rodapé a partir dos números. **Regra do arquivo: nenhum número entra sem `source`.** O registro nasce aqui para virar fonte única do site.
+- Imagem: recorte 16:9 do cover da Casa Santa Cristina em `public/images/Home/impacto-casa-santa-cristina.webp` (1600×900, 46 KB). É o único acento de cor da segunda metade da home; marca a passagem esqueleto (04, mono) → casa entregue (05).
+
+| Bloco | Números | Fonte |
+|---|---|---|
+| morar | 45–50 dB na parede · 4× menos calor atravessa a parede | spec Berkahn (lã 90 mm) ref. NBR 15575 · NBR 15220-3 (U 0,38–0,5 vs tijolo 2,0–2,5) |
+| pagar | < 5% de desperdício (vs até 30%) · 2022, norma própria (NBR 16970) | SINDUSCON-SP · ABNT |
+| cidade | 100% do aço reciclável (vs 16% do entulho reciclado) · 1,5 t de CO₂ evitada por tonelada de aço reciclado | World Steel + Instituto Aço Brasil · ABRECON |
+
+Decisões de dado, com o porquê:
+- **Água ficou fora.** Cinco valores coexistem no projeto (60%, 70%, 90%, 99%, >99%) e nenhum tem fonte primária forte. A frase do bloco 01 cobre o tema sem número.
+- **Térmico só como transmitância**, com razão conservadora (pior LSF contra melhor tijolo). O blog registra que o LSF reprova na capacidade térmica da NBR 15575 pela rota simplificada, então "desempenho térmico conforme NBR" contradiria o próprio conteúdo.
+- **O "180,41 kgCO₂e/m²" do vault não se sustentou.** O paper existe (Abouhamad & Abu-Hamd, *Sustainability* 2020, 12(24):10686, DOI 10.3390/su122410686), mas o abstract não traz nenhum valor por m², só percentuais de um estudo de caso de um edifício universitário. Entrou o fallback previsto: 1,5 t de CO₂ evitada por tonelada de sucata (World Steel). Os dois artigos de sustentabilidade que citam 180,41 precisam de conferência no texto integral. Registrado no hub.
+- Só um número repete o comparativo (desperdício), reenquadrado como dinheiro e agora com fonte.
+
+Relacionados: [[site]] · [[berkahn-brand]] · [[steel-frame-domain]] · [[design-principles]]

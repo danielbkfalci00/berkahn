@@ -5,8 +5,8 @@ import { HeroCinematic } from "@/components/sections/home/HeroCinematic";
 import { EditorialStatement } from "@/components/sections/home/EditorialStatement";
 import { Segments } from "@/components/sections/home/Segments";
 import { ProcessPinned } from "@/components/sections/home/ProcessPinned";
-import { StatsCounter } from "@/components/sections/StatsCounter";
 import { ComparisonCompact } from "@/components/sections/home/ComparisonCompact";
+import { ImpactLedger } from "@/components/sections/home/ImpactLedger";
 import { Partners } from "@/components/sections/Partners";
 import { CTA } from "@/components/sections/CTA";
 
@@ -20,14 +20,6 @@ export const metadata: Metadata = {
   },
 };
 
-// Medições de engenharia do sistema LSF (fonte: lib/lsf-data.ts COMPARISON_DATA)
-const HOME_STATS = [
-  { value: 6, prefix: "até ", suffix: " meses", label: "do terreno à entrega" },
-  { value: 5, prefix: "< ", suffix: "%", label: "de desperdício de material" },
-  { value: 2, prefix: "± ", suffix: " mm", label: "de tolerância na estrutura" },
-  { value: 8, prefix: "até ", suffix: " m", label: "de vãos livres" },
-];
-
 export default function Home() {
   preload("/videos/hero/hero-poster.webp", { as: "image", fetchPriority: "high" });
 
@@ -38,8 +30,8 @@ export default function Home() {
       <EditorialStatement />
       <Segments />
       <ProcessPinned />
-      <StatsCounter stats={HOME_STATS} />
       <ComparisonCompact />
+      <ImpactLedger />
       <Partners
         label="PARCERIAS QUE SUSTENTAM A QUALIDADE"
         title="Marcas que Garantem o Padrão Berkahn"
