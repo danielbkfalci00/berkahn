@@ -1,6 +1,6 @@
 // Dados da seção "05 · impacto" da home. Regra deste arquivo: nenhum número
-// entra sem `source`. A lista de fontes da seção é derivada daqui por
-// `impactSources()`, nunca digitada à mão, para não desviar do dado.
+// entra sem `source`. As fontes não vão para a tela (decisão do Bruno em
+// 2026-09-02); ficam aqui como procedência de cada valor.
 //
 // Procedência de cada valor está documentada em
 // Berkahn-Vault/20-context/home-redesign-direcao.md (seção "05 · impacto").
@@ -56,9 +56,9 @@ export interface ImpactSection {
   headline: string;
   lede: string;
   ledeSource: DataSource;
-  image: { src: string; alt: string; caption: string };
+  /** Placa de fundo do track. Nunca uma obra que não seja nossa. */
+  image: { src: string; alt: string };
   blocks: [ImpactBlock, ImpactBlock, ImpactBlock];
-  cta: { label: string; href: string };
 }
 
 export const SOURCES = {
@@ -110,9 +110,8 @@ export const IMPACT_SECTION: ImpactSection = {
   lede: "Edificações e construção respondem por 34% das emissões globais de CO₂. Um sistema a seco muda essa conta para quem mora, quem paga e a cidade.",
   ledeSource: SOURCES.unepGsr2025,
   image: {
-    src: "/images/Home/impacto-casa-santa-cristina.webp",
-    alt: "Fachada da Casa Santa Cristina, projeto Berkahn em Light Steel Frame",
-    caption: "casa santa cristina · jardim paulistano, 2024",
+    src: "/images/Services/Execução-de-obras/Estrutura/estrutura-2.webp",
+    alt: "Interior de casa em Light Steel Frame na fase de fechamento, com montantes, lã de vidro e placas cimentícias",
   },
   blocks: [
     {
@@ -175,7 +174,6 @@ export const IMPACT_SECTION: ImpactSection = {
       },
     },
   ],
-  cta: { label: "Por que construção a seco", href: "/lsf" },
 };
 
 /** Texto final do número-herói, como fica parado. */
@@ -183,24 +181,3 @@ export function heroText(hero: ImpactHero): string {
   return `${hero.prefix ?? ""}${hero.to}${hero.unit}`;
 }
 
-/**
- * Fontes da seção na ordem em que aparecem (lede, depois cada batida),
- * sem repetição. O índice na lista (1-based) é o marcador de cada número.
- */
-export function impactSources(section: ImpactSection): DataSource[] {
-  const seen = new Set<string>();
-  const ordered: DataSource[] = [];
-  const push = (source?: DataSource) => {
-    if (!source || seen.has(source.id)) return;
-    seen.add(source.id);
-    ordered.push(source);
-  };
-
-  push(section.ledeSource);
-  for (const block of section.blocks) {
-    push(block.hero.source);
-    push(block.hero.compareSource);
-    push(block.aside.source);
-  }
-  return ordered;
-}

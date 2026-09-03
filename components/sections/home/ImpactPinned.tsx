@@ -2,17 +2,9 @@
 
 import { useRef } from "react";
 import Image from "next/image";
-import Link from "next/link";
 import { gsap, useGSAP } from "@/lib/gsap";
 import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
-import {
-  IMPACT_SECTION,
-  heroText,
-  impactSources,
-  type DataSource,
-} from "@/lib/impact-data";
-
-const SUPERSCRIPT = ["¹", "²", "³", "⁴", "⁵", "⁶", "⁷", "⁸", "⁹"];
+import { IMPACT_SECTION, heroText } from "@/lib/impact-data";
 
 /** Cada batida tem uma composição: esquerda, centro grande, direita. */
 const BEAT_ALIGN = ["items-start text-left", "items-center text-center", "items-end text-right"];
@@ -27,18 +19,12 @@ const BEAT_SIZE = ["text-[14vw]", "text-[19vw]", "text-[14vw]"];
  * os números derivam no sentido oposto.
  *
  * Desktop com motion: track de 320vh com viewport preso. Mobile e
- * reduced-motion: pilha estática, mesmo padrão de ProcessPinned.
+ * reduced-motion: pilha estática, mesmo padrão de ProcessPinned. As fontes
+ * de cada número ficam em lib/impact-data.ts, não na tela.
  */
 export function ImpactPinned() {
   const sectionRef = useRef<HTMLElement>(null);
   const section = IMPACT_SECTION;
-  const sources = impactSources(section);
-  const sourceIndex = new Map(sources.map((source, index) => [source.id, index]));
-  const noteOf = (source?: DataSource): Note | null => {
-    const index = source ? sourceIndex.get(source.id) : undefined;
-    if (index === undefined) return null;
-    return { n: index + 1, glyph: SUPERSCRIPT[index] ?? String(index + 1) };
-  };
 
   useGSAP(
     () => {
@@ -65,11 +51,11 @@ export function ImpactPinned() {
           },
         });
 
-        // Placa de fundo: a casa se aproxima ao longo de todo o percurso.
+        // Placa de fundo: a estrutura se aproxima ao longo de todo o percurso.
         tl.fromTo(plate, { scale: 1, yPercent: -3 }, { scale: 1.15, yPercent: 3, duration: total }, 0);
         // Números derivam contra a placa: é a segunda velocidade que dá profundidade.
         tl.fromTo(numbers, { yPercent: 8 }, { yPercent: -8, duration: total }, 0);
-        // O véu clareia na última batida, a casa aparece mais.
+        // O véu clareia na última batida, a foto aparece mais.
         tl.fromTo(veil, { opacity: 1 }, { opacity: 0.6, duration: 0.6 }, total - 0.8);
 
         section.blocks.forEach((block, index) => {
@@ -107,7 +93,6 @@ export function ImpactPinned() {
           <h2 className="headline-md text-white max-w-3xl">{section.headline}</h2>
           <p className="mt-6 max-w-2xl text-base md:text-lg leading-relaxed text-white-70">
             {section.lede}
-            <Sup note={noteOf(section.ledeSource)} />
           </p>
         </RevealOnScroll>
       </div>
@@ -122,7 +107,7 @@ export function ImpactPinned() {
               fill
               quality={70}
               sizes="100vw"
-              className="object-cover object-[50%_45%]"
+              className="object-cover object-[60%_50%]"
             />
           </div>
           <div
@@ -150,54 +135,34 @@ export function ImpactPinned() {
                   </p>
                   <p className="mt-5 text-xs uppercase tracking-wider text-white-70 font-medium">
                     {block.hero.label}
-                    <Sup note={noteOf(block.hero.source)} />
                   </p>
                   <p className="mt-8 max-w-xl font-display font-medium text-2xl xl:text-3xl tracking-tight text-white">
                     {block.claim}
                   </p>
                   <p className="mt-6 font-tech text-xs lowercase tracking-wide text-white-50">
                     {block.hero.compare}
-                    <Sup note={noteOf(block.hero.compareSource)} />
                     {" · "}
                     {block.aside.value} {block.aside.label}
-                    <Sup note={noteOf(block.aside.source)} />
                   </p>
                 </div>
               </div>
             </div>
           ))}
-
-          <p className="absolute bottom-8 left-0 right-0">
-            <span className="container flex items-center gap-3">
-              <span className="h-[3px] w-10 bg-white" aria-hidden="true" />
-              <span className="font-tech text-xs lowercase tracking-wide text-white-50">
-                {section.image.caption}
-              </span>
-            </span>
-          </p>
         </div>
       </div>
 
       {/* Mobile e reduced-motion: pilha estática */}
-      <div className="motion-safe:lg:hidden container flex flex-col gap-16">
-        <figure>
-          <div className="relative aspect-[4/3] overflow-hidden bg-carbon-soft">
-            <Image
-              src={section.image.src}
-              alt={section.image.alt}
-              fill
-              quality={70}
-              sizes="100vw"
-              className="object-cover"
-            />
-          </div>
-          <figcaption className="mt-4 flex items-center gap-3">
-            <span className="h-[3px] w-10 bg-white" aria-hidden="true" />
-            <span className="font-tech text-xs lowercase tracking-wide text-white-50">
-              {section.image.caption}
-            </span>
-          </figcaption>
-        </figure>
+      <div className="motion-safe:lg:hidden container flex flex-col gap-16 pb-2xl">
+        <div className="relative aspect-[4/3] overflow-hidden bg-carbon-soft">
+          <Image
+            src={section.image.src}
+            alt={section.image.alt}
+            fill
+            quality={70}
+            sizes="100vw"
+            className="object-cover"
+          />
+        </div>
 
         {section.blocks.map((block, index) => (
           <RevealOnScroll key={block.id} delay={index * 0.1}>
@@ -209,75 +174,18 @@ export function ImpactPinned() {
             </p>
             <p className="mt-4 text-xs uppercase tracking-wider text-white-70 font-medium">
               {block.hero.label}
-              <Sup note={noteOf(block.hero.source)} />
             </p>
             <p className="mt-6 font-display font-medium text-2xl tracking-tight text-white">
               {block.claim}
             </p>
             <p className="mt-4 font-tech text-xs lowercase tracking-wide text-white-50">
               {block.hero.compare}
-              <Sup note={noteOf(block.hero.compareSource)} />
               {" · "}
               {block.aside.value} {block.aside.label}
-              <Sup note={noteOf(block.aside.source)} />
             </p>
           </RevealOnScroll>
         ))}
       </div>
-
-      <div className="container pt-16 md:pt-20 pb-2xl md:pb-3xl grid gap-8 md:grid-cols-12 md:gap-10 md:items-start">
-        <RevealOnScroll className="md:col-span-5">
-          <Link
-            href={section.cta.href}
-            className="group inline-flex items-center gap-4 text-sm uppercase tracking-wider font-medium text-white"
-          >
-            <span className="h-[3px] w-10 bg-white transition-all duration-500 ease-expo group-hover:w-16" />
-            {section.cta.label}
-          </Link>
-        </RevealOnScroll>
-
-        <details
-          id="fontes"
-          className="md:col-span-6 md:col-start-7 font-tech text-[11px] md:text-xs tracking-wide leading-relaxed text-white-50"
-        >
-          <summary className="cursor-pointer lowercase hover:text-white-70">fontes dos números</summary>
-          <ol className="mt-3 space-y-1 list-none">
-            {sources.map((source, index) => (
-              <li key={source.id}>
-                {SUPERSCRIPT[index]}{" "}
-                {source.url ? (
-                  <a
-                    href={source.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="underline decoration-white-30 underline-offset-2 hover:text-white-70"
-                  >
-                    {source.name}
-                  </a>
-                ) : (
-                  source.name
-                )}
-                {source.year ? ` (${source.year})` : ""}
-                {source.note ? ` · ${source.note}` : ""}
-              </li>
-            ))}
-          </ol>
-        </details>
-      </div>
     </section>
-  );
-}
-
-type Note = { n: number; glyph: string };
-
-/** Marcador de fonte com rótulo para leitor de tela; aponta para a lista dobrada. */
-function Sup({ note }: { note: Note | null }) {
-  if (!note) return null;
-  return (
-    <sup className="ml-1 font-tech text-[10px] normal-case text-white-50">
-      <a href="#fontes" aria-label={`fonte ${note.n}`} className="no-underline">
-        {note.glyph}
-      </a>
-    </sup>
   );
 }
