@@ -6,7 +6,7 @@ import { EditorialStatement } from "@/components/sections/home/EditorialStatemen
 import { Segments } from "@/components/sections/home/Segments";
 import { ProcessPinned } from "@/components/sections/home/ProcessPinned";
 import { ComparisonCompact } from "@/components/sections/home/ComparisonCompact";
-import { ImpactLedger } from "@/components/sections/home/ImpactLedger";
+import { ImpactPinned } from "@/components/sections/home/ImpactPinned";
 import { Partners } from "@/components/sections/Partners";
 import { CTA } from "@/components/sections/CTA";
 
@@ -31,7 +31,7 @@ export default function Home() {
       <Segments />
       <ProcessPinned />
       <ComparisonCompact />
-      <ImpactLedger />
+      <ImpactPinned />
       <Partners
         label="PARCERIAS QUE SUSTENTAM A QUALIDADE"
         title="Marcas que Garantem o Padrão Berkahn"

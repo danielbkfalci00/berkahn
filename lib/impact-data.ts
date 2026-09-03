@@ -1,6 +1,6 @@
 // Dados da seção "05 · impacto" da home. Regra deste arquivo: nenhum número
-// entra sem `source`. O rodapé de fontes da seção é derivado daqui por
-// `impactSources()`, nunca digitado à mão, para não desviar do dado.
+// entra sem `source`. A lista de fontes da seção é derivada daqui por
+// `impactSources()`, nunca digitada à mão, para não desviar do dado.
 //
 // Procedência de cada valor está documentada em
 // Berkahn-Vault/20-context/home-redesign-direcao.md (seção "05 · impacto").
@@ -14,18 +14,30 @@ export interface DataSource {
   note?: string;
 }
 
-export interface ImpactFigure {
-  /** Texto do número grande. Até 6 caracteres visíveis. */
-  value: string;
-  /** Unidade renderizada menor, inline. */
-  unit?: string;
-  /** Rótulo em caixa alta. Até ~32 caracteres. */
+/**
+ * Número-herói de uma batida. Conta de `from` até `to` conforme o scroll;
+ * `from` é o valor do sistema convencional, para a diferença virar movimento.
+ */
+export interface ImpactHero {
+  from: number;
+  to: number;
+  /** Só aparece no valor final, ex.: "< ". */
+  prefix?: string;
+  /** Unidade colada ao número, ex.: "%", " dB". */
+  unit: string;
+  /** Rótulo em caixa alta, até ~40 caracteres. */
   label: string;
-  /** Referência convencional exibida abaixo do rótulo. */
+  /** O que era antes, em uma linha curta. */
   compare?: string;
   source: DataSource;
-  /** Fonte do `compare`, quando é outra. */
   compareSource?: DataSource;
+}
+
+/** Número secundário, em legenda mono pequena. */
+export interface ImpactFigure {
+  value: string;
+  label: string;
+  source: DataSource;
 }
 
 export interface ImpactBlock {
@@ -33,9 +45,10 @@ export interface ImpactBlock {
   index: "01" | "02" | "03";
   /** Label técnica minúscula, ex.: "para quem vai morar". */
   audience: string;
-  headline: string;
-  body: string;
-  figures: [ImpactFigure, ImpactFigure];
+  /** Uma linha, até 12 palavras. É todo o texto da batida. */
+  claim: string;
+  hero: ImpactHero;
+  aside: ImpactFigure;
 }
 
 export interface ImpactSection {
@@ -106,76 +119,73 @@ export const IMPACT_SECTION: ImpactSection = {
       id: "morar",
       index: "01",
       audience: "para quem vai morar",
-      headline: "O conforto está dentro da parede.",
-      body: "Lã mineral no miolo da parede segura barulho de rua e calor de tarde. Sem argamassa nem reboco, a parede sobe seca e a casa fica pronta para morar.",
-      figures: [
-        {
-          value: "45–50",
-          unit: "dB",
-          label: "de isolamento acústico na parede",
-          compare: "a NBR 15575 pede 45 dB entre unidades",
-          source: SOURCES.berkahnSpec,
-        },
-        {
-          value: "4×",
-          label: "menos calor atravessa a parede",
-          compare: "tijolo rebocado, 2,0 a 2,5 W/m²·K",
-          source: SOURCES.nbr15220,
-        },
-      ],
+      claim: "Parede que segura barulho de rua e calor de tarde.",
+      hero: {
+        from: 0,
+        to: 50,
+        unit: " dB",
+        label: "de isolamento acústico na parede",
+        compare: "faixa de 45 a 50 dB; a NBR 15575 pede 45 entre unidades",
+        source: SOURCES.berkahnSpec,
+      },
+      aside: {
+        value: "4×",
+        label: "menos calor atravessa a parede que no tijolo rebocado",
+        source: SOURCES.nbr15220,
+      },
     },
     {
       id: "pagar",
       index: "02",
       audience: "para quem paga a obra",
-      headline: "O que você compra vira parede.",
-      body: "Perfis chegam cortados de fábrica e quase tudo que entra no canteiro vira casa. Com a NBR 16970, o Light Steel Frame tem norma própria e entra na avaliação dos bancos sem laudo especial.",
-      figures: [
-        {
-          value: "< 5%",
-          label: "de material desperdiçado",
-          compare: "até 30% na obra convencional",
-          source: SOURCES.sinduscon,
-        },
-        {
-          value: "2022",
-          label: "norma própria na ABNT",
-          compare: "NBR 16970",
-          source: SOURCES.nbr16970,
-        },
-      ],
+      claim: "Quase tudo que entra no canteiro vira casa.",
+      hero: {
+        from: 30,
+        to: 5,
+        prefix: "< ",
+        unit: "%",
+        label: "de material desperdiçado",
+        compare: "a obra convencional perde até 30%",
+        source: SOURCES.sinduscon,
+      },
+      aside: {
+        value: "2022",
+        label: "norma própria na ABNT, a NBR 16970",
+        source: SOURCES.nbr16970,
+      },
     },
     {
       id: "cidade",
       index: "03",
       audience: "para o terreno e a cidade",
-      headline: "Menos carbono hoje, aço de novo amanhã.",
-      body: "Leve, pede menos concreto na fundação. No fim da vida, desmonta com parafuso e volta para a siderúrgica em vez de virar entulho, do qual o Brasil recicla só 16%.",
-      figures: [
-        {
-          value: "100%",
-          label: "do aço reciclável sem perder qualidade",
-          compare: "entulho reciclado no Brasil, 16%",
-          source: SOURCES.worldsteel,
-          compareSource: SOURCES.abrecon,
-        },
-        {
-          value: "1,5",
-          unit: "t",
-          label: "de CO₂ evitada por tonelada de aço reciclado",
-          compare: "a estrutura inteira volta para esse ciclo",
-          source: SOURCES.worldsteel,
-        },
-      ],
+      claim: "O aço volta para a siderúrgica, não para o entulho.",
+      hero: {
+        from: 16,
+        to: 100,
+        unit: "%",
+        label: "do aço reciclável sem perder qualidade",
+        compare: "do entulho de obra, o Brasil recicla 16%",
+        source: SOURCES.worldsteel,
+        compareSource: SOURCES.abrecon,
+      },
+      aside: {
+        value: "1,5 t",
+        label: "de CO₂ evitada por tonelada de aço reciclado",
+        source: SOURCES.worldsteel,
+      },
     },
   ],
   cta: { label: "Por que construção a seco", href: "/lsf" },
 };
 
+/** Texto final do número-herói, como fica parado. */
+export function heroText(hero: ImpactHero): string {
+  return `${hero.prefix ?? ""}${hero.to}${hero.unit}`;
+}
+
 /**
- * Fontes da seção na ordem em que aparecem (lede, depois cada número e seu
- * compare), sem repetição. O índice na lista (1-based) é o marcador que a
- * interface mostra ao lado de cada número.
+ * Fontes da seção na ordem em que aparecem (lede, depois cada batida),
+ * sem repetição. O índice na lista (1-based) é o marcador de cada número.
  */
 export function impactSources(section: ImpactSection): DataSource[] {
   const seen = new Set<string>();
@@ -188,10 +198,9 @@ export function impactSources(section: ImpactSection): DataSource[] {
 
   push(section.ledeSource);
   for (const block of section.blocks) {
-    for (const figure of block.figures) {
-      push(figure.source);
-      push(figure.compareSource);
-    }
+    push(block.hero.source);
+    push(block.hero.compareSource);
+    push(block.aside.source);
   }
   return ordered;
 }
