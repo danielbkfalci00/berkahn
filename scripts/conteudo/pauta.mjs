@@ -169,7 +169,7 @@ async function ver(id) {
 function publicacaoRealCompleta(pauta) {
   const blogCompleto = !pauta.status_blog || pauta.post_status === "published";
   const linkedinCompleto = !pauta.status_linkedin ||
-    Boolean(pauta.linkedin_url && pauta.linkedin_publicado_em);
+    Boolean(pauta.linkedin_publicado_em);
   return blogCompleto && linkedinCompleto;
 }
 
@@ -913,7 +913,7 @@ function gapsDaPauta(pauta) {
   if (pauta.status_linkedin) {
     if (!pauta.linkedin_texto) gaps.push("texto_linkedin");
     if (!pauta.capa_linkedin_url) gaps.push("capa_linkedin");
-    if (pauta.status_linkedin === "publicado" && (!pauta.linkedin_url || !pauta.linkedin_publicado_em))
+    if (pauta.status_linkedin === "publicado" && !pauta.linkedin_publicado_em)
       gaps.push("publicacao_real_linkedin");
   }
   return gaps;
@@ -930,7 +930,7 @@ function proximaAcaoPauta(pauta) {
   }
   if (pauta.status_linkedin) {
     if (!pauta.linkedin_texto || !pauta.capa_linkedin_url) return "produzir-linkedin";
-    if (!pauta.linkedin_url || !pauta.linkedin_publicado_em) return "preparar-publicacao";
+    if (!pauta.linkedin_publicado_em) return "preparar-publicacao";
   }
   return "concluido-real";
 }
