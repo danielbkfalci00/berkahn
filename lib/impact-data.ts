@@ -43,6 +43,8 @@ export interface ImpactFigure {
 export interface ImpactBlock {
   id: "morar" | "pagar" | "cidade";
   index: "01" | "02" | "03";
+  /** Placa de fundo da batida. Nunca uma obra que não seja nossa. */
+  image: { src: string; alt: string };
   /** Label técnica minúscula, ex.: "para quem vai morar". */
   audience: string;
   /** Uma linha, até 12 palavras. É todo o texto da batida. */
@@ -56,8 +58,6 @@ export interface ImpactSection {
   headline: string;
   lede: string;
   ledeSource: DataSource;
-  /** Placa de fundo do track. Nunca uma obra que não seja nossa. */
-  image: { src: string; alt: string };
   blocks: [ImpactBlock, ImpactBlock, ImpactBlock];
 }
 
@@ -109,27 +109,27 @@ export const IMPACT_SECTION: ImpactSection = {
   headline: "Construir a seco muda três contas.",
   lede: "Edificações e construção respondem por 34% das emissões globais de CO₂. Um sistema a seco muda essa conta para quem mora, quem paga e a cidade.",
   ledeSource: SOURCES.unepGsr2025,
-  image: {
-    src: "/images/Services/Execução-de-obras/Estrutura/estrutura-2.webp",
-    alt: "Interior de casa em Light Steel Frame na fase de fechamento, com montantes, lã de vidro e placas cimentícias",
-  },
   blocks: [
     {
       id: "morar",
       index: "01",
       audience: "para quem vai morar",
+      image: {
+        src: "/images/Services/Execução-de-obras/Acabamentos/acabamentos_1.webp",
+        alt: "Pintor aplicando a última demão em parede interna lisa",
+      },
       claim: "Parede que segura barulho de rua e calor de tarde.",
       hero: {
         from: 0,
         to: 50,
         unit: " dB",
         label: "de isolamento acústico na parede",
-        compare: "faixa de 45 a 50 dB; a NBR 15575 pede 45 entre unidades",
+        compare: "faixa de 45 a 50 dB na parede especificada",
         source: SOURCES.berkahnSpec,
       },
       aside: {
         value: "4×",
-        label: "menos calor atravessa a parede que no tijolo rebocado",
+        label: "menos calor atravessa a parede que no tijolo",
         source: SOURCES.nbr15220,
       },
     },
@@ -137,6 +137,10 @@ export const IMPACT_SECTION: ImpactSection = {
       id: "pagar",
       index: "02",
       audience: "para quem paga a obra",
+      image: {
+        src: "/images/Services/Execução-de-obras/Estrutura/estrutura-2.webp",
+        alt: "Interior de casa em Light Steel Frame na fase de fechamento, com montantes, lã de vidro e placas cimentícias",
+      },
       claim: "Quase tudo que entra no canteiro vira casa.",
       hero: {
         from: 30,
@@ -149,7 +153,7 @@ export const IMPACT_SECTION: ImpactSection = {
       },
       aside: {
         value: "2022",
-        label: "norma própria na ABNT, a NBR 16970",
+        label: "norma própria na ABNT (NBR 16970)",
         source: SOURCES.nbr16970,
       },
     },
@@ -157,27 +161,27 @@ export const IMPACT_SECTION: ImpactSection = {
       id: "cidade",
       index: "03",
       audience: "para o terreno e a cidade",
+      image: {
+        src: "/images/Home/lsf-estrutura.webp",
+        alt: "Esqueleto de Light Steel Frame de uma casa montado sobre o radier, com montantes e tesouras de aço galvanizado",
+      },
       claim: "O aço volta para a siderúrgica, não para o entulho.",
       hero: {
         from: 16,
         to: 100,
         unit: "%",
         label: "do aço reciclável sem perder qualidade",
-        compare: "do entulho de obra, o Brasil recicla 16%",
+        compare: "o Brasil recicla 16% do entulho de obra",
         source: SOURCES.worldsteel,
         compareSource: SOURCES.abrecon,
       },
       aside: {
         value: "1,5 t",
-        label: "de CO₂ evitada por tonelada de aço reciclado",
+        label: "de CO₂ evitada por tonelada reciclada",
         source: SOURCES.worldsteel,
       },
     },
   ],
 };
 
-/** Texto final do número-herói, como fica parado. */
-export function heroText(hero: ImpactHero): string {
-  return `${hero.prefix ?? ""}${hero.to}${hero.unit}`;
-}
 
