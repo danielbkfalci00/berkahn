@@ -85,6 +85,35 @@ contradição que a própria v1.2 introduziu: o prompt pedia obra "varrida e qui
 e canteiro varrido demais é justamente o que denuncia imagem gerada. Imperfeição
 passou a ser requisito escrito.
 
+### [[linkedin-post]] v1.2.2 → v1.3 (2026-09-03)
+
+Primeira calibragem desta série feita com **duas leituras humanas independentes**,
+e a única em que o dado contrariou o que o prompt mandava.
+
+Três versões do mesmo post passaram no `check-linkedin.mjs` com 148, 157 e 166
+palavras. O Bruno reprovou a de 148 por confusa e a de 157 por truncada. Um segundo
+revisor, sem ver a conversa, usou a mesma palavra: truncado. A versão aprovada foi
+a de **166 palavras**, a mais longa das três, e o caminho até ela passou por
+devolver conectivos, não por cortar.
+
+O alvo de 110 a 140 estava produzindo taquigrafia técnica que passava no
+verificador e falhava no leitor. A v1.3 separa o alvo por densidade do assunto:
+110 a 140 em tema leve, **150 a 180 em tema com número, norma ou termo técnico**,
+que é a maioria dos posts da Berkahn. O teto de 180 não mudou.
+
+Duas outras mudanças entraram junto:
+
+- **Pergunta como abertura** virou opção explicitamente bem-vinda, com a ressalva
+  do Bruno de que não vale em todos os posts. Eu vinha evitando abertura
+  interrogativa por completo, e as três versões reprovadas abriam com afirmação.
+- **Revisão humana em duas cabeças** virou etapa escrita. Quando os dois leitores
+  descrevem o problema com a mesma palavra sem terem combinado, isso passa na
+  frente de qualquer regra do prompt.
+
+A mensagem do `check-linkedin.mjs` foi atualizada junto. Deixar o verificador
+imprimindo "alvo 110 a 140" recriaria exatamente a contradição entre gerador e
+gate que originou a v1.2.
+
 ## Como sinalizar no vault
 
 Notas com `locked: true` no frontmatter têm essa proteção. Hook `validate-write` (futuro) bloqueia edits sem flag explícita.
