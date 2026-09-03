@@ -1,7 +1,7 @@
 ---
 tipo: context
 criado: 2026-08-05
-atualizado: 2026-08-27
+atualizado: 2026-09-02
 tags:
   - domain/brand
   - domain/architecture
@@ -39,7 +39,7 @@ Registro da direção aprovada pelo Bruno em 2026-08-05 para a repaginada da hom
 
 ## Narrativa da home (9 blocos)
 
-Hero cinematográfico (canvas/poster 100svh) → expertise institucional (SplitText scrub) → segmentos (parallax) → processo em 4 fases (sticky + crossfade) → números de engenharia (CountUp) → introdução LSF + comparativo enxuto → parceiros → CTA. O rail de projetos está preservado no código, mas desmontado temporariamente da home. Scroll global: Lenis escopado à home (lerp 0.12, anchors), GSAP ScrollTrigger só nos momentos-assinatura.
+Hero cinematográfico (canvas/poster 100svh) → expertise institucional (SplitText scrub) → segmentos (parallax) → processo em 4 fases (sticky + crossfade) → introdução LSF + comparativo enxuto (04) → **impacto para quem mora, quem paga e a cidade (05, desde 2026-09-02; substituiu o bloco de números CountUp)** → parceiros → CTA. O rail de projetos está preservado no código, mas desmontado temporariamente da home. Scroll global: Lenis escopado à home (lerp 0.12, anchors), GSAP ScrollTrigger só nos momentos-assinatura.
 
 ## Estado de entrega (2026-08-06 — PR #43 mergeado)
 
@@ -156,3 +156,29 @@ A imagem da seção LSF entra monocromática por CSS (`grayscale`), então vale 
 Pendente: as imagens **secundárias** de cada fase (`pre-obra-2`, `terraplanagem_2`, `estrutura-1`, `acabamentos_2`), que aparecem no carrossel de `/servicos`, continuam sendo as genéricas antigas e destoam das novas. Mesmos prompts com outro enquadramento resolvem.
 
 Relacionados: [[berkahn-brand]] · [[guia-design-berkahn]] · [[banco-imagens]]
+
+## 05 · impacto (2026-09-02)
+
+Seção nova entre o comparativo (04) e os parceiros, inspirada em "Nosso impacto" da AD Barbieri, mas com recortes de construtora, não de fabricante: **para quem vai morar · para quem paga a obra · para o terreno e a cidade**. Substituiu o `StatsCounter`, que ficava antes do 04, sem label na série numerada e com os mesmos quatro números que o comparativo já mostrava.
+
+- Componente: `components/sections/home/ImpactPinned.tsx` (client, GSAP via `@/lib/gsap`). **Três batidas com o viewport preso** (track de 320vh, sticky), uma por conta. O herói de cada batida é um **número em escala de viewport (14–19vw) que conta conforme o scroll**, saindo do valor do sistema convencional e chegando ao do LSF (0→50 dB, 30→5%, 16→100%). Uma linha de texto por batida, até doze palavras; o número secundário vira legenda mono. Composições diferentes por batida (esquerda, centro grande, direita) para não repetir. **Profundidade por duas velocidades**: a foto ao fundo avança (zoom 1→1,15 + parallax) enquanto os números derivam no sentido oposto; o véu clareia na última batida. Mobile e reduced-motion: pilha estática, mesmo padrão de `ProcessPinned`. **Fontes não vão para a tela** (decisão do Bruno em 2026-09-02): ficam como `source` em cada número no arquivo de dados. Sem link de saída no fim da seção; o "Por que construção a seco" para `/lsf` foi cortado por não levar a nada que a seção já não diga.
+- A primeira versão, um "ledger" de três linhas iguais com seis números e três parágrafos, foi rejeitada pelo Bruno em 2026-09-02 por genérica, repetitiva e sem motion. Lição registrada: contenção sem momento-assinatura vira ficha técnica; na home, o número precisa ser o herói de algum lugar.
+- Dados: `lib/impact-data.ts` com `IMPACT_SECTION` (`hero` com `from/to` por batida, `aside`, `claim`), o registro `SOURCES` e `impactSources()`, que gera a lista de fontes a partir dos números. **Regra do arquivo: nenhum número entra sem `source`.** O registro nasce aqui para virar fonte única do site.
+- Imagem: **a Casa Santa Cristina foi usada e retirada no mesmo dia. Não é obra Berkahn** (é projeto de terceiro que aparece no portfólio), e uma seção chamada "impacto" não pode ter como placa uma casa que não construímos. A placa atual é `Services/Execução-de-obras/Estrutura/estrutura-2.webp` (interior LSF em fechamento, com lã de vidro à vista, que conversa com as três contas: acústica, canteiro limpo, aço). Ela repete a fase 03 do processo; a placa definitiva deve ser gerada com o prompt abaixo e salva em `public/images/Home/impacto-plate.webp`, trocando só o `src` em `lib/impact-data.ts`.
+
+  Prompt da placa definitiva (mesma receita do banco de fotografia de obra; `--ar 16:9`, escolher a variação menos limpa):
+  `Close-up documentary photograph inside a light steel frame wall under construction, galvanized steel studs and tracks filling the frame in rhythmic rows, mineral wool insulation packed between them, a few screws and a cordless drill resting on the bottom track, fine dust on the metal, flat diffuse daylight from an unfinished window opening, no people, 35mm lens at f/4, handheld with a slight tilt, ISO 800, muted neutral colors, visible grain, no perfect symmetry, no glossy CGI look, no logos, no text`
+
+| Bloco | Números | Fonte |
+|---|---|---|
+| morar | 45–50 dB na parede · 4× menos calor atravessa a parede | spec Berkahn (lã 90 mm) ref. NBR 15575 · NBR 15220-3 (U 0,38–0,5 vs tijolo 2,0–2,5) |
+| pagar | < 5% de desperdício (vs até 30%) · 2022, norma própria (NBR 16970) | SINDUSCON-SP · ABNT |
+| cidade | 100% do aço reciclável (vs 16% do entulho reciclado) · 1,5 t de CO₂ evitada por tonelada de aço reciclado | World Steel + Instituto Aço Brasil · ABRECON |
+
+Decisões de dado, com o porquê:
+- **Água ficou fora.** Cinco valores coexistem no projeto (60%, 70%, 90%, 99%, >99%) e nenhum tem fonte primária forte. A frase do bloco 01 cobre o tema sem número.
+- **Térmico só como transmitância**, com razão conservadora (pior LSF contra melhor tijolo). O blog registra que o LSF reprova na capacidade térmica da NBR 15575 pela rota simplificada, então "desempenho térmico conforme NBR" contradiria o próprio conteúdo.
+- **O "180,41 kgCO₂e/m²" do vault não se sustentou.** O paper existe (Abouhamad & Abu-Hamd, *Sustainability* 2020, 12(24):10686, DOI 10.3390/su122410686), mas o abstract não traz nenhum valor por m², só percentuais de um estudo de caso de um edifício universitário. Entrou o fallback previsto: 1,5 t de CO₂ evitada por tonelada de sucata (World Steel). Os dois artigos de sustentabilidade que citam 180,41 precisam de conferência no texto integral. Registrado no hub.
+- Só um número repete o comparativo (desperdício), reenquadrado como dinheiro e agora com fonte.
+
+Relacionados: [[site]] · [[berkahn-brand]] · [[steel-frame-domain]] · [[design-principles]]

@@ -1,7 +1,7 @@
 ---
 tipo: projeto
 criado: 2026-05-22
-atualizado: 2026-08-27
+atualizado: 2026-09-02
 tags:
   - project/site
   - status/active
@@ -98,6 +98,12 @@ Site em produção (Next.js 16 App Router + Supabase + Vercel + Tailwind + shadc
 - [ ] @bruno Atualizar o briefing do institucional para v4 antes de distribuir; o código está em v4 e a documentação em v3 #pendencia
 - [ ] @codex Mover Playfair e Caveat do layout raiz para a rota de orçamento, os únicos consumidores, e medir a redução no payload global #pendencia
 - [ ] @codex Avaliar lazy-load das seções GSAP abaixo da dobra da home, preservando Lenis, acessibilidade e a narrativa visual #pendencia
+- [ ] @codex Alinhar os números sem fonte que a seção 05 da home passou a contradizer, usando `SOURCES` de `lib/impact-data.ts` como registro único: `ESGBentoGrid` (>99% água, 40% climatização), `InfograficoLSF` (90% água, 3% desperdício), `lib/lsf-data.ts` (linha de água sem fonte; R da alvenaria divergente do blog; concreto na fundação 60% vs 8%), `global-steel-frame-data.ts`, `residencial-data.ts` e `data/articles/*` #pendencia
+- [ ] @bruno Fechar um único valor de consumo de água por m² para o site inteiro, com fonte primária; hoje 60%, 70%, 90%, 99% e >99% coexistem, e por isso água ficou fora da seção 05 #pendencia
+- [ ] @codex Conferir no texto integral de Abouhamad & Abu-Hamd (2020, DOI 10.3390/su122410686) o "180,41 kgCO₂e/m²" citado nos dois artigos de sustentabilidade; o abstract só traz percentuais, e a home usou o fallback de 1,5 t de CO₂ por tonelada de aço reciclado #pendencia
+- [ ] @bruno **Casa Santa Cristina não é obra Berkahn** (dito em 2026-09-02 ao tirar a foto da seção 05). Revisar como ela aparece em `/portfolio`, `lib/residencial-data.ts:159-160`, `lib/presentation-data.ts:14-20` e na apresentação executiva; se for projeto de terceiro, precisa de crédito ou sair #pendencia
+- [ ] @bruno Gerar a placa definitiva da seção 05 com o prompt registrado em [[home-redesign-direcao]] e salvar em `public/images/Home/impacto-plate.webp`; hoje a placa reaproveita a foto da fase 03 do processo #pendencia
+- [ ] @bruno Levantar o desvio médio entre orçamento e valor entregue nos contratos concluídos; seria o número mais forte para "quem paga a obra" na seção 05 #pendencia
 - [x] Validar build (`npm run build`) sem warnings — passou em 2026-08-12 com Next 16.3; três `<img>` migrados, Browserslist atualizado, `middleware` migrado para `proxy` e tracing integral do harness removido
 - [x] **gitleaks pre-commit ativo** — reverificado em 2026-08-27 nos commits das PRs #72 e #73; o hook escaneou apenas o staged e encontrou zero leaks antes de liberar cada commit
 
