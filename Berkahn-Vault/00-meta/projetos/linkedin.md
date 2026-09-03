@@ -1,7 +1,7 @@
 ---
 tipo: projeto
 criado: 2026-05-22
-atualizado: 2026-08-27
+atualizado: 2026-09-03
 tags:
   - project/linkedin
   - status/active
@@ -62,6 +62,7 @@ Contagem verificada em 2026-07-29 contra `main` — o `kpi_publicados: 1` anteri
 - [x] Pauta `0fbdbc5d` (quanto custa o projeto) aprovada em 25/08 com copy de 115 palavras e capa 1080×1350
 - [ ] @bruno Publicar o post de quanto custa o projeto e registrar URL e data reais no card `0fbdbc5d` #pendencia
 - [x] Pauta `9c51c605` (terreno em declive) aprovada em 27/08 com copy de 157 palavras e capa 1080×1350, a primeira escrita sob a v1.2
+- [x] Copy de `9c51c605` reescrita em 03/09 após revisão do segundo leitor e aprovada nos dois lados, com 166 palavras e abertura em pergunta. Aprendizado em [[linkedin-post]] v1.3
 - [ ] @bruno Publicar o post de terreno em declive e registrar URL e data reais no card `9c51c605` #pendencia
 
 - [ ] Começar o backlog de distribuição: 22 posts derivam de artigos **já publicados** e não exigem escrever artigo nenhum

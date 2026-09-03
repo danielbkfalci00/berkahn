@@ -38,7 +38,7 @@ distribuição mensurável**, sem reabrir decisões arquiteturais concluídas.
 | Projeto | Estado | Próxima ação canônica |
 |---------|--------|-----------------------|
 | [[blog]] | Terreno em declive publicado, 43 artigos no ar | Solicitar indexação no Search Console |
-| [[linkedin]] | Quatro posts aprovados, nenhum publicado | Publicar manualmente e registrar URL/data |
+| [[linkedin]] | Quatro posts aprovados, nenhum publicado; copy calibrada para v1.3 com revisão em duas cabeças | Publicar um por semana, do mais antigo para o mais novo |
 | [[site]] | Pages neutralizado; admin multiusuário em produção | Smokes humanos e encerramento administrativo |
 | [[seo-aeo]] | Baseline técnico e de conversão disponível | Observar janelas de 7/28 dias |
 | [[apresentacoes]] | Apresentação executiva ativa | Smoke visual dos 16 slides |

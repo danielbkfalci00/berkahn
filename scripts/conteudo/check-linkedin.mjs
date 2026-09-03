@@ -37,7 +37,7 @@ const L = (passou, msg) => {
 
 // --- extensão e forma ---------------------------------------------------
 const palavras = corpo.split(/\s+/).filter(Boolean).length;
-L(palavras >= 100 && palavras <= 180, `extensão: ${palavras} palavras (100 a 180, alvo 110 a 140)`);
+L(palavras >= 100 && palavras <= 180, `extensão: ${palavras} palavras (100 a 180; alvo 110 a 140 em tema leve, 150 a 180 em tema com número ou termo técnico)`);
 
 const paragrafos = corpo.split(/\n\s*\n/).filter(Boolean);
 L(paragrafos.length <= 6, `parágrafos: ${paragrafos.length} (máx 6)`);
