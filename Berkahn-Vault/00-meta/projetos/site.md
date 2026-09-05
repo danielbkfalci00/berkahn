@@ -1,7 +1,7 @@
 ---
 tipo: projeto
 criado: 2026-05-22
-atualizado: 2026-09-02
+atualizado: 2026-09-05
 tags:
   - project/site
   - status/active
@@ -104,6 +104,11 @@ Site em produção (Next.js 16 App Router + Supabase + Vercel + Tailwind + shadc
 - [ ] @bruno **Casa Santa Cristina não é obra Berkahn** (dito em 2026-09-02 ao tirar a foto da seção 05). Revisar como ela aparece em `/portfolio`, `lib/residencial-data.ts:159-160`, `lib/presentation-data.ts:14-20` e na apresentação executiva; se for projeto de terceiro, precisa de crédito ou sair #pendencia
 - [ ] @bruno Gerar a placa definitiva da seção 05 com o prompt registrado em [[home-redesign-direcao]] e salvar em `public/images/Home/impacto-plate.webp`; hoje a placa reaproveita a foto da fase 03 do processo #pendencia
 - [ ] @bruno Levantar o desvio médio entre orçamento e valor entregue nos contratos concluídos; seria o número mais forte para "quem paga a obra" na seção 05 #pendencia
+- [ ] @bruno **O argumento de carbono do Light Steel Frame não se sustenta.** O único ACV brasileiro revisado por pares de berço ao túmulo (Caldas et al., *Ambiente Construído*, 2017) conclui a favor da alvenaria, porque a operação pesa de 50% a 70% do total. Decidir o que fazer com as afirmações de carbono já publicadas em `data/articles/sustentabilidade-steel-frame.ts` ("7× menos CO₂", 15,39 vs 108,12 kg/m²), nos dois artigos de sustentabilidade do blog (180,41 kgCO₂e/m²) e em `40-content/apresentacoes/steel-frame-no-mundo.md` (119-142, faixa que se sobrepõe à do concreto). A página /sustentabilidade já trata isso de frente na seção 07; o resto do site ainda não #pendencia
+- [ ] @bruno Trocar as oito fotos provisórias do Unsplash em `lib/sustentabilidade-data.ts` por fotografia nossa ou gerada com o banco de prompts de obra; os slots são floresta de abertura, cimento, areia, rio seco, fôrma de madeira, entulho, sucata e o plano de mata secundário #pendencia
+- [ ] @bruno Pedir ao fornecedor de OSB o número do certificado florestal (FSC ou CERFLOR). Hoje a página só pode dizer "pinus de floresta plantada", que é declaração de fabricante; com o certificado em mãos, o texto da seção 03 e da 07 pode nomear o selo #pendencia
+- [ ] @codex Medir CWV da /sustentabilidade depois do deploy. São oito fotos do Unsplash servidas pelo otimizador, uma cena 3D de seis camadas e um track horizontal; o teto combinado de peso é 1,6 MB e a página fala de baixo impacto, então peso alto ali é contradição visível #pendencia
+- [ ] @codex Confirmar o volume de resíduo de construção coletado no Brasil abrindo o PDF do Panorama ABREMA à mão. A própria página da entidade publica "45 mil toneladas" onde deveria ser "45 milhões", e o número de 48 milhões que o blog usa é de 2021 #pendencia
 - [x] Validar build (`npm run build`) sem warnings — passou em 2026-08-12 com Next 16.3; três `<img>` migrados, Browserslist atualizado, `middleware` migrado para `proxy` e tracing integral do harness removido
 - [x] **gitleaks pre-commit ativo** — reverificado em 2026-08-27 nos commits das PRs #72 e #73; o hook escaneou apenas o staged e encontrou zero leaks antes de liberar cada commit
 
