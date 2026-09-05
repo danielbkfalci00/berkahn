@@ -2,6 +2,7 @@
 
 import { useRef } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { gsap, useGSAP } from "@/lib/gsap";
 import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
 import { IMPACT_SECTION, type ImpactHero } from "@/lib/impact-data";
@@ -193,6 +194,25 @@ export function ImpactPinned() {
             </div>
           </article>
         ))}
+      </div>
+
+      {/* Saída da seção: a página que abre cada uma dessas contas. */}
+      <div className="container pb-2xl pt-12 md:pb-3xl md:pt-16">
+        <div className="border-t border-white-10 pt-10">
+          <Link
+            href="/sustentabilidade"
+            className="group inline-flex items-center gap-4 text-sm font-medium uppercase tracking-wider text-white"
+          >
+            <span
+              className="h-[3px] w-10 bg-white transition-all duration-500 ease-expo group-hover:w-16"
+              aria-hidden="true"
+            />
+            O que a obra tira do mundo
+          </Link>
+          <p className="mt-4 max-w-md font-tech text-xs tracking-wide text-white-50">
+            carbono, areia, água, madeira e entulho, com a procedência de cada número
+          </p>
+        </div>
       </div>
     </section>
   );

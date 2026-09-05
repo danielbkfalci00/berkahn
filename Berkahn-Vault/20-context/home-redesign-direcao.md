@@ -1,13 +1,13 @@
 ---
 tipo: context
 criado: 2026-08-05
-atualizado: 2026-09-02
+atualizado: 2026-09-05
 tags:
   - domain/brand
   - domain/architecture
   - project/site
   - status/active
-ai_summary: Direção visual do redesign do site (2026-08-05/06) — "luxo de engenharia" em paleta estritamente mono, Archivo display + Space Mono técnica e motion contido. Aplicada na home e em /atualidades, cuja abertura funde masthead e destaque editorial sem regredir SSG/ISR. Contém o estado do PR 43, pipeline do hero, o banco de prompts de fotografia documental de obra e decisões reutilizáveis para as próximas rotas.
+ai_summary: Direção visual do redesign do site (2026-08-05/06) — "luxo de engenharia" em paleta estritamente mono, Archivo display + Space Mono técnica e motion contido. Aplicada na home e em /atualidades, cuja abertura funde masthead e destaque editorial sem regredir SSG/ISR. Contém o estado do PR 43, pipeline do hero, o banco de prompts de fotografia documental de obra, a seção "05 · impacto" e a página /sustentabilidade, cuja apuração derrubou o argumento de carbono do LSF e virou uma ressalva explícita na tela.
 status: active
 projeto: site
 contextos_aplicados:
@@ -182,3 +182,53 @@ Decisões de dado, com o porquê:
 - Só um número repete o comparativo (desperdício), reenquadrado como dinheiro e agora com fonte.
 
 Relacionados: [[site]] · [[berkahn-brand]] · [[steel-frame-domain]] · [[design-principles]]
+
+## /sustentabilidade (2026-09-05)
+
+Página nova, destino do CTA que passa a fechar a seção "05 · impacto" da home. Pedido do Bruno: "uma página completa de sustentabilidade", muito visual, com scroll em camadas e 3D, storytelling conciso, sem AI slop, convencendo que construção a seco importa além de uma casa, com o eixo floresta incluído. Imagens do Unsplash liberadas como provisórias, para ele trocar depois pelas nossas.
+
+**Tese**: construir a seco muda o que a casa tira do mundo. A página é um extrato de contas que a obra paga fora do orçamento.
+
+### A descoberta que mudou a página
+
+O argumento de carbono **não se sustenta** e a página passou a dizer isso na cara, em vez de escondê-lo. O único ACV brasileiro revisado por pares que compara os dois sistemas de berço ao túmulo (Caldas, Lira, Melo e Sposto, *Ambiente Construído*, 2017, habitação de 46 m² em Brasília, 50 anos) conclui a favor da **alvenaria**: 1,16–1,76 tCO₂eq/m² contra 1,17–1,91 do Light Steel Frame, porque a fase de operação responde por 50% a 70% do total e o envelope térmico do LSF estudado era pior. Na fase de construção o LSF ganha, mas por ~16% (0,32 contra 0,38), não por "7 vezes".
+
+Consequências, todas aplicadas:
+- **Nenhum kgCO₂/m² na página.** Os três valores que o site publica hoje (180,41 · 15,39 · 119–142) são incompatíveis entre si e nenhum resiste a checagem. O de 119–142 tem faixas que se sobrepõem às do concreto (142 > 134), ou seja, derruba o próprio argumento.
+- A seção 07 tem um bloco chamado **"O que a gente não afirma"**, que declara a limitação e explica o que a construção a seco de fato muda com número na mão. É o argumento de credibilidade mais forte da página.
+- Vender desmontabilidade como ganho de carbono é factualmente errado: no mesmo estudo, o fim de vida é menos de 1% das emissões. Desmontagem é argumento de **circularidade e resíduo**, e é assim que a seção 06 a apresenta.
+
+### Estrutura e mecânica (uma por seção, nenhuma repetida)
+
+| # | seção | fundo | mecânica |
+|---|---|---|---|
+| 00 | abertura | carbon | foto recua devagar, texto sobe e sai antes; headline em linhas mascaradas (SplitText); **índice das cinco contas** no canto, que é a navegação da página |
+| 01 | o tamanho da conta | off-white | dois numerais contando; o primeiro é **preenchido por foto** via `background-clip: text`, e a foto deriva por dentro das letras enquanto elas ficam paradas |
+| 02 | o que a obra arranca | carbon | **track horizontal** com o viewport preso; três painéis giram em Y ao passar pelo centro (`containerAnimation`) |
+| 03 | a madeira que ninguém conta | carbon-soft | dois planos de mata em velocidades diferentes com **desfoque fixo** por distância; a nitidez é que lê como profundidade |
+| 04 | a parede | carbon | **corte que se abre no eixo Z**: seis camadas empilhadas se separam em perspectiva enquanto a cena gira; usa as nossas fotos de `public/images/Lsf/Layers/` e o `LSF_LAYERS` de `lib/lsf-data.ts` |
+| 05 | o que sobra | off-white | duas colunas-instrumento preenchidas por `clip-path: inset()`; a da obra convencional é preenchida pela **própria foto do entulho** |
+| 06 | o aço volta | carbon-soft | traçado fechado que se desenha por `strokeDashoffset`, com um quadrado percorrendo o caminho; retângulo de cantos vivos, não círculo com setas |
+| 07 | o que fica com a gente | white | quatro práticas e o bloco escuro da ressalva |
+
+Regras que valeram: **sem `ScrollTrigger.pin`** (track alto com filho `sticky`, porque pin briga com o Lenis); todo estado base do HTML é o estado **final** da animação, então sem JS ou com `prefers-reduced-motion` a página continua sendo um diagrama legível; nunca dois fundos iguais em sequência e o branco puro aparece uma vez só.
+
+### Decisões de dado
+
+- **Água entra**, ao contrário da home, porque agora existe fonte primária: 263 L/m² de média em canteiros convencionais medidos em Joinville, com faixa de 107 a 594 (Mergener et al., *Ambiente Construído*, 2025). É água **de canteiro**, e a tela traz a cidade, a faixa e a ressalva de que a fundação continua molhada. Sem essas três coisas, o número grande ao lado de uma alternativa não quantificada recria o "99% menos" por justaposição, que é justamente o que a decisão queria evitar. O par "5 L/m² contra 500 L/m²" que circula no site vem de compilação comercial e continua fora.
+- **Desperdício repete o par da home** ("< 5%" contra "até 30%") de propósito, para não criar um terceiro par conflitante. O que a página acrescenta é o destino: o Brasil recicla de 15% a 20% do entulho, com as usinas operando na metade da capacidade (Pesquisa Setorial ABRECON, EDUSP).
+- **O eixo floresta** é o achado mais forte e o menos óbvio: fôrma e escoramento de concreto armado consomem até 7,6 m³ de madeira por 100 m², e nas obras medidas pela UFSC tudo foi para aterro (Oliveira et al., Mix Sustentável, 2022). O número de reusos (2 a 3) é de outro estudo, o do ENTAC, e a página atribui cada frase ao seu em vez de fundir os dois numa apuração só.
+- **A equivalência caiu na revisão.** A primeira versão dizia que a obra descarta em madeira temporária o mesmo volume que uma casa de madeira usaria para sempre. Só é verdade na borda inferior: 0,025 m³/m² descartados contra 0,02 a 0,34 m³/m² permanentes, faixa de 17 vezes. Pior, as duas fontes brasileiras divergem em até 3x sobre a mesma grandeza (0,025 do ENTAC contra 0,042-0,076 derivados da UFSC), e a página estava escolhendo em silêncio a que servia a cada frase. Foi substituída por "a fôrma é madeira que a obra compra para jogar fora", que a fonte sustenta inteira.
+- **Saíram na revisão os 92% da madeira amazônica e os 10,5 mi ha de floresta plantada.** O primeiro tem `note` da própria fonte avisando que o relatório defende MAIS madeira na construção e que o número é de destino, não de condenação; a página o usava exatamente como condenação. O segundo é total nacional de silvicultura sem vínculo nenhum com a Berkahn, posicionado ao lado do claim de OSB, o que é greenwashing por adjacência.
+- **OSB**: dá para dizer "pinus de floresta plantada" (declaração de fabricante). **Não dá para dizer FSC nem CERFLOR** sem alguém conferir o certificado do fornecedor real.
+- **O 37% do UNEP saiu na revisão.** O escopo inclui a operação do edifício, que a própria seção 07 admite dominar, então a abertura cobrava da obra uma conta que a conclusão devolve ao uso. Some-se que a home publica 34% (edição anterior) para a frase quase idêntica. Ficou só a extração de materiais (~50%), que é número de extração e não de emissão.
+- **Nada de publicar só o topo da faixa.** Regra que nasceu da revisão e vale para as próximas páginas: onde a fonte descreve faixa, a tela mostra faixa. O cimento virou "7 a 8%" (a própria nota da fonte chama isso de leitura honesta) e a água mostra 107 a 594. Publicar sempre o topo é um viés que o leitor identifica na terceira ocorrência, e aí a página perde o benefício da dúvida que a seção 07 tenta comprar.
+- **Reciclagem de entulho alinhada com a home**: 16%, importando `SOURCES.abrecon` de `lib/impact-data.ts` em vez de publicar um segundo número. O que a página acrescenta é a capacidade ociosa das usinas, que a home não conta.
+- **A perda do canteiro é "na maior parte" sucata metálica.** A primeira versão dizia que o que sobra é sucata metálica com comprador, e isso é falso em qualquer canteiro: retalho de gesso, OSB e lã mineral não é metal e o gesso nem cadeia de reciclagem tem no Brasil.
+- **"Sem argamassa e sem cura" se autodestruía na tela.** A headline da seção 04 negava argamassa ao lado da lista de camadas que abre em base coat, aplicado úmido. Virou "sem argamassa de assentamento", com o corpo assumindo que o acabamento externo é a etapa que ainda espera secar. Assumir a exceção é mais forte que escondê-la.
+
+### Imagens
+
+Oito fotos do Unsplash, provisórias, todas conferidas uma a uma (ID extraído da página da foto, URL testada com 200) e escolhidas para aguentar grayscale, que é o tratamento da casa. As seis fotos de camada da parede são nossas. Substituir por fotografia própria quando houver.
+
+Relacionados: [[site]] · [[berkahn-brand]] · [[steel-frame-domain]]

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { preload } from "react-dom";
-import { SmoothScroll } from "@/components/sections/home/SmoothScroll";
+import { SmoothScroll } from "@/components/providers/SmoothScroll";
 import { HeroCinematic } from "@/components/sections/home/HeroCinematic";
 import { EditorialStatement } from "@/components/sections/home/EditorialStatement";
 import { Segments } from "@/components/sections/home/Segments";

@@ -6,7 +6,9 @@ import { gsap, ScrollTrigger } from "@/lib/gsap";
 import "lenis/dist/lenis.css";
 
 /**
- * Smooth scroll escopado à home (montado em app/page.tsx, renderiza null).
+ * Smooth scroll opt-in por rota: a página que quiser monta <SmoothScroll />
+ * e o componente renderiza null. Hoje em app/page.tsx e app/sustentabilidade.
+ * Nunca montar duas instâncias ao mesmo tempo.
  *
  * - Roda sobre o scroll nativo (Lenis): âncoras, sticky e a11y preservados.
  * - Com prefers-reduced-motion nada é instanciado — scroll 100% nativo.
