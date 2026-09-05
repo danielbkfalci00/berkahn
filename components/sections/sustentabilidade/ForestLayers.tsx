@@ -7,9 +7,16 @@ import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
 import { FOREST_SECTION } from "@/lib/sustentabilidade-data";
 import { CountingNumber } from "./CountingNumber";
 
-/** Desfoque estático por plano. É a nitidez, não o movimento, que o olho lê como distância. */
+/**
+ * Desfoque estático por plano, do mais distante para o mais próximo. É a
+ * nitidez, não o movimento, que o olho lê como distância. Os fallbacks existem
+ * porque a lista de planos mora no arquivo de dados: um plano a mais lá viraria
+ * `undefined` na classe e `NaN` no tween, e o GSAP falharia em silêncio.
+ */
 const PLANE_BLUR = ["blur-[3px]", "blur-[1px]"];
 const PLANE_SPEED = [10, 22];
+const blurOf = (index: number) => PLANE_BLUR[index] ?? "blur-[1px]";
+const speedOf = (index: number) => PLANE_SPEED[index] ?? 16;
 
 /**
  * "03 · a madeira que ninguém conta". Dois planos de mata recuam em velocidades
@@ -34,9 +41,9 @@ export function ForestLayers() {
         planes.forEach((plane, index) => {
           gsap.fromTo(
             plane,
-            { yPercent: -PLANE_SPEED[index] / 2 },
+            { yPercent: -speedOf(index) / 2 },
             {
-              yPercent: PLANE_SPEED[index] / 2,
+              yPercent: speedOf(index) / 2,
               ease: "none",
               scrollTrigger: {
                 trigger: plane.closest("[data-forest-stage]"),
@@ -83,7 +90,7 @@ export function ForestLayers() {
           <div
             key={plane.src}
             data-forest-plane
-            className={`absolute inset-[-14%] will-change-transform ${PLANE_BLUR[index]}`}
+            className={`absolute inset-[-14%] will-change-transform ${blurOf(index)}`}
             style={{ opacity: index === 0 ? 0.35 : 0.55 }}
             aria-hidden="true"
           >
@@ -92,7 +99,9 @@ export function ForestLayers() {
               alt=""
               fill
               quality={65}
-              sizes="100vw"
+              // Os planos são desfocados e ficam a 35% e 55% de opacidade, então
+              // pedir metade da largura da tela não custa nitidez nenhuma.
+              sizes="50vw"
               className="object-cover grayscale"
             />
           </div>
@@ -112,11 +121,11 @@ export function ForestLayers() {
             </p>
           </RevealOnScroll>
 
-          <div className="mt-16 grid gap-10 border-t border-white-10 pt-10 sm:grid-cols-3">
+          <div className="mt-16 grid gap-10 border-t border-white-10 pt-10 sm:grid-cols-2 lg:max-w-2xl">
             {FOREST_SECTION.figures.map((figure, index) => (
               <RevealOnScroll key={figure.label} delay={index * 0.1}>
                 <div>
-                  <CountingNumber figure={figure} className="text-[13vw] text-white sm:text-[5vw]" />
+                  <CountingNumber figure={figure} className="text-[13vw] text-white sm:text-[6vw]" />
                   <span className="mt-3 block h-[3px] w-8 bg-white" aria-hidden="true" />
                   <p className="mt-3 text-xs font-medium uppercase tracking-wider text-white-70">
                     {figure.label}

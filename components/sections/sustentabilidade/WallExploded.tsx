@@ -153,7 +153,7 @@ export function WallExploded() {
                         {String(index + 1).padStart(2, "0")}
                       </span>
                       <span className="flex-1 text-sm font-medium text-white">
-                        {WALL_LAYER_COPY[index].name}
+                        {WALL_LAYER_COPY[index]?.name ?? layer.name}
                       </span>
                       <span className="font-tech text-[11px] tracking-wide text-white-50">
                         {layer.thickness}

@@ -30,13 +30,17 @@ export function CountingNumber({ figure, className = "", fillImage }: CountingNu
   const rootRef = useRef<HTMLSpanElement>(null);
 
   useGSAP(
-    () => {
+    (_context, contextSafe) => {
       const root = rootRef.current;
-      if (!root) return;
+      if (!root || !contextSafe) return;
 
       if (fillImage) {
         const probe = new window.Image();
-        probe.onload = () => {
+        // contextSafe é obrigatório aqui: o onload roda depois que a execução
+        // síncrona deste callback terminou, e o que é criado fora dela não entra
+        // no contexto do useGSAP. Sem isso, sair da rota antes de a imagem
+        // carregar deixaria um ScrollTrigger com scrub escutando para sempre.
+        probe.onload = contextSafe(() => {
           root.style.backgroundImage = `url("${fillImage}")`;
           root.style.backgroundSize = "150% auto";
           root.style.backgroundPosition = "12% 30%";
@@ -57,11 +61,15 @@ export function CountingNumber({ figure, className = "", fillImage }: CountingNu
               },
             });
           }
-        };
+        });
         probe.src = fillImage;
       }
 
-      if (figure.from === undefined || figure.to === undefined) return;
+      // Estreitados aqui fora: o TypeScript não leva a narrowing para dentro do
+      // callback do matchMedia, e um cast ali dentro só calaria o compilador.
+      const from = figure.from;
+      const to = figure.to;
+      if (from === undefined || to === undefined) return;
 
       const mm = gsap.matchMedia();
       mm.add("(prefers-reduced-motion: no-preference)", () => {
@@ -69,8 +77,6 @@ export function CountingNumber({ figure, className = "", fillImage }: CountingNu
         const prefixEl = root.querySelector<HTMLElement>("[data-count-prefix]");
         if (!numberEl) return;
 
-        const from = figure.from as number;
-        const to = figure.to as number;
         const state = { value: from };
         const render = () => {
           const value = Math.round(state.value);

@@ -18,9 +18,9 @@ export function SustentabilidadeHero() {
   const sectionRef = useRef<HTMLElement>(null);
 
   useGSAP(
-    () => {
+    (_context, contextSafe) => {
       const root = sectionRef.current;
-      if (!root) return;
+      if (!root || !contextSafe) return;
       const mm = gsap.matchMedia();
 
       mm.add("(prefers-reduced-motion: no-preference)", () => {
@@ -54,20 +54,25 @@ export function SustentabilidadeHero() {
         gsap.from(rest, { autoAlpha: 0, y: 24, duration: 0.9, ease: "expo.out", delay: 0.5, stagger: 0.12 });
 
         if (title) {
-          document.fonts.ready.then(() => {
-            SplitText.create(title, {
-              type: "lines",
-              mask: "lines",
-              autoSplit: true,
-              onSplit: (self) =>
-                gsap.from(self.lines, {
-                  yPercent: 110,
-                  duration: 1.1,
-                  ease: "expo.out",
-                  stagger: 0.09,
-                }),
-            });
-          });
+          // A Promise resolve depois da execução síncrona deste callback, então
+          // o split e o tween precisam de contextSafe para entrar no contexto e
+          // serem revertidos se a rota sair antes de as fontes carregarem.
+          document.fonts.ready.then(
+            contextSafe(() => {
+              SplitText.create(title, {
+                type: "lines",
+                mask: "lines",
+                autoSplit: true,
+                onSplit: (self) =>
+                  gsap.from(self.lines, {
+                    yPercent: 110,
+                    duration: 1.1,
+                    ease: "expo.out",
+                    stagger: 0.09,
+                  }),
+              });
+            })
+          );
         }
       });
     },

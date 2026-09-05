@@ -13,7 +13,7 @@ import { CTA } from "@/components/sections/CTA";
 
 const TITLE = "Sustentabilidade | Berkahn";
 const DESCRIPTION =
-  "O que uma obra extrai, desperdiça e deixa para trás, e o que a construção a seco em Light Steel Frame muda nessa conta. Com a procedência de cada número.";
+  "As contas que uma obra paga fora do orçamento, de cimento e areia a madeira de fôrma e entulho, e o que a construção a seco em Light Steel Frame muda em cada uma.";
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -52,8 +52,8 @@ export const metadata: Metadata = {
  * A tese: construir a seco muda o que a casa tira do mundo. A página segue a
  * ordem extração → madeira → parede → resíduo → ciclo do aço → prática, e cada
  * seção tem a própria mecânica de scroll para nenhuma repetir a anterior:
- * parallax de plano no hero, contagem em duas velocidades no 01, track
- * horizontal pinado no 02, planos com desfoque fixo no 03, corte que se abre em
+ * parallax de plano no hero, numeral preenchido por foto no 01, track
+ * horizontal preso por sticky no 02, planos com desfoque fixo no 03, corte que se abre em
  * Z no 04, colunas que preenchem por clip-path no 05 e traçado que se fecha no
  * 06.
  *
@@ -98,7 +98,7 @@ export default function SustentabilidadePage() {
       <CTA
         label="CONSTRUÇÃO A SECO"
         title="Vamos calcular isso no seu projeto"
-        description="Cada terreno e cada programa mudam o que a obra consome. Conte o que você quer construir e a gente devolve o escopo, o prazo e o que o canteiro vai gerar."
+        description="Cada terreno muda o que a obra consome. Conte o que você quer construir e a gente devolve escopo, prazo e o que o canteiro vai gerar."
         ctaLocation="sustentabilidade"
       />
     </>

@@ -12,14 +12,6 @@ import { LOOP_SECTION } from "@/lib/sustentabilidade-data";
  * para o clichê de infográfico de reciclagem.
  */
 const PATH = "M 60 40 H 740 V 300 H 60 Z";
-/** Estações posicionadas sobre o traçado, em coordenadas do viewBox. */
-const STATIONS = [
-  { x: 60, y: 40, anchor: "start" as const, dy: -16 },
-  { x: 400, y: 40, anchor: "middle" as const, dy: -16 },
-  { x: 740, y: 170, anchor: "end" as const, dy: -12 },
-  { x: 400, y: 300, anchor: "middle" as const, dy: 28 },
-  { x: 60, y: 300, anchor: "start" as const, dy: 28 },
-];
 
 /**
  * "06 · o aço volta". O traçado do circuito se desenha conforme o scroll e um
@@ -127,8 +119,8 @@ export function SteelLoop() {
                 strokeWidth="1.5"
                 vectorEffect="non-scaling-stroke"
               />
-              {STATIONS.map((station, index) => (
-                <g key={LOOP_SECTION.stations[index].id} data-loop-station>
+              {LOOP_SECTION.stations.map((station) => (
+                <g key={station.id} data-loop-station>
                   <rect x={station.x - 3} y={station.y - 3} width="6" height="6" fill="#FFFFFF" />
                   <text
                     x={station.x}
@@ -138,7 +130,7 @@ export function SteelLoop() {
                     fontSize="13"
                     fontFamily="var(--font-space-mono), monospace"
                   >
-                    {LOOP_SECTION.stations[index].label}
+                    {station.label}
                   </text>
                 </g>
               ))}

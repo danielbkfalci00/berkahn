@@ -70,7 +70,7 @@ export function ScaleStatement() {
                 <div>
                   <CountingNumber
                     figure={figure}
-                    className="text-[19vw] text-black md:text-[10vw] lg:text-[8.5vw]"
+                    className="text-[24vw] text-black md:text-[13vw] lg:text-[12vw]"
                     fillImage={index === 0 ? SCALE_SECTION.fillImage : undefined}
                   />
                   <span className="mt-4 block h-[3px] w-10 bg-black" aria-hidden="true" />

@@ -22,7 +22,10 @@ export function PracticeList() {
 
         <ul className="mt-14 grid gap-px border-t-[3px] border-black bg-black-10 md:grid-cols-2">
           {PRACTICE_SECTION.practices.map((practice, index) => (
-            <li key={practice.title} className="bg-white">
+            <li
+              key={practice.title}
+              className={`bg-white ${index % 2 === 1 ? "md:pl-8" : ""}`}
+            >
               <RevealOnScroll delay={index * 0.08}>
                 <div className="flex gap-5 py-8 pr-6 md:py-10">
                   <span className="font-tech text-[11px] tracking-wide text-black-50">
