@@ -195,7 +195,7 @@ Eram ~7.300 palavras de corpo prontas enquanto o blog carregava 9 artigos de men
 
 **`orcamento-steel-frame`** (2.354 palavras de corpo). Bloqueio: **todo o eixo de preço está um ano defasado e conflita com o que já está no ar.**
 
-- Ancora no Índice Arquitecasa de **janeiro/2025** (R$ 2.979 a 5.926/m² no Sudeste). O canônico é **dezembro/2025** (R$ 3.015 a 6.091/m²), e a fonte disso é [[financiar-construcao-light-steel-frame]]
+- Ancora no Índice Arquitecasa de **janeiro/2025** (R$ 2.979 a 5.926/m² no Sudeste). O canônico é **dezembro/2025** (R$ 3.015 a 6.091/m²), e a fonte disso é [[40-content/blog/publicados/financiar-construcao-light-steel-frame|financiar-construcao-light-steel-frame]]
 - Selic e taxa da Caixa são de 2025 — o dado mais perecível do texto
 - Preços unitários de 2025: placa cimentícia, basecoat, tarifa de energia, caçamba, terreno
 - Diz LSF a 250 kg/m² e vida útil de 90 anos; [[mitos-verdades-steel-frame]], **publicado**, diz 60 a 100 kg/m² e "acima de 100 anos". O corpus publicado manda

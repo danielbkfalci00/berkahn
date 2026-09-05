@@ -57,7 +57,7 @@ convida a editar a errada.
 | Arquivo arquivado | Está no ar como | Similaridade |
 |---|---|---:|
 | `berkahn-reforma-construcao-industrializada-renamed.md` | [[reforma-tributaria-construcao-industrializada]] | **92%** |
-| `normas-lsf-renamed.md` | [[normas-light-steel-frame-brasil]] | **67%** |
+| `normas-lsf-renamed.md` | [[40-content/blog/publicados/normas-light-steel-frame-brasil|normas-light-steel-frame-brasil]] | **67%** |
 | `alvenaria-vs-drywall-renamed.md` | [[drywall-ou-alvenaria]] | **63%** |
 
 O `berkahn-reforma-...` é também o de frontmatter corrompido
