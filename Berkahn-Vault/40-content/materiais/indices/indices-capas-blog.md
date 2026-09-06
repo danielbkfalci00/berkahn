@@ -46,7 +46,7 @@ arquivos_duplicados: 3
 | `mito-verdade-lsf.png` | [[mitos-verdades-steel-frame]] | |
 | `normas-lsf.png` | [[certificacoes-steel-frame]] / [[40-content/blog/publicados/normas-light-steel-frame-brasil|normas-light-steel-frame-brasil]] | já em produção → `public/images/img_blog/Normas LSF/normas_lsf.png` |
 | `protecao-contra-queda.png` | [[protecao-contra-quedas-construcao-civil]] | |
-| `vantagesn-desnavantens-lsf.png` | [[steel-frame-vantagens-desvantagens]] | typo histórico no nome |
+| `vantagesn-desnavantens-lsf.png` | [[40-content/blog/publicados/steel-frame-vantagens-desvantagens|steel-frame-vantagens-desvantagens]] | typo histórico no nome |
 | `reestruturando-o-concreto.jpg` | [[sustentabilidade-construcao-civil-economia-circular\|economia circular]] | re-purpose; já em produção → `public/images/img_blog/economia circular/economia_circular.jpg` |
 | `energia-solar.png` | — | órfã — tema fotovoltaico (artigo "Solar + LSF" futuro) |
 | `marmore.png` | — | órfã — material premium (artigo "Mármore em LSF" futuro) |
