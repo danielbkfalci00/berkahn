@@ -231,4 +231,29 @@ Regras que valeram: **sem `ScrollTrigger.pin`** (track alto com filho `sticky`, 
 
 Oito fotos do Unsplash, provisórias, todas conferidas uma a uma (ID extraído da página da foto, URL testada com 200) e escolhidas para aguentar grayscale, que é o tratamento da casa. As seis fotos de camada da parede são nossas. Substituir por fotografia própria quando houver.
 
+### Auditoria de design e UX (2026-09-07)
+
+Cinco auditorias independentes rodaram sobre **screenshots reais da página inteira**, capturados com Playwright rolando de verdade, em 1440 e em 390, mais o código. Método que vale repetir: sem as tiras, três dos quatro defeitos críticos não apareciam na leitura do código.
+
+**O que estava quebrado e ninguém tinha visto:**
+
+- As placas do corte de parede pintavam **por cima da coluna de texto**, comendo a primeira letra de seis linhas. Duas lições de CSS que valem para o site inteiro: em `rotateY(θ)` o eixo Z local aponta para `x = sin(θ)`, então o sinal decide o lado do leque; e **`overflow-hidden` não recorta subárvore em `transform-style: preserve-3d`**, só `clip-path: inset(0)` recorta.
+- O circuito do aço **terminava de se desenhar acima do topo da janela**, porque o gatilho era a seção inteira e o SVG mora no terço de cima. A perna que fecha o circuito nunca era vista. Regra: quando o gatilho é uma seção alta e o elemento animado é pequeno, o gatilho tem que ser o elemento.
+- No celular os rótulos do SVG saíam a **5,6px**, porque `viewBox` de 800 num container de 342 dá fator 0,43. SVG com texto precisa de fallback próprio no mobile, não de escala.
+- O contador passava por **valores errados** ("49 bilhões" antes de 50) numa página cuja tese é precisão numérica.
+
+**Hierarquia, o achado mais estrutural:** havia **seis escalas de numeral** sem sistema, e na seção da perda o número de contexto (16%) estava 2,4 vezes maior que os da tese (30% contra 5%). Numa paleta mono a escala é a única linguagem de importância; com seis valores nenhum significa nada. Virou `components/sections/sustentabilidade/scale.ts`, três tiers, com um teto menor para coluna de meia largura.
+
+**O ritmo de fundo que eu tinha planejado não existia.** `carbon` contra `carbon-soft` é 10% de luminância: a fronteira lia como costura de renderização, não como capítulo. As três seções escuras seguidas chegavam ao leitor como um bloco contínuo de 5.500px. Decisão: `carbon-soft` **não é cor de chão**, só de chapa sobre o preto. Capítulo se marca com régua de 3px full-bleed.
+
+**Espaço morto:** `py-2xl md:py-3xl` aplicado em seis seções sem julgamento custava ~2.700px de nada. A página caiu de 12.448px para 11.437px sem perder um argumento.
+
+**Texto:** saiu o meta-texto que anunciava a estrutura da página, a atribuição "estudo da UFSC" (que furava a própria regra de não publicar fonte na tela), o aforismo de legenda, a legenda que descrevia a foto e a prática do OSB que repetia palavra por palavra o fecho da seção 03. Números apareciam escritos na prosa e como numeral na mesma tela.
+
+**Botões e navegação:** o índice das contas voltou, agora dentro da seção 01 em vez do rodapé do hero, onde sumia sob o header ao primeiro scroll. O CTA ganhou variante editorial e o botão passou a nomear o entregável em vez de repetir o "Fale Conosco" do header. E o projeto **não tinha nenhuma regra de `:focus-visible`**: foi adicionada no `globals.css` junto com `scroll-padding-top`, e o Lenis ganhou `anchors: { offset: -96 }`, porque as âncoras depositavam o alvo atrás do header. Isso vale para o site inteiro.
+
+**Imagem:** o hero era mata com névoa, a foto mais genérica que existe para sustentabilidade e a única não documental da página. Virou a cava de areia, que casa com a lede.
+
+**O que foi recusado, de propósito:** cortar a seção da parede (é a única peça que mostra o produto), mover o bloco "O que a gente não afirma" para o começo (abrir com a concessão faz quem sai em 20% levar a ressalva como mensagem), barra de progresso fixa (é o gesto mais genérico de página longa) e mexer em `.headline-md` no globals, que é usada no site inteiro.
+
 Relacionados: [[site]] · [[berkahn-brand]] · [[steel-frame-domain]]
