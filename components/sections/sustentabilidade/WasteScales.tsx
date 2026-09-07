@@ -6,6 +6,7 @@ import { gsap, useGSAP } from "@/lib/gsap";
 import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
 import { WASTE_SECTION } from "@/lib/sustentabilidade-data";
 import { CountingNumber } from "./CountingNumber";
+import { FIGURE_HERO_TIGHT, FIGURE_SUPPORT } from "./scale";
 
 /**
  * "05 · o que sobra". Duas colunas medem a perda de material lado a lado. A
@@ -29,19 +30,19 @@ export function WasteScales() {
 
       mm.add("(prefers-reduced-motion: no-preference)", () => {
         const fills = gsap.utils.toArray<HTMLElement>("[data-fill]", root);
-        fills.forEach((fill) => {
-          const target = Number(fill.dataset.fill ?? 0);
-          gsap.fromTo(
-            fill,
-            { clipPath: "inset(100% 0% 0% 0%)" },
-            {
-              clipPath: `inset(${100 - target}% 0% 0% 0%)`,
-              ease: "expo.out",
-              duration: 1.6,
-              scrollTrigger: { trigger: root, start: "top 62%", once: true },
-            }
-          );
-        });
+        // A caixa de preenchimento já tem a altura final; o clip só a revela de
+        // baixo para cima. Antes ela ocupava a moldura inteira e o clip mostrava
+        // só a faixa de baixo da foto, que é chão, não a montanha de entulho.
+        gsap.fromTo(
+          fills,
+          { clipPath: "inset(100% 0% 0% 0%)" },
+          {
+            clipPath: "inset(0% 0% 0% 0%)",
+            ease: "expo.out",
+            duration: 1.6,
+            scrollTrigger: { trigger: root, start: "top 62%", once: true },
+          }
+        );
       });
     },
     { scope: sectionRef }
@@ -51,14 +52,14 @@ export function WasteScales() {
     <section
       ref={sectionRef}
       id="sobra"
-      className="bg-off-white py-2xl md:py-3xl"
+      className="bg-off-white py-xl md:py-2xl"
       aria-labelledby="sobra-title"
     >
       <div className="container">
         <div className="grid gap-14 md:grid-cols-12 md:gap-12">
           <div className="md:col-span-5">
             <RevealOnScroll>
-              <p className="font-tech text-xs lowercase tracking-wide text-black-50">
+              <p className="font-tech text-xs lowercase tracking-wide text-black-70">
                 {WASTE_SECTION.eyebrow}
               </p>
               <h2 id="sobra-title" className="headline-md mt-4 max-w-md">
@@ -74,7 +75,7 @@ export function WasteScales() {
               <div className="mt-10 border-t-[3px] border-black pt-6">
                 <CountingNumber
                   figure={WASTE_SECTION.recycling}
-                  className="text-[16vw] text-black md:text-[6vw]"
+                  className={`${FIGURE_SUPPORT} text-black`}
                 />
                 <p className="mt-3 max-w-xs text-xs font-medium uppercase tracking-wider text-black-70">
                   {WASTE_SECTION.recycling.label}
@@ -87,7 +88,7 @@ export function WasteScales() {
             <div className="grid grid-cols-2 gap-5">
               {columns.map((column) => (
                 <div key={column.id}>
-                  <div className="fluxograma-grid-bg relative h-[34vh] min-h-[230px] overflow-hidden border border-black-10 bg-white md:h-[46vh] md:min-h-[300px]">
+                  <div className="fluxograma-grid-bg relative h-[24vh] min-h-[170px] overflow-hidden border border-black-10 bg-white md:h-[30vh] md:min-h-[210px]">
                     {/* Régua de escala: 0 embaixo, 100 no topo. A moldura vazia
                         é o argumento, então ela precisa ler como instrumento. */}
                     <span className="absolute inset-x-0 top-0 h-px bg-black-30" aria-hidden="true" />
@@ -95,16 +96,16 @@ export function WasteScales() {
                       className="absolute inset-x-0 top-1/2 h-px bg-black-10"
                       aria-hidden="true"
                     />
-                    <span className="absolute right-2 top-1 z-10 font-tech text-[10px] text-black-30">
+                    <span className="absolute right-2 top-1 z-10 font-tech text-[10px] text-black-70">
                       100
                     </span>
-                    <span className="absolute bottom-1 right-2 z-10 font-tech text-[10px] text-black-30">
+                    <span className="absolute bottom-1 right-2 z-10 font-tech text-[10px] text-black-70">
                       0
                     </span>
                     <div
-                      data-fill={column.value}
-                      className="absolute inset-0"
-                      style={{ clipPath: `inset(${100 - column.value}% 0% 0% 0%)` }}
+                      data-fill
+                      className="absolute inset-x-0 bottom-0"
+                      style={{ height: `${column.value}%`, clipPath: "inset(0% 0% 0% 0%)" }}
                     >
                       {column.id === "convencional" ? (
                         <Image
@@ -113,7 +114,7 @@ export function WasteScales() {
                           fill
                           quality={70}
                           sizes="(min-width: 768px) 28vw, 45vw"
-                          className="object-cover grayscale"
+                          className="object-cover object-[50%_35%] grayscale"
                         />
                       ) : (
                         <div className="h-full w-full bg-carbon" />
@@ -122,7 +123,9 @@ export function WasteScales() {
                   </div>
 
                   <div className="mt-4">
-                    <p className="font-display text-3xl font-semibold leading-none tracking-tight text-black md:text-4xl">
+                    <p
+                      className={`font-display ${FIGURE_HERO_TIGHT} font-semibold leading-none tracking-tight text-black`}
+                    >
                       <span className="align-baseline text-[0.42em] font-medium text-black-50">
                         {column.prefix.trim()}
                       </span>
@@ -132,7 +135,7 @@ export function WasteScales() {
                       </span>
                     </p>
                     <span className="mt-3 block h-[3px] w-8 bg-black" aria-hidden="true" />
-                    <p className="mt-2 font-tech text-[11px] lowercase tracking-wide text-black-50">
+                    <p className="mt-2 font-tech text-[11px] lowercase tracking-wide text-black-70">
                       {column.label}
                     </p>
                     <p className="mt-1 text-xs leading-relaxed text-black-70">{column.note}</p>

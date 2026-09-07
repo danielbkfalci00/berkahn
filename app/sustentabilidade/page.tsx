@@ -96,8 +96,11 @@ export default function SustentabilidadePage() {
       <SteelLoop />
       <PracticeList />
       <CTA
+        variant="editorial"
         label="CONSTRUÇÃO A SECO"
         title="Vamos calcular isso no seu projeto"
+        actionText="Pedir o cálculo do meu projeto"
+        defaultSegment="residencial"
         description="Cada terreno muda o que a obra consome. Conte o que você quer construir e a gente devolve escopo, prazo e o que o canteiro vai gerar."
         ctaLocation="sustentabilidade"
       />

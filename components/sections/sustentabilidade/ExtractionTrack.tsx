@@ -6,6 +6,7 @@ import { gsap, useGSAP } from "@/lib/gsap";
 import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
 import { EXTRACTION_SECTION } from "@/lib/sustentabilidade-data";
 import { CountingNumber } from "./CountingNumber";
+import { FIGURE_HERO } from "./scale";
 
 /**
  * "02 · o que a obra arranca". No desktop o viewport prende e as três batidas
@@ -112,7 +113,7 @@ export function ExtractionTrack() {
       className="bg-carbon text-white"
       aria-labelledby="extracao-title"
     >
-      <div className="container pt-2xl md:pt-3xl">
+      <div className="container pt-xl md:pt-2xl">
         <RevealOnScroll>
           <p className="font-tech text-xs lowercase tracking-wide text-white-50">
             {EXTRACTION_SECTION.eyebrow}
@@ -124,11 +125,22 @@ export function ExtractionTrack() {
       </div>
 
       {/* Desktop com motion: track horizontal com o viewport preso. */}
-      <div data-track className="relative mt-16 hidden motion-safe:lg:block">
+      <div data-track className="relative mt-8 hidden motion-safe:lg:block">
         <div
           className="sticky top-0 flex h-screen items-center overflow-hidden"
           style={{ perspective: "1600px" }}
         >
+          {/* Âncora da seção: enquanto o track corre na horizontal, a headline
+              já saiu da tela e só sobrava o rótulo da batida. top-24 livra os
+              90px do header. */}
+          <div className="pointer-events-none absolute inset-x-0 top-24 z-10">
+            <div className="container flex items-center gap-4">
+              <span className="h-[3px] w-10 bg-white" aria-hidden="true" />
+              <span className="font-tech text-xs lowercase tracking-wide text-white-70">
+                {EXTRACTION_SECTION.eyebrow}
+              </span>
+            </div>
+          </div>
           <div
             data-rail
             className="flex w-max items-center gap-[6vw] px-[8vw] will-change-transform"
@@ -160,7 +172,7 @@ export function ExtractionTrack() {
                     <p className="font-tech text-xs lowercase tracking-wide text-white-70">
                       {beat.index} · {beat.kicker}
                     </p>
-                    <CountingNumber figure={beat.hero} className="mt-3 text-[9vw] text-white" />
+                    <CountingNumber figure={beat.hero} className={`mt-3 ${FIGURE_HERO} text-white`} />
                   </div>
                 </div>
                 <div className="mt-6 flex items-start gap-6">
@@ -182,7 +194,7 @@ export function ExtractionTrack() {
 
       {/* Mobile e reduced-motion: pilha vertical. */}
       <div className="container motion-safe:lg:hidden">
-        <div className="mt-12 flex flex-col gap-16 pb-2xl">
+        <div className="mt-12 flex flex-col gap-16 pb-xl md:pb-2xl">
           {beats.map((beat) => (
             <article key={beat.id}>
               <div className="relative aspect-[4/3] overflow-hidden bg-carbon-soft">
@@ -202,7 +214,7 @@ export function ExtractionTrack() {
                   <p className="font-tech text-xs lowercase tracking-wide text-white-70">
                     {beat.index} · {beat.kicker}
                   </p>
-                  <CountingNumber figure={beat.hero} className="mt-2 text-[18vw] text-white" />
+                  <CountingNumber figure={beat.hero} className={`mt-2 ${FIGURE_HERO} text-white`} />
                 </div>
               </div>
               <p className="mt-5 text-xs font-medium uppercase tracking-wider text-white-70">

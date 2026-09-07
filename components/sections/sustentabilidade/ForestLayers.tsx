@@ -6,6 +6,7 @@ import { gsap, useGSAP } from "@/lib/gsap";
 import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
 import { FOREST_SECTION } from "@/lib/sustentabilidade-data";
 import { CountingNumber } from "./CountingNumber";
+import { FIGURE_HERO, FIGURE_SUPPORT } from "./scale";
 
 /**
  * Desfoque estático por plano, do mais distante para o mais próximo. É a
@@ -82,7 +83,7 @@ export function ForestLayers() {
     <section
       ref={sectionRef}
       id="madeira"
-      className="bg-carbon-soft text-white"
+      className="relative bg-carbon text-white before:absolute before:inset-x-0 before:top-0 before:z-10 before:h-[3px] before:bg-white before:content-['']"
       aria-labelledby="madeira-title"
     >
       <div data-forest-stage className="relative overflow-hidden">
@@ -106,9 +107,9 @@ export function ForestLayers() {
             />
           </div>
         ))}
-        <div className="absolute inset-0 bg-carbon-soft/60" aria-hidden="true" />
+        <div className="absolute inset-0 bg-carbon/60" aria-hidden="true" />
 
-        <div className="relative container py-2xl md:py-3xl">
+        <div className="relative container py-xl md:py-2xl">
           <RevealOnScroll>
             <p className="font-tech text-xs lowercase tracking-wide text-white-50">
               {FOREST_SECTION.eyebrow}
@@ -125,7 +126,10 @@ export function ForestLayers() {
             {FOREST_SECTION.figures.map((figure, index) => (
               <RevealOnScroll key={figure.label} delay={index * 0.1}>
                 <div>
-                  <CountingNumber figure={figure} className="text-[13vw] text-white sm:text-[6vw]" />
+                  <CountingNumber
+                    figure={figure}
+                    className={`${index === 0 ? FIGURE_HERO : FIGURE_SUPPORT} text-white`}
+                  />
                   <span className="mt-3 block h-[3px] w-8 bg-white" aria-hidden="true" />
                   <p className="mt-3 text-xs font-medium uppercase tracking-wider text-white-70">
                     {figure.label}
@@ -137,7 +141,7 @@ export function ForestLayers() {
         </div>
       </div>
 
-      <div className="container pb-2xl md:pb-3xl">
+      <div className="container pb-xl md:pb-2xl">
         <div className="grid gap-10 md:grid-cols-12 md:items-end md:gap-12">
           <figure className="md:col-span-7">
             <div className="relative aspect-[4/3] overflow-hidden bg-carbon md:aspect-[16/10]">

@@ -102,15 +102,18 @@ export function SustentabilidadeHero() {
 
       <div
         data-hero-content
-        className="relative flex h-full flex-col justify-end pb-32 md:justify-center md:pb-0"
+        className="relative flex h-full flex-col justify-end pb-32 md:pb-28"
       >
         <div className="container">
           <p data-hero-fade className="font-tech text-xs lowercase tracking-wide text-white-70">
             {HERO.eyebrow}
           </p>
+          {/* .headline-hero trava em 62px, teto calibrado para a frase de outra
+              página. Aqui a tese precisa ficar acima dos numerais, que chegam
+              a 150px. */}
           <h1
             data-hero-title
-            className="headline-hero mt-5 max-w-4xl hero-text-shadow-strong"
+            className="hero-text-shadow-strong mt-5 max-w-4xl font-display font-semibold leading-[1.04] tracking-tight text-white text-[clamp(2.75rem,1.4rem+5.2vw,5.5rem)]"
           >
             {HERO.headline}
           </h1>
@@ -123,41 +126,13 @@ export function SustentabilidadeHero() {
         </div>
       </div>
 
-      {/* Índice das contas. Serve de navegação da página inteira. */}
-      <nav
+      {/* Marca de rolagem sem palavra: "role para ver a conta" colidia com o
+          botão do header no primeiro scroll e era meta-texto. */}
+      <span
         data-hero-fade
-        aria-label="Contas desta página"
-        className="absolute bottom-8 left-0 right-0 hidden lg:block"
-      >
-        <div className="container">
-          <ul className="flex flex-col gap-2">
-            {HERO.index.map((item) => (
-              <li key={item.href}>
-                <a
-                  href={item.href}
-                  className="group inline-flex items-center gap-4 font-tech text-xs lowercase tracking-wide text-white-50 transition-colors duration-300 hover:text-white"
-                >
-                  <span
-                    className="h-[3px] w-10 bg-white/40 transition-all duration-500 ease-expo group-hover:w-16 group-hover:bg-white"
-                    aria-hidden="true"
-                  />
-                  {item.label}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </nav>
-
-      <div
-        data-hero-fade
-        className="absolute bottom-6 left-1/2 flex -translate-x-1/2 flex-col items-center gap-3 lg:left-auto lg:right-10 lg:translate-x-0"
-      >
-        <span className="font-tech text-[10px] lowercase tracking-wide text-white-50">
-          {HERO.cue}
-        </span>
-        <span className="animate-scroll-cue h-10 w-[3px] bg-white/70" aria-hidden="true" />
-      </div>
+        className="animate-scroll-cue absolute bottom-8 left-1/2 h-12 w-[3px] -translate-x-1/2 bg-white/60 md:left-auto md:right-10 md:translate-x-0"
+        aria-hidden="true"
+      />
     </section>
   );
 }

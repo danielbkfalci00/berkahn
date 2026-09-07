@@ -26,7 +26,8 @@ export function SmoothScroll() {
 
     // anchors: true — links #hash (ex.: "Ver projetos" do hero) rolam via Lenis;
     // sem isso o salto nativo é revertido pelo alvo interno do Lenis.
-    const lenis = new Lenis({ autoRaf: false, lerp: 0.12, anchors: true });
+    // offset -96 = altura do header fixo; sem ele a âncora para atrás dele.
+    const lenis = new Lenis({ autoRaf: false, lerp: 0.12, anchors: { offset: -96 } });
 
     const handleScroll = () => ScrollTrigger.update();
     lenis.on("scroll", handleScroll);

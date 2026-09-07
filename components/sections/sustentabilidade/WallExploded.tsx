@@ -7,9 +7,17 @@ import { LSF_LAYERS } from "@/lib/lsf-data";
 import { WALL_SECTION, WALL_LAYER_COPY } from "@/lib/sustentabilidade-data";
 
 /** Distância em Z entre duas camadas vizinhas, no corte aberto. */
-const LAYER_GAP = 118;
+const LAYER_GAP = 78;
 /** Perspectiva da cena. Quanto menor, mais dramática a fuga. */
 const PERSPECTIVE = 1500;
+/**
+ * Giro da cena. O sinal importa: em `rotateY(θ)`, o eixo Z local aponta para
+ * `x = sin(θ)`. Com θ negativo e as camadas em translateZ negativo, o leque
+ * abria para a DIREITA e entrava por cima da coluna de texto. Com θ positivo
+ * ele abre para a esquerda, onde há espaço vazio.
+ */
+const SCENE_ROTATE_Y = 30;
+const SCENE_ROTATE_X = -8;
 
 /**
  * Corte de parede que se abre em profundidade. As seis camadas começam
@@ -51,7 +59,7 @@ export function WallExploded() {
         tl.fromTo(
           wall,
           { rotateX: 0, rotateY: 0 },
-          { rotateX: -9, rotateY: -33, duration: 0.55 },
+          { rotateX: SCENE_ROTATE_X, rotateY: SCENE_ROTATE_Y, duration: 0.55 },
           0
         );
 
@@ -82,25 +90,28 @@ export function WallExploded() {
     <section
       ref={sectionRef}
       id="parede"
-      className="relative bg-carbon text-white"
+      className="relative bg-carbon text-white before:absolute before:inset-x-0 before:top-0 before:z-10 before:h-[3px] before:bg-white before:content-['']"
       aria-labelledby="parede-title"
     >
       <div data-wall-track className="relative lg:h-[240vh]">
         <div className="lg:sticky lg:top-0 lg:h-screen lg:overflow-hidden lg:flex lg:items-center">
-          <div className="container py-2xl lg:py-0">
+          <div className="container py-xl lg:py-0">
             <div className="grid gap-12 lg:grid-cols-12 lg:items-center lg:gap-10">
               {/* Cena 3D. Só desktop: em telas pequenas o corte vira lista. */}
-              <div className="hidden lg:block lg:col-span-7">
+              <div className="hidden lg:block lg:col-span-6">
+                {/* overflow-hidden cria contexto de empilhamento e impede que uma
+                    camada em 3D pinte por cima do que vem depois no DOM. Sem ele,
+                    a ordenação por Z do preserve-3d ignora a ordem dos irmãos. */}
                 <div
-                  className="relative h-[62vh]"
-                  style={{ perspective: `${PERSPECTIVE}px`, perspectiveOrigin: "44% 46%" }}
+                  className="relative h-[62vh] overflow-hidden [clip-path:inset(0)]"
+                  style={{ perspective: `${PERSPECTIVE}px`, perspectiveOrigin: "58% 46%" }}
                 >
                   <div
                     data-wall
                     className="absolute inset-0"
                     style={{
                       transformStyle: "preserve-3d",
-                      transform: "rotateX(-9deg) rotateY(-33deg)",
+                      transform: `rotateX(${SCENE_ROTATE_X}deg) rotateY(${SCENE_ROTATE_Y}deg)`,
                     }}
                   >
                     {layers.map((layer, index) => (
@@ -131,7 +142,7 @@ export function WallExploded() {
               </div>
 
               {/* Texto e legenda das camadas. */}
-              <div className="lg:col-span-5">
+              <div className="relative z-10 lg:col-span-5 lg:col-start-8">
                 <p className="font-tech text-xs lowercase tracking-wide text-white-50">
                   {WALL_SECTION.eyebrow}
                 </p>
@@ -162,21 +173,6 @@ export function WallExploded() {
                   ))}
                 </ul>
 
-                {/* No mobile a cena 3D não existe; as fotos entram aqui, em faixa. */}
-                <div className="mt-8 grid grid-cols-3 gap-2 lg:hidden">
-                  {layers.map((layer, index) => (
-                    <div key={layer.id} className="relative aspect-[4/3] border border-white-10">
-                      <Image
-                        src={layer.image}
-                        alt={index === 0 ? WALL_SECTION.sceneAlt : ""}
-                        fill
-                        quality={65}
-                        sizes="33vw"
-                        className="object-cover grayscale"
-                      />
-                    </div>
-                  ))}
-                </div>
               </div>
             </div>
           </div>

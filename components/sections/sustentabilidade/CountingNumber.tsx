@@ -8,13 +8,6 @@ interface CountingNumberProps {
   figure: BigNumber;
   /** Classe de tamanho do numeral. O prefixo e a unidade derivam dela em em. */
   className?: string;
-  /**
-   * Foto que preenche o numeral por dentro, via background-clip. Entra só
-   * depois de a imagem carregar: se falhar, o número continua na cor da classe
-   * em vez de sumir. A foto ainda deriva devagar dentro das letras enquanto a
-   * seção passa, o que põe duas velocidades nos mesmos pixels.
-   */
-  fillImage?: string;
 }
 
 /**
@@ -26,44 +19,13 @@ interface CountingNumberProps {
  * zero. O prefixo (`~`, `< `, `até `) fica escondido durante a contagem para
  * "< 5%" não passar por "< 3%" no caminho.
  */
-export function CountingNumber({ figure, className = "", fillImage }: CountingNumberProps) {
+export function CountingNumber({ figure, className = "" }: CountingNumberProps) {
   const rootRef = useRef<HTMLSpanElement>(null);
 
   useGSAP(
-    (_context, contextSafe) => {
+    () => {
       const root = rootRef.current;
-      if (!root || !contextSafe) return;
-
-      if (fillImage) {
-        const probe = new window.Image();
-        // contextSafe é obrigatório aqui: o onload roda depois que a execução
-        // síncrona deste callback terminou, e o que é criado fora dela não entra
-        // no contexto do useGSAP. Sem isso, sair da rota antes de a imagem
-        // carregar deixaria um ScrollTrigger com scrub escutando para sempre.
-        probe.onload = contextSafe(() => {
-          root.style.backgroundImage = `url("${fillImage}")`;
-          root.style.backgroundSize = "150% auto";
-          root.style.backgroundPosition = "12% 30%";
-          // A foto precisa ficar escura para o numeral ler como numeral sobre o
-          // off-white. Sem o brightness, a planta de cimento vira um fantasma.
-          root.style.filter = "grayscale(1) contrast(1.45) brightness(0.42)";
-          root.classList.add("bg-clip-text", "text-transparent");
-          if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-            gsap.to(root, {
-              backgroundPositionX: "88%",
-              backgroundPositionY: "70%",
-              ease: "none",
-              scrollTrigger: {
-                trigger: root,
-                start: "top bottom",
-                end: "bottom top",
-                scrub: true,
-              },
-            });
-          }
-        });
-        probe.src = fillImage;
-      }
+      if (!root) return;
 
       // Estreitados aqui fora: o TypeScript não leva a narrowing para dentro do
       // callback do matchMedia, e um cast ali dentro só calaria o compilador.
@@ -94,7 +56,7 @@ export function CountingNumber({ figure, className = "", fillImage }: CountingNu
         });
       });
     },
-    { scope: rootRef, dependencies: [figure.from, figure.to, fillImage] }
+    { scope: rootRef, dependencies: [figure.from, figure.to] }
   );
 
   return (
@@ -110,7 +72,19 @@ export function CountingNumber({ figure, className = "", fillImage }: CountingNu
           {figure.prefix.trim()}
         </span>
       )}
-      <span data-count-value>{figure.value}</span>
+      {/* Faixa ("7 a 8"): o conector cai para 0,34em. Com o "a" no mesmo corpo
+          dos dígitos, o numeral lê como erro de digitação, não como intervalo. */}
+      <span data-count-value>
+        {figure.value.includes(" a ") ? (
+          <>
+            {figure.value.split(" a ")[0]}
+            <span className="mx-[0.1em] align-middle text-[0.4em] font-medium opacity-60">a</span>
+            {figure.value.split(" a ")[1]}
+          </>
+        ) : (
+          figure.value
+        )}
+      </span>
       {figure.unit && (
         <span className="ml-[0.06em] align-baseline text-[0.36em] font-medium opacity-70">
           {figure.unit.trim()}

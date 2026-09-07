@@ -19,6 +19,11 @@ interface CTAProps {
   defaultSegment?: "residencial" | "comercial" | "";
   /** Vai para o GA4 como `cta_location`. Ex: "blog:custo-steel-frame-m2-2026". */
   ctaLocation?: string;
+  /**
+   * "editorial" alinha o bloco à esquerda e ocupa a largura do container, para
+   * o CTA não ser o único elemento centralizado de uma página editorial.
+   */
+  variant?: "default" | "editorial";
 }
 
 const ArrowIcon = () => (
@@ -28,7 +33,7 @@ const ArrowIcon = () => (
     viewBox="0 0 24 24"
     strokeWidth="2"
     stroke="currentColor"
-    className="w-4 h-4"
+    className="w-4 h-4 transition-transform duration-300 ease-expo group-hover:translate-x-1"
   >
     <path
       strokeLinecap="round"
@@ -38,8 +43,10 @@ const ArrowIcon = () => (
   </svg>
 );
 
+// O hover anterior era bg-white/90: 4% de luminância numa paleta mono, ou seja,
+// invisível. Agora inverte, e o foco de teclado tem contorno próprio.
 const buttonClasses =
-  "inline-flex items-center gap-2 px-8 py-4 bg-white text-black uppercase tracking-wider text-sm font-medium hover:bg-white/90 transition-colors duration-300";
+  "group inline-flex items-center gap-2 border-[3px] border-white bg-white px-8 py-4 text-sm font-medium uppercase tracking-wider text-black transition-colors duration-300 hover:bg-transparent hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white active:translate-y-px";
 
 export function CTA({
   label = "PRONTO PARA CONSTRUIR?",
@@ -50,11 +57,16 @@ export function CTA({
   actionHref = "/",
   defaultSegment,
   ctaLocation = "cta_secao",
+  variant = "default",
 }: CTAProps = {}) {
   return (
-    <section className="py-xl bg-white">
+    <section className={variant === "editorial" ? "bg-white pb-xl" : "py-xl bg-white"}>
       <div className="container">
-        <div className="text-center max-w-3xl mx-auto bg-black p-6 sm:p-10 md:p-16">
+        <div
+          className={`bg-black p-6 sm:p-10 md:p-16 ${
+            variant === "editorial" ? "text-left" : "mx-auto max-w-3xl text-center"
+          }`}
+        >
           <RevealOnScroll>
             <p className="label-text mb-4 text-white/60">{label}</p>
             <h2 className="mb-6 break-words hyphens-none text-3xl font-heading font-extrabold tracking-tight text-white sm:text-4xl md:text-5xl lg:text-6xl">

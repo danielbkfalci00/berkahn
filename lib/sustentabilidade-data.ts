@@ -116,19 +116,14 @@ export const HERO = {
   eyebrow: "sustentabilidade",
   headline: "Toda casa cobra alguma coisa do mundo antes de existir.",
   lede: "Essa conta corre fora do orçamento, no rio de onde saiu a areia e na caçamba que deixa o canteiro.",
+  // Era mata com névoa: a imagem mais genérica que existe para sustentabilidade,
+  // e a única não documental de uma página onde todo o resto é planta de
+  // cimento, esteira, solo rachado, fôrma e pátio de sucata. A cava de areia
+  // ainda casa com a lede, que fala do rio de onde saiu a areia.
   image: {
-    src: "https://images.unsplash.com/photo-1511884642898-4c92249e20b6?auto=format&fit=crop&w=2400&q=80",
-    alt: "Rio correndo entre encostas cobertas de floresta, com névoa baixa",
+    src: "https://images.unsplash.com/photo-1785791516569-07a837fb07b7?auto=format&fit=crop&w=2400&q=80",
+    alt: "Pilha de areia e correia transportadora num pátio de extração, ao fim da tarde",
   },
-  cue: "role para ver a conta",
-  /** Índice das contas. É a navegação da página, não enfeite. */
-  index: [
-    { href: "#extracao", label: "o que a obra arranca" },
-    { href: "#madeira", label: "a conta da madeira" },
-    { href: "#parede", label: "a parede" },
-    { href: "#sobra", label: "o que sobra" },
-    { href: "#ciclo", label: "o aço volta" },
-  ],
 };
 
 /* ------------------------------------------------------------------ */
@@ -136,16 +131,17 @@ export const HERO = {
 /* ------------------------------------------------------------------ */
 
 export const SCALE_SECTION = {
-  eyebrow: "01 · o tamanho da conta",
+  eyebrow: "01 · a escala",
   headline: "Edificações e construção consomem quase metade dos materiais que o mundo extrai.",
-  copy: "A seguir, cinco dessas contas e o que muda em cada uma quando a obra sobe a seco.",
-  /**
-   * Foto que preenche o numeral por dentro. Vai direto da CDN porque
-   * background-clip não passa por next/image; o domínio já está liberado em
-   * next.config.ts. É a mesma foto da batida "cimento", então o download é um só.
-   */
-  fillImage:
-    "https://images.unsplash.com/photo-1621121013599-c94f85975cfd?auto=format&fit=crop&w=900&q=70",
+  /** Índice das contas. É a navegação da página, não enfeite. */
+  index: [
+    { href: "#extracao", label: "o que a obra arranca" },
+    { href: "#madeira", label: "a conta da madeira" },
+    { href: "#parede", label: "a parede" },
+    { href: "#sobra", label: "o que sobra" },
+    { href: "#ciclo", label: "o aço volta" },
+    { href: "#pratica", label: "o que a gente não afirma" },
+  ],
   figures: [
     {
       value: "50",
@@ -189,7 +185,7 @@ export const EXTRACTION_SECTION = {
         label: "das emissões globais de CO₂ vêm do cimento",
         source: SOURCES.gcca,
       },
-      claim: "Uma parte vem da queima do forno. A outra vem da calcinação do calcário, reação que não se desfaz. Concreto endurecido nunca volta a ser cimento.",
+      claim: "Uma parte vem da queima do forno. A outra vem da calcinação do calcário, e essa não tem volta. Concreto endurecido nunca volta a ser cimento.",
       image: {
         src: "https://images.unsplash.com/photo-1621121013599-c94f85975cfd?auto=format&fit=crop&w=2400&q=80",
         alt: "Planta industrial de cimento com silos e torres de estocagem",
@@ -205,13 +201,13 @@ export const EXTRACTION_SECTION = {
         from: 0,
         to: 50,
         unit: " bilhões",
-        label: "de toneladas de areia e cascalho por ano",
+        label: "de toneladas de areia e cascalho por ano, o material mais extraído depois da água",
         source: SOURCES.unepSand,
       },
-      claim: "Depois da água, é o material mais extraído do planeta. O grão do deserto é liso demais para travar no concreto, então a extração cai sobre rios.",
+      claim: "O grão do deserto é liso demais para travar no concreto. Por isso a extração cai sobre rios, e não sobre o Saara.",
       image: {
-        src: "https://images.unsplash.com/photo-1785791516569-07a837fb07b7?auto=format&fit=crop&w=2400&q=80",
-        alt: "Pilha de areia e correia transportadora em área de extração",
+        src: "https://images.unsplash.com/photo-1750071443772-20299e110b42?auto=format&fit=crop&w=2400&q=80",
+        alt: "Barrancos erodidos e terreno arenoso exposto pela extração",
       },
       focus: "object-[50%_55%]",
     },
@@ -224,10 +220,10 @@ export const EXTRACTION_SECTION = {
         from: 0,
         to: 263,
         unit: " L",
-        label: "de água por m² na média dos canteiros medidos",
+        label: "de água por m², na média dos canteiros de Joinville",
         source: SOURCES.aguaCanteiro,
       },
-      claim: "Nos canteiros medidos em Joinville o consumo foi de 107 a 594 litros por m². A montagem a seco tira dali a argamassa, a cura e a lavagem, mas não a fundação.",
+      claim: "A faixa medida foi de 107 a 594 litros por m². A montagem a seco tira dali a argamassa, a cura e a lavagem. Não tira a fundação.",
       image: {
         src: "https://images.unsplash.com/photo-1761477066641-b66ba2c1148c?auto=format&fit=crop&w=2400&q=80",
         alt: "Leito de rio seco com o solo rachado",
@@ -242,10 +238,10 @@ export const EXTRACTION_SECTION = {
 /* ------------------------------------------------------------------ */
 
 export const FOREST_SECTION = {
-  eyebrow: "03 · a conta da madeira",
+  eyebrow: "03 · a madeira",
   headline: "A fôrma é madeira que a obra compra para jogar fora.",
-  copy: "Fôrma e escoramento consomem até 7,6 m³ de madeira a cada 100 m² de estrutura de concreto armado. Nas obras medidas por um estudo da UFSC, toda essa madeira terminou em aterro.",
-  closing: "Na parede a seco, a madeira que entra é o OSB estrutural, feito de pinus de floresta plantada, e ela fica na casa.",
+  copy: "E a fundação pede fôrma. Ela não vira parede nem laje, e não fica na casa. Nas obras medidas, toda ela terminou em aterro.",
+  closing: "A madeira que a gente compra é OSB estrutural de pinus de floresta plantada, e ela fica na casa.",
   closingSource: SOURCES.osbPinus,
   figures: [
     {
@@ -274,7 +270,7 @@ export const FOREST_SECTION = {
     src: "https://images.unsplash.com/photo-1784392087636-fb69865b4f96?auto=format&fit=crop&w=2000&q=80",
     alt: "Fôrmas de madeira e escoramento montados para a concretagem de uma estrutura",
   },
-  caption: "fôrma e escoramento, antes da concretagem",
+  caption: "tudo nesta foto vira caçamba",
 };
 
 /* ------------------------------------------------------------------ */
@@ -283,8 +279,8 @@ export const FOREST_SECTION = {
 
 export const WALL_SECTION = {
   eyebrow: "04 · a parede",
-  headline: "A parede sobe parafusada, camada por camada, sem argamassa de assentamento.",
-  copy: "As seis camadas de uma parede em Light Steel Frame chegam cortadas de fábrica, da estrutura que carrega até a placa que fecha. O acabamento externo é a única etapa que ainda espera secar.",
+  headline: "A parede sobe parafusada, camada por camada.",
+  copy: "Cada camada de uma parede em Light Steel Frame chega cortada de fábrica. Só o acabamento externo ainda espera secar.",
   sceneAlt: "Corte de parede em Light Steel Frame com as seis camadas separadas em profundidade",
 };
 
@@ -308,10 +304,10 @@ export const WALL_LAYER_COPY = [
 /* ------------------------------------------------------------------ */
 
 export const WASTE_SECTION = {
-  eyebrow: "05 · o que sobra",
+  eyebrow: "05 · a perda",
   headline: "O entulho que a obra gera quase não volta.",
-  copy: "A obra convencional perde até 30% do material que comprou. Esse entulho encontra um sistema que recicla cerca de 16% do total, com as usinas na metade da capacidade.",
-  closing: "No canteiro a seco a perda fica abaixo de 5%, e a maior parte dela é sucata metálica, que tem comprador.",
+  copy: "As usinas de reciclagem de entulho no Brasil operam na metade da capacidade instalada. O que elas não recebem vai para aterro.",
+  closing: "A sucata metálica tem comprador. O entulho misto não tem.",
   columns: [
     {
       id: "convencional",
@@ -360,9 +356,9 @@ export interface LoopStation {
 }
 
 export const LOOP_SECTION = {
-  eyebrow: "06 · o aço volta",
+  eyebrow: "06 · o aço",
   headline: "No fim da vida, a estrutura desmonta e volta para a siderúrgica.",
-  copy: "O aço é reciclável sem perder propriedades, e cada tonelada de sucata que volta ao forno evita cerca de 1,5 tonelada de CO₂. O concreto demolido, no máximo, vira agregado de sub-base.",
+  copy: "O aço volta ao forno sem perder propriedade, quantas vezes for. O concreto demolido, no máximo, vira agregado de sub-base.",
   /**
    * Estações do circuito. A posição vem junto do rótulo de propósito: quando
    * coordenada e texto moram em arrays separados, quem edita o conteúdo aqui
@@ -370,11 +366,13 @@ export const LOOP_SECTION = {
    * precisam cair sobre o traçado; `dy` afasta o rótulo do traço.
    */
   stations: [
-    { id: "bobina", label: "bobina de aço", x: 60, y: 40, anchor: "start", dy: -16 },
-    { id: "perfil", label: "perfil cortado", x: 400, y: 40, anchor: "middle", dy: -16 },
-    { id: "casa", label: "casa em pé", x: 740, y: 170, anchor: "end", dy: -12 },
-    { id: "desmonte", label: "desmonte por parafuso", x: 400, y: 300, anchor: "middle", dy: 28 },
-    { id: "forno", label: "forno", x: 60, y: 300, anchor: "start", dy: 28 },
+    { id: "bobina", label: "bobina de aço", x: 60, y: 40, anchor: "start", dy: -18 },
+    { id: "perfil", label: "perfil cortado", x: 400, y: 40, anchor: "middle", dy: -18 },
+    // Ancorado para dentro: com o rótulo terminando na própria linha, a última
+    // letra passava da borda do viewBox e saía cortada.
+    { id: "casa", label: "casa em pé", x: 724, y: 140, anchor: "end", dy: -10 },
+    { id: "desmonte", label: "desmonte por parafuso", x: 400, y: 240, anchor: "middle", dy: 30 },
+    { id: "forno", label: "forno", x: 60, y: 240, anchor: "start", dy: 30 },
   ] as LoopStation[],
   figures: [
     {
@@ -401,8 +399,8 @@ export const LOOP_SECTION = {
 /* ------------------------------------------------------------------ */
 
 export const PRACTICE_SECTION = {
-  eyebrow: "07 · o que fica com a gente",
-  headline: "O que a gente faz e o que a gente não afirma.",
+  eyebrow: "07 · a prática",
+  headline: "O que a gente faz no canteiro.",
   practices: [
     {
       title: "Projeto fechado antes de comprar",
@@ -410,16 +408,11 @@ export const PRACTICE_SECTION = {
     },
     {
       title: "Canteiro sem betoneira",
-      body: "Fora da fundação, não misturamos argamassa nem esperamos cura. A água que some do canteiro é a que ia para esses usos.",
+      body: "Fora da fundação, não entra betoneira na obra. A água que some do canteiro é a que ia para argamassa, cura e lavagem.",
     },
     {
       title: "Sucata separada na saída",
       body: "Separamos a perda metálica na saída da obra e mandamos para reciclagem, em vez da caçamba comum.",
-    },
-    {
-      title: "Madeira de floresta plantada",
-      body: "Especificamos OSB estrutural de pinus de floresta plantada nas paredes externas. Ele fica na casa.",
-      source: SOURCES.osbPinus,
     },
   ],
   honesty: {
