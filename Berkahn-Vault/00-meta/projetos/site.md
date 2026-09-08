@@ -1,7 +1,7 @@
 ---
 tipo: projeto
 criado: 2026-05-22
-atualizado: 2026-09-05
+atualizado: 2026-09-08
 tags:
   - project/site
   - status/active
@@ -44,6 +44,8 @@ code_paths:
 > Hub do projeto Site (next-app + admin). Em produção em [berkahn.com.br](https://www.berkahn.com.br). Ajustes contínuos.
 
 ## Status atual
+
+> **Página /sustentabilidade**: construída, revisada e auditada. PR [#80](https://github.com/danielbkfalci00/berkahn/pull/80) aberto e verde, **sem merge**, aguardando uma rodada de ajustes do Bruno. Ponto de retomada, armadilhas e comandos em [[retomada-sustentabilidade]].
 
 Site em produção (Next.js 16 App Router + Supabase + Vercel + Tailwind + shadcn/ui). O CRM leve em `/admin/leads` foi mergeado pela PR #53 no commit `5121941` e está deployado nos projetos `berkahn` e `berkahn-admin`; arquitetura e runbook vivem em [[admin-setup]]. Supabase é a única fonte operacional; Google Sheets e Apps Script são legado desativado em [[google-sheets]].
 

@@ -1,7 +1,7 @@
 ---
 tipo: context
 criado: 2026-08-05
-atualizado: 2026-09-05
+atualizado: 2026-09-08
 tags:
   - domain/brand
   - domain/architecture
@@ -232,6 +232,9 @@ Regras que valeram: **sem `ScrollTrigger.pin`** (track alto com filho `sticky`, 
 Oito fotos do Unsplash, provisórias, todas conferidas uma a uma (ID extraído da página da foto, URL testada com 200) e escolhidas para aguentar grayscale, que é o tratamento da casa. As seis fotos de camada da parede são nossas. Substituir por fotografia própria quando houver.
 
 ### Auditoria de design e UX (2026-09-07)
+
+> Estado de trabalho, pendências e comandos para retomar: [[retomada-sustentabilidade]].
+
 
 Cinco auditorias independentes rodaram sobre **screenshots reais da página inteira**, capturados com Playwright rolando de verdade, em 1440 e em 390, mais o código. Método que vale repetir: sem as tiras, três dos quatro defeitos críticos não apareciam na leitura do código.
 
