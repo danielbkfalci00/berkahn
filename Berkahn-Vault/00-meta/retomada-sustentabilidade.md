@@ -6,7 +6,7 @@ tags:
   - source/handoff
   - project/site
   - status/active
-ai_summary: "Ponto de retomada da página /sustentabilidade. Código pronto na branch feat/sustentabilidade, PR 80 aberto e verde, NÃO mergeado. Três rodadas concluídas: construção, revisão de dado e código, auditoria de design. Falta a lista de ajustes do Bruno, que ele vai passar, e as decisões de conteúdo listadas aqui. Contém as armadilhas técnicas descobertas e os comandos exatos para retomar."
+ai_summary: "Ponto de retomada da página /sustentabilidade. Código na branch feat/sustentabilidade, PR 80 aberto e verde, NÃO mergeado. O Bruno reprovou o design em 2026-09-08 e pediu remodelagem: mais respiro, IMAGENS COLORIDAS no lugar do preto e branco, fora o índice, o fundo quadriculado, a numeração de seção e as réguas entre seções, e um storytelling que mostre o estrago da construção convencional antes da saída. O briefing completo, seção por seção, está aqui, junto das armadilhas técnicas e dos comandos para retomar. Nada foi executado."
 status: active
 projeto: site
 contextos_aplicados:
@@ -17,7 +17,7 @@ contextos_aplicados:
 
 # Retomada — página /sustentabilidade
 
-> **Onde parou**: a página está construída, revisada e auditada. O PR está aberto e verde. **Não foi feito merge**, porque deploy é decisão do Bruno e ainda vem uma rodada de ajustes que ele vai passar.
+> **Onde parou**: a página está construída, revisada e auditada, e o PR está aberto e verde. Em 2026-09-08 o Bruno **reprovou o design** e passou um briefing de remodelagem, que está escrito neste documento e **não foi executado**. Não foi feito merge.
 
 ## Estado em uma tela
 
@@ -26,7 +26,7 @@ contextos_aplicados:
 | Branch | `feat/sustentabilidade` |
 | Worktree | `.worktrees/sustentabilidade` (a partir de `origin/main`) |
 | PR | [#80](https://github.com/danielbkfalci00/berkahn/pull/80), aberto, `MERGEABLE`, `validate=SUCCESS` |
-| Commits | 6, do `6e4c539` ao `de5809c` |
+| Commits | 8, do `6e4c539` ao `65872e8` |
 | Merge | **não feito, de propósito** |
 | Dev server | porta 3113 |
 | Altura da página | 11.394px no desktop, 10.517px no celular |
@@ -92,7 +92,7 @@ Isso tem consequência fora desta página, e está registrado como pendência no
 
 ### A · Ajustes do Bruno
 
-> **A preencher.** Ele disse que ainda vem uma rodada de ajustes e que passa a lista. Quando passar, ela entra aqui, item a item, antes de qualquer código ser tocado.
+> **Recebidos em 2026-09-08 e escritos abaixo**, na seção "Briefing de ajustes". Nada foi executado.
 
 ### B · Decisões de conteúdo que dependem dele
 
@@ -108,6 +108,91 @@ Isso tem consequência fora desta página, e está registrado como pendência no
 - Medir CWV depois do deploy. São oito fotos do Unsplash servidas pelo otimizador, uma cena 3D de seis camadas e um track horizontal. Peso de imagem da página inteira hoje: cerca de 1,3 MB.
 - Foto de OSB estrutural para o banco de imagens: é a única camada da parede que não fotografamos, e por isso o corte 3D mostra seis camadas enquanto o sistema real tem sete.
 - O interior do retângulo do circuito do aço (seção 06) continua vazio. Funciona como diagrama, mas é o ponto mais fraco de composição que sobrou.
+
+## Briefing de ajustes do Bruno (2026-09-08)
+
+> **Nada disto foi executado.** A sessão fechou aqui, de propósito, para a próxima começar com a fila pronta. O Bruno cogitou retomar com outro modelo, então este bloco é escrito para quem chega sem contexto nenhum.
+
+### O veredito dele, sem filtro
+
+> "Tá bem ruim pra ser sincero." · "Uma coisa muito densa por completo." · "Precisa ser mais minimalista, ter mais hierarquia de informação clara e não tornar tudo uma salada de fruta." · "Tornar as coisas mais vivas."
+
+Não é ajuste fino. É pedido de **remodelagem** de quase toda seção, mantendo a apuração e o argumento. Quem retomar não deve tentar remendar seção por seção antes de refazer a direção visual.
+
+### 1 · Respiro. A página está espremida perto da home
+
+Ele abriu por aqui: o cabeçalho precisa ficar **igual ao da home**, e na home existe um espaço entre o cabeçalho e a primeira informação que aqui não existe.
+
+**Causa medida, e é minha:** o componente de header é o mesmo nas duas rotas (84px de altura, `main` sem padding). A diferença está na primeira seção depois do hero.
+
+| | primeira seção de conteúdo |
+|---|---|
+| home | `py-3xl` → **192px** em cima e embaixo |
+| /sustentabilidade | `py-2xl` → **128px** |
+
+Eu reduzi de 192 para 128 em seis seções seguindo a auditoria de design, que mediu ~2.700px de padding aplicado sem julgamento. **A auditoria otimizou densidade; o olho do Bruno pede o respiro da home.** Ele decide. Se voltar para 192px, a página cresce ~800px no desktop, e aí o corte de gordura tem que vir de outro lugar: menos seção, não menos respiro.
+
+### 2 · Cor. Este é o item mais estruturante do briefing
+
+> "Gostaria de trabalhar mais imagens coloridas e menos imagens preto e branco. Vale para o hero, vale para as outras telas." · "À medida que a gente for scrollando, pode haver a imagem ir de preto e branco para colorido." · "Tem um storytelling de cor também."
+
+**Atenção, porque isto atravessa a marca.** A paleta mono e o `grayscale` nas fotos não são escolha desta página: estão em [[guia-design-berkahn]] e [[berkahn-brand]], e a home inteira é assim. Aplicar cor só aqui cria uma rota fora do sistema; aplicar em tudo é mudança de identidade visual.
+
+Antes de escrever qualquer CSS, quem retomar precisa fechar com o Bruno **qual das três** vale:
+1. cor só nesta página, assumida como exceção editorial;
+2. cor como recurso narrativo controlado, o cinza virando cor no scroll, aqui e depois em outras rotas;
+3. revisão da regra mono no guia de design.
+
+A ideia dele de **grayscale → colorido conforme o scroll** é boa e é implementável: `filter: grayscale(1) → grayscale(0)` num ScrollTrigger com scrub. Casa com o arco da página, que vai do problema para a saída. Custa repaint, então tem que ser em poucos elementos grandes, não em todas as fotos.
+
+### 3 · Fora da página
+
+Quatro coisas para remover, nas palavras dele:
+
+- **O índice da primeira seção.** "Fica meio quebrado, não tá muito bonito e eu acho que nem precisa. A primeira seção pode trabalhar um pouco mais da ideia central da página e menos do índice." Ironia registrada: o índice foi criado no hero, removido na auditoria, recriado dentro da seção 01 pela mesma auditoria. Agora sai de vez.
+- **O fundo quadriculado.** "Não tem nada a ver com a marca." É a utility `.fluxograma-grid-bg`, usada em `ScaleStatement` e nas molduras de `WasteScales`. Ela é pré-existente no projeto (nasceu no fluxograma de Etapas da Obra), mas não é vocabulário desta página.
+- **A numeração de seção** (`01 · a escala`, `02 · o que a obra arranca`…). "Parece um slide de apresentação, horrível. Essa página precisa ser mais um storytelling e menos uma apresentação de PowerPoint." **Cuidado**: esse formato veio da home, onde a seção se chama `05 · impacto`. Tirar aqui abre uma inconsistência com a home que precisa ser assumida ou resolvida nas duas.
+- **As réguas de 3px separando seções.** "A gente tem linhas separando sessões, nossa, tá horrível isso aqui." Elas entraram na auditoria para marcar capítulo depois que ficou provado que preto contra carbon-soft não marca nada. Saindo elas, o problema de fronteira entre seções escuras volta e precisa de outra solução.
+
+### 4 · O storytelling que ele quer
+
+A tese, na fala dele: a construção convencional, no Brasil e no mundo, **é muito maléfica para o planeta**; a construção a seco vem trazer o braço de sustentabilidade **de maneira muito forte**; e isso é algo que **a Berkahn preserva muito**. Ele diz que isso não ficou claro na página por completo e que é preciso redefinir com base nisso.
+
+**A restrição que não pode ser esquecida na reescrita:** o argumento de carbono do Light Steel Frame **não se sustenta** (ver o bloco "A decisão que define a página", acima). Quem reescrever para "construção a seco é sustentável de maneira muito forte" vai sentir a tentação de ressuscitar o kgCO₂/m². Não pode. O eixo defensável continua sendo o que a obra **extrai, desperdiça e deixa para trás**, e a página tem fonte primária para cada um desses.
+
+A leitura conciliadora, que provavelmente é o caminho: o problema hoje está **espalhado em números** e não em narrativa. O Bruno quer sentir o peso do estrago da construção convencional antes de ver a saída. Isso é ordem, ritmo e imagem, não dado novo.
+
+### 5 · Seção por seção, nas palavras dele
+
+| seção | componente | o que ele disse |
+|---|---|---|
+| 01 · a escala | `ScaleStatement.tsx` | índice quebrado e desnecessário; trabalhar a ideia central; fundo quadriculado fora |
+| 02 · o que a obra arranca | `ExtractionTrack.tsx` | "legal a gente ter um sistema de scroll, mas as imagens preto e branco, não gostei"; "parece que as imagens ficam cortadas, não ficou muito legal esse scroll" |
+| 03 · a madeira | `ForestLayers.tsx` | "ficou meio jogado esse design, essa UX/UI, precisa remodelar tudo, não fez sentido, tanto no mobile quanto no desktop"; "muito quebrado essas duas imagens"; "hierarquia de informação e UX/UI tá péssima" |
+| 04 · a parede | `WallExploded.tsx` | "componentização quebrada, porque ela não cabe na tela"; "nada disso foi validado visualmente, o que é uma pena" |
+| 05 · a perda | `WasteScales.tsx` | "péssima, muito confuso, números jogados, telas, imagens jogadas" |
+| 06 · o aço | `SteelLoop.tsx` | "muita coisa confusa"; "um motion de um quadrado, que não dá pra entender nada"; "uma imagem jogada ali com números, com um espaço vazio imenso" |
+
+### 6 · Dois defeitos confirmados com medição, ainda no ar
+
+- **A seção 04 realmente não cabe em tela baixa.** A 1024×640 a tabela de camadas é cortada pelo topo da janela: a cena tem `h-[62vh]` e a coluna de texto tem headline, parágrafo e seis linhas, o que passa da altura útil do `sticky h-screen`. A 1440×900 cabe, e foi só nessa medida que eu validei. **Lição de processo: validar toda cena pinada em pelo menos 1440×900, 1366×700 e 1024×640.**
+- **O contador ainda exibe valor errado.** A 1366×700 flagrei a seção 05 mostrando **"15%"** onde a afirmação é 16%. Eu tinha tratado o problema em parte, mas a figura de reciclagem ainda tem `from`/`to` e passa por 15 no caminho. Numa página cuja tese é precisão numérica, isso é grave. Solução recomendada: **tirar a contagem desta página inteira**. Nenhum número aqui tem "de onde" que carregue argumento (todos saem de zero), ao contrário da home, onde a viagem entre o valor da alvenaria e o do LSF É o argumento.
+
+### 7 · O que NÃO jogar fora na remodelagem
+
+- Toda a apuração e o registro de fontes em `lib/sustentabilidade-data.ts`, com a regra de que nenhum número entra sem `source` e nenhuma fonte fica declarada sem número.
+- O bloco **"O que a gente não afirma"**. É o argumento de credibilidade mais forte da página e sobreviveu a todas as revisões.
+- As correções de acessibilidade que valem para o site inteiro: `:focus-visible`, `scroll-padding-top` e o offset das âncoras no Lenis.
+- Os dois vazamentos de ScrollTrigger corrigidos com `contextSafe`.
+- As armadilhas técnicas listadas neste documento.
+- As duas ferramentas em `scripts/ui/`.
+
+### 8 · Como atacar quando retomar
+
+1. Fechar a **decisão de cor** com o Bruno antes de qualquer código. É ela que determina se o resto é ajuste ou redesenho.
+2. Reescrever o **arco narrativo** primeiro, em texto puro, e só depois desenhar. O pedido dele é de storytelling, e desenhar antes do texto foi o que produziu a "salada de fruta".
+3. Decidir quantas seções a página tem. Seis blocos temáticos mais hero e prática é muito para o volume de argumento que sobra sem o eixo de carbono. Menos seções, cada uma com mais respiro, ataca ao mesmo tempo o "denso" e o "espremido".
+4. Validar **cada seção visualmente** nas três alturas de tela antes de considerar pronta, com `node scripts/ui/tiras.mjs`.
 
 ## Armadilhas descobertas, para não repetir
 
