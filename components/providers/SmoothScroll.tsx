@@ -6,7 +6,9 @@ import { gsap, ScrollTrigger } from "@/lib/gsap";
 import "lenis/dist/lenis.css";
 
 /**
- * Smooth scroll escopado à home (montado em app/page.tsx, renderiza null).
+ * Smooth scroll opt-in por rota: a página que quiser monta <SmoothScroll />
+ * e o componente renderiza null. Hoje em app/page.tsx e app/sustentabilidade.
+ * Nunca montar duas instâncias ao mesmo tempo.
  *
  * - Roda sobre o scroll nativo (Lenis): âncoras, sticky e a11y preservados.
  * - Com prefers-reduced-motion nada é instanciado — scroll 100% nativo.
@@ -24,7 +26,8 @@ export function SmoothScroll() {
 
     // anchors: true — links #hash (ex.: "Ver projetos" do hero) rolam via Lenis;
     // sem isso o salto nativo é revertido pelo alvo interno do Lenis.
-    const lenis = new Lenis({ autoRaf: false, lerp: 0.12, anchors: true });
+    // offset -96 = altura do header fixo; sem ele a âncora para atrás dele.
+    const lenis = new Lenis({ autoRaf: false, lerp: 0.12, anchors: { offset: -96 } });
 
     const handleScroll = () => ScrollTrigger.update();
     lenis.on("scroll", handleScroll);

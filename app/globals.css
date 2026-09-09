@@ -42,6 +42,16 @@
   /* Smooth scroll global */
   html {
     scroll-behavior: smooth;
+    /* O header fixo tem 90px: sem isso, todo link #ancora deposita o alvo
+       atrás dele e o título fica escondido. */
+    scroll-padding-top: 96px;
+  }
+
+  /* O projeto não tinha nenhuma regra de foco visível. Navegação por teclado
+     ficava sem indicação em links e botões. */
+  :focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 4px;
   }
 
   /* Respeitar preferência de movimento reduzido */

@@ -20,14 +20,20 @@ export function ClientLayout({ children }: { children: React.ReactNode }) {
     return <>{children}</>;
   }
 
-  // Home: hero full-bleed encosta no topo (sem pt-20) sob header transparente
+  // Rotas cujo hero e full-bleed: encostam no topo (sem pt-20) sob header
+  // transparente. A home tem hero pinado com runway de 260vh, por isso o
+  // flip para solido acontece mais tarde nela do que num hero de 100svh.
   const isHome = pathname === "/";
+  const isFullBleed = isHome || pathname === "/sustentabilidade";
 
   return (
     <MenuProvider>
-      <Header variant={isHome ? "overlay" : "default"} />
+      <Header
+        variant={isFullBleed ? "overlay" : "default"}
+        heroEndFactor={isHome ? 1.55 : 0.92}
+      />
       <Sidebar />
-      <main className={isHome ? undefined : "pt-20"}>{children}</main>
+      <main className={isFullBleed ? undefined : "pt-20"}>{children}</main>
     </MenuProvider>
   );
 }
