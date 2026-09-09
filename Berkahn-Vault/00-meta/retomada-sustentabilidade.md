@@ -1,7 +1,7 @@
 ---
 tipo: meta
 criado: 2026-09-08
-atualizado: 2026-09-08
+atualizado: 2026-09-09
 tags:
   - source/handoff
   - project/site
@@ -214,6 +214,103 @@ A leitura conciliadora, que provavelmente é o caminho: o problema hoje está **
 **Processo**
 - Auditar design **lendo código não funciona**. Três dos quatro defeitos críticos só apareceram no screenshot.
 - Uma sessão longa pode esbarrar no limite e derrubar o último agente do workflow. Retomar com `resumeFromRunId` reaproveita tudo que já rodou.
+
+## Apêndice · Prompt para abrir a próxima sessão
+
+Copiar e colar inteiro numa sessão nova, na pasta do projeto.
+
+````text
+Vamos remodelar a página /sustentabilidade do site da Berkahn. Ela existe, está
+na branch feat/sustentabilidade, e eu reprovei o design. Nada da remodelagem foi
+feito ainda.
+
+ANTES DE QUALQUER COISA, leia estes dois arquivos inteiros:
+  Berkahn-Vault/00-meta/retomada-sustentabilidade.md
+  Berkahn-Vault/20-context/home-redesign-direcao.md  (seções "05 · impacto",
+  "/sustentabilidade" e "Auditoria de design e UX")
+
+O primeiro tem o estado, o briefing que eu passei seção por seção, as armadilhas
+técnicas que já custaram tempo e os comandos para rodar. Não reconstrua esse
+raciocínio, ele está escrito.
+
+ONDE TRABALHAR
+Worktree: .worktrees/sustentabilidade, branch feat/sustentabilidade, a partir de
+origin/main. NÃO trabalhe na pasta principal do repositório: outra sessão usa ela
+e troca de branch. O PR #80 está aberto e verde, sem merge. Não faça merge nem
+deploy sem eu pedir.
+
+Dev server:  cd .worktrees/sustentabilidade && npx next dev -p 3113
+
+A DECISÃO QUE VEM ANTES DO CÓDIGO
+Eu pedi imagens coloridas no lugar do preto e branco, e sugeri o cinza virando
+cor conforme o scroll. Isso atravessa a marca: o grayscale está no guia de design
+e a home inteira é assim. Me apresente as três saídas (exceção só nesta página /
+cor como recurso narrativo que depois se espalha / revisão da regra mono), com o
+custo de cada uma, e ESPERE eu escolher. Não escreva CSS de cor antes disso.
+
+DEPOIS QUE EU ESCOLHER, NESTA ORDEM
+1. Reescreva o arco narrativo em texto puro, antes de desenhar. A tese que eu
+   quero sentir: a construção convencional, no Brasil e no mundo, é muito
+   maléfica para o planeta; a construção a seco traz o braço de sustentabilidade
+   de maneira forte; e isso é algo que a Berkahn preserva. Hoje o argumento está
+   espalhado em números e não vira narrativa. Me mostre o arco e espere eu
+   aprovar.
+2. Defina quantas seções a página tem. Hoje são oito e é demais. Menos seção com
+   mais respiro ataca ao mesmo tempo o "denso" e o "espremido".
+3. Só então mexa em componente.
+
+O QUE SAI DA PÁGINA (decidido, não precisa me perguntar)
+- O índice da primeira seção.
+- O fundo quadriculado (.fluxograma-grid-bg).
+- A numeração de seção no formato "01 · a escala". Parece slide de PowerPoint.
+- As réguas de 3px separando seções.
+Duas dessas vieram da home e da auditoria, então a remoção abre inconsistência
+com a home. Me diga qual e proponha o que fazer.
+
+REGRAS QUE NÃO PODEM SER QUEBRADAS
+- NENHUM valor de kgCO2/m2 entra na página. O argumento de carbono do Light
+  Steel Frame não se sustenta: o único ACV brasileiro revisado por pares conclui
+  a favor da alvenaria no ciclo completo. Ao reescrever para "sustentabilidade
+  de maneira forte" você vai sentir a tentação de ressuscitar esse número.
+  Não pode. O eixo defensável é o que a obra extrai, desperdiça e deixa para
+  trás, e existe fonte primária para cada um.
+- Nenhum número entra sem `source` em lib/sustentabilidade-data.ts, e nenhuma
+  fonte fica declarada sem estar amarrada a um número.
+- Onde a fonte descreve faixa, a tela mostra faixa. Nada de publicar só o topo.
+- Voz da marca (Berkahn-Vault/20-context/berkahn-brand.md): sem travessão, sem
+  "não é X, é Y", sem tom de manifesto, "Light Steel Frame" por extenso na
+  primeira menção, nunca "Steel Frame" sozinho.
+- Mantenha o bloco "O que a gente não afirma". É o argumento de credibilidade
+  mais forte da página.
+- Sem ScrollTrigger.pin: track alto com filho sticky, porque pin briga com o
+  Lenis. O estado base do HTML tem que ser o estado FINAL da animação, para a
+  página funcionar sem JS e com prefers-reduced-motion.
+
+DOIS DEFEITOS AINDA NO AR, CONFIRMADOS COM MEDIÇÃO
+- A seção da parede não cabe a 1024x640: a tabela de camadas é cortada.
+- O contador da seção da perda exibe 15% onde a afirmação é 16%. Recomendação:
+  tirar a contagem da página inteira, porque nenhum número aqui tem "de onde"
+  que carregue argumento.
+
+COMO VALIDAR, E ISSO NÃO É OPCIONAL
+Auditar design lendo código não funciona: na última rodada, três dos quatro
+defeitos críticos só apareceram em screenshot. Antes de dizer que qualquer seção
+está pronta, capture e OLHE:
+  node scripts/ui/tiras.mjs ./tiras
+  node scripts/ui/medir-secoes.mjs
+Valide toda cena com viewport preso em 1440x900, 1366x700 E 1024x640. Foi por
+validar só a primeira que a seção da parede passou quebrada.
+No medir-secoes, as linhas marcadas "<<< folga" em extracao e parede são pista
+de rolagem de sticky, não espaço morto. Não "corrija".
+
+RESPIRO
+A home usa 192px de padding nas seções de conteúdo e esta página usa 128px,
+porque eu reduzi seguindo a auditoria. Eu achei espremido perto da home. Volte
+para o respiro da home e tire gordura cortando seção, não espaçamento.
+
+Comece lendo os dois arquivos e me trazendo a decisão de cor e o arco narrativo.
+Não escreva código antes disso.
+````
 
 ## Relacionados
 
