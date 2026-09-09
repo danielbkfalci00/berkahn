@@ -1,7 +1,7 @@
 ---
 tipo: projeto
 criado: 2026-05-22
-atualizado: 2026-08-27
+atualizado: 2026-09-09
 tags:
   - project/blog
   - status/active
@@ -9,6 +9,7 @@ ai_summary: Hub do Blog — 40 posts e 44 trilhas. A revisão de casa LSF 100 m�
 status: active
 projeto: blog
 kpi_publicados: 43
+kpi_drafts_aguardando_capa: 19
 kpi_meta_publicados_semanal: 1
 kpi_indexados_google: 34
 kpi_meta_indexacao_total: 40
@@ -265,6 +266,8 @@ O motivo está em comentário no `app/atualidades/[slug]/page.tsx` para o skelet
 - Capas em produção: `public/images/img_blog/[slug]/cover.webp`
 
 ## Histórico recente
+
+- 2026-09-05 e 06: **20 fluxos produzidos em dois lotes**, com 15 artigos novos, 4 reposicionamentos e 1 bloqueado. Ordem de publicação e restrições vinculantes em [[2026-09-lote-20-fronteiras]]; as decisões por extenso ficam no bloco Pesquisa de cada card. Nenhum `produzir` rodou: o lote para no draft registrado porque o CLI exige capa staging. O que o gate individual não via virou script: `scripts/conteudo/check-lote-linkedin.mjs` confere fórmula no conjunto, e achou 7 de 10 CTAs abrindo com a mesma construção no primeiro lote
 
 - 2026-09-09: **título duplicado corrigido em 9 artigos indexáveis.** A página renderiza `post.title` como hero `<h1>` e o `renderMarkdown` converte o `#` do `content` em `<h2>`, então o título aparecia duas vezes. Verificado em produção antes e depois em `drywall-st-ru-rf` e `steel-frame-no-mundo`. Oito eram repetição literal do título e a linha saiu; `reforma-tributaria-construcao-industrializada` usava `#` como nível de seção, com 6 deles e 6 subníveis em `##`, então a hierarquia inteira foi rebaixada em cascata para não transformar subnível em irmão do pai. Corrigido no Supabase e espelhado no vault, com backup do `content` anterior em `scripts/.cache/backup-content/`. **Artigos novos já estavam protegidos**: `corpoPublicavelDoMarkdown` aborta com "H1 no corpo", e esses nove são anteriores ao guard. Os outros 9 posts com H1 são os stubs geridos pelo thin-content e ficaram intocados de propósito
 - 2026-09-09: registro de um erro meu de leitura, para não se repetir. Reportei os 9 artigos com `content` de 135 a 570 caracteres como achado novo e urgente. **Já estavam diagnosticados e resolvidos desde 30/07**, em [[2026-07-thin-content-mapa]]: 4 sem substituto com `noindex, follow` e 5 consolidados por 301, controlados por `lib/seo/thin-content.ts`. Confirmado em produção: `guia-definitivo` e `isolamento-termico` respondem 200 com `noindex, follow`; `financiamento-construcao-steel-frame` e `certificacoes-steel-frame` respondem 308 para o destino correto. A métrica que li como sintoma de página quebrada (2 pageviews, 3 s) é **consequência do noindex**, não causa. Regra que fica: antes de tratar acervo publicado como defeito, ler `40-content/estrategia/` e `lib/seo/` primeiro. O que resta ali é o backlog de reescrita, com `guia-definitivo-steel-frame-brasil` em primeiro lugar, e é trabalho de conteúdo, não correção de bug
