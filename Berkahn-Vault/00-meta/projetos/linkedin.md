@@ -1,7 +1,7 @@
 ---
 tipo: projeto
 criado: 2026-05-22
-atualizado: 2026-09-03
+atualizado: 2026-09-09
 tags:
   - project/linkedin
   - status/active
@@ -58,6 +58,7 @@ Contagem verificada em 2026-07-29 contra `main` — o `kpi_publicados: 1` anteri
 - [x] Aprovação editorial registrada no card
 - [ ] @bruno Publicar manualmente no LinkedIn com a UTM entregue; depois registrar URL e data reais #pendencia
 - [x] Pauta `d29d7fee` (custos ocultos) aprovada em 18/08 com copy de 142 palavras e capa 1080×1350
+- [x] 20 posts escritos em 05 e 06/09 pelos lotes, todos com exit 0 no `check-linkedin.mjs` e o conjunto aprovado no `check-lote-linkedin.mjs`. Aguardam capa; ver [[2026-09-lote-20-fronteiras]]
 - [ ] @bruno Publicar o post de custos ocultos e registrar URL e data reais no card `d29d7fee` #pendencia
 - [x] Pauta `0fbdbc5d` (quanto custa o projeto) aprovada em 25/08 com copy de 115 palavras e capa 1080×1350
 - [ ] @bruno Publicar o post de quanto custa o projeto e registrar URL e data reais no card `0fbdbc5d` #pendencia

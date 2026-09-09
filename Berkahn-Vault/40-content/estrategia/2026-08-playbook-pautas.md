@@ -87,7 +87,7 @@ Revisão de evidência 2025-2026 em [[2026-07-diagnostico-editorial]]. Muda o de
 
 **Nota estratégica**: esta pauta é o destino natural da página canibalizada. Ver Bloco 1 do saneamento — a decisão é **reposicionar** `quanto-custa-construir-...` para metragem, não redirecionar.
 
-**Links**: [[custo-steel-frame-m2-2026]], [[financiar-construcao-light-steel-frame]]
+**Links**: [[40-content/blog/publicados/custo-steel-frame-m2-2026|custo-steel-frame-m2-2026]], [[40-content/blog/publicados/financiar-construcao-light-steel-frame|financiar-construcao-light-steel-frame]]
 
 ---
 
@@ -105,7 +105,7 @@ Revisão de evidência 2025-2026 em [[2026-07-diagnostico-editorial]]. Muda o de
 
 **Title**: sem ano. É query conceitual e atemporal.
 
-**Links**: [[custo-steel-frame-m2-2026]], [[steel-frame-vs-alvenaria]]
+**Links**: [[40-content/blog/publicados/custo-steel-frame-m2-2026|custo-steel-frame-m2-2026]], [[steel-frame-vs-alvenaria]]
 
 ---
 
@@ -201,7 +201,7 @@ Revisão de evidência 2025-2026 em [[2026-07-diagnostico-editorial]]. Muda o de
 
 **Estrutura**: preço na abertura → por que o m² é mais caro em área pequena (banheiro e cozinha não encolhem proporcionalmente) → o que priorizar → planta que funciona em 70m² → prazo.
 
-**Links**: pauta de 100m² (S2), [[custo-steel-frame-m2-2026]]
+**Links**: pauta de 100m² (S2), [[40-content/blog/publicados/custo-steel-frame-m2-2026|custo-steel-frame-m2-2026]]
 
 ---
 
@@ -233,7 +233,7 @@ Revisão de evidência 2025-2026 em [[2026-07-diagnostico-editorial]]. Muda o de
 
 **Distinguir** do artigo de financiamento: aquele é sobre comprar, este é sobre revender e ser avaliado.
 
-**Links**: [[financiar-construcao-light-steel-frame]], [[normas-light-steel-frame-brasil]]
+**Links**: [[40-content/blog/publicados/financiar-construcao-light-steel-frame|financiar-construcao-light-steel-frame]], [[40-content/blog/publicados/normas-light-steel-frame-brasil|normas-light-steel-frame-brasil]]
 
 ---
 
