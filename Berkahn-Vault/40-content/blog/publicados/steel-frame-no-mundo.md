@@ -30,7 +30,6 @@ contextos_aplicados:
   - seo-aeo-strategy
   - article-pipeline
 ---
-# Steel Frame no Mundo: Como Cada País Constrói com Aço
 
 O Japão constrói mais de 150 mil casas em estrutura de aço por ano. A Austrália protege suas residências contra cupins e ciclones com frames metálicos. O Reino Unido exige que pelo menos 25% da habitação social use métodos construtivos offsite, com o aço como tecnologia preferencial. O mercado global de Light Gauge Steel Framing movimenta entre US$ 36 e US$ 38 bilhões por ano, segundo estimativas convergentes da Grand View Research e da SkyQuest Technology, com projeção de ultrapassar US$ 55 bilhões até 2030.
 

@@ -30,7 +30,6 @@ contextos_aplicados:
   - seo-aeo-strategy
   - article-pipeline
 ---
-# Steel Frame: Vantagens e Desvantagens Reais
 
 O Light Steel Frame (LSF) é um sistema construtivo industrializado que utiliza perfis de aço galvanizado como estrutura, com fechamento externo em placas cimentícias e interno em gesso acartonado. Nos Estados Unidos, cerca de 500 mil casas são construídas nesse sistema por ano, com penetração de mercado em torno de 75%. No Brasil, após 25 anos de presença, o Steel Frame representa aproximadamente 2 a 3% das construções, segundo dados da ABCEM (Associação Brasileira da Construção Metálica). Na Berkahn, trabalhamos exclusivamente com LSF na Grande São Paulo e lidamos diariamente com as perguntas de quem está tentando decidir entre steel frame e alvenaria convencional. Este artigo reúne o que funciona, o que não funciona e o que depende do seu projeto, com dados de estudos acadêmicos brasileiros, normas técnicas e referências de mercado.
 

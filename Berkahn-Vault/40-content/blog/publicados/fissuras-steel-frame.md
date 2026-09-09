@@ -32,7 +32,6 @@ contextos_aplicados:
   - seo-aeo-strategy
   - article-pipeline
 ---
-# Fissuras no Steel Frame: Por Que Acontecem, Como Prevenir e Como Reparar
 
 Uma auditoria do Ministério da Transparência avaliou 688 empreendimentos do programa Minha Casa Minha Vida, totalizando 189 mil unidades em alvenaria construídas entre 2011 e 2014. Resultado: 48,9% apresentaram defeitos construtivos, com 30,8% de ocorrência específica de fissuras e trincas. Uma casa em alvenaria tem quase uma chance em três de desenvolver rachaduras visíveis nos primeiros anos. Esse dado raramente aparece quando alguém compara sistemas construtivos, porque fissuras em alvenaria são tão comuns que já foram normalizadas. Quando o assunto é Light Steel Frame (LSF), um sistema construtivo industrializado que usa perfis de aço galvanizado como estrutura, fechados com placas cimentícias ou gesso acartonado, qualquer marca na parede gera alarme. Na Berkahn, achamos que o caminho para conquistar confiança é tratar o tema com transparência técnica, e não com promessas vagas de que "Steel Frame não racha".
 

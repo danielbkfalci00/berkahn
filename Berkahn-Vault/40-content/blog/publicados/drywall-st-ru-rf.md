@@ -33,7 +33,6 @@ contextos_aplicados:
   - seo-aeo-strategy
   - article-pipeline
 ---
-# Drywall ST, RU e RF: qual usar em cada ambiente da sua obra
 
 Quem está planejando uma construção ou reforma cedo ou tarde esbarra numa dúvida que parece simples, mas que tem consequências sérias quando respondida errado: qual tipo de placa de drywall usar em cada ambiente? A resposta envolve três siglas que você provavelmente já viu por aí: ST, RU e RF. Cada uma identifica uma composição diferente do gesso acartonado, projetada para lidar com condições específicas de uso. Escolher errado não é só desperdício de dinheiro. É comprometer o desempenho da parede, abrir caminho para mofo, perder resistência ao fogo onde ela é obrigatória por lei, ou simplesmente ver o acabamento se deteriorar em poucos meses.
 

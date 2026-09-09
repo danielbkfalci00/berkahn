@@ -30,7 +30,6 @@ contextos_aplicados:
   - seo-aeo-strategy
   - article-pipeline
 ---
-# Como Financiar uma Construção em Light Steel Frame
 
 Até maio de 2022, financiar uma casa em Steel Frame no Brasil era um processo burocrático e, em muitos casos, inviável. A Caixa Econômica Federal classificava o Light Steel Frame (LSF), sistema construtivo industrializado que utiliza perfis de aço galvanizado como estrutura, na categoria de "sistema inovador", exigindo um documento técnico chamado DATec que pouquíssimas empresas conseguiam emitir. Na prática, quem queria construir em Steel Frame pagava à vista ou não construía. A publicação da NBR 16970 pela ABNT mudou esse cenário. O LSF passou a ser classificado como sistema convencional, e as portas do crédito imobiliário se abriram. Na Berkahn, acompanhamos essa evolução de perto porque ela impacta diretamente os projetos dos nossos clientes. Este guia reúne as três formas viáveis de levantar recurso para construir em Steel Frame, com taxas e condições atualizadas para fevereiro de 2026.
 
