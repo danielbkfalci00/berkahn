@@ -109,7 +109,7 @@ Tráfego seguiu crescendo: 1.179 users em junho, 1.407 nos primeiros 26 dias de 
 
 ## Próximos 7 dias
 
-- [ ] @bruno Revisar e aprovar o pacote `72133a0d`: artigo staged em `financiar-construcao-light-steel-frame`, copy LinkedIn de 130 palavras e capas já vinculadas #pendencia
+- [ ] @bruno Revisar e aprovar o pacote `72133a0d`: artigo staged em `financiar-construcao-light-steel-frame`, copy LinkedIn de 139 palavras e capas já vinculadas #pendencia
 
 - [x] Semana S1: artigo de ICMS publicado e reconciliado com a pauta
 - [x] Pesquisa e criação exercitadas na pauta de casa LSF de 100 m²
