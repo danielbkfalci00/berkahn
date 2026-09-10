@@ -3,5 +3,10 @@
     "ga4MoM": false,
     "gscMoM": true,
     "reason": "O Consent Mode começou em 30/07/2026; julho e agosto não têm bases GA4 comparáveis."
+  },
+  "2026-09": {
+    "ga4MoM": false,
+    "gscMoM": true,
+    "reason": "Agosto/2026 é a base anterior e teve quebra de coleta no GA4; a comparação GA4 volta em outubro × setembro."
   }
 }
