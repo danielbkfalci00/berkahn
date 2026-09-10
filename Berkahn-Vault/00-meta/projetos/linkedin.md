@@ -1,14 +1,14 @@
 ---
 tipo: projeto
 criado: 2026-05-22
-atualizado: 2026-08-27
+atualizado: 2026-09-09
 tags:
   - project/linkedin
   - status/active
 ai_summary: Hub do LinkedIn. Três pautas aprovadas aguardam publicação manual e registro de URL+data, casa LSF 100 m², custos ocultos e quanto custa o projeto. Cadência segue abaixo da meta.
 status: active
 projeto: linkedin
-kpi_publicados: 3
+kpi_publicados: 4
 kpi_meta_publicados_semanal: 1
 kpi_engajamento_medio: 0
 kpi_artigos_linkados: 0
@@ -58,11 +58,13 @@ Contagem verificada em 2026-07-29 contra `main` — o `kpi_publicados: 1` anteri
 - [x] Aprovação editorial registrada no card
 - [ ] @bruno Publicar manualmente no LinkedIn com a UTM entregue; depois registrar URL e data reais #pendencia
 - [x] Pauta `d29d7fee` (custos ocultos) aprovada em 18/08 com copy de 142 palavras e capa 1080×1350
+- [x] 20 posts escritos em 05 e 06/09 pelos lotes, todos com exit 0 no `check-linkedin.mjs` e o conjunto aprovado no `check-lote-linkedin.mjs`. Aguardam capa; ver [[2026-09-lote-20-fronteiras]]
 - [ ] @bruno Publicar o post de custos ocultos e registrar URL e data reais no card `d29d7fee` #pendencia
 - [x] Pauta `0fbdbc5d` (quanto custa o projeto) aprovada em 25/08 com copy de 115 palavras e capa 1080×1350
 - [ ] @bruno Publicar o post de quanto custa o projeto e registrar URL e data reais no card `0fbdbc5d` #pendencia
 - [x] Pauta `9c51c605` (terreno em declive) aprovada em 27/08 com copy de 157 palavras e capa 1080×1350, a primeira escrita sob a v1.2
-- [ ] @bruno Publicar o post de terreno em declive e registrar URL e data reais no card `9c51c605` #pendencia
+- [x] Copy de `9c51c605` reescrita em 03/09 após revisão do segundo leitor e aprovada nos dois lados, com 166 palavras e abertura em pergunta. Aprendizado em [[linkedin-post]] v1.3
+- [x] ~~Publicar o post de terreno em declive~~ — publicado pelo Bruno em 02/09. Data registrada no card `9c51c605`; a URL do post ele optou por não coletar, e o CLI deixou de exigi-la
 
 - [ ] Começar o backlog de distribuição: 22 posts derivam de artigos **já publicados** e não exigem escrever artigo nenhum
 

@@ -30,7 +30,6 @@ contextos_aplicados:
   - seo-aeo-strategy
   - article-pipeline
 ---
-# Iluminação LED Residencial: Por Que a Luz da Sua Casa Começa na Planta
 
 Existe um erro muito comum em casas que custam milhões de reais. A arquitetura é impecável, o acabamento é premium, os materiais foram escolhidos a dedo. Mas a iluminação foi decidida no final da obra, na pressa, comprando luminárias no showroom mais próximo. O resultado é previsível: um mármore de R$ 800 o metro quadrado que parece acinzentado sob a luz errada. Uma madeira nobre que perde toda a riqueza dos veios. Uma suíte de revista que, à noite, tem o charme de uma sala de espera.
 

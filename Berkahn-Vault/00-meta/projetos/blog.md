@@ -1,7 +1,7 @@
 ---
 tipo: projeto
 criado: 2026-05-22
-atualizado: 2026-08-27
+atualizado: 2026-09-09
 tags:
   - project/blog
   - status/active
@@ -9,6 +9,7 @@ ai_summary: Hub do Blog — 40 posts e 44 trilhas. A revisão de casa LSF 100 m�
 status: active
 projeto: blog
 kpi_publicados: 43
+kpi_drafts_aguardando_capa: 19
 kpi_meta_publicados_semanal: 1
 kpi_indexados_google: 34
 kpi_meta_indexacao_total: 40
@@ -195,7 +196,7 @@ Eram ~7.300 palavras de corpo prontas enquanto o blog carregava 9 artigos de men
 
 **`orcamento-steel-frame`** (2.354 palavras de corpo). Bloqueio: **todo o eixo de preço está um ano defasado e conflita com o que já está no ar.**
 
-- Ancora no Índice Arquitecasa de **janeiro/2025** (R$ 2.979 a 5.926/m² no Sudeste). O canônico é **dezembro/2025** (R$ 3.015 a 6.091/m²), e a fonte disso é [[financiar-construcao-light-steel-frame]]
+- Ancora no Índice Arquitecasa de **janeiro/2025** (R$ 2.979 a 5.926/m² no Sudeste). O canônico é **dezembro/2025** (R$ 3.015 a 6.091/m²), e a fonte disso é [[40-content/blog/publicados/financiar-construcao-light-steel-frame|financiar-construcao-light-steel-frame]]
 - Selic e taxa da Caixa são de 2025 — o dado mais perecível do texto
 - Preços unitários de 2025: placa cimentícia, basecoat, tarifa de energia, caçamba, terreno
 - Diz LSF a 250 kg/m² e vida útil de 90 anos; [[mitos-verdades-steel-frame]], **publicado**, diz 60 a 100 kg/m² e "acima de 100 anos". O corpus publicado manda
@@ -265,6 +266,11 @@ O motivo está em comentário no `app/atualidades/[slug]/page.tsx` para o skelet
 - Capas em produção: `public/images/img_blog/[slug]/cover.webp`
 
 ## Histórico recente
+
+- 2026-09-05 e 06: **20 fluxos produzidos em dois lotes**, com 15 artigos novos, 4 reposicionamentos e 1 bloqueado. Ordem de publicação e restrições vinculantes em [[2026-09-lote-20-fronteiras]]; as decisões por extenso ficam no bloco Pesquisa de cada card. Nenhum `produzir` rodou: o lote para no draft registrado porque o CLI exige capa staging. O que o gate individual não via virou script: `scripts/conteudo/check-lote-linkedin.mjs` confere fórmula no conjunto, e achou 7 de 10 CTAs abrindo com a mesma construção no primeiro lote
+
+- 2026-09-09: **título duplicado corrigido em 9 artigos indexáveis.** A página renderiza `post.title` como hero `<h1>` e o `renderMarkdown` converte o `#` do `content` em `<h2>`, então o título aparecia duas vezes. Verificado em produção antes e depois em `drywall-st-ru-rf` e `steel-frame-no-mundo`. Oito eram repetição literal do título e a linha saiu; `reforma-tributaria-construcao-industrializada` usava `#` como nível de seção, com 6 deles e 6 subníveis em `##`, então a hierarquia inteira foi rebaixada em cascata para não transformar subnível em irmão do pai. Corrigido no Supabase e espelhado no vault, com backup do `content` anterior em `scripts/.cache/backup-content/`. **Artigos novos já estavam protegidos**: `corpoPublicavelDoMarkdown` aborta com "H1 no corpo", e esses nove são anteriores ao guard. Os outros 9 posts com H1 são os stubs geridos pelo thin-content e ficaram intocados de propósito
+- 2026-09-09: registro de um erro meu de leitura, para não se repetir. Reportei os 9 artigos com `content` de 135 a 570 caracteres como achado novo e urgente. **Já estavam diagnosticados e resolvidos desde 30/07**, em [[2026-07-thin-content-mapa]]: 4 sem substituto com `noindex, follow` e 5 consolidados por 301, controlados por `lib/seo/thin-content.ts`. Confirmado em produção: `guia-definitivo` e `isolamento-termico` respondem 200 com `noindex, follow`; `financiamento-construcao-steel-frame` e `certificacoes-steel-frame` respondem 308 para o destino correto. A métrica que li como sintoma de página quebrada (2 pageviews, 3 s) é **consequência do noindex**, não causa. Regra que fica: antes de tratar acervo publicado como defeito, ler `40-content/estrategia/` e `lib/seo/` primeiro. O que resta ali é o backlog de reescrita, com `guia-definitivo-steel-frame-brasil` em primeiro lugar, e é trabalho de conteúdo, não correção de bug
 
 - 2026-08-27: `terreno-em-declive-quanto-encarece` publicado (`kpi_publicados` 42 → 43). Terceira volta completa do `/conteudo`. O passo de métricas devolveu "artigo novo" de novo, e desta vez o argumento é forte: nenhuma query de terreno ou declive aparece no top 20 do GSC de julho, que é inteiro de custo por m². Os dois vizinhos, `fundacao-steel-frame` com 2 cliques e `fundacao-steel-frame-vs-alvenaria` com 10, tocam o tema de passagem, então o artigo manda a decisão de tipo de fundação para eles por link interno e fica com a quantificação. Descartada de propósito a composição SINAPI 100350 de muro de arrimo, que **não tem preço publicado para São Paulo** em julho de 2026: usar a média nacional de agosto de 2024 seria o mesmo erro que o artigo critica nos agregadores, e dizer isso no texto virou diferencial. Fontes: SINAPI São Paulo julho/2026 com código de composição e a Lei de Obras 16.642/17, que obriga licenciamento acima de 1,50 m de desnível ou 1.000 m³
 

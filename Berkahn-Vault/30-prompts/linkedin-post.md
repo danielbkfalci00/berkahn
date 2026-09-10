@@ -9,7 +9,7 @@ tags:
 ai_summary: Criar post LinkedIn Berkahn a partir de artigo ou tema. Calibrado por Bruno. Abre numa situação concreta do público, exige texto contínuo sem frase de impacto isolada, prioriza 110-140 palavras, CTA útil e imagem de fotografia documental sem props encenados. Usado por /linkedin, com gate em check-linkedin.mjs.
 status: locked
 locked: true
-versao: 1.2.2
+versao: 1.3
 calibrado_em: 2026-08-27
 ---
 
@@ -76,6 +76,13 @@ contraste ou consequência concreta. Quando houver base factual, números podem
 materializar a tensão. Não comece explicando o tema ou anunciando a conclusão.
 O leitor precisa se enxergar no problema antes de receber a explicação técnica.
 
+Abrir com uma pergunta funciona bem e é preferência declarada do Bruno em
+2026-09-03, com a ressalva dele: "gosto de começar com uma dúvida nesses textos,
+mas não em todos, obviamente". Então é uma das aberturas boas, nunca a fórmula.
+A pergunta precisa ser a dúvida real de quem está decidindo, e a linha seguinte
+responde de verdade em vez de empurrar a resposta para o fim. Se dois posts
+seguidos abrirem com pergunta, o terceiro abre de outro jeito.
+
 **Corpo (1-2 parágrafos curtos):** Desenvolva o insight de forma concisa. Explique, contextualize, conecte com a realidade do leitor. Máximo 2-3 linhas por parágrafo. Vá direto ao ponto.
 
 **Fechamento institucional (2-3 linhas):** Conecte o tema do post com o propósito da Berkahn. A Berkahn existe para trazer três coisas para a construção civil: leveza, previsibilidade e limpeza. O Light Steel Frame é o sistema que viabiliza isso na prática.
@@ -132,10 +139,23 @@ pode ser fundido com o ponto de reflexão quando isso funcionar melhor.
 
 ## EXTENSÃO
 
-Mire 110 a 140 palavras no corpo, sem contar URL e hashtags. O teto continua em
-180 somente quando a compreensão técnica realmente exigir. Depois do primeiro
-rascunho, corte explicações repetidas, transições formais e frases que o exemplo
-concreto já demonstrou.
+O alvo depende da densidade do assunto, e a régua é a compreensão, não a contagem.
+
+- **Tema leve, um insight só**: 110 a 140 palavras.
+- **Tema com número, norma ou termo técnico**: 150 a 180. É a maioria dos posts
+  da Berkahn.
+
+O teto continua em 180. Depois do primeiro rascunho, corte explicações repetidas,
+transições formais e frases que o exemplo concreto já demonstrou, mas **não corte
+os conectivos que ligam uma ideia na outra**, porque é isso que produz o texto
+truncado.
+
+**Calibrado em 2026-09-03 com evidência, não com preferência.** Três versões do
+mesmo post passaram no gate com 148, 157 e 166 palavras. O Bruno reprovou a de 148
+por confusa e a de 157 por truncada; um segundo leitor humano, sem ver a conversa,
+chegou de forma independente na mesma palavra, truncado. A aprovada foi a de 166,
+a mais longa das três. Espremer para 140 vinha produzindo taquigrafia técnica que
+passava no verificador e falhava no leitor.
 
 ## FILTRO DE HUMANIZAÇÃO ANTES DE ENTREGAR
 
@@ -156,6 +176,10 @@ concreto já demonstrou.
   Precisa sair em 0. Ele confere extensão, os vícios listados acima,
   terminologia LSF, hashtags, a URL com UTM e a frase de impacto isolada.
   Se ele reprovar, o texto é reescrito, não remendado no ponto que ele apontou.
+- **Duas cabeças humanas leem antes de publicar.** Desde 2026-09-03 a copy passa
+  pelo Bruno e por um segundo revisor. Quando os dois usam a mesma palavra para
+  descrever o problema, sem terem combinado, isso vale mais que qualquer regra
+  escrita aqui e vira calibragem na hora.
 - **Passar no gate não é o mesmo que estar legível.** Depois do 0, leia de novo
   perguntando se cada frase entrega o que a seguinte precisa. Em 27/08 um texto
   passou em 20 de 20 e o Bruno reprovou por confuso: abria falando de altura de

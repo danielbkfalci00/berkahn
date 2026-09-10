@@ -32,7 +32,7 @@ material_visual_slug: null
 
 [STATS:numeros-reforma]
 
-# O que efetivamente mudou
+## O que efetivamente mudou
 
 A Emenda Constitucional nº 132, promulgada em dezembro de 2023, fez o que vinha sendo discutido há mais de trinta anos: dissolveu cinco tributos que se acumulavam sobre o consumo no Brasil. O PIS, a Cofins, o IPI, o ICMS e o ISS deixam de existir como tributos independentes e dão lugar a um modelo que o mundo inteiro usa, chamado IVA, Imposto sobre Valor Agregado. O Brasil optou por implementar esse IVA em formato dual, ou seja, dividido em duas camadas: a CBS (Contribuição sobre Bens e Serviços), de competência federal, e o IBS (Imposto sobre Bens e Serviços), compartilhado entre estados e municípios. As duas operam com a mesma lógica e sobre a mesma base de cálculo, mas cada uma é arrecadada por um ente diferente. Esse desenho dual, em vez do IVA único adotado pela maioria dos países, foi o arranjo possível para preservar a autonomia federativa brasileira: um IVA único exigiria que a União centralizasse a arrecadação e depois redistribuísse, o que estados e municípios não aceitariam.
 
@@ -44,7 +44,7 @@ A regulamentação dessa mudança veio em janeiro de 2025, com a Lei Complementa
 
 O número da alíquota, porém, é a parte menos importante da conversa. O que realmente redesenha a economia do setor de construção é uma mudança conceitual. O sistema antigo era cumulativo, o novo é não cumulativo. Essa diferença de uma palavra carrega o peso inteiro do debate.
 
-## A não cumulatividade é o coração da reforma
+### A não cumulatividade é o coração da reforma
 
 O artigo 47 da LC 214 estabelece o princípio da não cumulatividade plena. Traduzido para a prática do canteiro: todo tributo pago pelo fornecedor numa etapa anterior da cadeia vira crédito financeiro para quem compra. O comprador abate esse crédito do tributo que ele mesmo deve na etapa seguinte. No fim, cada elo da cadeia paga tributo apenas sobre o valor que efetivamente agregou, nunca sobre uma base que já contém os tributos pagos antes.
 
@@ -56,7 +56,7 @@ A reforma inverte essa lógica. Agora, quanto mais formal, industrializada e ras
 
 *Fonte:* CBIC, Reforma tributária reduz distorções e abre espaço para avanço da industrialização, cbic.org.br/reforma-tributaria-reduz-distorcoes-e-abre-espaco-para-avanco-da-industrializacao/
 
-# Por que isso empurra o Brasil para a construção industrializada
+## Por que isso empurra o Brasil para a construção industrializada
 
 A construção industrializada é qualquer método em que componentes são produzidos em ambiente fabril, com controle industrial de qualidade, e montados no canteiro com precisão milimétrica. Cabem nessa definição o Light Steel Frame, o wood frame, as estruturas pré-moldadas de concreto, os painéis modulares e os sistemas de fachada ventilada. Todos compartilham a mesma característica econômica: cadeia longa, insumos de alto valor agregado, processos formais, notas fiscais em todas as etapas, mão de obra especializada de menor volume físico em obra.
 
@@ -74,17 +74,17 @@ Rodrigo Navarro, presidente da Associação Brasileira da Indústria de Materiai
 
 O Light Steel Frame é o exemplo mais evidente desse movimento. Como sistema construtivo que utiliza perfis de aço galvanizado estruturais, placas cimentícias ou EIFS para fechamento externo e drywall para divisórias internas, o LSF depende quase inteiramente de uma cadeia industrial sofisticada. Gerdau, ArcelorMittal, Eternit, Saint-Gobain, Knauf, Placo e fabricantes de isolamentos térmicos fornecem insumos que passam por processos fabris complexos, com notas fiscais formais em toda a cadeia. É exatamente o perfil que o novo sistema tributário premia. Mas o raciocínio vale para qualquer método industrializado: wood frame, pré-moldado, modular. A reforma favorece a categoria inteira.
 
-# O que muda no imposto sobre os insumos
+## O que muda no imposto sobre os insumos
 
 A melhor forma de entender o impacto da reforma não é olhar para a alíquota final, mas sim para o comportamento tributário de cada insumo ao longo da cadeia. O estudo da BSSP Consulting, publicado em 2026 e citado pelo portal Arquis e pela Associação Latino-Americana de Empresas de Construção, projeta movimentos distintos por categoria. A lógica é consistente: itens com cadeia industrial longa e formal tendem a registrar deflação tributária, porque deixam de carregar o efeito cascata anterior; itens intensivos em mão de obra direta tendem a encarecer, porque mão de obra não gera crédito; itens já sujeitos a regimes especiais seguem padrões próprios.
 
-## Antes da reforma
+### Antes da reforma
 
 Um perfil de aço galvanizado produzido pela Gerdau sai da siderúrgica com IPI, ICMS (entre 12% e 18% conforme o estado), PIS e Cofins embutidos. Quando esse perfil passa pelo distribuidor, novos tributos incidem sobre uma base que já contém os tributos da etapa anterior. O distribuidor vende para o fornecedor da obra, que acrescenta sua margem e paga mais uma camada tributária. O fornecedor entrega no canteiro, e a construtora, que executa a obra sob regime de empreitada, recolhe ISS (entre 2% e 5% conforme o município) sobre o preço final do serviço. A construtora não consegue abater os tributos anteriores de forma ampla, porque o ISS não dá direito a crédito e o PIS/Cofins cumulativo tem restrições pesadas.
 
 A mesma dinâmica se repete com as placas cimentícias, o drywall, o EIFS, os parafusos estruturais, os isolantes termoacústicos. Cada insumo do LSF chega ao canteiro carregando uma pilha de tributos acumulados, que a construtora não recupera e repassa para o cliente final sob a forma de preço. A consequência prática é que o orçamento de uma obra em LSF, por acumular insumos industrializados, carrega mais tributo embutido que uma obra equivalente em alvenaria tradicional, que usa materiais de cadeia mais curta.
 
-## Depois da reforma
+### Depois da reforma
 
 A partir de 2027, com a entrada plena da CBS, e progressivamente até 2033 com a substituição do ICMS e ISS pelo IBS, o mecanismo muda. A siderúrgica vende o perfil com IBS e CBS destacados em nota fiscal. O distribuidor, ao comprar, credita esse valor. Quando revende, debita o IBS e a CBS sobre o novo preço, e abate o crédito recebido na compra. Paga ao fisco apenas a diferença. O mesmo acontece com o fornecedor que entrega em obra, e com a construtora que executa o serviço. Cada elo paga tributo apenas sobre o valor que agregou, e o tributo pago em uma etapa sempre vira crédito na etapa seguinte.
 
@@ -102,7 +102,7 @@ A leitura é clara. Os insumos em que a construção industrializada é mais int
 
 Em uma obra tipicamente industrializada, em que os materiais respondem por algo entre 60% e 70% do custo direto, a redução nos insumos tende a compensar o aumento na mão de obra e ainda sobra margem de ganho. Em uma obra tradicional, em que mão de obra pode chegar a 45% ou 50% do custo, o aumento dessa parcela domina a equação e o resultado líquido é um encarecimento relativo. A diferença entre os dois sistemas deixa de ser neutra, como era antes, e passa a favorecer o método industrial.
 
-# Cenário atual e tendências
+## Cenário atual e tendências
 
 O ano de 2026 é informativo. A Receita Federal disponibilizou em janeiro o ambiente virtual em consumo.tributos.gov.br, e as notas fiscais já podem ser emitidas com IBS e CBS destacados, em alíquotas simbólicas de 0,1% e 0,9% respectivamente, sem recolhimento efetivo. O Ato Conjunto RFB/CGIBS nº 1/2025 estabeleceu um período de tolerância sem penalidades enquanto empresas ajustam ERPs e processos internos. Em janeiro de 2026, segundo dados divulgados pela Receita Federal, apenas 1,7 milhão de notas fiscais haviam sido emitidas no novo padrão, contra quase 95 milhões no padrão antigo. A adesão inicial é baixa, o que indica que a maior parte do setor ainda não começou a preparação real.
 
@@ -112,7 +112,7 @@ A partir de 2027 a CBS entra em vigor plena, o PIS e a Cofins são extintos e o 
 
 *Fonte:* Ministério da Fazenda, Receita Federal e Comitê Gestor do IBS definem regras para 2026, gov.br/fazenda
 
-## Três tendências a observar
+### Três tendências a observar
 
 A primeira tendência é a consolidação da cadeia de fornecedores formais. O crédito de IBS e CBS só é integral quando o fornecedor está no regime regular. Fornecedores do Simples Nacional transferem crédito limitado. Construtoras que queiram maximizar o aproveitamento tributário vão migrar progressivamente para fornecedores formais, o que pressiona fornecedores informais a se formalizarem ou perderem competitividade. O setor deve experimentar uma onda de profissionalização da base de suprimento, especialmente em cidades fora dos grandes centros.
 
@@ -120,13 +120,13 @@ A segunda tendência é o crescimento acelerado da construção industrializada 
 
 A terceira tendência é a redefinição dos critérios de compra pelo cliente final. Hoje, o comprador de uma residência de alto padrão decide entre alvenaria e LSF com base em preço absoluto, prazo, conforto térmico e reputação do construtor. A partir de 2028, com LSF competitivo em preço e com prazo significativamente menor, a balança deve pender com mais força para os métodos industrializados. Construtoras que já dominam esses métodos hoje chegam ao novo mercado com vantagem de experiência e de curva de aprendizado.
 
-## O que não está resolvido
+### O que não está resolvido
 
 A alíquota combinada de 26,5% será calibrada pelo Senado com base nos dados de 2026, e pode ser ajustada para cima ou para baixo. Entidades do setor imobiliário, como CBIC, SindusCon-SP, Abrainc e Secovi-SP, pleiteiam redutores mais agressivos para operações com imóveis. A regulamentação infralegal do IBS e da CBS, incluindo a Declaração de Operações com Regimes Específicos e a Nota Fiscal de Alienação de Bens Imóveis, ainda está em elaboração. E há discussões técnicas relevantes sobre como o regime de transição vai conviver com estoques de matéria-prima comprados no sistema antigo e vendidos no novo. Nada disso compromete a tese central de que a reforma favorece a industrialização, mas tudo isso precisa ser acompanhado de perto pelo setor.
 
 *Fonte:* CBIC, Setor da construção e imobiliário sugere revisão de alíquotas, cbic.org.br/setor-da-construcao-e-imobiliario-sugere-revisao-de-aliquotas-para-aperfeicoar-a-reforma-tributaria/
 
-# O fim de uma distorção de décadas
+## O fim de uma distorção de décadas
 
 Durante gerações, o sistema tributário brasileiro funcionou como uma barreira silenciosa ao progresso técnico da construção. Não havia um artigo de lei dizendo que métodos industrializados deveriam ser desincentivados, mas a aritmética do sistema cumulativo produzia exatamente esse efeito. Cada elo industrial da cadeia pagava tributo sobre tributo, e o produto final chegava ao canteiro com uma camada tributária que a construtora não conseguia recuperar. O método artesanal, com cadeia curta e mão de obra intensiva, pagava menos imposto acumulado. A competição era desleal, e a desvantagem era estrutural.
 
@@ -134,13 +134,13 @@ A Reforma Tributária dissolve essa desvantagem. Não é um benefício fiscal da
 
 Para quem já constrói com [método industrial](/lsf), a janela estratégica está aberta. Os próximos cinco anos vão separar as construtoras que usarem o período de transição para refinar processos, formalizar cadeia de fornecedores, parametrizar sistemas e desenvolver portfólio, daquelas que apenas esperarem o novo regime começar. Em 2033, quando o IVA estiver em regime pleno, a maturidade acumulada nesses anos vai pesar mais do que qualquer outra variável competitiva.
 
-## Perguntas frequentes sobre Reforma Tributária e Steel Frame
+### Perguntas frequentes sobre Reforma Tributária e Steel Frame
 
 [FAQ:faq-reforma-lsf]
 
 [CTA:cta-reforma-construir-agora]
 
-# Fontes consultadas
+## Fontes consultadas
 
 - Constituição Federal, art. 156-A e art. 195, com redação dada pela Emenda Constitucional nº 132/2023.
 - Lei Complementar nº 214/2025 (Planalto), planalto.gov.br/ccivil_03/leis/lcp/lcp214.htm
