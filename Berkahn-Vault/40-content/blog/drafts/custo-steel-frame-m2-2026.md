@@ -31,6 +31,7 @@ contextos_aplicados:
   - berkahn-brand
   - seo-aeo-strategy
   - steel-frame-domain
+material_visual_slug: cover.webp
 ---
 
 Perguntar se o Steel Frame é mais barato que a alvenaria devolve, resultado após resultado, o mesmo par de números: quinze a trinta por cento. Ora como acréscimo, ora como economia. Rastrear esse par até um estudo, um índice ou uma planilha não leva a lugar nenhum, porque a origem não existe.

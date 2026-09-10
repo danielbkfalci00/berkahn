@@ -30,6 +30,7 @@ contextos_aplicados:
   - berkahn-brand
   - seo-aeo-strategy
   - steel-frame-domain
+material_visual_slug: cover.webp
 ---
 
 Desde meados de junho de 2026, a prefeitura de São Paulo emite alvará de aprovação e de execução sem analisar o projeto antes. O documento sai do sistema a partir da declaração do interessado e dos responsáveis técnicos, e a obra pode começar assim que três condições se cumprem juntas. A regra vale para edificação de até 1.500 m² em lote de até 20.000 m², dentro de uma lista fechada de usos.

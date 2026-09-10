@@ -30,6 +30,7 @@ contextos_aplicados:
   - berkahn-brand
   - seo-aeo-strategy
   - steel-frame-domain
+material_visual_slug: cover.webp
 ---
 
 A pergunta costuma chegar sempre no mesmo formato, quantos por cento de entrada são necessários. Ela funciona bem para quem compra apartamento na planta e falha para quem já tem o terreno, porque em construção não existe preço de compra sobre o qual calcular percentual. O que existe é uma sequência de desembolsos com data marcada, e boa parte deles acontece antes de o banco liberar o primeiro real.

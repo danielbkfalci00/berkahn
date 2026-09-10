@@ -30,6 +30,7 @@ contextos_aplicados:
   - seo-aeo-strategy
   - steel-frame-domain
   - copy-sem-travessao
+material_visual_slug: cover.webp
 ---
 
 Quem entrega uma casa entrega duas coisas, a chave e um documento. A maioria dos proprietários de casa em Light Steel Frame, o sistema construtivo que usa perfis leves de aço galvanizado formados a frio como estrutura e placas como fechamento, recebeu só a chave. O documento existe, tem norma brasileira própria e a entrega é obrigação do construtor, mas ele raramente é entregue e quase nunca é cobrado.

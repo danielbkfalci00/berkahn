@@ -34,6 +34,7 @@ contextos_aplicados:
   - seo-aeo-strategy
   - article-pipeline
   - steel-frame-domain
+material_visual_slug: cover.webp
 ---
 
 Em maio de 2022, a ABNT publicou a NBR 16970, a primeira norma brasileira criada exclusivamente para o Light Steel Frame, um sistema construtivo industrializado que utiliza perfis de aço galvanizado como estrutura, fechados com placas cimentícias, OSB ou drywall. Pode parecer só mais um número de norma técnica, mas o impacto prático foi enorme: a Caixa Econômica Federal reclassificou o LSF de "sistema inovador" para "sistema convencional", eliminando barreiras burocráticas que travavam financiamentos. Na Berkahn, acompanhamos essa evolução de perto porque ela afeta diretamente o planejamento de cada projeto que executamos em Steel Frame.

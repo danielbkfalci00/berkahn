@@ -31,6 +31,7 @@ contextos_aplicados:
   - seo-aeo-strategy
   - article-pipeline
   - steel-frame-domain
+material_visual_slug: cover.webp
 ---
 
 Os textos que ranqueiam para casa de 70 m² em steel frame fazem todos a mesma operação. Pegam uma faixa de mercado entre R$ 2.800 e R$ 4.500 por metro quadrado, multiplicam por 70 e apresentam o resultado, algo entre R$ 196 mil e R$ 315 mil, como se fosse orçamento. Nenhum deles informa de onde vem o índice, em que mês foi apurado ou o que ele deixa de fora.

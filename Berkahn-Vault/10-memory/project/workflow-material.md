@@ -1,12 +1,12 @@
 ---
 tipo: memory
 criado: 2026-05-22
-atualizado: 2026-08-27
+atualizado: 2026-09-10
 tags:
   - ai/memory
   - status/active
   - project/material
-ai_summary: Workflow do projeto Materiais — briefing (/material gera) → Canva (Bruno cria visual) → exportação → catalogação (índice). Materiais: capas blog (1 por artigo), peças LinkedIn (1 por post), infográficos, PDFs. Briefings vivem em 40-content/materiais/briefings/.
+ai_summary: Workflow de Materiais — briefing → cinco cenários → seleção única → WebP 1200x800 para Blog e recorte 1080x1350 para LinkedIn → staging do card → catálogo. Canva continua válido para peças gráficas; capas fotográficas podem sair do gerador de imagens.
 status: active
 subtipo: project
 why: "Material visual é gargalo (1 capa por artigo + 1 peça por post LinkedIn = volume contínuo). Briefing automatizado via prompt + catalogação estruturada evita perder rastreabilidade (briefing → imagem → output)."
@@ -26,14 +26,14 @@ how_to_apply: "Output (artigo/post) demanda visual → rodar /material com tema 
    ├─ Lê: berkahn-brand, design-principles, guia-design-berkahn
    └─ Output: briefing estruturado (conceito, paleta, layout, copy)
        ↓
-3. Canva (Bruno)  →  imagem-final.png
-   ├─ Importar template ou criar do zero seguindo briefing
-   └─ Exportar PNG/WebP
+3. Produção visual  →  imagem-final.png
+   ├─ Capa fotográfica: gerar cinco cenários, selecionar um e recortar os dois canais
+   └─ Peça gráfica: Canva seguindo briefing e templates Berkahn
        ↓
-4. Arquivar em Docs/Conteúdo/[tipo]/
-   ├─ Capa blog: Docs/Conteúdo/Capas blog/[slug].webp
-   ├─ Peça LinkedIn: Docs/Conteúdo/peças linkedin/YYYY-MM-DD-tema.png
-   └─ Infográfico/outros: Docs/Conteúdo/[subpasta]/
+4. Arquivar em Docs/banco-imagens/[categoria]/
+   ├─ Lote de capas: capas-blog/[lote]/[slug]/{scenario-*,selected,linkedin-1080x1350}.webp
+   ├─ Peça LinkedIn: materiais-marketing/YYYY-MM-DD-tema.png
+   └─ Infográfico/outros: categoria correspondente
        ↓
 5. Catalogar no índice apropriado em 40-content/materiais/indices/
    └─ Atualizar tabela com nome do arquivo + uso (artigo/post)
@@ -53,17 +53,16 @@ how_to_apply: "Output (artigo/post) demanda visual → rodar /material com tema 
 - Output: `40-content/materiais/briefings/YYYY-MM-DD-tema.md`
 - Briefing inclui: conceito, paleta, tipografia, layout sugerido, copy de elementos, referências visuais
 
-### 3. Criação no Canva
-- Bruno acessa Canva e cria visual seguindo briefing
-- Usar templates Berkahn quando existirem (manter consistência)
-- Aplicar logo de [[indices-marca]] (escolher variação por fundo)
-- Exportar: PNG (alta qualidade) ou WebP (web)
+### 3. Produção visual
+- Capas fotográficas: gerar cinco cenários distintos, escolher um arquivo e derivar dele Blog 1200×800 e LinkedIn 1080×1350.
+- Peças com texto ou composição gráfica: usar Canva e os templates Berkahn.
+- Aplicar logo de [[indices-marca]] somente quando o formato pedir; capas de artigo não levam texto embutido.
 
 ### 4. Arquivamento
 - **Capa blog** (final em produção): converter para WebP (sharp, quality 80, max 1200px) → `public/images/img_blog/[slug]/cover.webp`
-- **Capa blog** (versão arquivo Canva): salvar em `Docs/Conteúdo/Capas blog/[slug].png`
-- **Peça LinkedIn**: salvar em `Docs/Conteúdo/peças linkedin/YYYY-MM-DD-tema.png` E em `40-content/linkedin/YYYY-MM-DD-tema/imagem-final.png`
-- **Infográfico/material institucional**: salvar em `Docs/Conteúdo/[subpasta apropriada]/`
+- **Capa blog** (fonte e variações): salvar em `Docs/banco-imagens/capas-blog/`.
+- **Peça LinkedIn**: salvar em `Docs/banco-imagens/materiais-marketing/` e na pasta do post quando houver acervo específico.
+- **Infográfico/material institucional**: salvar na categoria apropriada de `Docs/banco-imagens/`.
 
 ### 5. Catalogação
 - Atualizar índice correspondente em `40-content/materiais/indices/`:
@@ -88,7 +87,7 @@ how_to_apply: "Output (artigo/post) demanda visual → rodar /material com tema 
 ## Outputs típicos
 
 - Briefing em `40-content/materiais/briefings/`
-- Imagem em `Docs/Conteúdo/[tipo]/` (origem Canva)
+- Imagem-fonte em `Docs/banco-imagens/[categoria]/`
 - Imagem em `public/images/img_blog/[slug]/cover.webp` (produção, capas blog)
 - Update de [[indices-capas-blog]] ou índice apropriado
 - Update do hub [[materiais]] (kpi_capas_blog, kpi_pecas_linkedin)
@@ -105,7 +104,7 @@ how_to_apply: "Output (artigo/post) demanda visual → rodar /material com tema 
 
 ## Gap atual
 
-- 22 capas blog mas só 35 artigos (faltam para 13 artigos sem capa catalogada)
+- O acervo de capas inclui o lote de 20 pautas de setembro; cobertura real deve ser conferida pelo staging do card e por `public/images/`, não pela contagem bruta de variações.
 - 1 peça LinkedIn vs 1 post (proporcional, mas baixo volume absoluto)
 - Identidade visual com 10 logos mas naming inconsistente — consolidar
 - Sem briefings históricos arquivados (todo briefing futuro vai para `40-content/materiais/briefings/`)

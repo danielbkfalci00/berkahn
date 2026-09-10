@@ -1,16 +1,16 @@
 ---
 tipo: indice
 criado: 2026-07-01
-atualizado: 2026-07-02
+atualizado: 2026-09-10
 tags:
   - project/materiais
   - status/active
   - source/manual
-ai_summary: "MOC do banco de imagens Berkahn — 166 arquivos em Docs/banco-imagens/ organizados em 9 categorias. Entry-point para os 9 índices de catálogo + galerias visuais (thumbnails). Fonte binária fora do vault; catálogo aqui."
+ai_summary: "MOC do banco de imagens Berkahn — 311 arquivos em Docs/banco-imagens/ organizados em 9 categorias. Entry-point para índices e galerias; detalhes do lote de 20 pautas ficam em [[indices-capas-blog]]."
 status: active
 projeto: materiais
 path_externo: "../../../Docs/banco-imagens/"
-arquivos_total: 166
+arquivos_total: 311
 ---
 
 # Banco de Imagens — MOC
@@ -34,7 +34,7 @@ arquivos_total: 166
 | **equipe** | 11 | Fotos institucionais (Daniel, Matheus, Gabriel) p/ /empresa, SlideFounders, LinkedIn | [[indices-equipe]] | [[galeria-equipe]] |
 | **tecnico-lsf** | 5 | Diagramas técnicos LSF, mapa Brasil — páginas /lsf, artigos técnicos | [[indices-tecnico-lsf]] | [[galeria-tecnico-lsf]] |
 | **orcamento-prototipos** | 22 | Protótipos de chalé (plantas, elevações, renders) p/ orçamento/proposta comercial | [[indices-orcamento-prototipos]] | [[galeria-orcamento-prototipos]] |
-| **capas-blog** | 22 | Capas Canva de artigos do blog (versão em produção fica em `public/images/`) | [[indices-capas-blog]] | [[galeria-capas-blog]] |
+| **capas-blog** | 162 | Capas de artigos, incluindo cenários e recortes do lote de setembro (versão em produção fica em `public/images/`) | [[indices-capas-blog]] | [[galeria-capas-blog]] |
 | **materiais-marketing** | 1 | Peças LinkedIn finalizadas (arquivo) | [[indices-materiais-marketing]] | [[galeria-materiais-marketing]] |
 | **referencia** | 34 | Screenshots, mockups, stock e inspiração — **não curados** p/ galeria pública | [[indices-referencia]] | — |
 

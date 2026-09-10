@@ -34,6 +34,7 @@ contextos_aplicados:
   - seo-aeo-strategy
   - steel-frame-domain
   - article-pipeline
+material_visual_slug: cover.webp
 ---
 
 Um perfil galvanizado Z275, o mínimo que a ABNT NBR 15253 exige para uso estrutural, carrega 19,3 micrômetros de zinco em cada face. Numa atmosfera a menos de um quilômetro do mar, a ISO 9223 fixa a perda do zinco entre 2,1 e 4,2 micrômetros por ano. A divisão dá de cinco a nove anos. A mesma casa precisa entregar cinquenta anos de vida útil de projeto para a estrutura, pela ABNT NBR 15575-1.

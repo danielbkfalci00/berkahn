@@ -34,6 +34,7 @@ contextos_aplicados:
   - seo-aeo-strategy
   - steel-frame-domain
   - article-pipeline
+material_visual_slug: cover.webp
 ---
 
 Vinte programas setoriais medem e publicam a conformidade de produtos da construção civil no Brasil, do cimento à tinta. A chapa de gesso que fecha a parede de uma casa em Light Steel Frame está entre eles, com 82% de conformidade. O perfil de aço que sustenta essa mesma casa não está em nenhum.

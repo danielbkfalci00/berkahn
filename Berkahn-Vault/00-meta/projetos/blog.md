@@ -1,15 +1,15 @@
 ---
 tipo: projeto
 criado: 2026-05-22
-atualizado: 2026-09-09
+atualizado: 2026-09-10
 tags:
   - project/blog
   - status/active
-ai_summary: Hub do Blog — 40 posts e 44 trilhas. A revisão de casa LSF 100 m² está staged com post/capa vinculados; o live antigo segue published. Falta aprovação humana e /artigo publicar.
+ai_summary: Hub do Blog — 40 posts e 44 trilhas. O lote de setembro tem 19 drafts recuperados da main e 20 capas Blog/LinkedIn vinculadas; cronograma foi redirecionado para revisar a URL existente, sem criar artigo concorrente.
 status: active
 projeto: blog
 kpi_publicados: 43
-kpi_drafts_aguardando_capa: 19
+kpi_drafts_aguardando_capa: 0
 kpi_meta_publicados_semanal: 1
 kpi_indexados_google: 34
 kpi_meta_indexacao_total: 40
@@ -262,7 +262,7 @@ O motivo está em comentário no `app/atualidades/[slug]/page.tsx` para o skelet
 
 ## Materiais de apoio
 
-- [[indices-capas-blog]] — 22 capas em `Docs/Conteúdo/Capas blog/` (criado em Sprint 1.7)
+- [[indices-capas-blog]] — acervo de capas; lote de 20 pautas de setembro vinculado no quadro e preparado para Blog/LinkedIn
 - Capas em produção: `public/images/img_blog/[slug]/cover.webp`
 
 ## Histórico recente

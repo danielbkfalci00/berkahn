@@ -31,6 +31,7 @@ contextos_aplicados:
   - berkahn-brand
   - seo-aeo-strategy
   - steel-frame-domain
+material_visual_slug: cover.webp
 ---
 
 Uma TV de 75 polegadas da linha 2025 da LG pesa por volta de 31 kg. A parede de Light Steel Frame, sistema construtivo que usa perfis leves de aço galvanizado formados a frio como estrutura e placas como fechamento, segura esse peso sem nenhum reforço, desde que o parafuso caia no montante de aço. A mesma parede, no mesmo cômodo, aguenta 10 kgf por ponto quando o parafuso cai no vão entre montantes e se apoia só na chapa de gesso. A televisão não mudou de peso. Mudou onde o furo caiu.

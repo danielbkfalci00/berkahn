@@ -32,6 +32,7 @@ contextos_aplicados:
   - steel-frame-domain
   - article-pipeline
   - copy-sem-travessao
+material_visual_slug: cover.webp
 ---
 
 Duas famílias compram a mesma casa de 100 m² no mesmo bairro. A primeira já tem o lote e contrata uma construtora por empreitada. A segunda compra a casa pronta de uma incorporadora. A partir de 1º de janeiro de 2027, quando PIS e Cofins deixam de existir por força do artigo 542 da Lei Complementar 214/2025, essas duas operações passam a carregar contas de imposto diferentes, e a diferença não está na alíquota.

@@ -34,6 +34,7 @@ contextos_aplicados:
   - article-pipeline
   - copy-sem-travessao
   - steel-frame-domain
+material_visual_slug: cover.webp
 ---
 
 Duas linhas de crédito para a mesma obra de R$ 400.000 podem exibir taxas parecidas no papel e cobrar valores bem diferentes durante a construção. Numa obra de seis meses, sob premissas declaradas mais adiante, o home equity produz cerca de R$ 31.200 de juros na fase de obra e o crédito de construção produz R$ 12.740. A diferença não está toda na taxa, e sim em quanto do dinheiro emprestado está rendendo juros a cada mês.

@@ -32,6 +32,7 @@ contextos_aplicados:
   - steel-frame-domain
   - article-pipeline
   - copy-sem-travessao
+material_visual_slug: cover.webp
 ---
 
 Procure quanto tempo dura uma casa de steel frame e a primeira página de resultados devolve quatro respostas diferentes. Cinquenta anos, noventa, cem, trezentos. Nenhuma das páginas que publicam esses números cita a norma brasileira que trata de durabilidade, e nenhuma explica de onde o número saiu nem o que ele mede.
