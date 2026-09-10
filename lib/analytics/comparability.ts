@@ -30,6 +30,19 @@ function withoutGa4Deltas(context: SnapshotContext): SnapshotContext {
   };
 }
 
+function withoutGscDeltas(context: SnapshotContext): SnapshotContext {
+  const gsc = { ...context.gsc };
+  delete gsc.clicksMoMText;
+  delete gsc.clicksMoMPct;
+  delete gsc.impressionsMoMText;
+  delete gsc.impressionsMoMPct;
+  delete gsc.ctrMoMText;
+  delete gsc.ctrMoMPct;
+  delete gsc.positionMoMText;
+  delete gsc.positionMoMPct;
+  return { ...context, gsc };
+}
+
 function isIndexedCoverage(coverageState: string | undefined): boolean {
   const state = (coverageState ?? "").toLowerCase();
   return state.includes("indexed") && !state.includes("not indexed");
@@ -73,9 +86,10 @@ function withoutExcludedIndexation(context: SnapshotContext): SnapshotContext {
 export function applySnapshotComparisonPolicy(snapshot: AnalyticsSnapshot): AnalyticsSnapshot {
   const comparability = comparisonAvailability(snapshot.context);
   const indexationSafeContext = withoutExcludedIndexation(snapshot.context);
-  const context = comparability.ga4MoM
+  let context = comparability.ga4MoM
     ? indexationSafeContext
     : withoutGa4Deltas(indexationSafeContext);
+  if (!comparability.gscMoM) context = withoutGscDeltas(context);
   return {
     ...snapshot,
     context: { ...context, comparability },

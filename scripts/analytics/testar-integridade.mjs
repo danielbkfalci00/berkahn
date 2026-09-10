@@ -21,6 +21,7 @@ ok('agosto bloqueia MoM do GA4', comparisonPolicyFor('2026-08').ga4MoM === false
 ok('agosto preserva MoM do GSC', comparisonPolicyFor('2026-08').gscMoM === true);
 ok('setembro bloqueia GA4 porque agosto e a base', comparisonPolicyFor('2026-09').ga4MoM === false);
 ok('regra central corrige snapshot explicito antigo', comparisonPolicyFor('2026-09', { ga4MoM: true, gscMoM: true }).ga4MoM === false);
+ok('regra central nao reativa baseline ausente', comparisonPolicyFor('2026-09', { ga4MoM: false, gscMoM: false, reason: 'baseline ausente' }).gscMoM === false);
 ok('outubro volta a comparacao normal', comparisonPolicyFor('2026-10').ga4MoM === true);
 
 const dir = mkdtempSync(join(tmpdir(), 'analytics-integrity-'));
@@ -91,6 +92,16 @@ ok('resumo legado perde claim MoM', !legacy.context.summary[0].text.includes('Mo
 ok('snapshot legado normaliza universo de indexacao', legacy.context.totalArticles === 1 && legacy.context.indexedCount === 1);
 ok('snapshot legado remove acao de redirect', legacy.context.actionsP0.length === 0);
 
+const missingGscBaseline = comparison.applySnapshotComparisonPolicy({
+  context: {
+    ...baseContext,
+    monthSlug: '2026-10',
+    comparability: { ga4MoM: true, gscMoM: false, reason: 'Baseline GSC ausente.' },
+    gsc: { clicks: 20, clicksMoMText: '—', clicksMoMPct: 0 },
+  },
+});
+ok('baseline GSC ausente nao vira delta zero', missingGscBaseline.context.gsc.clicksMoMPct === undefined && missingGscBaseline.context.gsc.clicksMoMText === undefined);
+
 const current = {
   context: baseContext,
   ga4_data: { topPages: [{ slug: 'post', pageviews: 200, users: 100, avgEngagementTime: 30 }] },
@@ -114,11 +125,16 @@ const manifest = JSON.parse(readFileSync('public/admin/manifest.webmanifest', 'u
 ok('PWA admin abre dashboard', manifest.id === '/admin/' && manifest.start_url === '/admin' && manifest.scope === '/admin/');
 const nextConfig = readFileSync('next.config.ts', 'utf8');
 ok('manifest tem MIME explicito', nextConfig.includes('application/manifest+json; charset=utf-8'));
+const analyticsContent = readFileSync('app/admin/analytics/AnalyticsContent.tsx', 'utf8');
+ok('comparativo exige baseline das duas fontes', analyticsContent.includes('!comparability.ga4MoM || !comparability.gscMoM'));
+const gscFetcher = readFileSync('scripts/analytics/fetch-gsc.mjs', 'utf8');
+ok('falha no baseline de queries nao vira lista vazia valida', gscFetcher.includes('comparisonUnavailableReason = [comparisonUnavailableReason, queriesReason]'));
+const act4 = readFileSync('components/admin/analytics/acts/Act4Action.tsx', 'utf8');
+ok('painel de queries recebe indisponibilidade', act4.includes('unavailableReason='));
 const proxy = readFileSync('proxy.ts', 'utf8');
 const manifestBypass = proxy.indexOf('pathname === "/admin/manifest.webmanifest"');
 const adminAuth = proxy.indexOf('pathname.startsWith("/admin") || pathname.startsWith("/api/admin")');
 ok('manifest passa antes da autenticacao', manifestBypass >= 0 && manifestBypass < adminAuth);
-const analyticsContent = readFileSync('app/admin/analytics/AnalyticsContent.tsx', 'utf8');
 ok('URL direto nao forca comparativo invalido', analyticsContent.includes('comparisonMode && previousSnapshot && !comparisonDisabled'));
 
 rmSync(dir, { recursive: true, force: true });

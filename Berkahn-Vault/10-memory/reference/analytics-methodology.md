@@ -166,6 +166,12 @@ GSC e URL Inspection: origem API/cache, instante da coleta, último dia coberto,
 lag e completude. Isso descreve a coleta que gerou o snapshot, não promete
 monitoramento ao vivo da disponibilidade das APIs.
 
+O baseline é coletado separadamente dos números absolutos. Se ele falhar, a
+fonte atual continua disponível, mas sua comparação recebe estado
+`unavailable` e motivo explícito; ausência nunca é convertida em delta de 0%.
+No GSC, o total anterior é obtido na mesma execução que as tendências de
+queries, evitando a segunda coleta completa e reduzindo chamadas duplicadas.
+
 ## Red flags (Ato 0)
 
 Implementado em [`lib/analytics/red-flags.ts`](../../../../lib/analytics/red-flags.ts). Lista até 3 visíveis com acordion para o resto.

@@ -180,7 +180,17 @@ export function AnalyticsContent({
   // porque são calculados contra a janela equivalente na geração do snapshot.
   const isPartial = ctx.partial === true;
   const comparability = comparisonAvailability(ctx);
-  const comparisonDisabled = previousSnapshot === null || isPartial || !comparability.ga4MoM;
+  const comparabilityNotice = !comparability.ga4MoM || !comparability.gscMoM
+    ? `Comparação ${[
+        !comparability.ga4MoM ? "GA4" : null,
+        !comparability.gscMoM ? "Search Console" : null,
+      ].filter(Boolean).join(" e ")} indisponível: ${comparability.reason ?? "baseline ausente."}${
+        !comparability.ga4MoM && comparability.gscMoM
+          ? " Métricas absolutas e comparações do Search Console permanecem válidas."
+          : " Métricas absolutas permanecem válidas."
+      }`
+    : undefined;
+  const comparisonDisabled = previousSnapshot === null || isPartial || !comparability.ga4MoM || !comparability.gscMoM;
   const comparisonMode = requestedComparisonMode && !comparisonDisabled;
 
   return (
@@ -204,7 +214,7 @@ export function AnalyticsContent({
         daysCovered={ctx.daysCovered}
         daysInMonth={ctx.daysInMonth}
         generatedAt={ctx.generatedAt}
-        comparabilityReason={!comparability.ga4MoM ? comparability.reason : undefined}
+        comparabilityReason={comparabilityNotice}
         sources={ctx.sources}
       />
 

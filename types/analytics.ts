@@ -193,6 +193,8 @@ export interface SnapshotSourceProvenance {
   dataThrough: string;
   completeness: "partial" | "closed";
   lagDays?: number | null;
+  comparisonStatus?: "available" | "unavailable";
+  comparisonReason?: string;
 }
 
 // ============================================

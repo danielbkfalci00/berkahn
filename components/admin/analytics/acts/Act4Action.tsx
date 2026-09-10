@@ -7,6 +7,7 @@ import { FallingQueriesPanel } from "../FallingQueriesPanel";
 import { ConversionEvents } from "../ConversionEvents";
 import { FunilLeads } from "../FunilLeads";
 import { narrativeAct4Action } from "@/lib/analytics/narrative";
+import { comparisonAvailability } from "@/lib/analytics/comparability";
 import { countByStatus, findBestPost } from "@/lib/analytics/post-performance";
 import type { FunilLeads as Funil } from "@/lib/analytics/leads-funnel";
 import type { AdminDataResult, AnalyticsTask, PostPerformance, SnapshotContext } from "@/types/analytics";
@@ -21,6 +22,7 @@ interface Act4ActionProps {
 export function Act4Action({ context, posts = [], tasks = [], funilLeads }: Act4ActionProps) {
   const counts = countByStatus(posts);
   const best = findBestPost(posts);
+  const comparability = comparisonAvailability(context);
 
   const narrative = narrativeAct4Action(context, {
     bestPostTitle: best?.title ?? null,
@@ -47,7 +49,14 @@ export function Act4Action({ context, posts = [], tasks = [], funilLeads }: Act4
       />
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <IndexationStatus indexation={context.indexation} />
-        <FallingQueriesPanel queries={context.gsc.fallingQueries} />
+        <FallingQueriesPanel
+          queries={context.gsc.fallingQueries}
+          unavailableReason={
+            comparability.gscMoM
+              ? undefined
+              : context.sources?.gsc.comparisonReason ?? comparability.reason ?? "baseline ausente"
+          }
+        />
       </div>
       <ConversionEvents
         events={context.ga4.events ?? []}
