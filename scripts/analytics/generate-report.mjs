@@ -23,8 +23,9 @@ import { fetchGsc } from './fetch-gsc.mjs';
 import { renderHtml } from './render-html.mjs';
 import { updateHubKpis } from './update-hub-kpis.mjs';
 import { upsertSnapshot } from './lib/supabase-snapshot.mjs';
-import { enrichRowsWithTitle, getAllPostUrls } from './lib/posts.mjs';
+import { enrichRowsWithTitle, getAllPostUrls, isIndexationEligibleSlug } from './lib/posts.mjs';
 import { buildInsights, buildActions, buildSummary, isIndexedState } from './lib/insights.mjs';
+import { comparisonPolicyFor } from '../../lib/analytics/comparison-policy.mjs';
 import { syncContentLearning } from './lib/content-learning.mjs';
 import {
   monthBounds, previousMonth, lastClosedMonth, monthLabel, monthSlug, parseMonthArg,
@@ -110,6 +111,7 @@ function assertFixtureMatches(fx, { fixtureName, isPartial, period }) {
 
 async function buildContext({ year, month, useFixture, fromCache = false, partial = false, asOf = new Date() }) {
   const slug = monthSlug(year, month);
+  const comparability = comparisonPolicyFor(slug);
   // partialMonthBounds devolve partial:false quando o corte já alcançou o fim
   // do mês — ou seja, quando o mês fechou de fato e não há o que marcar.
   const period = partial ? partialMonthBounds(year, month, { asOf }) : { ...monthBounds(year, month), partial: false };
@@ -170,7 +172,8 @@ async function buildContext({ year, month, useFixture, fromCache = false, partia
   // Enriquecer com títulos de posts
   ga4Data.topPages = await enrichRowsWithTitle(ga4Data.topPages, 'slug');
   gscData.topPages = await enrichRowsWithTitle(gscData.topPages, 'slug');
-  const indexation = await enrichRowsWithTitle(gscData.indexation, 'slug');
+  const eligibleIndexation = (gscData.indexation ?? []).filter((item) => isIndexationEligibleSlug(item.slug));
+  const indexation = await enrichRowsWithTitle(eligibleIndexation, 'slug');
   const indexationWithStatus = indexation.map((i) => {
     const isIndexed = isIndexedState(i.coverageState);
     return {
@@ -180,11 +183,13 @@ async function buildContext({ year, month, useFixture, fromCache = false, partia
     };
   });
 
-  const ga4WithDeltas = applyDeltas(ga4Data, ga4Prev);
-  const gscWithDeltas = applyDeltas(gscData, gscPrev);
+  const ga4WithDeltas = comparability.ga4MoM
+    ? applyDeltas(ga4Data, ga4Prev)
+    : { ...ga4Data, usersMoMText: 'comparação indisponível', sessionsMoMText: 'comparação indisponível', pageviewsMoMText: 'comparação indisponível' };
+  const gscWithDeltas = comparability.gscMoM ? applyDeltas(gscData, gscPrev) : { ...gscData };
 
   // Aplica deltas em topPages do GA4 (vs mês anterior)
-  if (ga4Prev?.topPages) {
+  if (comparability.ga4MoM && ga4Prev?.topPages) {
     const prevMap = new Map(ga4Prev.topPages.map((p) => [p.slug, p.pageviews]));
     ga4WithDeltas.topPages = ga4WithDeltas.topPages.map((p) => {
       const d = fmtDelta(p.pageviews, prevMap.get(p.slug));
@@ -196,12 +201,20 @@ async function buildContext({ year, month, useFixture, fromCache = false, partia
 
   const insights = buildInsights({ ga4: ga4Data, gsc: gscData, ga4Prev, gscPrev, indexation: indexationWithStatus });
   const { actionsP0, actionsP1, actionsP2 } = buildActions({ ga4: ga4Data, gsc: gscData, indexation: indexationWithStatus });
-  const summary = buildSummary({ ga4: ga4Data, gsc: gscData, ga4Prev, gscPrev, indexation: indexationWithStatus });
+  const summary = buildSummary({
+    ga4: ga4Data,
+    gsc: gscData,
+    ga4Prev: comparability.ga4MoM ? ga4Prev : null,
+    gscPrev: comparability.gscMoM ? gscPrev : null,
+    indexation: indexationWithStatus,
+  });
 
   const indexedCount = indexationWithStatus.filter((i) => isIndexedState(i.coverageState)).length;
 
   // toISOString() é UTC: rodando 21h-23h59 local o carimbo sairia um dia à frente.
   const now = new Date();
+  const collectedAt = now.toISOString();
+  const origin = shouldUseFixture ? 'fixture' : 'api';
   const pad = (n) => String(n).padStart(2, '0');
 
   return {
@@ -222,6 +235,9 @@ async function buildContext({ year, month, useFixture, fromCache = false, partia
     periodoAnaliseLabel: isPartial
       ? `${period.startDate} a ${period.endDate} (parcial, ${period.daysCovered} de ${dim} dias)`
       : `${period.startDate} a ${period.endDate}`,
+    weekdayCompositionNote: isPartial && period.daysCovered % 7 !== 0
+      ? `Ressalva: como ${period.daysCovered} não é múltiplo de 7, as janelas têm composições diferentes de dias da semana.`
+      : 'As janelas cobrem semanas completas e têm a mesma composição de dias da semana.',
     ga4: ga4WithDeltas,
     gsc: gscWithDeltas,
     indexation: indexationWithStatus,
@@ -237,6 +253,22 @@ async function buildContext({ year, month, useFixture, fromCache = false, partia
     ga4PropertyId: getGa4PropertyId(),
     gscSiteUrl: getGscSiteUrl(),
     historicalMonths: 'em breve (após 3 meses de bootstrap)',
+    comparability,
+    reportMode: isPartial ? 'partial' : 'closed',
+    sources: {
+      ga4: {
+        status: 'available', origin, collectedAt, dataThrough: period.endDate,
+        completeness: isPartial ? 'partial' : 'closed', lagDays: 0,
+      },
+      gsc: {
+        status: 'available', origin, collectedAt, dataThrough: period.endDate,
+        completeness: isPartial ? 'partial' : 'closed', lagDays: period.lagDays ?? 0,
+      },
+      indexation: {
+        status: 'available', origin, collectedAt, dataThrough: todayLocal(now),
+        completeness: isPartial ? 'partial' : 'closed', lagDays: 0,
+      },
+    },
     // Raw data passthrough (para upsert Supabase)
     _raw: { ga4: ga4Data, gsc: gscData, ga4Prev, gscPrev },
   };

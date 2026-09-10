@@ -23,11 +23,20 @@ function computeHealthScore(context) {
   const usersScore = momToScore(context.ga4?.usersMoMPct);
   const clicksScore = momToScore(context.gsc?.clicksMoMPct);
   const engagementScore = clampScore(context.ga4?.engagementRate ?? 50);
+  const available = {
+    indexation: true,
+    usersGrowth: context.comparability?.ga4MoM !== false,
+    clicksGrowth: context.comparability?.gscMoM !== false,
+    engagementRate: true,
+  };
+  const totalWeight = Object.entries(HEALTH_WEIGHTS).reduce(
+    (sum, [key, weight]) => sum + (available[key] ? weight : 0), 0
+  );
   return clampScore(
-    indexationScore * HEALTH_WEIGHTS.indexation +
-      usersScore * HEALTH_WEIGHTS.usersGrowth +
-      clicksScore * HEALTH_WEIGHTS.clicksGrowth +
-      engagementScore * HEALTH_WEIGHTS.engagementRate
+    (indexationScore * HEALTH_WEIGHTS.indexation +
+      (available.usersGrowth ? usersScore * HEALTH_WEIGHTS.usersGrowth : 0) +
+      (available.clicksGrowth ? clicksScore * HEALTH_WEIGHTS.clicksGrowth : 0) +
+      engagementScore * HEALTH_WEIGHTS.engagementRate) / totalWeight
   );
 }
 

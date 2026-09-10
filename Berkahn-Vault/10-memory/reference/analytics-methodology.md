@@ -1,7 +1,7 @@
 ---
 tipo: memory
 criado: 2026-05-28
-atualizado: 2026-08-10
+atualizado: 2026-09-10
 tags:
   - ai/memory
   - status/active
@@ -56,6 +56,13 @@ Implementado em [`lib/analytics/health-score.ts`](../../scripts/../../lib/analyt
 
 **Como ajustar**: editar a constante `DEFAULT_WEIGHTS` em `lib/analytics/health-score.ts`. Documentar a mudança aqui com data + razão.
 
+**Série não comparável**: quando `comparability.ga4MoM` é falso, o componente
+`usersGrowth` sai do cálculo e seu peso é redistribuído proporcionalmente entre
+indexação, cliques GSC e engagement. O score não imputa 50 nem transforma dado
+ausente em estabilidade. A política central fica em
+`lib/analytics/comparison-breaks.json` e também corrige snapshots legados na
+leitura, sem regravar a data histórica.
+
 ## Classificação de posts (Ato 3)
 
 Implementado em [`lib/analytics/post-performance.ts`](../../../../lib/analytics/post-performance.ts). Cascata por prioridade.
@@ -73,6 +80,10 @@ Implementado em [`lib/analytics/post-performance.ts`](../../../../lib/analytics/
 **Por que cascata (não OR)?** Um post engajado E em alta vira "engajado" porque retenção é métrica mais robusta. Evita ambiguidade visual.
 
 **Como ajustar**: editar constantes em `lib/analytics/post-performance.ts`. Lembre de avisar o time se mudar — afeta o que aparece nos chips de filtro.
+
+Se o MoM do GA4 estiver marcado como não comparável, `pageviewsMoMPct` fica
+ausente e os estados **Em alta** e **Em queda** não são atribuídos. Retenção,
+engagement e abandono continuam utilizáveis como observações absolutas.
 
 ## Metas dinâmicas (Ato 1)
 
@@ -145,7 +156,15 @@ O pipeline mensal foi desenhado para meses **fechados**. Para ver o mês corrent
 
 **Limitação conhecida**: a composição de dias da semana só é idêntica quando `daysCovered` é múltiplo de 7. Fora disso as duas janelas pegam quantidades diferentes de fim de semana, o que enviesa levemente o MoM. Não foi corrigido por normalização de média diária — isso introduziria um segundo modelo mental ("users/dia") que ninguém lembraria em reunião.
 
-**Auto-cura**: o run do dia 1 (sem flags) regenera o mesmo mês como fechado, sobrescrevendo o mesmo arquivo MD e a mesma linha do Supabase (PK `month`). Não há estado órfão para limpar.
+**Cadência**: o GitHub Actions roda toda quarta-feira às 12:00 UTC com
+`--partial`. No dia 4 às 12:00 UTC roda também o fechamento oficial do mês
+anterior. O parcial faz upsert na mesma linha (`month`) e não atualiza os hubs;
+o fechamento posterior substitui o parcial e atualiza os KPIs oficiais.
+
+Cada snapshot novo grava `reportMode`, comparabilidade e proveniência de GA4,
+GSC e URL Inspection: origem API/cache, instante da coleta, último dia coberto,
+lag e completude. Isso descreve a coleta que gerou o snapshot, não promete
+monitoramento ao vivo da disponibilidade das APIs.
 
 ## Red flags (Ato 0)
 
@@ -210,9 +229,10 @@ Os dois bugs foram corrigidos. Agora o default é `denied` nas 4 categorias do C
 
 **Consequência na medição**: usuários que não aceitam cookies deixam de ser contados. A queda em `users`, `sessions` e `pageviews` a partir de 01/08/2026 é a diferença entre o que era medido indevidamente e o que passa a ser medido com consentimento.
 
-**Ao ler o relatório de agosto (gerado pelo cron em 01/09)**:
+**Ao ler o relatório de agosto**:
 
-- `detectRedFlags` (`lib/analytics/red-flags.ts`) vai disparar `users-drop`. É falso positivo desta mudança.
+- Métricas absolutas do GA4 permanecem visíveis, mas deltas, narrativas, alertas, metas comparativas e estados `rising`/`cold` são suprimidos.
+- O Health Score exclui crescimento de users e redistribui o peso entre os componentes válidos.
 - O MoM de julho→agosto **não é comparável**. A base de comparação válida volta a existir em setembro→outubro, quando os dois meses já terão a mesma regra.
 - O GSC **não é afetado** — cliques e impressões vêm do Search Console, que não depende de cookie. Se `users` cair e `clicks` não, é este corte.
 
@@ -238,7 +258,11 @@ O GA4 nunca recebe nome, email, telefone, mensagem ou `leadId`. `whatsapp_click`
 
 ### KPIs operacionais do CRM
 
-`/admin/leads` calcula uma coorte móvel de contatos recebidos nos últimos 28 dias: recebidos, ainda novos, qualificados, convertidos e `qualificados ÷ contatos elegíveis`. Qualificados são registros com `qualificado_em`; convertidos usam `convertido_em`, preservando o resultado mesmo se o funil for revisto depois. Importados com status ausente ou desconhecido entram como `novo`, visualizados e arquivados, ficando fora da taxa. A métrica editorial continua `qualificados ÷ sessões engajadas × 100`; cliques no WhatsApp não entram como lead.
+`/admin/leads` calcula uma coorte móvel de contatos recebidos nos últimos 28 dias: recebidos, ainda novos, qualificados, convertidos e `qualificados ÷ contatos elegíveis`. Qualificados são registros com `qualificado_em`; convertidos usam `convertido_em`, preservando o resultado mesmo se o funil for revisto depois. Leads com `arquivado_em` ou `anonimizado_em` ficam fora tanto desses KPIs quanto do funil mensal de analytics. Importados com status ausente ou desconhecido entram como `novo`, visualizados e arquivados, ficando fora da taxa. A métrica editorial continua `qualificados ÷ sessões engajadas × 100`; cliques no WhatsApp não entram como lead.
+
+Falha de consulta ao CRM aparece como **dados indisponíveis**, nunca como zero.
+Um zero só é exibido quando a consulta foi concluída e realmente não retornou
+leads elegíveis.
 
 Responsável, prioridade, resumo operacional, arquivos e notificações push são dimensões de trabalho, não conversões. Arrastar um card no Kanban chama a mesma RPC do seletor de status; instalar a PWA, abrir arquivo ou receber push não dispara evento GA4. O payload push é genérico e não contém PII nem identificador do lead.
 

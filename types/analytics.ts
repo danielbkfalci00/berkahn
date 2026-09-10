@@ -176,6 +176,25 @@ export interface ActionItem {
   text: string;
 }
 
+export type AdminDataResult<T> =
+  | { status: "ok"; data: T }
+  | { status: "unavailable"; reason: string };
+
+export interface SnapshotComparability {
+  ga4MoM: boolean;
+  gscMoM: boolean;
+  reason?: string;
+}
+
+export interface SnapshotSourceProvenance {
+  status: "available";
+  origin: "api" | "fixture";
+  collectedAt: string;
+  dataThrough: string;
+  completeness: "partial" | "closed";
+  lagDays?: number | null;
+}
+
 // ============================================
 // Sistema de tarefas (Sprint 7) — tabela analytics_tasks
 // ============================================
@@ -342,6 +361,15 @@ export interface SnapshotContext {
   ga4PropertyId: string;
   gscSiteUrl: string;
   historicalMonths: string;
+
+  /** Regra de comparabilidade e proveniência gravadas no momento da coleta. */
+  comparability?: SnapshotComparability;
+  reportMode?: "partial" | "closed";
+  sources?: {
+    ga4: SnapshotSourceProvenance;
+    gsc: SnapshotSourceProvenance;
+    indexation: SnapshotSourceProvenance;
+  };
 
   // Mês parcial. Ausentes nos snapshots gerados antes do suporte a parcial
   // (2026-02 a 2026-06) — `partial === undefined` é falsy, então basta

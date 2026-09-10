@@ -8,6 +8,7 @@ import type {
   PostPerformance,
   PostStatus,
 } from "@/types/analytics";
+import { comparisonAvailability } from "./comparability";
 
 const ENGAGED_RETENTION_THRESHOLD = 60;
 const RISING_GROWTH_THRESHOLD = 30;
@@ -73,8 +74,9 @@ export function buildPostPerformance(
   historicalByMonthAndSlug: Map<string, Map<string, number>>
 ): PostPerformance[] {
   const currentPages = current.ga4_data?.topPages ?? [];
+  const ga4MoMAvailable = comparisonAvailability(current.context).ga4MoM;
   const prevPagesMap = new Map<string, Ga4PageRow>();
-  if (previous?.ga4_data?.topPages) {
+  if (ga4MoMAvailable && previous?.ga4_data?.topPages) {
     for (const p of previous.ga4_data.topPages) {
       prevPagesMap.set(p.slug, p);
     }

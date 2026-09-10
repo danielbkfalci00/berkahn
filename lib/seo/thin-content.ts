@@ -1,3 +1,5 @@
+import exclusions from "./indexation-exclusions.json";
+
 /**
  * Artigos publicados cujo corpo tem menos de 55 palavras.
  *
@@ -30,12 +32,7 @@
  *
  * COMO SAIR DAQUI: reescrever o artigo e apagar a linha.
  */
-export const THIN_CONTENT_SLUGS: readonly string[] = [
-  "guia-definitivo-steel-frame-brasil",
-  "isolamento-termico-acustico-steel-frame",
-  "passo-passo-construcao-steel-frame",
-  "tendencias-construcao-modular-2025",
-] as const;
+export const THIN_CONTENT_SLUGS: readonly string[] = exclusions.thinContent;
 
 /**
  * Com substituto: 301 para o artigo que já cobre o tema. Os destinos foram
@@ -53,13 +50,7 @@ export const THIN_CONTENT_SLUGS: readonly string[] = [
  * A fonte da verdade dos redirects é `next.config.ts`; esta lista existe
  * para o sitemap saber o que excluir.
  */
-export const REDIRECTED_SLUGS: readonly string[] = [
-  "5-vantagens-decisivas-light-steel-frame",
-  "certificacoes-steel-frame",
-  "financiamento-construcao-steel-frame",
-  "steel-frame-futuro-construcao",
-  "sustentabilidade-construcao-industrializada",
-] as const;
+export const REDIRECTED_SLUGS: readonly string[] = exclusions.redirected;
 
 const THIN_CONTENT_SET = new Set(THIN_CONTENT_SLUGS);
 const REDIRECTED_SET = new Set(REDIRECTED_SLUGS);

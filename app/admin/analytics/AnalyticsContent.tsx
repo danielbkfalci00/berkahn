@@ -10,6 +10,7 @@ import { Act4Action } from "@/components/admin/analytics/acts/Act4Action";
 import { ComparisonView } from "@/components/admin/analytics/ComparisonView";
 import { computeMonthlyGoals, computeGoalProgress, formatGoalLabel, formulaLabel, goalStatusColor } from "@/lib/analytics/goals";
 import { detectRedFlags } from "@/lib/analytics/red-flags";
+import { comparisonAvailability } from "@/lib/analytics/comparability";
 import type { TimelineEvent } from "@/lib/analytics/timeline-events";
 import type { MapaLeitura, MatrizArtigoMes } from "@/lib/analytics/heatmaps";
 import type { MapaOportunidade } from "@/lib/analytics/query-opportunity";
@@ -21,6 +22,7 @@ import type {
   PostPerformance,
   TrendPoint,
   TopQueryWithTrend,
+  AdminDataResult,
 } from "@/types/analytics";
 
 interface AnalyticsContentProps {
@@ -36,7 +38,7 @@ interface AnalyticsContentProps {
   matrizAcervo: MatrizArtigoMes;
   mapaLeitura: MapaLeitura;
   oportunidade: MapaOportunidade;
-  funilLeads: FunilLeads;
+  funilLeads: AdminDataResult<FunilLeads>;
 }
 
 function deltaDirection(deltaPct?: number): "up" | "down" | "flat" {
@@ -53,6 +55,7 @@ function buildKpis(
   const ctx = snapshot.context;
   const ga4 = ctx.ga4;
   const gsc = ctx.gsc;
+  const comparability = comparisonAvailability(ctx);
   const goals = computeMonthlyGoals(trend, currentMonth);
   const formula = formulaLabel(goals.basedOnMonths);
 
@@ -85,8 +88,8 @@ function buildKpis(
             pct: ga4.usersMoMPct ?? 0,
           }
         : undefined,
-      sparkline: usersHistory,
-      goal: goalProps(ga4.users, goals.users),
+      sparkline: comparability.ga4MoM ? usersHistory : undefined,
+      goal: comparability.ga4MoM ? goalProps(ga4.users, goals.users) : undefined,
     },
     {
       label: "Sessões",
@@ -99,8 +102,8 @@ function buildKpis(
             pct: ga4.sessionsMoMPct ?? 0,
           }
         : undefined,
-      sparkline: sessionsHistory,
-      goal: goalProps(ga4.sessions, goals.sessions),
+      sparkline: comparability.ga4MoM ? sessionsHistory : undefined,
+      goal: comparability.ga4MoM ? goalProps(ga4.sessions, goals.sessions) : undefined,
     },
     {
       label: "Pageviews",
@@ -113,8 +116,8 @@ function buildKpis(
             pct: ga4.pageviewsMoMPct ?? 0,
           }
         : undefined,
-      sparkline: pageviewsHistory,
-      goal: goalProps(ga4.pageviews, goals.pageviews),
+      sparkline: comparability.ga4MoM ? pageviewsHistory : undefined,
+      goal: comparability.ga4MoM ? goalProps(ga4.pageviews, goals.pageviews) : undefined,
     },
     {
       label: "Cliques GSC",
@@ -163,7 +166,7 @@ export function AnalyticsContent({
   funilLeads,
 }: AnalyticsContentProps) {
   const searchParams = useSearchParams();
-  const comparisonMode = searchParams.get("compare") === "1";
+  const requestedComparisonMode = searchParams.get("compare") === "1";
 
   const ctx = snapshot.context;
   const kpis = buildKpis(snapshot, trendPoints, currentMonth);
@@ -176,7 +179,9 @@ export function AnalyticsContent({
   // de tamanhos diferentes — os deltas inline do context não têm esse problema
   // porque são calculados contra a janela equivalente na geração do snapshot.
   const isPartial = ctx.partial === true;
-  const comparisonDisabled = previousSnapshot === null || isPartial;
+  const comparability = comparisonAvailability(ctx);
+  const comparisonDisabled = previousSnapshot === null || isPartial || !comparability.ga4MoM;
+  const comparisonMode = requestedComparisonMode && !comparisonDisabled;
 
   return (
     <div className="space-y-12 max-w-[1400px]">
@@ -190,15 +195,20 @@ export function AnalyticsContent({
         comparisonDisabledReason={
           isPartial
             ? "Indisponível em mês parcial: o snapshot anterior guarda o mês inteiro, então a comparação mediria janelas de tamanhos diferentes"
-            : "Sem mês anterior pra comparar"
+            : !comparability.ga4MoM
+              ? comparability.reason
+              : "Sem mês anterior pra comparar"
         }
         comparisonMode={comparisonMode}
         isPartial={isPartial}
         daysCovered={ctx.daysCovered}
         daysInMonth={ctx.daysInMonth}
+        generatedAt={ctx.generatedAt}
+        comparabilityReason={!comparability.ga4MoM ? comparability.reason : undefined}
+        sources={ctx.sources}
       />
 
-      {comparisonMode && previousSnapshot && !isPartial ? (
+      {comparisonMode && previousSnapshot && !comparisonDisabled ? (
         <ComparisonView current={snapshot} previous={previousSnapshot} />
       ) : (
         <>
