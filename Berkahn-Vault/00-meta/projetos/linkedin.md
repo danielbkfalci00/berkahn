@@ -5,7 +5,7 @@ atualizado: 2026-09-10
 tags:
   - project/linkedin
   - status/active
-ai_summary: Hub do LinkedIn. A pauta semanal de home equity tem copy humanizada de 130 palavras, capa 4:5 e UTM prontas; aprovação editorial e publicação continuam humanas. Cadência segue abaixo da meta.
+ai_summary: Hub do LinkedIn. A pauta semanal de home equity tem copy de 139 palavras reescrita para o cliente final, capa 4:5 e UTM prontas; aprovação editorial e publicação continuam humanas. Cadência segue abaixo da meta.
 status: active
 projeto: linkedin
 kpi_publicados: 4
@@ -51,7 +51,7 @@ Contagem verificada em 2026-07-29 contra `main` — o `kpi_publicados: 1` anteri
 
 ## Próximos 7 dias
 
-- [x] Pauta `72133a0d` preparada em 10/09: copy de 130 palavras, capa 1080×1350 e UTM; aprovação do pacote tem owner único em [[blog#Próximos 7 dias]]
+- [x] Pauta `72133a0d` preparada em 10/09: copy de 139 palavras voltada ao cliente final, capa 1080×1350 e UTM; aprovação do pacote tem owner único em [[blog#Próximos 7 dias]]
 
 - [x] Texto, prompt e briefing da pauta de casa LSF de 100 m² gravados no card
 - [x] Imagem 4:5 gerada e validada em 1080×1350

@@ -38,7 +38,7 @@ indexado sem trocar a URL e preparando a distribuição manual no LinkedIn.
 | Projeto | Estado | Próxima ação canônica |
 |---------|--------|-----------------------|
 | [[blog]] | Revisão de `financiar-construcao-light-steel-frame` staged | Revisão humana do pacote; ver [[blog#Próximos 7 dias]] |
-| [[linkedin]] | Copy de 130 palavras e capa 4:5 prontas | Aprovar o pacote e publicar manualmente depois do Blog |
+| [[linkedin]] | Copy de 139 palavras e capa 4:5 prontas | Aprovar o pacote e publicar manualmente depois do Blog |
 | [[site]] | Pages neutralizado; admin multiusuário em produção | Smokes humanos e encerramento administrativo |
 | [[seo-aeo]] | Baseline técnico e de conversão disponível | Observar janelas de 7/28 dias |
 | [[apresentacoes]] | Apresentação executiva ativa | Smoke visual dos 16 slides |
@@ -56,7 +56,7 @@ indexado sem trocar a URL e preparando a distribuição manual no LinkedIn.
 - [x] Afirmações de mercado sem fonte primária removidas do artigo
 - [x] Artigo vinculado ao post existente como revisão staged; versão publicada
   continua intacta
-- [x] Texto do LinkedIn reescrito em 130 palavras e URL UTM preparada
+- [x] Texto do LinkedIn reescrito em 139 palavras, com linguagem para o cliente final, e URL UTM preparada
 - [x] Capas Blog 1200×800 e LinkedIn 1080×1350 já vinculadas ao card
 
 ## Prioridades restantes
