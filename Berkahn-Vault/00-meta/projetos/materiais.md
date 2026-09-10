@@ -1,14 +1,14 @@
 ---
 tipo: projeto
 criado: 2026-05-22
-atualizado: 2026-07-20
+atualizado: 2026-09-10
 tags:
   - project/material
   - status/active
-ai_summary: Hub do projeto Materiais — briefings Canva (capas blog, peças LinkedIn, infográficos), PDFs técnicos, identidade visual. Banco de imagens reorganizado: 160 arquivos em 9 categorias (Docs/banco-imagens/), catalogados via MOC [[banco-imagens]] + 9 notas-índice em 40-content/materiais/indices/.
+ai_summary: Hub do projeto Materiais — banco com 311 arquivos em 9 categorias. O lote de setembro acrescentou 140 arquivos rastreáveis para 20 pautas: cinco cenários, seleção Blog e recorte LinkedIn por tema.
 status: active
 projeto: materiais
-kpi_capas_blog: 22
+kpi_capas_blog: 162
 kpi_pecas_linkedin: 1
 kpi_logos_variacoes: 10
 kpi_imagens_orcamento: 22
@@ -100,7 +100,7 @@ Entry-point: [[banco-imagens]] (MOC). Fonte: `Docs/banco-imagens/<categoria>/`.
 - [[indices-equipe]] — equipe (11 fotos, 1 em prod)
 - [[indices-tecnico-lsf]] — técnico LSF (5, 3 em prod)
 - [[indices-orcamento-prototipos]] — orçamento/protótipos (22, 4 em prod)
-- [[indices-capas-blog]] — capas blog (22, 5 em prod)
+- [[indices-capas-blog]] — 162 arquivos de capa; lote de 20 pautas já vinculado ao staging e preparado em `public/images/`
 - [[indices-materiais-marketing]] — materiais marketing (1)
 - [[indices-referencia]] — referência (34 — não curado p/ galeria)
 

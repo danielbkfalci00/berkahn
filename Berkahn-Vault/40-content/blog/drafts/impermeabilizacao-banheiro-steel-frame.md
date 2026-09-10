@@ -30,6 +30,7 @@ contextos_aplicados:
   - seo-aeo-strategy
   - steel-frame-domain
   - copy-sem-travessao
+material_visual_slug: cover.webp
 ---
 
 A resposta que a internet dá para impermeabilizar banheiro foi escrita para alvenaria sobre laje de concreto. Ela manda passar duas demãos de argamassa polimérica com tela, subir 20 cm de rodapé e chegar a 1,50 m nas paredes do box. Nenhuma das páginas que repetem essa receita cita a norma brasileira que trata exatamente de área molhada em estrutura de aço leve, e é por isso que ela erra o alvo quando a casa é em Light Steel Frame, o sistema construtivo que usa perfis leves de aço galvanizado formados a frio como estrutura e placas como fechamento.

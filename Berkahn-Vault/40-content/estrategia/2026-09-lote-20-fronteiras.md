@@ -1,14 +1,14 @@
 ---
 tipo: documentacao
 criado: 2026-09-09
-atualizado: 2026-09-09
+atualizado: 2026-09-10
 tags:
   - project/blog
   - project/seo-aeo
   - status/active
   - source/manual
   - domain/lsf
-ai_summary: "Ordem de publicação e restrições vinculantes dos 20 fluxos produzidos em 05 e 06/09: 15 artigos novos, 4 reposicionamentos de página indexada e 1 bloqueado. Dezenove colisões foram arbitradas antes da escrita, e as decisões de sequenciamento e de propriedade de conteúdo precisam sobreviver até a publicação, que acontece um por semana até novembro."
+ai_summary: "Ordem de publicação e restrições vinculantes dos 20 fluxos produzidos em 05 e 06/09: 15 artigos novos, 4 reposicionamentos e a pauta de cronograma redirecionada para revisão do guia existente. As 20 capas Blog e LinkedIn foram geradas e ligadas aos cards em 10/09."
 status: active
 subtipo: mapa-lote
 projeto: blog
@@ -47,7 +47,7 @@ Detalhe do estado de cada card em `/admin/conteudo/<id>`. Fluxo em
 | 28/09 | `a5396a74` | `casa-steel-frame-70m2` | novo |
 | 28/09 | `239dc13e` | `vida-util-casa-steel-frame` | novo |
 | 05/10 | `f579f618` | `manutencao-casa-steel-frame` | novo |
-| 05/10 | `d13686e3` | — | **bloqueado, sem draft** |
+| 05/10 | `d13686e3` | `passo-passo-construcao-steel-frame` | **revisão direcionada; sem nova URL** |
 | 12/10 | `b2536b68` | `casa-steel-frame-valoriza-revenda` | novo |
 | 19/10 | `10139838` | `acustica-entrepiso-steel-frame` | novo |
 | 26/10 | `8ef29137` | `galpao-steel-frame-ou-estrutura-metalica` | novo |
@@ -55,9 +55,11 @@ Detalhe do estado de cada card em `/admin/conteudo/<id>`. Fluxo em
 | 26/10 | `df7906d4` | `reforma-tributaria-empreitada-incorporacao` | novo |
 | 26/10 | `a66a5dba` | `steel-frame-comercial-loja-escritorio` | novo |
 
-15 artigos novos, 4 reposicionamentos e 1 bloqueado.
+15 artigos novos e 5 revisões de páginas existentes. A pauta de cronograma não
+abre URL: a pesquisa reprovou a criação de um oitavo conteúdo conflitante e o
+destino passou a ser o guia já indexado `passo-passo-construcao-steel-frame`.
 
-> [!warning] Os 4 reposicionamentos mexem em página indexada e viva
+> [!warning] As 5 revisões mexem em página indexada e viva
 > Eles não criam URL. O draft tem o mesmo nome do arquivo em `publicados/`, o que
 > é estado de staging por design: `produzir` num slug publicado escreve em
 > `post_draft_payload` sem tocar no artigo no ar, e `publicar` troca por RPC.
@@ -105,7 +107,7 @@ investigado nem confirmado.
 
 ## Pendências
 
-- [ ] @bruno Gerar as 20 imagens a partir dos cinco cenários de cada card e enviar os arquivos, para as capas Blog 1200x800 e LinkedIn 1080x1350 serem recortadas e subidas #pendencia
-- [ ] @bruno Confirmar `--usar-existente` para cada um dos 4 reposicionamentos antes de produzir, porque eles alteram página indexada #pendencia
-- [ ] @bruno Decidir o destino da pauta `d13686e3` (cronograma semana a semana): liberar dados de obra Berkahn com datas reais, autorizar o método por homem-hora das composições SINAPI, ou matar a pauta #pendencia
-- [ ] @bruno Confirmar se o cronograma deve ocupar o slug `passo-passo-construcao-steel-frame`, aproveitando os 8 links internos e o histórico, como sugere [[2026-07-thin-content-mapa]] #pendencia
+- [x] Geradas e vinculadas as 20 capas Blog 1200x800 e LinkedIn 1080x1350; staging dos cards e arquivos públicos preparados em 10/09.
+- [ ] @bruno Confirmar `--usar-existente` para cada uma das 5 revisões antes de produzir, porque elas alteram páginas indexadas #pendencia
+- [x] `d13686e3` redirecionada para revisão de `passo-passo-construcao-steel-frame`, sem nova URL e sem fabricar um cronograma de obra não documentado.
+- [ ] @bruno Fornecer um cronograma real de obra Berkahn, com área e datas, antes de publicar números próprios na revisão de `passo-passo-construcao-steel-frame` #pendencia

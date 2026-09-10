@@ -30,6 +30,7 @@ contextos_aplicados:
   - berkahn-brand
   - seo-aeo-strategy
   - steel-frame-domain
+material_visual_slug: cover.webp
 ---
 
 Dois pisos medidos em campo pela mesma equipe de pesquisa deram 60 dB e 78 dB de ruído de impacto. A laje era a mesma, maciça de 12 cm, e o contrapiso também, argamassa com brita leve de 4 cm. A diferença inteira estava na última camada, aquela que se escolhe no fim da obra pensando em estética, com laminado assentado sobre manta resiliente de um lado e porcelanato colado do outro. São 18 dB de distância sem tocar em nada estrutural, medidos por Nunes, Zini e Pagnussat e publicados na revista Acústica e Vibrações em dezembro de 2014.

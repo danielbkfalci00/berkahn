@@ -32,6 +32,7 @@ contextos_aplicados:
   - steel-frame-domain
   - article-pipeline
   - copy-sem-travessao
+material_visual_slug: cover.webp
 ---
 
 Casa em steel frame esquenta? A pergunta chega sempre nessa forma e recebe quase sempre a mesma resposta, de que é mito, de que o aço ocupa pouca área da parede e de que a lã de vidro resolve. Nenhum dos textos que respondem essa dúvida na primeira página do Google traz um número, e nenhum diz qual norma foi consultada.

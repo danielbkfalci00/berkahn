@@ -32,6 +32,7 @@ contextos_aplicados:
   - steel-frame-domain
   - article-pipeline
   - copy-sem-travessao
+material_visual_slug: cover.webp
 ---
 
 A pergunta costuma aparecer no fim da conversa, depois que prazo, custo e conforto térmico já foram resolvidos. Casa de steel frame valoriza? E na hora de vender, quanto o banco do comprador reconhece que ela vale? A resposta que circula vem em forma de adjetivo. Valoriza porque é moderna, porque é sustentável, porque fica pronta rápido. Nenhuma das páginas que respondem assim abre o documento que decide o teto do negócio, que é o laudo de avaliação.

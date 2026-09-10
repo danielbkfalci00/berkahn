@@ -34,6 +34,7 @@ contextos_aplicados:
   - seo-aeo-strategy
   - steel-frame-domain
   - article-pipeline
+material_visual_slug: cover.webp
 ---
 
 Uma das páginas mais bem colocadas na busca por galpão em steel frame é o blog de uma revendedora de galpões metálicos. O texto define steel frame como moldura de aço, conta que o sistema chegou ao Brasil nos anos 1990 e afirma que ele serve para galpão logístico porque suporta variação de temperatura. Em toda a página não aparece uma norma, um vão livre, um pé-direito nem uma carga.

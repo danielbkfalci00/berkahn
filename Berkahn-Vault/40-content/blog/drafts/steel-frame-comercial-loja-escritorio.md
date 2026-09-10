@@ -31,6 +31,7 @@ contextos_aplicados:
   - berkahn-brand
   - seo-aeo-strategy
   - steel-frame-domain
+material_visual_slug: cover.webp
 ---
 
 Quem vai abrir uma loja, montar um escritório ou instalar uma clínica faz uma conta antes de escolher o sistema construtivo. Se a obra terminar mais cedo, quantos meses de aluguel deixam de ser pagos no ponto atual. A conta é razoável e o raciocínio está certo. O resultado dela quase nunca é o que se espera.

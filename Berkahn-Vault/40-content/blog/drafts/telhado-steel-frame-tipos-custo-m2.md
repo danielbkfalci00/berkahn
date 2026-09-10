@@ -32,6 +32,7 @@ contextos_aplicados:
   - seo-aeo-strategy
   - article-pipeline
   - steel-frame-domain
+material_visual_slug: cover.webp
 ---
 
 Procurar "telhado steel frame preço m2" devolve uma primeira página sem um único número em reais. As duas primeiras posições são páginas de captação replicadas por dezenas de cidades, e em uma delas o único número publicado é o telefone de contato. Logo abaixo aparece um site que ranqueia em português com o título "Preços por m² em 2026" e cota 180 € por metro quadrado, o que produz erro de ordem de grandeza próximo de seis vezes para quem não repara na moeda. Nós fomos atrás dos índices públicos que ninguém usou e montamos a conta camada por camada.
