@@ -1,12 +1,12 @@
 ---
 tipo: meta
 criado: 2026-05-21
-atualizado: 2026-09-09
+atualizado: 2026-09-10
 tags:
   - project/site
   - project/blog
   - status/active
-ai_summary: "Sprint 24–28/08: fechar governança documental, publicar o pacote editorial aprovado e concluir smokes humanos. Detalhes e tarefas vivem nos hubs; esta nota mantém somente estado, prioridade e ponteiros."
+ai_summary: "Sprint 07–11/09: levar a pauta de home equity ate a aprovacao editorial, preservando o slug indexado e a publicacao humana. Detalhes e tarefas vivem nos hubs; esta nota mantem somente estado, prioridade e ponteiros."
 status: active
 projetos_em_curso:
   - blog
@@ -17,11 +17,11 @@ projetos_em_curso:
   - materiais
   - pesquisas
   - orcamento-automacao
-semana_inicio: 2026-08-24
-semana_fim: 2026-08-28
+semana_inicio: 2026-09-07
+semana_fim: 2026-09-11
 ---
 
-# Sprint Ativa — semana de 2026-08-24
+# Sprint Ativa — semana de 2026-09-07
 
 > [!info] Regra de contexto
 > Esta nota é um painel curto. Fatos, KPIs e tarefas ficam uma única vez nos hubs
@@ -30,15 +30,15 @@ semana_fim: 2026-08-28
 
 ## Objetivo da semana
 
-**Fechar a governança operacional e transformar o conteúdo já aprovado em
-distribuição mensurável**, sem reabrir decisões arquiteturais concluídas.
+**Entregar um pacote editorial completo para aprovação**, revisando o artigo
+indexado sem trocar a URL e preparando a distribuição manual no LinkedIn.
 
 ## Estado por projeto
 
 | Projeto | Estado | Próxima ação canônica |
 |---------|--------|-----------------------|
-| [[blog]] | 43 no ar e 19 drafts prontos aguardando capa | Gerar as 20 imagens; ver [[2026-09-lote-20-fronteiras]] |
-| [[linkedin]] | 3 aprovados sem publicar, mais 20 escritos aguardando capa | Publicar um por semana, do mais antigo para o mais novo |
+| [[blog]] | Revisão de `financiar-construcao-light-steel-frame` staged | Revisão humana do pacote; ver [[blog#Próximos 7 dias]] |
+| [[linkedin]] | Copy de 130 palavras e capa 4:5 prontas | Aprovar o pacote e publicar manualmente depois do Blog |
 | [[site]] | Pages neutralizado; admin multiusuário em produção | Smokes humanos e encerramento administrativo |
 | [[seo-aeo]] | Baseline técnico e de conversão disponível | Observar janelas de 7/28 dias |
 | [[apresentacoes]] | Apresentação executiva ativa | Smoke visual dos 16 slides |
@@ -48,18 +48,16 @@ distribuição mensurável**, sem reabrir decisões arquiteturais concluídas.
 
 ## Entregue nesta semana
 
-- [x] Next.js 16.3, fontes locais, ESLint flat, imagens otimizadas e zero
-  advisories; detalhes em [[stack-nextjs-supabase]]
-- [x] GitHub Pages legado neutralizado com noindex, canonical, redirect e
-  exclusão dos caminhos sensíveis; estado em [[site]]
-- [x] Analytics mensal hospedado validado e snapshot de julho persistido;
-  operação em [[admin-setup]]
-- [x] Gate do vault convertido para fail-closed: configuração do Linter,
-  `--single`, argumentos, campos vazios, pendências e wikilinks/anchors
-- [x] MOC reconciliado com os oito hubs; CWV e follow-ups da home passaram a
-  ter owner único
-- [x] Sprint histórica compactada; contexto detalhado segue acessível por
-  wikilink, sem duplicação
+- [x] Próxima pauta escolhida explicitamente no quadro, sem depender do seletor
+  genérico que priorizaria outro card atrasado
+- [x] Séries 20773 e 29973 conferidas na API oficial do Banco Central
+- [x] Conversão anual/mensal corrigida por equivalência composta e tabelas
+  recalculadas
+- [x] Afirmações de mercado sem fonte primária removidas do artigo
+- [x] Artigo vinculado ao post existente como revisão staged; versão publicada
+  continua intacta
+- [x] Texto do LinkedIn reescrito em 130 palavras e URL UTM preparada
+- [x] Capas Blog 1200×800 e LinkedIn 1080×1350 já vinculadas ao card
 
 ## Prioridades restantes
 
@@ -71,7 +69,8 @@ As tarefas editoriais e de rollout vivem nos hubs:
 - [[pesquisas#Bloqueios ativos]]
 - [[2026-08-diagnostico-integrado-site]]
 
-Pendências cross-project que continuam pertencendo a esta sprint:
+O único bloqueio editorial desta entrega é a aprovação humana registrada em
+[[blog#Próximos 7 dias]]. Pendências cross-project preservadas:
 
 - [ ] @bruno Redesenhar o worker para execução sob demanda ou heartbeat leve antes de reativá-lo; o agendamento antigo aponta para worktree removido e uma task completa a cada 15 minutos tem custo desnecessário #pendencia
 - [ ] @bruno Decidir o destino das quatro capas órfãs em [[00-meta/projetos/materiais|materiais]]: Reestruturando Concreto, energia_solar, mármore e piscina_arraia #pendencia

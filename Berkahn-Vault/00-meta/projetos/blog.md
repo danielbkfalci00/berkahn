@@ -5,7 +5,7 @@ atualizado: 2026-09-10
 tags:
   - project/blog
   - status/active
-ai_summary: Hub do Blog — 40 posts e 44 trilhas. O lote de setembro tem 19 drafts recuperados da main e 20 capas Blog/LinkedIn vinculadas; cronograma foi redirecionado para revisar a URL existente, sem criar artigo concorrente.
+ai_summary: Hub do Blog — 40 posts e 44 trilhas. A pauta semanal de home equity foi staged como revisão da URL existente, com números recalculados e sem alterar o artigo publicado; aguarda aprovação humana.
 status: active
 projeto: blog
 kpi_publicados: 43
@@ -108,6 +108,8 @@ Tráfego seguiu crescendo: 1.179 users em junho, 1.407 nos primeiros 26 dias de 
 - [ ] @codex Rebasear separadamente a página-mãe de custo na série Arquitecasa de abril/2026, depois da publicação do draft de 11/08, para as duas páginas não voltarem a divergir #pendencia
 
 ## Próximos 7 dias
+
+- [ ] @bruno Revisar e aprovar o pacote `72133a0d`: artigo staged em `financiar-construcao-light-steel-frame`, copy LinkedIn de 130 palavras e capas já vinculadas #pendencia
 
 - [x] Semana S1: artigo de ICMS publicado e reconciliado com a pauta
 - [x] Pesquisa e criação exercitadas na pauta de casa LSF de 100 m²
