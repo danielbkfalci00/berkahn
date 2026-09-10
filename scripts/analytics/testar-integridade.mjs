@@ -19,7 +19,9 @@ function ok(name, condition, detail = '') {
 console.log('comparabilidade e Health Score');
 ok('agosto bloqueia MoM do GA4', comparisonPolicyFor('2026-08').ga4MoM === false);
 ok('agosto preserva MoM do GSC', comparisonPolicyFor('2026-08').gscMoM === true);
-ok('setembro usa comparacao normal', comparisonPolicyFor('2026-09').ga4MoM === true);
+ok('setembro bloqueia GA4 porque agosto e a base', comparisonPolicyFor('2026-09').ga4MoM === false);
+ok('regra central corrige snapshot explicito antigo', comparisonPolicyFor('2026-09', { ga4MoM: true, gscMoM: true }).ga4MoM === false);
+ok('outubro volta a comparacao normal', comparisonPolicyFor('2026-10').ga4MoM === true);
 
 const dir = mkdtempSync(join(tmpdir(), 'analytics-integrity-'));
 cpSync('types/analytics.ts', join(dir, 'types.ts'));

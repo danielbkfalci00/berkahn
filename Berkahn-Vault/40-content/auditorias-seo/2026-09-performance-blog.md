@@ -7,7 +7,7 @@ tags:
   - project/seo-aeo
   - status/active
   - source/manual
-ai_summary: "PARCIAL (7 de 30 dias) — Performance Setembro/2026 — GA4 120 users (↓ 9.8%), GSC 292 clicks (↓ 0.7%), indexação 31/34. Top: Custo do Steel Frame por m² em 2026: Preços Atualizados. P0: Solicitar indexação manual no GSC para "/atualidades/isencao-icms-energia-solar-sp" (status: Discovered - currently not indexed).."
+ai_summary: "PARCIAL (7 de 30 dias) — Performance Setembro/2026 — GA4 120 users (comparação indisponível), GSC 292 clicks (↓ 0.7%), indexação 31/34. Top: Custo do Steel Frame por m² em 2026: Preços Atualizados. P0: Solicitar indexação manual no GSC para "/atualidades/isencao-icms-energia-solar-sp" (status: Discovered - currently not indexed).."
 status: active
 subtipo: performance-mensal
 kpi_paginas_indexadas: 31
@@ -21,7 +21,7 @@ kpi_gsc_impressions_mes: 11296
 kpi_gsc_ctr_mes: 2.58
 kpi_gsc_position_mes: 5.2
 kpi_delta_clicks_mom_pct: -0.7
-kpi_delta_users_mom_pct: -9.8
+kpi_delta_users_mom_pct: 
 contextos_aplicados:
   - seo-aeo-strategy
   - article-pipeline
@@ -45,7 +45,7 @@ data_diagnostico: 2026-09-10
 
 ## Resumo executivo
 
-- 120 usuários e 194 pageviews no GA4 (-10% MoM).
+- 120 usuários e 194 pageviews no GA4.
 - 292 cliques e 11296 impressões no Google Search (-1% MoM), posição média 5.2.
 - 31 de 34 artigos indexados no Google.
 - Página mais acessada: Custo do Steel Frame por m² em 2026: Preços Atualizados (67 pageviews).
@@ -56,38 +56,38 @@ data_diagnostico: 2026-09-10
 
 | Métrica | Valor | Variação MoM |
 |---------|------:|:------------:|
-| Users | 120 | ↓ 9.8% |
-| Sessions | 155 | ↓ 14.8% |
-| Pageviews | 194 | ↓ 32.4% |
-| Engagement rate | 65.2% | ↑ 0.6% |
-| Tempo médio sessão | 219.2s | ↓ 12.9% |
+| Users | 120 | comparação indisponível |
+| Sessions | 155 | comparação indisponível |
+| Pageviews | 194 | comparação indisponível |
+| Engagement rate | 65.2% |  |
+| Tempo médio sessão | 219.2s |  |
 
 ### Top 15 páginas (por pageviews)
 
 | Página | Pageviews | Users | Tempo médio | MoM |
 |--------|----------:|------:|------------:|:---:|
-| Custo do Steel Frame por m² em 2026: Preços Atualizados (`custo-steel-frame-m2-2026`) | 67 | 54 | 121.2s | ↓ 15.2% |
-| Home (``) | 44 | 35 | 31s | ↓ 33.3% |
-| Residencial (`/residencial`) | 12 | 12 | 92.7s | ↓ 40.0% |
-| Quanto custa uma casa de 100 m² em Steel Frame em 2026 (`quanto-custa-construir-steel-frame-precos-m2-2026`) | 11 | 10 | 66.1s | ↓ 62.1% |
-| Principais Normas do Light Steel Frame no Brasil (`normas-light-steel-frame-brasil`) | 10 | 4 | 101.8s | ↑ 150.0% |
-| Serviços (`/servicos`) | 8 | 7 | 68.9s | ↓ 20.0% |
+| Custo do Steel Frame por m² em 2026: Preços Atualizados (`custo-steel-frame-m2-2026`) | 67 | 54 | 121.2s | — |
+| Home (``) | 44 | 35 | 31s | — |
+| Residencial (`/residencial`) | 12 | 12 | 92.7s | — |
+| Quanto custa uma casa de 100 m² em Steel Frame em 2026 (`quanto-custa-construir-steel-frame-precos-m2-2026`) | 11 | 10 | 66.1s | — |
+| Principais Normas do Light Steel Frame no Brasil (`normas-light-steel-frame-brasil`) | 10 | 4 | 101.8s | — |
+| Serviços (`/servicos`) | 8 | 7 | 68.9s | — |
 | Steel Frame vs Alvenaria: O Comparativo Definitivo (`steel-frame-vs-alvenaria`) | 7 | 5 | 84s | — |
-| Como Financiar uma Construção em Light Steel Frame (`financiar-construcao-light-steel-frame`) | 6 | 3 | 630.7s | ↓ 45.5% |
-| Pillar LSF (`/lsf`) | 6 | 4 | 44.5s | → 0.0% |
-| Apresentação Executiva (`/apresentacao-executiva`) | 3 | 2 | 169.5s | ↓ 25.0% |
-| Atualidades (índice) (`/atualidades`) | 3 | 2 | 96.5s | ↓ 78.6% |
+| Como Financiar uma Construção em Light Steel Frame (`financiar-construcao-light-steel-frame`) | 6 | 3 | 630.7s | — |
+| Pillar LSF (`/lsf`) | 6 | 4 | 44.5s | — |
+| Apresentação Executiva (`/apresentacao-executiva`) | 3 | 2 | 169.5s | — |
+| Atualidades (índice) (`/atualidades`) | 3 | 2 | 96.5s | — |
 | Anatomia da Parede de Steel Frame: Camada por Camada (`anatomia-parede-steel-frame`) | 3 | 3 | 103s | — |
-| Empresa (`/empresa`) | 3 | 3 | 224s | ↓ 57.1% |
+| Empresa (`/empresa`) | 3 | 3 | 224s | — |
 | Isolamento Térmico e Acústico no Steel Frame (`isolamento-termico-acustico-steel-frame`) | 2 | 1 | 21s | — |
 | Terreno em declive: quanto encarece a obra em 2026 (`terreno-em-declive-quanto-encarece`) | 2 | 2 | 0s | — |
 | Fissuras no Steel Frame: Causas, Prevenção e Reparo (`fissuras-steel-frame`) | 1 | 1 | 23s | — |
-| Fundação Steel Frame vs. Alvenaria: Comparativo Completo (`fundacao-steel-frame-vs-alvenaria`) | 1 | 1 | 2s | → 0.0% |
+| Fundação Steel Frame vs. Alvenaria: Comparativo Completo (`fundacao-steel-frame-vs-alvenaria`) | 1 | 1 | 2s | — |
 | Mitos e Verdades do Steel Frame: O Que Sustenta Cada Argumento (`mitos-verdades-steel-frame`) | 1 | 1 | 2093s | — |
-| Patologias em Steel Frame: Como Prevenir e Como Corrigir (`patologias-steel-frame`) | 1 | 1 | 40s | ↓ 75.0% |
+| Patologias em Steel Frame: Como Prevenir e Como Corrigir (`patologias-steel-frame`) | 1 | 1 | 40s | — |
 | Proteção contra quedas na construção civil: guia técnico completo (`protecao-contra-quedas-construcao-civil`) | 1 | 1 | 0s | — |
 | Steel Frame Aguenta Vento Forte? A Engenharia por Trás dos 200 km/h (`steel-frame-aguenta-vento-forte`) | 1 | 1 | 279s | — |
-| Steel Frame no Mundo: Como Cada País Constrói com Aço (`steel-frame-no-mundo`) | 1 | 1 | 0s | ↓ 80.0% |
+| Steel Frame no Mundo: Como Cada País Constrói com Aço (`steel-frame-no-mundo`) | 1 | 1 | 0s | — |
 
 ### Top 10 fontes de tráfego
 
@@ -467,7 +467,7 @@ Nenhuma ação P2 identificada.
 - Fonte GSC: `sc-domain:berkahn.com.br`
 - Janela: 2026-09-01 a 2026-09-07 (parcial, 7 de 30 dias)
 - Comparação MoM: 2026-08-01 a 2026-08-07 (7 dias, janela equivalente)
-- Gerado em: 2026-09-10 15:23:31 via `/performance`
+- Gerado em: 2026-09-10 16:02:11 via `/performance`
 - Histórico (3 meses): em breve (após 3 meses de bootstrap)
 
 ---
