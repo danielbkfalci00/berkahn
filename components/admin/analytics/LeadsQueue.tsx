@@ -173,13 +173,15 @@ export function LeadsQueue({ initialLeads, total, page, pageCount, kpis, respons
 
   const kpiData = kpis.status === "ok" ? kpis.data : null;
   const qualificationRate = kpiData?.eligible ? Math.round((kpiData.qualified / kpiData.eligible) * 100) : null;
+  const activeFilterCount = ["q", "status", "canal", "segmento", "prioridade", "responsavel", "periodo", "vencida", "semResponsavel", "semAcao", "arquivados"]
+    .filter((key) => Boolean(searchParams.get(key))).length;
 
   return (
-    <div className="space-y-6">
+    <div className="mx-auto max-w-7xl space-y-5">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
           <h1 className="text-2xl font-semibold text-neutral-900">Leads</h1>
-          <p className="text-sm text-neutral-500">Operação comercial com PII centralizada no Supabase.</p>
+          <p className="text-sm text-neutral-500">Priorize o próximo contato.</p>
         </div>
         <button
           type="button"
@@ -190,11 +192,10 @@ export function LeadsQueue({ initialLeads, total, page, pageCount, kpis, respons
         </button>
       </div>
 
-      <div className="flex flex-wrap items-center gap-x-6 gap-y-2 border-y border-neutral-300 py-3 text-sm">
+      <div className="grid grid-cols-3 gap-3 border-y border-neutral-300 py-3 text-sm sm:flex sm:flex-wrap sm:gap-x-6 sm:gap-y-2">
         <Metric label="Recebidos · 28d" value={kpiData?.received ?? "—"} />
         <Metric label="Novos" value={kpiData?.new ?? "—"} />
-        <Metric label="Qualificados" value={kpiData?.qualified ?? "—"} />
-        <Metric label="Convertidos" value={kpiData?.converted ?? "—"} />
+        <span className="hidden sm:contents"><Metric label="Qualificados" value={kpiData?.qualified ?? "—"} /><Metric label="Convertidos" value={kpiData?.converted ?? "—"} /></span>
         <Metric label="Taxa" value={qualificationRate === null ? "—" : `${qualificationRate}%`} />
       </div>
 
@@ -206,7 +207,12 @@ export function LeadsQueue({ initialLeads, total, page, pageCount, kpis, respons
 
       <div className="flex items-center gap-1 border-b border-neutral-200" aria-label="Visualização dos leads">
         <ViewTab href={withView(searchParams, "inbox")} active={view === "inbox"}><LayoutList className="h-4 w-4" /> Inbox</ViewTab>
-        <ViewTab href={withView(searchParams, "kanban")} active={view === "kanban"}><GripVertical className="h-4 w-4" /> Kanban</ViewTab>
+        <span className="hidden md:contents"><ViewTab href={withView(searchParams, "kanban")} active={view === "kanban"}><GripVertical className="h-4 w-4" /> Kanban</ViewTab></span>
+      </div>
+
+      <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 md:hidden" aria-label="Filtrar por etapa">
+        <StageChip href={withStatus(searchParams, null)} active={!searchParams.get("status")}>Todos</StageChip>
+        {STATUS.map((item) => <StageChip key={item.value} href={withStatus(searchParams, item.value)} active={searchParams.get("status") === item.value}>{item.label}</StageChip>)}
       </div>
 
       {manualOpen && (
@@ -248,9 +254,9 @@ export function LeadsQueue({ initialLeads, total, page, pageCount, kpis, respons
       {error && <p role="alert" className="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p>}
       {success && <p role="status" className="rounded-md border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-800">{success}</p>}
 
-      <button type="button" aria-expanded={filtersOpen} onClick={() => setFiltersOpen((value) => !value)} className="inline-flex h-10 items-center justify-center gap-2 rounded-md border border-neutral-300 bg-white text-sm font-medium md:hidden"><SlidersHorizontal className="h-4 w-4" /> {filtersOpen ? "Ocultar filtros" : "Filtrar leads"}</button>
+      <button type="button" aria-expanded={filtersOpen} onClick={() => setFiltersOpen((value) => !value)} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-neutral-300 bg-white px-4 text-sm font-medium md:hidden"><SlidersHorizontal className="h-4 w-4" /> Filtros{activeFilterCount > 0 ? ` (${activeFilterCount})` : ""}</button>
 
-      <form className={`${filtersOpen ? "grid" : "hidden"} gap-3 rounded-lg border border-neutral-200 bg-white p-4 md:grid md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5`}>
+      <form className={`${filtersOpen ? "grid" : "hidden"} fixed inset-x-3 bottom-[calc(5rem+env(safe-area-inset-bottom))] z-50 max-h-[70vh] gap-3 overflow-y-auto rounded-lg border border-neutral-200 bg-white p-4 shadow-2xl md:static md:grid md:max-h-none md:grid-cols-2 md:shadow-none lg:grid-cols-4 xl:grid-cols-5`}>
         <input type="hidden" name="view" value={view} />
         <input name="q" defaultValue={searchParams.get("q") || ""} placeholder="Nome, telefone ou email" className={`${INPUT_CLASS} md:col-span-2`} />
         <FilterSelect name="status" label="Todos os status" options={STATUS} current={searchParams.get("status")} />
@@ -270,7 +276,8 @@ export function LeadsQueue({ initialLeads, total, page, pageCount, kpis, respons
       {view === "kanban" ? (
         <>
           {total > leads.length && <p className="rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-900">O Kanban mostra os {leads.length} leads mais recentes deste filtro. Refine a busca para operar os demais.</p>}
-          <LeadKanban leads={leads} pendingLeadId={pendingLeadId} onStatusChange={changeStatus} />
+          <div className="md:hidden"><LeadInbox leads={leads} pendingLeadId={pendingLeadId} onStatusChange={changeStatus} /></div>
+          <div className="hidden md:block"><LeadKanban leads={leads} pendingLeadId={pendingLeadId} onStatusChange={changeStatus} /></div>
         </>
       ) : (
         <LeadInbox leads={leads} pendingLeadId={pendingLeadId} onStatusChange={changeStatus} />
@@ -296,7 +303,7 @@ export function LeadsQueue({ initialLeads, total, page, pageCount, kpis, respons
 }
 
 function Metric({ label, value }: { label: string; value: string | number }) {
-  return <div className="flex items-baseline gap-2"><span className="text-xs text-neutral-500">{label}</span><strong className="font-semibold text-neutral-900">{value}</strong></div>;
+  return <div className="flex min-w-0 flex-col sm:flex-row sm:items-baseline sm:gap-2"><span className="truncate text-[11px] text-neutral-500 sm:text-xs">{label}</span><strong className="font-semibold tabular-nums text-neutral-900">{value}</strong></div>;
 }
 
 function ViewTab({ href, active, children }: { href: string; active: boolean; children: React.ReactNode }) {
@@ -308,6 +315,18 @@ function withView(params: URLSearchParams, view: "inbox" | "kanban"): string {
   next.set("view", view);
   next.delete("page");
   return `?${next.toString()}`;
+}
+
+function withStatus(params: URLSearchParams, status: LeadStatus | null): string {
+  const next = new URLSearchParams(params.toString());
+  next.set("view", "inbox");
+  next.delete("page");
+  if (status) next.set("status", status); else next.delete("status");
+  return `?${next.toString()}`;
+}
+
+function StageChip({ href, active, children }: { href: string; active: boolean; children: React.ReactNode }) {
+  return <Link href={href} aria-current={active ? "page" : undefined} className={`inline-flex min-h-10 shrink-0 items-center rounded-full border px-3 text-xs font-medium ${active ? "border-neutral-950 bg-neutral-950 text-white" : "border-neutral-200 bg-white text-neutral-600"}`}>{children}</Link>;
 }
 
 function priorityMeta(priority: LeadPriority) {
@@ -324,20 +343,20 @@ function LeadInbox({ leads, pendingLeadId, onStatusChange }: { leads: AnalyticsL
     {leads.length === 0 ? <p className="px-4 py-10 text-center text-sm text-neutral-500">Nenhum lead corresponde aos filtros.</p> : leads.map((lead) => {
       const priority = priorityMeta(lead.prioridade);
       const overdue = Boolean(lead.proxima_acao_em && new Date(lead.proxima_acao_em) < new Date());
-      return <article key={lead.id} className="grid gap-4 border-b px-4 py-4 text-sm last:border-0 lg:grid-cols-[1fr_1.4fr_.75fr_.85fr_.8fr_.25fr] lg:items-center">
+      return <article key={lead.id} className="grid gap-3 border-b px-4 py-4 text-sm last:border-0 lg:grid-cols-[1fr_1.4fr_.75fr_.85fr_.8fr_.25fr] lg:items-center">
         <div className="min-w-0">
           <div className="flex items-center gap-2"><p className="truncate font-semibold text-neutral-900">{lead.nome}</p>{!lead.visualizado_em && <span className="h-2 w-2 shrink-0 rounded-full bg-blue-600" title="Não visualizado" />}</div>
           <p className="truncate text-xs text-neutral-500">{lead.email || lead.telefone || "Sem contato"}</p>
-          <div className="mt-2 flex gap-2 lg:hidden"><span className={`rounded-full border px-2 py-0.5 text-[10px] font-medium ${priority.className}`}>{priority.label}</span>{lead.artifact_count > 0 && <span className="inline-flex items-center gap-1 text-[10px] text-neutral-500"><FileText className="h-3 w-3" />{lead.artifact_count}</span>}</div>
+          <div className="mt-2 flex flex-wrap gap-2 lg:hidden"><span className={`rounded-full border px-2 py-0.5 text-[10px] font-medium ${priority.className}`}>{priority.label}</span><span className="rounded-full border border-neutral-200 px-2 py-0.5 text-[10px] font-medium text-neutral-600">{STATUS.find((item) => item.value === lead.status)?.label}</span>{lead.artifact_count > 0 && <span className="inline-flex items-center gap-1 text-[10px] text-neutral-500"><FileText className="h-3 w-3" />{lead.artifact_count}</span>}</div>
         </div>
-        <div className="min-w-0">
+        <div className="hidden min-w-0 lg:block">
           <p className="line-clamp-2 text-sm text-neutral-800">{lead.resumo_status || "Sem atualização operacional"}</p>
           <div className="mt-1 hidden items-center gap-2 lg:flex"><span className={`rounded-full border px-2 py-0.5 text-[10px] font-medium ${priority.className}`}>{priority.label}</span>{lead.artifact_count > 0 && <span className="inline-flex items-center gap-1 text-[10px] text-neutral-500"><FileText className="h-3 w-3" />{lead.artifact_count}</span>}</div>
         </div>
         <p className="inline-flex items-center gap-1.5 text-xs text-neutral-600"><UserRound className="h-3.5 w-3.5" />{lead.responsavel?.nome || "Sem responsável"}</p>
         <p className={`inline-flex items-center gap-1.5 text-xs ${overdue ? "font-semibold text-red-700" : "text-neutral-600"}`}><Clock3 className="h-3.5 w-3.5" />{lead.proxima_acao_em ? new Intl.DateTimeFormat("pt-BR", { dateStyle: "short", timeStyle: "short" }).format(new Date(lead.proxima_acao_em)) : "Não agendada"}</p>
-        <select value={lead.status} onChange={(event) => onStatusChange(lead.id, event.target.value as LeadStatus)} disabled={pendingLeadId !== null} className={`${INPUT_CLASS} h-9 text-xs`} aria-label={`Status de ${lead.nome}`}>{STATUS.map((status) => <option key={status.value} value={status.value}>{status.label}</option>)}</select>
-        <Link href={`/admin/leads/${lead.id}`} className="text-sm font-medium underline underline-offset-4">Abrir</Link>
+        <select value={lead.status} onChange={(event) => onStatusChange(lead.id, event.target.value as LeadStatus)} disabled={pendingLeadId !== null} className={`${INPUT_CLASS} hidden h-9 text-xs lg:block`} aria-label={`Status de ${lead.nome}`}>{STATUS.map((status) => <option key={status.value} value={status.value}>{status.label}</option>)}</select>
+        <Link href={`/admin/leads/${lead.id}`} className="inline-flex min-h-11 items-center text-sm font-medium underline underline-offset-4">Abrir</Link>
       </article>;
     })}
   </div>;
@@ -468,17 +487,17 @@ export function LeadDetail({
   const utmEntries = Object.entries(lead.utm || {}).filter(([, value]) => value);
 
   return (
-    <div className="space-y-6">
+    <div className="mx-auto max-w-6xl space-y-5">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
           <Link href="/admin/leads" className="text-sm text-neutral-500 hover:text-neutral-900">← Voltar para leads</Link>
           <h1 className="mt-2 text-2xl font-semibold text-neutral-900">{lead.nome}</h1>
           <p className="text-sm text-neutral-500">Recebido em {new Intl.DateTimeFormat("pt-BR", { dateStyle: "medium", timeStyle: "short" }).format(new Date(lead.criado_em))}</p>
         </div>
-        <div className="flex flex-wrap gap-2">
-          {lead.telefone && <a href={`tel:${phoneDigits}`} className="inline-flex items-center gap-2 rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm font-medium"><Phone className="h-4 w-4" /> Ligar</a>}
-          {lead.telefone && <a href={`https://wa.me/${phoneDigits}`} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm font-medium"><MessageCircle className="h-4 w-4" /> WhatsApp</a>}
-          {lead.email && <a href={`mailto:${lead.email}`} className="inline-flex items-center gap-2 rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm font-medium"><Mail className="h-4 w-4" /> Email</a>}
+        <div className="grid w-full grid-cols-3 gap-2 sm:flex sm:w-auto sm:flex-wrap">
+          {lead.telefone && <a href={`tel:${phoneDigits}`} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-neutral-300 bg-white px-3 text-sm font-medium"><Phone className="h-4 w-4" /> Ligar</a>}
+          {lead.telefone && <a href={`https://wa.me/${phoneDigits}`} target="_blank" rel="noreferrer" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md bg-neutral-950 px-3 text-sm font-medium text-white"><MessageCircle className="h-4 w-4" /> WhatsApp</a>}
+          {lead.email && <a href={`mailto:${lead.email}`} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-neutral-300 bg-white px-3 text-sm font-medium"><Mail className="h-4 w-4" /> Email</a>}
         </div>
       </div>
 
@@ -486,9 +505,9 @@ export function LeadDetail({
       {success && <p role="status" className="rounded-md border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-800">{success}</p>}
 
       <div className="grid gap-6 xl:grid-cols-[1.1fr_.9fr]">
-        <div className="space-y-6">
-          <section className="rounded-lg border border-neutral-200 bg-white p-5">
-            <h2 className="font-medium text-neutral-900">Contato e contexto</h2>
+        <div className="order-2 space-y-5 xl:order-1">
+          <details className="rounded-lg border border-neutral-200 bg-white p-4 sm:p-5">
+            <summary className="flex min-h-11 cursor-pointer items-center font-medium text-neutral-900">Contato e contexto</summary>
             <dl className="mt-4 grid gap-4 text-sm sm:grid-cols-2">
               <Info label="Telefone" value={lead.telefone} /><Info label="Email" value={lead.email} />
               <Info label="Segmento" value={lead.segmento.replace("nao_definido", "não definido")} /><Info label="Canal" value={lead.canal} />
@@ -499,10 +518,10 @@ export function LeadDetail({
               <Info label="Referrer" value={lead.referrer} /><Info label="UTMs" value={utmEntries.map(([key, value]) => `${key}: ${value}`).join(" · ") || null} />
             </dl>
             {lead.mensagem && <p className="mt-5 whitespace-pre-wrap rounded-md bg-neutral-50 p-4 text-sm text-neutral-700">{lead.mensagem}</p>}
-          </section>
+          </details>
 
-          <section className="rounded-lg border border-neutral-200 bg-white p-5">
-            <h2 className="font-medium text-neutral-900">Linha do tempo</h2>
+          <details className="rounded-lg border border-neutral-200 bg-white p-4 sm:p-5">
+            <summary className="flex min-h-11 cursor-pointer items-center font-medium text-neutral-900">Linha do tempo</summary>
             <form className="mt-4 grid gap-3" onSubmit={(event) => { event.preventDefault(); run(() => registerLeadActivity(lead.id, activityType, note), () => setNote("")); }}>
               <select value={activityType} onChange={(event) => setActivityType(event.target.value as "nota" | "contato")} className={INPUT_CLASS}><option value="contato">Contato realizado</option><option value="nota">Nota</option></select>
               <textarea required value={note} onChange={(event) => setNote(event.target.value)} placeholder="Registre o resultado do contato ou uma nota operacional" className={`${INPUT_CLASS} min-h-24 py-2`} />
@@ -513,21 +532,21 @@ export function LeadDetail({
                 <li key={activity.id} className="relative text-sm"><span className="absolute -left-[25px] top-1 h-2 w-2 rounded-full bg-neutral-900" /><p className="font-medium text-neutral-900">{activity.action}</p><p className="text-xs text-neutral-500">{new Intl.DateTimeFormat("pt-BR", { dateStyle: "short", timeStyle: "short" }).format(new Date(activity.created_at))} · {activity.user_name || "Admin"}</p>{typeof activity.details?.nota === "string" && <p className="mt-1 whitespace-pre-wrap text-neutral-700">{activity.details.nota}</p>}</li>
               ))}
             </ol>
-          </section>
+          </details>
         </div>
 
-        <div className="space-y-6">
-          <section className="rounded-lg border border-neutral-200 bg-white p-5">
+        <div className="order-1 space-y-5 xl:order-2">
+          <section className="rounded-lg border border-neutral-200 bg-white p-4 sm:p-5">
             <h2 className="font-medium text-neutral-900">Situação atual</h2>
             <div className="mt-4 space-y-3">
               <Field label="Último status"><textarea value={summary} onChange={(event) => setSummary(event.target.value)} maxLength={500} placeholder="Resumo curto que aparece na inbox e no Kanban" className={`${INPUT_CLASS} min-h-24 py-2`} /></Field>
               <div className="grid grid-cols-2 gap-3"><Field label="Responsável"><select value={responsibleId} onChange={(event) => setResponsibleId(event.target.value)} className={INPUT_CLASS}><option value="">Sem responsável</option>{responsibles.map((item) => <option key={item.id} value={item.id} disabled={!item.ativo}>{item.nome}{item.ativo ? "" : " (inativo)"}</option>)}</select></Field><Field label="Prioridade"><select value={priority} onChange={(event) => setPriority(event.target.value as LeadPriority)} className={INPUT_CLASS}><option value="normal">Normal</option><option value="alta">Alta</option><option value="urgente">Urgente</option></select></Field></div>
-              <button disabled={isPending} onClick={() => run(() => updateLeadOperations(lead.id, { responsavelId: responsibleId || undefined, prioridade: priority, resumoStatus: summary }))} className="rounded-md bg-neutral-900 px-4 py-2 text-sm text-white disabled:opacity-50">Salvar situação</button>
+              <button disabled={isPending} onClick={() => run(() => updateLeadOperations(lead.id, { responsavelId: responsibleId || undefined, prioridade: priority, resumoStatus: summary }))} className="min-h-11 rounded-md bg-neutral-950 px-4 text-sm text-white disabled:opacity-50">Salvar situação</button>
               <div className="border-t border-neutral-200 pt-3" />
               <Field label="Status"><select value={status} onChange={(event) => setStatus(event.target.value as LeadStatus)} className={INPUT_CLASS}>{STATUS.map((item) => <option key={item.value} value={item.value}>{item.label}</option>)}</select></Field>
               {status === "desqualificado" && <Field label="Motivo obrigatório"><textarea required value={reason} onChange={(event) => setReason(event.target.value)} className={`${INPUT_CLASS} min-h-20 py-2`} /></Field>}
-              <button disabled={isPending || (status === "desqualificado" && !reason.trim())} onClick={() => run(() => updateLeadStatus(lead.id, status, reason))} className="rounded-md bg-neutral-900 px-4 py-2 text-sm text-white disabled:opacity-50">Salvar status</button>
-              <Field label="Próxima ação"><div className="flex gap-2"><input type="datetime-local" value={nextAction} onChange={(event) => setNextAction(event.target.value)} className={INPUT_CLASS} /><button onClick={() => run(() => setLeadNextAction(lead.id, localInputToIso(nextAction)))} className="rounded-md border border-neutral-300 px-3 text-sm">Salvar</button></div></Field>
+              <button disabled={isPending || (status === "desqualificado" && !reason.trim())} onClick={() => run(() => updateLeadStatus(lead.id, status, reason))} className="min-h-11 rounded-md bg-neutral-950 px-4 text-sm text-white disabled:opacity-50">Salvar status</button>
+              <Field label="Próxima ação"><div className="grid gap-2 sm:grid-cols-[1fr_auto]"><input type="datetime-local" value={nextAction} onChange={(event) => setNextAction(event.target.value)} className={INPUT_CLASS} /><button onClick={() => run(() => setLeadNextAction(lead.id, localInputToIso(nextAction)))} className="min-h-11 rounded-md border border-neutral-300 px-3 text-sm">Salvar</button></div></Field>
             </div>
           </section>
 
@@ -535,8 +554,8 @@ export function LeadDetail({
 
           <CommercialLinks title="Orçamentos" records={budgets} empty="Nenhum orçamento vinculado." />
           <CommercialLinks title="Propostas" records={proposals} empty="Nenhuma proposta vinculada." />
-          <Link href={`/admin/orcamentos/novo/form?lead=${lead.id}`} className="block rounded-md bg-neutral-900 px-4 py-3 text-center text-sm font-medium text-white">Criar orçamento</Link>
-          <button disabled={isPending} onClick={() => run(() => setLeadArchived(lead.id, !lead.arquivado_em), () => router.push("/admin/leads"))} className="inline-flex items-center gap-2 text-sm text-neutral-600 hover:text-neutral-900"><Archive className="h-4 w-4" /> {lead.arquivado_em ? "Reabrir lead" : "Arquivar lead"}</button>
+          <Link href={`/admin/orcamentos/novo/form?lead=${lead.id}`} className="block min-h-11 rounded-md bg-neutral-950 px-4 py-3 text-center text-sm font-medium text-white">Criar orçamento</Link>
+          <div className="border-t border-neutral-200 pt-4"><button disabled={isPending} onClick={() => run(() => setLeadArchived(lead.id, !lead.arquivado_em), () => router.push("/admin/leads"))} className="inline-flex min-h-11 items-center gap-2 text-sm text-neutral-500 hover:text-neutral-900"><Archive className="h-4 w-4" /> {lead.arquivado_em ? "Reabrir lead" : "Arquivar lead"}</button></div>
         </div>
       </div>
     </div>

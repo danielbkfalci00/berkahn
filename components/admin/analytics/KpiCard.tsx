@@ -27,7 +27,7 @@ export function KpiCard({ kpi, className }: KpiCardProps) {
   const Icon = direction === "up" ? ArrowUp : direction === "down" ? ArrowDown : Minus;
 
   return (
-    <Card className={cn("p-4 flex flex-col gap-2 bg-white border-neutral-200", className)}>
+    <Card className={cn("flex flex-col gap-2 bg-white p-3 sm:p-4 border-neutral-200", className)}>
       <div className="flex items-center justify-between gap-2 min-h-[18px]">
         <span className="text-[10px] uppercase tracking-wider font-semibold text-neutral-500 leading-tight">
           {kpi.label}
@@ -45,7 +45,7 @@ export function KpiCard({ kpi, className }: KpiCardProps) {
         )}
       </div>
 
-      <div className="text-3xl font-bold text-neutral-900 leading-none tracking-tight tabular-nums">
+      <div className="text-2xl font-bold text-neutral-900 leading-none tracking-tight tabular-nums sm:text-3xl">
         {kpi.value}
       </div>
 

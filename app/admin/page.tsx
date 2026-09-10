@@ -2,13 +2,8 @@ import { createClient } from "@/lib/supabase/server";
 import { DashboardContent } from "@/components/admin/DashboardContent";
 import { DashboardStats } from "@/types/admin";
 import { getAdminSession } from "@/lib/supabase/sessao";
-
-// Default stats when tables don't exist yet
-const defaultStats: DashboardStats = {
-  posts: { total: 0, published: 0, drafts: 0, scheduled: 0 },
-  proposals: { total: 0, pending: 0, approved: 0, rejected: 0, total_value: 0 },
-  presentations: { total: 0, sent: 0, viewed: 0 },
-};
+import { getDashboardLeadOperations } from "@/lib/analytics/leads-queries";
+import type { AdminDataResult } from "@/types/analytics";
 
 // Helper to format relative time
 function formatRelativeTime(date: string): string {
@@ -34,51 +29,50 @@ export default async function AdminDashboard() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  // Fetch real stats from Supabase using the helper function
-  let stats: DashboardStats = defaultStats;
+  let stats: AdminDataResult<DashboardStats>;
   try {
     const { data, error } = await supabase.rpc('get_dashboard_stats');
-    if (!error && data) {
-      stats = data as DashboardStats;
-    }
-  } catch {
-    // Tables may not exist yet, use defaults
-    console.log('Dashboard stats: using defaults (tables may not exist)');
+    stats = error || !data
+      ? { status: "unavailable", reason: "Não foi possível consultar os indicadores agora." }
+      : { status: "ok", data: data as DashboardStats };
+  } catch (error) {
+    console.error("Dashboard stats indisponíveis", error);
+    stats = { status: "unavailable", reason: "Não foi possível consultar os indicadores agora." };
   }
 
   // Fetch recent activity from activity_logs
-  let recentActivity: { id: string; action: string; entity: string; time: string }[] = [];
+  let recentActivity: AdminDataResult<{ id: string; action: string; entity: string; time: string }[]>;
   try {
-    const { data: logs } = await supabase
+    const { data: logs, error } = await supabase
       .from('activity_logs')
       .select('id, action, entity_name, created_at')
       .order('created_at', { ascending: false })
       .limit(5);
 
-    if (logs && logs.length > 0) {
-      recentActivity = logs.map((log) => ({
+    if (error || !logs) {
+      recentActivity = { status: "unavailable", reason: "Não foi possível carregar a atividade recente." };
+    } else {
+      recentActivity = { status: "ok", data: logs.map((log) => ({
         id: log.id,
         action: log.action,
         entity: log.entity_name,
         time: formatRelativeTime(log.created_at),
-      }));
+      })) };
     }
-  } catch {
-    // Table may not exist yet
+  } catch (error) {
+    console.error("Atividade recente indisponível", error);
+    recentActivity = { status: "unavailable", reason: "Não foi possível carregar a atividade recente." };
   }
 
-  // If no activity logs, show placeholder
-  if (recentActivity.length === 0) {
-    recentActivity = [
-      { id: "0", action: "Sistema iniciado", entity: "Painel Administrativo", time: "Agora" },
-    ];
-  }
+  const canManageCommercial = session?.membership.role === "owner" || session?.membership.role === "comercial";
+  const leadOperations = canManageCommercial ? await getDashboardLeadOperations() : null;
 
   return (
     <DashboardContent
       user={user}
       stats={stats}
       recentActivity={recentActivity}
+      leadOperations={leadOperations}
       membership={session?.membership ?? null}
     />
   );

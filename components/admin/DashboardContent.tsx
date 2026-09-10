@@ -9,18 +9,16 @@ import {
   Presentation,
   FileSpreadsheet,
   Plus,
-  ArrowUpRight,
-  TrendingUp,
   Clock,
-  CheckCircle,
   DollarSign,
-  Eye,
   Inbox,
-  Calculator,
-  BarChart3,
+  UserRoundX,
+  AlertTriangle,
+  ChevronRight,
 } from "lucide-react";
 import type { DashboardStats } from "@/types/admin";
-import type { AdminMembership } from "@/types/analytics";
+import type { AdminDataResult, AdminMembership } from "@/types/analytics";
+import type { DashboardLeadOperations } from "@/lib/analytics/leads-queries";
 
 interface Activity {
   id: string;
@@ -31,8 +29,9 @@ interface Activity {
 
 interface DashboardContentProps {
   user: User | null;
-  stats: DashboardStats;
-  recentActivity: Activity[];
+  stats: AdminDataResult<DashboardStats>;
+  recentActivity: AdminDataResult<Activity[]>;
+  leadOperations: AdminDataResult<DashboardLeadOperations> | null;
   membership: AdminMembership | null;
 }
 
@@ -40,6 +39,7 @@ export function DashboardContent({
   user,
   stats,
   recentActivity,
+  leadOperations,
   membership,
 }: DashboardContentProps) {
   const greeting = getGreeting();
@@ -49,195 +49,104 @@ export function DashboardContent({
   const canReadContent = canManageContent || membership?.role === "viewer";
 
   return (
-    <div className="space-y-8">
-      {/* Welcome section */}
-      <div className="flex items-center justify-between">
+    <div className="mx-auto max-w-6xl space-y-7">
+      <div className="flex items-center justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-semibold text-neutral-900">
+          <h2 className="text-xl font-semibold tracking-tight text-neutral-950 sm:text-2xl">
             {greeting}, {firstName}!
           </h2>
-          <p className="text-neutral-500 mt-1">
-            Aqui está um resumo do seu painel
-          </p>
         </div>
-        {canManageContent && <div className="flex gap-2">
-          <Link href="/admin/posts/new">
-            <Button className="bg-neutral-900 hover:bg-neutral-800">
+        {canManageContent && (
+          <Button asChild className="min-h-11 bg-neutral-950 text-white hover:bg-neutral-800">
+            <Link href="/admin/posts/new">
               <Plus className="h-4 w-4 mr-2" />
-              Novo Post
-            </Button>
-          </Link>
-        </div>}
+              Novo post
+            </Link>
+          </Button>
+        )}
       </div>
 
-      {/* Stats grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {/* Posts */}
-        {canReadContent && <Card className="p-6 hover:shadow-luxury-md transition-shadow">
-          <div className="flex items-center justify-between">
-            <div className="p-2 bg-blue-50 rounded-lg">
-              <FileText className="h-5 w-5 text-blue-600" />
-            </div>
-            <Link
-              href="/admin/posts"
-              className="text-neutral-400 hover:text-neutral-600"
-            >
-              <ArrowUpRight className="h-4 w-4" />
+      {canManageCommercial && leadOperations && (
+        <section aria-labelledby="pending-title">
+          <div className="mb-3 flex items-center justify-between">
+            <h3 id="pending-title" className="text-base font-semibold text-neutral-950">Pendências agora</h3>
+            <Link href="/admin/leads" className="inline-flex min-h-11 items-center text-sm font-medium text-neutral-600 hover:text-neutral-950">
+              Ver leads <ChevronRight className="ml-1 h-4 w-4" />
             </Link>
           </div>
-          <div className="mt-4">
-            <p className="text-2xl font-semibold text-neutral-900">
-              {stats.posts.total}
-            </p>
-            <p className="text-sm text-neutral-500">Posts</p>
-          </div>
-          <div className="mt-4 flex items-center gap-4 text-xs">
-            <span className="flex items-center gap-1 text-green-600">
-              <CheckCircle className="h-3 w-3" />
-              {stats.posts.published} publicados
-            </span>
-            <span className="flex items-center gap-1 text-amber-600">
-              <Clock className="h-3 w-3" />
-              {stats.posts.drafts} rascunhos
-            </span>
-          </div>
-        </Card>}
+          {leadOperations.status === "unavailable" ? (
+            <Card className="border-amber-200 p-4 text-sm text-amber-800">Pendências indisponíveis. {leadOperations.reason}</Card>
+          ) : (
+            <Card className="overflow-hidden border-neutral-200 bg-white">
+              <div className="grid grid-cols-3 divide-x divide-neutral-200">
+                <OperationMetric icon={Inbox} label="Novos" value={leadOperations.data.newCount} />
+                <OperationMetric icon={AlertTriangle} label="Vencidos" value={leadOperations.data.overdueCount} danger={leadOperations.data.overdueCount > 0} />
+                <OperationMetric icon={UserRoundX} label="Sem responsável" value={leadOperations.data.unassignedCount} />
+              </div>
+              {leadOperations.data.nextLeadId && leadOperations.data.nextActionAt && (
+                <Link href={`/admin/leads/${leadOperations.data.nextLeadId}`} className="flex min-h-12 items-center justify-between border-t border-neutral-200 px-4 text-sm hover:bg-neutral-50">
+                  <span className={leadOperations.data.nextActionOverdue ? "font-medium text-red-700" : "text-neutral-700"}>
+                    {leadOperations.data.nextActionOverdue ? "Ação mais atrasada" : "Próxima ação"}: {formatDateTime(leadOperations.data.nextActionAt)}
+                  </span>
+                  <ChevronRight className="h-4 w-4 text-neutral-400" />
+                </Link>
+              )}
+            </Card>
+          )}
+        </section>
+      )}
 
-        {/* Proposals */}
-        {canManageCommercial && <Card className="p-6 hover:shadow-luxury-md transition-shadow">
-          <div className="flex items-center justify-between">
-            <div className="p-2 bg-green-50 rounded-lg">
-              <FileSpreadsheet className="h-5 w-5 text-green-600" />
-            </div>
-            <Link
-              href="/admin/propostas"
-              className="text-neutral-400 hover:text-neutral-600"
-            >
-              <ArrowUpRight className="h-4 w-4" />
-            </Link>
+      <section aria-labelledby="overview-title">
+        <h3 id="overview-title" className="mb-3 text-base font-semibold text-neutral-950">Visão geral</h3>
+        {stats.status === "unavailable" ? (
+          <Card className="border-amber-200 p-4 text-sm text-amber-800">Indicadores indisponíveis. {stats.reason}</Card>
+        ) : (
+          <div className="grid grid-cols-2 gap-px overflow-hidden rounded-lg border border-neutral-200 bg-neutral-200 lg:grid-cols-4">
+            {canReadContent && <SummaryMetric href="/admin/posts" icon={FileText} label="Posts" value={stats.data.posts.total} detail={`${stats.data.posts.drafts} rascunhos`} />}
+            {canManageCommercial && <SummaryMetric href="/admin/propostas" icon={FileSpreadsheet} label="Propostas" value={stats.data.proposals.total} detail={`${stats.data.proposals.pending} pendentes`} />}
+            {canReadContent && <SummaryMetric href="/admin/apresentacoes" icon={Presentation} label="Apresentações" value={stats.data.presentations.total} detail={`${stats.data.presentations.viewed} visualizadas`} />}
+            {canManageCommercial && <SummaryMetric href="/admin/propostas" icon={DollarSign} label="Aprovado" value={`R$ ${(stats.data.proposals.total_value / 1000).toFixed(0)}k`} detail={`${stats.data.proposals.approved} propostas`} />}
           </div>
-          <div className="mt-4">
-            <p className="text-2xl font-semibold text-neutral-900">
-              {stats.proposals.total}
-            </p>
-            <p className="text-sm text-neutral-500">Propostas</p>
-          </div>
-          <div className="mt-4 flex items-center gap-4 text-xs">
-            <span className="flex items-center gap-1 text-amber-600">
-              <Clock className="h-3 w-3" />
-              {stats.proposals.pending} pendentes
-            </span>
-            <span className="flex items-center gap-1 text-green-600">
-              <CheckCircle className="h-3 w-3" />
-              {stats.proposals.approved} aprovadas
-            </span>
-          </div>
-        </Card>}
+        )}
+      </section>
 
-        {/* Presentations */}
-        {canReadContent && <Card className="p-6 hover:shadow-luxury-md transition-shadow">
-          <div className="flex items-center justify-between">
-            <div className="p-2 bg-purple-50 rounded-lg">
-              <Presentation className="h-5 w-5 text-purple-600" />
-            </div>
-            <Link
-              href="/admin/apresentacoes"
-              className="text-neutral-400 hover:text-neutral-600"
-            >
-              <ArrowUpRight className="h-4 w-4" />
-            </Link>
-          </div>
-          <div className="mt-4">
-            <p className="text-2xl font-semibold text-neutral-900">
-              {stats.presentations.total}
-            </p>
-            <p className="text-sm text-neutral-500">Apresentações</p>
-          </div>
-          <div className="mt-4 flex items-center gap-4 text-xs">
-            <span className="flex items-center gap-1 text-blue-600">
-              <TrendingUp className="h-3 w-3" />
-              {stats.presentations.sent} enviadas
-            </span>
-            <span className="flex items-center gap-1 text-purple-600">
-              <Eye className="h-3 w-3" />
-              {stats.presentations.viewed} visualizadas
-            </span>
-          </div>
-        </Card>}
-
-        {/* Revenue (Proposals) */}
-        {canManageCommercial && <Card className="p-6 hover:shadow-luxury-md transition-shadow">
-          <div className="flex items-center justify-between">
-            <div className="p-2 bg-amber-50 rounded-lg">
-              <DollarSign className="h-5 w-5 text-amber-600" />
-            </div>
-          </div>
-          <div className="mt-4">
-            <p className="text-2xl font-semibold text-neutral-900">
-              R$ {(stats.proposals.total_value / 1000).toFixed(0)}k
-            </p>
-            <p className="text-sm text-neutral-500">Em propostas aprovadas</p>
-          </div>
-          <div className="mt-4 flex items-center text-xs text-neutral-500">
-            <CheckCircle className="h-3 w-3 mr-1" />
-            <span>{stats.proposals.approved} propostas aprovadas</span>
-          </div>
-        </Card>}
-      </div>
-
-      {/* Quick actions and recent activity */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Quick actions */}
-        <Card className="p-6 lg:col-span-1">
-          <h3 className="font-semibold text-neutral-900 mb-4">Ações Rápidas</h3>
-          <div className="space-y-2">
-            {canManageContent && <Link href="/admin/posts/new">
-              <Button variant="outline" className="w-full justify-start">
-                <FileText className="h-4 w-4 mr-2" />
-                Novo Post
-              </Button>
-            </Link>}
-            {canManageCommercial && <Link href="/admin/leads">
-              <Button variant="outline" className="w-full justify-start">
-                <Inbox className="h-4 w-4 mr-2" />
-                Operar Leads
-              </Button>
-            </Link>}
-            {canManageCommercial && <Link href="/admin/orcamentos/novo">
-              <Button variant="outline" className="w-full justify-start">
-                <Calculator className="h-4 w-4 mr-2" />
-                Novo Orçamento
-              </Button>
-            </Link>}
-            <Link href="/admin/analytics"><Button variant="outline" className="w-full justify-start"><BarChart3 className="h-4 w-4 mr-2" />Ver Analytics</Button></Link>
-          </div>
-        </Card>
-
-        {/* Recent activity */}
-        <Card className="p-6 lg:col-span-2">
-          <h3 className="font-semibold text-neutral-900 mb-4">
-            Atividade Recente
-          </h3>
-          <div className="space-y-4">
-            {recentActivity.map((activity) => (
+      <section aria-labelledby="activity-title">
+        <h3 id="activity-title" className="mb-3 text-base font-semibold text-neutral-950">Atividade recente</h3>
+        <Card className="divide-y divide-neutral-100 overflow-hidden border-neutral-200">
+          {recentActivity.status === "unavailable" ? (
+            <p className="p-4 text-sm text-amber-800">{recentActivity.reason}</p>
+          ) : recentActivity.data.length === 0 ? (
+            <p className="p-4 text-sm text-neutral-500">Nenhuma atividade registrada ainda.</p>
+          ) : recentActivity.data.map((activity) => (
               <div
                 key={activity.id}
-                className="flex items-center justify-between py-3 border-b border-neutral-100 last:border-0"
+                className="flex items-center justify-between gap-4 px-4 py-3"
               >
-                <div>
+                <div className="min-w-0">
                   <p className="text-sm font-medium text-neutral-900">
                     {activity.action}
                   </p>
-                  <p className="text-sm text-neutral-500">{activity.entity}</p>
+                  <p className="truncate text-xs text-neutral-500">{activity.entity}</p>
                 </div>
-                <span className="text-xs text-neutral-400">{activity.time}</span>
+                <span className="shrink-0 text-xs text-neutral-400">{activity.time}</span>
               </div>
             ))}
-          </div>
         </Card>
-      </div>
+      </section>
     </div>
   );
+}
+
+function OperationMetric({ icon: Icon, label, value, danger = false }: { icon: typeof Inbox; label: string; value: number; danger?: boolean }) {
+  return <div className="min-w-0 px-3 py-4 sm:px-5"><Icon className={`mb-3 h-4 w-4 ${danger ? "text-red-600" : "text-neutral-400"}`} /><strong className={`block text-2xl tabular-nums ${danger ? "text-red-700" : "text-neutral-950"}`}>{value}</strong><span className="mt-1 block text-[11px] leading-tight text-neutral-500 sm:text-xs">{label}</span></div>;
+}
+
+function SummaryMetric({ href, icon: Icon, label, value, detail }: { href: string; icon: typeof Inbox; label: string; value: string | number; detail: string }) {
+  return <Link href={href} className="flex min-h-28 flex-col bg-white p-4 hover:bg-neutral-50"><Icon className="h-4 w-4 text-neutral-400" /><strong className="mt-3 text-xl tabular-nums text-neutral-950">{value}</strong><span className="text-sm text-neutral-700">{label}</span><span className="mt-1 text-xs text-neutral-400">{detail}</span></Link>;
+}
+
+function formatDateTime(value: string): string {
+  return new Intl.DateTimeFormat("pt-BR", { dateStyle: "short", timeStyle: "short", timeZone: "America/Sao_Paulo" }).format(new Date(value));
 }
 
 function getGreeting(): string {

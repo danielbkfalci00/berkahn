@@ -5,6 +5,51 @@ import { createClient } from "@/lib/supabase/server";
 import type { LeadParaFunil } from "./leads-funnel";
 import type { AdminDataResult } from "@/types/analytics";
 
+export interface DashboardLeadOperations {
+  newCount: number;
+  overdueCount: number;
+  unassignedCount: number;
+  nextLeadId: string | null;
+  nextActionAt: string | null;
+  nextActionOverdue: boolean;
+}
+
+const ACTIVE_LEAD_STATUSES = ["novo", "em_contato", "qualificado", "proposta_enviada"] as const;
+
+/** Resumo operacional sem carregar nome, contato, mensagem ou atribuição. */
+export async function getDashboardLeadOperations(): Promise<AdminDataResult<DashboardLeadOperations>> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("leads")
+    .select("id,status,responsavel_id,proxima_acao_em,criado_em")
+    .in("status", [...ACTIVE_LEAD_STATUSES])
+    .is("arquivado_em", null)
+    .is("anonimizado_em", null);
+
+  if (error || !data) {
+    console.error("Falha ao carregar pendencias do dashboard", error);
+    return { status: "unavailable", reason: "Não foi possível consultar o CRM agora." };
+  }
+
+  const now = Date.now();
+  const scheduled = data
+    .filter((lead) => Boolean(lead.proxima_acao_em))
+    .sort((a, b) => new Date(a.proxima_acao_em!).getTime() - new Date(b.proxima_acao_em!).getTime());
+  const next = scheduled[0] ?? null;
+
+  return {
+    status: "ok",
+    data: {
+      newCount: data.filter((lead) => lead.status === "novo").length,
+      overdueCount: scheduled.filter((lead) => new Date(lead.proxima_acao_em!).getTime() < now).length,
+      unassignedCount: data.filter((lead) => !lead.responsavel_id).length,
+      nextLeadId: next?.id ?? null,
+      nextActionAt: next?.proxima_acao_em ?? null,
+      nextActionOverdue: next ? new Date(next.proxima_acao_em!).getTime() < now : false,
+    },
+  };
+}
+
 /**
  * Leads criados dentro do mês, para o funil.
  *

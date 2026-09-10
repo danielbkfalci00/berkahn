@@ -33,10 +33,10 @@ export function Act4Action({ context, posts = [], tasks = [], funilLeads }: Act4
   return (
     <section className="space-y-6" aria-labelledby="act-4-title">
       <div>
-        <h2 id="act-4-title" className="text-2xl font-bold text-neutral-900 tracking-tight">
+        <h2 id="act-4-title" className="text-xl font-bold text-neutral-900 tracking-tight sm:text-2xl">
           Para onde direcionar esforço
         </h2>
-        <p className="text-base text-neutral-600 mt-1">{narrative}</p>
+        <p className="mt-1 text-sm text-neutral-600 sm:text-base">{narrative}</p>
       </div>
       <InsightsList insights={context.insights} />
       <TaskBoard
