@@ -37,7 +37,7 @@ export function MatrizArtigoMes({ matriz }: MatrizArtigoMesProps) {
   }
 
   return (
-    <Card className="bg-white border-neutral-200 p-6">
+    <Card className="bg-white border-neutral-200 p-4 sm:p-6">
       <div className="flex flex-wrap items-baseline justify-between gap-2 mb-1">
         <h3 className="text-sm uppercase tracking-wider font-medium text-neutral-500">
           Acervo mês a mês
@@ -50,13 +50,41 @@ export function MatrizArtigoMes({ matriz }: MatrizArtigoMesProps) {
           dos pageviews do último mês
         </p>
       </div>
-      <p className="text-xs text-neutral-500 mb-4">
+      <p className="hidden text-xs text-neutral-500 mb-4 sm:block">
         Intensidade em escala de raiz sobre o máximo global — a cauda continua
         visível sem achatar o topo.
       </p>
 
-      {/* Wide content rola dentro do próprio container; a página nunca rola na horizontal. */}
-      <div className="overflow-x-auto">
+      <div className="mt-4 space-y-3 md:hidden">
+        {matriz.linhas.slice(0, 5).map((linha) => (
+          <div key={linha.slug} className="flex items-center justify-between gap-3 border-b border-neutral-100 pb-3 text-sm last:border-0">
+            <span className="min-w-0 truncate text-neutral-700">{linha.title}</span>
+            <strong className="shrink-0 tabular-nums text-neutral-950">{linha.total.toLocaleString("pt-BR")}</strong>
+          </div>
+        ))}
+        <details>
+          <summary className="flex min-h-11 cursor-pointer items-center text-sm font-medium text-neutral-700">Ver matriz completa</summary>
+          <div className="max-h-[28rem] overflow-auto">
+            <MatrizTable matriz={matriz} />
+          </div>
+        </details>
+      </div>
+
+      <div className="hidden overflow-x-auto md:block print:block">
+        <MatrizTable matriz={matriz} />
+      </div>
+
+      {matriz.ocultos > 0 && (
+        <p className="text-xs text-neutral-500 mt-3">
+          {matriz.ocultos} {matriz.ocultos === 1 ? "artigo com menos tráfego ficou" : "artigos com menos tráfego ficaram"} fora do corte.
+        </p>
+      )}
+    </Card>
+  );
+}
+
+function MatrizTable({ matriz }: MatrizArtigoMesProps) {
+  return (
         <table className="w-full text-sm border-separate border-spacing-0">
           <caption className="sr-only">
             Pageviews por artigo em cada mês. Células mais escuras indicam mais leituras.
@@ -108,13 +136,5 @@ export function MatrizArtigoMes({ matriz }: MatrizArtigoMesProps) {
             ))}
           </tbody>
         </table>
-      </div>
-
-      {matriz.ocultos > 0 && (
-        <p className="text-xs text-neutral-500 mt-3">
-          {matriz.ocultos} {matriz.ocultos === 1 ? "artigo com menos tráfego ficou" : "artigos com menos tráfego ficaram"} fora do corte.
-        </p>
-      )}
-    </Card>
   );
 }

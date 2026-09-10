@@ -41,7 +41,7 @@ export function HeroMetric({ context, trendPoints }: HeroMetricProps) {
 
   return (
     <Card
-      className="p-6 sm:p-8 bg-[#F4F2EC] border-l-4 print:border-l-2"
+      className="p-4 sm:p-8 bg-[#F4F2EC] border-l-4 print:border-l-2"
       style={{ borderLeftColor: color }}
     >
       <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
@@ -69,7 +69,7 @@ export function HeroMetric({ context, trendPoints }: HeroMetricProps) {
           </div>
 
           <div className="flex items-baseline gap-4 mt-1">
-            <div className="text-6xl font-bold leading-none tabular-nums tracking-tight" style={{ color }}>
+            <div className="text-5xl font-bold leading-none tabular-nums tracking-tight sm:text-6xl" style={{ color }}>
               {health.score}
             </div>
             <div>

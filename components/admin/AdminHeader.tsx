@@ -51,15 +51,15 @@ export function AdminHeader({ membership }: { membership: AdminMembership | null
   const title = getPageTitle(pathname || "");
 
   return (
-    <header data-admin-header className="sticky top-0 z-30 h-16 bg-white border-b border-neutral-200 px-6 flex items-center justify-between">
+    <header data-admin-header className="admin-header sticky top-0 z-30 flex min-h-14 items-center justify-between border-b border-neutral-200 bg-white px-4 pt-[env(safe-area-inset-top)] sm:min-h-16 sm:px-6">
       <div className="flex items-center gap-4">
-        <h1 className="text-xl font-semibold text-neutral-900 lg:ml-0 ml-12">
+        <h1 className="text-lg font-semibold text-neutral-900 sm:text-xl">
           {title}
         </h1>
       </div>
 
       <div className="flex items-center gap-2">
-        <Button asChild variant="ghost" size="icon" className="text-neutral-600">
+        <Button asChild variant="ghost" size="icon" className="min-h-11 min-w-11 text-neutral-600">
           <Link href="/admin/configuracoes#notificacoes" aria-label="Configurar notificações"><Bell className="h-5 w-5" /></Link>
         </Button>
         <Button asChild variant="ghost" className="hidden gap-2 text-neutral-600 sm:inline-flex">

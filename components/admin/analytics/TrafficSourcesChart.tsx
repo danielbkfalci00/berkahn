@@ -74,7 +74,7 @@ export function TrafficSourcesChart({ data }: TrafficSourcesChartProps) {
   const chartData = consolidated.slice(0, 10);
 
   return (
-    <Card className="p-6 bg-white border-neutral-200">
+    <Card className="bg-white p-4 sm:p-6 border-neutral-200">
       <div className="flex items-center gap-2 mb-4">
         <h3 className="text-sm uppercase tracking-wider font-medium text-neutral-500">
           Top fontes de tráfego
@@ -95,8 +95,21 @@ export function TrafficSourcesChart({ data }: TrafficSourcesChartProps) {
           }
         />
       </div>
+      <div className="space-y-3 md:hidden" role="list" aria-label="Cinco principais fontes de tráfego">
+        {chartData.slice(0, 5).map((source) => (
+          <div key={source.name} role="listitem">
+            <div className="mb-1 flex items-baseline justify-between gap-3 text-sm">
+              <span className="min-w-0 truncate text-neutral-700">{source.name}</span>
+              <strong className="shrink-0 tabular-nums text-neutral-950">{source.sessions.toLocaleString("pt-BR")}</strong>
+            </div>
+            <div className="h-1.5 overflow-hidden rounded-full bg-neutral-100">
+              <div className="h-full rounded-full" style={{ width: `${Math.max(2, source.pct)}%`, backgroundColor: source.isAi ? AI_COLOR : DEFAULT_COLOR }} />
+            </div>
+          </div>
+        ))}
+      </div>
       <div
-        className="h-72"
+        className="hidden h-64 md:block lg:h-72"
         role="img"
         aria-label="Top fontes de tráfego com IAs consolidadas"
       >
@@ -155,7 +168,7 @@ export function TrafficSourcesChart({ data }: TrafficSourcesChartProps) {
         </ResponsiveContainer>
       </div>
       {aiSources.length > 0 && (
-        <p className="text-xs text-neutral-500 mt-3">
+        <p className="mt-4 text-xs text-neutral-500">
           IAs consolidadas: {aiBreakdown.byAi.map((a) => `${a.name} ${a.users}`).join(" · ")}
         </p>
       )}
