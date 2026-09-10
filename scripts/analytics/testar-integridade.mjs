@@ -112,6 +112,10 @@ const manifest = JSON.parse(readFileSync('public/admin/manifest.webmanifest', 'u
 ok('PWA admin abre dashboard', manifest.id === '/admin/' && manifest.start_url === '/admin' && manifest.scope === '/admin/');
 const nextConfig = readFileSync('next.config.ts', 'utf8');
 ok('manifest tem MIME explicito', nextConfig.includes('application/manifest+json; charset=utf-8'));
+const proxy = readFileSync('proxy.ts', 'utf8');
+const manifestBypass = proxy.indexOf('pathname === "/admin/manifest.webmanifest"');
+const adminAuth = proxy.indexOf('pathname.startsWith("/admin") || pathname.startsWith("/api/admin")');
+ok('manifest passa antes da autenticacao', manifestBypass >= 0 && manifestBypass < adminAuth);
 const analyticsContent = readFileSync('app/admin/analytics/AnalyticsContent.tsx', 'utf8');
 ok('URL direto nao forca comparativo invalido', analyticsContent.includes('comparisonMode && previousSnapshot && !comparisonDisabled'));
 
