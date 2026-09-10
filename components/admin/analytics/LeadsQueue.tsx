@@ -32,7 +32,7 @@ import {
 } from "@/app/admin/leads/actions";
 import { createClient } from "@/lib/supabase/client";
 import type {
-  AnalyticsLead, LeadArtifact, LeadPriority, LeadResponsible, LeadStatus,
+  AdminDataResult, AnalyticsLead, LeadArtifact, LeadPriority, LeadResponsible, LeadStatus,
 } from "@/types/analytics";
 
 const STATUS: Array<{ value: LeadStatus; label: string }> = [
@@ -73,7 +73,7 @@ interface LeadsQueueProps {
   total: number;
   page: number;
   pageCount: number;
-  kpis: LeadKpis;
+  kpis: AdminDataResult<LeadKpis>;
   responsibles: LeadResponsible[];
   view: "inbox" | "kanban";
 }
@@ -171,7 +171,8 @@ export function LeadsQueue({ initialLeads, total, page, pageCount, kpis, respons
     });
   }
 
-  const qualificationRate = kpis.eligible ? Math.round((kpis.qualified / kpis.eligible) * 100) : null;
+  const kpiData = kpis.status === "ok" ? kpis.data : null;
+  const qualificationRate = kpiData?.eligible ? Math.round((kpiData.qualified / kpiData.eligible) * 100) : null;
 
   return (
     <div className="space-y-6">
@@ -190,12 +191,18 @@ export function LeadsQueue({ initialLeads, total, page, pageCount, kpis, respons
       </div>
 
       <div className="flex flex-wrap items-center gap-x-6 gap-y-2 border-y border-neutral-300 py-3 text-sm">
-        <Metric label="Recebidos · 28d" value={kpis.received} />
-        <Metric label="Novos" value={kpis.new} />
-        <Metric label="Qualificados" value={kpis.qualified} />
-        <Metric label="Convertidos" value={kpis.converted} />
+        <Metric label="Recebidos · 28d" value={kpiData?.received ?? "—"} />
+        <Metric label="Novos" value={kpiData?.new ?? "—"} />
+        <Metric label="Qualificados" value={kpiData?.qualified ?? "—"} />
+        <Metric label="Convertidos" value={kpiData?.converted ?? "—"} />
         <Metric label="Taxa" value={qualificationRate === null ? "—" : `${qualificationRate}%`} />
       </div>
+
+      {kpis.status === "unavailable" && (
+        <p role="alert" className="rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-800">
+          Indicadores indisponíveis. {kpis.reason} A lista de leads foi carregada separadamente.
+        </p>
+      )}
 
       <div className="flex items-center gap-1 border-b border-neutral-200" aria-label="Visualização dos leads">
         <ViewTab href={withView(searchParams, "inbox")} active={view === "inbox"}><LayoutList className="h-4 w-4" /> Inbox</ViewTab>

@@ -1,6 +1,7 @@
 // Queries server-side para o /admin/analytics dashboard
 import "server-only";
 import { createClient } from "@/lib/supabase/server";
+import { applySnapshotComparisonPolicy } from "@/lib/analytics/comparability";
 import type {
   AnalyticsSnapshot,
   PostMeta,
@@ -36,7 +37,7 @@ export async function getSnapshot(monthSlug: string): Promise<AnalyticsSnapshot 
     .single();
 
   if (error || !data) return null;
-  return data as AnalyticsSnapshot;
+  return applySnapshotComparisonPolicy(data as AnalyticsSnapshot);
 }
 
 /**
@@ -58,7 +59,7 @@ export async function getMultipleSnapshots(months: string[]): Promise<AnalyticsS
     .order("month", { ascending: true }); // crescente para trends
 
   if (error || !data) return [];
-  return data as AnalyticsSnapshot[];
+  return (data as AnalyticsSnapshot[]).map(applySnapshotComparisonPolicy);
 }
 
 /**

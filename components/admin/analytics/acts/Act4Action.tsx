@@ -9,13 +9,13 @@ import { FunilLeads } from "../FunilLeads";
 import { narrativeAct4Action } from "@/lib/analytics/narrative";
 import { countByStatus, findBestPost } from "@/lib/analytics/post-performance";
 import type { FunilLeads as Funil } from "@/lib/analytics/leads-funnel";
-import type { AnalyticsTask, PostPerformance, SnapshotContext } from "@/types/analytics";
+import type { AdminDataResult, AnalyticsTask, PostPerformance, SnapshotContext } from "@/types/analytics";
 
 interface Act4ActionProps {
   context: SnapshotContext;
   posts?: PostPerformance[];
   tasks?: AnalyticsTask[];
-  funilLeads: Funil;
+  funilLeads: AdminDataResult<Funil>;
 }
 
 export function Act4Action({ context, posts = [], tasks = [], funilLeads }: Act4ActionProps) {

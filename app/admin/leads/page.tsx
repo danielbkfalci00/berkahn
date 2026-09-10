@@ -1,6 +1,6 @@
 import { LeadsQueue, type LeadKpis } from "@/components/admin/analytics/LeadsQueue";
 import { createClient } from "@/lib/supabase/server";
-import type { AnalyticsLead, LeadChannel, LeadPriority, LeadResponsible, LeadSegment, LeadStatus } from "@/types/analytics";
+import type { AdminDataResult, AnalyticsLead, LeadChannel, LeadPriority, LeadResponsible, LeadSegment, LeadStatus } from "@/types/analytics";
 
 export const dynamic = "force-dynamic";
 
@@ -98,7 +98,7 @@ export default async function LeadsPage({ searchParams }: PageProps) {
   );
 }
 
-async function getLeadKpis(): Promise<LeadKpis> {
+async function getLeadKpis(): Promise<AdminDataResult<LeadKpis>> {
   const supabase = await createClient();
   const since = new Date();
   since.setUTCDate(since.getUTCDate() - 28);
@@ -108,14 +108,20 @@ async function getLeadKpis(): Promise<LeadKpis> {
     .gte("criado_em", since.toISOString())
     .is("arquivado_em", null)
     .is("anonimizado_em", null);
-  if (error || !data) return { received: 0, new: 0, qualified: 0, converted: 0, eligible: 0 };
+  if (error || !data) {
+    console.error("Falha ao carregar KPIs de leads", error);
+    return { status: "unavailable", reason: "Não foi possível consultar os indicadores do CRM agora." };
+  }
 
   const statuses = data.map((lead) => lead.status as LeadStatus);
   return {
-    received: statuses.length,
-    new: statuses.filter((status) => status === "novo").length,
-    qualified: data.filter((lead) => Boolean(lead.qualificado_em)).length,
-    converted: data.filter((lead) => Boolean(lead.convertido_em)).length,
-    eligible: statuses.length,
+    status: "ok",
+    data: {
+      received: statuses.length,
+      new: statuses.filter((status) => status === "novo").length,
+      qualified: data.filter((lead) => Boolean(lead.qualificado_em)).length,
+      converted: data.filter((lead) => Boolean(lead.convertido_em)).length,
+      eligible: statuses.length,
+    },
   };
 }

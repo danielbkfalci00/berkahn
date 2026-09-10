@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Printer, SplitSquareHorizontal, X } from "lucide-react";
 import { PeriodSelect } from "./PeriodSelect";
 import { cn } from "@/lib/utils";
+import type { SnapshotSourceProvenance } from "@/types/analytics";
 
 interface AnalyticsHeaderProps {
   monthLabel: string;
@@ -22,6 +23,13 @@ interface AnalyticsHeaderProps {
   isPartial?: boolean;
   daysCovered?: number;
   daysInMonth?: number;
+  generatedAt: string;
+  comparabilityReason?: string;
+  sources?: {
+    ga4: SnapshotSourceProvenance;
+    gsc: SnapshotSourceProvenance;
+    indexation: SnapshotSourceProvenance;
+  };
 }
 
 export function AnalyticsHeader({
@@ -36,6 +44,9 @@ export function AnalyticsHeader({
   isPartial = false,
   daysCovered,
   daysInMonth,
+  generatedAt,
+  comparabilityReason,
+  sources,
 }: AnalyticsHeaderProps) {
   const router = useRouter();
   const pathname = usePathname();
@@ -52,8 +63,9 @@ export function AnalyticsHeader({
   };
 
   return (
-    <div className="flex items-end justify-between gap-4 flex-wrap pb-6 border-b border-neutral-200 print:pb-3 print:mb-4">
-      <div>
+    <div className="space-y-4 pb-6 border-b border-neutral-200 print:pb-3 print:mb-4">
+      <div className="flex items-end justify-between gap-4 flex-wrap">
+        <div>
         <p className="text-xs uppercase tracking-[0.2em] font-semibold text-neutral-500 mb-1">
           Performance Berkahn
         </p>
@@ -79,9 +91,9 @@ export function AnalyticsHeader({
             </span>
           )}
         </p>
-      </div>
+        </div>
 
-      <div className="flex items-center gap-2 print:hidden flex-wrap">
+        <div className="flex items-center gap-2 print:hidden flex-wrap">
         <PeriodSelect availableMonths={availableMonths} currentMonth={currentMonth} />
         <Button
           variant={comparisonMode ? "default" : "outline"}
@@ -107,6 +119,28 @@ export function AnalyticsHeader({
           <Printer className="h-4 w-4 mr-2" />
           Exportar PDF
         </Button>
+        </div>
+      </div>
+
+      {comparabilityReason && (
+        <p role="note" className="rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-900">
+          Comparação GA4 indisponível: {comparabilityReason} Métricas absolutas e comparações do Search Console permanecem válidas.
+        </p>
+      )}
+
+      <div className="flex flex-wrap gap-x-5 gap-y-1 text-xs text-neutral-500">
+        {(["ga4", "gsc", "indexation"] as const).map((key) => {
+          const source = sources?.[key];
+          const label = { ga4: "GA4", gsc: "Search Console", indexation: "Indexação" }[key];
+          return (
+            <span key={key}>
+              <strong className="font-medium text-neutral-700">{label}</strong>{" "}
+              {source
+                ? `disponível · dados até ${source.dataThrough}${source.lagDays != null ? ` · lag ${source.lagDays}d` : ""}${source.origin === "fixture" ? " · cache" : ""}`
+                : `snapshot legado · atualizado em ${generatedAt}`}
+            </span>
+          );
+        })}
       </div>
     </div>
   );

@@ -1,7 +1,7 @@
 ---
 tipo: context
 criado: 2025-12-01
-atualizado: 2026-08-27
+atualizado: 2026-09-10
 tags:
   - ai/context
   - project/site
@@ -208,7 +208,7 @@ O `proxy.ts` bloqueia rotas incompatíveis antes da renderização; RLS e RPCs r
 
 Arquivos de até 6 MB (`PDF`, `DOCX`, `XLSX`, `JPEG`, `PNG`, `WebP`) usam upload assinado direto ao bucket privado `lead-files`; o arquivo não atravessa a função Vercel. Arquivos grandes e pastas permanecem no Drive e entram como URL HTTPS. O Drive não é duplicado nem sincronizado automaticamente. Ao anonimizar, links externos são removidos e objetos privados entram em `lead_storage_cleanup` até a Edge Function confirmar a exclusão.
 
-A PWA do admin usa `/admin/manifest.webmanifest` e `/admin-sw.js`, sem cachear telas ou PII. A tela de configurações oferece instalação quando o navegador expõe `beforeinstallprompt` e orientação manual no iPhone. Cada usuário escolhe os tipos de alerta e cada dispositivo opta separadamente por Web Push. A outbox `lead_notification_outbox` recebe apenas título, texto, URL genérica e tag; não contém nome, contato ou UUID do lead. Novos contatos e próximas ações vencidas são deduplicados. As chaves abaixo foram configuradas nos dois projetos Vercel em 2026-08-14:
+A PWA do admin usa o manifesto estático `public/admin/manifest.webmanifest`, servido em `/admin/manifest.webmanifest`, com `id: /admin/`, `scope: /admin/` e `start_url: /admin`. O manifesto público continua separado e abre `/`. Instalações anteriores precisam ser removidas e instaladas novamente para o sistema operacional incorporar o novo identificador e destino. O `/admin-sw.js` permanece exclusivo para push, sem cachear telas ou PII. A tela de configurações oferece instalação quando o navegador expõe `beforeinstallprompt` e orientação manual no iPhone. Cada usuário escolhe os tipos de alerta e cada dispositivo opta separadamente por Web Push. A outbox `lead_notification_outbox` recebe apenas título, texto, URL genérica e tag; não contém nome, contato ou UUID do lead. Novos contatos e próximas ações vencidas são deduplicados. As chaves abaixo foram configuradas nos dois projetos Vercel em 2026-08-14:
 
 ```text
 NEXT_PUBLIC_VAPID_PUBLIC_KEY
@@ -221,7 +221,7 @@ O mesmo `LEAD_PUSH_CRON_SECRET` está no Supabase Vault como `lead_push_cron_sec
 
 ### Analytics mensal hospedado
 
-`.github/workflows/analytics-monthly.yml` executa no dia 4 de cada mês, às 12:00 UTC, quando o mês anterior já está fechado e o atraso do GSC foi absorvido. O workflow reutiliza `scripts/analytics/generate-report.mjs`, grava `analytics_snapshots` no Supabase e também aceita disparo manual com `month=AAAA-MM`. OAuth pode vir dos arquivos locais ou dos segredos JSON `GOOGLE_OAUTH_CLIENT_JSON` e `GOOGLE_OAUTH_TOKENS_JSON`; o job também exige `GA4_PROPERTY_ID`, `GSC_SITE_URL`, `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` e `SUPABASE_SERVICE_KEY`. Uma falha deixa o workflow vermelho e não depende de tarefa local, computador ligado ou worktree persistente.
+`.github/workflows/analytics-monthly.yml` executa toda quarta-feira às 12:00 UTC para atualizar o mês corrente como parcial, com janela equivalente e lag do GSC. No dia 4 às 12:00 UTC executa também o fechamento oficial do mês anterior. A concorrência é serializada por workflow. O job reutiliza `scripts/analytics/generate-report.mjs`, grava `analytics_snapshots` no Supabase e aceita disparo manual com `month=AAAA-MM`; se o mês solicitado for o corrente, o script marca automaticamente como parcial. OAuth vem dos segredos JSON `GOOGLE_OAUTH_CLIENT_JSON` e `GOOGLE_OAUTH_TOKENS_JSON`; o job também exige `GA4_PROPERTY_ID`, `GSC_SITE_URL`, `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` e `SUPABASE_SERVICE_KEY`. Uma falha deixa o workflow vermelho e não depende de tarefa local, computador ligado ou worktree persistente.
 
 Orçamentos e propostas têm `lead_id`. “Criar orçamento” abre o wizard existente com contato e vínculo preenchidos; salvar rascunho não move o funil e finalizar somente registra atividade. O módulo de propostas continua placeholder.
 

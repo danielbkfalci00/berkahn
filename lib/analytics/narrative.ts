@@ -11,6 +11,10 @@ function pctFmt(n: number | undefined): string {
   return `${n >= 0 ? "+" : ""}${n.toFixed(0)}%`;
 }
 
+function absPctFmt(n: number): string {
+  return `${Math.abs(n).toFixed(0)}%`;
+}
+
 function intFmt(n: number): string {
   return n.toLocaleString("pt-BR");
 }
@@ -38,18 +42,23 @@ export function narrativeAct1Growth(ctx: SnapshotContext): string {
   const usersMoM = ctx.ga4.usersMoMPct;
   const clicksMoM = ctx.gsc.clicksMoMPct;
   const topArea = ctx.ga4.byArea[0];
+  const parts: string[] = [];
 
-  if (usersMoM === undefined || clicksMoM === undefined) {
-    return `${intFmt(ctx.ga4.users)} usuários neste mês.`;
+  if (usersMoM === undefined) {
+    parts.push(`${intFmt(ctx.ga4.users)} usuários no GA4, sem comparação mensal válida`);
+  } else {
+    const direction = usersMoM >= 0 ? "cresceu" : "caiu";
+    parts.push(`Tráfego ${direction} ${absPctFmt(usersMoM)} vs mês anterior`);
   }
 
-  const direction = usersMoM >= 0 ? "cresceu" : "caiu";
-  const searchDirection = clicksMoM >= 0 ? "subiu" : "caiu";
-  let text = `Tráfego ${direction} ${pctFmt(Math.abs(usersMoM))} e search ${searchDirection} ${pctFmt(Math.abs(clicksMoM))} vs mês anterior`;
+  if (clicksMoM !== undefined) {
+    const searchDirection = clicksMoM >= 0 ? "subiu" : "caiu";
+    parts.push(`Search ${searchDirection} ${absPctFmt(clicksMoM)} vs mês anterior`);
+  }
   if (topArea) {
-    text += `. ${topArea.area} concentra ${topArea.pctOfTotal}% dos pageviews`;
+    parts.push(`${topArea.area} concentra ${topArea.pctOfTotal}% dos pageviews`);
   }
-  return text + ".";
+  return parts.join(". ") + ".";
 }
 
 export function narrativeAct2Origin(ctx: SnapshotContext): string {
@@ -235,5 +244,5 @@ export function detectRedFlag(ctx: SnapshotContext): string | null {
 
   candidates.sort((a, b) => a.pct - b.pct);
   const worst = candidates[0];
-  return `${worst.label} caiu ${pctFmt(Math.abs(worst.pct))} (${worst.absolute})`;
+  return `${worst.label} caiu ${absPctFmt(worst.pct)} (${worst.absolute})`;
 }

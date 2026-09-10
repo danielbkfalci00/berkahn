@@ -1,17 +1,20 @@
-name: Analytics Monthly
+name: Analytics snapshots
 
 on:
   schedule:
+    # Tendência provisória do mês corrente, com lag do GSC e janela equivalente.
+    - cron: "0 12 * * 3"
+    # Fechamento oficial do mês anterior.
     - cron: "0 12 4 * *"
   workflow_dispatch:
     inputs:
       month:
-        description: "Mês fechado opcional (AAAA-MM)"
+        description: "Mês opcional (AAAA-MM); o mês corrente vira parcial automaticamente"
         required: false
         type: string
 
 concurrency:
-  group: analytics-monthly
+  group: analytics-snapshots
   cancel-in-progress: false
 
 jobs:
@@ -30,6 +33,7 @@ jobs:
       GOOGLE_OAUTH_CLIENT_JSON: ${{ secrets.GOOGLE_OAUTH_CLIENT_JSON }}
       GOOGLE_OAUTH_TOKENS_JSON: ${{ secrets.GOOGLE_OAUTH_TOKENS_JSON }}
       REQUESTED_MONTH: ${{ inputs.month }}
+      SCHEDULE_KIND: ${{ github.event.schedule }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -37,9 +41,10 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      - name: Generate closed-month snapshot
+      - name: Generate analytics snapshot
         shell: bash
         run: |
           args=()
           if [[ -n "$REQUESTED_MONTH" ]]; then args+=(--month "$REQUESTED_MONTH"); fi
+          if [[ "$SCHEDULE_KIND" == "0 12 * * 3" ]]; then args+=(--partial); fi
           node scripts/analytics/generate-report.mjs "${args[@]}"

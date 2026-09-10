@@ -1,6 +1,13 @@
 // Busca metadados de posts publicados no Supabase para enriquecer relatório
 
 import https from 'node:https';
+import exclusions from '../../../lib/seo/indexation-exclusions.json' with { type: 'json' };
+
+const INDEXATION_EXCLUSIONS = new Set([...exclusions.thinContent, ...exclusions.redirected]);
+
+export function isIndexationEligibleSlug(slug) {
+  return Boolean(slug) && !INDEXATION_EXCLUSIONS.has(slug);
+}
 
 const SUPABASE_HOST = 'sfqaknxomxwmviarpwfy.supabase.co';
 
@@ -98,5 +105,7 @@ export async function enrichRowsWithTitle(rows, slugKey = 'slug') {
 
 export async function getAllPostUrls(base = 'https://www.berkahn.com.br') {
   const map = await getPublishedPostsMap();
-  return Array.from(map.keys()).map((slug) => `${base}/atualidades/${slug}`);
+  return Array.from(map.keys())
+    .filter(isIndexationEligibleSlug)
+    .map((slug) => `${base}/atualidades/${slug}`);
 }

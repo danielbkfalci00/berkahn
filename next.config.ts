@@ -88,6 +88,13 @@ const nextConfig: NextConfig = {
   async headers() {
     return [
       {
+        source: "/admin/manifest.webmanifest",
+        headers: [
+          { key: "Content-Type", value: "application/manifest+json; charset=utf-8" },
+          { key: "Cache-Control", value: "no-cache, must-revalidate" },
+        ],
+      },
+      {
         source: "/admin-sw.js",
         headers: [
           { key: "Cache-Control", value: "no-cache, no-store, must-revalidate" },

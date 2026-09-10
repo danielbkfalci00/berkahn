@@ -12,6 +12,7 @@ import {
   type HealthScoreBreakdown,
 } from "@/lib/analytics/health-score";
 import type { SnapshotContext, TrendPoint } from "@/types/analytics";
+import { comparisonAvailability } from "@/lib/analytics/comparability";
 
 interface HeroMetricProps {
   context: SnapshotContext;
@@ -29,6 +30,8 @@ export function HeroMetric({ context, trendPoints }: HeroMetricProps) {
   const health: HealthScoreBreakdown = computeHealthScore(context);
   const color = statusColor(health.status);
   const label = statusLabel(health.status);
+  const comparability = comparisonAvailability(context);
+  const pct = (weight: number) => `${Math.round(weight * 100)}%`;
 
   // Sparkline: score histórico não temos ainda — usamos users como proxy
   const usersTrend = trendPoints.map((p) => p.users);
@@ -52,10 +55,10 @@ export function HeroMetric({ context, trendPoints }: HeroMetricProps) {
                   <p className="font-semibold text-neutral-900">Health Score 0-100</p>
                   <p>Resume a saúde do projeto no mês a partir de 4 componentes:</p>
                   <ul className="space-y-1 pl-3 list-disc">
-                    <li>Indexação Google (30%)</li>
-                    <li>Crescimento de users MoM (30%)</li>
-                    <li>Crescimento de cliques GSC MoM (20%)</li>
-                    <li>Engagement rate atual (20%)</li>
+                    <li>Indexação Google ({pct(health.weights.indexation)})</li>
+                    {health.components.usersGrowth.available && <li>Crescimento de users MoM ({pct(health.weights.usersGrowth)})</li>}
+                    <li>Crescimento de cliques GSC MoM ({pct(health.weights.clicksGrowth)})</li>
+                    <li>Engagement rate atual ({pct(health.weights.engagementRate)})</li>
                   </ul>
                   <p className="text-neutral-600 pt-1">
                     80+ excelente · 60-80 bom · 40-60 atenção · &lt;40 crítico
@@ -83,9 +86,7 @@ export function HeroMetric({ context, trendPoints }: HeroMetricProps) {
               <strong className="text-neutral-900">{health.components.indexation.raw}</strong>
             </span>
             <span>
-              Users {context.ga4.usersMoMText && (
-                <strong className="text-neutral-900">{context.ga4.usersMoMText}</strong>
-              )}
+              Users <strong className="text-neutral-900">{health.components.usersGrowth.raw}</strong>
             </span>
             <span>
               Cliques {context.gsc.clicksMoMText && (
@@ -99,7 +100,7 @@ export function HeroMetric({ context, trendPoints }: HeroMetricProps) {
           </div>
         </div>
 
-        {usersTrend.length > 1 && (
+        {usersTrend.length > 1 && comparability.ga4MoM && (
           <div className="w-full lg:w-64 lg:flex-shrink-0">
             <div className="flex items-center gap-2 text-xs uppercase tracking-wider text-neutral-500 mb-2">
               <TrendIcon className="h-3.5 w-3.5" strokeWidth={2} style={{ color: trendColor }} />
