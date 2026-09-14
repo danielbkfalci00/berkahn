@@ -51,14 +51,14 @@ const galleryImages = [
   img(4, "Chalé A-frame em Light Steel Frame, vista lateral ao entardecer"), // 24 • chalé (mantido)
   img(47, "Detalhe estrutural em Light Steel Frame (perfil galvanizado SMART G90) durante a obra"), // 25 • NOVO
   img(42), // 26 • vista aérea da estrutura na cidade
-  img(31), // 27 • garagem com forro estrutural
+  img(49, "Estrutura híbrida em aço galvanizado e madeira laminada durante a execução — residência Berkahn"), // 27 • obra real, canteiro limpo
   { src: `${SUPABASE_STORAGE}/expansao-jardim-europa.mp4`, alt: "Expansão Jardim Europa" }, // 28 • VÍDEO 2
   img(1, "Chalé A-frame em Light Steel Frame com fechamento em madeira e estrutura aparente"), // 29 • chalé (mantido)
   img(48, "Beiral em madeira sobre estrutura de aço galvanizado — execução em Light Steel Frame"), // 30 • NOVO
   img(19), // 31 • interior drywall
   img(21), // 32 • drywall interior
   img(29), // 33 • lã de vidro isolamento
-  img(32), // 34 • drywall com pessoa
+  img(50, "Vão em Light Steel Frame sob vigas de madeira, com vista para o entorno — residência Berkahn"), // 34 • obra real, canteiro limpo
   img(20), // 35 • lã de vidro isolamento
 
   // ── Lateral esquerda imediata ────────────────────────────────
