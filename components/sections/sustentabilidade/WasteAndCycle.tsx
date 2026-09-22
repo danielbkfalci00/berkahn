@@ -14,7 +14,11 @@ export function ImpactJourney() {
       if (!root) return;
 
       const mm = gsap.matchMedia();
-      mm.add("(min-width: 1200px) and (prefers-reduced-motion: no-preference)", () => {
+      // Mesmo motivo do recorte da parede: a coluna sticky de imagens só existe
+      // a partir do `xl` do Tailwind, então o portão precisa casar com ele. Abaixo
+      // disso o movimento apagava os passos para 42% sem a troca de imagem que
+      // justifica o apagamento.
+      mm.add("(min-width: 1280px) and (prefers-reduced-motion: no-preference)", () => {
         const images = gsap.utils.toArray<HTMLElement>("[data-site-image]", root);
         const steps = gsap.utils.toArray<HTMLElement>("[data-site-step]", root);
         if (images.length !== steps.length) return;

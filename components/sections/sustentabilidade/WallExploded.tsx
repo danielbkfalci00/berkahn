@@ -21,7 +21,10 @@ export function WallExploded() {
       if (!root) return;
 
       const mm = gsap.matchMedia();
-      mm.add("(min-width: 1200px) and (min-height: 680px) and (prefers-reduced-motion: no-preference)", () => {
+      // 1280px é o `xl` do Tailwind, que é onde a cena 3D deixa de ser `hidden`.
+      // Com o portão em 1200px, a faixa de 1200 a 1279 ganhava os 225vh de track
+      // com a cena escondida: duas telas e um quarto de rolagem morta.
+      mm.add("(min-width: 1280px) and (min-height: 680px) and (prefers-reduced-motion: no-preference)", () => {
         const track = root.querySelector<HTMLElement>("[data-wall-track]");
         const sticky = root.querySelector<HTMLElement>("[data-wall-sticky]");
         const container = root.querySelector<HTMLElement>("[data-wall-container]");
