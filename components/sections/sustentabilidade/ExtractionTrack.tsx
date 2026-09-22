@@ -25,10 +25,15 @@ export function ExtractionTrack() {
 
         const timeline = gsap.timeline({
           defaults: { ease: "none" },
+          // A troca acontece num trecho curto, logo depois de a foto grudar:
+          // começa com a mata inteira quando o "~50%" ainda está na tela e
+          // termina uma tela e pouco depois. Espalhada pela coluna inteira
+          // (mais de três telas), a mata já tinha perdido 22% ao grudar e a
+          // troca passava sem ser vista.
           scrollTrigger: {
             trigger: track,
-            start: "top 75%",
-            end: "bottom 35%",
+            start: "top -25%",
+            end: "top -140%",
             scrub: 0.45,
           },
         });
