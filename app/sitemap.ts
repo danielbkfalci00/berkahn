@@ -46,6 +46,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE_URL}/comercial-industrial`, lastModified: new Date('2026-03-01'), changeFrequency: "monthly", priority: 0.9 },
     { url: `${BASE_URL}/lsf`, lastModified: new Date('2026-03-01'), changeFrequency: "monthly", priority: 0.8 },
     { url: `${BASE_URL}/servicos`, lastModified: new Date('2026-03-01'), changeFrequency: "monthly", priority: 0.8 },
+    { url: `${BASE_URL}/sustentabilidade`, lastModified: new Date('2026-09-05'), changeFrequency: "monthly", priority: 0.8 },
     {
       url: `${BASE_URL}/atualidades`,
       ...(ultimaPublicacao ? { lastModified: new Date(ultimaPublicacao) } : {}),

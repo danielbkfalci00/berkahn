@@ -10,12 +10,15 @@ import { Button } from "@/components/ui/button";
 
 interface HeaderProps {
   variant?: 'default' | 'orcamento' | 'overlay';
+  /** Fim do hero em multiplos do viewport. Ver useHeaderScroll. */
+  heroEndFactor?: number;
   projectName?: string;
   onDownloadPDF?: () => void;
 }
 
 export function Header({
   variant = 'default',
+  heroEndFactor,
   projectName,
   onDownloadPDF
 }: HeaderProps = {}) {
@@ -24,7 +27,7 @@ export function Header({
   // Overlay: o hero da home é pinado (runway de 260vh) — o flip para sólido
   // acontece no fim do runway, não no fim do primeiro viewport.
   const { isScrolled, isPastHero, isPastHeroEnd } = useHeaderScroll({
-    heroEndFactor: variant === 'overlay' ? 1.55 : 0.92,
+    heroEndFactor: heroEndFactor ?? (variant === 'overlay' ? 1.55 : 0.92),
   });
 
   const isOverlay = variant === 'overlay';
