@@ -113,7 +113,7 @@ export function Segments() {
                 src={segment.image}
                 alt={segment.imageAlt}
                 fill
-                quality={82}
+                quality={80}
                 sizes="(min-width: 768px) max(62vw, 148vh), 121vh"
                 className={`object-cover transition-transform duration-1000 ease-expo group-hover:scale-[1.04] motion-reduce:transition-none ${segment.focus}`}
               />
