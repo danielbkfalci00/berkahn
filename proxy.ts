@@ -33,6 +33,19 @@ export async function proxy(request: NextRequest) {
     return NextResponse.next();
   }
 
+  // O manifest do PWA precisa passar sem sessão.
+  //
+  // O navegador busca manifest com `credentials: "omit"` por padrão — não manda
+  // o cookie da sessão nem quando o usuário está logado. Passando pelo gate,
+  // ele tomava 307 para /admin/login, o parse falhava, e o Chrome caía no
+  // /manifest.json do site público, cujo start_url é "/". Era por isso que o
+  // atalho na tela de início abria a home em vez do painel.
+  //
+  // Liberar não expõe nada: o manifest só tem nome, cores, ícones e start_url.
+  if (pathname === "/admin/manifest.webmanifest") {
+    return NextResponse.next();
+  }
+
   // Redirect root to /admin when accessing via admin subdomain
   if (hostname.startsWith("admin.") && pathname === "/") {
     return NextResponse.redirect(new URL("/admin", request.url));
