@@ -151,10 +151,12 @@ export const IMPACT_SECTION: ImpactSection = {
       id: "cidade",
       audience: "para o terreno e a cidade",
       image: {
-        src: "/images/Home/lsf-estrutura.webp",
-        alt: "Esqueleto de Light Steel Frame de uma casa montado sobre o radier, com montantes e tesouras de aço galvanizado",
+        // Outra foto que a da seção de LSF logo acima (lsf-estrutura), que
+        // aparecia duas vezes seguidas na home.
+        src: "/images/Services/servicos-structure.webp",
+        alt: "Estrutura de aço galvanizado de uma casa de dois pavimentos em montagem",
       },
-      claim: "O aço volta para a siderúrgica, não para o entulho.",
+      claim: "No fim da vida da casa, o aço volta para a siderúrgica.",
       hero: {
         to: 100,
         unit: "%",
