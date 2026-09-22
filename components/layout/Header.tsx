@@ -80,8 +80,8 @@ export function Header({ variant = "default", heroEndFactor }: HeaderProps = {})
                 altura e opacidade para a marca subir e descer sem pulo. */}
             <span
               className={cn(
-                "overflow-hidden whitespace-nowrap font-heading text-[8px] uppercase tracking-[0.2em] text-black-50 transition-all duration-300 ease-expo",
-                isSolid ? "mt-1 max-h-3 opacity-100" : "mt-0 max-h-0 opacity-0"
+                "overflow-hidden whitespace-nowrap font-heading text-[6.5px] uppercase tracking-[0.18em] text-black-50 transition-all duration-300 ease-expo",
+                isSolid ? "mt-[3px] max-h-3 opacity-100" : "mt-0 max-h-0 opacity-0"
               )}
               aria-hidden={!isSolid}
             >
