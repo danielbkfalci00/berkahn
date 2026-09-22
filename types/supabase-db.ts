@@ -1276,6 +1276,7 @@ export type Database = {
     }
     Functions: {
       anonymize_expired_lead: { Args: { p_id: string }; Returns: string[] }
+      anonymize_lead_on_request: { Args: { p_id: string; p_motivo: string }; Returns: undefined }
       claim_lead_push_notifications: {
         Args: { p_limit?: number }
         Returns: Database["public"]["Tables"]["lead_notification_outbox"]["Row"][]
@@ -1319,6 +1320,10 @@ export type Database = {
       schedule_monthly_lead_retention: { Args: { p_function_url: string }; Returns: number }
       enqueue_overdue_lead_pushes: { Args: never; Returns: number }
       schedule_lead_push_dispatch: { Args: { p_dispatch_url: string }; Returns: number }
+      set_lead_retention_exception: {
+        Args: { p_ativo: boolean; p_id: string; p_motivo: string | null }
+        Returns: undefined
+      }
       set_lead_archived: { Args: { p_arquivado: boolean; p_id: string }; Returns: undefined }
       set_lead_next_action: { Args: { p_id: string; p_proxima_acao_em: string | null }; Returns: undefined }
       update_lead_status: {

@@ -96,7 +96,11 @@ export async function updateSession(request: NextRequest) {
   }
 
   if (isAdminRoute && !isLoginPage && !isPasswordPage && membership && !roleCanAccessPath(membership.role, request.nextUrl.pathname)) {
-    return comCookies(NextResponse.redirect(new URL('/admin', request.url)))
+    // O aviso explica o desvio: sem ele, quem clica numa área fora do seu papel
+    // só vê o dashboard reaparecer e acha que o link está quebrado.
+    const url = new URL('/admin', request.url)
+    url.searchParams.set('aviso', 'sem-permissao')
+    return comCookies(NextResponse.redirect(url))
   }
 
   if (isLoginPage && user && membership) {

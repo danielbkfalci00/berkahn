@@ -5,16 +5,20 @@ import {
   type LeadContextLinks,
   type LinkedCommercialRecord,
 } from "@/components/admin/analytics/LeadsQueue";
+import { LeadPrivacyPanel } from "@/components/admin/analytics/LeadPrivacyPanel";
 import { createClient } from "@/lib/supabase/server";
+import { getAdminSession } from "@/lib/supabase/sessao";
 import type { AnalyticsLead, LeadArtifact, LeadResponsible } from "@/types/analytics";
 
 export const dynamic = "force-dynamic";
 
-const LEAD_COLUMNS = "id,nome,email,telefone,telefone_normalizado,segmento,mensagem,canal,status,prioridade,responsavel_id,resumo_status,resumo_status_em,tipo_projeto,empresa,cargo,pagina_origem,landing_page,referrer,slug_origem,cta_location,utm,post_id,pauta_id,visualizado_em,ultimo_contato_em,proxima_acao_em,motivo_desqualificacao,qualificado_em,desqualificado_em,convertido_em,arquivado_em,anonimizado_em,origem_legado,importado_em,criado_em,lead_responsaveis(id,nome)";
+const LEAD_COLUMNS = "id,nome,email,telefone,telefone_normalizado,segmento,mensagem,canal,status,prioridade,responsavel_id,resumo_status,resumo_status_em,tipo_projeto,empresa,cargo,pagina_origem,landing_page,referrer,slug_origem,cta_location,utm,post_id,pauta_id,visualizado_em,ultimo_contato_em,proxima_acao_em,motivo_desqualificacao,qualificado_em,desqualificado_em,convertido_em,arquivado_em,anonimizado_em,retencao_excecao,retencao_excecao_motivo,origem_legado,importado_em,criado_em,lead_responsaveis(id,nome)";
 
 export default async function LeadDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const supabase = await createClient();
+  const session = await getAdminSession();
+  const isOwner = session?.membership.role === "owner";
   const [leadResult, activityResult, budgetResult, proposalResult, artifactsResult, responsiblesResult] = await Promise.all([
     supabase.from("leads").select(LEAD_COLUMNS).eq("id", id).maybeSingle(),
     supabase
@@ -77,6 +81,7 @@ export default async function LeadDetailPage({ params }: { params: Promise<{ id:
       artifacts={(artifactsResult.data ?? []) as LeadArtifact[]}
       responsibles={(responsiblesResult.data ?? []) as LeadResponsible[]}
       contextLinks={contextLinks}
+      privacyPanel={isOwner ? <LeadPrivacyPanel lead={lead} /> : null}
     />
   );
 }

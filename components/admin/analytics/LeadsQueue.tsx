@@ -462,6 +462,7 @@ export function LeadDetail({
   artifacts,
   responsibles,
   contextLinks,
+  privacyPanel,
 }: {
   lead: AnalyticsLead;
   activities: LeadActivity[];
@@ -470,6 +471,8 @@ export function LeadDetail({
   artifacts: LeadArtifact[];
   responsibles: LeadResponsible[];
   contextLinks: LeadContextLinks;
+  /** Painel LGPD; a página só passa para owner. */
+  privacyPanel?: React.ReactNode;
 }) {
   const router = useRouter();
   const [status, setStatus] = useState(lead.status);
@@ -577,6 +580,7 @@ export function LeadDetail({
           <CommercialLinks title="Orçamentos" records={budgets} empty="Nenhum orçamento vinculado." />
           <CommercialLinks title="Propostas" records={proposals} empty="Nenhuma proposta vinculada." />
           <Link href={`/admin/orcamentos/novo/form?lead=${lead.id}`} className="block min-h-11 rounded-md bg-neutral-950 px-4 py-3 text-center text-sm font-medium text-white">Criar orçamento</Link>
+          {privacyPanel}
           <div className="border-t border-neutral-200 pt-4"><button disabled={isPending} onClick={() => {
             // Arquivar tira o lead da fila e sai da tela; confirma como na remoção de arquivo.
             if (!lead.arquivado_em && !window.confirm(`Arquivar “${lead.nome}”? Ele sai da fila de leads.`)) return;

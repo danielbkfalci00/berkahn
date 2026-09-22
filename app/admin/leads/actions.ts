@@ -40,6 +40,22 @@ async function requireCommercialAdmin() {
   return session;
 }
 
+async function requireOwnerAdmin() {
+  const session = await getAdminSession();
+  if (!session || session.membership.role !== "owner") return null;
+  return session;
+}
+
+// A migration 032 cria as RPCs de LGPD; até ela ser aplicada o PostgREST
+// responde PGRST202 (ou 42883 do Postgres). Traduz para algo acionável em vez
+// de expor "Could not find the function" na tela.
+function lgpdRpcError(error: { code?: string; message: string }): string {
+  if (error.code === "PGRST202" || error.code === "42883" || /does not exist|could not find the function/i.test(error.message)) {
+    return "Recurso indisponível: a migration 032 (LGPD) ainda não foi aplicada no banco.";
+  }
+  return error.message;
+}
+
 function safeStorageName(value: string): string {
   const clean = value
     .normalize("NFD")
@@ -417,4 +433,35 @@ async function removeQueuedArtifactObject(
     .eq("bucket", artifact.bucket)
     .eq("path", artifact.path);
   if (queueError) console.error("lead artifact cleanup dequeue:", queueError.message);
+}
+
+export async function setLeadRetentionException(
+  id: string,
+  ativo: boolean,
+  motivo?: string
+): Promise<LeadActionResult> {
+  // A RPC já exige owner; checar aqui evita a ida ao banco e dá erro legível.
+  if (!(await requireOwnerAdmin())) return { ok: false, error: "Somente owner pode alterar a retenção legal." };
+  const cleanMotivo = motivo?.trim() || "";
+  if (ativo && !cleanMotivo) return { ok: false, error: "Informe o motivo da retenção legal." };
+  const supabase = await createClient();
+  const { error } = await supabase.rpc("set_lead_retention_exception", {
+    p_id: id,
+    p_ativo: ativo,
+    p_motivo: cleanMotivo || null,
+  });
+  if (error) return { ok: false, error: lgpdRpcError(error) };
+  revalidateLead(id);
+  return { ok: true };
+}
+
+export async function anonymizeLeadOnRequest(id: string, motivo: string): Promise<LeadActionResult> {
+  if (!(await requireOwnerAdmin())) return { ok: false, error: "Somente owner pode eliminar dados de um lead." };
+  const cleanMotivo = motivo.trim();
+  if (!cleanMotivo) return { ok: false, error: "Informe o motivo do pedido do titular." };
+  const supabase = await createClient();
+  const { error } = await supabase.rpc("anonymize_lead_on_request", { p_id: id, p_motivo: cleanMotivo });
+  if (error) return { ok: false, error: lgpdRpcError(error) };
+  revalidateLead(id);
+  return { ok: true };
 }

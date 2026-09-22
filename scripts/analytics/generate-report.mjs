@@ -299,7 +299,6 @@ async function buildContext({ year, month, useFixture, fromCache = false, partia
     topAction: actionsP0[0] || actionsP1[0] || { text: 'Sem ações priorizadas' },
     ga4PropertyId: getGa4PropertyId(),
     gscSiteUrl: getGscSiteUrl(),
-    historicalMonths: 'em breve (após 3 meses de bootstrap)',
     comparability,
     reportMode: isPartial ? 'partial' : 'closed',
     sources: {
