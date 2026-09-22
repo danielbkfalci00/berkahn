@@ -31,7 +31,7 @@ export default function Home() {
       <ImpactPinned />
       <Partners
         label="PARCERIAS QUE SUSTENTAM A QUALIDADE"
-        title="Marcas que Garantem o Padrão Berkahn"
+        title="Marcas que garantem o padrão Berkahn"
         marquee
       />
       {/* Fundo branco, sem a caixa preta: a caixa dentro de uma faixa branca
