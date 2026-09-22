@@ -76,6 +76,9 @@ export function ExtractionTrack() {
                   className={`object-cover grayscale contrast-[1.08] ${EXTRACTION_SECTION.image.focus ?? ""}`}
                 />
               </div>
+              {/* A mata entra em cor e a pedreira embaixo é monocromática. O
+                  corte do clip-path sobe, então a linha entre cor e cinza viaja
+                  pela imagem: é a cor sendo trocada pela extração. */}
               <div data-extraction-forest className="absolute inset-0 hidden will-change-[clip-path]">
                 <Image
                   src={HERO.image.src}
@@ -83,7 +86,7 @@ export function ExtractionTrack() {
                   fill
                   quality={75}
                   sizes="58vw"
-                  className="object-cover grayscale contrast-[1.08]"
+                  className="object-cover saturate-[.9] contrast-[.98]"
                 />
               </div>
               <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-black/5" />
