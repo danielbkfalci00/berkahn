@@ -55,11 +55,14 @@ export function Segments() {
             >
               <Link href={segment.href} className="group block">
                 <div className="relative">
+                  {/* Caixa vertical (4:5 e 3:4) com foto 3:2 e o scale-110 do
+                      parallax: a foto é desenhada pela altura, com ~2x a largura
+                      da caixa. "50vw/100vw" pedia metade dos pixels. */}
                   <ParallaxImage
                     src={segment.image}
                     alt={segment.imageAlt}
                     speed={0.12}
-                    sizes="(min-width: 768px) 50vw, 100vw"
+                    sizes="(min-width: 768px) 100vw, 200vw"
                     containerClassName="aspect-[4/5] md:aspect-[3/4]"
                     className="transition-transform duration-700 ease-expo group-hover:scale-[1.03]"
                   />

@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import Image from "next/image";
+import { getImageProps } from "next/image";
 import { gsap, useGSAP } from "@/lib/gsap";
 import { ContactFormDialog } from "@/components/forms/ContactFormDialog";
 import { Button } from "@/components/ui/button";
@@ -15,7 +15,9 @@ import { Button } from "@/components/ui/button";
  * - Poster = LCP e fallback; o canvas assume no primeiro frame carregado
  * - Preload em estágios: seis frames imediatos, restante em background;
  *   o draw usa o frame carregado mais próximo
- * - Mobile usa sequência própria de 36 frames a 640 px
+ * - Mobile usa sequência própria de 36 frames verticais, 608×1080: recorte
+ *   9:16 do centro da fonte 1080p, na resolução cheia. A anterior era 960×540
+ *   horizontal e, num celular em pé, aparecia ampliada ~4,7x
  * - prefers-reduced-motion: sem runway, sem pin, poster estático + texto
  */
 // Resolução nativa da fonte (1920×1080) para o canvas não ampliar em telas
@@ -23,6 +25,53 @@ import { Button } from "@/components/ui/button";
 // perde fluidez porque o runway de 260vh dá ~27 px de scroll por frame.
 const FRAME_COUNT_DESKTOP = 56;
 const FRAME_COUNT_MOBILE = 36;
+
+const POSTER_ALT =
+  "Corredor de estrutura em Light Steel Frame avançando até um ambiente finalizado";
+
+/**
+ * Poster com um arquivo por formato de tela: horizontal no desktop, vertical
+ * (recorte 9:16 do centro, na resolução cheia da fonte) no celular. Antes o
+ * celular recebia o poster 16:9 e mostrava só a faixa central dele, ampliada.
+ *
+ * O sizes vai pela altura: a foto cobre uma caixa da altura da tela, então a
+ * largura desenhada é a altura vezes a proporção da foto (1.78 e 0.56).
+ */
+function HeroPoster() {
+  const common = { alt: POSTER_ALT, quality: 85 };
+  const {
+    props: { srcSet: desktop },
+  } = getImageProps({
+    ...common,
+    src: "/videos/hero/hero-poster.webp",
+    width: 1920,
+    height: 1080,
+    sizes: "max(100vw, 178vh)",
+  });
+  const {
+    props: { srcSet: mobile, ...rest },
+  } = getImageProps({
+    ...common,
+    src: "/videos/hero/hero-poster-m.webp",
+    width: 608,
+    height: 1080,
+    sizes: "max(100vw, 57vh)",
+  });
+
+  return (
+    <picture>
+      <source media="(min-width: 768px)" srcSet={desktop} sizes="max(100vw, 178vh)" />
+      <source media="(max-width: 767px)" srcSet={mobile} sizes="max(100vw, 57vh)" />
+      <img
+        {...rest}
+        alt={POSTER_ALT}
+        loading="eager"
+        fetchPriority="high"
+        className="absolute inset-0 h-full w-full object-cover object-[50%_80%]"
+      />
+    </picture>
+  );
+}
 
 const framePath = (index: number, isMobile: boolean) =>
   `/videos/hero/${isMobile ? "seq-m" : "seq"}/f_${String(index + 1).padStart(3, "0")}.webp`;
@@ -59,6 +108,11 @@ export function HeroCinematic() {
           if (!isLoaded[nearest]) return;
 
           const img = images[nearest];
+          // O padrão do Chrome é suavização "low": qualquer ampliação saía
+          // serrilhada. Redefinido a cada desenho porque redimensionar o
+          // canvas zera o estado do contexto.
+          context2d.imageSmoothingEnabled = true;
+          context2d.imageSmoothingQuality = "high";
           const cw = canvas.width;
           const ch = canvas.height;
           const scale = Math.max(cw / img.naturalWidth, ch / img.naturalHeight);
@@ -179,14 +233,7 @@ export function HeroCinematic() {
           ref={posterWrapRef}
           className="absolute inset-0 transition-opacity duration-500"
         >
-          <Image
-            src="/videos/hero/hero-poster.webp"
-            alt="Corredor de estrutura em Light Steel Frame avançando até um ambiente finalizado"
-            fill
-            priority
-            sizes="100vw"
-            className="object-cover object-[50%_80%]"
-          />
+          <HeroPoster />
         </div>
 
         <canvas

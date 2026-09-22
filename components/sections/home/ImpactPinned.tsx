@@ -129,6 +129,9 @@ export function ImpactPinned() {
       {/* Desktop com motion: três batidas com o viewport preso */}
       <div data-impact-track className="hidden motion-safe:lg:block relative h-[320vh]">
         <div className="sticky top-0 h-screen overflow-hidden">
+          {/* sizes das fotos: tela cheia com zoom de 1.15 no desktop e, no
+              celular, foto 3:2 cobrindo uma caixa da altura da tela, desenhada
+              pela altura. "100vw" pedia de 2x a 3x menos pixels. */}
           <div data-impact-plates className="absolute inset-0 will-change-transform">
             {section.blocks.map((block, index) => (
               <div
@@ -140,8 +143,8 @@ export function ImpactPinned() {
                   src={block.image.src}
                   alt={index === 0 ? block.image.alt : ""}
                   fill
-                  quality={70}
-                  sizes="100vw"
+                  quality={80}
+                  sizes="max(115vw, 173vh)"
                   className={`object-cover ${PLATE_FOCUS[index]}`}
                 />
               </div>
@@ -180,8 +183,8 @@ export function ImpactPinned() {
                 src={block.image.src}
                 alt={block.image.alt}
                 fill
-                quality={70}
-                sizes="100vw"
+                quality={80}
+                sizes="max(115vw, 173vh)"
                 className={`object-cover ${PLATE_FOCUS[index]}`}
               />
             </div>

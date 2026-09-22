@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { preload } from "react-dom";
 import { SmoothScroll } from "@/components/providers/SmoothScroll";
 import { HeroCinematic } from "@/components/sections/home/HeroCinematic";
 import { EditorialStatement } from "@/components/sections/home/EditorialStatement";
@@ -21,8 +20,6 @@ export const metadata: Metadata = {
 };
 
 export default function Home() {
-  preload("/videos/hero/hero-poster.webp", { as: "image", fetchPriority: "high" });
-
   return (
     <div>
       <SmoothScroll />
@@ -37,7 +34,9 @@ export default function Home() {
         title="Marcas que Garantem o Padrão Berkahn"
         marquee
       />
-      <CTA />
+      {/* Fundo branco, sem a caixa preta: a caixa dentro de uma faixa branca
+          deixava sobra branca entre os parceiros e o CTA. */}
+      <CTA variant="editorial" />
     </div>
   );
 }
