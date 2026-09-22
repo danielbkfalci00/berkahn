@@ -92,7 +92,7 @@ export const WALL_SECTION = {
   headline: "No Light Steel Frame, a parede começa no projeto.",
   copy: "A modulação define onde cada perfil e placa entra. Isso organiza a compra e transforma o fechamento em uma sequência de montagem.",
   consequence: "Depois da fundação, a parede dispensa argamassa de assentamento, cura e a lavagem ligada a essas etapas.",
-  note: "Um recorte dos componentes do fechamento, mostrado camada por camada.",
+  note: "As camadas do fechamento, da face externa para a interna.",
   sceneAlt: "Recorte visual de seis componentes usados em uma parede de Light Steel Frame",
 };
 
@@ -192,6 +192,9 @@ export const PRACTICE_SECTION = {
   ],
   honesty: {
     title: "O que a gente não afirma",
+    // Exibida riscada. É a frase que o mercado repete e que a Berkahn não
+    // assina; ver caldas2017 e o cabeçalho deste arquivo.
+    claim: "Uma casa em Light Steel Frame emite menos carbono ao longo de toda a vida.",
     body: "A gente não afirma que uma casa em Light Steel Frame emite menos carbono ao longo de todo o ciclo de vida. No estudo brasileiro que comparou os sistemas, a alvenaria apresentou vantagem no resultado completo.",
     conclusion: "O compromisso que conseguimos demonstrar está no projeto, no uso consciente dos materiais e no destino do que sobra.",
   },

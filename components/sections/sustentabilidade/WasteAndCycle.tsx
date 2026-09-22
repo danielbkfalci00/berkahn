@@ -54,10 +54,10 @@ export function ImpactJourney() {
       <section
         ref={siteRef}
         id="canteiro"
-        className="bg-carbon py-xl text-white md:py-3xl"
+        className="bg-carbon text-white"
         aria-labelledby="canteiro-title"
       >
-        <div className="container">
+        <div className="container pb-16 pt-xl md:pt-3xl xl:pb-24">
           <div className="grid gap-9 lg:grid-cols-12 lg:gap-12">
             <h2
               id="canteiro-title"
@@ -69,10 +69,13 @@ export function ImpactJourney() {
               {SITE_SECTION.lede}
             </p>
           </div>
+        </div>
 
-          <div className="mt-20 grid gap-16 xl:mt-32 xl:grid-cols-12 xl:gap-12">
-            <div className="hidden xl:col-span-7 xl:block">
-              <div className="sticky top-[12vh] h-[76vh] overflow-hidden bg-carbon-soft">
+        {/* Tela dividida, como na extração: a foto ocupa a metade esquerda de
+            borda a borda e a altura da tela inteira enquanto os passos rolam. */}
+        <div className="xl:grid xl:grid-cols-2">
+            <div className="hidden xl:block">
+              <div className="sticky top-0 h-[100svh] overflow-hidden bg-carbon-soft">
                 {SITE_SECTION.steps.map((step, index) => (
                   <div
                     key={step.title}
@@ -85,7 +88,7 @@ export function ImpactJourney() {
                       alt={step.image.alt}
                       fill
                       quality={80}
-                      sizes="58vw"
+                      sizes="50vw"
                       className={`object-cover saturate-[.9] contrast-[.98] ${step.image.focus ?? ""}`}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent" />
@@ -94,12 +97,12 @@ export function ImpactJourney() {
               </div>
             </div>
 
-            <div className="xl:col-span-4 xl:col-start-9">
+            <div className="container pb-xl xl:max-w-none xl:px-16 xl:pb-0 2xl:px-24">
               {SITE_SECTION.steps.map((step) => (
                 <article
                   key={step.title}
                   data-site-step
-                  className="py-10 lg:grid lg:grid-cols-12 lg:items-center lg:gap-10 xl:flex xl:min-h-[68vh] xl:flex-col xl:items-stretch xl:justify-center xl:gap-0 xl:py-16"
+                  className="py-10 lg:grid lg:grid-cols-12 lg:items-center lg:gap-10 xl:flex xl:min-h-[100svh] xl:flex-col xl:items-stretch xl:justify-center xl:gap-0 xl:py-16"
                 >
                   <div className="relative mb-8 aspect-[4/3] overflow-hidden bg-carbon-soft lg:col-span-7 lg:mb-0 lg:aspect-[3/2] xl:hidden">
                     <Image
@@ -122,7 +125,6 @@ export function ImpactJourney() {
                 </article>
               ))}
             </div>
-          </div>
         </div>
       </section>
 

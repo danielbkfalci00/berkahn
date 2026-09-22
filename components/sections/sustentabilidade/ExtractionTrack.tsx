@@ -45,10 +45,10 @@ export function ExtractionTrack() {
     <section
       ref={sectionRef}
       id="extracao"
-      className="bg-carbon py-xl text-white md:py-3xl"
+      className="bg-carbon text-white"
       aria-labelledby="extracao-title"
     >
-      <div className="container">
+      <div className="container pb-16 pt-xl md:pt-3xl lg:pb-24">
         <div className="grid gap-10 lg:grid-cols-12 lg:gap-12">
           <div className="lg:col-span-7">
             <h2
@@ -62,17 +62,22 @@ export function ExtractionTrack() {
             {EXTRACTION_SECTION.lede}
           </p>
         </div>
+      </div>
 
-        <div className="mt-20 grid gap-14 lg:mt-32 lg:grid-cols-12 lg:gap-12">
-          <div data-extraction-track className="lg:col-span-7">
-            <figure className="relative aspect-[4/5] overflow-hidden bg-carbon-soft lg:sticky lg:top-[12vh] lg:h-[76vh] lg:aspect-auto">
+      {/* Tela dividida: a foto ocupa a metade esquerda, de borda a borda e da
+          altura da tela, presa enquanto o texto da direita rola. Antes ela
+          ficava numa coluna do container com 76vh e sobrava preto em cima e
+          embaixo. */}
+      <div className="grid lg:grid-cols-2">
+          <div data-extraction-track className="relative">
+            <figure className="relative aspect-[4/5] overflow-hidden bg-carbon-soft lg:sticky lg:top-0 lg:aspect-auto lg:h-[100svh]">
               <div data-extraction-quarry className="absolute inset-0 will-change-transform">
                 <Image
                   src={EXTRACTION_SECTION.image.src}
                   alt={EXTRACTION_SECTION.image.alt}
                   fill
                   quality={80}
-                  sizes="(min-width: 1024px) 58vw, 100vw"
+                  sizes="(min-width: 1024px) 50vw, 100vw"
                   className={`object-cover grayscale contrast-[1.08] ${EXTRACTION_SECTION.image.focus ?? ""}`}
                 />
               </div>
@@ -85,7 +90,7 @@ export function ExtractionTrack() {
                   alt=""
                   fill
                   quality={75}
-                  sizes="58vw"
+                  sizes="50vw"
                   className="object-cover saturate-[.9] contrast-[.98]"
                 />
               </div>
@@ -96,8 +101,8 @@ export function ExtractionTrack() {
             </figure>
           </div>
 
-          <div className="lg:col-span-4 lg:col-start-9">
-            <div className="pb-20 lg:pb-[32vh]">
+          <div className="px-6 pb-xl pt-16 sm:px-8 lg:px-16 lg:py-0 xl:px-24">
+            <div className="lg:flex lg:min-h-[100svh] lg:flex-col lg:justify-center">
               <p className="font-display text-[clamp(5rem,10vw,10rem)] font-semibold leading-[0.78] tracking-[-0.075em]">
                 {EXTRACTION_SECTION.figure.value}
               </p>
@@ -106,9 +111,9 @@ export function ExtractionTrack() {
               </p>
             </div>
 
-            <div className="space-y-20 lg:space-y-0">
+            <div className="mt-16 space-y-16 lg:mt-0 lg:space-y-0">
               {EXTRACTION_SECTION.beats.map((beat) => (
-                <article key={beat.title} className="flex min-h-[42vh] flex-col justify-center py-8 lg:min-h-[52vh]">
+                <article key={beat.title} className="lg:flex lg:min-h-[80svh] lg:flex-col lg:justify-center">
                   <h3 className="max-w-sm font-display text-2xl font-semibold leading-tight tracking-[-0.025em] md:text-3xl">
                     {beat.title}
                   </h3>
@@ -119,7 +124,6 @@ export function ExtractionTrack() {
               ))}
             </div>
           </div>
-        </div>
       </div>
     </section>
   );

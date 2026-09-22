@@ -48,6 +48,10 @@ const ArrowIcon = () => (
 const buttonClasses =
   "group inline-flex items-center gap-2 border-[3px] border-white bg-white px-8 py-4 text-sm font-medium uppercase tracking-wider text-black transition-colors duration-300 hover:bg-transparent hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white active:translate-y-px";
 
+// Mesmo botão, invertido para fundo branco.
+const buttonClassesOnWhite =
+  "group inline-flex items-center gap-2 border-[3px] border-black bg-black px-8 py-4 text-sm font-medium uppercase tracking-wider text-white transition-colors duration-300 hover:bg-transparent hover:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-black active:translate-y-px";
+
 export function CTA({
   label = "PRONTO PARA CONSTRUIR?",
   title = "Vamos conversar sobre seu projeto",
@@ -59,29 +63,41 @@ export function CTA({
   ctaLocation = "cta_secao",
   variant = "default",
 }: CTAProps = {}) {
+  // "editorial" vive direto no fundo branco da seção, sem a caixa preta: numa
+  // página que alterna seções de fundo cheio, a caixa dentro de uma faixa
+  // branca deixava uma sobra branca entre a penúltima seção e o CTA.
+  const isEditorial = variant === "editorial";
+  const botao = isEditorial ? buttonClassesOnWhite : buttonClasses;
+
   return (
-    <section className={variant === "editorial" ? "bg-white pb-xl" : "py-xl bg-white"}>
+    <section className={isEditorial ? "bg-white py-xl md:py-3xl" : "py-xl bg-white"}>
       <div className="container">
         <div
-          className={`bg-black p-6 sm:p-10 md:p-16 ${
-            variant === "editorial" ? "text-left" : "mx-auto max-w-3xl text-center"
-          }`}
+          className={
+            isEditorial
+              ? "max-w-5xl text-left"
+              : "mx-auto max-w-3xl bg-black p-6 text-center sm:p-10 md:p-16"
+          }
         >
           <RevealOnScroll>
-            <p className="label-text mb-4 text-white/60">{label}</p>
-            <h2 className="mb-6 break-words hyphens-none text-3xl font-heading font-extrabold tracking-tight text-white sm:text-4xl md:text-5xl lg:text-6xl">
+            <p className={`label-text mb-4 ${isEditorial ? "text-black-50" : "text-white/60"}`}>{label}</p>
+            <h2
+              className={`mb-6 break-words hyphens-none text-3xl font-heading font-extrabold tracking-tight sm:text-4xl md:text-5xl lg:text-6xl ${
+                isEditorial ? "text-black" : "text-white"
+              }`}
+            >
               {title}
             </h2>
-            <p className="body-md mb-8 text-white/70">{description}</p>
+            <p className={`body-md mb-8 ${isEditorial ? "max-w-2xl text-black-70" : "text-white/70"}`}>{description}</p>
 
             {actionType === "link" ? (
-              <Link href={actionHref} className={buttonClasses}>
+              <Link href={actionHref} className={botao}>
                 {actionText}
                 <ArrowIcon />
               </Link>
             ) : (
               <ContactFormDialog defaultSegment={defaultSegment} ctaLocation={ctaLocation}>
-                <button className={buttonClasses}>
+                <button className={botao}>
                   {actionText}
                   <ArrowIcon />
                 </button>

@@ -1,55 +1,28 @@
 "use client";
 
-import type { CSSProperties } from "react";
 import Image from "next/image";
 import { useRef } from "react";
-import { gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
+import { gsap, useGSAP } from "@/lib/gsap";
 import { LSF_LAYERS } from "@/lib/lsf-data";
 import { WALL_LAYER_COPY, WALL_SECTION } from "@/lib/sustentabilidade-data";
 
 /**
- * A parede como um corte: as seis camadas lado a lado, na ordem da montagem,
- * com uma aberta por vez.
+ * A parede, camada por camada: seis cartões lado a lado, na ordem da montagem
+ * de fora para dentro, deslizando para o lado conforme a página rola.
  *
- * A versão anterior abria as camadas em 3D. Girada a 28 graus, cada placa
- * escondia a seguinte: sobrava uma foto legível e cinco lascas. E o bloco de
- * texto inteiro morava dentro do sticky, então em janela abaixo de ~730px de
- * altura o topo do título era cortado (medido: estoura 40px a 1920x720).
+ * Duas versões anteriores falharam por motivos que valem registrar. A cena 3D
+ * escondia cada placa atrás da seguinte. O acordeão por clip-path prendia a
+ * tela (o bloco inteiro ficava sticky) e mostrava de cada camada só a fatia da
+ * foto que caía na posição da faixa, por isso as imagens pareciam recortes
+ * ruins. Aqui nada prende a rolagem: a fileira anda por scrub enquanto a seção
+ * atravessa a tela, e cada cartão mostra a foto inteira, centrada.
  *
- * Aqui o cabeçalho rola normal, como no resto da página, e só o corte fica
- * preso na tela, com altura fixa que cabe em qualquer janela. Os nomes saíram
- * da lista em duas colunas e foram para cima da camada que nomeiam.
- *
- * As seis camadas estão sempre no HTML. A rolagem só muda qual está aberta e
- * colorida, então nada depende de JavaScript para existir na página.
+ * Abaixo de 1024px, ou com movimento reduzido, a fileira é um carrossel nativo
+ * com snap, sem animação.
  */
-
-// Fração da largura para a camada aberta. As outras cinco dividem o resto e
-// ficam como lombadas, estreitas mas largas o bastante para o nome na vertical.
-const ABERTA = 0.44;
-
-interface Faixa {
-  esquerda: number;
-  largura: number;
-}
-
 export function WallExploded() {
   const sectionRef = useRef<HTMLElement>(null);
   const layers = LSF_LAYERS;
-  const fechada = (1 - ABERTA) / (layers.length - 1);
-
-  const faixas = (aberta: number): Faixa[] => {
-    let esquerda = 0;
-    return layers.map((_, index) => {
-      const largura = index === aberta ? ABERTA : fechada;
-      const faixa = { esquerda, largura };
-      esquerda += largura;
-      return faixa;
-    });
-  };
-
-  const recorte = (faixa: Faixa) =>
-    `inset(0 ${((1 - faixa.esquerda - faixa.largura) * 100).toFixed(3)}% 0 ${(faixa.esquerda * 100).toFixed(3)}%)`;
 
   useGSAP(
     () => {
@@ -58,87 +31,41 @@ export function WallExploded() {
 
       const mm = gsap.matchMedia();
       mm.add("(min-width: 1024px) and (prefers-reduced-motion: no-preference)", () => {
-        const track = root.querySelector<HTMLElement>("[data-wall-track]");
-        const sticky = root.querySelector<HTMLElement>("[data-wall-sticky]");
-        const corte = root.querySelector<HTMLElement>("[data-wall-cut]");
-        const itens = gsap.utils.toArray<HTMLElement>("[data-wall-layer]", root);
-        const rotulos = gsap.utils.toArray<HTMLElement>("[data-wall-label]", root);
-        const fotos = gsap.utils.toArray<HTMLElement>("[data-wall-photo]", root);
-        const espessuras = gsap.utils.toArray<HTMLElement>("[data-wall-thickness]", root);
-        if (!track || !sticky || !corte || itens.length !== layers.length) return;
+        const faixa = root.querySelector<HTMLElement>("[data-wall-rail]");
+        const fileira = root.querySelector<HTMLElement>("[data-wall-row]");
+        if (!faixa || !fileira) return;
 
-        // 60vh de rolagem por camada. Com 26vh um giro de roda atravessava
-        // duas camadas e não dava para ver a foto aberta; a seção fica mais
-        // longa, mas é o preço de cada imagem ficar na tela.
-        track.style.height = `${layers.length * 60}vh`;
-        Object.assign(sticky.style, {
-          position: "sticky",
-          top: "84px",
-          display: "flex",
-          height: "calc(100vh - 84px)",
-          alignItems: "center",
-        });
+        // Anda o quanto a fileira passa da largura visível, nem mais nem menos:
+        // o último cartão termina alinhado à margem direita do container.
+        const distancia = () => Math.max(0, fileira.scrollWidth - faixa.clientWidth);
 
-        let atual = 0;
-
-        const aplicar = (indice: number, instantaneo = false) => {
-          const largura = corte.clientWidth;
-          const duracao = instantaneo ? 0 : 0.7;
-          faixas(indice).forEach((faixa, i) => {
-            gsap.to(itens[i], {
-              clipPath: recorte(faixa),
-              duration: duracao,
-              ease: "power3.out",
-              overwrite: true,
-            });
-            gsap.to(rotulos[i], {
-              x: faixa.esquerda * largura,
-              duration: duracao,
-              ease: "power3.out",
-              overwrite: true,
-            });
-            gsap.to(fotos[i], {
-              filter:
-                i === indice
-                  ? "grayscale(0%) saturate(90%) contrast(98%)"
-                  : "grayscale(100%) contrast(104%)",
-              duration: instantaneo ? 0 : 0.55,
-              overwrite: true,
-            });
-            gsap.to(espessuras[i], {
-              opacity: i === indice ? 1 : 0,
-              duration: instantaneo ? 0 : 0.4,
-              overwrite: true,
-            });
-          });
-        };
-
-        aplicar(0, true);
-
-        ScrollTrigger.create({
-          trigger: track,
-          start: "top top",
-          end: "bottom bottom",
-          onUpdate: (self) => {
-            const indice = Math.min(
-              layers.length - 1,
-              Math.max(0, Math.floor(self.progress * layers.length)),
-            );
-            if (indice === atual) return;
-            atual = indice;
-            aplicar(indice);
+        gsap.to(fileira, {
+          x: () => -distancia(),
+          ease: "none",
+          // Começa com a fileira no meio da tela (topo a 45%), para o primeiro
+          // cartão ser visto inteiro e parado antes de a fileira andar.
+          scrollTrigger: {
+            trigger: faixa,
+            start: "top 45%",
+            end: "bottom top",
+            scrub: 0.8,
+            invalidateOnRefresh: true,
           },
-          // A posição do rótulo é em pixels, então precisa ser refeita sempre
-          // que a largura do corte muda.
-          onRefresh: () => aplicar(atual, true),
         });
 
-        return () => {
-          track.style.removeProperty("height");
-          for (const propriedade of ["position", "top", "display", "height", "align-items"]) {
-            sticky.style.removeProperty(propriedade);
-          }
-        };
+        // Parallax leve dentro de cada foto, para a fileira não deslizar
+        // como uma chapa só.
+        gsap.utils.toArray<HTMLElement>("[data-wall-photo]", root).forEach((foto) => {
+          gsap.fromTo(
+            foto,
+            { xPercent: -6 },
+            {
+              xPercent: 6,
+              ease: "none",
+              scrollTrigger: { trigger: faixa, start: "top bottom", end: "bottom top", scrub: true },
+            },
+          );
+        });
       });
     },
     { scope: sectionRef },
@@ -148,7 +75,7 @@ export function WallExploded() {
     <section
       ref={sectionRef}
       id="parede"
-      className="bg-off-white py-xl text-black md:py-3xl"
+      className="overflow-hidden bg-off-white py-xl text-black md:py-3xl"
       aria-labelledby="parede-title"
     >
       <div className="container">
@@ -163,73 +90,48 @@ export function WallExploded() {
             {WALL_SECTION.copy}
           </p>
         </div>
-      </div>
 
-      <div data-wall-track className="relative mt-12 md:mt-16">
-        <div data-wall-sticky>
-          <div className="container w-full">
-            <figure>
-              <ol
-                data-wall-cut
-                aria-label={WALL_SECTION.sceneAlt}
-                className="relative flex snap-x snap-mandatory gap-3 overflow-x-auto pb-3 lg:block lg:h-[clamp(300px,46vh,520px)] lg:gap-0 lg:overflow-hidden lg:pb-0"
+        <figure data-wall-rail className="mt-16 md:mt-24">
+          <ol
+            data-wall-row
+            aria-label={WALL_SECTION.sceneAlt}
+            className="-mx-6 flex snap-x snap-mandatory gap-4 overflow-x-auto px-6 pb-4 sm:-mx-8 sm:px-8 lg:mx-0 lg:gap-6 lg:overflow-visible lg:px-0 lg:pb-0 lg:will-change-transform"
+          >
+            {layers.map((layer, index) => (
+              <li
+                key={layer.id}
+                className="w-[78vw] shrink-0 snap-start sm:w-[52vw] lg:w-[min(30vw,420px)]"
               >
-                {layers.map((layer, index) => (
-                  <li
-                    key={layer.id}
-                    data-wall-layer
-                    className="relative aspect-[4/5] w-[78%] shrink-0 snap-start overflow-hidden bg-carbon sm:w-[52%] lg:absolute lg:inset-0 lg:aspect-auto lg:w-full lg:[clip-path:var(--faixa)]"
-                    style={{ "--faixa": recorte(faixas(0)[index]) } as CSSProperties}
-                  >
+                <div className="relative aspect-[4/3] overflow-hidden bg-carbon">
+                  <div data-wall-photo className="absolute inset-y-0 -left-[8%] -right-[8%]">
                     <Image
-                      data-wall-photo
                       src={layer.image}
                       alt=""
                       fill
-                      quality={78}
-                      sizes="(min-width: 1024px) 92vw, 80vw"
-                      className={`object-cover saturate-[.9] contrast-[.98] ${
-                        index === 0 ? "" : "lg:grayscale lg:contrast-[1.04]"
-                      }`}
+                      quality={82}
+                      sizes="(min-width: 1024px) 460px, 80vw"
+                      className="object-cover saturate-[.9] contrast-[.98]"
                     />
+                  </div>
+                </div>
+                <div className="mt-5 flex items-baseline justify-between gap-4 border-t border-black-10 pt-4">
+                  <h3 className="font-display text-xl font-semibold leading-tight tracking-[-0.02em] md:text-2xl">
+                    {WALL_LAYER_COPY[index]?.name ?? layer.name}
+                  </h3>
+                  <span className="shrink-0 font-tech text-xs text-black-50">{layer.thickness}</span>
+                </div>
+                <p className="mt-2 max-w-[34ch] text-sm leading-relaxed text-black-70">
+                  {layer.description}
+                </p>
+              </li>
+            ))}
+          </ol>
+          <figcaption className="mt-8 text-xs leading-relaxed text-black-50">
+            {WALL_SECTION.note}
+          </figcaption>
+        </figure>
 
-                    {/* Véu de baixo para cima no carrossel; na faixa, o véu
-                        viaja junto com o rótulo, senão a lombada da direita
-                        fica com texto branco sobre foto clara. */}
-                    <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-[linear-gradient(180deg,transparent,rgba(0,0,0,.72))] lg:hidden" />
-
-                    <div
-                      data-wall-label
-                      className="absolute bottom-0 left-0 p-5 lg:inset-y-0 lg:flex lg:w-[94px] lg:items-end lg:bg-[linear-gradient(90deg,rgba(0,0,0,.78)_0%,rgba(0,0,0,.34)_58%,transparent_100%)] lg:p-4"
-                    >
-                      <p className="font-display text-sm font-semibold uppercase leading-tight tracking-[0.08em] text-white lg:rotate-180 lg:[writing-mode:vertical-rl]">
-                        {WALL_LAYER_COPY[index]?.name ?? layer.name}
-                        <span
-                          data-wall-thickness
-                          className={`font-normal tracking-normal text-white/55 ${
-                            index === 0 ? "" : "lg:opacity-0"
-                          }`}
-                        >
-                          {" "}
-                          {layer.thickness}
-                        </span>
-                      </p>
-                    </div>
-                  </li>
-                ))}
-              </ol>
-              <figcaption className="mt-5 text-xs leading-relaxed text-black-50 lg:mt-6">
-                {WALL_SECTION.note}
-              </figcaption>
-            </figure>
-          </div>
-        </div>
-      </div>
-
-      <div className="container">
-        {/* No desktop o sticky já deixa uns 180px de ar embaixo do corte, então
-            a margem aqui encolhe para o buraco não somar duas vezes. */}
-        <p className="mt-12 max-w-3xl font-display text-[clamp(1.5rem,2.2vw,2.4rem)] font-semibold leading-snug tracking-[-0.03em] md:mt-16 lg:mt-4">
+        <p className="mt-16 max-w-3xl font-display text-[clamp(1.5rem,2.2vw,2.4rem)] font-semibold leading-snug tracking-[-0.03em] md:mt-24">
           {WALL_SECTION.consequence}
         </p>
       </div>
