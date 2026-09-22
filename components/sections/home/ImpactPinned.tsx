@@ -9,8 +9,7 @@ import { IMPACT_SECTION, type ImpactHero } from "@/lib/impact-data";
 
 /** Cada batida tem uma composição: esquerda, centro grande, direita. */
 const BEAT_ALIGN = ["items-start text-left", "items-center text-center", "items-end text-right"];
-const BEAT_SIZE_DESKTOP = ["text-[14vw]", "text-[19vw]", "text-[14vw]"];
-const BEAT_SIZE_MOBILE = ["text-[24vw]", "text-[30vw]", "text-[24vw]"];
+const BEAT_SIZE = ["text-[24vw] lg:text-[14vw]", "text-[30vw] lg:text-[19vw]", "text-[24vw] lg:text-[14vw]"];
 const PLATE_FOCUS = ["object-[55%_50%]", "object-[60%_50%]", "object-[50%_45%]"];
 
 const NUMBER_CLASS = "font-display font-semibold tracking-tight leading-none tabular-nums text-white";
@@ -23,11 +22,11 @@ const CAPTION_CLASS = "font-tech text-xs tracking-wide text-white-50";
  * escala de viewport que conta do valor do sistema convencional ao do Light
  * Steel Frame. Cada batida tem a própria foto ao fundo.
  *
- * Desktop com motion: track de 320vh com o viewport preso; a placa troca de
- * foto a cada batida e avança (zoom + parallax) o tempo todo, enquanto os
- * números derivam no sentido oposto. Mobile com motion: três cartões de tela
- * quase inteira, foto ao fundo com zoom leve no scroll e número contando ao
- * entrar na tela. Reduced-motion: cartões estáticos com os números finais.
+ * Com movimento, no desktop e no celular: track de 240vh com a tela presa; a
+ * placa troca de foto a cada batida e avança (zoom + parallax) o tempo todo,
+ * enquanto os números derivam no sentido oposto. Antes eram 320vh, e o celular
+ * tinha só três cartões soltos, sem a sequência. Movimento reduzido: cartões
+ * estáticos com os números finais.
  * As fontes de cada número ficam em lib/impact-data.ts, não na tela.
  */
 export function ImpactPinned() {
@@ -39,7 +38,7 @@ export function ImpactPinned() {
     () => {
       const mm = gsap.matchMedia();
 
-      mm.add("(min-width: 1024px) and (prefers-reduced-motion: no-preference)", () => {
+      mm.add("(prefers-reduced-motion: no-preference)", () => {
         const root = sectionRef.current;
         if (!root) return;
         const track = root.querySelector<HTMLElement>("[data-impact-track]");
@@ -75,41 +74,6 @@ export function ImpactPinned() {
           }
         });
       });
-
-      mm.add("(max-width: 1023px) and (prefers-reduced-motion: no-preference)", () => {
-        const root = sectionRef.current;
-        if (!root) return;
-        const cards = gsap.utils.toArray<HTMLElement>("[data-impact-card]", root);
-
-        section.blocks.forEach((block, index) => {
-          const card = cards[index];
-          if (!card) return;
-          const plate = card.querySelector<HTMLElement>("[data-impact-card-plate]");
-          const count = makeCounter(card, block.hero);
-
-          // Foto respira conforme o cartão atravessa a tela.
-          if (plate) {
-            gsap.fromTo(
-              plate,
-              { scale: 1.12, yPercent: -4 },
-              {
-                scale: 1,
-                yPercent: 4,
-                ease: "none",
-                scrollTrigger: { trigger: card, start: "top bottom", end: "bottom top", scrub: true },
-              }
-            );
-          }
-          // O número conta uma vez, quando o cartão entra.
-          gsap.to(count.state, {
-            value: block.hero.to,
-            duration: 1.4,
-            ease: "expo.out",
-            onUpdate: count.render,
-            scrollTrigger: { trigger: card, start: "top 70%", once: true },
-          });
-        });
-      });
     },
     { scope: sectionRef }
   );
@@ -126,9 +90,9 @@ export function ImpactPinned() {
         </RevealOnScroll>
       </div>
 
-      {/* Desktop com motion: três batidas com o viewport preso */}
-      <div data-impact-track className="hidden motion-safe:lg:block relative h-[320vh]">
-        <div className="sticky top-0 h-screen overflow-hidden">
+      {/* Com movimento: três batidas com a tela presa, desktop e celular */}
+      <div data-impact-track className="relative hidden h-[240vh] motion-safe:block">
+        <div className="sticky top-0 h-[100svh] overflow-hidden">
           {/* sizes das fotos: tela cheia com zoom de 1.15 no desktop e, no
               celular, foto 3:2 cobrindo uma caixa da altura da tela, desenhada
               pela altura. "100vw" pedia de 2x a 3x menos pixels. */}
@@ -163,22 +127,21 @@ export function ImpactPinned() {
               className={`absolute inset-0 flex flex-col justify-center ${index > 0 ? "opacity-0" : ""}`}
             >
               <div className="container">
-                <Beat block={block} index={index} sizeClass={BEAT_SIZE_DESKTOP[index]} />
+                <Beat block={block} index={index} sizeClass={BEAT_SIZE[index]} />
               </div>
             </div>
           ))}
         </div>
       </div>
 
-      {/* Mobile e reduced-motion: três cartões com foto ao fundo */}
-      <div className="motion-safe:lg:hidden flex flex-col">
+      {/* Movimento reduzido: três cartões estáticos com foto ao fundo */}
+      <div className="hidden flex-col motion-reduce:flex">
         {section.blocks.map((block, index) => (
           <article
             key={block.id}
-            data-impact-card
             className="relative min-h-[88svh] overflow-hidden flex flex-col justify-end"
           >
-            <div data-impact-card-plate className="absolute inset-0 will-change-transform">
+            <div className="absolute inset-0">
               <Image
                 src={block.image.src}
                 alt={block.image.alt}
@@ -193,7 +156,7 @@ export function ImpactPinned() {
               aria-hidden="true"
             />
             <div className="relative container pb-14 pt-32">
-              <Beat block={block} index={index} sizeClass={BEAT_SIZE_MOBILE[index]} />
+              <Beat block={block} index={index} sizeClass={BEAT_SIZE[index]} />
             </div>
           </article>
         ))}

@@ -17,8 +17,13 @@ const ACTS = EXECUTION_PHASES.map((phase) => ({
 }));
 
 /**
- * As quatro fases canônicas da execução. No desktop, mídia e texto fazem
- * crossfade dentro do track sticky; mobile e reduced-motion usam stack estático.
+ * As quatro fases canônicas da execução. Mídia e texto fazem crossfade dentro
+ * de um track sticky, no desktop e no celular. No desktop a foto fica numa
+ * coluna ao lado do texto; no celular ela ocupa a tela inteira, atrás do texto,
+ * com véu escuro. Só com movimento reduzido a seção vira pilha estática.
+ *
+ * Track de 250vh: 150vh de tela presa, uns 50vh de rolagem por fase. Antes
+ * eram 340vh, 2,4 telas presas para quatro trocas.
  */
 export function ProcessPinned() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -28,7 +33,7 @@ export function ProcessPinned() {
       const mm = gsap.matchMedia();
 
       mm.add(
-        "(min-width: 1024px) and (prefers-reduced-motion: no-preference)",
+        "(prefers-reduced-motion: no-preference)",
         () => {
           const images = gsap.utils.toArray<HTMLElement>("[data-process-img]");
           const texts = gsap.utils.toArray<HTMLElement>("[data-process-text]");
@@ -82,10 +87,12 @@ export function ProcessPinned() {
         </RevealOnScroll>
       </div>
 
-      <div data-process-track className="hidden motion-safe:lg:block relative h-[340vh]">
-        <div className="sticky top-0 flex h-screen flex-col justify-center pt-24 pb-10">
-          <div className="container grid grid-cols-12 gap-10 items-center">
-            <div className="col-span-7 relative h-[56svh] min-h-[380px] overflow-hidden">
+      <div data-process-track className="relative hidden h-[250vh] motion-safe:block">
+        {/* O container não é `relative` de propósito: no celular a coluna da
+            foto é absolute e se posiciona pelo sticky, cobrindo a tela toda. */}
+        <div className="sticky top-0 h-[100svh] overflow-hidden lg:flex lg:flex-col lg:justify-center lg:pb-10 lg:pt-24">
+          <div className="container flex h-full flex-col justify-end pb-16 lg:grid lg:h-auto lg:grid-cols-12 lg:items-center lg:gap-10 lg:pb-0">
+            <div className="absolute inset-0 overflow-hidden lg:relative lg:inset-auto lg:col-span-7 lg:h-[56svh] lg:min-h-[380px]">
               {ACTS.map((act, index) => (
                 <div
                   key={act.id}
@@ -96,14 +103,19 @@ export function ProcessPinned() {
                     src={act.image}
                     alt={index === 0 ? act.imageAlt : ""}
                     fill
-                    sizes="(min-width: 1024px) 55vw, 100vw"
+                    sizes="(min-width: 1024px) 60vw, 150vh"
                     className="object-cover"
                   />
                 </div>
               ))}
+              {/* Véu só no celular, onde o texto passa por cima da foto. */}
+              <div
+                className="absolute inset-0 bg-gradient-to-t from-carbon via-carbon/70 to-carbon/20 lg:hidden"
+                aria-hidden="true"
+              />
             </div>
 
-            <div className="col-span-4 col-start-9">
+            <div className="relative z-10 lg:col-span-4 lg:col-start-9">
               <div className="flex items-center gap-6 mb-10" aria-hidden="true">
                 {ACTS.map((act, index) => (
                   <span
@@ -120,7 +132,7 @@ export function ProcessPinned() {
                 <span className="h-[3px] flex-1 bg-white-10" />
               </div>
 
-              <div className="relative min-h-[300px]">
+              <div className="relative min-h-[240px] lg:min-h-[300px]">
                 {ACTS.map((act, index) => (
                   <div
                     key={act.id}
@@ -146,7 +158,7 @@ export function ProcessPinned() {
         </div>
       </div>
 
-      <div className="motion-safe:lg:hidden container flex flex-col gap-14 pt-16">
+      <div className="container hidden flex-col gap-14 pt-16 motion-reduce:flex">
         {ACTS.map((act, index) => (
           <RevealOnScroll key={act.id} delay={index * 0.1}>
             <div className="relative aspect-[16/10] overflow-hidden mb-6">
