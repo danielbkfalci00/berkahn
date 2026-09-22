@@ -88,23 +88,6 @@ export const EXTRACTION_SECTION = {
   } satisfies EditorialImage,
 };
 
-export const WALL_SECTION = {
-  headline: "No Light Steel Frame, a parede começa no projeto.",
-  copy: "A modulação define onde cada perfil e placa entra. Isso organiza a compra e transforma o fechamento em uma sequência de montagem.",
-  consequence: "Depois da fundação, a parede dispensa argamassa de assentamento, cura e a lavagem ligada a essas etapas.",
-  note: "As camadas do fechamento, da face externa para a interna.",
-  sceneAlt: "Recorte visual de seis componentes usados em uma parede de Light Steel Frame",
-};
-
-export const WALL_LAYER_COPY = [
-  { name: "Base coat" },
-  { name: "Placa cimentícia" },
-  { name: "Manta hidrófuga" },
-  { name: "Lã mineral" },
-  { name: "Montantes de aço galvanizado" },
-  { name: "Placa de gesso" },
-];
-
 export const SITE_SECTION = {
   headline: "O impacto aparece na obra que você acompanha.",
   lede: "Para quem decide construir, sustentabilidade precisa aparecer no cotidiano do canteiro.",

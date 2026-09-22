@@ -3,7 +3,6 @@ import { SmoothScroll } from "@/components/providers/SmoothScroll";
 import { Breadcrumb } from "@/components/layout/Breadcrumb";
 import { SustentabilidadeHero } from "@/components/sections/sustentabilidade/SustentabilidadeHero";
 import { ExtractionTrack } from "@/components/sections/sustentabilidade/ExtractionTrack";
-import { WallExploded } from "@/components/sections/sustentabilidade/WallExploded";
 import { ImpactJourney } from "@/components/sections/sustentabilidade/WasteAndCycle";
 import { PracticeList } from "@/components/sections/sustentabilidade/PracticeList";
 import { CTA } from "@/components/sections/CTA";
@@ -47,8 +46,8 @@ export const metadata: Metadata = {
  * /sustentabilidade: destino do CTA da seção "05 · impacto" da home.
  *
  * A tese: a construção convencional pressiona a extração e deixa resíduos; a
- * montagem a seco muda esse processo. A página concentra o movimento na
- * abertura das camadas da parede e usa a chegada da cor como virada narrativa.
+ * montagem a seco muda esse processo. A cor faz a virada narrativa: a mata
+ * entra em cor e a extração a apaga; o canteiro e o ciclo voltam em cor.
  *
  * Toda a procedência dos números vive em lib/sustentabilidade-data.ts. Nenhuma
  * fonte vai para a tela, por decisão do Bruno, mas nenhum número entra sem ela.
@@ -82,7 +81,6 @@ export default function SustentabilidadePage() {
         <SustentabilidadeHero />
       </div>
       <ExtractionTrack />
-      <WallExploded />
       <ImpactJourney />
       <PracticeList />
       <CTA
