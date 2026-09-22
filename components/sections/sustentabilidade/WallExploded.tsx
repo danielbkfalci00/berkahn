@@ -67,9 +67,10 @@ export function WallExploded() {
         const espessuras = gsap.utils.toArray<HTMLElement>("[data-wall-thickness]", root);
         if (!track || !sticky || !corte || itens.length !== layers.length) return;
 
-        // 26vh por camada: dá cerca de um quarto de tela de rolagem para cada
-        // uma, o suficiente para ler o nome sem esticar a seção.
-        track.style.height = `${layers.length * 26}vh`;
+        // 60vh de rolagem por camada. Com 26vh um giro de roda atravessava
+        // duas camadas e não dava para ver a foto aberta; a seção fica mais
+        // longa, mas é o preço de cada imagem ficar na tela.
+        track.style.height = `${layers.length * 60}vh`;
         Object.assign(sticky.style, {
           position: "sticky",
           top: "84px",
