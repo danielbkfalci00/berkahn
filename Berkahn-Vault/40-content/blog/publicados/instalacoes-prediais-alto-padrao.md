@@ -11,6 +11,7 @@ ai_summary: "Pauta 5 das cinco solicitações dos sócios. Julga quais sistemas 
 status: published
 projeto: blog
 slug: instalacoes-prediais-alto-padrao
+data_publicacao: 2026-09-22
 title: "Instalações de casa de alto padrão que funcionam no Brasil"
 seo_title: "Instalações de Casa de Alto Padrão no Brasil"
 description: "Ventilação com recuperação, bomba de calor, VRF e piso radiante vieram de países frios. Veja quais passam no filtro do clima brasileiro antes do preço."
@@ -26,6 +27,8 @@ category: Tecnologia e Inovação
 read_time: 8 min
 author: Equipe Berkahn
 answer_summary: "Recife, Manaus, Fortaleza e Belém registram zero graus-dia de aquecimento, e Estocolmo registra 59 graus-dia de resfriamento no ano inteiro, pela mesma base de 18,3 °C do ASHRAE Handbook de 2025. Os sistemas prediais de casa de alto desempenho no exterior foram desenhados do lado oposto dessa conta. O Passive House Institute escreve a assimetria na Versão 10c dos critérios: a demanda de aquecimento é fixa em 15 kWh/(m²a) no mundo inteiro, a de resfriamento é 15 mais uma parcela variável, e nas zonas quentes a exigência de recuperação de calor some e dá lugar a 60% de recuperação de umidade. No Brasil, as 83 composições de ar-condicionado do SINAPI não cobrem nenhum dos cinco sistemas."
+supabase_id: 77181b92-640b-4dfc-b5e8-214a4ca79b43
+url_final: "https://www.berkahn.com.br/atualidades/instalacoes-prediais-alto-padrao"
 contextos_aplicados:
   - berkahn-brand
   - seo-aeo-strategy
@@ -33,9 +36,6 @@ contextos_aplicados:
   - article-pipeline
   - copy-sem-travessao
 material_visual_slug: cover.webp
-data_publicacao: 2026-09-22
-supabase_id: 77181b92-640b-4dfc-b5e8-214a4ca79b43
-url_final: "https://www.berkahn.com.br/atualidades/instalacoes-prediais-alto-padrao"
 ---
 
 Recife, Manaus, Fortaleza e Belém registram zero graus-dia de aquecimento. Zero mesmo, não um número pequeno. Estocolmo, na mesma base de 18,3 °C, acumula 59 graus-dia de resfriamento no ano inteiro, contra 4.022 de aquecimento. Os dois valores saem do capítulo de dados climáticos do ASHRAE Handbook de 2025.

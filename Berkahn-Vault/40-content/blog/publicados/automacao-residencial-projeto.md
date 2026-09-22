@@ -11,6 +11,7 @@ ai_summary: "Pauta 4 das cinco solicitações dos sócios. Automação residenci
 status: published
 projeto: blog
 slug: automacao-residencial-projeto
+data_publicacao: 2026-09-22
 title: "Automação residencial: o que prever no projeto antes da obra"
 seo_title: "Automação Residencial no Projeto: O Que Prever na Obra"
 description: "Automação residencial se decide no projeto, não na loja. Veja o que precisa estar no quadro, no eletroduto e na caixa antes de a parede fechar, e o que ainda volta depois."
@@ -26,14 +27,13 @@ category: Guias e Tutoriais
 read_time: 8 min
 author: Equipe Berkahn
 answer_summary: "Automação residencial se decide no projeto porque a infraestrutura fecha junto com a parede. A Tabela 59 da ABNT NBR 5410:2004 fixa a reserva do quadro pelo número de circuitos com que ele for efetivamente equipado: 2 espaços até 6 circuitos, 3 de 7 a 12, 4 de 13 a 30 e 0,15 vezes o número acima disso, e essa reserva entra no cálculo do alimentador. A mesma norma admite 53% de ocupação do eletroduto com um condutor, 15 m de trecho contínuo e três curvas de 90 graus entre caixas. A régua residencial brasileira é a ABNT NBR 16264. A regra prática: o que tem eletroduto vazio volta depois, o que não tem depende de rádio ou de obra."
+supabase_id: f1e623c5-4e10-42c4-8b5c-75d2ce135ab0
+url_final: "https://www.berkahn.com.br/atualidades/automacao-residencial-projeto"
 contextos_aplicados:
   - berkahn-brand
   - seo-aeo-strategy
   - steel-frame-domain
 material_visual_slug: cover.webp
-data_publicacao: 2026-09-22
-supabase_id: f1e623c5-4e10-42c4-8b5c-75d2ce135ab0
-url_final: "https://www.berkahn.com.br/atualidades/automacao-residencial-projeto"
 ---
 
 Um quadro de distribuição residencial equipado com 13 a 30 circuitos precisa, pela ABNT NBR 5410:2004, de quatro espaços de reserva. Só isso. Uma central de automação, a fonte do barramento e dois módulos de comando consomem os quatro antes de a casa acender a primeira lâmpada, e a conta acabou sem que ninguém escolhesse marca nenhuma.

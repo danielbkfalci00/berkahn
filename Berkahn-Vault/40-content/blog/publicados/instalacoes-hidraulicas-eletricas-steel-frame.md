@@ -11,6 +11,7 @@ ai_summary: "Solicitação dos sócios de 16/09/2026, eixo hidráulico liderando
 status: published
 projeto: blog
 slug: instalacoes-hidraulicas-eletricas-steel-frame
+data_publicacao: 2026-09-22
 title: "Instalação hidráulica e elétrica em steel frame: o furo no perfil"
 seo_title: "Instalação Hidráulica e Elétrica em Steel Frame: PEX"
 description: "Como cano e fio atravessam o perfil em steel frame, quanto custa cada furo em capacidade estrutural e o que decide a manutenção sem quebra-quebra depois."
@@ -26,15 +27,14 @@ category: Guias e Tutoriais
 read_time: 8 min
 author: Equipe Berkahn
 answer_summary: "Em Light Steel Frame a tubulação atravessa a alma do montante por furos que entram no projeto estrutural. A figura de furação da ABNT NBR 15253, reproduzida pelo manual do CBCA, admite furo redondo de até 38 mm ou oblongo de até 115 mm, com 600 mm entre centros. Um esgoto DN 100, de 110 mm externos, não passa e desce por shaft. Pelo método da largura efetiva, o montante cai de 13,85 para 11,96 kN com furo de 38 por 110 mm. A ABNT NBR 5626:2020 exige ensaio de estanqueidade a 600 kPa por uma hora antes de a placa subir, e não exige coletor, que o SINAPI precifica como distribuidor."
+supabase_id: bb68d4a2-bbdf-447e-b4a4-5a0cf12f2365
+url_final: "https://www.berkahn.com.br/atualidades/instalacoes-hidraulicas-eletricas-steel-frame"
 contextos_aplicados:
   - berkahn-brand
   - seo-aeo-strategy
   - steel-frame-domain
   - copy-sem-travessao
 material_visual_slug: cover.webp
-data_publicacao: 2026-09-22
-supabase_id: bb68d4a2-bbdf-447e-b4a4-5a0cf12f2365
-url_final: "https://www.berkahn.com.br/atualidades/instalacoes-hidraulicas-eletricas-steel-frame"
 ---
 
 Um furo de 38 por 110 milímetros na alma de um montante de aço derruba a resistência calculada daquele perfil de 13,85 kN para 11,96 kN de compressão. São quase 14% da conta, perdidos para deixar passar um cano. Os dois números estão no mesmo capítulo do manual Steel Framing Engenharia, do Centro Brasileiro da Construção em Aço, que dimensiona o mesmo perfil Ue 90x40x12x0,95 com a alma inteira e com a abertura, pelo mesmo método nas duas pontas.

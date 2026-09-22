@@ -11,6 +11,7 @@ ai_summary: "Pauta 1 das cinco solicitações dos sócios. Compara EIFS, placa c
 status: published
 projeto: blog
 slug: revestimento-externo-steel-frame
+data_publicacao: 2026-09-22
 title: "Revestimento externo em steel frame: cinco sistemas de fachada lado a lado"
 seo_title: "Revestimento Externo Steel Frame: 5 Sistemas, 0 no SINAPI"
 description: "EIFS, placa cimentícia, siding, fachada ventilada e painel metálico comparados por água, fogo, impacto, juntas e manutenção, e o que existe de preço público."
@@ -27,14 +28,13 @@ category: Guias e Tutoriais
 read_time: 8 min
 author: Equipe Berkahn
 answer_summary: "Revestimento, substrato e sistema de fachada são três compras diferentes: a ABNT NBR 15498:2021 separa a placa cimentícia em tipos A e B, externos sem e com acabamento, e C, interno. Em Light Steel Frame a fachada se decide pela água. São Paulo recebe 1.658,3 mm de chuva anuais pela Normal 1991-2020 do INMET, 65 polegadas, e o mapa de chuva de 2004 da Building Science Corporation põe tudo acima de 60 polegadas na faixa mais exigente, a da tela com equalização de pressão, uma acima da fachada ventilada. No SINAPI de julho de 2026, média nacional não desonerada, a fachada molhada sobre alvenaria ou concreto soma R$ 98,52 por m², e nenhum dos cinco sistemas secos tem composição publicada."
+supabase_id: 77ac32dd-5167-4905-9924-e279b52da209
+url_final: "https://www.berkahn.com.br/atualidades/revestimento-externo-steel-frame"
 contextos_aplicados:
   - berkahn-brand
   - seo-aeo-strategy
   - steel-frame-domain
 material_visual_slug: cover.webp
-data_publicacao: 2026-09-22
-supabase_id: 77ac32dd-5167-4905-9924-e279b52da209
-url_final: "https://www.berkahn.com.br/atualidades/revestimento-externo-steel-frame"
 ---
 
 São Paulo recebe 1.658,3 mm de chuva por ano, valor que o INMET imprime na coluna anual da Normal Climatológica de 1991 a 2020 do Mirante de Santana. Na unidade em que a literatura de controle de chuva em fachada trabalha, são 65 polegadas. Joseph Lstiburek publicou pela Building Science Corporation, em março de 2004, um relatório cuja Figura 4 mapeia a chuva anual da América do Norte e amarra, na legenda, cada faixa a uma estratégia de fachada. Acima de 60 polegadas fica a faixa mais exigente de todas, a que pede tela ventilada com equalização de pressão, um degrau acima da fachada ventilada que o mercado brasileiro conhece. Vedação de face, o sistema aderido sem caminho de saída para a água, aparece uma única vez naquela legenda, abaixo de 20 polegadas.
