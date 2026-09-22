@@ -77,7 +77,15 @@ L(paragrafosSuspeitos.length === 0,
 // storytelling do mesmo jeito. Apontado pelo Bruno em 2026-08-25, depois de dois
 // posts entregues com esse ritmo.
 const frases = corpo.split(/(?<=[.!?])\s+/).map((s) => s.trim()).filter(Boolean);
-const impacto = frases.filter((s) => s.split(/\s+/).filter(Boolean).length <= 6);
+// Excecao calibrada em 2026-09-22: a pergunta de abertura nao e frase de impacto.
+// O prompt v1.3 endossa abrir com pergunta ("gosto de comecar com uma duvida
+// nesses textos", Bruno, 2026-09-03) e uma boa pergunta e curta por natureza.
+// A regra continua valendo para qualquer declarativa curta e para qualquer
+// pergunta que nao seja a primeira frase do post, que e o vicio real.
+const aberturaEhPergunta = frases.length > 0 && frases[0].endsWith('?');
+const impacto = frases
+  .filter((s, i) => !(i === 0 && aberturaEhPergunta))
+  .filter((s) => s.split(/\s+/).filter(Boolean).length <= 6);
 L(impacto.length === 0,
   impacto.length === 0
     ? 'sem frase de impacto solta (nenhuma com 6 palavras ou menos)'
