@@ -17,8 +17,12 @@ import { WALL_LAYER_COPY, WALL_SECTION } from "@/lib/sustentabilidade-data";
  * ruins. Aqui nada prende a rolagem: a fileira anda por scrub enquanto a seção
  * atravessa a tela, e cada cartão mostra a foto inteira, centrada.
  *
- * Abaixo de 1024px, ou com movimento reduzido, a fileira é um carrossel nativo
- * com snap, sem animação.
+ * Abaixo de 1024px o trilho gruda na tela e a rolagem vertical anda a fileira
+ * (ver o segundo bloco do matchMedia). Com movimento reduzido, a fileira é um
+ * carrossel nativo com snap, sem animação.
+ *
+ * A seção usa overflow-x-clip, não overflow-hidden: hidden cria um contêiner
+ * de rolagem e anula o sticky do trilho no celular.
  */
 export function WallExploded() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -37,7 +41,7 @@ export function WallExploded() {
 
         // Anda o quanto a fileira passa da largura visível, nem mais nem menos:
         // o último cartão termina alinhado à margem direita do container.
-        const distancia = () => Math.max(0, fileira.scrollWidth - faixa.clientWidth);
+        const distancia = () => Math.max(0, fileira.scrollWidth - fileira.clientWidth);
 
         gsap.to(fileira, {
           x: () => -distancia(),
@@ -67,6 +71,52 @@ export function WallExploded() {
           );
         });
       });
+
+      // Celular: cada cartão tem 78% da tela, então a fileira passa de cinco
+      // telas de largura e não dá para deslizá-la só com a seção passando (seria
+      // o dobro da velocidade da rolagem). Aqui o trilho gruda na tela por
+      // 55vh de rolagem por cartão, e a rolagem vertical anda a fileira.
+      mm.add("(max-width: 1023px) and (prefers-reduced-motion: no-preference)", () => {
+        const trilho = root.querySelector<HTMLElement>("[data-wall-track]");
+        const tela = root.querySelector<HTMLElement>("[data-wall-sticky]");
+        const fileira = root.querySelector<HTMLElement>("[data-wall-row]");
+        if (!trilho || !tela || !fileira) return;
+
+        trilho.style.height = `${layers.length * 55}vh`;
+        Object.assign(tela.style, {
+          position: "sticky",
+          top: "0px",
+          height: "100vh",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+        });
+        // O carrossel nativo sai de cena: com transform, rolar o próprio
+        // carrossel e rolar a página brigariam pelo mesmo gesto.
+        fileira.style.overflow = "visible";
+        fileira.style.scrollSnapType = "none";
+
+        gsap.to(fileira, {
+          x: () => -Math.max(0, fileira.scrollWidth - fileira.clientWidth),
+          ease: "none",
+          scrollTrigger: {
+            trigger: trilho,
+            start: "top top",
+            end: "bottom bottom",
+            scrub: 0.6,
+            invalidateOnRefresh: true,
+          },
+        });
+
+        return () => {
+          trilho.style.removeProperty("height");
+          for (const p of ["position", "top", "height", "display", "flex-direction", "justify-content"]) {
+            tela.style.removeProperty(p);
+          }
+          fileira.style.removeProperty("overflow");
+          fileira.style.removeProperty("scroll-snap-type");
+        };
+      });
     },
     { scope: sectionRef },
   );
@@ -75,7 +125,7 @@ export function WallExploded() {
     <section
       ref={sectionRef}
       id="parede"
-      className="overflow-hidden bg-off-white py-xl text-black md:py-3xl"
+      className="overflow-x-clip bg-off-white py-xl text-black md:py-3xl"
       aria-labelledby="parede-title"
     >
       <div className="container">
@@ -91,6 +141,8 @@ export function WallExploded() {
           </p>
         </div>
 
+        <div data-wall-track className="relative">
+        <div data-wall-sticky>
         <figure data-wall-rail className="mt-16 md:mt-24">
           <ol
             data-wall-row
@@ -130,6 +182,8 @@ export function WallExploded() {
             {WALL_SECTION.note}
           </figcaption>
         </figure>
+        </div>
+        </div>
 
         <p className="mt-16 max-w-3xl font-display text-[clamp(1.5rem,2.2vw,2.4rem)] font-semibold leading-snug tracking-[-0.03em] md:mt-24">
           {WALL_SECTION.consequence}

@@ -14,7 +14,9 @@ export function ExtractionTrack() {
       if (!root) return;
 
       const mm = gsap.matchMedia();
-      mm.add("(min-width: 1024px) and (prefers-reduced-motion: no-preference)", () => {
+      // Todas as larguras: no celular a foto também gruda na tela e a troca
+      // acontece enquanto o texto passa por cima dela.
+      mm.add("(prefers-reduced-motion: no-preference)", () => {
         const track = root.querySelector<HTMLElement>("[data-extraction-track]");
         const forest = root.querySelector<HTMLElement>("[data-extraction-forest]");
         const quarry = root.querySelector<HTMLElement>("[data-extraction-quarry]");
@@ -69,13 +71,13 @@ export function ExtractionTrack() {
         </div>
       </div>
 
-      {/* Tela dividida: a foto ocupa a metade esquerda, de borda a borda e da
-          altura da tela, presa enquanto o texto da direita rola. Antes ela
-          ficava numa coluna do container com 76vh e sobrava preto em cima e
-          embaixo. */}
-      <div className="grid lg:grid-cols-2">
-          <div data-extraction-track className="relative">
-            <figure className="relative aspect-[4/5] overflow-hidden bg-carbon-soft lg:sticky lg:top-0 lg:aspect-auto lg:h-[100svh]">
+      {/* Desktop: tela dividida, a foto na metade esquerda da altura da tela,
+          presa enquanto o texto da direita rola. Celular: a foto gruda
+          ocupando a tela inteira e o texto passa rolando por cima dela, com
+          véu escuro. Nos dois a foto é filha direta deste bloco, para o
+          sticky valer pela altura inteira dele. */}
+      <div data-extraction-track className="relative lg:grid lg:grid-cols-2">
+            <figure className="sticky top-0 h-[100svh] overflow-hidden bg-carbon-soft lg:col-start-1 lg:row-start-1 lg:self-start">
               <div data-extraction-quarry className="absolute inset-0 will-change-transform">
                 <Image
                   src={EXTRACTION_SECTION.image.src}
@@ -95,19 +97,20 @@ export function ExtractionTrack() {
                   alt=""
                   fill
                   quality={75}
-                  sizes="50vw"
+                  sizes="(min-width: 1024px) 50vw, 100vw"
                   className="object-cover saturate-[.9] contrast-[.98]"
                 />
               </div>
               <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-black/5" />
-              <figcaption className="absolute bottom-6 left-6 right-6 max-w-sm text-xs leading-relaxed text-white/60 md:bottom-8 md:left-8">
+              {/* Véu só no celular, onde o texto branco fica por cima da foto. */}
+              <div className="absolute inset-0 bg-black/50 lg:hidden" />
+              <figcaption className="absolute bottom-6 left-6 right-6 hidden max-w-sm text-xs leading-relaxed text-white/60 md:bottom-8 md:left-8 lg:block">
                 A mesma cadeia que ergue cidades começa na paisagem.
               </figcaption>
             </figure>
-          </div>
 
-          <div className="px-6 pb-xl pt-16 sm:px-8 lg:px-16 lg:py-0 xl:px-24">
-            <div className="lg:flex lg:min-h-[100svh] lg:flex-col lg:justify-center">
+          <div className="relative z-10 -mt-[100svh] px-6 sm:px-8 lg:col-start-2 lg:row-start-1 lg:mt-0 lg:px-16 xl:px-24">
+            <div className="flex min-h-[100svh] flex-col justify-center">
               <p className="font-display text-[clamp(5rem,10vw,10rem)] font-semibold leading-[0.78] tracking-[-0.075em]">
                 {EXTRACTION_SECTION.figure.value}
               </p>
@@ -116,13 +119,13 @@ export function ExtractionTrack() {
               </p>
             </div>
 
-            <div className="mt-16 space-y-16 lg:mt-0 lg:space-y-0">
+            <div>
               {EXTRACTION_SECTION.beats.map((beat) => (
-                <article key={beat.title} className="lg:flex lg:min-h-[80svh] lg:flex-col lg:justify-center">
+                <article key={beat.title} className="flex min-h-[85svh] flex-col justify-center lg:min-h-[80svh]">
                   <h3 className="max-w-sm font-display text-2xl font-semibold leading-tight tracking-[-0.025em] md:text-3xl">
                     {beat.title}
                   </h3>
-                  <p className="mt-5 max-w-md text-base leading-relaxed text-white-70">
+                  <p className="mt-5 max-w-md text-base leading-relaxed text-white/80 lg:text-white-70">
                     {beat.body}
                   </p>
                 </article>

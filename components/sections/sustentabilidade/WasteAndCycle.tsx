@@ -7,6 +7,7 @@ import { LIFECYCLE_SECTION, SITE_SECTION } from "@/lib/sustentabilidade-data";
 
 export function ImpactJourney() {
   const siteRef = useRef<HTMLElement>(null);
+  const cycleRef = useRef<HTMLElement>(null);
 
   useGSAP(
     () => {
@@ -14,11 +15,9 @@ export function ImpactJourney() {
       if (!root) return;
 
       const mm = gsap.matchMedia();
-      // Mesmo motivo do recorte da parede: a coluna sticky de imagens só existe
-      // a partir do `xl` do Tailwind, então o portão precisa casar com ele. Abaixo
-      // disso o movimento apagava os passos para 42% sem a troca de imagem que
-      // justifica o apagamento.
-      mm.add("(min-width: 1280px) and (prefers-reduced-motion: no-preference)", () => {
+      // Todas as larguras: a foto grudada existe no celular também (em tela
+      // cheia, atrás do texto), então a troca por passo vale para os dois.
+      mm.add("(prefers-reduced-motion: no-preference)", () => {
         const images = gsap.utils.toArray<HTMLElement>("[data-site-image]", root);
         const steps = gsap.utils.toArray<HTMLElement>("[data-site-step]", root);
         if (images.length !== steps.length) return;
@@ -49,6 +48,30 @@ export function ImpactJourney() {
     { scope: siteRef },
   );
 
+  // Ciclo: cada foto se revela de baixo para cima, com um leve recuo de zoom,
+  // e o número sobe no mesmo trecho. Sem contagem: número aqui é faixa ou
+  // aproximação, e contador mutila as duas coisas.
+  useGSAP(
+    () => {
+      const root = cycleRef.current;
+      if (!root) return;
+      const mm = gsap.matchMedia();
+      mm.add("(prefers-reduced-motion: no-preference)", () => {
+        gsap.utils.toArray<HTMLElement>("[data-cycle-item]", root).forEach((item) => {
+          const frame = item.querySelector<HTMLElement>("[data-cycle-frame]");
+          const photo = item.querySelector<HTMLElement>("[data-cycle-photo]");
+          const figure = item.querySelector<HTMLElement>("[data-cycle-figure]");
+          if (!frame || !photo || !figure) return;
+          const scrollTrigger = { trigger: item, start: "top 88%", end: "top 38%", scrub: 0.6 };
+          gsap.fromTo(frame, { clipPath: "inset(100% 0 0 0)" }, { clipPath: "inset(0% 0 0 0)", ease: "none", scrollTrigger });
+          gsap.fromTo(photo, { scale: 1.15 }, { scale: 1, ease: "none", scrollTrigger });
+          gsap.fromTo(figure, { yPercent: 40, opacity: 0 }, { yPercent: 0, opacity: 1, ease: "none", scrollTrigger: { ...scrollTrigger, start: "top 60%", end: "top 25%" } });
+        });
+      });
+    },
+    { scope: cycleRef },
+  );
+
   return (
     <>
       <section
@@ -71,10 +94,12 @@ export function ImpactJourney() {
           </div>
         </div>
 
-        {/* Tela dividida, como na extração: a foto ocupa a metade esquerda de
-            borda a borda e a altura da tela inteira enquanto os passos rolam. */}
-        <div className="xl:grid xl:grid-cols-2">
-            <div className="hidden xl:block">
+        {/* Desktop: tela dividida, como na extração. Celular e tablet: a foto
+            gruda em tela cheia e os passos passam por cima dela. O wrapper da
+            coluna vira `contents` abaixo do xl para a foto sticky ser filha
+            direta deste bloco e grudar pela altura inteira dele. */}
+        <div className="relative xl:grid xl:grid-cols-2">
+            <div className="contents xl:block">
               <div className="sticky top-0 h-[100svh] overflow-hidden bg-carbon-soft">
                 {SITE_SECTION.steps.map((step, index) => (
                   <div
@@ -88,40 +113,30 @@ export function ImpactJourney() {
                       alt={step.image.alt}
                       fill
                       quality={80}
-                      sizes="50vw"
+                      sizes="(min-width: 1280px) 50vw, 100vw"
                       className={`object-cover saturate-[.9] contrast-[.98] ${step.image.focus ?? ""}`}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent" />
                   </div>
                 ))}
+                {/* Véu só abaixo do xl, onde o texto branco fica por cima. */}
+                <div className="absolute inset-0 bg-black/50 xl:hidden" />
               </div>
             </div>
 
-            <div className="container pb-xl xl:max-w-none xl:px-16 xl:pb-0 2xl:px-24">
+            <div className="container relative z-10 -mt-[100svh] xl:mt-0 xl:max-w-none xl:px-16 2xl:px-24">
               {SITE_SECTION.steps.map((step) => (
                 <article
                   key={step.title}
                   data-site-step
-                  className="py-10 lg:grid lg:grid-cols-12 lg:items-center lg:gap-10 xl:flex xl:min-h-[100svh] xl:flex-col xl:items-stretch xl:justify-center xl:gap-0 xl:py-16"
+                  className="flex min-h-[100svh] flex-col justify-center py-16"
                 >
-                  <div className="relative mb-8 aspect-[4/3] overflow-hidden bg-carbon-soft lg:col-span-7 lg:mb-0 lg:aspect-[3/2] xl:hidden">
-                    <Image
-                      src={step.image.src}
-                      alt={step.image.alt}
-                      fill
-                      quality={78}
-                      sizes="(min-width: 1024px) 58vw, 100vw"
-                      className={`object-cover saturate-[.9] contrast-[.98] ${step.image.focus ?? ""}`}
-                    />
-                  </div>
-                  <div className="lg:col-span-4 lg:col-start-9 xl:contents">
-                    <h3 className="max-w-md font-display text-[clamp(1.8rem,3vw,3.2rem)] font-semibold leading-[1.02] tracking-[-0.035em]">
-                      {step.title}
-                    </h3>
-                    <p className="mt-6 max-w-md text-base leading-relaxed text-white-70">
-                      {step.body}
-                    </p>
-                  </div>
+                  <h3 className="max-w-md font-display text-[clamp(1.9rem,3vw,3.2rem)] font-semibold leading-[1.02] tracking-[-0.035em]">
+                    {step.title}
+                  </h3>
+                  <p className="mt-6 max-w-md text-base leading-relaxed text-white/80 xl:text-white-70">
+                    {step.body}
+                  </p>
                 </article>
               ))}
             </div>
@@ -129,6 +144,7 @@ export function ImpactJourney() {
       </section>
 
       <section
+        ref={cycleRef}
         id="ciclo"
         className="bg-off-white py-xl text-black md:py-3xl"
         aria-labelledby="ciclo-title"
@@ -148,9 +164,10 @@ export function ImpactJourney() {
 
           <div className="mt-20 grid gap-20 lg:mt-32 lg:grid-cols-2 lg:gap-6">
             {[LIFECYCLE_SECTION.operation, LIFECYCLE_SECTION.steel].map((item, index) => (
-              <article key={item.title} className={index === 1 ? "lg:mt-36" : ""}>
-                <figure className="relative aspect-[4/3] overflow-hidden bg-carbon-soft">
+              <article key={item.title} data-cycle-item className={index === 1 ? "lg:mt-36" : ""}>
+                <figure data-cycle-frame className="relative aspect-[4/3] overflow-hidden bg-carbon-soft">
                   <Image
+                    data-cycle-photo
                     src={item.image.src}
                     alt={item.image.alt}
                     fill
@@ -160,7 +177,7 @@ export function ImpactJourney() {
                   />
                 </figure>
                 <div className="grid gap-8 pt-9 md:grid-cols-5 md:gap-10 md:pt-11">
-                  <div className="md:col-span-2">
+                  <div data-cycle-figure className="md:col-span-2">
                     <p className="font-display text-[clamp(3.7rem,6vw,6.8rem)] font-semibold leading-[0.82] tracking-[-0.065em]">
                       {item.figure.value}
                     </p>
