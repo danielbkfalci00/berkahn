@@ -20,7 +20,14 @@ function formatRelativeTime(date: string): string {
   return `Há ${diffDays} dias`;
 }
 
-export default async function AdminDashboard() {
+export default async function AdminDashboard({
+  searchParams,
+}: {
+  searchParams: Promise<{ aviso?: string | string[] }>;
+}) {
+  const { aviso } = await searchParams;
+  // Setado pelo middleware quando roleCanAccessPath nega a rota pedida.
+  const semPermissao = aviso === "sem-permissao";
   const supabase = await createClient();
   const session = await getAdminSession();
 
@@ -68,12 +75,22 @@ export default async function AdminDashboard() {
   const leadOperations = canManageCommercial ? await getDashboardLeadOperations() : null;
 
   return (
-    <DashboardContent
+    <>
+      {semPermissao && (
+        <p
+          role="status"
+          className="mx-auto mb-4 max-w-6xl rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-800"
+        >
+          Seu papel não dá acesso à área que você tentou abrir. Se precisar dela, peça acesso a um owner.
+        </p>
+      )}
+      <DashboardContent
       user={user}
       stats={stats}
       recentActivity={recentActivity}
       leadOperations={leadOperations}
       membership={session?.membership ?? null}
-    />
+      />
+    </>
   );
 }

@@ -313,6 +313,9 @@ export interface AnalyticsLead {
   convertido_em: string | null;
   arquivado_em: string | null;
   anonimizado_em: string | null;
+  /** Opcionais: só o detalhe do lead seleciona (painel LGPD do owner). */
+  retencao_excecao?: boolean;
+  retencao_excecao_motivo?: string | null;
   origem_legado: string | null;
   importado_em: string | null;
   sheet_sync_status: "pendente" | "sincronizado" | "falhou";
@@ -362,7 +365,6 @@ export interface SnapshotContext {
   topAction: ActionItem;
   ga4PropertyId: string;
   gscSiteUrl: string;
-  historicalMonths: string;
 
   /** Regra de comparabilidade e proveniência gravadas no momento da coleta. */
   comparability?: SnapshotComparability;

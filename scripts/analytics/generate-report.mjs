@@ -57,8 +57,13 @@ function clearSchedulerError() {
 }
 
 function fmtDelta(current, previous, kind = 'pct') {
-  if (previous === undefined || previous === null || previous === 0) {
+  if (previous === undefined || previous === null) {
     return { text: '—', pct: null };
+  }
+  // Base zero não tem variação percentual, mas crescimento a partir do nada é
+  // informação: omitir o delta escondia justamente as páginas que surgiram.
+  if (previous === 0) {
+    return { text: current > 0 ? 'novo' : '—', pct: null };
   }
   const delta = ((current - previous) / previous) * 100;
   const arrow = delta > 0 ? '↑' : delta < 0 ? '↓' : '→';
@@ -73,16 +78,16 @@ function applyDeltas(current, previous) {
   for (const key of ['users', 'sessions', 'pageviews', 'engagementRate', 'avgSessionDuration', 'clicks', 'impressions', 'ctr', 'position']) {
     if (current[key] !== undefined) {
       const d = fmtDelta(current[key], previous?.[key]);
-      if (d.pct !== null) {
-        result[`${key}MoMText`] = d.text;
-        result[`${key}MoMPct`] = d.pct;
-      }
+      if (d.text !== '—') result[`${key}MoMText`] = d.text;
+      if (d.pct !== null) result[`${key}MoMPct`] = d.pct;
     }
   }
   return result;
 }
 
-// Defensive patch: normaliza engagementRate se vier como ratio (0-1) em vez de pct (0-100)
+// Só para fixtures legadas: algumas gravaram engagementRate como ratio (0-1).
+// O caminho ao vivo já recebe % de fetchOverall, e reaplicar aqui multiplicava
+// por 100 qualquer taxa real abaixo de 5%.
 function normalizeGa4(data) {
   if (!data) return data;
   if (data.engagementRate !== undefined && data.engagementRate > 0 && data.engagementRate < 5) {
@@ -138,8 +143,11 @@ async function buildContext({ year, month, useFixture, fromCache = false, partia
   if (shouldUseFixture) {
     const fx = JSON.parse(fs.readFileSync(fixturePath, 'utf-8'));
     assertFixtureMatches(fx, { fixtureName, isPartial, period });
-    ga4Data = normalizeGa4(fx.ga4); gscData = fx.gsc;
-    ga4Prev = normalizeGa4(fx.ga4Prev); gscPrev = fx.gscPrev;
+    // Fixture com _meta foi gravada pelo caminho ao vivo, já em %: normalizar
+    // de novo reintroduzia o x100 em taxas reais abaixo de 5%.
+    const legacy = !fx._meta;
+    ga4Data = legacy ? normalizeGa4(fx.ga4) : fx.ga4; gscData = fx.gsc;
+    ga4Prev = legacy ? normalizeGa4(fx.ga4Prev) : fx.ga4Prev; gscPrev = fx.gscPrev;
   } else {
     const urls = await getAllPostUrls();
     const [ga4Raw, gscRaw, ga4PrevResult] = await Promise.all([
@@ -153,8 +161,8 @@ async function buildContext({ year, month, useFixture, fromCache = false, partia
         })),
     ]);
     const { previousOverall, comparisonUnavailableReason, ...currentGsc } = gscRaw;
-    ga4Data = normalizeGa4(ga4Raw); gscData = currentGsc;
-    ga4Prev = normalizeGa4(ga4PrevResult.data); gscPrev = previousOverall;
+    ga4Data = ga4Raw; gscData = currentGsc;
+    ga4Prev = ga4PrevResult.data; gscPrev = previousOverall;
     ga4BaselineFailureReason = ga4PrevResult.reason ?? undefined;
     gscBaselineFailureReason = comparisonUnavailableReason ?? undefined;
     if (ga4BaselineFailureReason) console.warn(`   ⚠️  ${ga4BaselineFailureReason}`);
@@ -202,12 +210,24 @@ async function buildContext({ year, month, useFixture, fromCache = false, partia
   const indexation = await enrichRowsWithTitle(eligibleIndexation, 'slug');
   const indexationWithStatus = indexation.map((i) => {
     const isIndexed = isIndexedState(i.coverageState);
+    // Falha da URL Inspection (cota, 429) não diz nada sobre o índice: rotular
+    // como "Não indexada" derrubava a cobertura e o Health Score sem motivo real.
+    const statusLabel = i.verdict === 'ERROR'
+      ? '⚠️ Falha na inspeção'
+      : isIndexed ? '✅ Indexada' : (i.verdict === 'PASS' ? '⚠️ Crawled' : '❌ Não indexada');
     return {
       ...i,
-      statusLabel: isIndexed ? '✅ Indexada' : (i.verdict === 'PASS' ? '⚠️ Crawled' : '❌ Não indexada'),
+      statusLabel,
       lastCrawlTime: i.lastCrawlTime ? new Date(i.lastCrawlTime).toLocaleDateString('pt-BR') : '—',
     };
   });
+
+  // Itens com falha de inspeção ficam na tabela, mas fora do universo medido.
+  const inspectedIndexation = indexationWithStatus.filter((i) => i.verdict !== 'ERROR');
+  const inspectionErrors = indexationWithStatus.length - inspectedIndexation.length;
+  if (inspectionErrors > 0) {
+    console.warn(`   ⚠️  URL Inspection falhou em ${inspectionErrors} de ${indexationWithStatus.length} URLs; excluídas da cobertura.`);
+  }
 
   const ga4WithDeltas = comparability.ga4MoM
     ? applyDeltas(ga4Data, ga4Prev)
@@ -225,17 +245,17 @@ async function buildContext({ year, month, useFixture, fromCache = false, partia
     ga4WithDeltas.topPages = ga4WithDeltas.topPages.map((p) => ({ ...p, momText: '—' }));
   }
 
-  const insights = buildInsights({ ga4: ga4Data, gsc: gscData, ga4Prev, gscPrev, indexation: indexationWithStatus });
-  const { actionsP0, actionsP1, actionsP2 } = buildActions({ ga4: ga4Data, gsc: gscData, indexation: indexationWithStatus });
+  const insights = buildInsights({ ga4: ga4Data, gsc: gscData, ga4Prev, gscPrev, indexation: inspectedIndexation });
+  const { actionsP0, actionsP1, actionsP2 } = buildActions({ ga4: ga4Data, gsc: gscData, indexation: inspectedIndexation });
   const summary = buildSummary({
     ga4: ga4Data,
     gsc: gscData,
     ga4Prev: comparability.ga4MoM ? ga4Prev : null,
     gscPrev: comparability.gscMoM ? gscPrev : null,
-    indexation: indexationWithStatus,
+    indexation: inspectedIndexation,
   });
 
-  const indexedCount = indexationWithStatus.filter((i) => isIndexedState(i.coverageState)).length;
+  const indexedCount = inspectedIndexation.filter((i) => isIndexedState(i.coverageState)).length;
 
   // toISOString() é UTC: rodando 21h-23h59 local o carimbo sairia um dia à frente.
   const now = new Date();
@@ -268,7 +288,8 @@ async function buildContext({ year, month, useFixture, fromCache = false, partia
     gsc: gscWithDeltas,
     indexation: indexationWithStatus,
     indexedCount,
-    totalArticles: indexationWithStatus.length,
+    totalArticles: inspectedIndexation.length,
+    inspectionErrors,
     topArticle: ga4WithDeltas.topPages[0] || { title: '—', slug: '—' },
     summary,
     insights,
@@ -278,7 +299,6 @@ async function buildContext({ year, month, useFixture, fromCache = false, partia
     topAction: actionsP0[0] || actionsP1[0] || { text: 'Sem ações priorizadas' },
     ga4PropertyId: getGa4PropertyId(),
     gscSiteUrl: getGscSiteUrl(),
-    historicalMonths: 'em breve (após 3 meses de bootstrap)',
     comparability,
     reportMode: isPartial ? 'partial' : 'closed',
     sources: {

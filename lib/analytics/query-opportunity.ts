@@ -1,7 +1,7 @@
 // Quadrante de oportunidade de query: onde o Google já entrega audiência e o
 // clique não vem.
 //
-// Módulo puro, sem I/O — exercitado por scripts/analytics/testar-oportunidade.mjs.
+// Módulo puro, sem I/O — exercitado por scripts/analytics/testar-heatmaps.mjs.
 
 import type { GscQuery } from "@/types/analytics";
 

@@ -81,6 +81,9 @@ const PRIORITY_META: Record<
 
 const PRIORITIES: TaskPriority[] = ["p0", "p1", "p2"];
 
+// Tempo do aviso de erro de mutação na tela; 4s não dava para ler.
+const ERROR_VISIBLE_MS = 10000;
+
 export function TaskBoard({ tasks, systemActions }: TaskBoardProps) {
   const [isPending, startTransition] = React.useTransition();
   const [localTasks, setLocalTasks] = React.useState<AnalyticsTask[]>(tasks);
@@ -124,10 +127,11 @@ export function TaskBoard({ tasks, systemActions }: TaskBoardProps) {
   const doneTasks = localTasks.filter((t) => t.status === "done");
   const activeTask = activeId ? localTasks.find((t) => t.id === activeId) ?? null : null;
 
+  // O aviso também é anunciado a leitores de tela via role="alert".
   function flashError(message: string) {
     setErrorMsg(message);
     setLocalTasks(tasks); // reverte otimista
-    window.setTimeout(() => setErrorMsg(null), 4000);
+    window.setTimeout(() => setErrorMsg(null), ERROR_VISIBLE_MS);
   }
 
   /** Aplica mutação otimista no localTasks e persiste; reverte em erro. */
@@ -191,6 +195,11 @@ export function TaskBoard({ tasks, systemActions }: TaskBoardProps) {
   }
 
   function handleDelete(id: string) {
+    // Exclusão é definitiva (sem desfazer) e o botão fica colado no Reabrir:
+    // confirma antes, no mesmo padrão de LeadsQueue.
+    const alvo = localTasks.find((t) => t.id === id);
+    const msg = alvo ? `Excluir a tarefa “${alvo.title}”?` : "Excluir esta tarefa?";
+    if (!window.confirm(msg)) return;
     runOptimistic((prev) => prev.filter((t) => t.id !== id), () => deleteTask(id));
   }
 
@@ -334,7 +343,7 @@ export function TaskBoard({ tasks, systemActions }: TaskBoardProps) {
         </h3>
 
         {errorMsg && (
-          <div className="flex items-center gap-2 mb-4 p-3 rounded-md bg-[#F8E8E8] text-[#B83A3A] text-sm">
+          <div role="alert" className="flex items-center gap-2 mb-4 p-3 rounded-md bg-[#F8E8E8] text-[#B83A3A] text-sm">
             <AlertCircle className="h-4 w-4 shrink-0" strokeWidth={2} />
             {errorMsg}
           </div>
@@ -468,7 +477,7 @@ export function TaskBoard({ tasks, systemActions }: TaskBoardProps) {
                         aria-label="Reabrir tarefa"
                         disabled={isPending}
                         onClick={() => handleReopen(task.id)}
-                        className="inline-flex items-center justify-center h-7 w-7 rounded-md border border-neutral-200 text-neutral-400 hover:text-neutral-700 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-1"
+                        className="inline-flex items-center justify-center h-11 w-11 sm:h-7 sm:w-7 rounded-md border border-neutral-200 text-neutral-400 hover:text-neutral-700 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-1"
                       >
                         <RotateCcw className="h-3.5 w-3.5" strokeWidth={1.75} />
                       </button>
@@ -478,7 +487,7 @@ export function TaskBoard({ tasks, systemActions }: TaskBoardProps) {
                         aria-label="Excluir tarefa"
                         disabled={isPending}
                         onClick={() => handleDelete(task.id)}
-                        className="inline-flex items-center justify-center h-7 w-7 rounded-md border border-neutral-200 text-neutral-400 hover:text-[#B83A3A] hover:bg-[#F8E8E8] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-1"
+                        className="inline-flex items-center justify-center h-11 w-11 sm:h-7 sm:w-7 rounded-md border border-neutral-200 text-neutral-400 hover:text-[#B83A3A] hover:bg-[#F8E8E8] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-1"
                       >
                         <Trash2 className="h-3.5 w-3.5" strokeWidth={1.75} />
                       </button>
@@ -596,7 +605,7 @@ function SortableTaskRow({
         <button
           type="button"
           aria-label="Arrastar tarefa"
-          className="mt-0.5 cursor-grab touch-none text-neutral-300 hover:text-neutral-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-1 rounded"
+          className="-m-2 sm:m-0 sm:mt-0.5 inline-flex items-center justify-center min-h-11 min-w-11 sm:min-h-0 sm:min-w-0 cursor-grab touch-none text-neutral-300 hover:text-neutral-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-1 rounded"
           {...attributes}
           {...listeners}
         >

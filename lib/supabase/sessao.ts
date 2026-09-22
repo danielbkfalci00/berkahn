@@ -1,9 +1,12 @@
 import "server-only";
+import { cache } from "react";
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import type { AdminMembership, AdminRole } from "@/types/analytics";
 
-export async function getAdminSession() {
+// cache() deduplica dentro de uma mesma renderização: layout, página e
+// exigirSessao compartilham um único getUser() + SELECT por request.
+export const getAdminSession = cache(async () => {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return null;
@@ -15,7 +18,7 @@ export async function getAdminSession() {
     .maybeSingle();
   if (error || !membership) return null;
   return { supabase, user, membership: membership as AdminMembership };
-}
+});
 
 /**
  * Barreira de autenticação para route handlers sob /api/admin.

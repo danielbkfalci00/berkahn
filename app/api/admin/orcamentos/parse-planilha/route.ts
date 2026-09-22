@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"
-import { createClient } from "@/lib/supabase/server"
+import { exigirSessao } from "@/lib/supabase/sessao"
 import { parsePlanilha } from "@/lib/orcamento-planilha"
 
 export const dynamic = "force-dynamic"
@@ -7,13 +7,10 @@ export const dynamic = "force-dynamic"
 const MAX_INPUT_BYTES = 5 * 1024 * 1024
 
 export async function POST(request: Request) {
-  const supabase = await createClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-  if (!user) {
-    return NextResponse.json({ error: "Não autorizado" }, { status: 401 })
-  }
+  // Mesmo gate das demais rotas de orçamento: exige membership ativa com
+  // papel owner/comercial, não só um usuário autenticado qualquer.
+  const barrado = await exigirSessao()
+  if (barrado) return barrado
 
   const formData = await request.formData()
   const file = formData.get("file")

@@ -3,9 +3,11 @@ import { injetarPonte, origemDoAdmin } from "@/lib/documentacoes/injecao";
 
 // Serve o HTML bruto do documento para o <iframe> do viewer.
 //
-// Fica sob /admin/ e NÃO sob /api/ de propósito: o matcher do middleware.ts é
-// ['/', '/admin/:path*'], então uma rota em /api/ ficaria pública. Aqui o guard
-// de sessão de lib/supabase/middleware.ts já protege sem auth manual.
+// Fica sob /admin/ porque o <iframe> do viewer precisa da mesma origem e do
+// mesmo prefixo das páginas do painel. O gate de sessão vem do proxy.ts
+// (matcher ['/', '/admin/:path*', '/api/admin/:path*'], via
+// lib/supabase/middleware.ts). /api/admin também seria protegido, mas ali o
+// padrão é o handler chamar exigirSessao() por conta própria.
 export const dynamic = "force-dynamic";
 
 type Props = {

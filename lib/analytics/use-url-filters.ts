@@ -1,9 +1,16 @@
 "use client";
 
 import { useCallback, useMemo } from "react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 
 const EMPTY_DEFAULTS = Object.freeze({});
+
+// Os filtros são aplicados só no client. router.replace re-renderizaria a
+// página force-dynamic inteira no servidor a cada tecla; history.replaceState
+// é sincronizado com useSearchParams pelo App Router sem novo request.
+function replaceUrl(pathname: string, qs: string) {
+  window.history.replaceState(window.history.state, "", qs ? `${pathname}?${qs}` : pathname);
+}
 
 interface UseUrlFiltersOptions<TKey extends string> {
   /** Valores default por key. Quando o valor === default, a key é removida da URL (clean). */
@@ -26,7 +33,7 @@ interface UseUrlFiltersReturn<TKey extends string> {
 /**
  * Hook genérico para gerenciar filtros via URL search params.
  * - Lê valores da URL com fallback pra defaults.
- * - Escreve via router.replace (sem scroll) — preserva params não gerenciados (ex: ?month=).
+ * - Escreve via history.replaceState (sem scroll, sem request ao servidor) — preserva params não gerenciados (ex: ?month=).
  * - Quando valor === "" ou === default, remove a key (não polui URL com defaults).
  *
  * Uso típico em tabelas filtráveis: `useUrlFilters(["posts_q", "posts_status", "posts_cat"] as const)`.
@@ -35,7 +42,6 @@ export function useUrlFilters<TKey extends string>(
   keys: readonly TKey[],
   options?: UseUrlFiltersOptions<TKey>
 ): UseUrlFiltersReturn<TKey> {
-  const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const defaults = options?.defaults
@@ -59,9 +65,9 @@ export function useUrlFilters<TKey extends string>(
         params.set(key, value);
       }
       const qs = params.toString();
-      router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
+      replaceUrl(pathname, qs);
     },
-    [searchParams, router, pathname, defaults]
+    [searchParams, pathname, defaults]
   );
 
   const clearValues = useCallback((targetKeys: readonly TKey[]) => {
@@ -70,8 +76,8 @@ export function useUrlFilters<TKey extends string>(
       params.delete(key);
     }
     const qs = params.toString();
-    router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
-  }, [searchParams, router, pathname]);
+    replaceUrl(pathname, qs);
+  }, [searchParams, pathname]);
 
   const clearAll = useCallback(() => {
     const params = new URLSearchParams(searchParams.toString());
@@ -79,8 +85,8 @@ export function useUrlFilters<TKey extends string>(
       params.delete(key);
     }
     const qs = params.toString();
-    router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
-  }, [keys, searchParams, router, pathname]);
+    replaceUrl(pathname, qs);
+  }, [keys, searchParams, pathname]);
 
   const hasActive = useMemo(() => {
     return keys.some((k) => {

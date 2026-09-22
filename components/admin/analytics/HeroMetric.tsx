@@ -36,7 +36,12 @@ export function HeroMetric({ context, trendPoints }: HeroMetricProps) {
   // Sparkline: score histórico não temos ainda — usamos users como proxy
   const usersTrend = trendPoints.map((p) => p.users);
   const currentUsers = context.ga4.users;
-  const prevUsers = trendPoints.length > 1 ? trendPoints[trendPoints.length - 2].users : undefined;
+  // Compara com o mês imediatamente anterior ao selecionado (?month=), não com
+  // o penúltimo da série. Em mês parcial o total bruto é de N dias, então o
+  // ícone fica neutro para não sinalizar queda falsa.
+  const selectedIdx = trendPoints.findIndex((p) => p.monthSlug === context.monthSlug);
+  const prevUsers =
+    !context.partial && selectedIdx > 0 ? trendPoints[selectedIdx - 1].users : undefined;
   const { Icon: TrendIcon, color: trendColor } = trendIcon(currentUsers, prevUsers);
 
   return (

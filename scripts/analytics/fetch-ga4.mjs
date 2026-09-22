@@ -118,10 +118,10 @@ async function fetchTopPages(data, propertyId, startDate, endDate, limit) {
       }),
     ]);
     const mapB = new Map();
-    for (const r of resB.data?.rows ?? []) {
+    for (const r of resB.rows ?? []) {
       mapB.set(r.dimensionValues[0].value, r.metricValues);
     }
-    rows = (resA.data?.rows ?? []).map((r) => {
+    rows = (resA.rows ?? []).map((r) => {
       const path = r.dimensionValues[0].value;
       const extra = mapB.get(path);
       const combined = [...r.metricValues, ...(extra ?? Array.from({ length: 5 }, () => ({ value: '0' })))];
@@ -192,8 +192,8 @@ async function fetchByDevice(data, propertyId, startDate, endDate) {
   });
 }
 
-async function fetchByArea(data, propertyId, startDate, endDate) {
-  const pages = await fetchTopPages(data, propertyId, startDate, endDate, LIMITE_PAGINAS);
+// Deriva de topPages já coletado: pedir o mesmo relatório de novo só gastava cota.
+function aggregateByArea(pages) {
   const buckets = {};
   let total = 0;
   pages.forEach((p) => {
@@ -295,15 +295,16 @@ export async function fetchGa4(startDate, endDate) {
   const propertyId = getGa4PropertyId();
   const data = google.analyticsdata({ version: 'v1beta', auth });
 
-  const [overall, topPages, topSources, byDevice, byArea, events, articleProgress] = await Promise.all([
+  const [overall, topPages, topSources, byDevice, events, articleProgress] = await Promise.all([
     fetchOverall(data, propertyId, startDate, endDate),
     fetchTopPages(data, propertyId, startDate, endDate, LIMITE_PAGINAS),
     fetchTopSources(data, propertyId, startDate, endDate, LIMITE_FONTES),
     fetchByDevice(data, propertyId, startDate, endDate),
-    fetchByArea(data, propertyId, startDate, endDate),
     fetchEvents(data, propertyId, startDate, endDate),
     fetchArticleProgress(data, propertyId, startDate, endDate),
   ]);
+
+  const byArea = aggregateByArea(topPages);
 
   return {
     ...overall,

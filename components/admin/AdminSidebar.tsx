@@ -90,15 +90,21 @@ export function AdminSidebar({ membership }: { membership: AdminMembership | nul
   const moreButtonRef = useRef<HTMLButtonElement>(null);
   const drawerRef = useRef<HTMLElement>(null);
 
+  // O badge só importa para quem acessa Leads, e só muda quando alguém abre
+  // leads; fora de /admin/leads a chave fica fixa e a navegação não refaz o COUNT.
+  const canSeeLeads = Boolean(membership && roleCanAccessPath(membership.role, "/admin/leads"));
+  const leadsRefreshKey = pathname.startsWith("/admin/leads") ? pathname : "fora-de-leads";
   useEffect(() => {
+    if (!canSeeLeads) return;
     const supabase = createClient();
     void supabase
       .from("leads")
       .select("id", { count: "exact", head: true })
       .is("visualizado_em", null)
       .is("arquivado_em", null)
+      .is("anonimizado_em", null)
       .then(({ count }) => setUnseenLeads(count ?? 0));
-  }, [pathname]);
+  }, [canSeeLeads, leadsRefreshKey]);
 
   useEffect(() => {
     if (!mobileOpen) return;
