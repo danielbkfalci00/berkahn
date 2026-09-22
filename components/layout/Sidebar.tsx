@@ -2,210 +2,88 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useMenu } from "@/components/providers/MenuProvider";
-import { NAV_LINKS, NavLinkItem, NavLinkChild } from "@/lib/constants";
+import { BAR_LINKS, isNavLinkActive } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import { ContactFormDialog } from "@/components/forms/ContactFormDialog";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
 
-// Type guard para detectar se link tem children
-function hasChildren(
-  link: typeof NAV_LINKS[number]
-): link is typeof NAV_LINKS[number] & {
-  children: NonNullable<typeof NAV_LINKS[number]["children"]>;
-} {
-  return "children" in link && Array.isArray(link.children) && link.children.length > 0;
-}
-
-// Componente para itens com children (nested menu)
-interface NavItemWithChildrenProps {
-  link: NavLinkItem & { children: NavLinkChild[] };
-  isActive: boolean;
-  close: () => void;
-  pathname: string;
-}
-
-function NavItemWithChildren({ link, isActive, close, pathname }: NavItemWithChildrenProps) {
-  // Hash tracking para active state de sub-links
-  const [currentHash, setCurrentHash] = useState("");
-
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      setCurrentHash(window.location.hash);
-
-      const handleHashChange = () => setCurrentHash(window.location.hash);
-      window.addEventListener("hashchange", handleHashChange);
-      return () => window.removeEventListener("hashchange", handleHashChange);
-    }
-  }, []);
-
-  // Verifica se sub-link está ativo
-  const isChildActive = (childHref: string) => {
-    const [childPath, childHash] = childHref.split("#");
-    if (childHash) {
-      return pathname === childPath && currentHash === `#${childHash}`;
-    }
-    return pathname === childPath;
-  };
-
-  // Handler para smooth scroll + fechar menu
-  const handleSubLinkClick = (href: string) => {
-    close();
-    // Se já estamos na página, apenas scroll
-    if (href.includes("#")) {
-      const [path, hash] = href.split("#");
-      if (pathname === path) {
-        const element = document.getElementById(hash);
-        if (element) {
-          element.scrollIntoView({ behavior: "smooth" });
-        }
-      }
-    }
-  };
-
-  return (
-    <AccordionItem value={link.href} className="border-none">
-      <div className="flex items-center">
-        {/* Label do pai - navega para página principal */}
-        <Link
-          href={link.href}
-          onClick={close}
-          className={cn(
-            "flex-1 py-2 px-4 text-base transition-all duration-300",
-            isActive && !link.children.some((c) => isChildActive(c.href))
-              ? "bg-black text-white font-medium"
-              : "text-black-70 hover:text-black hover:bg-black-5"
-          )}
-        >
-          {link.label}
-        </Link>
-
-        {/* Chevron - expande/colapsa accordion */}
-        <AccordionTrigger className="py-2 px-3 hover:bg-black-5 transition-colors duration-300 [&[data-state=open]>svg]:rotate-180 [&>svg]:h-5 [&>svg]:w-5 [&>svg]:text-black-50" />
-      </div>
-
-      {/* Sub-links */}
-      <AccordionContent className="pb-0">
-        <ul className="pl-4 border-l border-black-10 ml-4 space-y-1">
-          {link.children.map((child) => (
-            <li key={child.href}>
-              <Link
-                href={child.href}
-                onClick={() => handleSubLinkClick(child.href)}
-                className={cn(
-                  "block py-1.5 px-4 text-sm transition-all duration-300",
-                  isChildActive(child.href)
-                    ? "bg-black text-white font-medium"
-                    : "text-black-50 hover:text-black hover:bg-black-5"
-                )}
-              >
-                {child.label}
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </AccordionContent>
-    </AccordionItem>
-  );
-}
-
+/**
+ * Menu do celular e do tablet: um painel que desce colado na pílula do header.
+ *
+ * Mantém o nome Sidebar porque é quem o ClientLayout renderiza, mas deixou de
+ * ser gaveta lateral: uma gaveta da esquerda não conversa com uma navbar que
+ * flutua no centro. Acima de 1024px os links já estão na pílula e o painel
+ * não aparece.
+ *
+ * As camadas ficam abaixo do header (z-100), para o botão de fechar continuar
+ * clicável por cima do véu, e abaixo do diálogo de contato (z-150), que antes
+ * abria atrás da gaveta antiga (z-200).
+ */
 export function Sidebar() {
   const { isOpen, close } = useMenu();
   const pathname = usePathname();
 
-  // Auto-expand accordion when on a child page
-  const defaultAccordionValue = NAV_LINKS.find(
-    (link) => hasChildren(link) && link.children?.some((c) => pathname === c.href.split("#")[0])
-  )?.href;
+  // Se a janela alarga para desktop com o menu aberto, o painel some pelo
+  // lg:hidden mas o MenuProvider deixou o body com overflow hidden: a página
+  // travaria sem rolar. Fechar ao cruzar 1024px devolve a rolagem.
+  useEffect(() => {
+    if (!isOpen) return;
+    const desktop = window.matchMedia("(min-width: 1024px)");
+    const closeOnDesktop = () => {
+      if (desktop.matches) close();
+    };
+    closeOnDesktop();
+    desktop.addEventListener("change", closeOnDesktop);
+    return () => desktop.removeEventListener("change", closeOnDesktop);
+  }, [isOpen, close]);
+
+  if (!isOpen) return null;
 
   return (
     <>
-      {isOpen && (
-        <>
-          {/* Backdrop */}
-          <div
-            className="fixed inset-0 bg-black-50 z-[200] animate-in fade-in-0 duration-300 motion-reduce:animate-none"
-            onClick={close}
-          />
+      <div
+        aria-hidden="true"
+        onClick={close}
+        className="fixed inset-0 z-[90] bg-black-30 backdrop-blur-[2px] animate-in fade-in-0 duration-300 motion-reduce:animate-none lg:hidden"
+      />
 
-          {/* Sidebar */}
-          <aside
-            className="fixed top-0 left-0 bottom-0 w-80 max-w-[85vw] bg-white z-[201] shadow-luxury-xl animate-in slide-in-from-left-full duration-500 motion-reduce:animate-none"
+      <div
+        id="menu-principal"
+        className="fixed inset-x-3 top-[68px] z-[95] rounded-[28px] bg-white p-2 text-black shadow-luxury-xl animate-in fade-in-0 slide-in-from-top-2 duration-300 motion-reduce:animate-none md:top-[76px] lg:hidden"
+      >
+        <nav aria-label="Menu">
+          <ul>
+            {BAR_LINKS.map((link) => {
+              const isActive = isNavLinkActive(pathname, link.href);
+              return (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    onClick={close}
+                    aria-current={isActive ? "page" : undefined}
+                    className={cn(
+                      "flex items-center rounded-[20px] px-4 py-3.5 text-lg font-medium transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black",
+                      isActive ? "bg-black-5 text-black" : "text-black-70 hover:bg-black-5 hover:text-black"
+                    )}
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        </nav>
+
+        <ContactFormDialog ctaLocation="menu_lateral">
+          <button
+            type="button"
+            className="mt-2 flex h-12 w-full items-center justify-center rounded-full bg-black text-sm font-medium text-white transition-colors duration-300 hover:bg-black-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2"
           >
-            <div className="flex flex-col h-full p-6">
-              {/* Logo */}
-              <div className="mb-6">
-                <Link
-                  href="/"
-                  onClick={close}
-                  className="text-2xl font-heading tracking-wider block"
-                >
-                  BERKAHN
-                </Link>
-              </div>
-
-              {/* Navigation */}
-              <nav className="flex-1">
-                <Accordion type="single" collapsible defaultValue={defaultAccordionValue} className="w-full">
-                  <ul className="space-y-0">
-                    {NAV_LINKS.map((link) => {
-                      const isActive = pathname === link.href;
-
-                      return (
-                        <li key={link.href}>
-                          {hasChildren(link) ? (
-                            <NavItemWithChildren
-                              link={link}
-                              isActive={isActive}
-                              close={close}
-                              pathname={pathname}
-                            />
-                          ) : (
-                            <Link
-                              href={link.href}
-                              onClick={close}
-                              className={cn(
-                                "block py-2 px-4 text-base transition-all duration-300",
-                                isActive
-                                  ? "bg-black text-white font-medium"
-                                  : "text-black-70 hover:text-black hover:bg-black-5"
-                              )}
-                            >
-                              {link.label}
-                            </Link>
-                          )}
-                        </li>
-                      );
-                    })}
-                  </ul>
-                </Accordion>
-              </nav>
-
-              {/* CTA Button - Mobile Only */}
-              <div className="mt-4 px-4">
-                <ContactFormDialog ctaLocation="menu_lateral">
-                  <button className="w-full py-2.5 bg-black text-white text-sm uppercase tracking-wider hover:bg-black-90 transition-colors duration-300 border border-black">
-                    Fale Conosco
-                  </button>
-                </ContactFormDialog>
-              </div>
-
-              {/* Footer */}
-              <div className="pt-4 border-t border-black-10">
-                <p className="text-sm text-black-50">
-                  © 2026 Berkahn. Todos os direitos reservados.
-                </p>
-              </div>
-            </div>
-          </aside>
-        </>
-      )}
+            Fale conosco
+          </button>
+        </ContactFormDialog>
+      </div>
     </>
   );
 }

@@ -1,35 +1,34 @@
 // Navigation Types
-export interface NavLinkChild {
-  label: string;
-  href: string;
-}
-
 export interface NavLinkItem {
   label: string;
   href: string;
-  children?: NavLinkChild[];
 }
 
 export type NavLinks = readonly NavLinkItem[];
 
 // Navigation Links
+//
+// Só primeiro nível: a navbar é uma pílula e não tem submenu. Residencial e
+// Comercial & Industrial continuam alcançáveis pela página de Serviços e pela
+// seção de segmentos da home.
 export const NAV_LINKS: NavLinks = [
   { label: "Home", href: "/" },
   { label: "Empresa", href: "/empresa" },
-  {
-    label: "Serviços",
-    href: "/servicos",
-    children: [
-      { label: "Residencial", href: "/residencial" },
-      { label: "Comercial & Industrial", href: "/comercial-industrial" },
-    ],
-  },
+  { label: "Serviços", href: "/servicos" },
   { label: "LSF", href: "/lsf" },
   // TODO: Descomentar para mostrar Portfólio no menu
   // { label: "Portfólio", href: "/portfolio" },
   { label: "Atualidades", href: "/atualidades" },
   { label: "FAQ", href: "/perguntas-frequentes" },
 ] as const;
+
+// Links da navbar e do menu do celular. "Home" fica de fora: a marca já leva
+// para a home. O rodapé continua usando NAV_LINKS inteiro.
+export const BAR_LINKS: NavLinks = NAV_LINKS.filter((link) => link.href !== "/");
+
+export function isNavLinkActive(pathname: string | null, href: string): boolean {
+  return pathname === href || Boolean(pathname?.startsWith(`${href}/`));
+}
 
 // Footer Contact Data (icons will be added in Footer component)
 export const FOOTER_CONTACT = [
