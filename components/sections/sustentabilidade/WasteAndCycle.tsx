@@ -108,12 +108,14 @@ export function ImpactJourney() {
                     className="absolute inset-0 will-change-[opacity,transform]"
                     style={{ opacity: index === SITE_SECTION.steps.length - 1 ? 1 : 0 }}
                   >
+                    {/* sizes pela altura, como na extração: foto 4:3 cobrindo
+                        uma caixa da altura da tela desenha ~1.35 x altura. */}
                     <Image
                       src={step.image.src}
                       alt={step.image.alt}
                       fill
-                      quality={80}
-                      sizes="(min-width: 1280px) 50vw, 100vw"
+                      quality={85}
+                      sizes="(min-width: 1280px) max(50vw, 135vh), max(100vw, 135vh)"
                       className={`object-cover saturate-[.9] contrast-[.98] ${step.image.focus ?? ""}`}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent" />

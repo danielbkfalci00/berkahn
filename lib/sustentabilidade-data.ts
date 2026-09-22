@@ -52,7 +52,7 @@ export const HERO = {
   lede: "No Light Steel Frame, parte desse impacto muda antes de a obra começar. A diferença aparece no projeto, na compra e na forma de montar cada parede.",
   // Provisória, de https://unsplash.com/photos/0dtLWM5ycGc
   image: {
-    src: "https://images.unsplash.com/photo-1713700741779-fb0237967302?auto=format&fit=crop&w=2400&q=82",
+    src: "https://images.unsplash.com/photo-1713700741779-fb0237967302?auto=format&fit=crop&w=3840&q=90",
     alt: "Vista aérea da copa de uma floresta brasileira",
     focus: "object-center",
   } satisfies EditorialImage,
@@ -82,7 +82,7 @@ export const EXTRACTION_SECTION = {
   ],
   // Provisória, de https://unsplash.com/photos/oF7hh97lVqA
   image: {
-    src: "https://images.unsplash.com/photo-1571223641822-b82408a0e705?auto=format&fit=crop&w=2400&q=82",
+    src: "https://images.unsplash.com/photo-1571223641822-b82408a0e705?auto=format&fit=crop&w=3840&q=90",
     alt: "Vista aérea de uma pedreira e das marcas da extração no terreno",
     focus: "object-center",
   } satisfies EditorialImage,

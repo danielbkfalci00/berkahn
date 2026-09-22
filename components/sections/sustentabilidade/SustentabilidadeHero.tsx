@@ -81,13 +81,17 @@ export function SustentabilidadeHero() {
       aria-labelledby="sustentabilidade-title"
     >
       <div data-hero-image className="absolute inset-[-8%] will-change-transform">
+        {/* O quadro da foto é 16% maior que a tela e o parallax ainda aplica
+            1.08; no celular a foto (16:9) cobre a altura, não a largura. O
+            sizes antigo, 100vw, pedia de 2x a 3x menos pixels do que a tela
+            mostra. */}
         <Image
           src={HERO.image.src}
           alt={HERO.image.alt}
           fill
           priority
-          quality={80}
-          sizes="100vw"
+          quality={85}
+          sizes="max(125vw, 225vh)"
           className={`object-cover grayscale contrast-[1.08] ${HERO.image.focus ?? ""}`}
         />
       </div>

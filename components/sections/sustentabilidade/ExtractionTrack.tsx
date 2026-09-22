@@ -79,12 +79,16 @@ export function ExtractionTrack() {
       <div data-extraction-track className="relative lg:grid lg:grid-cols-2">
             <figure className="sticky top-0 h-[100svh] overflow-hidden bg-carbon-soft lg:col-start-1 lg:row-start-1 lg:self-start">
               <div data-extraction-quarry className="absolute inset-0 will-change-transform">
+                {/* sizes pela altura: as duas fotos são bem horizontais (1.8 e
+                    1.9) e cobrem uma caixa da altura da tela, então a largura
+                    desenhada é a altura vezes ~1.9, mais o zoom de 1.08. Com
+                    "50vw/100vw" o navegador pedia até 3x menos pixels. */}
                 <Image
                   src={EXTRACTION_SECTION.image.src}
                   alt={EXTRACTION_SECTION.image.alt}
                   fill
-                  quality={80}
-                  sizes="(min-width: 1024px) 50vw, 100vw"
+                  quality={85}
+                  sizes="max(54vw, 205vh)"
                   className={`object-cover grayscale contrast-[1.08] ${EXTRACTION_SECTION.image.focus ?? ""}`}
                 />
               </div>
@@ -96,8 +100,8 @@ export function ExtractionTrack() {
                   src={HERO.image.src}
                   alt=""
                   fill
-                  quality={75}
-                  sizes="(min-width: 1024px) 50vw, 100vw"
+                  quality={85}
+                  sizes="max(54vw, 205vh)"
                   className="object-cover saturate-[.9] contrast-[.98]"
                 />
               </div>
