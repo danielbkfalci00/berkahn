@@ -1,9 +1,14 @@
-// Dados da seção "05 · impacto" da home. Regra deste arquivo: nenhum número
+// Dados da seção de impacto da home. Regra deste arquivo: nenhum número
 // entra sem `source`. As fontes não vão para a tela (decisão do Bruno em
 // 2026-09-02); ficam aqui como procedência de cada valor.
 //
 // Procedência de cada valor está documentada em
 // Berkahn-Vault/20-context/home-redesign-direcao.md (seção "05 · impacto").
+//
+// Sem argumento de carbono (decisão do Bruno em 2026-09-22): a página de
+// sustentabilidade não o usa, porque o único ACV brasileiro revisado por pares
+// dá vantagem à alvenaria no ciclo completo. Saíram a abertura com "34% das
+// emissões globais de CO2" e o "1,5 t de CO2 evitada por tonelada reciclada".
 
 export interface DataSource {
   id: string;
@@ -15,13 +20,12 @@ export interface DataSource {
 }
 
 /**
- * Número-herói de uma batida. Conta de `from` até `to` conforme o scroll;
- * `from` é o valor do sistema convencional, para a diferença virar movimento.
+ * Número-herói de uma batida, mostrado já no valor final. Não há contador:
+ * no meio da conta ele exibia números que não eram de nada ("0 dB", "19%").
  */
 export interface ImpactHero {
-  from: number;
   to: number;
-  /** Só aparece no valor final, ex.: "< ". */
+  /** Ex.: "< ". */
   prefix?: string;
   /** Unidade colada ao número, ex.: "%", " dB". */
   unit: string;
@@ -42,7 +46,6 @@ export interface ImpactFigure {
 
 export interface ImpactBlock {
   id: "morar" | "pagar" | "cidade";
-  index: "01" | "02" | "03";
   /** Placa de fundo da batida. Nunca uma obra que não seja nossa. */
   image: { src: string; alt: string };
   /** Label técnica minúscula, ex.: "para quem vai morar". */
@@ -50,25 +53,17 @@ export interface ImpactBlock {
   /** Uma linha, até 12 palavras. É todo o texto da batida. */
   claim: string;
   hero: ImpactHero;
-  aside: ImpactFigure;
+  aside?: ImpactFigure;
 }
 
 export interface ImpactSection {
   eyebrow: string;
   headline: string;
   lede: string;
-  ledeSource: DataSource;
   blocks: [ImpactBlock, ImpactBlock, ImpactBlock];
 }
 
 export const SOURCES = {
-  unepGsr2025: {
-    id: "unep",
-    name: "UNEP, Global Status Report for Buildings and Construction 2024/25",
-    year: 2025,
-    url: "https://www.unep.org/resources/report/global-status-report-buildings-and-construction-20242025",
-    note: "34% das emissões globais de CO₂ do setor de edificações e construção. A edição 2025/26 já registra 37%.",
-  },
   berkahnSpec: {
     id: "berkahn",
     name: "Especificação técnica Berkahn (lã mineral 90 mm), ref. ABNT NBR 15575",
@@ -94,7 +89,7 @@ export const SOURCES = {
     id: "worldsteel",
     name: "World Steel Association; Instituto Aço Brasil",
     url: "https://worldsteel.org/about-steel/steel-facts/",
-    note: "Aço 100% reciclável sem perda de propriedades; cada tonelada de sucata usada evita cerca de 1,5 t de CO₂.",
+    note: "Aço 100% reciclável sem perda de propriedades.",
   },
   abrecon: {
     id: "abrecon",
@@ -105,14 +100,12 @@ export const SOURCES = {
 } as const satisfies Record<string, DataSource>;
 
 export const IMPACT_SECTION: ImpactSection = {
-  eyebrow: "05 · impacto",
+  eyebrow: "Impacto",
   headline: "Construir a seco muda três contas.",
-  lede: "Edificações e construção respondem por 34% das emissões globais de CO₂. Um sistema a seco muda essa conta para quem mora, quem paga e a cidade.",
-  ledeSource: SOURCES.unepGsr2025,
+  lede: "Um sistema a seco muda a conta para quem mora, para quem paga e para a cidade.",
   blocks: [
     {
       id: "morar",
-      index: "01",
       audience: "para quem vai morar",
       image: {
         src: "/images/Services/Execução-de-obras/Acabamentos/acabamentos_1.webp",
@@ -120,7 +113,6 @@ export const IMPACT_SECTION: ImpactSection = {
       },
       claim: "Parede que segura barulho de rua e calor de tarde.",
       hero: {
-        from: 0,
         to: 50,
         unit: " dB",
         label: "de isolamento acústico na parede",
@@ -135,7 +127,6 @@ export const IMPACT_SECTION: ImpactSection = {
     },
     {
       id: "pagar",
-      index: "02",
       audience: "para quem paga a obra",
       image: {
         src: "/images/Services/Execução-de-obras/Estrutura/estrutura-2.webp",
@@ -143,7 +134,6 @@ export const IMPACT_SECTION: ImpactSection = {
       },
       claim: "Quase tudo que entra no canteiro vira casa.",
       hero: {
-        from: 30,
         to: 5,
         prefix: "< ",
         unit: "%",
@@ -159,7 +149,6 @@ export const IMPACT_SECTION: ImpactSection = {
     },
     {
       id: "cidade",
-      index: "03",
       audience: "para o terreno e a cidade",
       image: {
         src: "/images/Home/lsf-estrutura.webp",
@@ -167,18 +156,12 @@ export const IMPACT_SECTION: ImpactSection = {
       },
       claim: "O aço volta para a siderúrgica, não para o entulho.",
       hero: {
-        from: 16,
         to: 100,
         unit: "%",
         label: "do aço reciclável sem perder qualidade",
         compare: "o Brasil recicla 16% do entulho de obra",
         source: SOURCES.worldsteel,
         compareSource: SOURCES.abrecon,
-      },
-      aside: {
-        value: "1,5 t",
-        label: "de CO₂ evitada por tonelada reciclada",
-        source: SOURCES.worldsteel,
       },
     },
   ],

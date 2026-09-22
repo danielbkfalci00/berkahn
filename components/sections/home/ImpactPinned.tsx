@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { gsap, useGSAP } from "@/lib/gsap";
 import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
-import { IMPACT_SECTION, type ImpactHero } from "@/lib/impact-data";
+import { IMPACT_SECTION } from "@/lib/impact-data";
 
 /** Cada batida tem uma composição: esquerda, centro grande, direita. */
 const BEAT_ALIGN = ["items-start text-left", "items-center text-center", "items-end text-right"];
@@ -17,10 +17,11 @@ const LABEL_CLASS = "font-tech text-xs lowercase tracking-wide text-white-50";
 const CAPTION_CLASS = "font-tech text-xs tracking-wide text-white-50";
 
 /**
- * "05 · impacto": três batidas, uma por conta que a construção a seco muda
- * (quem mora, quem paga, a cidade). O herói de cada batida é um número em
- * escala de viewport que conta do valor do sistema convencional ao do Light
- * Steel Frame. Cada batida tem a própria foto ao fundo.
+ * Impacto: três batidas, uma por conta que a construção a seco muda (quem
+ * mora, quem paga, a cidade). O herói de cada batida é um número em escala de
+ * viewport, já no valor final: o contador que existia exibia, no meio da
+ * conta, números que não eram de nada ("0 dB", "19%"). Cada batida tem a
+ * própria foto ao fundo.
  *
  * Com movimento, no desktop e no celular: track de 240vh com a tela presa; a
  * placa troca de foto a cada batida e avança (zoom + parallax) o tempo todo,
@@ -57,18 +58,17 @@ export function ImpactPinned() {
         tl.fromTo(plateWrap, { scale: 1, yPercent: -3 }, { scale: 1.15, yPercent: 3, duration: total }, 0);
         tl.fromTo(veil, { opacity: 1 }, { opacity: 0.6, duration: 0.6 }, total - 0.8);
 
-        section.blocks.forEach((block, index) => {
+        section.blocks.forEach((_block, index) => {
           const beat = beats[index];
-          const count = makeCounter(beat, block.hero);
+          const number = beat.querySelector<HTMLElement>("[data-impact-number]");
           // Números derivam contra a placa: segunda velocidade, profundidade.
-          tl.fromTo(count.numberEl, { yPercent: 8 }, { yPercent: -8, duration: total }, 0);
+          if (number) tl.fromTo(number, { yPercent: 8 }, { yPercent: -8, duration: total }, 0);
 
           const at = index;
           if (index > 0) {
             tl.fromTo(plates[index], { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.3 }, at - 0.05);
             tl.fromTo(beat, { autoAlpha: 0, y: 48 }, { autoAlpha: 1, y: 0, duration: 0.28 }, at);
           }
-          tl.to(count.state, { value: block.hero.to, duration: 0.5, onUpdate: count.render }, at + (index === 0 ? 0.04 : 0.18));
           if (index < total - 1) {
             tl.to(beat, { autoAlpha: 0, y: -48, duration: 0.22 }, at + 0.78);
           }
@@ -82,11 +82,15 @@ export function ImpactPinned() {
     <section ref={sectionRef} id="impacto" className="relative bg-carbon text-white">
       <div className="container pt-2xl md:pt-3xl pb-12 md:pb-16">
         <RevealOnScroll>
-          <p className={`${LABEL_CLASS} mb-4`}>{section.eyebrow}</p>
-          <h2 className="headline-md text-white max-w-3xl">{section.headline}</h2>
-          <p className="mt-6 max-w-2xl text-base md:text-lg leading-relaxed text-white-70">
-            {section.lede}
-          </p>
+          <p className="mb-6 text-xs font-medium uppercase tracking-[0.18em] text-white-50">{section.eyebrow}</p>
+          <div className="grid gap-8 lg:grid-cols-12 lg:gap-12">
+            <h2 className="max-w-4xl font-display text-[clamp(2.4rem,1.2rem+3.6vw,5rem)] font-semibold leading-[0.98] tracking-[-0.04em] text-white lg:col-span-8">
+              {section.headline}
+            </h2>
+            <p className="max-w-md text-base leading-relaxed text-white-70 lg:col-span-4 lg:self-end lg:text-lg">
+              {section.lede}
+            </p>
+          </div>
         </RevealOnScroll>
       </div>
 
@@ -176,7 +180,7 @@ export function ImpactPinned() {
             O que a obra tira do mundo
           </Link>
           <p className="mt-4 max-w-md font-tech text-xs tracking-wide text-white-50">
-            carbono, areia, água, madeira e entulho, com a procedência de cada número
+            extração, desperdício e o destino do que sobra
           </p>
         </div>
       </div>
@@ -197,19 +201,14 @@ function Beat({
   const { hero, aside } = block;
   return (
     <div className={`flex flex-col ${BEAT_ALIGN[index]}`}>
-      <p className={`${LABEL_CLASS} mb-6`}>
-        {block.index} · {block.audience}
-      </p>
-      <p className={`${NUMBER_CLASS} ${sizeClass}`}>
+      <p className={`${LABEL_CLASS} mb-6`}>{block.audience}</p>
+      <p data-impact-number className={`${NUMBER_CLASS} ${sizeClass}`}>
         {hero.prefix && (
-          <span
-            data-impact-prefix
-            className="mr-[0.08em] align-baseline text-[0.55em] font-medium text-white-70"
-          >
+          <span className="mr-[0.08em] align-baseline text-[0.55em] font-medium text-white-70">
             {hero.prefix.trim()}
           </span>
         )}
-        <span data-impact-number>{hero.to}</span>
+        <span>{hero.to}</span>
         <span className="ml-[0.08em] align-baseline text-[0.42em] font-medium text-white-70">
           {hero.unit.trim()}
         </span>
@@ -220,26 +219,8 @@ function Beat({
       </p>
       <p className={`mt-6 max-w-md ${CAPTION_CLASS}`}>
         {hero.compare}
-        {" · "}
-        {aside.value} {aside.label}
+        {aside && ` · ${aside.value} ${aside.label}`}
       </p>
     </div>
   );
-}
-
-/**
- * Liga um número-herói ao GSAP: escreve só o numeral e mostra o prefixo
- * ("<") apenas no valor final, para "< 5%" não virar "< 30%" no meio da conta.
- */
-function makeCounter(root: HTMLElement, hero: ImpactHero) {
-  const numberEl = root.querySelector<HTMLElement>("[data-impact-number]");
-  const prefixEl = root.querySelector<HTMLElement>("[data-impact-prefix]");
-  const state = { value: hero.from };
-  const render = () => {
-    const value = Math.round(state.value);
-    if (numberEl) numberEl.textContent = String(value);
-    if (prefixEl) prefixEl.style.opacity = value === hero.to ? "1" : "0";
-  };
-  render();
-  return { numberEl: numberEl ?? root, state, render };
 }
