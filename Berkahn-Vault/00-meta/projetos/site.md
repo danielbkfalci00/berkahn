@@ -1,11 +1,11 @@
 ---
 tipo: projeto
 criado: 2026-05-22
-atualizado: 2026-09-08
+atualizado: 2026-09-10
 tags:
   - project/site
   - status/active
-ai_summary: "Hub do Site — Admin tem contas individuais, quatro papéis, PWA/push por usuário e analytics mensal hospedado. O clone do GitHub Pages foi neutralizado; pendem smoke multidispositivo e o encerramento administrativo do host legado."
+ai_summary: "Hub do Site — /sustentabilidade foi remodelada e validada em quatro viewports na branch feat/sustentabilidade; PR 80 segue aberto, sem merge ou deploy. Admin tem contas individuais, PWA/push por usuário e analytics mensal hospedado."
 status: active
 projeto: site
 kpi_paginas_indexadas: 34
@@ -45,7 +45,7 @@ code_paths:
 
 ## Status atual
 
-> **Página /sustentabilidade**: construída, revisada e auditada. PR [#80](https://github.com/danielbkfalci00/berkahn/pull/80) aberto e verde, **sem merge**, aguardando uma rodada de ajustes do Bruno. Ponto de retomada, armadilhas e comandos em [[retomada-sustentabilidade]].
+> **Página /sustentabilidade**: novo arco concluído e validado em 2026-09-10. São seis cenas mais CTA, com cor entrando na parede Light Steel Frame e seguindo pelo canteiro, ciclo e práticas. PR [#80](https://github.com/danielbkfalci00/berkahn/pull/80) permanece aberto, **sem merge e sem deploy**. Evidências e comandos em [[retomada-sustentabilidade]].
 
 Site em produção (Next.js 16 App Router + Supabase + Vercel + Tailwind + shadcn/ui). O CRM leve em `/admin/leads` foi mergeado pela PR #53 no commit `5121941` e está deployado nos projetos `berkahn` e `berkahn-admin`; arquitetura e runbook vivem em [[admin-setup]]. Supabase é a única fonte operacional; Google Sheets e Apps Script são legado desativado em [[google-sheets]].
 
@@ -106,14 +106,14 @@ Site em produção (Next.js 16 App Router + Supabase + Vercel + Tailwind + shadc
 - [ ] @bruno **Casa Santa Cristina não é obra Berkahn** (dito em 2026-09-02 ao tirar a foto da seção 05). Revisar como ela aparece em `/portfolio`, `lib/residencial-data.ts:159-160`, `lib/presentation-data.ts:14-20` e na apresentação executiva; se for projeto de terceiro, precisa de crédito ou sair #pendencia
 - [ ] @bruno Gerar a placa definitiva da seção 05 com o prompt registrado em [[home-redesign-direcao]] e salvar em `public/images/Home/impacto-plate.webp`; hoje a placa reaproveita a foto da fase 03 do processo #pendencia
 - [ ] @bruno Levantar o desvio médio entre orçamento e valor entregue nos contratos concluídos; seria o número mais forte para "quem paga a obra" na seção 05 #pendencia
-- [ ] @bruno **O argumento de carbono do Light Steel Frame não se sustenta.** O único ACV brasileiro revisado por pares de berço ao túmulo (Caldas et al., *Ambiente Construído*, 2017) conclui a favor da alvenaria, porque a operação pesa de 50% a 70% do total. Decidir o que fazer com as afirmações de carbono já publicadas em `data/articles/sustentabilidade-steel-frame.ts` ("7× menos CO₂", 15,39 vs 108,12 kg/m²), nos dois artigos de sustentabilidade do blog (180,41 kgCO₂e/m²) e em `40-content/apresentacoes/steel-frame-no-mundo.md` (119-142, faixa que se sobrepõe à do concreto). A página /sustentabilidade já trata isso de frente na seção 07; o resto do site ainda não #pendencia
-- [ ] @bruno Trocar as oito fotos provisórias do Unsplash em `lib/sustentabilidade-data.ts` por fotografia nossa ou gerada com o banco de prompts de obra; os slots são floresta de abertura, cimento, areia, rio seco, fôrma de madeira, entulho, sucata e o plano de mata secundário #pendencia
+- [ ] @bruno **O argumento de carbono do Light Steel Frame não se sustenta.** O único ACV brasileiro revisado por pares de berço ao túmulo (Caldas et al., *Ambiente Construído*, 2017) conclui a favor da alvenaria, porque a operação pesa de 50% a 70% do total. Decidir o que fazer com as afirmações de carbono já publicadas em `data/articles/sustentabilidade-steel-frame.ts` ("7× menos CO₂", 15,39 vs 108,12 kg/m²), nos dois artigos de sustentabilidade do blog (180,41 kgCO₂e/m²) e em `40-content/apresentacoes/steel-frame-no-mundo.md` (119-142, faixa que se sobrepõe à do concreto). A página /sustentabilidade trata isso de frente em "O que a gente não afirma"; o resto do site ainda não #pendencia
+- [ ] @bruno Trocar as três fotos externas de mata, pedreira e sucata em `lib/sustentabilidade-data.ts` por fotografia própria quando houver conjunto documental equivalente; canteiro, residência e camadas já usam o acervo Berkahn #pendencia
 - [ ] @bruno Pedir ao fornecedor de OSB o número do certificado florestal (FSC ou CERFLOR). Hoje a página só pode dizer "pinus de floresta plantada", que é declaração de fabricante; com o certificado em mãos, o texto da seção 03 e da 07 pode nomear o selo #pendencia
-- [ ] @codex Medir CWV da /sustentabilidade depois do deploy. São oito fotos do Unsplash servidas pelo otimizador, uma cena 3D de seis camadas e um track horizontal; o teto combinado de peso é 1,6 MB e a página fala de baixo impacto, então peso alto ali é contradição visível #pendencia
+- [ ] @codex Medir CWV da /sustentabilidade depois do deploy. São três fotos externas servidas pelo otimizador, imagens locais e uma cena 3D de seis camadas; o track horizontal e os efeitos repetidos foram removidos #pendencia
 - [ ] @codex Confirmar o volume de resíduo de construção coletado no Brasil abrindo o PDF do Panorama ABREMA à mão. A própria página da entidade publica "45 mil toneladas" onde deveria ser "45 milhões", e o número de 48 milhões que o blog usa é de 2021 #pendencia
-- [ ] @bruno Achar a referência primária do par de desperdício ("< 5%" contra "até 30%"). `SOURCES.sinduscon` em `lib/impact-data.ts:82-86` é a única fonte do registro **sem `url` e sem `year`**, e é justamente a que sustenta o número mais citado do site: ele aparece na seção 05 da home e na seção 05 de /sustentabilidade. Um engenheiro que perguntar "onde está esse estudo do SINDUSCON-SP" hoje não recebe nada #pendencia
-- [ ] @bruno **O memorial da parede se contradiz sobre o OSB.** `lib/lsf-data.ts:296` diz "Cimentícia 10mm **ou** OSB 11.1mm" e `lib/lsf-data.ts:581` diz que "todas as paredes externas recebem placas OSB". As duas não podem estar certas. Como `LSF_LAYERS` não lista o OSB entre as seis camadas, o fecho da seção 03 de /sustentabilidade foi reescrito para falar do que a gente compra, e não de uma camada do diagrama. Fechar qual é o detalhe construtivo padrão #pendencia
-- [ ] @bruno Foto de OSB estrutural para o banco de imagens. É a única das camadas da parede que a gente não fotografou, e por isso o corte 3D da seção 04 mostra seis camadas enquanto o sistema real tem sete #pendencia
+- [ ] @bruno Achar a referência primária do par de desperdício ("< 5%" contra "até 30%"). `SOURCES.sinduscon` em `lib/impact-data.ts:82-86` é a única fonte do registro **sem `url` e sem `year`**, e sustenta a comparação ainda publicada na seção 05 da home. O par saiu de /sustentabilidade #pendencia
+- [ ] @bruno **O memorial da parede se contradiz sobre o OSB.** `lib/lsf-data.ts:296` diz "Cimentícia 10mm **ou** OSB 11.1mm" e `lib/lsf-data.ts:581` diz que "todas as paredes externas recebem placas OSB". As duas não podem estar certas. /sustentabilidade apresenta as seis imagens disponíveis como recorte ilustrativo dos componentes e deixa o OSB de fora até a decisão. Fechar qual é o detalhe construtivo padrão #pendencia
+- [ ] @bruno Foto de OSB estrutural para o banco de imagens. É a única camada sem fotografia própria; até a contradição do memorial ser resolvida, o corte da parede não afirma representar a composição completa #pendencia
 - [x] Validar build (`npm run build`) sem warnings — passou em 2026-08-12 com Next 16.3; três `<img>` migrados, Browserslist atualizado, `middleware` migrado para `proxy` e tracing integral do harness removido
 - [x] **gitleaks pre-commit ativo** — reverificado em 2026-08-27 nos commits das PRs #72 e #73; o hook escaneou apenas o staged e encontrou zero leaks antes de liberar cada commit
 
@@ -171,6 +171,8 @@ Site em produção (Next.js 16 App Router + Supabase + Vercel + Tailwind + shadc
 - [[paginas-conteudo-v2]] — estratégia de páginas (migrado de Docs/)
 
 ## Histórico recente
+
+- 2026-09-10: `/sustentabilidade` concluída na branch `feat/sustentabilidade`: seis cenas mais CTA, 192px de respiro, fotografia híbrida, parede 3D como gesto central e cor como virada narrativa. Permaneceram somente três figuras com fonte e a ressalva do ACV brasileiro. Todas as cenas passaram por captura e medição em quatro viewports, inclusive movimento reduzido e JavaScript desligado; lint, typecheck e build verdes. PR #80 segue aberto, sem merge ou deploy. Ver [[retomada-sustentabilidade]].
 
 - 2026-08-07: sprint integrado de performance/UX/SEO/AEO — fontes escopadas por rota, shell sem Motion, formulário lazy, charts sob demanda, sizes corrigidos, tracking de WhatsApp padronizado e axe sério/crítico zerado em 28 cenários. Ver [[2026-08-diagnostico-integrado-site]]
 

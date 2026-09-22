@@ -1,12 +1,12 @@
 ---
 tipo: meta
 criado: 2026-09-08
-atualizado: 2026-09-09
+atualizado: 2026-09-10
 tags:
   - source/handoff
   - project/site
   - status/active
-ai_summary: "Ponto de retomada da página /sustentabilidade. Código na branch feat/sustentabilidade, PR 80 aberto e verde, NÃO mergeado. O Bruno reprovou o design em 2026-09-08 e pediu remodelagem: mais respiro, IMAGENS COLORIDAS no lugar do preto e branco, fora o índice, o fundo quadriculado, a numeração de seção e as réguas entre seções, e um storytelling que mostre o estrago da construção convencional antes da saída. O briefing completo, seção por seção, está aqui, junto das armadilhas técnicas e dos comandos para retomar. Nada foi executado."
+ai_summary: "Ponto de retomada da página /sustentabilidade. A remodelagem foi concluída em 2026-09-10 na branch feat/sustentabilidade: seis cenas mais CTA, 192px de respiro, interface mono e cor entrando na abertura da parede LSF. Lint, typecheck, build, medições e capturas em quatro viewports passaram. PR 80 continua aberto, sem merge nem deploy."
 status: active
 projeto: site
 contextos_aplicados:
@@ -17,7 +17,7 @@ contextos_aplicados:
 
 # Retomada — página /sustentabilidade
 
-> **Onde parou**: a página está construída, revisada e auditada, e o PR está aberto e verde. Em 2026-09-08 o Bruno **reprovou o design** e passou um briefing de remodelagem, que está escrito neste documento e **não foi executado**. Não foi feito merge.
+> **Onde parou**: o novo arco completo foi implementado e validado em 2026-09-10. O PR permanece aberto, sem merge e sem deploy.
 
 ## Estado em uma tela
 
@@ -29,7 +29,16 @@ contextos_aplicados:
 | Commits | 8, do `6e4c539` ao `65872e8` |
 | Merge | **não feito, de propósito** |
 | Dev server | porta 3113 |
-| Altura da página | 11.394px no desktop, 10.517px no celular |
+| Altura da página | 12.415px em 1440×900; 10.938px em 1366×700; 10.459px em 1024×640; 11.510px em 390×844 |
+
+## Remodelagem concluída em 2026-09-10
+
+- **Estrutura**: seis cenas narrativas mais o CTA: hero, extração, parede, canteiro, ciclo e práticas. O hero absorveu a escala global e a extração absorveu o eixo da madeira.
+- **Direção visual**: interface monocromática. A mata e a pedreira abrem dessaturadas; a cor entra na abertura das camadas do Light Steel Frame e permanece no canteiro, no ciclo e nas práticas. A seleção híbrida combina fotografias próprias da obra com três imagens documentais externas, usando mata e vegetação como contraponto narrativo.
+- **Ritmo**: `py-3xl` nos capítulos de conteúdo no desktop, equivalente aos 192px da home. A separação acontece pela alternância de superfícies, sem índice, grade técnica, numeração de capítulo ou réguas de 3px.
+- **Motion**: a parede é o gesto principal, com seis camadas abrindo em perspectiva e ganhando cor. Extração troca mata por pedreira e o canteiro tem trilho editorial em telas largas. Não há `ScrollTrigger.pin`; os trechos usam track alto com filho sticky.
+- **Dados**: ficaram apenas três figuras estáticas, todas ligadas a `source`: cerca de 50% da extração global, 50 a 70% do ciclo de vida na operação e 85% de recuperação global do aço na construção. Nenhum valor de intensidade de carbono por área entrou.
+- **Validação**: `tiras.mjs` e `medir-secoes.mjs` cobrem 1440×900, 1366×700, 1024×640 e 390×844. Não houve overflow horizontal. Todas as cenas e os estados intermediários da parede foram inspecionados. Em 1024×640, parede e canteiro usam fluxos estáticos que cabem na janela. Movimento reduzido e JavaScript desligado mostram pedreira, parede aberta e fotografias coloridas no estado final. `npm run lint`, `npm run typecheck` e `npm run build` passaram; o build manteve `/sustentabilidade` estática.
 
 ## Como retomar
 
@@ -54,9 +63,9 @@ Os dois scripts nasceram nesta sessão e estão versionados. **Leia o cabeçalho
 
 > No `medir-secoes`, as duas linhas marcadas `<<< folga` (`extracao` e `parede`) **não são espaço morto**. São a pista de rolagem dos trechos com viewport preso. Não "corrigir".
 
-## O que a página é hoje
+## Estado anterior à remodelagem, preservado para histórico
 
-Oito seções e um CTA. Cada seção tem uma mecânica de scroll diferente, de propósito: repetir recurso na mesma visita foi o que o Bruno rejeitou na primeira versão da seção 05 da home.
+Antes da remodelagem, a página tinha oito seções e um CTA. A tabela abaixo descreve a versão recusada e serve apenas como histórico.
 
 | # | seção | fundo | mecânica |
 |---|---|---|---|
@@ -70,7 +79,7 @@ Oito seções e um CTA. Cada seção tem uma mecânica de scroll diferente, de p
 | 07 | a prática | white | três práticas e o bloco escuro "O que a gente não afirma" |
 | — | CTA | white | variante editorial, botão "Pedir o cálculo do meu projeto" |
 
-Regras que valeram e continuam valendo: **sem `ScrollTrigger.pin`** (track alto com filho `sticky`, porque pin briga com o Lenis); o estado base do HTML é sempre o estado **final** da animação, então sem JS ou com `prefers-reduced-motion` cada seção continua sendo um diagrama legível; nunca dois fundos iguais em sequência; o branco puro aparece uma vez só.
+Regras que continuam valendo: **sem `ScrollTrigger.pin`**; estado-base do HTML no estado final; página legível sem JavaScript e com `prefers-reduced-motion`.
 
 ## O que foi feito, em três rodadas
 
@@ -84,7 +93,7 @@ Regras que valeram e continuam valendo: **sem `ScrollTrigger.pin`** (track alto 
 
 **O argumento de carbono do Light Steel Frame não se sustenta.** O único ACV brasileiro revisado por pares que compara os dois sistemas de berço ao túmulo (Caldas et al., *Ambiente Construído*, 2017) conclui a favor da **alvenaria** no ciclo completo, porque a operação responde por 50% a 70% do total.
 
-Por isso: nenhum kgCO₂/m² entra na página, e a seção 07 declara a limitação em vez de escondê-la. O eixo defensável é o que a obra **extrai, desperdiça e deixa para trás**.
+Por isso: nenhum kgCO₂/m² entra na página, e o bloco "O que a gente não afirma" declara a limitação em vez de escondê-la. O eixo defensável é o que a obra **extrai, desperdiça e deixa para trás**.
 
 Isso tem consequência fora desta página, e está registrado como pendência no hub: o resto do site ainda publica três valores de carbono incompatíveis entre si.
 
@@ -92,12 +101,11 @@ Isso tem consequência fora desta página, e está registrado como pendência no
 
 ### A · Ajustes do Bruno
 
-> **Recebidos em 2026-09-08 e escritos abaixo**, na seção "Briefing de ajustes". Nada foi executado.
+> **Executados em 2026-09-09.** O briefing original permanece abaixo como histórico da decisão.
 
 ### B · Decisões de conteúdo que dependem dele
 
-- **Foto do hero.** Era mata com névoa, virou cava de areia, porque a mata é a imagem mais genérica que existe para o assunto e era a única não documental da página. Se ele preferir a floresta, é uma linha em `lib/sustentabilidade-data.ts`.
-- **As oito fotos do Unsplash são provisórias.** Slots: abertura (cava de areia), cimento, areia, rio seco, fôrma de madeira, entulho, sucata e o plano de mata secundário. As seis fotos de camada da parede são nossas.
+- **As três fotos externas são provisórias.** Mata, pedreira e sucata têm crédito e link para a página original no Unsplash. As imagens de canteiro, residência e das seis camadas da parede são do acervo Berkahn. Substituir as externas por fotografia própria quando houver conjunto documental equivalente.
 - **O memorial da parede se contradiz sobre o OSB.** `lib/lsf-data.ts:296` diz "Cimentícia 10mm **ou** OSB 11.1mm" e `lib/lsf-data.ts:581` diz que "todas as paredes externas recebem placas OSB". Como `LSF_LAYERS` não lista o OSB, o fecho da seção 03 foi reescrito para falar do que a gente compra, e não de uma camada do diagrama. Falta fechar qual é o detalhe padrão.
 - **Certificado florestal do OSB.** Sem o número do certificado do fornecedor, a tela só pode dizer "pinus de floresta plantada" e nunca nomear FSC ou CERFLOR.
 - **A fonte do par de desperdício** ("< 5%" contra "até 30%") não tem referência primária. É o número mais citado do site, aparece na home e aqui.
@@ -105,13 +113,12 @@ Isso tem consequência fora desta página, e está registrado como pendência no
 
 ### C · Técnicas conhecidas
 
-- Medir CWV depois do deploy. São oito fotos do Unsplash servidas pelo otimizador, uma cena 3D de seis camadas e um track horizontal. Peso de imagem da página inteira hoje: cerca de 1,3 MB.
+- Medir CWV depois do deploy. São três fotos externas servidas pelo otimizador, fotografias locais e uma cena 3D de seis camadas. O track horizontal e os efeitos repetidos saíram.
 - Foto de OSB estrutural para o banco de imagens: é a única camada da parede que não fotografamos, e por isso o corte 3D mostra seis camadas enquanto o sistema real tem sete.
-- O interior do retângulo do circuito do aço (seção 06) continua vazio. Funciona como diagrama, mas é o ponto mais fraco de composição que sobrou.
 
 ## Briefing de ajustes do Bruno (2026-09-08)
 
-> **Nada disto foi executado.** A sessão fechou aqui, de propósito, para a próxima começar com a fila pronta. O Bruno cogitou retomar com outro modelo, então este bloco é escrito para quem chega sem contexto nenhum.
+> **Executado em 2026-09-09.** Este bloco registra o briefing original para preservar o raciocínio que levou à remodelagem.
 
 ### O veredito dele, sem filtro
 

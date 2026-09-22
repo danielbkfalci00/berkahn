@@ -1,13 +1,13 @@
 ---
 tipo: context
 criado: 2026-08-05
-atualizado: 2026-09-08
+atualizado: 2026-09-10
 tags:
   - domain/brand
   - domain/architecture
   - project/site
   - status/active
-ai_summary: Direção visual do redesign do site (2026-08-05/06) — "luxo de engenharia" em paleta estritamente mono, Archivo display + Space Mono técnica e motion contido. Aplicada na home e em /atualidades, cuja abertura funde masthead e destaque editorial sem regredir SSG/ISR. Contém o estado do PR 43, pipeline do hero, o banco de prompts de fotografia documental de obra, a seção "05 · impacto" e a página /sustentabilidade, cuja apuração derrubou o argumento de carbono do LSF e virou uma ressalva explícita na tela.
+ai_summary: Direção visual do redesign do site — "luxo de engenharia" em paleta mono, Archivo display + Space Mono técnica e motion contido. Aplicada na home, em /atualidades e na remodelagem de /sustentabilidade concluída em 2026-09-10, onde a cor entra como recurso narrativo na abertura da parede LSF e a ressalva do ACV brasileiro permanece explícita.
 status: active
 projeto: site
 contextos_aplicados:
@@ -195,10 +195,10 @@ O argumento de carbono **não se sustenta** e a página passou a dizer isso na c
 
 Consequências, todas aplicadas:
 - **Nenhum kgCO₂/m² na página.** Os três valores que o site publica hoje (180,41 · 15,39 · 119–142) são incompatíveis entre si e nenhum resiste a checagem. O de 119–142 tem faixas que se sobrepõem às do concreto (142 > 134), ou seja, derruba o próprio argumento.
-- A seção 07 tem um bloco chamado **"O que a gente não afirma"**, que declara a limitação e explica o que a construção a seco de fato muda com número na mão. É o argumento de credibilidade mais forte da página.
+- A página tem um bloco chamado **"O que a gente não afirma"**, que declara a limitação e explica o que a construção a seco de fato muda com número na mão. É o argumento de credibilidade mais forte da página.
 - Vender desmontabilidade como ganho de carbono é factualmente errado: no mesmo estudo, o fim de vida é menos de 1% das emissões. Desmontagem é argumento de **circularidade e resíduo**, e é assim que a seção 06 a apresenta.
 
-### Estrutura e mecânica (uma por seção, nenhuma repetida)
+### Estrutura anterior à remodelagem (uma mecânica por seção)
 
 | # | seção | fundo | mecânica |
 |---|---|---|---|
@@ -221,17 +221,29 @@ Regras que valeram: **sem `ScrollTrigger.pin`** (track alto com filho `sticky`, 
 - **A equivalência caiu na revisão.** A primeira versão dizia que a obra descarta em madeira temporária o mesmo volume que uma casa de madeira usaria para sempre. Só é verdade na borda inferior: 0,025 m³/m² descartados contra 0,02 a 0,34 m³/m² permanentes, faixa de 17 vezes. Pior, as duas fontes brasileiras divergem em até 3x sobre a mesma grandeza (0,025 do ENTAC contra 0,042-0,076 derivados da UFSC), e a página estava escolhendo em silêncio a que servia a cada frase. Foi substituída por "a fôrma é madeira que a obra compra para jogar fora", que a fonte sustenta inteira.
 - **Saíram na revisão os 92% da madeira amazônica e os 10,5 mi ha de floresta plantada.** O primeiro tem `note` da própria fonte avisando que o relatório defende MAIS madeira na construção e que o número é de destino, não de condenação; a página o usava exatamente como condenação. O segundo é total nacional de silvicultura sem vínculo nenhum com a Berkahn, posicionado ao lado do claim de OSB, o que é greenwashing por adjacência.
 - **OSB**: dá para dizer "pinus de floresta plantada" (declaração de fabricante). **Não dá para dizer FSC nem CERFLOR** sem alguém conferir o certificado do fornecedor real.
-- **O 37% do UNEP saiu na revisão.** O escopo inclui a operação do edifício, que a própria seção 07 admite dominar, então a abertura cobrava da obra uma conta que a conclusão devolve ao uso. Some-se que a home publica 34% (edição anterior) para a frase quase idêntica. Ficou só a extração de materiais (~50%), que é número de extração e não de emissão.
-- **Nada de publicar só o topo da faixa.** Regra que nasceu da revisão e vale para as próximas páginas: onde a fonte descreve faixa, a tela mostra faixa. O cimento virou "7 a 8%" (a própria nota da fonte chama isso de leitura honesta) e a água mostra 107 a 594. Publicar sempre o topo é um viés que o leitor identifica na terceira ocorrência, e aí a página perde o benefício da dúvida que a seção 07 tenta comprar.
+- **O 37% do UNEP saiu na revisão.** O escopo inclui a operação do edifício, que o bloco de credibilidade admite dominar, então a abertura cobrava da obra uma conta que a conclusão devolve ao uso. Some-se que a home publica 34% (edição anterior) para a frase quase idêntica. Ficou só a extração de materiais (~50%), que é número de extração e não de emissão.
+- **Nada de publicar só o topo da faixa.** Regra que nasceu da revisão e vale para as próximas páginas: onde a fonte descreve faixa, a tela mostra faixa. O cimento virou "7 a 8%" (a própria nota da fonte chama isso de leitura honesta) e a água mostra 107 a 594. Publicar sempre o topo é um viés que o leitor identifica na terceira ocorrência, e aí a página perde o benefício da dúvida que o bloco de credibilidade tenta comprar.
 - **Reciclagem de entulho alinhada com a home**: 16%, importando `SOURCES.abrecon` de `lib/impact-data.ts` em vez de publicar um segundo número. O que a página acrescenta é a capacidade ociosa das usinas, que a home não conta.
 - **A perda do canteiro é "na maior parte" sucata metálica.** A primeira versão dizia que o que sobra é sucata metálica com comprador, e isso é falso em qualquer canteiro: retalho de gesso, OSB e lã mineral não é metal e o gesso nem cadeia de reciclagem tem no Brasil.
 - **"Sem argamassa e sem cura" se autodestruía na tela.** A headline da seção 04 negava argamassa ao lado da lista de camadas que abre em base coat, aplicado úmido. Virou "sem argamassa de assentamento", com o corpo assumindo que o acabamento externo é a etapa que ainda espera secar. Assumir a exceção é mais forte que escondê-la.
 
 ### Imagens
 
-Oito fotos do Unsplash, provisórias, todas conferidas uma a uma (ID extraído da página da foto, URL testada com 200) e escolhidas para aguentar grayscale, que é o tratamento da casa. As seis fotos de camada da parede são nossas. Substituir por fotografia própria quando houver.
+Sete fotos do Unsplash, provisórias, conferidas uma a uma. Hero e extração ficam dessaturados; a cor entra durante a abertura da parede e permanece nas fotos de resíduos e aço. As seis fotos de camada da parede são nossas. Substituir por fotografia própria quando houver.
 
-### Auditoria de design e UX (2026-09-07)
+### Remodelagem concluída (2026-09-10)
+
+A versão recusada abaixo foi consolidada em seis cenas mais CTA: hero com escala global; extração convencional; parede Light Steel Frame; canteiro; ciclo dos materiais; práticas Berkahn com o bloco integral "O que a gente não afirma". `ScaleStatement`, `ForestLayers`, `WasteScales`, `SteelLoop`, os contadores e a escala tipográfica paralela foram removidos depois da absorção do conteúdo útil.
+
+A interface continua restrita a carbon, carbon-soft, off-white e branco. A cor foi adotada como recurso narrativo controlado: aparece nas fotografias quando as camadas da parede se abrem e segue nos capítulos posteriores. A home não foi alterada, portanto sua numeração "05 · impacto" e seus contadores continuam como uma inconsistência deliberadamente isolada.
+
+Os capítulos de conteúdo voltaram a 192px de respiro no desktop. Saíram índice, fundo quadriculado, numeração, réguas de 3px, track horizontal e reveals repetitivos. A alternância entre superfícies claras e escuras passou a marcar os capítulos.
+
+O gesto visual principal é a parede 3D abrindo camada por camada. A extração faz a transição da mata para a pedreira, e o canteiro usa um trilho editorial somente em telas largas. A fotografia é híbrida: acervo Berkahn para componentes, execução e residência; três imagens documentais externas para mata, pedreira e sucata. A vegetação funciona como contraponto, sem virar ornamento genérico.
+
+Validação local: todas as cenas foram capturadas e inspecionadas em 1440×900, 1366×700, 1024×640 e 390×844, sem overflow horizontal. A parede e o canteiro têm composição estática própria em 1024×640. Movimento reduzido e JavaScript desligado exibem a pedreira, a parede aberta e colorida e o restante do arco no estado final. Lint, typecheck e build passaram; `/sustentabilidade` permanece pré-renderizada como rota estática. O PR #80 continua aberto, sem merge ou deploy.
+
+### Auditoria de design e UX da versão recusada (2026-09-07)
 
 > Estado de trabalho, pendências e comandos para retomar: [[retomada-sustentabilidade]].
 
