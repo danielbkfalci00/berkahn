@@ -15,11 +15,11 @@ const shimmerPlaceholder =
 // components/sections/Partners.tsx e lib/institucional-data.ts PARCEIROS).
 const partners = [
   {
-    name: "Brand 01",
+    name: "Eternit",
     logo: "/images/parceiros/brand-01.webp",
   },
   {
-    name: "Lumen",
+    name: "SICLA",
     logo: "/images/parceiros/lumen.webp",
   },
   {
