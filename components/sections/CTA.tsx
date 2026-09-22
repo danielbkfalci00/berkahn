@@ -55,7 +55,7 @@ const buttonClassesOnWhite =
 export function CTA({
   label = "PRONTO PARA CONSTRUIR?",
   title = "Vamos conversar sobre seu projeto",
-  description = "Conte-nos sobre seu projeto. Trabalhamos com Steel Frame e construção de alto desempenho: projeto completo, execução de obra ou mão de obra especializada.",
+  description = "Conte-nos sobre seu projeto. Trabalhamos com Light Steel Frame e construção de alto desempenho: projeto completo, execução de obra ou mão de obra especializada.",
   actionType = "dialog",
   actionText = "Fale Conosco",
   actionHref = "/",

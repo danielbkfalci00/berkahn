@@ -157,7 +157,19 @@ export function HeroCinematic() {
           loadFrame(nextToLoad++);
           backgroundLoader = setTimeout(loadRemaining, 35);
         };
-        loadRemaining();
+
+        // O resto da sequência (até 7,7 MB) só começa quando a pessoa rola ou
+        // depois de 2,5 s parada. Antes começava junto com a página e disputava
+        // banda e CPU com o resto do carregamento.
+        let started = false;
+        const startBackground = () => {
+          if (started) return;
+          started = true;
+          window.removeEventListener("scroll", startBackground);
+          loadRemaining();
+        };
+        window.addEventListener("scroll", startBackground, { passive: true });
+        const idleStart = setTimeout(startBackground, 2500);
 
         const frameState = { frame: 0 };
         const master = gsap.timeline({
@@ -220,6 +232,8 @@ export function HeroCinematic() {
         return () => {
           window.removeEventListener("resize", resize);
           if (backgroundLoader) clearTimeout(backgroundLoader);
+          clearTimeout(idleStart);
+          window.removeEventListener("scroll", startBackground);
         };
       });
     },
