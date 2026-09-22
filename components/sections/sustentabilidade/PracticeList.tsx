@@ -1,59 +1,56 @@
-import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
 import { PRACTICE_SECTION } from "@/lib/sustentabilidade-data";
 
-/**
- * "07 · a prática". Server Component: três práticas concretas e, fechando a
- * página, o que a gente deliberadamente NÃO afirma sobre carbono.
- * O bloco de ressalva é o único elemento escuro sobre o fundo branco, porque
- * ele é o argumento mais forte de credibilidade da página inteira.
- */
 export function PracticeList() {
   return (
-    <section id="pratica" className="bg-white pt-xl pb-lg md:pt-2xl" aria-labelledby="pratica-title">
+    <section
+      id="pratica"
+      className="bg-white py-xl text-black md:py-3xl"
+      aria-labelledby="pratica-title"
+    >
       <div className="container">
-        <RevealOnScroll>
-          <p className="font-tech text-xs lowercase tracking-wide text-black-70">
-            {PRACTICE_SECTION.eyebrow}
-          </p>
-          <h2 id="pratica-title" className="headline-md mt-4 max-w-2xl">
+        <div className="grid gap-9 lg:grid-cols-12 lg:gap-12">
+          <h2
+            id="pratica-title"
+            className="max-w-5xl font-display text-[clamp(2.7rem,1.3rem+4.4vw,5.8rem)] font-semibold leading-[0.94] tracking-[-0.05em] lg:col-span-8"
+          >
             {PRACTICE_SECTION.headline}
           </h2>
-        </RevealOnScroll>
+          <p className="max-w-md text-base leading-relaxed text-black-70 lg:col-span-4 lg:self-end lg:text-lg">
+            {PRACTICE_SECTION.lede}
+          </p>
+        </div>
 
-        {/* Régua de 3px por coluna em vez do truque de gap-px com fundo: são
-            três práticas, e três células iguais numa grade de duas deixavam um
-            buraco na segunda linha. */}
-        <ul className="mt-14 grid gap-10 md:grid-cols-3 md:gap-8">
-          {PRACTICE_SECTION.practices.map((practice, index) => (
-            <li key={practice.title}>
-              <RevealOnScroll delay={index * 0.08}>
-                <div className="border-t-[3px] border-black pt-5">
-                  <span className="font-tech text-[11px] tracking-wide text-black-70">
-                    {String(index + 1).padStart(2, "0")}
-                  </span>
-                  <h3 className="mt-3 text-lg font-semibold tracking-tight">{practice.title}</h3>
-                  <p className="mt-3 text-sm leading-relaxed text-black-70">{practice.body}</p>
-                </div>
-              </RevealOnScroll>
-            </li>
-          ))}
+        <ul className="mt-24 grid gap-16 md:mt-36 md:grid-cols-12 md:gap-10">
+          {PRACTICE_SECTION.practices.map((practice, index) => {
+            const position = ["md:col-span-4", "md:col-span-4 md:mt-24", "md:col-span-4 md:mt-48"][index];
+            return (
+              <li key={practice.title} className={position}>
+                <h3 className="max-w-xs font-display text-[clamp(1.65rem,2.4vw,2.65rem)] font-semibold leading-[1.04] tracking-[-0.03em]">
+                  {practice.title}
+                </h3>
+                <p className="mt-6 max-w-sm text-base leading-relaxed text-black-70">
+                  {practice.body}
+                </p>
+              </li>
+            );
+          })}
         </ul>
 
-        <RevealOnScroll>
-          <div className="mt-16 bg-carbon p-8 text-white md:mt-20 md:p-12">
-            <div className="grid gap-8 md:grid-cols-12 md:gap-10">
-              <div className="md:col-span-4">
-                <span className="block h-[3px] w-10 bg-white" aria-hidden="true" />
-                <h3 className="mt-5 font-display text-2xl font-semibold tracking-tight md:text-3xl">
-                  {PRACTICE_SECTION.honesty.title}
-                </h3>
-              </div>
-              <p className="text-base leading-relaxed text-white-70 md:col-span-7 md:col-start-6 md:text-lg">
+        <div className="mt-28 bg-carbon px-7 py-16 text-white md:mt-44 md:px-16 md:py-24 lg:px-24">
+          <div className="grid gap-12 lg:grid-cols-12 lg:gap-14">
+            <h3 className="max-w-md font-display text-[clamp(2.2rem,3.6vw,4.4rem)] font-semibold leading-[0.98] tracking-[-0.04em] lg:col-span-5">
+              {PRACTICE_SECTION.honesty.title}
+            </h3>
+            <div className="lg:col-span-6 lg:col-start-7">
+              <p className="text-base leading-relaxed text-white-70 md:text-lg">
                 {PRACTICE_SECTION.honesty.body}
+              </p>
+              <p className="mt-10 font-display text-xl font-semibold leading-snug tracking-[-0.02em] text-white md:text-2xl">
+                {PRACTICE_SECTION.honesty.conclusion}
               </p>
             </div>
           </div>
-        </RevealOnScroll>
+        </div>
       </div>
     </section>
   );

@@ -1,19 +1,10 @@
 "use client";
 
-import { useRef } from "react";
 import Image from "next/image";
-import { gsap, useGSAP, SplitText } from "@/lib/gsap";
+import { useRef } from "react";
+import { gsap, SplitText, useGSAP } from "@/lib/gsap";
 import { HERO } from "@/lib/sustentabilidade-data";
 
-/**
- * Abertura de tela cheia. A foto recua devagar enquanto o texto sobe mais
- * rápido e sai antes, o que dá a sensação de câmera avançando na cena em vez
- * de página rolando. A headline emerge por baixo de uma máscara de linha,
- * mesmo recurso do EditorialStatement da home.
- *
- * O split só acontece depois de as fontes carregarem; medir linha com a fonte
- * de fallback quebra a quebra de linha e deixa palavra órfã.
- */
 export function SustentabilidadeHero() {
   const sectionRef = useRef<HTMLElement>(null);
 
@@ -21,42 +12,46 @@ export function SustentabilidadeHero() {
     (_context, contextSafe) => {
       const root = sectionRef.current;
       if (!root || !contextSafe) return;
-      const mm = gsap.matchMedia();
 
+      const mm = gsap.matchMedia();
       mm.add("(prefers-reduced-motion: no-preference)", () => {
-        const plate = root.querySelector<HTMLElement>("[data-hero-plate]");
+        const image = root.querySelector<HTMLElement>("[data-hero-image]");
         const content = root.querySelector<HTMLElement>("[data-hero-content]");
         const title = root.querySelector<HTMLElement>("[data-hero-title]");
-        const rest = gsap.utils.toArray<HTMLElement>("[data-hero-fade]", root);
 
-        if (plate) {
+        if (image) {
           gsap.fromTo(
-            plate,
-            { yPercent: -6, scale: 1.12 },
+            image,
+            { scale: 1.08, yPercent: -2 },
             {
-              yPercent: 8,
               scale: 1,
+              yPercent: 8,
               ease: "none",
-              scrollTrigger: { trigger: root, start: "top top", end: "bottom top", scrub: true },
-            }
+              scrollTrigger: {
+                trigger: root,
+                start: "top top",
+                end: "bottom top",
+                scrub: 0.4,
+              },
+            },
           );
         }
 
         if (content) {
           gsap.to(content, {
-            yPercent: -18,
+            yPercent: -10,
             autoAlpha: 0,
             ease: "none",
-            scrollTrigger: { trigger: root, start: "center top", end: "bottom top", scrub: true },
+            scrollTrigger: {
+              trigger: root,
+              start: "55% top",
+              end: "bottom top",
+              scrub: true,
+            },
           });
         }
 
-        gsap.from(rest, { autoAlpha: 0, y: 24, duration: 0.9, ease: "expo.out", delay: 0.5, stagger: 0.12 });
-
         if (title) {
-          // A Promise resolve depois da execução síncrona deste callback, então
-          // o split e o tween precisam de contextSafe para entrar no contexto e
-          // serem revertidos se a rota sair antes de as fontes carregarem.
           document.fonts.ready.then(
             contextSafe(() => {
               SplitText.create(title, {
@@ -65,74 +60,66 @@ export function SustentabilidadeHero() {
                 autoSplit: true,
                 onSplit: (self) =>
                   gsap.from(self.lines, {
-                    yPercent: 110,
-                    duration: 1.1,
+                    yPercent: 104,
+                    duration: 1.05,
                     ease: "expo.out",
-                    stagger: 0.09,
+                    stagger: 0.07,
                   }),
               });
-            })
+            }),
           );
         }
       });
     },
-    { scope: sectionRef }
+    { scope: sectionRef },
   );
 
   return (
     <section
       ref={sectionRef}
-      className="relative h-[100svh] min-h-[560px] overflow-hidden bg-carbon text-white"
+      className="relative h-[100svh] min-h-[620px] overflow-hidden bg-carbon text-white"
+      aria-labelledby="sustentabilidade-title"
     >
-      <div data-hero-plate className="absolute inset-[-8%] will-change-transform">
+      <div data-hero-image className="absolute inset-[-8%] will-change-transform">
         <Image
           src={HERO.image.src}
           alt={HERO.image.alt}
           fill
           priority
-          quality={75}
+          quality={80}
           sizes="100vw"
-          className="object-cover grayscale"
+          className={`object-cover grayscale contrast-[1.08] ${HERO.image.focus ?? ""}`}
         />
       </div>
-      <div
-        className="absolute inset-0 bg-gradient-to-t from-carbon via-carbon/70 to-carbon/45"
-        aria-hidden="true"
-      />
 
-      <div
-        data-hero-content
-        className="relative flex h-full flex-col justify-end pb-32 md:pb-28"
-      >
-        <div className="container">
-          <p data-hero-fade className="font-tech text-xs lowercase tracking-wide text-white-70">
-            {HERO.eyebrow}
-          </p>
-          {/* .headline-hero trava em 62px, teto calibrado para a frase de outra
-              página. Aqui a tese precisa ficar acima dos numerais, que chegam
-              a 150px. */}
+      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,.18)_0%,rgba(0,0,0,.2)_35%,rgba(0,0,0,.9)_100%)]" />
+      <div className="absolute inset-y-0 left-0 w-[32vw] min-w-20 bg-[linear-gradient(90deg,rgba(0,0,0,.36),transparent)]" />
+
+      <div data-hero-content className="relative flex h-full items-end pb-20 md:pb-24">
+        <div className="container grid gap-8 lg:grid-cols-12 lg:items-end lg:gap-10">
           <h1
+            id="sustentabilidade-title"
             data-hero-title
-            className="hero-text-shadow-strong mt-5 max-w-4xl font-display font-semibold leading-[1.04] tracking-tight text-white text-[clamp(2.75rem,1.4rem+5.2vw,5.5rem)]"
+            className="hero-text-shadow-strong max-w-5xl font-display text-[clamp(3rem,1.1rem+5.7vw,6.6rem)] font-semibold leading-[0.93] tracking-[-0.052em] text-white lg:col-span-9"
           >
             {HERO.headline}
           </h1>
-          <p
-            data-hero-fade
-            className="mt-6 max-w-xl text-base leading-relaxed text-white-70 md:text-lg"
-          >
+          <p className="max-w-md text-base leading-relaxed text-white-70 lg:col-span-3 lg:pb-2 lg:text-lg">
             {HERO.lede}
           </p>
         </div>
       </div>
 
-      {/* Marca de rolagem sem palavra: "role para ver a conta" colidia com o
-          botão do header no primeiro scroll e era meta-texto. */}
-      <span
-        data-hero-fade
-        className="animate-scroll-cue absolute bottom-8 left-1/2 h-12 w-[3px] -translate-x-1/2 bg-white/60 md:left-auto md:right-10 md:translate-x-0"
-        aria-hidden="true"
-      />
+      {HERO.image.credit && HERO.image.creditUrl ? (
+        <a
+          href={HERO.image.creditUrl}
+          target="_blank"
+          rel="noreferrer"
+          className="absolute bottom-5 right-16 text-[10px] text-white/45 transition-colors hover:text-white focus-visible:text-white md:right-20"
+        >
+          Foto {HERO.image.credit}
+        </a>
+      ) : null}
     </section>
   );
 }

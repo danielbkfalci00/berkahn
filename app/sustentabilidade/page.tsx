@@ -2,18 +2,15 @@ import type { Metadata } from "next";
 import { SmoothScroll } from "@/components/providers/SmoothScroll";
 import { Breadcrumb } from "@/components/layout/Breadcrumb";
 import { SustentabilidadeHero } from "@/components/sections/sustentabilidade/SustentabilidadeHero";
-import { ScaleStatement } from "@/components/sections/sustentabilidade/ScaleStatement";
 import { ExtractionTrack } from "@/components/sections/sustentabilidade/ExtractionTrack";
-import { ForestLayers } from "@/components/sections/sustentabilidade/ForestLayers";
 import { WallExploded } from "@/components/sections/sustentabilidade/WallExploded";
-import { WasteScales } from "@/components/sections/sustentabilidade/WasteScales";
-import { SteelLoop } from "@/components/sections/sustentabilidade/SteelLoop";
+import { ImpactJourney } from "@/components/sections/sustentabilidade/WasteAndCycle";
 import { PracticeList } from "@/components/sections/sustentabilidade/PracticeList";
 import { CTA } from "@/components/sections/CTA";
 
 const TITLE = "Sustentabilidade | Berkahn";
 const DESCRIPTION =
-  "As contas que uma obra paga fora do orçamento, de cimento e areia a madeira de fôrma e entulho, e o que a construção a seco em Light Steel Frame muda em cada uma.";
+  "Como o Light Steel Frame muda decisões de projeto, compra, montagem e destino dos materiais, e o que a Berkahn preserva em cada obra.";
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -47,15 +44,11 @@ export const metadata: Metadata = {
 };
 
 /**
- * /sustentabilidade — destino do CTA da seção "05 · impacto" da home.
+ * /sustentabilidade: destino do CTA da seção "05 · impacto" da home.
  *
- * A tese: construir a seco muda o que a casa tira do mundo. A página segue a
- * ordem extração → madeira → parede → resíduo → ciclo do aço → prática, e cada
- * seção tem a própria mecânica de scroll para nenhuma repetir a anterior:
- * parallax de plano no hero, numeral preenchido por foto no 01, track
- * horizontal preso por sticky no 02, planos com desfoque fixo no 03, corte que se abre em
- * Z no 04, colunas que preenchem por clip-path no 05 e traçado que se fecha no
- * 06.
+ * A tese: a construção convencional pressiona a extração e deixa resíduos; a
+ * montagem a seco muda esse processo. A página concentra o movimento na
+ * abertura das camadas da parede e usa a chegada da cor como virada narrativa.
  *
  * Toda a procedência dos números vive em lib/sustentabilidade-data.ts. Nenhuma
  * fonte vai para a tela, por decisão do Bruno, mas nenhum número entra sem ela.
@@ -88,20 +81,17 @@ export default function SustentabilidadePage() {
         <Breadcrumb items={[{ name: "Sustentabilidade", href: "/sustentabilidade" }]} schemaOnly />
         <SustentabilidadeHero />
       </div>
-      <ScaleStatement />
       <ExtractionTrack />
-      <ForestLayers />
       <WallExploded />
-      <WasteScales />
-      <SteelLoop />
+      <ImpactJourney />
       <PracticeList />
       <CTA
         variant="editorial"
         label="CONSTRUÇÃO A SECO"
-        title="Vamos calcular isso no seu projeto"
-        actionText="Pedir o cálculo do meu projeto"
+        title="Veja como essas escolhas entram no seu projeto"
+        actionText="Pedir uma análise do meu projeto"
         defaultSegment="residencial"
-        description="Cada terreno muda o que a obra consome. Conte o que você quer construir e a gente devolve escopo, prazo e o que o canteiro vai gerar."
+        description="Cada terreno e cada projeto pedem decisões próprias. Conte o que você quer construir e a gente mostra como o sistema pode entrar na sua obra."
         ctaLocation="sustentabilidade"
       />
     </>

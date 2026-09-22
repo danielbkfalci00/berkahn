@@ -1,228 +1,129 @@
 "use client";
 
-import { useRef } from "react";
 import Image from "next/image";
+import { useRef } from "react";
 import { gsap, useGSAP } from "@/lib/gsap";
-import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
-import { EXTRACTION_SECTION } from "@/lib/sustentabilidade-data";
-import { CountingNumber } from "./CountingNumber";
-import { FIGURE_HERO } from "./scale";
+import { EXTRACTION_SECTION, HERO } from "@/lib/sustentabilidade-data";
 
-/**
- * "02 · o que a obra arranca". No desktop o viewport prende e as três batidas
- * atravessam a tela na horizontal, cada painel girando em Y conforme passa pelo
- * centro. O eixo horizontal é o que separa esta seção da seção 05 da home, que
- * usa pinagem vertical: o mesmo recurso duas vezes na mesma visita cansa.
- *
- * A rotação de cada painel usa `containerAnimation`, que é como o ScrollTrigger
- * resolve gatilhos dentro de um track que se move na horizontal. Sem isso, o
- * start/end seria medido contra o scroll da página e nunca bateria com a
- * posição real do painel.
- *
- * Mobile e reduced-motion: os três painéis empilham na vertical e os números
- * contam ao entrar, sem pin e sem giro.
- */
 export function ExtractionTrack() {
   const sectionRef = useRef<HTMLElement>(null);
-  const beats = EXTRACTION_SECTION.beats;
 
   useGSAP(
     () => {
       const root = sectionRef.current;
       if (!root) return;
+
       const mm = gsap.matchMedia();
-
       mm.add("(min-width: 1024px) and (prefers-reduced-motion: no-preference)", () => {
-        const track = root.querySelector<HTMLElement>("[data-track]");
-        const rail = root.querySelector<HTMLElement>("[data-rail]");
-        const panels = gsap.utils.toArray<HTMLElement>("[data-panel]", root);
-        if (!track || !rail || panels.length !== beats.length) return;
+        const track = root.querySelector<HTMLElement>("[data-extraction-track]");
+        const forest = root.querySelector<HTMLElement>("[data-extraction-forest]");
+        const quarry = root.querySelector<HTMLElement>("[data-extraction-quarry]");
+        if (!track || !forest || !quarry) return;
 
-        // Track alto com filho sticky, e não ScrollTrigger.pin: o pin cria um
-        // spacer e reescreve a posição do elemento, o que briga com o Lenis.
-        // A altura do track é a sobra horizontal do rail mais um viewport.
-        let distance = 0;
-        const measure = () => {
-          distance = Math.max(0, rail.scrollWidth - window.innerWidth);
-          track.style.height = `${window.innerHeight + distance}px`;
-        };
-        measure();
+        gsap.set(forest, { display: "block", clipPath: "inset(0 0 0 0)" });
+        gsap.set(quarry, { scale: 1.08 });
 
-        const drift = gsap.to(rail, {
-          x: () => -distance,
-          ease: "none",
+        const timeline = gsap.timeline({
+          defaults: { ease: "none" },
           scrollTrigger: {
             trigger: track,
-            start: "top top",
-            end: "bottom bottom",
-            scrub: 0.6,
-            invalidateOnRefresh: true,
-            onRefreshInit: measure,
+            start: "top 75%",
+            end: "bottom 35%",
+            scrub: 0.45,
           },
         });
 
-        panels.forEach((panel) => {
-          const plate = panel.querySelector<HTMLElement>("[data-panel-plate]");
-          gsap.fromTo(
-            panel,
-            { rotateY: 11 },
-            {
-              rotateY: -11,
-              ease: "none",
-              scrollTrigger: {
-                trigger: panel,
-                containerAnimation: drift,
-                start: "left right",
-                end: "right left",
-                scrub: true,
-              },
-            }
-          );
-          if (plate) {
-            gsap.fromTo(
-              plate,
-              { xPercent: -6, scale: 1.14 },
-              {
-                xPercent: 6,
-                scale: 1,
-                ease: "none",
-                scrollTrigger: {
-                  trigger: panel,
-                  containerAnimation: drift,
-                  start: "left right",
-                  end: "right left",
-                  scrub: true,
-                },
-              }
-            );
-          }
-        });
-
-        return () => {
-          track.style.height = "";
-        };
+        timeline
+          .to(forest, { clipPath: "inset(0 0 100% 0)", duration: 1 }, 0)
+          .to(quarry, { scale: 1, duration: 1 }, 0);
       });
     },
-    { scope: sectionRef }
+    { scope: sectionRef },
   );
 
   return (
     <section
       ref={sectionRef}
       id="extracao"
-      className="bg-carbon text-white"
+      className="bg-carbon py-xl text-white md:py-3xl"
       aria-labelledby="extracao-title"
     >
-      <div className="container pt-xl md:pt-2xl">
-        <RevealOnScroll>
-          <p className="font-tech text-xs lowercase tracking-wide text-white-50">
-            {EXTRACTION_SECTION.eyebrow}
+      <div className="container">
+        <div className="grid gap-10 lg:grid-cols-12 lg:gap-12">
+          <div className="lg:col-span-7">
+            <h2
+              id="extracao-title"
+              className="max-w-4xl font-display text-[clamp(2.7rem,1.3rem+4.5vw,6rem)] font-semibold leading-[0.94] tracking-[-0.05em]"
+            >
+              {EXTRACTION_SECTION.headline}
+            </h2>
+          </div>
+          <p className="max-w-md text-base leading-relaxed text-white-70 lg:col-span-4 lg:col-start-9 lg:self-end lg:text-lg">
+            {EXTRACTION_SECTION.lede}
           </p>
-          <h2 id="extracao-title" className="headline-md mt-4 max-w-2xl text-white">
-            {EXTRACTION_SECTION.headline}
-          </h2>
-        </RevealOnScroll>
-      </div>
+        </div>
 
-      {/* Desktop com motion: track horizontal com o viewport preso. */}
-      <div data-track className="relative mt-8 hidden motion-safe:lg:block">
-        <div
-          className="sticky top-0 flex h-screen items-center overflow-hidden"
-          style={{ perspective: "1600px" }}
-        >
-          {/* Âncora da seção: enquanto o track corre na horizontal, a headline
-              já saiu da tela e só sobrava o rótulo da batida. top-24 livra os
-              90px do header. */}
-          <div className="pointer-events-none absolute inset-x-0 top-24 z-10">
-            <div className="container flex items-center gap-4">
-              <span className="h-[3px] w-10 bg-white" aria-hidden="true" />
-              <span className="font-tech text-xs lowercase tracking-wide text-white-70">
-                {EXTRACTION_SECTION.eyebrow}
-              </span>
+        <div className="mt-20 grid gap-14 lg:mt-32 lg:grid-cols-12 lg:gap-12">
+          <div data-extraction-track className="lg:col-span-7">
+            <figure className="relative aspect-[4/5] overflow-hidden bg-carbon-soft lg:sticky lg:top-[12vh] lg:h-[76vh] lg:aspect-auto">
+              <div data-extraction-quarry className="absolute inset-0 will-change-transform">
+                <Image
+                  src={EXTRACTION_SECTION.image.src}
+                  alt={EXTRACTION_SECTION.image.alt}
+                  fill
+                  quality={80}
+                  sizes="(min-width: 1024px) 58vw, 100vw"
+                  className={`object-cover grayscale contrast-[1.08] ${EXTRACTION_SECTION.image.focus ?? ""}`}
+                />
+              </div>
+              <div data-extraction-forest className="absolute inset-0 hidden will-change-[clip-path]">
+                <Image
+                  src={HERO.image.src}
+                  alt=""
+                  fill
+                  quality={75}
+                  sizes="58vw"
+                  className="object-cover grayscale contrast-[1.08]"
+                />
+              </div>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-black/5" />
+              <figcaption className="absolute bottom-6 left-6 right-6 max-w-sm text-xs leading-relaxed text-white/60 md:bottom-8 md:left-8">
+                A mesma cadeia que ergue cidades começa na paisagem.
+              </figcaption>
+              <a
+                href={EXTRACTION_SECTION.image.creditUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="absolute bottom-6 right-6 text-[10px] text-white/45 transition-colors hover:text-white focus-visible:text-white md:bottom-8 md:right-8"
+              >
+                Foto {EXTRACTION_SECTION.image.credit}
+              </a>
+            </figure>
+          </div>
+
+          <div className="lg:col-span-4 lg:col-start-9">
+            <div className="pb-20 lg:pb-[32vh]">
+              <p className="font-display text-[clamp(5rem,10vw,10rem)] font-semibold leading-[0.78] tracking-[-0.075em]">
+                {EXTRACTION_SECTION.figure.value}
+              </p>
+              <p className="mt-8 max-w-sm text-base leading-relaxed text-white-70">
+                {EXTRACTION_SECTION.figure.label}
+              </p>
+            </div>
+
+            <div className="space-y-20 lg:space-y-0">
+              {EXTRACTION_SECTION.beats.map((beat) => (
+                <article key={beat.title} className="flex min-h-[42vh] flex-col justify-center py-8 lg:min-h-[52vh]">
+                  <h3 className="max-w-sm font-display text-2xl font-semibold leading-tight tracking-[-0.025em] md:text-3xl">
+                    {beat.title}
+                  </h3>
+                  <p className="mt-5 max-w-md text-base leading-relaxed text-white-70">
+                    {beat.body}
+                  </p>
+                </article>
+              ))}
             </div>
           </div>
-          <div
-            data-rail
-            className="flex w-max items-center gap-[6vw] px-[8vw] will-change-transform"
-            style={{ transformStyle: "preserve-3d" }}
-          >
-            {beats.map((beat, index) => (
-              <article
-                key={beat.id}
-                data-panel
-                className="relative w-[62vw] max-w-[860px] shrink-0 will-change-transform"
-                style={{ transformStyle: "preserve-3d" }}
-              >
-                <div className="relative h-[46vh] max-h-[480px] overflow-hidden bg-carbon-soft">
-                  <div data-panel-plate className="absolute inset-[-8%] will-change-transform">
-                    <Image
-                      src={beat.image.src}
-                      alt={beat.image.alt}
-                      fill
-                      quality={70}
-                      sizes="62vw"
-                      className={`object-cover grayscale ${beat.focus}`}
-                    />
-                  </div>
-                  <div
-                    className="absolute inset-0 bg-gradient-to-t from-carbon via-carbon/45 to-transparent"
-                    aria-hidden="true"
-                  />
-                  <div className="absolute inset-x-0 bottom-0 p-8">
-                    <p className="font-tech text-xs lowercase tracking-wide text-white-70">
-                      {beat.index} · {beat.kicker}
-                    </p>
-                    <CountingNumber figure={beat.hero} className={`mt-3 ${FIGURE_HERO} text-white`} />
-                  </div>
-                </div>
-                <div className="mt-6 flex items-start gap-6">
-                  <span className="mt-2 h-[3px] w-10 shrink-0 bg-white" aria-hidden="true" />
-                  <div>
-                    <p className="text-xs font-medium uppercase tracking-wider text-white-70">
-                      {beat.hero.label}
-                    </p>
-                    <p className="mt-3 max-w-xl text-base leading-relaxed text-white-70">
-                      {beat.claim}
-                    </p>
-                  </div>
-                </div>
-              </article>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Mobile e reduced-motion: pilha vertical. */}
-      <div className="container motion-safe:lg:hidden">
-        <div className="mt-12 flex flex-col gap-16 pb-xl md:pb-2xl">
-          {beats.map((beat) => (
-            <article key={beat.id}>
-              <div className="relative aspect-[4/3] overflow-hidden bg-carbon-soft">
-                <Image
-                  src={beat.image.src}
-                  alt={beat.image.alt}
-                  fill
-                  quality={70}
-                  sizes="100vw"
-                  className={`object-cover grayscale ${beat.focus}`}
-                />
-                <div
-                  className="absolute inset-0 bg-gradient-to-t from-carbon via-carbon/50 to-transparent"
-                  aria-hidden="true"
-                />
-                <div className="absolute inset-x-0 bottom-0 p-5">
-                  <p className="font-tech text-xs lowercase tracking-wide text-white-70">
-                    {beat.index} · {beat.kicker}
-                  </p>
-                  <CountingNumber figure={beat.hero} className={`mt-2 ${FIGURE_HERO} text-white`} />
-                </div>
-              </div>
-              <p className="mt-5 text-xs font-medium uppercase tracking-wider text-white-70">
-                {beat.hero.label}
-              </p>
-              <p className="mt-3 text-base leading-relaxed text-white-70">{beat.claim}</p>
-            </article>
-          ))}
         </div>
       </div>
     </section>
