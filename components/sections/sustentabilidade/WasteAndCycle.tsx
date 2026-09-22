@@ -156,16 +156,6 @@ export function ImpactJourney() {
                     sizes="(min-width: 1024px) 50vw, 100vw"
                     className={`object-cover saturate-[.9] contrast-[.98] ${item.image.focus ?? ""}`}
                   />
-                  {"credit" in item.image && item.image.credit && item.image.creditUrl ? (
-                    <a
-                      href={item.image.creditUrl}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="absolute bottom-4 right-4 text-[10px] text-white/55 transition-colors hover:text-white focus-visible:text-white"
-                    >
-                      Foto {item.image.credit}
-                    </a>
-                  ) : null}
                 </figure>
                 <div className="grid gap-8 pt-9 md:grid-cols-5 md:gap-10 md:pt-11">
                   <div className="md:col-span-2">

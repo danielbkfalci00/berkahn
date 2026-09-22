@@ -38,22 +38,22 @@ export interface SourcedFigure {
   source: DataSource;
 }
 
+// Sem campo de crédito: a página não assina foto na tela. As três imagens
+// externas são provisórias e o link de origem fica em comentário, ao lado de
+// cada uma, para identificar qual arquivo substituir.
 export interface EditorialImage {
   src: string;
   alt: string;
-  credit?: string;
-  creditUrl?: string;
   focus?: string;
 }
 
 export const HERO = {
   headline: "O sistema da sua casa também decide o que a obra deixa para trás.",
   lede: "No Light Steel Frame, parte desse impacto muda antes de a obra começar. A diferença aparece no projeto, na compra e na forma de montar cada parede.",
+  // Provisória, de https://unsplash.com/photos/0dtLWM5ycGc
   image: {
     src: "https://images.unsplash.com/photo-1713700741779-fb0237967302?auto=format&fit=crop&w=2400&q=82",
     alt: "Vista aérea da copa de uma floresta brasileira",
-    credit: "Kawê Rodrigues",
-    creditUrl: "https://unsplash.com/photos/0dtLWM5ycGc",
     focus: "object-center",
   } satisfies EditorialImage,
 };
@@ -80,11 +80,10 @@ export const EXTRACTION_SECTION = {
       body: "A construção a seco leva parte dessas decisões para o projeto e substitui etapas de produção no local por uma sequência planejada de montagem.",
     },
   ],
+  // Provisória, de https://unsplash.com/photos/oF7hh97lVqA
   image: {
     src: "https://images.unsplash.com/photo-1571223641822-b82408a0e705?auto=format&fit=crop&w=2400&q=82",
     alt: "Vista aérea de uma pedreira e das marcas da extração no terreno",
-    credit: "Dion Beetson",
-    creditUrl: "https://unsplash.com/photos/oF7hh97lVqA",
     focus: "object-center",
   } satisfies EditorialImage,
 };
@@ -165,11 +164,10 @@ export const LIFECYCLE_SECTION = {
       label: "é a taxa global de recuperação do aço no fim da vida em construção",
       source: SOURCES.worldsteel,
     } satisfies SourcedFigure,
+    // Provisória, de https://unsplash.com/photos/lp6CBQSr1Ek
     image: {
       src: "https://images.unsplash.com/photo-1722695694560-f452b0919d3a?auto=format&fit=crop&w=2000&q=82",
       alt: "Garra de pátio de sucata recolhendo aço para reciclagem",
-      credit: "Yasin Hemmati",
-      creditUrl: "https://unsplash.com/photos/lp6CBQSr1Ek",
       focus: "object-center",
     } satisfies EditorialImage,
   },

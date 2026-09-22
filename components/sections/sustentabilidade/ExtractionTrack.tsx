@@ -90,14 +90,6 @@ export function ExtractionTrack() {
               <figcaption className="absolute bottom-6 left-6 right-6 max-w-sm text-xs leading-relaxed text-white/60 md:bottom-8 md:left-8">
                 A mesma cadeia que ergue cidades começa na paisagem.
               </figcaption>
-              <a
-                href={EXTRACTION_SECTION.image.creditUrl}
-                target="_blank"
-                rel="noreferrer"
-                className="absolute bottom-6 right-6 text-[10px] text-white/45 transition-colors hover:text-white focus-visible:text-white md:bottom-8 md:right-8"
-              >
-                Foto {EXTRACTION_SECTION.image.credit}
-              </a>
             </figure>
           </div>
 

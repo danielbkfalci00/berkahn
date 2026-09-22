@@ -109,17 +109,6 @@ export function SustentabilidadeHero() {
           </p>
         </div>
       </div>
-
-      {HERO.image.credit && HERO.image.creditUrl ? (
-        <a
-          href={HERO.image.creditUrl}
-          target="_blank"
-          rel="noreferrer"
-          className="absolute bottom-5 right-16 text-[10px] text-white/45 transition-colors hover:text-white focus-visible:text-white md:right-20"
-        >
-          Foto {HERO.image.credit}
-        </a>
-      ) : null}
     </section>
   );
 }
