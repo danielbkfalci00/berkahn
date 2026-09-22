@@ -153,7 +153,7 @@ Visão completa em `Berkahn-Vault/60-arquitetura/stack-nextjs-supabase.md`:
 - Next.js (App Router) + React + TypeScript + Tailwind + shadcn/ui
 - Supabase (PostgreSQL + Auth + RLS) — tabela `posts`
 - Vercel deploy
-- Leads no Supabase como fonte primária; Google Sheets é espelho assíncrono via Apps Script
+- Leads no Supabase como fonte única; o espelho Sheets foi descontinuado (só houve importação legada via `scripts/leads/import-leads-csv.mjs`)
 
 Comandos críticos:
 ```bash

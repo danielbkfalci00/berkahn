@@ -32,12 +32,18 @@ export async function getSnapshot(monthSlug: string): Promise<AnalyticsSnapshot 
   const monthDate = `${monthSlug}-01`;
   const { data, error } = await supabase
     .from("analytics_snapshots")
-    .select("*")
+    // ga4_prev/gsc_prev não são lidos pelo painel e este objeto vai inteiro
+    // para o client component; ficam fora da projeção para enxugar o payload.
+    .select("month, ga4_data, gsc_data, context, generated_at")
     .eq("month", monthDate)
     .single();
 
   if (error || !data) return null;
-  return applySnapshotComparisonPolicy(data as AnalyticsSnapshot);
+  return applySnapshotComparisonPolicy({
+    ...(data as Omit<AnalyticsSnapshot, "ga4_prev" | "gsc_prev">),
+    ga4_prev: null,
+    gsc_prev: null,
+  });
 }
 
 /**

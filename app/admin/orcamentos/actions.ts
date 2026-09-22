@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache"
 import { createServiceClient } from "@/lib/supabase/admin"
-import { createClient } from "@/lib/supabase/server"
+import { getAdminSession } from "@/lib/supabase/sessao"
 import { rowParaInsert } from "@/lib/orcamento-planilha"
 import type {
   OrcamentoInsert,
@@ -16,16 +16,13 @@ type ActionResultCreate =
 
 type ActionResultUpdate = { ok: true } | { ok: false; erro: string }
 
-const ADMIN_EMAIL = "contato.berkahn@gmail.com"
-
+// Mesmo gate de papel das actions de leads (migration 031): owner e comercial
+// escrevem orçamentos. O e-mail fixo da 024 barrava a equipe comercial e,
+// como a escrita usa o service client, a RLS por papel não tinha voz aqui.
 async function getAuthorizedAdmin() {
-  const supabase = await createClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-
-  if (user?.email?.toLowerCase() !== ADMIN_EMAIL) return null
-  return { supabase, user }
+  const session = await getAdminSession()
+  if (!session || !["owner", "comercial"].includes(session.membership.role)) return null
+  return session
 }
 
 export async function criarOrcamento(

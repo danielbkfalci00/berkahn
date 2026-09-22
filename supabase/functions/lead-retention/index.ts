@@ -6,7 +6,7 @@ Deno.serve(async (request) => {
   if (request.method !== "POST") return response({ error: "method_not_allowed" }, 405);
   const expected = Deno.env.get("RETENTION_CRON_SECRET");
   const received = request.headers.get("x-cron-secret");
-  if (!expected || !received || received !== expected) return response({ error: "unauthorized" }, 401);
+  if (!expected || !received || !(await safeEqual(received, expected))) return response({ error: "unauthorized" }, 401);
 
   const url = Deno.env.get("SUPABASE_URL");
   const key = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
@@ -94,4 +94,19 @@ function response(body: Record<string, unknown>, status = 200) {
     status,
     headers: { "Content-Type": "application/json", "Cache-Control": "no-store" },
   });
+}
+
+// Compara digests SHA-256 de tamanho fixo byte a byte, sem retorno antecipado:
+// o tempo não revela quantos caracteres do segredo o chamador acertou.
+async function safeEqual(a: string, b: string): Promise<boolean> {
+  const encoder = new TextEncoder();
+  const [digestA, digestB] = await Promise.all([
+    crypto.subtle.digest("SHA-256", encoder.encode(a)),
+    crypto.subtle.digest("SHA-256", encoder.encode(b)),
+  ]);
+  const bytesA = new Uint8Array(digestA);
+  const bytesB = new Uint8Array(digestB);
+  let diff = 0;
+  for (let i = 0; i < bytesA.length; i++) diff |= bytesA[i] ^ bytesB[i];
+  return diff === 0;
 }

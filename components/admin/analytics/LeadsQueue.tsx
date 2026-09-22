@@ -2,11 +2,11 @@
 
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useMemo, useState, useTransition } from "react";
+import { useEffect, useMemo, useRef, useState, useTransition } from "react";
 import {
-  Archive, AlertTriangle, ChevronLeft, ChevronRight, Clock3, ExternalLink,
+  Archive, ChevronLeft, ChevronRight, Clock3, ExternalLink,
   FileText, FolderOpen, GripVertical, LayoutList, Link2, Mail, MessageCircle,
-  Phone, Plus, RefreshCw, SlidersHorizontal, Trash2, Upload, UserRound,
+  Phone, Plus, RefreshCw, SlidersHorizontal, Trash2, Upload, UserRound, X,
 } from "lucide-react";
 import {
   DndContext, KeyboardSensor, PointerSensor, closestCenter, useDraggable,
@@ -100,7 +100,24 @@ export function LeadsQueue({ initialLeads, total, page, pageCount, kpis, respons
   const [pendingLeadId, setPendingLeadId] = useState<string | null>(null);
   const [disqualifying, setDisqualifying] = useState<{ id: string; reason: string } | null>(null);
   const [filtersOpen, setFiltersOpen] = useState(false);
-  const [isPending, startTransition] = useTransition();
+  const filtersToggleRef = useRef<HTMLButtonElement>(null);
+  const [, startTransition] = useTransition();
+
+  // No mobile os filtros viram uma sheet fixa sobre a página: Escape fecha e o foco
+  // volta ao botão que abriu, para não deixar o teclado perdido atrás da sheet.
+  useEffect(() => {
+    if (!filtersOpen) return;
+    function onKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") closeFilters();
+    }
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [filtersOpen]);
+
+  function closeFilters() {
+    setFiltersOpen(false);
+    filtersToggleRef.current?.focus();
+  }
 
   useEffect(() => {
     setLeads(initialLeads);
@@ -254,9 +271,11 @@ export function LeadsQueue({ initialLeads, total, page, pageCount, kpis, respons
       {error && <p role="alert" className="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p>}
       {success && <p role="status" className="rounded-md border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-800">{success}</p>}
 
-      <button type="button" aria-expanded={filtersOpen} onClick={() => setFiltersOpen((value) => !value)} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-neutral-300 bg-white px-4 text-sm font-medium md:hidden"><SlidersHorizontal className="h-4 w-4" /> Filtros{activeFilterCount > 0 ? ` (${activeFilterCount})` : ""}</button>
+      <button ref={filtersToggleRef} type="button" aria-expanded={filtersOpen} onClick={() => setFiltersOpen((value) => !value)} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-neutral-300 bg-white px-4 text-sm font-medium md:hidden"><SlidersHorizontal className="h-4 w-4" /> Filtros{activeFilterCount > 0 ? ` (${activeFilterCount})` : ""}</button>
 
+      {filtersOpen && <div aria-hidden="true" onClick={closeFilters} className="fixed inset-0 z-40 bg-neutral-950/30 md:hidden" />}
       <form className={`${filtersOpen ? "grid" : "hidden"} fixed inset-x-3 bottom-[calc(5rem+env(safe-area-inset-bottom))] z-50 max-h-[70vh] gap-3 overflow-y-auto rounded-lg border border-neutral-200 bg-white p-4 shadow-2xl md:static md:grid md:max-h-none md:grid-cols-2 md:shadow-none lg:grid-cols-4 xl:grid-cols-5`}>
+        <div className="flex items-center justify-between md:hidden"><p className="text-sm font-semibold text-neutral-900">Filtros</p><button type="button" onClick={closeFilters} aria-label="Fechar filtros" className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-md text-neutral-500 hover:text-neutral-900"><X className="h-5 w-5" /></button></div>
         <input type="hidden" name="view" value={view} />
         <input name="q" defaultValue={searchParams.get("q") || ""} placeholder="Nome, telefone ou email" className={`${INPUT_CLASS} md:col-span-2`} />
         <FilterSelect name="status" label="Todos os status" options={STATUS} current={searchParams.get("status")} />
@@ -342,7 +361,8 @@ function LeadInbox({ leads, pendingLeadId, onStatusChange }: { leads: AnalyticsL
     </div>
     {leads.length === 0 ? <p className="px-4 py-10 text-center text-sm text-neutral-500">Nenhum lead corresponde aos filtros.</p> : leads.map((lead) => {
       const priority = priorityMeta(lead.prioridade);
-      const overdue = Boolean(lead.proxima_acao_em && new Date(lead.proxima_acao_em) < new Date());
+      // Mesma regra do filtro e do push (028): lead encerrado não tem ação vencida.
+      const overdue = Boolean(lead.proxima_acao_em && new Date(lead.proxima_acao_em) < new Date() && lead.status !== "convertido" && lead.status !== "desqualificado");
       return <article key={lead.id} className="grid gap-3 border-b px-4 py-4 text-sm last:border-0 lg:grid-cols-[1fr_1.4fr_.75fr_.85fr_.8fr_.25fr] lg:items-center">
         <div className="min-w-0">
           <div className="flex items-center gap-2"><p className="truncate font-semibold text-neutral-900">{lead.nome}</p>{!lead.visualizado_em && <span className="h-2 w-2 shrink-0 rounded-full bg-blue-600" title="Não visualizado" />}</div>
@@ -484,6 +504,8 @@ export function LeadDetail({
   }
 
   const phoneDigits = lead.telefone?.replace(/\D/g, "") || "";
+  // wa.me exige DDI; telefone digitado no formulário chega como (11) 99999-8888.
+  const whatsappDigits = phoneDigits.length === 10 || phoneDigits.length === 11 ? `55${phoneDigits}` : phoneDigits;
   const utmEntries = Object.entries(lead.utm || {}).filter(([, value]) => value);
 
   return (
@@ -496,7 +518,7 @@ export function LeadDetail({
         </div>
         <div className="grid w-full grid-cols-3 gap-2 sm:flex sm:w-auto sm:flex-wrap">
           {lead.telefone && <a href={`tel:${phoneDigits}`} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-neutral-300 bg-white px-3 text-sm font-medium"><Phone className="h-4 w-4" /> Ligar</a>}
-          {lead.telefone && <a href={`https://wa.me/${phoneDigits}`} target="_blank" rel="noreferrer" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md bg-neutral-950 px-3 text-sm font-medium text-white"><MessageCircle className="h-4 w-4" /> WhatsApp</a>}
+          {lead.telefone && <a href={`https://wa.me/${whatsappDigits}`} target="_blank" rel="noreferrer" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md bg-neutral-950 px-3 text-sm font-medium text-white"><MessageCircle className="h-4 w-4" /> WhatsApp</a>}
           {lead.email && <a href={`mailto:${lead.email}`} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-neutral-300 bg-white px-3 text-sm font-medium"><Mail className="h-4 w-4" /> Email</a>}
         </div>
       </div>
@@ -555,7 +577,11 @@ export function LeadDetail({
           <CommercialLinks title="Orçamentos" records={budgets} empty="Nenhum orçamento vinculado." />
           <CommercialLinks title="Propostas" records={proposals} empty="Nenhuma proposta vinculada." />
           <Link href={`/admin/orcamentos/novo/form?lead=${lead.id}`} className="block min-h-11 rounded-md bg-neutral-950 px-4 py-3 text-center text-sm font-medium text-white">Criar orçamento</Link>
-          <div className="border-t border-neutral-200 pt-4"><button disabled={isPending} onClick={() => run(() => setLeadArchived(lead.id, !lead.arquivado_em), () => router.push("/admin/leads"))} className="inline-flex min-h-11 items-center gap-2 text-sm text-neutral-500 hover:text-neutral-900"><Archive className="h-4 w-4" /> {lead.arquivado_em ? "Reabrir lead" : "Arquivar lead"}</button></div>
+          <div className="border-t border-neutral-200 pt-4"><button disabled={isPending} onClick={() => {
+            // Arquivar tira o lead da fila e sai da tela; confirma como na remoção de arquivo.
+            if (!lead.arquivado_em && !window.confirm(`Arquivar “${lead.nome}”? Ele sai da fila de leads.`)) return;
+            run(() => setLeadArchived(lead.id, !lead.arquivado_em), () => router.push("/admin/leads"));
+          }} className="inline-flex min-h-11 items-center gap-2 text-sm text-neutral-500 hover:text-neutral-900"><Archive className="h-4 w-4" /> {lead.arquivado_em ? "Reabrir lead" : "Arquivar lead"}</button></div>
         </div>
       </div>
     </div>

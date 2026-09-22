@@ -99,6 +99,9 @@ export async function updateHubKpis(context, { allowPartial = false } = {}) {
   if (fs.existsSync(SEO_HUB)) {
     let seo = fs.readFileSync(SEO_HUB, 'utf-8');
     seo = upsertFrontmatterField(seo, 'kpi_paginas_indexadas', context.indexedCount);
+    // Apesar do sufixo _30d, estes dois recebem o total do mês calendário do
+    // relatório (28 a 31 dias, ou parcial). O nome ficou por compatibilidade
+    // com o hub e o linter do vault; não ler como janela móvel.
     seo = upsertFrontmatterField(seo, 'kpi_trafego_cliques_30d', context.gsc.clicks);
     seo = upsertFrontmatterField(seo, 'kpi_trafego_impressoes_30d', context.gsc.impressions);
     seo = upsertFrontmatterField(seo, 'kpi_ctr_medio', context.gsc.ctr);

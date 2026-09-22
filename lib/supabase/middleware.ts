@@ -41,6 +41,14 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser()
 
+  // Toda resposta que não seja supabaseResponse precisa carregar os cookies que
+  // o getUser() acabou de rotacionar. Sem isso o browser fica com o refresh
+  // token antigo, já invalidado pelo Supabase, e cai no login na request seguinte.
+  const comCookies = <T extends NextResponse>(res: T): T => {
+    supabaseResponse.cookies.getAll().forEach((c) => res.cookies.set(c))
+    return res
+  }
+
   // Protected admin routes
   const isAdminRoute = request.nextUrl.pathname.startsWith('/admin')
   const isLoginPage = request.nextUrl.pathname === '/admin/login'
@@ -58,7 +66,10 @@ export async function updateSession(request: NextRequest) {
     // Redirect to login if not authenticated
     const url = request.nextUrl.clone()
     url.pathname = '/admin/login'
-    url.searchParams.set('redirectTo', request.nextUrl.pathname)
+    // Leva a query junto (ex.: ?month= do analytics) para o deep link sobreviver
+    // ao login. A validação do destino continua no LoginForm.
+    url.search = ''
+    url.searchParams.set('redirectTo', request.nextUrl.pathname + request.nextUrl.search)
     return NextResponse.redirect(url)
   }
 
@@ -74,25 +85,25 @@ export async function updateSession(request: NextRequest) {
   }
 
   if (isAdminApi && user && !membership) {
-    return NextResponse.json({ error: 'Acesso administrativo inativo' }, { status: 403 })
+    return comCookies(NextResponse.json({ error: 'Acesso administrativo inativo' }, { status: 403 }))
   }
 
   if (isAdminRoute && !isLoginPage && user && !membership) {
     const url = request.nextUrl.clone()
     url.pathname = '/admin/login'
     url.searchParams.set('erro', 'acesso-inativo')
-    return NextResponse.redirect(url)
+    return comCookies(NextResponse.redirect(url))
   }
 
   if (isAdminRoute && !isLoginPage && !isPasswordPage && membership && !roleCanAccessPath(membership.role, request.nextUrl.pathname)) {
-    return NextResponse.redirect(new URL('/admin', request.url))
+    return comCookies(NextResponse.redirect(new URL('/admin', request.url)))
   }
 
   if (isLoginPage && user && membership) {
     // Redirect to dashboard if already authenticated
     const url = request.nextUrl.clone()
     url.pathname = '/admin'
-    return NextResponse.redirect(url)
+    return comCookies(NextResponse.redirect(url))
   }
 
   return supabaseResponse

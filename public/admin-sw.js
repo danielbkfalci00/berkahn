@@ -1,3 +1,9 @@
+// Assume as abas abertas já na ativação, para o toque na notificação achar
+// um cliente controlado sem exigir recarregar a página.
+self.addEventListener("activate", (event) => {
+  event.waitUntil(self.clients.claim());
+});
+
 self.addEventListener("push", (event) => {
   let payload = {
     title: "Berkahn Admin",
@@ -27,8 +33,14 @@ self.addEventListener("notificationclick", (event) => {
     const windows = await self.clients.matchAll({ type: "window", includeUncontrolled: true });
     for (const client of windows) {
       if (client.url.startsWith(self.location.origin) && "focus" in client) {
-        await client.navigate(target);
-        return client.focus();
+        // navigate() rejeita em janela que o SW não controla (fora de /admin/);
+        // nesse caso abre uma janela nova em vez de engolir o toque.
+        try {
+          await client.navigate(target);
+          return client.focus();
+        } catch {
+          return self.clients.openWindow(target);
+        }
       }
     }
     return self.clients.openWindow(target);

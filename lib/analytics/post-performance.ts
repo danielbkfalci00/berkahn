@@ -76,7 +76,12 @@ export function buildPostPerformance(
   const currentPages = current.ga4_data?.topPages ?? [];
   const ga4MoMAvailable = comparisonAvailability(current.context).ga4MoM;
   const prevPagesMap = new Map<string, Ga4PageRow>();
-  if (ga4MoMAvailable && previous?.ga4_data?.topPages) {
+  // Snapshot parcial cobre N dias e o anterior é o mês fechado inteiro: a
+  // divisão página a página daria queda falsa e marcaria o acervo como "cold".
+  // Os KPIs agregados usam janela equivalente; por página não temos, então
+  // o MoM fica indisponível (null) em vez de mentir.
+  const eitherPartial = Boolean(current.context?.partial || previous?.context?.partial);
+  if (ga4MoMAvailable && !eitherPartial && previous?.ga4_data?.topPages) {
     for (const p of previous.ga4_data.topPages) {
       prevPagesMap.set(p.slug, p);
     }

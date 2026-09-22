@@ -48,12 +48,15 @@ type FormStatus = "idle" | "loading" | "success" | "error";
 const CAMPO_CLASS =
   "h-10 text-sm bg-white border border-black-10 placeholder:text-black-30 focus-visible:border-black focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 transition-colors";
 
-/** Mensagem de erro sob um campo. */
-function FieldError({ message }: { message?: string }) {
+/** Mensagem de erro sob um campo. role="alert" faz o leitor de tela anunciar o erro,
+ *  e o id liga a mensagem ao campo via aria-describedby. */
+function FieldError({ id, message }: { id: string; message?: string }) {
   return (
     <AnimatePresence>
       {message && (
         <motion.p
+          id={id}
+          role="alert"
           initial={{ opacity: 0, y: -5 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -5 }}
@@ -249,6 +252,8 @@ export function ContactForm({
               </Label>
               <Input
                 id="name"
+                aria-invalid={Boolean(errors.name)}
+                aria-describedby={errors.name ? "name-error" : undefined}
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                 placeholder="Seu nome"
@@ -256,7 +261,7 @@ export function ContactForm({
                 disabled={status === "loading"}
                 className={CAMPO_CLASS}
               />
-              <FieldError message={errors.name} />
+              <FieldError id="name-error" message={errors.name} />
             </div>
 
             {/* Email */}
@@ -266,6 +271,8 @@ export function ContactForm({
               </Label>
               <Input
                 id="email"
+                aria-invalid={Boolean(errors.email)}
+                aria-describedby={errors.email ? "email-error" : undefined}
                 type="email"
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
@@ -273,7 +280,7 @@ export function ContactForm({
                 disabled={status === "loading"}
                 className={CAMPO_CLASS}
               />
-              <FieldError message={errors.email} />
+              <FieldError id="email-error" message={errors.email} />
             </div>
 
             {/* Telefone */}
@@ -283,6 +290,8 @@ export function ContactForm({
               </Label>
               <Input
                 id="phone"
+                aria-invalid={Boolean(errors.phone)}
+                aria-describedby={errors.phone ? "phone-error" : undefined}
                 type="tel"
                 value={formData.phone}
                 onChange={(e) =>
@@ -294,7 +303,7 @@ export function ContactForm({
                 disabled={status === "loading"}
                 className={CAMPO_CLASS}
               />
-              <FieldError message={errors.phone} />
+              <FieldError id="phone-error" message={errors.phone} />
             </div>
 
             {/* Segmento */}
@@ -305,7 +314,7 @@ export function ContactForm({
                 onValueChange={(value) => setFormData({ ...formData, segment: value })}
                 disabled={status === "loading"}
               >
-                <SelectTrigger id="contact-segment" aria-label="Segmento" className="h-10 text-sm bg-white border border-black-10 rounded-md px-3 py-2 shadow-none focus:border-black focus:ring-2 focus:ring-black focus:ring-offset-2 transition-colors data-[placeholder]:text-black-60">
+                <SelectTrigger id="contact-segment" aria-label="Segmento" aria-invalid={Boolean(errors.segment)} aria-describedby={errors.segment ? "contact-segment-error" : undefined} className="h-10 text-sm bg-white border border-black-10 rounded-md px-3 py-2 shadow-none focus:border-black focus:ring-2 focus:ring-black focus:ring-offset-2 transition-colors data-[placeholder]:text-black-60">
                   <SelectValue placeholder="Selecione o segmento" />
                 </SelectTrigger>
                 <SelectContent
@@ -320,7 +329,7 @@ export function ContactForm({
                   </SelectItem>
                 </SelectContent>
               </Select>
-              <FieldError message={errors.segment} />
+              <FieldError id="contact-segment-error" message={errors.segment} />
             </div>
 
             {/* Mensagem */}
@@ -330,6 +339,8 @@ export function ContactForm({
               </Label>
               <Textarea
                 id="message"
+                aria-invalid={Boolean(errors.message)}
+                aria-describedby={errors.message ? "message-error" : undefined}
                 value={formData.message}
                 onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                 placeholder="Conte-nos sobre seu projeto..."
@@ -338,7 +349,7 @@ export function ContactForm({
                 disabled={status === "loading"}
                 className="text-sm bg-white border border-black-10 placeholder:text-black-30 focus-visible:border-black focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 transition-colors resize-none min-h-[60px]"
               />
-              <FieldError message={errors.message} />
+              <FieldError id="message-error" message={errors.message} />
             </div>
 
             <div>
@@ -378,6 +389,7 @@ export function ContactForm({
             <AnimatePresence>
               {status === "error" && errors.submit && (
                 <motion.p
+                  role="alert"
                   initial={{ opacity: 0, y: -5 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -5 }}

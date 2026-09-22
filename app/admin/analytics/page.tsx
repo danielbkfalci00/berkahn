@@ -53,18 +53,20 @@ export default async function AnalyticsPage({ searchParams }: PageProps) {
       ? queryMonth
       : availableMonths[0];
 
-  const snapshot = await getSnapshot(currentMonth);
-  if (!snapshot) notFound();
-
+  // Tudo abaixo só depende de currentMonth: uma rodada paralela ao banco em
+  // vez de três em série.
   const prevMonth = previousMonthSlug(currentMonth);
-  const prevSnapshot = prevMonth ? await getSnapshot(prevMonth) : null;
-
-  const [trendPoints, postsMap, historicalBySlug, tasks] = await Promise.all([
-    getAllTrendPoints(),
-    getPublishedPosts(),
-    getHistoricalPageviewsBySlug(),
-    getTasks(),
-  ]);
+  const [snapshot, prevSnapshot, trendPoints, postsMap, historicalBySlug, tasks, leadsResult] =
+    await Promise.all([
+      getSnapshot(currentMonth),
+      prevMonth ? getSnapshot(prevMonth) : Promise.resolve(null),
+      getAllTrendPoints(),
+      getPublishedPosts(),
+      getHistoricalPageviewsBySlug(),
+      getTasks(),
+      listarLeadsDoMes(currentMonth),
+    ]);
+  if (!snapshot) notFound();
 
   const postPerformance = buildPostPerformance(
     snapshot,
@@ -81,7 +83,6 @@ export default async function AnalyticsPage({ searchParams }: PageProps) {
   const matrizAcervo = construirMatrizArtigoMes(historicalBySlug, postsMap);
   const mapaLeitura = construirMapaLeitura(snapshot.ga4_data?.articleProgress, postsMap);
   const oportunidade = construirMapaOportunidade(snapshot.gsc_data?.topQueries);
-  const leadsResult = await listarLeadsDoMes(currentMonth);
   const funilLeads = leadsResult.status === "ok"
     ? { status: "ok" as const, data: construirFunilLeads(leadsResult.data) }
     : leadsResult;

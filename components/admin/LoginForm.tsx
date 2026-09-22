@@ -20,21 +20,38 @@ import { Loader2, AlertCircle, Lock } from "lucide-react";
  * `redirectTo` vem do middleware como `request.nextUrl.pathname`, mas a URL é
  * editável: `/admin/login?redirectTo=https://exemplo.com` faria o
  * `router.push` levar o usuário para fora depois de autenticar. `//` também
- * sai barrado porque o browser o interpreta como protocolo-relativo.
+ * sai barrado porque o browser o interpreta como protocolo-relativo, e `\`
+ * também, porque o parser de URL trata `/\evil.com` como `//evil.com`. Por
+ * isso a checagem final é pela origem resolvida, não pelo texto.
  */
 function destinoSeguro(bruto: string | null): string {
-  if (!bruto || !bruto.startsWith("/") || bruto.startsWith("//")) return "/admin";
-  return bruto;
+  if (!bruto || !bruto.startsWith("/") || bruto.startsWith("//") || bruto.includes("\\")) return "/admin";
+  try {
+    const url = new URL(bruto, window.location.origin);
+    if (url.origin !== window.location.origin || !url.pathname.startsWith("/admin")) return "/admin";
+    return url.pathname + url.search + url.hash;
+  } catch {
+    return "/admin";
+  }
 }
+
+// Motivos que chegam por redirect (auth/callback e middleware). Sem isso a
+// pessoa cai numa tela de login muda e não sabe por que voltou.
+const ERROS_DE_REDIRECT: Record<string, string> = {
+  "link-invalido": "O link expirou ou já foi usado. Peça um novo em Esqueci minha senha.",
+  "acesso-inativo": "Seu acesso está inativo. Fale com o responsável.",
+};
 
 export function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const destino = destinoSeguro(searchParams.get("redirectTo"));
+  const redirectTo = searchParams.get("redirectTo");
 
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
-  const [erro, setErro] = useState<string | null>(null);
+  const [erro, setErro] = useState<string | null>(
+    () => ERROS_DE_REDIRECT[searchParams.get("erro") ?? ""] ?? null
+  );
   const [mensagem, setMensagem] = useState<string | null>(null);
   const [enviando, iniciar] = useTransition();
 
@@ -49,7 +66,7 @@ export function LoginForm() {
         setErro(res.erro);
         return;
       }
-      router.push(destino);
+      router.push(destinoSeguro(redirectTo));
       router.refresh();
     });
   }
@@ -68,7 +85,7 @@ export function LoginForm() {
     <div className="bg-white rounded-xl shadow-luxury-md p-8">
       <form onSubmit={aoEnviar} className="space-y-6">
         {erro && (
-          <div className="flex items-center gap-2 p-3 text-sm text-red-600 bg-red-50 rounded-lg">
+          <div id="login-erro" role="alert" className="flex items-center gap-2 p-3 text-sm text-red-600 bg-red-50 rounded-lg">
             <AlertCircle className="h-4 w-4 flex-shrink-0" />
             <span>{erro}</span>
           </div>
@@ -78,7 +95,7 @@ export function LoginForm() {
 
         <div className="space-y-2">
           <Label htmlFor="email">Email</Label>
-          <Input id="email" type="email" value={email} onChange={(event) => setEmail(event.target.value)} required disabled={enviando} autoComplete="email" />
+          <Input id="email" type="email" value={email} onChange={(event) => setEmail(event.target.value)} required disabled={enviando} className="h-12" autoComplete="email" aria-invalid={!!erro} aria-describedby={erro ? "login-erro" : undefined} />
         </div>
 
         <div className="space-y-2">
@@ -95,6 +112,8 @@ export function LoginForm() {
             disabled={enviando}
             className="h-12"
             autoComplete="current-password"
+            aria-invalid={!!erro}
+            aria-describedby={erro ? "login-erro" : undefined}
           />
         </div>
 
@@ -112,7 +131,7 @@ export function LoginForm() {
             "Entrar"
           )}
         </Button>
-        <button type="button" onClick={redefinir} disabled={enviando} className="w-full text-sm text-neutral-600 underline-offset-4 hover:text-neutral-900 hover:underline disabled:opacity-50">Esqueci minha senha</button>
+        <button type="button" onClick={redefinir} disabled={enviando} className="w-full min-h-11 py-2 text-sm text-neutral-600 underline-offset-4 hover:text-neutral-900 hover:underline disabled:opacity-50">Esqueci minha senha</button>
       </form>
     </div>
   );

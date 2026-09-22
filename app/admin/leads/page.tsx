@@ -1,11 +1,17 @@
 import { LeadsQueue, type LeadKpis } from "@/components/admin/analytics/LeadsQueue";
+import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import type { AdminDataResult, AnalyticsLead, LeadChannel, LeadPriority, LeadResponsible, LeadSegment, LeadStatus } from "@/types/analytics";
 
 export const dynamic = "force-dynamic";
 
 const PAGE_SIZE = 25;
-const LEAD_COLUMNS = "id,nome,email,telefone,telefone_normalizado,segmento,mensagem,canal,status,prioridade,responsavel_id,resumo_status,resumo_status_em,tipo_projeto,empresa,cargo,pagina_origem,landing_page,referrer,slug_origem,cta_location,utm,post_id,pauta_id,visualizado_em,ultimo_contato_em,proxima_acao_em,motivo_desqualificacao,qualificado_em,desqualificado_em,convertido_em,arquivado_em,anonimizado_em,origem_legado,importado_em,sheet_sync_status,sheet_sync_tentativas,sheet_sync_error,criado_em,lead_responsaveis(id,nome),lead_artifacts(count)";
+// Estados que encerram o funil: ação vencida neles não é pendência, igual ao push (028).
+const CLOSED_STATUSES = "(convertido,desqualificado)";
+// Qualificado pelo estado atual: qualificado_em nunca é limpo pela RPC (024), então
+// contar pelo carimbo somaria leads que depois foram desqualificados ou voltaram atrás.
+const QUALIFIED_STATUSES: LeadStatus[] = ["qualificado", "proposta_enviada", "convertido"];
+const LEAD_COLUMNS = "id,nome,email,telefone,telefone_normalizado,segmento,mensagem,canal,status,prioridade,responsavel_id,resumo_status,resumo_status_em,tipo_projeto,empresa,cargo,pagina_origem,landing_page,referrer,slug_origem,cta_location,utm,post_id,pauta_id,visualizado_em,ultimo_contato_em,proxima_acao_em,motivo_desqualificacao,qualificado_em,desqualificado_em,convertido_em,arquivado_em,anonimizado_em,origem_legado,importado_em,criado_em,lead_responsaveis(id,nome),lead_artifacts(count)";
 
 interface PageProps {
   searchParams: Promise<{
@@ -59,17 +65,30 @@ export default async function LeadsPage({ searchParams }: PageProps) {
     from.setUTCDate(from.getUTCDate() - Number(params.periodo));
     query = query.gte("criado_em", from.toISOString());
   }
-  if (params.vencida === "1") query = query.lt("proxima_acao_em", new Date().toISOString());
+  if (params.vencida === "1") {
+    query = query.lt("proxima_acao_em", new Date().toISOString()).not("status", "in", CLOSED_STATUSES);
+  }
   if (params.semAcao === "1") query = query.is("proxima_acao_em", null);
+  // Anonimizado não é lead operável e já fica fora dos KPIs; a lista segue a mesma regra.
+  query = query.is("anonimizado_em", null);
   query = params.arquivados === "1" ? query.not("arquivado_em", "is", null) : query.is("arquivado_em", null);
 
   const from = view === "kanban" ? 0 : (page - 1) * PAGE_SIZE;
   const limit = view === "kanban" ? 150 : PAGE_SIZE;
   const [{ data, count, error }, kpis, responsiblesResult] = await Promise.all([
     query.range(from, from + limit - 1),
-    getLeadKpis(),
+    getLeadKpis(supabase),
     supabase.from("lead_responsaveis").select("id,nome,ativo,ordem").eq("ativo", true).eq("recebe_leads", true).order("ordem").order("nome"),
   ]);
+  // Página além do fim (link antigo, filtro que encolheu a lista): o PostgREST responde
+  // 416 (PGRST103). Volta para a última página válida em vez de derrubar a tela.
+  if (error?.code === "PGRST103") {
+    const { count: realCount } = await query.range(0, 0);
+    const lastPage = Math.max(1, Math.ceil((realCount ?? 0) / PAGE_SIZE));
+    const next = new URLSearchParams(Object.entries(params).filter((entry): entry is [string, string] => typeof entry[1] === "string"));
+    next.set("page", String(lastPage));
+    redirect(`/admin/leads?${next.toString()}`);
+  }
   if (error) throw new Error(`Falha ao carregar leads: ${error.message}`);
   if (responsiblesResult.error) throw new Error(`Falha ao carregar responsáveis: ${responsiblesResult.error.message}`);
 
@@ -98,30 +117,34 @@ export default async function LeadsPage({ searchParams }: PageProps) {
   );
 }
 
-async function getLeadKpis(): Promise<AdminDataResult<LeadKpis>> {
-  const supabase = await createClient();
+type ServerClient = Awaited<ReturnType<typeof createClient>>;
+
+// Contagem agregada no banco (head + count) em vez de trazer as linhas para o Node:
+// select sem range trunca em silêncio no max-rows do PostgREST.
+// Arquivar é faxina da fila, não apaga o fato de o lead ter chegado; por isso os KPIs
+// de 28 dias só excluem anonimizados. Sem isso, arquivar desqualificados inflava a Taxa.
+async function getLeadKpis(supabase: ServerClient): Promise<AdminDataResult<LeadKpis>> {
   const since = new Date();
   since.setUTCDate(since.getUTCDate() - 28);
-  const { data, error } = await supabase
+  const base = () => supabase
     .from("leads")
-    .select("status,qualificado_em,convertido_em")
+    .select("id", { count: "exact", head: true })
     .gte("criado_em", since.toISOString())
-    .is("arquivado_em", null)
     .is("anonimizado_em", null);
-  if (error || !data) {
-    console.error("Falha ao carregar KPIs de leads", error);
+  const results = await Promise.all([
+    base(),
+    base().eq("status", "novo"),
+    base().in("status", QUALIFIED_STATUSES),
+    base().not("convertido_em", "is", null),
+  ]);
+  const failed = results.find((result) => result.error);
+  if (failed) {
+    console.error("Falha ao carregar KPIs de leads", failed.error);
     return { status: "unavailable", reason: "Não foi possível consultar os indicadores do CRM agora." };
   }
-
-  const statuses = data.map((lead) => lead.status as LeadStatus);
+  const [received, novos, qualified, converted] = results.map((result) => result.count ?? 0);
   return {
     status: "ok",
-    data: {
-      received: statuses.length,
-      new: statuses.filter((status) => status === "novo").length,
-      qualified: data.filter((lead) => Boolean(lead.qualificado_em)).length,
-      converted: data.filter((lead) => Boolean(lead.convertido_em)).length,
-      eligible: statuses.length,
-    },
+    data: { received, new: novos, qualified, converted, eligible: received },
   };
 }

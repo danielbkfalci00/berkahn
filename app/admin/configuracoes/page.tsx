@@ -18,7 +18,7 @@ export default async function ConfiguracoesPage() {
       .order("nome"),
     session.supabase
       .from("admin_push_subscriptions")
-      .select("id,device_label,ativo,ultimo_uso_em")
+      .select("id,device_label,ativo,ultimo_uso_em,endpoint")
       .order("ativo", { ascending: false })
       .order("ultimo_uso_em", { ascending: false }),
   ]);
@@ -48,6 +48,7 @@ export default async function ConfiguracoesPage() {
           <AdminPushSettings
             devices={(pushDevices || []) as AdminPushDevice[]}
             configured={pushConfigured}
+            canReceivePush={["owner", "comercial"].includes(session.membership.role)}
             preferences={{
               novosLeads: session.membership.notificar_novos_leads,
               acoesVencidas: session.membership.notificar_acoes_vencidas,
