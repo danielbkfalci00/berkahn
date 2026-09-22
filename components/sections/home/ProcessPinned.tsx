@@ -119,7 +119,7 @@ export function ProcessPinned() {
                   src={act.image}
                   alt={index === 0 ? act.imageAlt : ""}
                   fill
-                  quality={82}
+                  quality={80}
                   sizes="(min-width: 1024px) max(50vw, 150vh), 150vh"
                   className="object-cover"
                 />

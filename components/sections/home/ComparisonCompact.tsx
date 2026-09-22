@@ -91,7 +91,7 @@ export function ComparisonCompact() {
                 src="/images/Home/lsf-estrutura.webp"
                 alt="Esqueleto de Light Steel Frame de uma casa montado sobre o radier, com montantes e tesouras de aço galvanizado"
                 fill
-                quality={82}
+                quality={80}
                 sizes="(min-width: 1024px) 42vw, 100vw"
                 className="object-cover"
               />

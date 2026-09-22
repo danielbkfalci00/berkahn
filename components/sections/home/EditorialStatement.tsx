@@ -129,7 +129,7 @@ export function EditorialStatement() {
               src="/images/galeria/projeto-42.webp"
               alt="Vista aérea de uma estrutura em Light Steel Frame sendo erguida entre as casas de um bairro residencial"
               fill
-              quality={82}
+              quality={80}
               sizes="(min-width: 1024px) 75vw, 155vw"
               className="object-cover object-[35%_50%]"
             />
