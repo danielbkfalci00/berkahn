@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { AdminLayoutClient } from "@/components/admin/AdminLayoutClient";
 import { getAdminSession } from "@/lib/supabase/sessao";
 
@@ -18,6 +18,12 @@ export const metadata: Metadata = {
     index: false,
     follow: false,
   },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
 };
 
 export default async function AdminLayout({

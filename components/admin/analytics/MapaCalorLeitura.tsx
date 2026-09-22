@@ -21,7 +21,7 @@ interface MapaCalorLeituraProps {
 export function MapaCalorLeitura({ mapa }: MapaCalorLeituraProps) {
   if (!mapa.disponivel) {
     return (
-      <Card className="bg-white border-neutral-200 p-6">
+      <Card className="bg-white border-neutral-200 p-4 sm:p-6">
         <h3 className="text-sm uppercase tracking-wider font-medium text-neutral-500">
           Até onde leem
         </h3>
@@ -42,7 +42,7 @@ export function MapaCalorLeitura({ mapa }: MapaCalorLeituraProps) {
   const comAmostra = mapa.linhas.filter((l) => l.amostraSuficiente).length;
 
   return (
-    <Card className="bg-white border-neutral-200 p-6">
+    <Card className="bg-white border-neutral-200 p-4 sm:p-6">
       <h3 className="text-sm uppercase tracking-wider font-medium text-neutral-500">
         Até onde leem
       </h3>

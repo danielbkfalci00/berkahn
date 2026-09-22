@@ -19,10 +19,10 @@ export function Act2Origin({ context, topQueries, oportunidade }: Act2OriginProp
   return (
     <section className="space-y-6" aria-labelledby="act-2-title">
       <div>
-        <h2 id="act-2-title" className="text-2xl font-bold text-neutral-900 tracking-tight">
+        <h2 id="act-2-title" className="text-xl font-bold text-neutral-900 tracking-tight sm:text-2xl">
           De onde vem o tráfego
         </h2>
-        <p className="text-base text-neutral-600 mt-1">{narrativeAct2Origin(context)}</p>
+        <p className="mt-1 text-sm text-neutral-600 sm:text-base">{narrativeAct2Origin(context)}</p>
       </div>
       <TrafficSourcesChart data={context.ga4.topSources} />
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

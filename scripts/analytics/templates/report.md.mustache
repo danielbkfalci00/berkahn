@@ -41,8 +41,8 @@ data_diagnostico: {{generatedDate}}
 {{#partial}}
 > [!warning] Relatório parcial — não é o fechamento do mês
 > Janela: **{{periodStart}} a {{periodEnd}}** ({{daysCovered}} de {{daysInMonth}} dias). O Search Console consolida com {{gscLagDays}} dias de lag, então os dias mais recentes ainda não entraram.
-> As variações MoM comparam contra **{{prevPeriodStart}} a {{prevPeriodEnd}}** ({{prevDaysCovered}} dias), para medir janelas equivalentes. Ressalva: como {{daysCovered}} não é múltiplo de 7, as duas janelas pegam quantidades diferentes de fim de semana.
-> O run automático do dia 1 sobrescreve este arquivo com o mês fechado.
+> As variações MoM comparam contra **{{prevPeriodStart}} a {{prevPeriodEnd}}** ({{prevDaysCovered}} dias), para medir janelas equivalentes. {{weekdayCompositionNote}}
+> O run automático do dia 4 substitui o parcial pelo fechamento oficial do mês.
 
 {{/partial}}
 ## Resumo executivo

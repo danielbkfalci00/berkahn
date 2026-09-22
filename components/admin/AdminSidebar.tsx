@@ -12,14 +12,15 @@ import {
   Settings,
   LogOut,
   ChevronLeft,
-  Menu,
   BarChart3,
   BookOpen,
   KanbanSquare,
   Inbox,
+  MoreHorizontal,
+  X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import { disableCurrentAdminPush } from "@/components/admin/AdminPwa";
@@ -85,6 +86,9 @@ export function AdminSidebar({ membership }: { membership: AdminMembership | nul
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [unseenLeads, setUnseenLeads] = useState(0);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const moreButtonRef = useRef<HTMLButtonElement>(null);
+  const drawerRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     const supabase = createClient();
@@ -96,6 +100,24 @@ export function AdminSidebar({ membership }: { membership: AdminMembership | nul
       .then(({ count }) => setUnseenLeads(count ?? 0));
   }, [pathname]);
 
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    closeButtonRef.current?.focus();
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setMobileOpen(false);
+        moreButtonRef.current?.focus();
+      }
+    };
+    document.addEventListener("keydown", closeOnEscape);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      document.removeEventListener("keydown", closeOnEscape);
+    };
+  }, [mobileOpen]);
+
   const handleLogout = async () => {
     const supabase = createClient();
     await disableCurrentAdminPush();
@@ -103,19 +125,23 @@ export function AdminSidebar({ membership }: { membership: AdminMembership | nul
     router.push("/admin/login");
   };
 
+  const trapDrawerFocus = (event: React.KeyboardEvent<HTMLElement>) => {
+    if (!mobileOpen || event.key !== "Tab") return;
+    const focusable = drawerRef.current?.querySelectorAll<HTMLElement>('a[href],button:not([disabled]),select,input,textarea,[tabindex]:not([tabindex="-1"])');
+    if (!focusable?.length) return;
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
+  };
+
   return (
     <>
-      {/* Mobile menu button */}
-      <button
-        type="button"
-        aria-label={mobileOpen ? "Fechar menu" : "Abrir menu"}
-        aria-expanded={mobileOpen}
-        className="fixed top-4 left-4 z-50 lg:hidden p-2 rounded-lg bg-white shadow-md"
-        onClick={() => setMobileOpen(!mobileOpen)}
-      >
-        <Menu className="h-5 w-5" />
-      </button>
-
       {/* Mobile overlay */}
       {mobileOpen && (
         <div
@@ -126,14 +152,20 @@ export function AdminSidebar({ membership }: { membership: AdminMembership | nul
 
       {/* Sidebar */}
       <aside
+        ref={drawerRef}
+        data-admin-sidebar
+        role={mobileOpen ? "dialog" : undefined}
+        aria-modal={mobileOpen ? true : undefined}
+        aria-label={mobileOpen ? "Mais opcoes do admin" : undefined}
+        onKeyDown={trapDrawerFocus}
         className={cn(
-          "fixed inset-y-0 left-0 z-50 flex flex-col bg-white border-r border-neutral-200 transition-all duration-300",
+          "fixed inset-y-0 left-0 z-50 flex flex-col border-r border-neutral-200 bg-white pb-[env(safe-area-inset-bottom)] pt-[env(safe-area-inset-top)] transition-all duration-300",
           collapsed ? "w-16" : "w-64",
           mobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
         )}
       >
         {/* Logo */}
-        <div className="flex h-16 items-center justify-between px-4 border-b border-neutral-200">
+        <div className="flex h-16 items-center justify-between border-b border-neutral-200 px-4">
           {!collapsed && (
             <Link href="/admin" className="flex items-center gap-2">
               <span className="text-lg font-bold text-neutral-900">BERKAHN</span>
@@ -143,6 +175,7 @@ export function AdminSidebar({ membership }: { membership: AdminMembership | nul
             </Link>
           )}
           <button
+            ref={closeButtonRef}
             type="button"
             aria-label={collapsed ? "Expandir menu" : "Recolher menu"}
             onClick={() => setCollapsed(!collapsed)}
@@ -154,6 +187,14 @@ export function AdminSidebar({ membership }: { membership: AdminMembership | nul
                 collapsed && "rotate-180"
               )}
             />
+          </button>
+          <button
+            type="button"
+            aria-label="Fechar menu"
+            onClick={() => setMobileOpen(false)}
+            className="flex min-h-11 min-w-11 items-center justify-center rounded-lg text-neutral-600 hover:bg-neutral-100 lg:hidden"
+          >
+            <X className="h-5 w-5" />
           </button>
         </div>
 
@@ -212,6 +253,47 @@ export function AdminSidebar({ membership }: { membership: AdminMembership | nul
           </Button>
         </div>
       </aside>
+
+      <nav
+        aria-label="Navegacao principal"
+        className="fixed inset-x-0 bottom-0 z-40 grid grid-cols-4 border-t border-neutral-200 bg-white/95 px-2 pb-[env(safe-area-inset-bottom)] backdrop-blur lg:hidden print:hidden"
+      >
+        {navigation.slice(0, 3).map((item) => {
+          if (!membership || !roleCanAccessPath(membership.role, item.href)) return <span key={item.href} />;
+          const active = pathname === item.href || (item.href !== "/admin" && pathname?.startsWith(item.href));
+          return (
+            <Link
+              key={item.href}
+              href={item.href}
+              aria-current={active ? "page" : undefined}
+              className={cn(
+                "relative flex min-h-16 flex-col items-center justify-center gap-1 text-[11px] font-medium",
+                active ? "text-neutral-950" : "text-neutral-500"
+              )}
+            >
+              <item.icon className="h-5 w-5" strokeWidth={active ? 2.25 : 1.75} />
+              <span>{item.name}</span>
+              {active && <span className="absolute inset-x-5 top-0 h-0.5 bg-neutral-950" />}
+              {item.name === "Leads" && unseenLeads > 0 && (
+                <span className="absolute left-1/2 top-1 ml-2 min-w-4 rounded-full bg-blue-600 px-1 text-center text-[9px] font-semibold text-white">
+                  {unseenLeads > 99 ? "99+" : unseenLeads}
+                </span>
+              )}
+            </Link>
+          );
+        })}
+        <button
+          ref={moreButtonRef}
+          type="button"
+          aria-label="Abrir mais opcoes"
+          aria-expanded={mobileOpen}
+          onClick={() => setMobileOpen(true)}
+          className="flex min-h-16 flex-col items-center justify-center gap-1 text-[11px] font-medium text-neutral-500"
+        >
+          <MoreHorizontal className="h-5 w-5" />
+          <span>Mais</span>
+        </button>
+      </nav>
     </>
   );
 }

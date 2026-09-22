@@ -12,12 +12,12 @@ const COLORS = ["#0A0A0A", "#4A4A4A", "#8A8A8A", "#C5C2BA", "#E5E2D9", "#F4F2EC"
 
 export function AreaDistributionChart({ data }: AreaDistributionChartProps) {
   return (
-    <Card className="p-6 bg-white border-neutral-200">
+    <Card className="bg-white p-4 sm:p-6 border-neutral-200">
       <h3 className="text-sm uppercase tracking-wider font-medium text-neutral-500 mb-4">
         Tráfego por área do site
       </h3>
       <div
-        className="h-72"
+        className="h-52 sm:h-64"
         role="img"
         aria-label="Distribuição de pageviews por área do site"
       >

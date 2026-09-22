@@ -21,18 +21,24 @@ import type { GscDelta } from "@/types/analytics";
 
 interface FallingQueriesPanelProps {
   queries: GscDelta[];
+  unavailableReason?: string;
 }
 
 const INITIAL_LIMIT = 10;
 
-export function FallingQueriesPanel({ queries }: FallingQueriesPanelProps) {
+export function FallingQueriesPanel({ queries, unavailableReason }: FallingQueriesPanelProps) {
   const [showAll, setShowAll] = useState(false);
   const total = queries.length;
   const visible = showAll ? queries : queries.slice(0, INITIAL_LIMIT);
 
   return (
     <Card className="p-6 bg-white border-neutral-200">
-      {total === 0 ? (
+      {unavailableReason ? (
+        <div className="flex items-center gap-3">
+          <TrendingDown className="h-4 w-4 text-amber-600" strokeWidth={1.75} />
+          <p className="text-sm text-neutral-600">Comparação de queries indisponível: {unavailableReason}</p>
+        </div>
+      ) : total === 0 ? (
         <div className="flex items-center gap-3">
           <TrendingDown className="h-4 w-4 text-neutral-400" strokeWidth={1.75} />
           <p className="text-sm text-neutral-500">Nenhuma queda significativa neste período</p>

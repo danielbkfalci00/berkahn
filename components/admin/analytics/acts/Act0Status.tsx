@@ -29,10 +29,10 @@ export function Act0Status({ context, trendPoints, redFlags = [] }: Act0StatusPr
   return (
     <section className="space-y-4" aria-labelledby="act-0-title">
       <div>
-        <h2 id="act-0-title" className="text-2xl font-bold text-neutral-900 tracking-tight">
+        <h2 id="act-0-title" className="text-xl font-bold text-neutral-900 tracking-tight sm:text-2xl">
           Status do mês
         </h2>
-        <p className="text-base text-neutral-600 mt-1">{narrative}</p>
+        <p className="mt-1 text-sm text-neutral-600 sm:text-base">{narrative}</p>
       </div>
 
       <HeroMetric context={context} trendPoints={trendPoints} />

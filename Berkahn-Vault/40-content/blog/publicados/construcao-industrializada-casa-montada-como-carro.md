@@ -37,7 +37,6 @@ contextos_aplicados:
 linkedin_slug: null
 material_visual_slug: null
 ---
-# Construção Industrializada: a Casa Montada Como um Carro
 
 Em 1923, Le Corbusier escreveu uma frase que até hoje incomoda parte dos arquitetos. A casa, dizia ele, é uma máquina de morar. A intenção era literal. Ele queria que casas fossem produzidas com a mesma lógica de um automóvel, com peças padronizadas saindo de uma linha de produção. Um século depois, a construção civil segue como uma das poucas grandes indústrias que não fez essa transição por completo, e o atraso aparece nos números.
 

@@ -3,9 +3,10 @@
 import { Card } from "@/components/ui/card";
 import { pct } from "./calor";
 import type { FunilLeads as Funil, FatiaOrigem } from "@/lib/analytics/leads-funnel";
+import type { AdminDataResult } from "@/types/analytics";
 
 interface FunilLeadsProps {
-  funil: Funil;
+  funil: AdminDataResult<Funil>;
   monthSlug: string;
 }
 
@@ -45,7 +46,19 @@ function ListaOrigem({ titulo, fatias, vazio }: { titulo: string; fatias: FatiaO
  * conversão dentro da mesma tela.
  */
 export function FunilLeads({ funil, monthSlug }: FunilLeadsProps) {
-  const topo = funil.degraus[0]?.alcancaram ?? 0;
+  if (funil.status === "unavailable") {
+    return (
+      <Card className="bg-white border-amber-200 p-6">
+        <h3 className="text-sm uppercase tracking-wider font-medium text-neutral-500">Funil de leads</h3>
+        <p role="alert" className="mt-3 text-sm text-amber-800">
+          Dados indisponíveis. {funil.reason} Os demais analytics continuam válidos.
+        </p>
+      </Card>
+    );
+  }
+
+  const data = funil.data;
+  const topo = data.degraus[0]?.alcancaram ?? 0;
 
   return (
     <Card className="bg-white border-neutral-200 p-6">
@@ -57,15 +70,15 @@ export function FunilLeads({ funil, monthSlug }: FunilLeadsProps) {
           <p className="text-xs text-neutral-500">
             Conversão{" "}
             <strong className="font-semibold text-neutral-900">
-              {pct(funil.taxaConversao)}
+              {pct(data.taxaConversao)}
             </strong>
-            {funil.maiorPerda && (
+            {data.maiorPerda && (
               <>
                 {" "}· maior perda em{" "}
                 <strong className="font-semibold text-neutral-900">
-                  {funil.maiorPerda.de} → {funil.maiorPerda.para}
+                  {data.maiorPerda.de} → {data.maiorPerda.para}
                 </strong>{" "}
-                (−{pct(funil.maiorPerda.pct)})
+                (−{pct(data.maiorPerda.pct)})
               </>
             )}
           </p>
@@ -81,7 +94,7 @@ export function FunilLeads({ funil, monthSlug }: FunilLeadsProps) {
       ) : (
         <>
           <div className="space-y-1.5 mt-4">
-            {funil.degraus.map((degrau) => (
+            {data.degraus.map((degrau) => (
               <div key={degrau.etapa} className="flex items-center gap-3">
                 <span className="text-sm text-neutral-700 w-36 shrink-0">{degrau.rotulo}</span>
                 <div className="flex-1 h-7 bg-neutral-100 rounded-sm overflow-hidden">
@@ -107,9 +120,9 @@ export function FunilLeads({ funil, monthSlug }: FunilLeadsProps) {
             ))}
           </div>
 
-          {funil.desqualificados > 0 && (
+          {data.desqualificados > 0 && (
             <p className="text-xs text-neutral-500 mt-3">
-              {funil.desqualificados} desqualificados, fora da soma do funil — é
+              {data.desqualificados} desqualificados, fora da soma do funil — é
               saída lateral a partir de qualquer etapa, não um degrau posterior.
             </p>
           )}
@@ -117,19 +130,19 @@ export function FunilLeads({ funil, monthSlug }: FunilLeadsProps) {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-6 pt-5 border-t border-neutral-100">
             <ListaOrigem
               titulo="Por gatilho (cta_location)"
-              fatias={funil.porCtaLocation}
+              fatias={data.porCtaLocation}
               vazio="Nenhum lead com gatilho identificado."
             />
             <ListaOrigem
               titulo="Por página de origem"
-              fatias={funil.porPagina}
+              fatias={data.porPagina}
               vazio="Nenhum lead com página identificada."
             />
           </div>
 
           <p className="text-xs text-neutral-500 mt-4">
             <strong className="font-medium text-neutral-700">
-              {funil.comUtm} de {funil.total}
+              {data.comUtm} de {data.total}
             </strong>{" "}
             leads têm UTM. Atribuição por campanha é enviesada por construção:
             `utm`, `landing_page` e `referrer` só são gravados para quem aceitou

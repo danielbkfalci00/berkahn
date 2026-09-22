@@ -33,7 +33,7 @@ export function DevicesMiniChart({ data }: DevicesMiniChartProps) {
   const hasData = data.length > 0 && data.some((d) => d.users > 0);
 
   return (
-    <Card className="p-6 bg-white border-neutral-200">
+    <Card className="bg-white p-4 sm:p-6 border-neutral-200">
       <div className="flex items-center gap-2 mb-4">
         <h3 className="text-sm uppercase tracking-wider font-medium text-neutral-500">
           Dispositivos
@@ -51,7 +51,7 @@ export function DevicesMiniChart({ data }: DevicesMiniChartProps) {
         />
       </div>
       <div
-        className="h-72"
+        className="h-52 sm:h-64"
         role="img"
         aria-label="Distribuição de usuários por dispositivo (desktop, mobile, tablet)"
       >

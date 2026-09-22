@@ -31,7 +31,7 @@ export function AdminLayoutClient({ children, membership }: AdminLayoutClientPro
       <AdminSidebar membership={membership} />
       <div className="lg:pl-64">
         <AdminHeader membership={membership} />
-        <main className="p-4 sm:p-6">
+        <main className="px-4 pb-[calc(5.5rem+env(safe-area-inset-bottom))] pt-4 sm:p-6 lg:pb-6">
           {children}
         </main>
       </div>

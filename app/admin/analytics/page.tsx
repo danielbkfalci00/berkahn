@@ -81,7 +81,10 @@ export default async function AnalyticsPage({ searchParams }: PageProps) {
   const matrizAcervo = construirMatrizArtigoMes(historicalBySlug, postsMap);
   const mapaLeitura = construirMapaLeitura(snapshot.ga4_data?.articleProgress, postsMap);
   const oportunidade = construirMapaOportunidade(snapshot.gsc_data?.topQueries);
-  const funilLeads = construirFunilLeads(await listarLeadsDoMes(currentMonth));
+  const leadsResult = await listarLeadsDoMes(currentMonth);
+  const funilLeads = leadsResult.status === "ok"
+    ? { status: "ok" as const, data: construirFunilLeads(leadsResult.data) }
+    : leadsResult;
 
   // Conta posts publicados dentro do mês atual (pra detector "no-posts")
   const monthStart = `${currentMonth}-01`;

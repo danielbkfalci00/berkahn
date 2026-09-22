@@ -100,14 +100,14 @@ function GrowthTooltip({ active, payload, label, events }: GrowthTooltipProps) {
 export function GrowthChart({ data, events = [] }: GrowthChartProps) {
   if (data.length === 0) {
     return (
-      <Card className="p-6 bg-white border-neutral-200">
+      <Card className="bg-white p-4 sm:p-6 border-neutral-200">
         <p className="text-neutral-500 text-sm">Sem dados históricos ainda.</p>
       </Card>
     );
   }
 
   return (
-    <Card className="p-6 bg-white border-neutral-200">
+    <Card className="bg-white p-4 sm:p-6 border-neutral-200">
       <h3 className="text-sm uppercase tracking-wider font-medium text-neutral-500 mb-1">
         Evolução mensal — usuários e cliques
       </h3>
@@ -122,7 +122,7 @@ export function GrowthChart({ data, events = [] }: GrowthChartProps) {
         </p>
       )}
       {events.length === 0 && <div className="mb-6" />}
-      <div className="h-72" role="img" aria-label="Evolução mensal de usuários (GA4) e cliques (GSC)">
+      <div className="h-56 sm:h-72" role="img" aria-label="Evolução mensal de usuários (GA4) e cliques (GSC)">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={data} margin={{ top: 10, right: 16, left: 0, bottom: 0 }}>
             <CartesianGrid stroke="#E5E2D9" strokeDasharray="3 3" vertical={false} />

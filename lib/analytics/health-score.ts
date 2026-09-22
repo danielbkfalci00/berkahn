@@ -8,6 +8,7 @@
 // Pesos documentados em Berkahn-Vault/10-memory/reference/analytics-methodology.md
 
 import type { SnapshotContext } from "@/types/analytics";
+import { comparisonAvailability } from "./comparability";
 
 export interface HealthScoreWeights {
   indexation: number;
@@ -29,10 +30,10 @@ export interface HealthScoreBreakdown {
   score: number; // 0-100
   status: HealthStatus;
   components: {
-    indexation: { value: number; raw: string };
-    usersGrowth: { value: number; raw: string };
-    clicksGrowth: { value: number; raw: string };
-    engagementRate: { value: number; raw: string };
+    indexation: { value: number; raw: string; available: boolean };
+    usersGrowth: { value: number; raw: string; available: boolean };
+    clicksGrowth: { value: number; raw: string; available: boolean };
+    engagementRate: { value: number; raw: string; available: boolean };
   };
   weights: HealthScoreWeights;
 }
@@ -95,12 +96,29 @@ export function computeHealthScore(
   const usersScore = momToScore(ctx.ga4.usersMoMPct);
   const clicksScore = momToScore(ctx.gsc.clicksMoMPct);
   const engagementScore = engagementToScore(ctx.ga4.engagementRate);
+  const comparable = comparisonAvailability(ctx);
+  const enabled = {
+    indexation: true,
+    usersGrowth: comparable.ga4MoM,
+    clicksGrowth: comparable.gscMoM,
+    engagementRate: true,
+  };
+  const enabledWeight = Object.entries(weights).reduce(
+    (sum, [key, weight]) => sum + (enabled[key as keyof typeof enabled] ? weight : 0),
+    0
+  );
+  const normalizedWeights: HealthScoreWeights = {
+    indexation: enabled.indexation ? weights.indexation / enabledWeight : 0,
+    usersGrowth: enabled.usersGrowth ? weights.usersGrowth / enabledWeight : 0,
+    clicksGrowth: enabled.clicksGrowth ? weights.clicksGrowth / enabledWeight : 0,
+    engagementRate: enabled.engagementRate ? weights.engagementRate / enabledWeight : 0,
+  };
 
   const score = clampScore(
-    indexationScore * weights.indexation +
-      usersScore * weights.usersGrowth +
-      clicksScore * weights.clicksGrowth +
-      engagementScore * weights.engagementRate
+    indexationScore * normalizedWeights.indexation +
+      usersScore * normalizedWeights.usersGrowth +
+      clicksScore * normalizedWeights.clicksGrowth +
+      engagementScore * normalizedWeights.engagementRate
   );
 
   return {
@@ -110,20 +128,24 @@ export function computeHealthScore(
       indexation: {
         value: indexationScore,
         raw: `${ctx.indexedCount}/${ctx.totalArticles} indexados`,
+        available: true,
       },
       usersGrowth: {
         value: usersScore,
-        raw: ctx.ga4.usersMoMText ?? "—",
+        raw: enabled.usersGrowth ? (ctx.ga4.usersMoMText ?? "—") : "comparação indisponível",
+        available: enabled.usersGrowth,
       },
       clicksGrowth: {
         value: clicksScore,
-        raw: ctx.gsc.clicksMoMText ?? "—",
+        raw: enabled.clicksGrowth ? (ctx.gsc.clicksMoMText ?? "—") : "comparação indisponível",
+        available: enabled.clicksGrowth,
       },
       engagementRate: {
         value: engagementScore,
         raw: `${ctx.ga4.engagementRate}%`,
+        available: true,
       },
     },
-    weights,
+    weights: normalizedWeights,
   };
 }

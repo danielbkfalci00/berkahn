@@ -52,7 +52,7 @@ Depois da NBR 16970:
 ## Onde aprofundar
 
 - [[certificacoes-steel-frame]] — artigo completo sobre normas
-- [[normas-light-steel-frame-brasil]] — detalhes técnicos das NBRs
+- [[40-content/blog/publicados/normas-light-steel-frame-brasil|normas-light-steel-frame-brasil]] — detalhes técnicos das NBRs
 - [[guia-definitivo-steel-frame-brasil]] — contexto geral LSF
 - [[financiamento-construcao-steel-frame]] — impacto regulatório no financiamento
 

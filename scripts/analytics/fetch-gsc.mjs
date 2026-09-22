@@ -181,16 +181,35 @@ export async function fetchGsc(startDate, endDate, options = {}) {
   // API e garante que os dois lados do delta saem do mesmo conjunto.
   let risingQueries = [];
   let fallingQueries = [];
+  let previousOverall = null;
+  let comparisonUnavailableReason = null;
   if (options.previousPeriod) {
-    const prevQueries = await fetchTopQueries(
-      sc,
-      siteUrl,
-      options.previousPeriod.startDate,
-      options.previousPeriod.endDate,
-      LIMITE_QUERIES
-    );
-    risingQueries = computeDelta(topQueries, prevQueries, 'rising', 5);
-    fallingQueries = computeDelta(topQueries, prevQueries, 'falling', 5);
+    const [overallResult, queriesResult] = await Promise.allSettled([
+      fetchOverall(sc, siteUrl, options.previousPeriod.startDate, options.previousPeriod.endDate),
+      fetchTopQueries(
+        sc,
+        siteUrl,
+        options.previousPeriod.startDate,
+        options.previousPeriod.endDate,
+        LIMITE_QUERIES
+      ),
+    ]);
+
+    if (overallResult.status === 'fulfilled') {
+      previousOverall = overallResult.value;
+    } else {
+      comparisonUnavailableReason = `Baseline do Search Console indisponível: ${overallResult.reason?.message ?? overallResult.reason}`;
+      console.warn(`   ⚠️  ${comparisonUnavailableReason}`);
+    }
+
+    if (queriesResult.status === 'fulfilled') {
+      risingQueries = computeDelta(topQueries, queriesResult.value, 'rising', 5);
+      fallingQueries = computeDelta(topQueries, queriesResult.value, 'falling', 5);
+    } else {
+      const queriesReason = `Baseline de queries do Search Console indisponível: ${queriesResult.reason?.message ?? queriesResult.reason}`;
+      comparisonUnavailableReason = [comparisonUnavailableReason, queriesReason].filter(Boolean).join(' ');
+      console.warn(`   ⚠️  ${queriesReason}`);
+    }
   }
 
   // URL Inspection para indexação de artigos
@@ -206,6 +225,8 @@ export async function fetchGsc(startDate, endDate, options = {}) {
     risingQueries,
     fallingQueries,
     indexation,
+    previousOverall,
+    comparisonUnavailableReason,
     period: { startDate, endDate },
   };
 }

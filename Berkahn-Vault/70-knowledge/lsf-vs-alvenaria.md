@@ -84,7 +84,7 @@ LSF tem **TCO ~9% menor** em 30 anos, apesar do custo inicial 15-30% maior.
 ## Onde aprofundar
 
 - [[steel-frame-vs-alvenaria]] — artigo completo
-- [[steel-frame-vantagens-desvantagens]] — análise honesta de prós/contras
+- [[40-content/blog/publicados/steel-frame-vantagens-desvantagens|steel-frame-vantagens-desvantagens]] — análise honesta de prós/contras
 - [[mitos-verdades-steel-frame]] — mitos desfeitos
 - [[lsf-custos]] — números detalhados
 - [[lsf-cronograma]] — velocidade detalhada

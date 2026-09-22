@@ -82,7 +82,7 @@ Bom para construção LSF rápida (3-6 meses): liberação acompanha o ritmo.
 ## Onde aprofundar
 
 - [[financiamento-construcao-steel-frame]] — artigo completo sobre opções
-- [[financiar-construcao-light-steel-frame]] — guia passo a passo
+- [[40-content/blog/publicados/financiar-construcao-light-steel-frame|financiar-construcao-light-steel-frame]] — guia passo a passo
 - [[lsf-normas-nbr]] — NBR 16970 que destravou financiamento
 - [[lsf-custos]] — valores típicos para dimensionar financiamento
 

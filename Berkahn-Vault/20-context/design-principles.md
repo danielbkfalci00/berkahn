@@ -92,6 +92,15 @@ Alternativas: Montserrat, Inter
 - Sem scroll horizontal em nenhum viewport
 - Layouts flexíveis com sizing relativo
 
+### Admin mobile-first
+
+- A primeira dobra responde “o que exige ação agora”; totais históricos são secundários.
+- Dashboard, Analytics e Leads ficam na navegação inferior. Os demais módulos vivem em **Mais**; permissões continuam definindo o que aparece.
+- O shell respeita as safe areas do PWA com `viewport-fit=cover` e `env(safe-area-inset-*)`.
+- Relatórios usam divulgação progressiva: resumo primeiro, abas por intenção e metodologia em **Qualidade dos dados**.
+- Tabelas desktop viram listas ou rankings no celular. Scroll horizontal fica restrito ao detalhe explicitamente aberto, nunca à página.
+- Superfícies operacionais preferem divisores e agrupamento sobre pilhas de cards decorativos.
+
 ## Performance
 
 - Imagens otimizadas (WebP, lazy-loaded)

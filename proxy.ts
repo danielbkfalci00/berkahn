@@ -20,6 +20,13 @@ export async function proxy(request: NextRequest) {
     return NextResponse.json({ error: "Não encontrado" }, { status: 404 });
   }
 
+  // O manifesto precisa ser público para que o navegador consiga instalar o
+  // PWA antes do login. No host público, o bloco acima ainda o redireciona
+  // para a origem administrativa canônica.
+  if (pathname === "/admin/manifest.webmanifest") {
+    return NextResponse.next();
+  }
+
   // Chamado pelo pg_cron apenas no host canônico. O route handler valida um
   // segredo dedicado e não depende do cookie da sessão humana.
   if (pathname === "/api/admin/push/dispatch") {

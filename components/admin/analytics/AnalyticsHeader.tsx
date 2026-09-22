@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Printer, SplitSquareHorizontal, X } from "lucide-react";
 import { PeriodSelect } from "./PeriodSelect";
 import { cn } from "@/lib/utils";
+import type { SnapshotSourceProvenance } from "@/types/analytics";
 
 interface AnalyticsHeaderProps {
   monthLabel: string;
@@ -22,6 +23,13 @@ interface AnalyticsHeaderProps {
   isPartial?: boolean;
   daysCovered?: number;
   daysInMonth?: number;
+  generatedAt: string;
+  comparabilityReason?: string;
+  sources?: {
+    ga4: SnapshotSourceProvenance;
+    gsc: SnapshotSourceProvenance;
+    indexation: SnapshotSourceProvenance;
+  };
 }
 
 export function AnalyticsHeader({
@@ -36,6 +44,9 @@ export function AnalyticsHeader({
   isPartial = false,
   daysCovered,
   daysInMonth,
+  generatedAt,
+  comparabilityReason,
+  sources,
 }: AnalyticsHeaderProps) {
   const router = useRouter();
   const pathname = usePathname();
@@ -52,12 +63,13 @@ export function AnalyticsHeader({
   };
 
   return (
-    <div className="flex items-end justify-between gap-4 flex-wrap pb-6 border-b border-neutral-200 print:pb-3 print:mb-4">
-      <div>
+    <div className="space-y-4 pb-6 border-b border-neutral-200 print:pb-3 print:mb-4">
+      <div className="flex items-end justify-between gap-4 flex-wrap">
+        <div>
         <p className="text-xs uppercase tracking-[0.2em] font-semibold text-neutral-500 mb-1">
           Performance Berkahn
         </p>
-        <h1 className="text-3xl font-bold text-neutral-900 tracking-tight">
+        <h1 className="text-2xl font-bold text-neutral-900 tracking-tight sm:text-3xl">
           {monthLabel}
           {isPartial && (
             <span className="align-middle ml-3 rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-amber-800">
@@ -79,9 +91,9 @@ export function AnalyticsHeader({
             </span>
           )}
         </p>
-      </div>
+        </div>
 
-      <div className="flex items-center gap-2 print:hidden flex-wrap">
+        <div className="flex items-center gap-2 print:hidden flex-wrap">
         <PeriodSelect availableMonths={availableMonths} currentMonth={currentMonth} />
         <Button
           variant={comparisonMode ? "default" : "outline"}
@@ -93,21 +105,46 @@ export function AnalyticsHeader({
         >
           {comparisonMode ? (
             <>
-              <X className="h-4 w-4 mr-2" />
-              Sair do comparativo
+              <X className="h-4 w-4 sm:mr-2" />
+              <span className="hidden sm:inline">Sair do comparativo</span>
             </>
           ) : (
             <>
-              <SplitSquareHorizontal className="h-4 w-4 mr-2" />
-              Comparar
+              <SplitSquareHorizontal className="h-4 w-4 sm:mr-2" />
+              <span className="hidden sm:inline">Comparar</span>
             </>
           )}
         </Button>
         <Button variant="outline" size="default" onClick={() => window.print()} className="bg-white">
-          <Printer className="h-4 w-4 mr-2" />
-          Exportar PDF
+          <Printer className="h-4 w-4 sm:mr-2" />
+          <span className="hidden sm:inline">Exportar PDF</span>
         </Button>
+        </div>
       </div>
+
+      {comparabilityReason && (
+        <p role="note" className="rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-900">
+          {comparabilityReason}
+        </p>
+      )}
+
+      <details className="group text-xs text-neutral-500">
+        <summary className="flex min-h-11 cursor-pointer list-none items-center font-medium text-neutral-700">Qualidade dos dados</summary>
+        <div className="grid gap-2 border-l border-neutral-200 pl-3 sm:grid-cols-3">
+          {(["ga4", "gsc", "indexation"] as const).map((key) => {
+            const source = sources?.[key];
+            const label = { ga4: "GA4", gsc: "Search Console", indexation: "Indexação" }[key];
+            return (
+              <span key={key}>
+                <strong className="block font-medium text-neutral-700">{label}</strong>
+                {source
+                  ? `Dados até ${source.dataThrough}${source.lagDays != null ? ` · defasagem ${source.lagDays}d` : ""}${source.origin === "fixture" ? " · cache" : ""}`
+                  : `Snapshot legado · ${generatedAt}`}
+              </span>
+            );
+          })}
+        </div>
+      </details>
     </div>
   );
 }

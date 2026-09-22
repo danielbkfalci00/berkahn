@@ -36,7 +36,6 @@ contextos_aplicados:
 linkedin_slug: null
 material_visual_slug: null
 ---
-# Fundação para Steel Frame: O Guia Definitivo [2026]
 
 Uma casa em [[steel-frame-domain|Light Steel Frame]] (LSF), o sistema construtivo industrializado que utiliza perfis de aço galvanizado como estrutura, pesa cerca de 250 kg/m² com todas as cargas de uso incluídas. Uma casa equivalente em alvenaria convencional pesa aproximadamente 1.250 kg/m². São cinco vezes menos peso sobre o solo, e essa diferença muda fundamentalmente o que a fundação precisa ser, quanto custa e como deve ser executada. Na Berkahn, o projeto de fundação é onde começa toda obra, e entender essa etapa é essencial para quem está planejando construir.
 

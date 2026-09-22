@@ -90,6 +90,29 @@ node scripts/conteudo/pauta.mjs publicar <id> --dry-run
 
 `criar` exige `--confirmar-aprovacao`. Sobrescrever conteúdo exige `--forcar --confirmar-substituicao`. `aprovar` só aceita confirmação humana explícita. `publicar` recusa pautas não aprovadas e desfaz markdown, capa e versão anterior se o banco falhar. Requer `NEXT_PUBLIC_SUPABASE_URL` e `SUPABASE_SERVICE_KEY` no ambiente para operações remotas.
 
+### 4b. `conteudo/check-linkedin.mjs` e `conteudo/check-lote-linkedin.mjs` — gates de copy
+
+Os dois conferem a copy do LinkedIn contra o prompt calibrado `30-prompts/linkedin-post.md`,
+em escalas diferentes, e os dois saem 0 ou 1, então servem de gate.
+
+```bash
+node scripts/conteudo/check-linkedin.mjs <arquivo.txt>
+node scripts/conteudo/check-lote-linkedin.mjs --dir=<pasta> --glob=<prefixo>
+```
+
+`check-linkedin` avalia **um post**: extensão, `copy-sem-travessao`, terminologia LSF,
+vícios de linguagem, frase de impacto solta, hashtags e a URL com UTM.
+
+`check-lote-linkedin` avalia **um conjunto** e existe porque o primeiro, por construção,
+não consegue ver fórmula. Em 2026-09-05 dez posts passaram individualmente com exit 0 e
+sete abriam o CTA com a mesma construção, que é o padrão que o prompt proíbe. Ele checa
+distribuição de aberturas em pergunta, CTA em primeira pessoa do plural anunciando o
+artefato, repetição da primeira palavra de hook e de CTA, e avisa sobre posts sem folga
+até o teto de 180 palavras. Exige no mínimo 3 posts, porque fórmula só existe no conjunto.
+
+**Passar nos dois não garante legibilidade.** Eles conferem conformidade. A regra de
+reler depois do verde está escrita no filtro de humanização do prompt v1.2.1.
+
 ### 5. `analytics/` — relatório e aprendizado editorial
 
 O pipeline operacional de GA4/GSC é versionado seletivamente. Além do relatório
