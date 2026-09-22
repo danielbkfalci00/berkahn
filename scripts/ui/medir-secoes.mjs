@@ -16,15 +16,24 @@ const URL = process.argv[3] ?? process.argv[2] ?? "http://localhost:3113/sustent
 const browser = await chromium.launch();
 
 for (const perfil of [
-  { nome: "desktop", width: 1440, height: 900 },
+  { nome: "desktop-1440", width: 1440, height: 900 },
+  { nome: "desktop-1366", width: 1366, height: 700 },
+  { nome: "desktop-1024", width: 1024, height: 640 },
   { nome: "mobile", width: 390, height: 844 },
 ]) {
   const ctx = await browser.newContext({ viewport: { width: perfil.width, height: perfil.height } });
+  await ctx.addInitScript(() => {
+    localStorage.setItem(
+      "berkahn-cookie-consent",
+      JSON.stringify({ level: "necessary", version: "1.0", timestamp: Date.now() })
+    );
+  });
   const page = await ctx.newPage();
   await page.goto(URL, { waitUntil: "networkidle", timeout: 120000 });
-  const b = page.getByRole("button", { name: "Apenas necessários" });
-  if (await b.count()) { await b.first().click(); await page.waitForTimeout(500); }
   await page.waitForTimeout(2000);
+  if (await page.getByRole("button", { name: "Apenas necessários" }).count()) {
+    throw new Error(`${perfil.nome}: banner de cookies ainda visível`);
+  }
 
   const dados = await page.evaluate(() => {
     const alvo = document.querySelectorAll("main > section, main > div > section, section");
@@ -51,10 +60,16 @@ for (const perfil of [
         vazioBase: Math.round(topo + r.height - max),
       });
     }
-    return { total: Math.round(document.documentElement.scrollHeight), linhas };
+    return {
+      total: Math.round(document.documentElement.scrollHeight),
+      largura: Math.round(document.documentElement.scrollWidth),
+      viewport: window.innerWidth,
+      linhas,
+    };
   });
 
   console.log(`\n=== ${perfil.nome} (${perfil.width}px) · página ${dados.total}px ===`);
+  console.log(`largura: ${dados.largura}px para viewport de ${dados.viewport}px${dados.largura > dados.viewport ? "  <<< overflow horizontal" : ""}`);
   console.log("seção".padEnd(26), "altura".padStart(8), "vazio topo".padStart(12), "vazio base".padStart(12));
   for (const l of dados.linhas) {
     const marca = l.vazioTopo + l.vazioBase > perfil.height * 0.55 ? "  <<< folga" : "";
