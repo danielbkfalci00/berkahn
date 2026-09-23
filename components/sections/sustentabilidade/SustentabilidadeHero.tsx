@@ -51,7 +51,10 @@ export function SustentabilidadeHero() {
           });
         }
 
-        if (title) {
+        // Só no desktop. No celular o título é o maior elemento da primeira
+        // tela (LCP) e a revelação o escondia até o JS e as fontes chegarem:
+        // Lighthouse mediu 12,5 s em produção.
+        if (title && window.matchMedia("(min-width: 1024px)").matches) {
           document.fonts.ready.then(
             contextSafe(() => {
               SplitText.create(title, {
@@ -84,14 +87,16 @@ export function SustentabilidadeHero() {
         {/* O quadro da foto é 16% maior que a tela e o parallax ainda aplica
             1.08; no celular a foto (16:9) cobre a altura, não a largura. O
             sizes antigo, 100vw, pedia de 2x a 3x menos pixels do que a tela
-            mostra. */}
+            mostra. No celular, porém, pedir a largura inteira desenhada (~5000px
+            numa tela 3x) trazia fotos de 1,9 MB e travava o carregamento; lá o
+            teto é 100vh, 2x a 3x a tela, em troca de um pouco de nitidez. */}
         <Image
           src={HERO.image.src}
           alt={HERO.image.alt}
           fill
           priority
-          quality={85}
-          sizes="max(125vw, 225vh)"
+          quality={80}
+          sizes="(max-width: 767px) 100vh, max(125vw, 225vh)"
           className={`object-cover grayscale contrast-[1.08] ${HERO.image.focus ?? ""}`}
         />
       </div>
