@@ -309,7 +309,7 @@ export function HeroCinematic() {
           // Dissolve o conteúdo em estágios para liberar a vista no fim do percurso.
           .to("[data-hero-foot]", { autoAlpha: 0, duration: 0.12, ease: "none" }, 0.06)
           .to(
-            ["[data-hero-label]", "[data-hero-bar]"],
+            "[data-hero-label]",
             { autoAlpha: 0, duration: 0.14, ease: "none" },
             0.28
           )
@@ -327,11 +327,6 @@ export function HeroCinematic() {
         const intro = gsap.timeline({ defaults: { ease: "expo.out" } });
         intro
           .from("[data-hero-label]", { autoAlpha: 0, y: 16, duration: 0.7 }, 0.15)
-          .from(
-            "[data-hero-bar]",
-            { scaleX: 0, transformOrigin: "left center", duration: 0.8 },
-            0.2
-          )
           .from("[data-hero-line]", { yPercent: 110, duration: 1.1, stagger: 0.12 }, 0.25)
           .from("[data-hero-sub]", { autoAlpha: 0, y: 24, duration: 0.9 }, 0.8)
           .from("[data-hero-cta]", { autoAlpha: 0, y: 18, duration: 0.8 }, 0.95)
@@ -367,42 +362,44 @@ export function HeroCinematic() {
         />
 
         <div className="absolute inset-0 hero-overlay-vignette" aria-hidden="true" />
+        {/* Véu extra embaixo, onde o texto fica: a imagem é clara no centro. */}
+        <div
+          className="absolute inset-x-0 bottom-0 h-[70%] bg-gradient-to-t from-black/85 via-black/45 to-transparent"
+          aria-hidden="true"
+        />
 
         <div
           ref={contentRef}
-          className="relative z-10 flex h-full flex-col justify-end pb-48 md:pb-32 pl-6 pr-6 md:pl-16 lg:pl-24 max-w-[1100px]"
+          className="relative z-10 flex h-full flex-col justify-end pb-24 md:pb-28 pl-6 pr-6 md:pl-16 lg:pl-24 max-w-[1320px]"
         >
+          {/* Hierarquia: rótulo pequeno, título num peso só, texto de apoio e
+              um botão. Antes o título alternava fino e grosso no meio da
+              frase, o rótulo usava a fonte monoespaçada com uma régua de
+              enfeite, e o bloco ficava no meio da tela, sobre a porta
+              iluminada, onde o contraste é menor. */}
           <p
             data-hero-label
-            className="font-tech text-xs md:text-sm lowercase tracking-wide text-white-70 mb-5"
+            className="mb-5 text-xs font-medium uppercase tracking-[0.18em] text-white/75"
           >
-            construtora · light steel frame · são paulo
+            Construtora em São Paulo
           </p>
 
-          <div
-            data-hero-bar
-            className="h-[3px] w-14 bg-white mb-7"
-            aria-hidden="true"
-          />
-
-          <h1 className="headline-hero hero-text-shadow mb-7">
-            <span className="block overflow-hidden">
-              <span data-hero-line className="block md:whitespace-nowrap">
-                <span className="font-light text-white-70">Especialistas em</span>{" "}
-                <span className="font-semibold">Light Steel Frame</span>
+          <h1 className="mb-6 font-display text-[clamp(2.4rem,1.2rem+4.2vw,5.4rem)] font-semibold leading-[0.98] tracking-[-0.04em] text-white hero-text-shadow">
+            <span className="block overflow-hidden pb-[0.06em]">
+              <span data-hero-line className="block">
+                Especialistas em Light Steel Frame.
               </span>
             </span>
-            <span className="block overflow-hidden">
-              <span data-hero-line className="block md:whitespace-nowrap">
-                <span className="font-light text-white-70">Mestres em</span>{" "}
-                <span className="font-semibold">Construir</span>
+            <span className="block overflow-hidden pb-[0.06em]">
+              <span data-hero-line className="block text-white/70">
+                Mestres em construir.
               </span>
             </span>
           </h1>
 
           <p
             data-hero-sub
-            className="max-w-xl text-base md:text-lg text-white-70 leading-relaxed mb-9"
+            className="mb-8 max-w-xl text-base leading-relaxed text-white/85 md:text-lg"
           >
             Construímos com a tecnologia certa para cada projeto. Residencial
             ou comercial, simples ou complexo.
@@ -412,7 +409,7 @@ export function HeroCinematic() {
             <ContactFormDialog ctaLocation="home_hero">
               <Button
                 size="lg"
-                className="rounded-full bg-white text-black hover:bg-off-white px-8 text-xs uppercase tracking-wider font-semibold"
+                className="h-12 rounded-full bg-white px-7 text-sm font-medium text-black hover:bg-white/85"
               >
                 Fale conosco
               </Button>
@@ -422,11 +419,11 @@ export function HeroCinematic() {
 
         <div
           data-hero-foot
-          className="absolute bottom-0 left-0 right-0 z-10 flex items-end justify-between pb-8 pl-6 pr-6 md:pl-16 md:pr-16 lg:pl-24"
+          className="absolute bottom-0 left-0 right-0 z-10 flex items-end justify-between pb-8 pl-6 pr-6 md:pl-16 md:pr-28 lg:pl-24"
         >
           <div className="h-12 w-px bg-white-50 animate-scroll-cue" aria-hidden="true" />
-          <p className="hidden md:block font-tech text-xs lowercase tracking-wide text-white-50">
-            obra seca · prazo previsível · estrutura leve
+          <p className="hidden text-xs font-medium uppercase tracking-[0.18em] text-white/60 md:block">
+            Obra seca · prazo previsível · estrutura leve
           </p>
         </div>
       </div>
