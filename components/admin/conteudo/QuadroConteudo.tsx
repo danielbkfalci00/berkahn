@@ -425,7 +425,7 @@ export function QuadroConteudo({ pautas: doServidor, tagsCatalogo, worker }: Pro
       ) : (
         <DndContext sensors={sensores} collisionDetection={closestCorners}
           onDragStart={aoIniciar} onDragOver={aoPassarPor} onDragEnd={aoTerminar}>
-          <div className="-mx-6 overflow-x-auto px-6 pb-4">
+          <div className="-mx-4 overflow-x-auto px-4 pb-4 md:-mx-6 md:px-6">
             <div className="flex min-w-full flex-col items-stretch gap-4 md:min-w-max md:flex-row md:items-start">
               {colunas.map((coluna) => (
                 <ColunaPauta key={coluna} coluna={coluna} visao={visao}

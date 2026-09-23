@@ -59,8 +59,36 @@ export function OrcamentosTable({ orcamentos }: Props) {
   }
 
   return (
-    <Card>
-      <div className="overflow-x-auto">
+    <Card className="min-w-0 overflow-hidden">
+      <div className="divide-y divide-neutral-100 md:hidden">
+        {orcamentos.map((o) => (
+          <article key={o.id} className="min-w-0 p-4">
+            <div className="flex items-start justify-between gap-3">
+              <div className="min-w-0">
+                <p className="font-mono text-xs text-neutral-500">{o.numero}</p>
+                <Link href={`/admin/orcamentos/${o.id}`} className="mt-1 block font-semibold text-neutral-900 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900">
+                  {o.cliente_nome}
+                </Link>
+              </div>
+              <Badge className="shrink-0" variant={STATUS_VARIANT[o.status]}>{STATUS_LABEL[o.status]}</Badge>
+            </div>
+            <p className="mt-2 text-sm text-neutral-600">{o.obra_cidade} · {o.projeto_area_m2} m²</p>
+            <p className="mt-1 text-sm font-medium tabular-nums text-neutral-900">{formatarMoeda(o.valor_min)} – {formatarMoeda(o.valor_max)}</p>
+            <p className="mt-1 text-xs text-neutral-500">{formatarData(o.data_elaboracao)}</p>
+            <div className="mt-3 flex gap-2 border-t border-neutral-100 pt-3">
+              <Link href={`/admin/orcamentos/${o.id}`} className="inline-flex min-h-11 items-center gap-2 rounded-lg border border-neutral-200 px-4 text-sm font-medium text-neutral-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900">
+                <FileText className="h-4 w-4" /> Abrir
+              </Link>
+              {o.pdf_url && (
+                <a href={o.pdf_url} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center gap-2 rounded-lg border border-neutral-200 px-4 text-sm font-medium text-neutral-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900">
+                  <Download className="h-4 w-4" /> PDF
+                </a>
+              )}
+            </div>
+          </article>
+        ))}
+      </div>
+      <div className="hidden overflow-x-auto md:block">
         <table className="w-full text-sm">
           <thead className="border-b border-neutral-200 bg-neutral-50/50 text-left text-xs uppercase tracking-wider text-neutral-500">
             <tr>
@@ -92,7 +120,7 @@ export function OrcamentosTable({ orcamentos }: Props) {
                   <div className="flex items-center justify-end gap-2">
                     <Link
                       href={`/admin/orcamentos/${o.id}`}
-                      className="inline-flex items-center gap-1 text-xs text-neutral-700 hover:text-neutral-900"
+                      className="inline-flex min-h-11 items-center gap-1 rounded px-2 text-xs text-neutral-700 hover:text-neutral-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-neutral-900"
                     >
                       <FileText className="h-3.5 w-3.5" />
                       Abrir
@@ -102,7 +130,7 @@ export function OrcamentosTable({ orcamentos }: Props) {
                         href={o.pdf_url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1 text-xs text-neutral-700 hover:text-neutral-900"
+                        className="inline-flex min-h-11 items-center gap-1 rounded px-2 text-xs text-neutral-700 hover:text-neutral-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-neutral-900"
                       >
                         <Download className="h-3.5 w-3.5" />
                         PDF

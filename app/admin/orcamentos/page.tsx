@@ -41,6 +41,7 @@ export default async function OrcamentosPage({ searchParams }: PageProps) {
   const supabase = await createClient()
 
   let orcamentos: OrcamentoListItem[] = []
+  let unavailable = false
   const contagens: Record<StatusFiltro, number> = {
     ativos: 0,
     rascunho: 0,
@@ -75,11 +76,11 @@ export default async function OrcamentosPage({ searchParams }: PageProps) {
     }
 
     const [
-      { data: listData },
-      { count: countRascunho },
-      { count: countFinalizado },
-      { count: countArquivado },
-      { count: countTodos },
+      listResult,
+      countRascunhoResult,
+      countFinalizadoResult,
+      countArquivadoResult,
+      countTodosResult,
     ] = await Promise.all([
       listQuery,
       contarPorStatus("rascunho"),
@@ -88,14 +89,19 @@ export default async function OrcamentosPage({ searchParams }: PageProps) {
       contarPorStatus(),
     ])
 
-    orcamentos = (listData ?? []) as OrcamentoListItem[]
-    contagens.rascunho = countRascunho ?? 0
-    contagens.finalizado = countFinalizado ?? 0
-    contagens.arquivado = countArquivado ?? 0
-    contagens.todos = countTodos ?? 0
+    const results = [listResult, countRascunhoResult, countFinalizadoResult, countArquivadoResult, countTodosResult]
+    const failed = results.find((result) => result.error)
+    if (failed?.error) throw failed.error
+
+    orcamentos = (listResult.data ?? []) as OrcamentoListItem[]
+    contagens.rascunho = countRascunhoResult.count ?? 0
+    contagens.finalizado = countFinalizadoResult.count ?? 0
+    contagens.arquivado = countArquivadoResult.count ?? 0
+    contagens.todos = countTodosResult.count ?? 0
     contagens.ativos = contagens.rascunho + contagens.finalizado
-  } catch {
-    console.log("Orcamentos: tabela ainda não existe (rodar migration 006)")
+  } catch (error) {
+    unavailable = true
+    console.error("Orcamentos: failed to load", error)
   }
 
   return (
@@ -114,13 +120,16 @@ export default async function OrcamentosPage({ searchParams }: PageProps) {
         </Link>
       </div>
 
-      <OrcamentosFiltros
-        statusAtivo={statusAtivo}
-        qAtivo={qAtivo}
-        contagens={contagens}
-      />
-
-      <OrcamentosTable orcamentos={orcamentos} />
+      {unavailable ? (
+        <div role="alert" className="rounded-xl border border-amber-200 bg-amber-50 p-5 text-amber-900">
+          Não foi possível carregar os orçamentos agora. Tente atualizar a página.
+        </div>
+      ) : (
+        <>
+          <OrcamentosFiltros statusAtivo={statusAtivo} qAtivo={qAtivo} contagens={contagens} />
+          <OrcamentosTable orcamentos={orcamentos} />
+        </>
+      )}
     </div>
   )
 }
