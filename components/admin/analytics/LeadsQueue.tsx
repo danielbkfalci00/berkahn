@@ -120,6 +120,7 @@ export function LeadsQueue({ initialLeads, allStageLeads, total, page, pageCount
   const [pendingFilterHref, setPendingFilterHref] = useState<string | null>(null);
   const filtersToggleRef = useRef<HTMLButtonElement>(null);
   const filterPanelRef = useRef<HTMLFormElement>(null);
+  const previewTriggerRef = useRef<HTMLElement | null>(null);
   const [, startTransition] = useTransition();
   const currentQuery = searchParams.toString();
   const selectedLeadId = selectedLead?.id ?? null;
@@ -293,7 +294,8 @@ export function LeadsQueue({ initialLeads, allStageLeads, total, page, pageCount
     router.push(href, { scroll: false });
   }
 
-  function openLead(lead: LeadListItem) {
+  function openLead(lead: LeadListItem, trigger: HTMLElement) {
+    previewTriggerRef.current = trigger;
     setError(null);
     setSuccess(null);
     setSelectedLead(lead);
@@ -425,6 +427,7 @@ export function LeadsQueue({ initialLeads, allStageLeads, total, page, pageCount
         lead={activeLead}
         preview={preview?.id === activeLead?.id ? preview : null}
         onClose={() => setSelectedLead(null)}
+        onRestoreFocus={() => { if (previewTriggerRef.current?.isConnected) previewTriggerRef.current.focus(); }}
         onStatusChange={(id, status) => {
           if (status === "desqualificado") setSelectedLead(null);
           changeStatus(id, status);
@@ -491,12 +494,13 @@ function priorityMeta(priority: LeadPriority) {
   return { label: "Normal", className: "border-neutral-200 bg-neutral-50 text-neutral-600" };
 }
 
-function LeadQuickView({ lead, preview, onClose, onStatusChange, pending, error, success }: {
+function LeadQuickView({ lead, preview, onClose, onRestoreFocus, onStatusChange, pending, error, success }: {
   lead: LeadListItem | null;
   preview: { id: string; status: "loading" } |
     { id: string; status: "ok"; data: LeadPreviewDetails } |
     { id: string; status: "unavailable"; reason: string } | null;
   onClose: () => void;
+  onRestoreFocus: () => void;
   onStatusChange: (id: string, status: LeadStatus) => void;
   pending: boolean;
   error: string | null;
@@ -508,7 +512,7 @@ function LeadQuickView({ lead, preview, onClose, onStatusChange, pending, error,
   return <DialogPrimitive.Root open={Boolean(lead)} onOpenChange={(open) => { if (!open) onClose(); }}>
     <DialogPrimitive.Portal>
       <DialogPrimitive.Overlay className="fixed inset-0 z-[150] bg-black/45" />
-      {lead && <DialogPrimitive.Content className="fixed inset-x-0 bottom-0 z-[151] flex max-h-[calc(100dvh-env(safe-area-inset-top))] min-h-[70dvh] flex-col overflow-hidden rounded-t-2xl bg-white shadow-2xl outline-none md:inset-y-0 md:left-auto md:right-0 md:w-[min(32rem,100vw)] md:max-h-none md:min-h-0 md:rounded-none">
+      {lead && <DialogPrimitive.Content onCloseAutoFocus={(event) => { event.preventDefault(); onRestoreFocus(); }} className="fixed inset-x-0 bottom-0 z-[151] flex max-h-[calc(100dvh-env(safe-area-inset-top))] min-h-[70dvh] flex-col overflow-hidden rounded-t-2xl bg-white shadow-2xl outline-none md:inset-y-0 md:left-auto md:right-0 md:w-[min(32rem,100vw)] md:max-h-none md:min-h-0 md:rounded-none">
         <header className="flex items-start justify-between gap-4 border-b border-neutral-200 px-5 pb-4 pt-5">
           <div className="min-w-0">
             <DialogPrimitive.Title className="truncate text-xl font-semibold text-neutral-950">{lead.nome}</DialogPrimitive.Title>
@@ -556,7 +560,7 @@ function LeadQuickView({ lead, preview, onClose, onStatusChange, pending, error,
   </DialogPrimitive.Root>;
 }
 
-function LeadInbox({ leads, pendingLeadId, onStatusChange, onOpen }: { leads: LeadListItem[]; pendingLeadId: string | null; onStatusChange: (id: string, status: LeadStatus) => void; onOpen: (lead: LeadListItem) => void }) {
+function LeadInbox({ leads, pendingLeadId, onStatusChange, onOpen }: { leads: LeadListItem[]; pendingLeadId: string | null; onStatusChange: (id: string, status: LeadStatus) => void; onOpen: (lead: LeadListItem, trigger: HTMLElement) => void }) {
   return <div className="overflow-hidden rounded-lg border border-neutral-200 bg-white">
     <div className="hidden grid-cols-[1fr_1.4fr_.75fr_.85fr_.8fr_.25fr] gap-4 border-b bg-neutral-50 px-4 py-2 text-[11px] font-medium uppercase tracking-wider text-neutral-500 lg:grid">
       <span>Contato</span><span>Situação</span><span>Responsável</span><span>Próxima ação</span><span>Status</span><span />
@@ -569,7 +573,7 @@ function LeadInbox({ leads, pendingLeadId, onStatusChange, onOpen }: { leads: Le
         <Link href={`/admin/leads/${lead.id}`} prefetch={false} onClick={(event) => {
           if (event.button === 0 && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey) {
             event.preventDefault();
-            onOpen(lead);
+            onOpen(lead, event.currentTarget);
           }
         }} aria-label={`Pré-visualizar ${lead.nome}`} className="absolute inset-0 z-10 rounded-sm focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-neutral-900" />
         <div className="min-w-0">
@@ -591,7 +595,7 @@ function LeadInbox({ leads, pendingLeadId, onStatusChange, onOpen }: { leads: Le
   </div>;
 }
 
-function LeadKanban({ leads, pendingLeadId, onStatusChange, onOpen }: { leads: LeadListItem[]; pendingLeadId: string | null; onStatusChange: (id: string, status: LeadStatus) => void; onOpen: (lead: LeadListItem) => void }) {
+function LeadKanban({ leads, pendingLeadId, onStatusChange, onOpen }: { leads: LeadListItem[]; pendingLeadId: string | null; onStatusChange: (id: string, status: LeadStatus) => void; onOpen: (lead: LeadListItem, trigger: HTMLElement) => void }) {
   const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 6 } }), useSensor(KeyboardSensor));
   const leadById = useMemo(() => new Map(leads.map((lead) => [lead.id, lead])), [leads]);
   function handleDragEnd(event: DragEndEvent) {
@@ -608,7 +612,7 @@ function LeadKanban({ leads, pendingLeadId, onStatusChange, onOpen }: { leads: L
   </div>;
 }
 
-function KanbanColumn({ status, leads, pendingLeadId, onStatusChange, onOpen }: { status: { value: LeadStatus; label: string }; leads: LeadListItem[]; pendingLeadId: string | null; onStatusChange: (id: string, status: LeadStatus) => void; onOpen: (lead: LeadListItem) => void }) {
+function KanbanColumn({ status, leads, pendingLeadId, onStatusChange, onOpen }: { status: { value: LeadStatus; label: string }; leads: LeadListItem[]; pendingLeadId: string | null; onStatusChange: (id: string, status: LeadStatus) => void; onOpen: (lead: LeadListItem, trigger: HTMLElement) => void }) {
   const { setNodeRef, isOver } = useDroppable({ id: status.value });
   return <section ref={setNodeRef} className={`min-h-[360px] rounded-lg border p-3 transition-colors ${isOver ? "border-neutral-900 bg-neutral-100" : "border-neutral-200 bg-neutral-50"}`}>
     <div className="mb-3 flex items-center justify-between"><h2 className="text-xs font-semibold uppercase tracking-wider text-neutral-700">{status.label}</h2><span className="rounded-full bg-white px-2 py-0.5 text-xs text-neutral-500">{leads.length}</span></div>
@@ -616,14 +620,14 @@ function KanbanColumn({ status, leads, pendingLeadId, onStatusChange, onOpen }: 
   </section>;
 }
 
-function KanbanCard({ lead, disabled, onStatusChange, onOpen }: { lead: LeadListItem; disabled: boolean; onStatusChange: (id: string, status: LeadStatus) => void; onOpen: (lead: LeadListItem) => void }) {
+function KanbanCard({ lead, disabled, onStatusChange, onOpen }: { lead: LeadListItem; disabled: boolean; onStatusChange: (id: string, status: LeadStatus) => void; onOpen: (lead: LeadListItem, trigger: HTMLElement) => void }) {
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({ id: lead.id, data: { status: lead.status }, disabled });
   const priority = priorityMeta(lead.prioridade);
   return <article ref={setNodeRef} style={{ transform: CSS.Translate.toString(transform) }} className={`relative rounded-md border border-neutral-200 bg-white p-3 shadow-sm hover:border-neutral-400 focus-within:border-neutral-900 ${isDragging ? "z-20 opacity-70 shadow-lg" : ""}`}>
     <Link href={`/admin/leads/${lead.id}`} prefetch={false} onClick={(event) => {
       if (event.button === 0 && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey) {
         event.preventDefault();
-        onOpen(lead);
+        onOpen(lead, event.currentTarget);
       }
     }} aria-label={`Pré-visualizar ${lead.nome}`} className="absolute inset-0 z-10 rounded-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900" />
     <div className="flex items-start justify-between gap-2"><span className="line-clamp-2 text-sm font-semibold text-neutral-900">{lead.nome}</span><button type="button" aria-label={`Mover ${lead.nome}`} className="relative z-20 cursor-grab touch-none rounded p-1 text-neutral-400 hover:bg-neutral-100 hover:text-neutral-700" {...listeners} {...attributes}><GripVertical className="h-4 w-4" /></button></div>
