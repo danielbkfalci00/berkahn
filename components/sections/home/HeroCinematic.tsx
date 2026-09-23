@@ -73,8 +73,12 @@ function HeroPoster() {
   );
 }
 
-const framePath = (index: number, isMobile: boolean) =>
-  `/videos/hero/${isMobile ? "seq-m" : "seq"}/f_${String(index + 1).padStart(3, "0")}.webp`;
+// AVIF qualidade 50: 42% menor que o WebP q78 e mais fiel à fonte (SSIM
+// 0,990 contra 0,984 em luminância, medido sobre quadros do vídeo original).
+// O WebP fica como reserva para navegador que não decodifica AVIF.
+type FrameFormat = "avif" | "webp";
+const framePath = (index: number, isMobile: boolean, format: FrameFormat) =>
+  `/videos/hero/${isMobile ? "seq-m" : "seq"}/f_${String(index + 1).padStart(3, "0")}.${format}`;
 
 export function HeroCinematic() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -94,55 +98,150 @@ export function HeroCinematic() {
 
         const isMobile = window.matchMedia("(max-width: 767px)").matches;
         const frameCount = isMobile ? FRAME_COUNT_MOBILE : FRAME_COUNT_DESKTOP;
-        const images: HTMLImageElement[] = new Array(frameCount);
+        // Bytes de cada quadro, ainda comprimidos (7,7 MB no total). Decodificar
+        // a partir do Blob acontece sempre fora da thread principal; a partir
+        // de um <img> o Chrome pode decodificar na thread principal.
+        const blobs: (Blob | undefined)[] = new Array(frameCount);
+        let format: FrameFormat = "avif";
         const isLoaded: boolean[] = new Array(frameCount).fill(false);
-        let currentIndex = 0;
+        // Quadros já decodificados (ImageBitmap), só numa janela em volta do
+        // atual: decodificar um WebP de 1920px na hora do drawImage travava a
+        // tela por dezenas de ms a cada troca de quadro. createImageBitmap
+        // decodifica fora da thread principal. A janela existe porque os 56
+        // quadros decodificados ocupariam ~460 MB de memória.
+        const bitmaps: (ImageBitmap | undefined)[] = new Array(frameCount);
+        const pendingBitmap: boolean[] = new Array(frameCount).fill(false);
+        const BITMAP_WINDOW = 6;
+        let position = 0; // posição fracionária na sequência
+        let drawnPosition = -1;
         let isPosterHidden = false;
+        let rafId = 0;
+        // A mistura de dois quadros dobra o custo de pintura. Em aparelho que
+        // não dá conta (desenho acima de ~10 ms, três vezes seguidas), o hero
+        // volta ao quadro único e não liga a mistura de novo.
+        let blend = true;
+        let slowDraws = 0;
+
+        // Tamanho nativo dos quadros de cada sequência.
+        const frameW = isMobile ? 608 : 1920;
+        const frameH = 1080;
 
         // O foco vertical baixo preserva o piso e a leitura do percurso.
         const VERTICAL_FOCUS = 0.8;
 
-        const draw = (index: number) => {
-          let nearest = Math.min(index, frameCount - 1);
-          while (nearest > 0 && !isLoaded[nearest]) nearest--;
-          if (!isLoaded[nearest]) return;
+        const sourceFor = (index: number) => bitmaps[index];
 
-          const img = images[nearest];
+        const paint = (source: CanvasImageSource, alpha: number) => {
+          const cw = canvas.width;
+          const ch = canvas.height;
+          const scale = Math.max(cw / frameW, ch / frameH);
+          const w = frameW * scale;
+          const h = frameH * scale;
+          context2d.globalAlpha = alpha;
+          context2d.drawImage(source, (cw - w) / 2, (ch - h) * VERTICAL_FOCUS, w, h);
+        };
+
+        // Desenha a posição fracionária misturando os dois quadros vizinhos.
+        // Sem isso a imagem saltava de quadro em quadro (56 quadros para 2,6
+        // telas de rolagem, um salto a cada ~40px).
+        const draw = () => {
+          rafId = 0;
+          const started = performance.now();
+          if (position === drawnPosition) return;
+          let base = Math.min(Math.floor(position), frameCount - 1);
+          while (base > 0 && !sourceFor(base)) base--;
+          const baseSource = sourceFor(base);
+          if (!baseSource) return;
+
           // O padrão do Chrome é suavização "low": qualquer ampliação saía
           // serrilhada. Redefinido a cada desenho porque redimensionar o
           // canvas zera o estado do contexto.
           context2d.imageSmoothingEnabled = true;
           context2d.imageSmoothingQuality = "high";
-          const cw = canvas.width;
-          const ch = canvas.height;
-          const scale = Math.max(cw / img.naturalWidth, ch / img.naturalHeight);
-          const w = img.naturalWidth * scale;
-          const h = img.naturalHeight * scale;
-          context2d.drawImage(img, (cw - w) / 2, (ch - h) * VERTICAL_FOCUS, w, h);
+          paint(baseSource, 1);
+          const t = position - base;
+          const nextSource = base + 1 < frameCount ? sourceFor(base + 1) : undefined;
+          if (blend && t > 0.02 && nextSource) paint(nextSource, t);
+          context2d.globalAlpha = 1;
+          drawnPosition = position;
+
+          if (blend) {
+            slowDraws = performance.now() - started > 10 ? slowDraws + 1 : 0;
+            if (slowDraws >= 3) blend = false;
+          }
 
           if (!isPosterHidden && posterWrapRef.current) {
             posterWrapRef.current.style.opacity = "0";
             isPosterHidden = true;
           }
         };
+        // No máximo um desenho por quadro de tela, por mais eventos de
+        // rolagem que cheguem nesse intervalo.
+        const requestDraw = () => {
+          if (!rafId) rafId = requestAnimationFrame(draw);
+        };
 
+        const refreshBitmaps = () => {
+          const center = Math.round(position);
+          for (let i = 0; i < frameCount; i++) {
+            const inside = Math.abs(i - center) <= BITMAP_WINDOW;
+            if (!inside && bitmaps[i]) {
+              bitmaps[i]!.close();
+              bitmaps[i] = undefined;
+            } else if (inside && isLoaded[i] && !bitmaps[i] && !pendingBitmap[i]) {
+              pendingBitmap[i] = true;
+              createImageBitmap(blobs[i]!)
+                .then((bitmap) => {
+                  pendingBitmap[i] = false;
+                  if (Math.abs(i - Math.round(position)) <= BITMAP_WINDOW) {
+                    bitmaps[i] = bitmap;
+                    if (Math.abs(i - position) <= 1.5) {
+                      drawnPosition = -1;
+                      requestDraw();
+                    }
+                  } else {
+                    bitmap.close();
+                  }
+                })
+                .catch(() => {
+                  pendingBitmap[i] = false;
+                  // Navegador sem AVIF: recomeça tudo em WebP, uma vez só.
+                  if (format === "avif") switchToWebp();
+                });
+            }
+          }
+        };
+
+        // O canvas não precisa de mais pixels que o próprio quadro: num
+        // monitor retina ele tinha 2880px de largura para um vídeo de 1920, e
+        // pintava 2,25x mais pixels sem ganhar nitidez nenhuma.
         const resize = () => {
-          const dpr = Math.min(window.devicePixelRatio || 1, 2);
-          canvas.width = Math.round(canvas.clientWidth * dpr);
-          canvas.height = Math.round(canvas.clientHeight * dpr);
-          draw(currentIndex);
+          const cssW = canvas.clientWidth;
+          const cssH = canvas.clientHeight;
+          const coverScale = Math.max(cssW / frameW, cssH / frameH);
+          const dpr = Math.max(1, Math.min(window.devicePixelRatio || 1, 2, 1 / coverScale));
+          canvas.width = Math.round(cssW * dpr);
+          canvas.height = Math.round(cssH * dpr);
+          drawnPosition = -1;
+          requestDraw();
         };
         resize();
         window.addEventListener("resize", resize);
 
+        let generation = 0;
         const loadFrame = (index: number) => {
-          const img = new window.Image();
-          img.src = framePath(index, isMobile);
-          img.onload = () => {
-            isLoaded[index] = true;
-            if (Math.abs(index - currentIndex) <= 2) draw(currentIndex);
-          };
-          images[index] = img;
+          const requested = generation;
+          fetch(framePath(index, isMobile, format))
+            .then((response) => (response.ok ? response.blob() : Promise.reject(response.status)))
+            .then((blob) => {
+              if (requested !== generation) return;
+              blobs[index] = blob;
+              isLoaded[index] = true;
+              refreshBitmaps();
+            })
+            .catch(() => {
+              // Quadro que falhou fica de fora; o desenho usa o vizinho.
+            });
         };
 
         // Quatro e não seis: com os frames em 1920 cada um pesa ~180 KB, e o
@@ -161,6 +260,16 @@ export function HeroCinematic() {
         // O resto da sequência (até 7,7 MB) só começa quando a pessoa rola ou
         // depois de 2,5 s parada. Antes começava junto com a página e disputava
         // banda e CPU com o resto do carregamento.
+        const switchToWebp = () => {
+          format = "webp";
+          generation++;
+          blobs.fill(undefined);
+          isLoaded.fill(false);
+          for (let i = 0; i < EAGER_FRAMES; i++) loadFrame(i);
+          nextToLoad = EAGER_FRAMES;
+          if (started) loadRemaining();
+        };
+
         let started = false;
         const startBackground = () => {
           if (started) return;
@@ -189,11 +298,10 @@ export function HeroCinematic() {
               duration: 1,
               ease: "none",
               onUpdate: () => {
-                const index = Math.round(frameState.frame);
-                if (index !== currentIndex) {
-                  currentIndex = index;
-                  draw(index);
-                }
+                const previous = Math.round(position);
+                position = frameState.frame;
+                if (Math.round(position) !== previous) refreshBitmaps();
+                requestDraw();
               },
             },
             0
@@ -201,7 +309,7 @@ export function HeroCinematic() {
           // Dissolve o conteúdo em estágios para liberar a vista no fim do percurso.
           .to("[data-hero-foot]", { autoAlpha: 0, duration: 0.12, ease: "none" }, 0.06)
           .to(
-            ["[data-hero-label]", "[data-hero-bar]"],
+            "[data-hero-label]",
             { autoAlpha: 0, duration: 0.14, ease: "none" },
             0.28
           )
@@ -219,11 +327,6 @@ export function HeroCinematic() {
         const intro = gsap.timeline({ defaults: { ease: "expo.out" } });
         intro
           .from("[data-hero-label]", { autoAlpha: 0, y: 16, duration: 0.7 }, 0.15)
-          .from(
-            "[data-hero-bar]",
-            { scaleX: 0, transformOrigin: "left center", duration: 0.8 },
-            0.2
-          )
           .from("[data-hero-line]", { yPercent: 110, duration: 1.1, stagger: 0.12 }, 0.25)
           .from("[data-hero-sub]", { autoAlpha: 0, y: 24, duration: 0.9 }, 0.8)
           .from("[data-hero-cta]", { autoAlpha: 0, y: 18, duration: 0.8 }, 0.95)
@@ -231,6 +334,8 @@ export function HeroCinematic() {
 
         return () => {
           window.removeEventListener("resize", resize);
+          if (rafId) cancelAnimationFrame(rafId);
+          bitmaps.forEach((bitmap) => bitmap?.close());
           if (backgroundLoader) clearTimeout(backgroundLoader);
           clearTimeout(idleStart);
           window.removeEventListener("scroll", startBackground);
@@ -257,42 +362,44 @@ export function HeroCinematic() {
         />
 
         <div className="absolute inset-0 hero-overlay-vignette" aria-hidden="true" />
+        {/* Véu extra embaixo, onde o texto fica: a imagem é clara no centro. */}
+        <div
+          className="absolute inset-x-0 bottom-0 h-[70%] bg-gradient-to-t from-black/85 via-black/45 to-transparent"
+          aria-hidden="true"
+        />
 
         <div
           ref={contentRef}
-          className="relative z-10 flex h-full flex-col justify-end pb-48 md:pb-32 pl-6 pr-6 md:pl-16 lg:pl-24 max-w-[1100px]"
+          className="relative z-10 flex h-full flex-col justify-end pb-24 md:pb-28 pl-6 pr-6 md:pl-16 lg:pl-24 max-w-[1320px]"
         >
+          {/* Hierarquia: rótulo pequeno, título num peso só, texto de apoio e
+              um botão. Antes o título alternava fino e grosso no meio da
+              frase, o rótulo usava a fonte monoespaçada com uma régua de
+              enfeite, e o bloco ficava no meio da tela, sobre a porta
+              iluminada, onde o contraste é menor. */}
           <p
             data-hero-label
-            className="font-tech text-xs md:text-sm lowercase tracking-wide text-white-70 mb-5"
+            className="mb-5 text-xs font-medium uppercase tracking-[0.18em] text-white/75"
           >
-            construtora · light steel frame · são paulo
+            Construtora em São Paulo
           </p>
 
-          <div
-            data-hero-bar
-            className="h-[3px] w-14 bg-white mb-7"
-            aria-hidden="true"
-          />
-
-          <h1 className="headline-hero hero-text-shadow mb-7">
-            <span className="block overflow-hidden">
-              <span data-hero-line className="block md:whitespace-nowrap">
-                <span className="font-light text-white-70">Especialistas em</span>{" "}
-                <span className="font-semibold">Light Steel Frame</span>
+          <h1 className="mb-6 font-display text-[clamp(2.4rem,1.2rem+4.2vw,5.4rem)] font-semibold leading-[0.98] tracking-[-0.04em] text-white hero-text-shadow">
+            <span className="block overflow-hidden pb-[0.06em]">
+              <span data-hero-line className="block">
+                Especialistas em Light Steel Frame.
               </span>
             </span>
-            <span className="block overflow-hidden">
-              <span data-hero-line className="block md:whitespace-nowrap">
-                <span className="font-light text-white-70">Mestres em</span>{" "}
-                <span className="font-semibold">Construir</span>
+            <span className="block overflow-hidden pb-[0.06em]">
+              <span data-hero-line className="block text-white/70">
+                Mestres em construir.
               </span>
             </span>
           </h1>
 
           <p
             data-hero-sub
-            className="max-w-xl text-base md:text-lg text-white-70 leading-relaxed mb-9"
+            className="mb-8 max-w-xl text-base leading-relaxed text-white/85 md:text-lg"
           >
             Construímos com a tecnologia certa para cada projeto. Residencial
             ou comercial, simples ou complexo.
@@ -302,7 +409,7 @@ export function HeroCinematic() {
             <ContactFormDialog ctaLocation="home_hero">
               <Button
                 size="lg"
-                className="rounded-full bg-white text-black hover:bg-off-white px-8 text-xs uppercase tracking-wider font-semibold"
+                className="h-12 rounded-full bg-white px-7 text-sm font-medium text-black hover:bg-white/85"
               >
                 Fale conosco
               </Button>
@@ -312,11 +419,11 @@ export function HeroCinematic() {
 
         <div
           data-hero-foot
-          className="absolute bottom-0 left-0 right-0 z-10 flex items-end justify-between pb-8 pl-6 pr-6 md:pl-16 md:pr-16 lg:pl-24"
+          className="absolute bottom-0 left-0 right-0 z-10 flex items-end justify-between pb-8 pl-6 pr-6 md:pl-16 md:pr-28 lg:pl-24"
         >
           <div className="h-12 w-px bg-white-50 animate-scroll-cue" aria-hidden="true" />
-          <p className="hidden md:block font-tech text-xs lowercase tracking-wide text-white-50">
-            obra seca · prazo previsível · estrutura leve
+          <p className="hidden text-xs font-medium uppercase tracking-[0.18em] text-white/60 md:block">
+            Obra seca · prazo previsível · estrutura leve
           </p>
         </div>
       </div>
