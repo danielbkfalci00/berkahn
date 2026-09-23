@@ -24,11 +24,17 @@ export function TrackedWhatsAppLink({
   ...props
 }: TrackedWhatsAppLinkProps) {
   const pathname = usePathname();
+  const url = new URL(href);
+  const originalMessage = url.searchParams.get("text")?.trim() || "Olá! Gostaria de falar com a Berkahn.";
+  const origin = `Origem no site: ${pathname || "/"} · ${ctaLocation}`;
+  if (!originalMessage.includes("Origem no site:")) {
+    url.searchParams.set("text", `${originalMessage}\n${origin}`);
+  }
 
   return (
     <a
       {...props}
-      href={href}
+      href={url.toString()}
       onClick={(event) => {
         trackEvent("whatsapp_click", {
           page_path: pathname ?? undefined,

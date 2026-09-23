@@ -59,6 +59,7 @@ export interface FunilLeads {
   taxaConversao: number;
   porCtaLocation: FatiaOrigem[];
   porPagina: FatiaOrigem[];
+  porCanal: FatiaOrigem[];
   /** Quantos leads têm UTM — só existe para quem aceitou todos os cookies. */
   comUtm: number;
   /** Maior degrau de perda, para o resumo em texto. */
@@ -137,6 +138,7 @@ export function construirFunilLeads(leads: LeadParaFunil[] | undefined): FunilLe
     taxaConversao: topo > 0 ? convertidos / topo : 0,
     porCtaLocation: agrupar(todos, (l) => l.cta_location),
     porPagina: agrupar(todos, (l) => l.pagina_origem),
+    porCanal: agrupar(todos, (l) => l.canal),
     comUtm: todos.filter((l) => l.utm && Object.keys(l.utm).length > 0).length,
     maiorPerda,
   };

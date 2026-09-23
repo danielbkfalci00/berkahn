@@ -9,6 +9,7 @@ import { Act3Posts } from "@/components/admin/analytics/acts/Act3Posts";
 import { Act4Action } from "@/components/admin/analytics/acts/Act4Action";
 import { KpiCardGrid } from "@/components/admin/analytics/KpiCardGrid";
 import { GrowthChart } from "@/components/admin/analytics/GrowthChart";
+import { ConversionEvents } from "@/components/admin/analytics/ConversionEvents";
 import { MatrizArtigoMes } from "@/components/admin/analytics/MatrizArtigoMes";
 import { ComparisonView } from "@/components/admin/analytics/ComparisonView";
 import { computeMonthlyGoals, computeGoalProgress, formatGoalLabel, formulaLabel, goalStatusColor } from "@/lib/analytics/goals";
@@ -295,6 +296,7 @@ export function AnalyticsContent({
           <section id="analytics-panel-resumo" aria-labelledby="analytics-tab-resumo" role="tabpanel" className={activeTab === "resumo" ? "space-y-6" : "hidden print:block print:space-y-6"}>
             <Act0Status context={ctx} trendPoints={trendPoints} redFlags={redFlags} />
             <KpiCardGrid kpis={summaryKpis} />
+            <ConversionEvents ga4={ctx.ga4} funil={funilLeads} monthSlug={ctx.monthSlug} />
             <div className="grid gap-4 lg:grid-cols-2">
               <div className="border-t border-neutral-200 pt-4">
                 <h3 className="text-sm font-semibold text-neutral-950">Principal insight</h3>

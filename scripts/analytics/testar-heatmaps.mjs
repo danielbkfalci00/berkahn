@@ -297,6 +297,7 @@ const lead = (status, extra = {}) => ({
   ok("undefined nao quebra", vazio.total === 0 && vazio.degraus.length === 5);
   ok("sem lead => conversao 0, nao NaN", vazio.taxaConversao === 0);
   ok("sem lead => sem maior perda", vazio.maiorPerda === null);
+  ok("sem lead => sem canais", vazio.porCanal.length === 0);
   ok("degraus zerados nao viram NaN", vazio.degraus.every((d) => Number.isFinite(d.fracaoDoTopo) && Number.isFinite(d.perda)));
 }
 
@@ -336,15 +337,16 @@ const lead = (status, extra = {}) => ({
 
 {
   const r = fn.construirFunilLeads([
-    lead("novo", { cta_location: "artigo_fim", pagina_origem: "/atualidades/custo" }),
-    lead("convertido", { cta_location: "artigo_fim", pagina_origem: "/atualidades/custo" }),
-    lead("novo", { cta_location: "header", utm: { utm_source: "linkedin" } }),
+    lead("novo", { canal: "form", cta_location: "artigo_fim", pagina_origem: "/atualidades/custo" }),
+    lead("convertido", { canal: "form", cta_location: "artigo_fim", pagina_origem: "/atualidades/custo" }),
+    lead("novo", { canal: "whatsapp", cta_location: "header", utm: { utm_source: "linkedin" } }),
     lead("novo", { cta_location: null }),
   ]);
   ok("agrupa por cta_location", r.porCtaLocation[0].rotulo === "artigo_fim" && r.porCtaLocation[0].total === 2);
   ok("conta convertidos por origem", r.porCtaLocation[0].convertidos === 1);
   ok("cta_location nulo nao vira grupo", !r.porCtaLocation.some((f) => f.rotulo === "(nulo)"));
   ok("agrupa por pagina", r.porPagina[0].total === 2);
+  ok("separa canais confirmados", r.porCanal.find((f) => f.rotulo === "form")?.total === 2 && r.porCanal.find((f) => f.rotulo === "whatsapp")?.total === 1);
   ok("conta quem tem UTM", r.comUtm === 1, `veio ${r.comUtm}`);
   ok("utm vazio nao conta", fn.construirFunilLeads([lead("novo", { utm: {} })]).comUtm === 0);
 }

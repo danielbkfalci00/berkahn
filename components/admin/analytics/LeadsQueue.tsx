@@ -366,6 +366,12 @@ export function LeadsQueue({ initialLeads, allStageLeads, total, page, pageCount
             <Field label="Próxima ação"><input type="datetime-local" value={manual.proximaAcaoEm || ""} onChange={(e) => setManual({ ...manual, proximaAcaoEm: e.target.value })} className={INPUT_CLASS} /></Field>
           </div>
           <Field label="Nota inicial"><textarea value={manual.mensagem} onChange={(e) => setManual({ ...manual, mensagem: e.target.value })} className={`${INPUT_CLASS} min-h-20 py-2`} /></Field>
+          {manual.canal === "whatsapp" && (
+            <div className="grid gap-3 md:grid-cols-2">
+              <Field label="Página de origem (se informada na mensagem)"><input placeholder="/contato" pattern="/[a-zA-Z0-9/_-]*" value={manual.paginaOrigem || ""} onChange={(e) => setManual({ ...manual, paginaOrigem: e.target.value })} className={INPUT_CLASS} /></Field>
+              <Field label="Botão de origem (se informado)"><input placeholder="whatsapp_flutuante" value={manual.ctaLocation || ""} onChange={(e) => setManual({ ...manual, ctaLocation: e.target.value })} className={INPUT_CLASS} /></Field>
+            </div>
+          )}
           {duplicates.length > 0 && (
             <div className="rounded-md border border-amber-300 bg-amber-50 p-3 text-sm text-amber-900">
               <p className="font-medium">Possível duplicidade encontrada:</p>

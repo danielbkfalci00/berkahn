@@ -245,13 +245,43 @@ async function fetchEvents(data, propertyId, startDate, endDate) {
       orderBys: [{ metric: { metricName: 'eventCount' }, desc: true }],
       limit: EVENTOS_RASTREADOS.length,
     });
-    return (res.rows || []).map((r) => ({
+    return { available: true, rows: (res.rows || []).map((r) => ({
       name: r.dimensionValues[0].value,
       count: parseInt(r.metricValues[0].value),
       topPages: '', // pode ser preenchido com query secundária se necessário
-    }));
+    })) };
   } catch (e) {
-    return [];
+    console.warn('GA4 conversion events unavailable:', e?.message || e);
+    return { available: false, rows: [] };
+  }
+}
+
+async function fetchWhatsAppBreakdown(data, propertyId, startDate, endDate) {
+  try {
+    const res = await runReport(data, propertyId, {
+      dateRanges: [{ startDate, endDate }],
+      dimensions: [{ name: 'pagePath' }, { name: 'customEvent:cta_location' }],
+      metrics: [{ name: 'eventCount' }],
+      dimensionFilter: {
+        filter: {
+          fieldName: 'eventName',
+          stringFilter: { matchType: 'EXACT', value: 'whatsapp_click' },
+        },
+      },
+      orderBys: [{ metric: { metricName: 'eventCount' }, desc: true }],
+      limit: 1000,
+    });
+    return {
+      available: true,
+      rows: (res.rows || []).map((row) => ({
+        pagePath: row.dimensionValues?.[0]?.value || '(não definido)',
+        ctaLocation: row.dimensionValues?.[1]?.value || '(não definido)',
+        clicks: Number.parseInt(row.metricValues?.[0]?.value || '0', 10),
+      })),
+    };
+  } catch (error) {
+    console.warn('GA4 WhatsApp breakdown unavailable:', error?.message || error);
+    return { available: false, reason: 'Detalhamento por página e botão não foi coletado.', rows: [] };
   }
 }
 async function fetchArticleProgress(data, propertyId, startDate, endDate) {
@@ -295,12 +325,13 @@ export async function fetchGa4(startDate, endDate) {
   const propertyId = getGa4PropertyId();
   const data = google.analyticsdata({ version: 'v1beta', auth });
 
-  const [overall, topPages, topSources, byDevice, events, articleProgress] = await Promise.all([
+  const [overall, topPages, topSources, byDevice, eventsResult, whatsappBreakdown, articleProgress] = await Promise.all([
     fetchOverall(data, propertyId, startDate, endDate),
     fetchTopPages(data, propertyId, startDate, endDate, LIMITE_PAGINAS),
     fetchTopSources(data, propertyId, startDate, endDate, LIMITE_FONTES),
     fetchByDevice(data, propertyId, startDate, endDate),
     fetchEvents(data, propertyId, startDate, endDate),
+    fetchWhatsAppBreakdown(data, propertyId, startDate, endDate),
     fetchArticleProgress(data, propertyId, startDate, endDate),
   ]);
 
@@ -312,7 +343,9 @@ export async function fetchGa4(startDate, endDate) {
     topSources,
     byDevice,
     byArea,
-    events,
+    events: eventsResult.rows,
+    eventsAvailable: eventsResult.available,
+    whatsappBreakdown,
     period: { startDate, endDate },
     articleProgress,
   };

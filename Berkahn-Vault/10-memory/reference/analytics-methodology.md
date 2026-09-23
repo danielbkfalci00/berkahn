@@ -262,6 +262,12 @@ Eventos e o que cada um significa:
 
 O GA4 nunca recebe nome, email, telefone, mensagem ou `leadId`. `whatsapp_click` é intenção; somente um cadastro manual com canal WhatsApp representa conversa recebida.
 
+### Caminhos de contato no Admin
+
+O cartão **Caminhos de contato** em `/admin/analytics?tab=resumo` mostra três medidas separadas para o mês selecionado: cliques `whatsapp_click` no GA4 (somente com consentimento), leads `canal=form` confirmados no Supabase e leads `canal=whatsapp` cadastrados após conversa recebida. O detalhamento de cliques por página/CTA vem de uma consulta adicional ao GA4 e só existe nos snapshots gerados após esta instrumentação; falha da consulta ou snapshot legado aparece como indisponível, nunca como zero. Os totais não devem ser somados nem divididos entre si para criar uma taxa de conversão, pois cobrem populações diferentes.
+
+Links públicos atendidos por `TrackedWhatsAppLink` incluem página e CTA no texto pré-preenchido da mensagem. O usuário pode editar ou não enviar esse texto. Ao cadastrar uma conversa recebida, o operador pode copiar esses dois campos para `pagina_origem` e `cta_location` do CRM; se o contato já existe pelo formulário, deve revisar a duplicidade e registrar a interação no lead existente. Nesse caso a origem principal continua `form`: **o painel ainda não comprova nem contabiliza como canal WhatsApp essa segunda interação**. Um cruzamento individual automatizado depende de confirmação de mensagem recebida e de um identificador/integração próprios, sujeitos a revisão de privacidade; nenhum ID individual vai ao GA4. Links externos fora do site (apresentações compartilhadas, QR etc.) exigem instrumentação própria e não entram no detalhamento de página/CTA do site.
+
 ### KPIs operacionais do CRM
 
 `/admin/leads` calcula uma coorte móvel de contatos recebidos nos últimos 28 dias: recebidos, ainda novos, qualificados, convertidos e `qualificados ÷ contatos elegíveis`. Qualificados são registros com `qualificado_em`; convertidos usam `convertido_em`, preservando o resultado mesmo se o funil for revisto depois. Leads com `arquivado_em` ou `anonimizado_em` ficam fora tanto desses KPIs quanto do funil mensal de analytics. Importados com status ausente ou desconhecido entram como `novo`, visualizados e arquivados, ficando fora da taxa. A métrica editorial continua `qualificados ÷ sessões engajadas × 100`; cliques no WhatsApp não entram como lead.
