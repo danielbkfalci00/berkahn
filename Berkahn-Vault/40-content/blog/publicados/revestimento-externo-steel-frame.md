@@ -1,7 +1,7 @@
 ---
 tipo: draft-content
 criado: 2026-09-22
-atualizado: 2026-09-22
+atualizado: 2026-09-23
 tags:
   - project/blog
   - status/draft
@@ -11,7 +11,7 @@ ai_summary: "Pauta 1 das cinco solicitações dos sócios. Compara EIFS, placa c
 status: published
 projeto: blog
 slug: revestimento-externo-steel-frame
-data_publicacao: 2026-09-22
+data_publicacao: 2026-09-23
 title: "Revestimento externo em steel frame: cinco sistemas de fachada lado a lado"
 seo_title: "Revestimento Externo Steel Frame: 5 Sistemas, 0 no SINAPI"
 description: "EIFS, placa cimentícia com acabamento, siding, fachada ventilada e painel metálico: cinco caminhos de fachada comparados por água, fogo, impacto, juntas e manutenção."
@@ -53,7 +53,7 @@ A ABNT NBR 15498, atualizada em maio de 2021, já faz essa separação ao dividi
 
 São Paulo recebe 1.658,3 mm de chuva por ano, pela Normal Climatológica 1991-2020 do INMET, na estação do Mirante de Santana. Em polegadas, a unidade da literatura de fachada, são 65. Joseph Lstiburek publicou pela Building Science Corporation, em março de 2004, um relatório cuja Figura 4 mapeia a chuva anual da América do Norte e amarra, na legenda, cada faixa a uma estratégia de fachada. Acima de 60 polegadas fica a faixa mais exigente de todas, a que pede tela ventilada com equalização de pressão, um degrau acima da fachada ventilada que o mercado brasileiro conhece. Vedação de face, o sistema aderido sem saída para a água, só aparece abaixo de 20 polegadas.
 
-O relatório de 2004 separa duas estratégias de controle de chuva. A de barreira conta com a massa da parede para armazenar a água que entrou até ela secar, e nasceu para pedra, tijolo e concreto. A de gestão de água aceita que parte da chuva atravessa o revestimento e devolve essa parte para fora por um plano de drenagem com câmara de ar e saída na base. Lstiburek nomeia explicitamente a estrutura de aço leve no segundo grupo, por serem paredes leves, ocas e sensíveis à umidade. E escreve a recomendação sem meio termo: fora das regiões de baixa exposição à chuva, sistemas de vedação de face ou de barreira usados com componentes sensíveis à umidade devem ser evitados.
+O relatório de 2004 separa duas estratégias de controle de chuva. A de barreira conta com a massa da parede para armazenar a água que entrou até ela secar, e nasceu para pedra, tijolo e concreto. A de gestão de água aceita que parte da chuva atravessa o revestimento e devolve essa parte para fora por um plano de drenagem com câmara de ar e saída na base. Lstiburek nomeia explicitamente a estrutura de aço leve no segundo grupo, por serem paredes leves, com cavidade e sensíveis à umidade. E escreve a recomendação sem meio termo: fora das regiões de baixa exposição à chuva, sistemas de vedação de face ou de barreira usados com componentes sensíveis à umidade devem ser evitados.
 
 O EIFS, sigla de exterior insulation and finish system, é o revestimento externo com isolante térmico, formado por placa de EPS colada sobre o substrato, base coat com tela de fibra de vidro e acabamento. Ele existe em duas versões, aderida e drenante, e no Brasil a primeira é a que a pesquisa acadêmica encontrou instalada.
 

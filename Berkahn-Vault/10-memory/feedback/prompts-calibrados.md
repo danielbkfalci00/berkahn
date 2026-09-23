@@ -145,3 +145,14 @@ O gate não pega nada disso por construção. Candidato a check executável: abe
 com número técnico nas duas primeiras linhas, dois-pontos usado como recurso de
 estilo (proibido no prompt e não verificado), e a palavra "blog" fora do último
 parágrafo.
+
+## 2026-09-23 — revisão do Bertevas nos posts de fachada e hidráulica
+
+- **Nunca chamar a parede de LSF de "oca".** Ela tem vedação termoacústica na
+  cavidade, e "oca" vende parede vazia, fraca e barulhenta, que é a objeção que o
+  sistema precisa desfazer. Use "montada em camadas" ou "com cavidade" (termo
+  técnico). Corrigido no post de hidráulica e no artigo de fachada.
+- **Mostrar que a parede acompanha a casa.** Conclusão sugerida para o post de
+  camadas: se a demanda de uma parede mudar depois, dá para abrir o trecho e
+  trocar a placa, sem quebra-quebra, e se a mudança já estiver prevista no projeto
+  nem vira obra. Exemplo dele: corredor que passa a receber um móvel apoiado.
