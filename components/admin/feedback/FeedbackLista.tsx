@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { CheckCircle2, MessageCircle, MessageSquarePlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -9,6 +10,7 @@ import { abrirFeedbackRapido } from "./FeedbackRapido";
 import {
   CATEGORIA_LABEL,
   STATUS_LABEL,
+  parseFiltro,
   type CategoriaFeedback,
   type FiltroFeedback,
   type ItemFeedback,
@@ -50,7 +52,13 @@ const FILTROS: { valor: FiltroFeedback; rotulo: string }[] = [
   { valor: "todos", rotulo: "Todos" },
 ];
 
-export function FeedbackLista({ itens, filtro }: { itens: ItemFeedback[]; filtro: FiltroFeedback }) {
+export function FeedbackLista({ itens, filtro, filtroLocal }: { itens: ItemFeedback[]; filtro: FiltroFeedback; filtroLocal: boolean }) {
+  const searchParams = useSearchParams();
+  const filtroAtivo = filtroLocal ? parseFiltro(searchParams.get("status")) : filtro;
+  const visiveis = filtroLocal && filtroAtivo !== "todos"
+    ? itens.filter((item) => item.status === filtroAtivo)
+    : itens;
+
   return (
     <div className="max-w-3xl space-y-5">
       <header className="flex flex-wrap items-end justify-between gap-3">
@@ -71,10 +79,18 @@ export function FeedbackLista({ itens, filtro }: { itens: ItemFeedback[]; filtro
           <Link
             key={f.valor}
             href={f.valor === "aberto" ? "/admin/feedback" : `/admin/feedback?status=${f.valor}`}
-            aria-current={filtro === f.valor ? "page" : undefined}
+            prefetch={filtroLocal ? false : undefined}
+            onClick={filtroLocal ? (event) => {
+              if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+              event.preventDefault();
+              if (filtroAtivo === f.valor) return;
+              const href = f.valor === "aberto" ? "/admin/feedback" : `/admin/feedback?status=${f.valor}`;
+              window.history.pushState(null, "", href);
+            } : undefined}
+            aria-current={filtroAtivo === f.valor ? "page" : undefined}
             className={cn(
               "flex min-h-11 items-center rounded-md px-3 text-sm font-medium transition-colors",
-              filtro === f.valor ? "bg-neutral-900 text-white" : "text-neutral-600 hover:bg-neutral-100"
+              filtroAtivo === f.valor ? "bg-neutral-900 text-white" : "text-neutral-600 hover:bg-neutral-100"
             )}
           >
             {f.rotulo}
@@ -82,11 +98,11 @@ export function FeedbackLista({ itens, filtro }: { itens: ItemFeedback[]; filtro
         ))}
       </nav>
 
-      {itens.length === 0 ? (
-        <EstadoVazio filtro={filtro} />
+      {visiveis.length === 0 ? (
+        <EstadoVazio filtro={filtroAtivo} />
       ) : (
         <ul className="divide-y divide-neutral-200 overflow-hidden rounded-lg border border-neutral-200 bg-white">
-          {itens.map((item) => (
+          {visiveis.map((item) => (
             <li key={item.id}>
               <Link
                 href={`/admin/feedback/${item.id}`}
@@ -101,7 +117,7 @@ export function FeedbackLista({ itens, filtro }: { itens: ItemFeedback[]; filtro
                 </div>
                 <div className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-neutral-500">
                   <SeloCategoria categoria={item.categoria} />
-                  {filtro === "todos" && <SeloStatus status={item.status} />}
+                  {filtroAtivo === "todos" && <SeloStatus status={item.status} />}
                   <span>{item.autorNome}</span>
                   <span aria-hidden>·</span>
                   <time dateTime={item.atualizadoEm}>{tempoRelativo(item.atualizadoEm)}</time>
@@ -125,6 +141,9 @@ function EstadoVazio({ filtro }: { filtro: FiltroFeedback }) {
         Nada marcado como implementado ainda.
       </p>
     );
+  }
+  if (filtro === "todos") {
+    return <p className="rounded-lg border border-dashed border-neutral-300 bg-white p-8 text-center text-sm text-neutral-500">Nenhum feedback registrado ainda.</p>;
   }
   return (
     <div className="rounded-lg border border-dashed border-neutral-300 bg-white p-8 text-center">
