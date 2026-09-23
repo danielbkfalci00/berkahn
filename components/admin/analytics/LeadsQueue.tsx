@@ -114,9 +114,10 @@ export function LeadsQueue({ initialLeads, total, page, pageCount, kpis, respons
   }, [initialLeads]);
 
   useEffect(() => {
-    if (view === "kanban" && window.matchMedia("(max-width: 767px)").matches) {
-      router.replace(withView(searchParams, "inbox"), { scroll: false });
-    }
+    if (searchParams.get("view") !== "kanban" || !window.matchMedia("(max-width: 767px)").matches) return;
+    const inboxUrl = withView(searchParams, "inbox");
+    if (view === "inbox") window.history.replaceState(null, "", inboxUrl);
+    else router.replace(inboxUrl, { scroll: false });
   }, [router, searchParams, view]);
 
   useEffect(() => {

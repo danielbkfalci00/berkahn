@@ -1,5 +1,6 @@
 import { LeadsQueue, type LeadKpis } from "@/components/admin/analytics/LeadsQueue";
 import { redirect } from "next/navigation";
+import { headers } from "next/headers";
 import { createClient } from "@/lib/supabase/server";
 import type { AdminDataResult, AnalyticsLead, LeadChannel, LeadPriority, LeadResponsible, LeadSegment, LeadStatus } from "@/types/analytics";
 
@@ -34,7 +35,12 @@ interface PageProps {
 export default async function LeadsPage({ searchParams }: PageProps) {
   const params = await searchParams;
   const page = Math.max(1, Number.parseInt(params.page || "1", 10) || 1);
-  const view = params.view === "kanban" ? "kanban" : "inbox";
+  const requestHeaders = await headers();
+  const mobileDevice = requestHeaders.get("sec-ch-ua-mobile") === "?1"
+    || /iPhone|iPod|Android.*Mobile|Mobile/i.test(requestHeaders.get("user-agent") ?? "");
+  // Um link Kanban salvo no celular precisa receber a Inbox paginada já no
+  // primeiro request. A checagem no cliente cobre janelas pequenas em desktop.
+  const view = params.view === "kanban" && !mobileDevice ? "kanban" : "inbox";
   const supabase = await createClient();
   let query = supabase
     .from("leads")
