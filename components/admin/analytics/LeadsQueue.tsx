@@ -76,6 +76,7 @@ export type LeadListItem = Pick<
 
 interface LeadsQueueProps {
   initialLeads: LeadListItem[];
+  allStageLeads: LeadListItem[] | null;
   total: number;
   page: number;
   pageCount: number;
@@ -93,10 +94,11 @@ const EMPTY_MANUAL: ManualLeadInput = {
   mensagem: "",
 };
 
-export function LeadsQueue({ initialLeads, total, page, pageCount, kpis, responsibles, view }: LeadsQueueProps) {
+export function LeadsQueue({ initialLeads, allStageLeads, total, page, pageCount, kpis, responsibles, view }: LeadsQueueProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [leads, setLeads] = useState(initialLeads);
+  const [stageLeads, setStageLeads] = useState(allStageLeads);
   const [manual, setManual] = useState<ManualLeadInput>(EMPTY_MANUAL);
   const [duplicates, setDuplicates] = useState<NonNullable<Awaited<ReturnType<typeof findLeadDuplicates>>["duplicates"]>>([]);
   const [manualOpen, setManualOpen] = useState(false);
@@ -124,6 +126,10 @@ export function LeadsQueue({ initialLeads, total, page, pageCount, kpis, respons
   useEffect(() => {
     setLeads(initialLeads);
   }, [initialLeads]);
+
+  useEffect(() => {
+    setStageLeads(allStageLeads);
+  }, [allStageLeads]);
 
   useEffect(() => {
     if (searchParams.get("view") !== "kanban" || !window.matchMedia("(max-width: 767px)").matches) return;
@@ -165,7 +171,9 @@ export function LeadsQueue({ initialLeads, total, page, pageCount, kpis, respons
 
   function commitStatus(id: string, status: LeadStatus, reason?: string) {
     const previous = leads;
+    const previousStageLeads = stageLeads;
     setLeads((current) => current.map((lead) => (lead.id === id ? { ...lead, status } : lead)));
+    setStageLeads((current) => current?.map((lead) => (lead.id === id ? { ...lead, status } : lead)) ?? null);
     setError(null);
     setSuccess(null);
     setPendingLeadId(id);
@@ -173,6 +181,7 @@ export function LeadsQueue({ initialLeads, total, page, pageCount, kpis, respons
       const result = await updateLeadStatus(id, status, reason);
       if (!result.ok) {
         setLeads(previous);
+        setStageLeads(previousStageLeads);
         setError(result.error || "Não foi possível alterar o status.");
       } else {
         setSuccess("Status atualizado.");
@@ -226,6 +235,21 @@ export function LeadsQueue({ initialLeads, total, page, pageCount, kpis, respons
   const selectedStatus = pendingFilterHref
     ? new URLSearchParams(pendingFilterHref.slice(1)).get("status")
     : searchParams.get("status");
+  const localStageMode = stageLeads !== null && view === "inbox" &&
+    [...searchParams.keys()].every((key) => key === "view" || key === "status" || key === "page");
+  const localPage = Math.max(1, Number.parseInt(searchParams.get("page") || "1", 10) || 1);
+  const stageMatches = localStageMode
+    ? stageLeads.filter((lead) => !searchParams.get("status") || lead.status === searchParams.get("status"))
+    : null;
+  const visibleLeads = stageMatches?.slice((localPage - 1) * 25, localPage * 25) ?? leads;
+  const visibleTotal = stageMatches?.length ?? total;
+  const visiblePage = stageMatches ? localPage : page;
+  const visiblePageCount = stageMatches ? Math.ceil(stageMatches.length / 25) : pageCount;
+
+  function navigateStage(href: string) {
+    setPendingFilterHref(href);
+    if (localStageMode) window.history.pushState(null, "", href);
+  }
 
   function applyFilters(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -275,8 +299,8 @@ export function LeadsQueue({ initialLeads, total, page, pageCount, kpis, respons
       </div>
 
       <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 md:hidden" aria-label="Filtrar por etapa">
-        <StageChip href={withStatus(searchParams, null)} active={!selectedStatus} onNavigate={setPendingFilterHref}>Todos</StageChip>
-        {STATUS.map((item) => <StageChip key={item.value} href={withStatus(searchParams, item.value)} active={selectedStatus === item.value} onNavigate={setPendingFilterHref}>{item.label}</StageChip>)}
+        <StageChip href={withStatus(searchParams, null)} active={!selectedStatus} local={localStageMode} onNavigate={navigateStage}>Todos</StageChip>
+        {STATUS.map((item) => <StageChip key={item.value} href={withStatus(searchParams, item.value)} active={selectedStatus === item.value} local={localStageMode} onNavigate={navigateStage}>{item.label}</StageChip>)}
       </div>
       {pendingFilterHref && <p role="status" className="text-xs text-neutral-500">Atualizando lista de leads…</p>}
 
@@ -347,12 +371,12 @@ export function LeadsQueue({ initialLeads, total, page, pageCount, kpis, respons
           <div className="hidden md:block"><LeadKanban leads={leads} pendingLeadId={pendingLeadId} onStatusChange={changeStatus} /></div>
         </>
       ) : (
-        <LeadInbox leads={leads} pendingLeadId={pendingLeadId} onStatusChange={changeStatus} />
+        <LeadInbox leads={visibleLeads} pendingLeadId={pendingLeadId} onStatusChange={changeStatus} />
       )}
 
       {view === "inbox" && <div className="flex flex-wrap items-center justify-between gap-2 text-sm text-neutral-600">
-        <span>{total} registro{total === 1 ? "" : "s"}</span>
-        <div className="flex items-center gap-3"><PageLink page={page - 1} disabled={page <= 1}><ChevronLeft className="h-4 w-4" /> Anterior</PageLink><span>{page} / {Math.max(pageCount, 1)}</span><PageLink page={page + 1} disabled={page >= pageCount}>Próxima <ChevronRight className="h-4 w-4" /></PageLink></div>
+        <span>{visibleTotal} registro{visibleTotal === 1 ? "" : "s"}</span>
+        <div className="flex items-center gap-3"><PageLink page={visiblePage - 1} disabled={visiblePage <= 1}><ChevronLeft className="h-4 w-4" /> Anterior</PageLink><span>{visiblePage} / {Math.max(visiblePageCount, 1)}</span><PageLink page={visiblePage + 1} disabled={visiblePage >= visiblePageCount}>Próxima <ChevronRight className="h-4 w-4" /></PageLink></div>
       </div>}
 
       {disqualifying && (
@@ -392,9 +416,12 @@ function withStatus(params: URLSearchParams, status: LeadStatus | null): string 
   return `?${next.toString()}`;
 }
 
-function StageChip({ href, active, onNavigate, children }: { href: string; active: boolean; onNavigate: (href: string) => void; children: React.ReactNode }) {
+function StageChip({ href, active, local, onNavigate, children }: { href: string; active: boolean; local: boolean; onNavigate: (href: string) => void; children: React.ReactNode }) {
   return <Link href={href} onClick={(event) => {
-    if (!active && event.button === 0 && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey) onNavigate(href);
+    if (!active && event.button === 0 && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey) {
+      if (local) event.preventDefault();
+      onNavigate(href);
+    }
   }} aria-current={active ? "page" : undefined} className={`inline-flex min-h-11 shrink-0 items-center rounded-full border px-3 text-xs font-medium ${active ? "border-neutral-950 bg-neutral-950 text-white" : "border-neutral-200 bg-white text-neutral-600"}`}>{children}</Link>;
 }
 
