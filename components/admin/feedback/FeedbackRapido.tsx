@@ -111,7 +111,7 @@ export function FeedbackRapido() {
       <Dialog open={aberto} onOpenChange={mudarAberto}>
         <DialogContent
           className={cn(
-            "max-h-[90dvh] overflow-y-auto sm:max-w-md",
+            "max-h-[calc(100dvh-env(safe-area-inset-top)-0.75rem)] overflow-y-auto sm:max-h-[90dvh] sm:max-w-md",
             // Mobile: folha de baixo, colada no rodapé e acima da área segura.
             "max-sm:bottom-0 max-sm:top-auto max-sm:left-0 max-sm:max-w-none max-sm:translate-x-0 max-sm:translate-y-0 max-sm:rounded-t-2xl max-sm:border-x-0 max-sm:border-b-0 max-sm:px-4 max-sm:pb-[calc(1.25rem+env(safe-area-inset-bottom))]",
             "max-sm:data-[state=open]:![--tw-enter-translate-x:0] max-sm:data-[state=open]:![--tw-enter-translate-y:100%]",
