@@ -132,8 +132,8 @@ function PostsToolbar({ table, categories, filters }: PostsToolbarProps) {
               table.setSorting([{ id, desc: sortDesc }])
             }
           >
-            <SelectTrigger className="h-8 w-[180px] bg-white text-xs">
-              <span className="text-neutral-500">Ordenar por:</span>
+            <SelectTrigger aria-label="Ordenar posts" className="h-11 w-[140px] bg-white text-xs sm:h-8 sm:w-[180px]">
+              <span className="hidden text-neutral-500 sm:inline">Ordenar por:</span>
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -147,7 +147,7 @@ function PostsToolbar({ table, categories, filters }: PostsToolbarProps) {
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="sm" className="h-8 bg-white text-xs">
+              <Button variant="outline" size="sm" className="h-11 bg-white text-xs sm:h-8">
                 Colunas <ChevronDown className="ml-1 h-3.5 w-3.5" />
               </Button>
             </DropdownMenuTrigger>
