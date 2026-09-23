@@ -14,7 +14,7 @@ export default function PropostasPage() {
           </p>
         </div>
         <Link href="/admin/propostas/new">
-          <Button className="bg-neutral-900 hover:bg-neutral-800">
+          <Button className="bg-neutral-900 text-white hover:bg-neutral-800 hover:text-white">
             <Plus className="h-4 w-4 mr-2" />
             Nova Proposta
           </Button>

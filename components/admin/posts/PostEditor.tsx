@@ -338,7 +338,7 @@ export function PostEditor({ post }: PostEditorProps) {
             Salvar rascunho
           </Button>
           <Button
-            className="bg-neutral-900 hover:bg-neutral-800"
+            className="bg-neutral-900 text-white hover:bg-neutral-800 hover:text-white"
             onClick={() => handleSave(true)}
             disabled={isSaving || isPublishing}
           >
