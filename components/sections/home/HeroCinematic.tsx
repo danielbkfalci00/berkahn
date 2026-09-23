@@ -111,7 +111,19 @@ export function HeroCinematic() {
         // quadros decodificados ocupariam ~460 MB de memória.
         const bitmaps: (ImageBitmap | undefined)[] = new Array(frameCount);
         const pendingBitmap: boolean[] = new Array(frameCount).fill(false);
-        const BITMAP_WINDOW = 6;
+        const BITMAP_WINDOW = 5;
+        // No máximo duas decodificações em resolução cheia ao mesmo tempo: numa
+        // rolagem rápida a janela anda muitos quadros de uma vez, e disparar
+        // todos juntos atrasava justamente o quadro que ia para a tela.
+        const MAX_FULL_DECODES = 2;
+        let fullDecodes = 0;
+        // Versão leve de TODOS os quadros, decodificada uma vez e mantida: numa
+        // rolagem rápida a posição salta além da janela de resolução cheia, e
+        // sem isso o vídeo congelava até o quadro novo ficar pronto (medido:
+        // até meio segundo parado). Com a imagem em movimento a diferença de
+        // resolução não se nota, e a versão cheia assume assim que chega.
+        const proxies: (ImageBitmap | undefined)[] = new Array(frameCount);
+        let direction = 1; // sentido da rolagem, para decodificar à frente
         let position = 0; // posição fracionária na sequência
         let drawnPosition = -1;
         let isPosterHidden = false;
@@ -129,7 +141,8 @@ export function HeroCinematic() {
         // O foco vertical baixo preserva o piso e a leitura do percurso.
         const VERTICAL_FOCUS = 0.8;
 
-        const sourceFor = (index: number) => bitmaps[index];
+        const PROXY_WIDTH = isMobile ? 304 : 640;
+        const sourceFor = (index: number) => bitmaps[index] ?? proxies[index];
 
         const paint = (source: CanvasImageSource, alpha: number) => {
           const cw = canvas.width;
@@ -181,34 +194,49 @@ export function HeroCinematic() {
           if (!rafId) rafId = requestAnimationFrame(draw);
         };
 
+        // Mantém em resolução cheia os quadros em volta da posição, com o
+        // centro adiantado dois quadros no sentido da rolagem, e decodifica
+        // primeiro os mais próximos.
+        const fullCenter = () => Math.round(position + direction * 2);
         const refreshBitmaps = () => {
-          const center = Math.round(position);
+          const center = fullCenter();
+          const wanted: number[] = [];
           for (let i = 0; i < frameCount; i++) {
             const inside = Math.abs(i - center) <= BITMAP_WINDOW;
             if (!inside && bitmaps[i]) {
               bitmaps[i]!.close();
               bitmaps[i] = undefined;
             } else if (inside && isLoaded[i] && !bitmaps[i] && !pendingBitmap[i]) {
-              pendingBitmap[i] = true;
-              createImageBitmap(blobs[i]!)
-                .then((bitmap) => {
-                  pendingBitmap[i] = false;
-                  if (Math.abs(i - Math.round(position)) <= BITMAP_WINDOW) {
-                    bitmaps[i] = bitmap;
-                    if (Math.abs(i - position) <= 1.5) {
-                      drawnPosition = -1;
-                      requestDraw();
-                    }
-                  } else {
-                    bitmap.close();
-                  }
-                })
-                .catch(() => {
-                  pendingBitmap[i] = false;
-                  // Navegador sem AVIF: recomeça tudo em WebP, uma vez só.
-                  if (format === "avif") switchToWebp();
-                });
+              wanted.push(i);
             }
+          }
+          wanted.sort((x, y) => Math.abs(x - position) - Math.abs(y - position));
+          for (const i of wanted) {
+            if (fullDecodes >= MAX_FULL_DECODES) break;
+            pendingBitmap[i] = true;
+            fullDecodes++;
+            createImageBitmap(blobs[i]!)
+              .then((bitmap) => {
+                if (Math.abs(i - fullCenter()) > BITMAP_WINDOW) {
+                  bitmap.close();
+                  return;
+                }
+                bitmaps[i] = bitmap;
+                // Troca a versão leve pela cheia no quadro que está na tela.
+                if (Math.abs(i - position) <= 1.5) {
+                  drawnPosition = -1;
+                  requestDraw();
+                }
+              })
+              .catch(() => {
+                // Navegador sem AVIF: recomeça tudo em WebP, uma vez só.
+                if (format === "avif") switchToWebp();
+              })
+              .finally(() => {
+                pendingBitmap[i] = false;
+                fullDecodes--;
+                refreshBitmaps();
+              });
           }
         };
 
@@ -237,6 +265,21 @@ export function HeroCinematic() {
               if (requested !== generation) return;
               blobs[index] = blob;
               isLoaded[index] = true;
+              createImageBitmap(blob, { resizeWidth: PROXY_WIDTH, resizeQuality: "medium" })
+                .then((proxy) => {
+                  if (requested !== generation) {
+                    proxy.close();
+                    return;
+                  }
+                  proxies[index] = proxy;
+                  if (Math.abs(index - position) <= 1.5) {
+                    drawnPosition = -1;
+                    requestDraw();
+                  }
+                })
+                .catch(() => {
+                  // A decodificação cheia trata a troca para WebP.
+                });
               refreshBitmaps();
             })
             .catch(() => {
@@ -264,6 +307,8 @@ export function HeroCinematic() {
           format = "webp";
           generation++;
           blobs.fill(undefined);
+          proxies.forEach((proxy) => proxy?.close());
+          proxies.fill(undefined);
           isLoaded.fill(false);
           for (let i = 0; i < EAGER_FRAMES; i++) loadFrame(i);
           nextToLoad = EAGER_FRAMES;
@@ -299,6 +344,7 @@ export function HeroCinematic() {
               ease: "none",
               onUpdate: () => {
                 const previous = Math.round(position);
+                if (frameState.frame !== position) direction = frameState.frame > position ? 1 : -1;
                 position = frameState.frame;
                 if (Math.round(position) !== previous) refreshBitmaps();
                 requestDraw();
@@ -336,6 +382,7 @@ export function HeroCinematic() {
           window.removeEventListener("resize", resize);
           if (rafId) cancelAnimationFrame(rafId);
           bitmaps.forEach((bitmap) => bitmap?.close());
+          proxies.forEach((proxy) => proxy?.close());
           if (backgroundLoader) clearTimeout(backgroundLoader);
           clearTimeout(idleStart);
           window.removeEventListener("scroll", startBackground);
