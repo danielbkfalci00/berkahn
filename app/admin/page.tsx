@@ -1,9 +1,9 @@
-import { createClient } from "@/lib/supabase/server";
 import { DashboardContent } from "@/components/admin/DashboardContent";
 import { DashboardStats } from "@/types/admin";
 import { getAdminSession } from "@/lib/supabase/sessao";
 import { getDashboardLeadOperations } from "@/lib/analytics/leads-queries";
 import type { AdminDataResult } from "@/types/analytics";
+import { redirect } from "next/navigation";
 
 // Helper to format relative time
 function formatRelativeTime(date: string): string {
@@ -28,51 +28,15 @@ export default async function AdminDashboard({
   const { aviso } = await searchParams;
   // Setado pelo middleware quando roleCanAccessPath nega a rota pedida.
   const semPermissao = aviso === "sem-permissao";
-  const supabase = await createClient();
   const session = await getAdminSession();
-
-  // Fetch user info
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  let stats: AdminDataResult<DashboardStats>;
-  try {
-    const { data, error } = await supabase.rpc('get_dashboard_stats');
-    stats = error || !data
-      ? { status: "unavailable", reason: "Não foi possível consultar os indicadores agora." }
-      : { status: "ok", data: data as DashboardStats };
-  } catch (error) {
-    console.error("Dashboard stats indisponíveis", error);
-    stats = { status: "unavailable", reason: "Não foi possível consultar os indicadores agora." };
-  }
-
-  // Fetch recent activity from activity_logs
-  let recentActivity: AdminDataResult<{ id: string; action: string; entity: string; time: string }[]>;
-  try {
-    const { data: logs, error } = await supabase
-      .from('activity_logs')
-      .select('id, action, entity_name, created_at')
-      .order('created_at', { ascending: false })
-      .limit(5);
-
-    if (error || !logs) {
-      recentActivity = { status: "unavailable", reason: "Não foi possível carregar a atividade recente." };
-    } else {
-      recentActivity = { status: "ok", data: logs.map((log) => ({
-        id: log.id,
-        action: log.action,
-        entity: log.entity_name,
-        time: formatRelativeTime(log.created_at),
-      })) };
-    }
-  } catch (error) {
-    console.error("Atividade recente indisponível", error);
-    recentActivity = { status: "unavailable", reason: "Não foi possível carregar a atividade recente." };
-  }
-
+  if (!session) redirect("/admin/login");
+  const { user, membership } = session;
   const canManageCommercial = session?.membership.role === "owner" || session?.membership.role === "comercial";
-  const leadOperations = canManageCommercial ? await getDashboardLeadOperations() : null;
+  const [stats, recentActivity, leadOperations] = await Promise.all([
+    loadStats(),
+    loadRecentActivity(),
+    canManageCommercial ? getDashboardLeadOperations() : Promise.resolve(null),
+  ]);
 
   return (
     <>
@@ -85,12 +49,48 @@ export default async function AdminDashboard({
         </p>
       )}
       <DashboardContent
-      user={user}
-      stats={stats}
-      recentActivity={recentActivity}
-      leadOperations={leadOperations}
-      membership={session?.membership ?? null}
+        fallbackName={user.email?.split("@")[0] ?? null}
+        stats={stats}
+        recentActivity={recentActivity}
+        leadOperations={leadOperations}
+        membership={membership}
       />
     </>
   );
+}
+
+async function loadStats(): Promise<AdminDataResult<DashboardStats>> {
+  try {
+    const session = await getAdminSession();
+    if (!session) throw new Error("Sessão ausente");
+    const { data, error } = await session.supabase.rpc("get_dashboard_stats");
+    return error || !data
+      ? { status: "unavailable", reason: "Não foi possível consultar os indicadores agora." }
+      : { status: "ok", data: data as DashboardStats };
+  } catch (error) {
+    console.error("Dashboard stats indisponíveis", error);
+    return { status: "unavailable", reason: "Não foi possível consultar os indicadores agora." };
+  }
+}
+
+async function loadRecentActivity(): Promise<AdminDataResult<{ id: string; action: string; entity: string; time: string }[]>> {
+  try {
+    const session = await getAdminSession();
+    if (!session) throw new Error("Sessão ausente");
+    const { data: logs, error } = await session.supabase
+      .from("activity_logs")
+      .select("id, action, entity_name, created_at")
+      .order("created_at", { ascending: false })
+      .limit(5);
+    if (error || !logs) return { status: "unavailable", reason: "Não foi possível carregar a atividade recente." };
+    return { status: "ok", data: logs.map((log) => ({
+      id: log.id,
+      action: log.action,
+      entity: log.entity_name,
+      time: formatRelativeTime(log.created_at),
+    })) };
+  } catch (error) {
+    console.error("Atividade recente indisponível", error);
+    return { status: "unavailable", reason: "Não foi possível carregar a atividade recente." };
+  }
 }

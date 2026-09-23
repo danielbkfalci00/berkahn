@@ -52,7 +52,7 @@ export function ColunaPauta({
 
       <div ref={setNodeRef}
         className={cn(
-          "flex max-h-[calc(100vh-22rem)] min-h-24 flex-col gap-2 overflow-y-auto rounded-b-lg bg-[#FAF8F2] p-2 transition-colors",
+          "flex min-h-24 flex-col gap-2 overflow-visible rounded-b-lg bg-[#FAF8F2] p-2 transition-colors md:max-h-[calc(100vh-22rem)] md:overflow-y-auto",
           isOver && pautas.length === 0 && "bg-neutral-100 ring-1 ring-dashed ring-neutral-300"
         )}>
         <SortableContext items={pautas.map((p) => p.id)}

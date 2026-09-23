@@ -10,18 +10,22 @@ export default async function PostsPage() {
 
   // Fetch posts from Supabase
   let posts: Post[] = [];
+  let unavailable = false;
   try {
     const { data, error } = await supabase
       .from('posts')
       .select('*')
       .order('created_at', { ascending: false });
 
-    if (!error && data) {
+    if (error) {
+      unavailable = true;
+      console.error('Posts: failed to load posts', error);
+    } else if (data) {
       posts = data as Post[];
     }
-  } catch {
-    // Table may not exist yet
-    console.log('Posts: table may not exist yet');
+  } catch (error) {
+    unavailable = true;
+    console.error('Posts: failed to load posts', error);
   }
 
   return (
@@ -42,7 +46,13 @@ export default async function PostsPage() {
       </div>
 
       {/* Posts table */}
-      <PostsTable posts={posts} />
+      {unavailable ? (
+        <div role="alert" className="rounded-xl border border-amber-200 bg-amber-50 p-5 text-amber-900">
+          Não foi possível carregar os posts agora. Tente atualizar a página.
+        </div>
+      ) : (
+        <PostsTable posts={posts} />
+      )}
     </div>
   );
 }

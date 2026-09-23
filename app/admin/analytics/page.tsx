@@ -25,7 +25,13 @@ interface PageProps {
 export default async function AnalyticsPage({ searchParams }: PageProps) {
   const { month: queryMonth } = await searchParams;
 
-  const availableMonths = await getAvailableMonths();
+  const [availableMonths, trendPoints, postsMap, historicalBySlug, tasks] = await Promise.all([
+    getAvailableMonths(),
+    getAllTrendPoints(),
+    getPublishedPosts(),
+    getHistoricalPageviewsBySlug(),
+    getTasks(),
+  ]);
 
   if (availableMonths.length === 0) {
     return (
@@ -53,19 +59,12 @@ export default async function AnalyticsPage({ searchParams }: PageProps) {
       ? queryMonth
       : availableMonths[0];
 
-  // Tudo abaixo só depende de currentMonth: uma rodada paralela ao banco em
-  // vez de três em série.
   const prevMonth = previousMonthSlug(currentMonth);
-  const [snapshot, prevSnapshot, trendPoints, postsMap, historicalBySlug, tasks, leadsResult] =
-    await Promise.all([
-      getSnapshot(currentMonth),
-      prevMonth ? getSnapshot(prevMonth) : Promise.resolve(null),
-      getAllTrendPoints(),
-      getPublishedPosts(),
-      getHistoricalPageviewsBySlug(),
-      getTasks(),
-      listarLeadsDoMes(currentMonth),
-    ]);
+  const [snapshot, prevSnapshot, leadsResult] = await Promise.all([
+    getSnapshot(currentMonth),
+    prevMonth ? getSnapshot(prevMonth) : Promise.resolve(null),
+    listarLeadsDoMes(currentMonth),
+  ]);
   if (!snapshot) notFound();
 
   const postPerformance = buildPostPerformance(

@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { User } from "@supabase/supabase-js";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
@@ -28,7 +27,7 @@ interface Activity {
 }
 
 interface DashboardContentProps {
-  user: User | null;
+  fallbackName: string | null;
   stats: AdminDataResult<DashboardStats>;
   recentActivity: AdminDataResult<Activity[]>;
   leadOperations: AdminDataResult<DashboardLeadOperations> | null;
@@ -36,14 +35,14 @@ interface DashboardContentProps {
 }
 
 export function DashboardContent({
-  user,
+  fallbackName,
   stats,
   recentActivity,
   leadOperations,
   membership,
 }: DashboardContentProps) {
   const greeting = getGreeting();
-  const firstName = membership?.nome.split(" ")[0] || user?.email?.split("@")[0] || "Admin";
+  const firstName = membership?.nome.split(" ")[0] || fallbackName || "Admin";
   const canManageContent = membership?.role === "owner" || membership?.role === "conteudo";
   const canManageCommercial = membership?.role === "owner" || membership?.role === "comercial";
   const canReadContent = canManageContent || membership?.role === "viewer";

@@ -34,7 +34,8 @@ export default async function LeadDetailPage({ params }: { params: Promise<{ id:
     supabase.from("lead_responsaveis").select("id,nome,ativo,ordem").eq("recebe_leads", true).order("ativo", { ascending: false }).order("ordem").order("nome"),
   ]);
 
-  if (leadResult.error || !leadResult.data) notFound();
+  if (leadResult.error) throw new Error(`Falha ao carregar lead: ${leadResult.error.message}`);
+  if (!leadResult.data) notFound();
   if (activityResult.error) throw new Error(`Falha ao carregar timeline: ${activityResult.error.message}`);
   if (budgetResult.error) throw new Error(`Falha ao carregar orçamentos: ${budgetResult.error.message}`);
   if (proposalResult.error) throw new Error(`Falha ao carregar propostas: ${proposalResult.error.message}`);

@@ -1,6 +1,7 @@
 "use client";
 
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
+import { useEffect, useRef } from "react";
 import { AnalyticsHeader } from "@/components/admin/analytics/AnalyticsHeader";
 import { Act0Status } from "@/components/admin/analytics/acts/Act0Status";
 import { Act2Origin } from "@/components/admin/analytics/acts/Act2Origin";
@@ -168,8 +169,8 @@ export function AnalyticsContent({
   funilLeads,
 }: AnalyticsContentProps) {
   const searchParams = useSearchParams();
-  const router = useRouter();
   const pathname = usePathname();
+  const reportRef = useRef<HTMLDivElement>(null);
   const requestedComparisonMode = searchParams.get("compare") === "1";
   const requestedTab = searchParams.get("tab");
   const activeTab = ["resumo", "aquisicao", "conteudo", "diagnostico"].includes(requestedTab ?? "")
@@ -202,10 +203,33 @@ export function AnalyticsContent({
   const comparisonMode = requestedComparisonMode && !comparisonDisabled;
 
   function setTab(tab: string) {
+    if (tab === activeTab) return;
     const params = new URLSearchParams(searchParams.toString());
     params.set("tab", tab);
-    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+    // Next synchronizes useSearchParams with the native history API without
+    // requesting a new Server Component payload for this client-only view.
+    window.history.pushState(null, "", `${pathname}?${params.toString()}`);
   }
+
+  useEffect(() => {
+    const openedByPrint: HTMLDetailsElement[] = [];
+    const openDetails = () => {
+      reportRef.current?.querySelectorAll<HTMLDetailsElement>("details:not([open])").forEach((details) => {
+        details.open = true;
+        openedByPrint.push(details);
+      });
+    };
+    const restoreDetails = () => {
+      openedByPrint.splice(0).forEach((details) => { details.open = false; });
+    };
+    window.addEventListener("beforeprint", openDetails);
+    window.addEventListener("afterprint", restoreDetails);
+    return () => {
+      window.removeEventListener("beforeprint", openDetails);
+      window.removeEventListener("afterprint", restoreDetails);
+      restoreDetails();
+    };
+  }, []);
 
   function handleTabKey(event: React.KeyboardEvent<HTMLButtonElement>, currentIndex: number) {
     if (event.key !== "ArrowLeft" && event.key !== "ArrowRight" && event.key !== "Home" && event.key !== "End") return;
@@ -232,7 +256,7 @@ export function AnalyticsContent({
   const summaryKpis = [kpis[0], kpis[1], kpis[3], leadsKpi];
 
   return (
-    <div className="mx-auto max-w-[1400px] space-y-7">
+    <div ref={reportRef} className="mx-auto max-w-[1400px] space-y-7">
       <AnalyticsHeader
         monthLabel={ctx.monthLabel}
         periodStart={ctx.periodStart}

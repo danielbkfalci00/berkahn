@@ -44,7 +44,7 @@ const STATUS: Array<{ value: LeadStatus; label: string }> = [
   { value: "desqualificado", label: "Desqualificado" },
 ];
 
-const INPUT_CLASS = "h-10 w-full rounded-md border border-neutral-300 bg-white px-3 text-sm text-neutral-900 outline-none focus:border-neutral-900 focus:ring-2 focus:ring-neutral-200";
+const INPUT_CLASS = "min-h-11 w-full rounded-md border border-neutral-300 bg-white px-3 text-sm text-neutral-900 outline-none focus:border-neutral-900 focus:ring-2 focus:ring-neutral-200";
 
 function isoToLocalInput(value?: string | null): string {
   if (!value) return "";
@@ -101,18 +101,8 @@ export function LeadsQueue({ initialLeads, total, page, pageCount, kpis, respons
   const [disqualifying, setDisqualifying] = useState<{ id: string; reason: string } | null>(null);
   const [filtersOpen, setFiltersOpen] = useState(false);
   const filtersToggleRef = useRef<HTMLButtonElement>(null);
+  const filterPanelRef = useRef<HTMLFormElement>(null);
   const [, startTransition] = useTransition();
-
-  // No mobile os filtros viram uma sheet fixa sobre a página: Escape fecha e o foco
-  // volta ao botão que abriu, para não deixar o teclado perdido atrás da sheet.
-  useEffect(() => {
-    if (!filtersOpen) return;
-    function onKeyDown(event: KeyboardEvent) {
-      if (event.key === "Escape") closeFilters();
-    }
-    window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
-  }, [filtersOpen]);
 
   function closeFilters() {
     setFiltersOpen(false);
@@ -122,6 +112,36 @@ export function LeadsQueue({ initialLeads, total, page, pageCount, kpis, respons
   useEffect(() => {
     setLeads(initialLeads);
   }, [initialLeads]);
+
+  useEffect(() => {
+    if (searchParams.get("view") !== "kanban" || !window.matchMedia("(max-width: 767px)").matches) return;
+    const inboxUrl = withView(searchParams, "inbox");
+    if (view === "inbox") window.history.replaceState(null, "", inboxUrl);
+    else router.replace(inboxUrl, { scroll: false });
+  }, [router, searchParams, view]);
+
+  useEffect(() => {
+    if (!filtersOpen) return;
+    const panel = filterPanelRef.current;
+    panel?.querySelector<HTMLInputElement>('input[name="q"]')?.focus();
+    function onKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        closeFilters();
+      }
+      if (event.key !== "Tab" || !panel) return;
+      const controls = Array.from(panel.querySelectorAll<HTMLElement>('input:not([type="hidden"]), select, button, a[href]'));
+      if (!controls.length) return;
+      if (event.shiftKey && document.activeElement === controls[0]) {
+        event.preventDefault();
+        controls[controls.length - 1].focus();
+      } else if (!event.shiftKey && document.activeElement === controls[controls.length - 1]) {
+        event.preventDefault();
+        controls[0].focus();
+      }
+    }
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [filtersOpen]);
 
   function changeStatus(id: string, status: LeadStatus) {
     if (status === "desqualificado") {
@@ -203,7 +223,7 @@ export function LeadsQueue({ initialLeads, total, page, pageCount, kpis, respons
         <button
           type="button"
           onClick={() => setManualOpen((value) => !value)}
-          className="inline-flex h-10 items-center gap-2 rounded-md bg-neutral-900 px-4 text-sm font-medium text-white hover:bg-neutral-700"
+          className="inline-flex min-h-11 items-center gap-2 rounded-md bg-neutral-900 px-4 text-sm font-medium text-white hover:bg-neutral-700"
         >
           <Plus className="h-4 w-4" /> Cadastrar lead
         </button>
@@ -262,7 +282,7 @@ export function LeadsQueue({ initialLeads, total, page, pageCount, kpis, respons
               <p className="mt-2 text-xs">Revise os registros. Clique novamente em “Salvar mesmo assim” para preservar este contato separado.</p>
             </div>
           )}
-          <button disabled={pendingLeadId === "manual"} className="rounded-md bg-neutral-900 px-4 py-2 text-sm text-white disabled:opacity-50">
+          <button disabled={pendingLeadId === "manual"} className="min-h-11 rounded-md bg-neutral-900 px-4 py-2 text-sm text-white disabled:opacity-50">
             {pendingLeadId === "manual" ? "Salvando…" : confirmDuplicate ? "Salvar mesmo assim" : "Verificar e salvar"}
           </button>
         </form>
@@ -271,10 +291,10 @@ export function LeadsQueue({ initialLeads, total, page, pageCount, kpis, respons
       {error && <p role="alert" className="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p>}
       {success && <p role="status" className="rounded-md border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-800">{success}</p>}
 
-      <button ref={filtersToggleRef} type="button" aria-expanded={filtersOpen} onClick={() => setFiltersOpen((value) => !value)} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-neutral-300 bg-white px-4 text-sm font-medium md:hidden"><SlidersHorizontal className="h-4 w-4" /> Filtros{activeFilterCount > 0 ? ` (${activeFilterCount})` : ""}</button>
+      <button ref={filtersToggleRef} type="button" aria-expanded={filtersOpen} aria-controls="lead-filters" onClick={() => setFiltersOpen((value) => !value)} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-neutral-300 bg-white px-4 text-sm font-medium md:hidden"><SlidersHorizontal className="h-4 w-4" /> Filtros{activeFilterCount > 0 ? ` (${activeFilterCount})` : ""}</button>
 
       {filtersOpen && <div aria-hidden="true" onClick={closeFilters} className="fixed inset-0 z-40 bg-neutral-950/30 md:hidden" />}
-      <form className={`${filtersOpen ? "grid" : "hidden"} fixed inset-x-3 bottom-[calc(5rem+env(safe-area-inset-bottom))] z-50 max-h-[70vh] gap-3 overflow-y-auto rounded-lg border border-neutral-200 bg-white p-4 shadow-2xl md:static md:grid md:max-h-none md:grid-cols-2 md:shadow-none lg:grid-cols-4 xl:grid-cols-5`}>
+      <form ref={filterPanelRef} id="lead-filters" role={filtersOpen ? "dialog" : undefined} aria-modal={filtersOpen ? true : undefined} aria-label={filtersOpen ? "Filtrar leads" : undefined} className={`${filtersOpen ? "grid" : "hidden"} fixed inset-x-3 bottom-[calc(5rem+env(safe-area-inset-bottom))] z-50 max-h-[70vh] gap-3 overflow-y-auto rounded-lg border border-neutral-200 bg-white p-4 shadow-2xl md:static md:grid md:max-h-none md:grid-cols-2 md:shadow-none lg:grid-cols-4 xl:grid-cols-5`}>
         <div className="flex items-center justify-between md:hidden"><p className="text-sm font-semibold text-neutral-900">Filtros</p><button type="button" onClick={closeFilters} aria-label="Fechar filtros" className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-md text-neutral-500 hover:text-neutral-900"><X className="h-5 w-5" /></button></div>
         <input type="hidden" name="view" value={view} />
         <input name="q" defaultValue={searchParams.get("q") || ""} placeholder="Nome, telefone ou email" className={`${INPUT_CLASS} md:col-span-2`} />
@@ -288,8 +308,8 @@ export function LeadsQueue({ initialLeads, total, page, pageCount, kpis, respons
         <label className="flex items-center gap-2 text-xs text-neutral-600"><input type="checkbox" name="semResponsavel" value="1" defaultChecked={searchParams.get("semResponsavel") === "1"} /> Sem responsável</label>
         <label className="flex items-center gap-2 text-xs text-neutral-600"><input type="checkbox" name="semAcao" value="1" defaultChecked={searchParams.get("semAcao") === "1"} /> Sem próxima ação</label>
         <label className="flex items-center gap-2 text-xs text-neutral-600"><input type="checkbox" name="arquivados" value="1" defaultChecked={searchParams.get("arquivados") === "1"} /> Arquivados</label>
-        <button className="inline-flex h-10 items-center justify-center gap-2 rounded-md border border-neutral-300 text-sm font-medium hover:bg-neutral-50"><RefreshCw className="h-4 w-4" /> Aplicar</button>
-        <Link href={`?view=${view}`} className="inline-flex h-10 items-center justify-center text-sm text-neutral-600 underline-offset-4 hover:underline">Limpar filtros</Link>
+        <button className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-neutral-300 text-sm font-medium hover:bg-neutral-50"><RefreshCw className="h-4 w-4" /> Aplicar</button>
+        <Link href={`?view=${view}`} className="inline-flex min-h-11 items-center justify-center text-sm text-neutral-600 underline-offset-4 hover:underline">Limpar filtros</Link>
       </form>
 
       {view === "kanban" ? (
@@ -302,7 +322,7 @@ export function LeadsQueue({ initialLeads, total, page, pageCount, kpis, respons
         <LeadInbox leads={leads} pendingLeadId={pendingLeadId} onStatusChange={changeStatus} />
       )}
 
-      {view === "inbox" && <div className="flex items-center justify-between text-sm text-neutral-600">
+      {view === "inbox" && <div className="flex flex-wrap items-center justify-between gap-2 text-sm text-neutral-600">
         <span>{total} registro{total === 1 ? "" : "s"}</span>
         <div className="flex items-center gap-3"><PageLink page={page - 1} disabled={page <= 1}><ChevronLeft className="h-4 w-4" /> Anterior</PageLink><span>{page} / {Math.max(pageCount, 1)}</span><PageLink page={page + 1} disabled={page >= pageCount}>Próxima <ChevronRight className="h-4 w-4" /></PageLink></div>
       </div>}
@@ -313,7 +333,7 @@ export function LeadsQueue({ initialLeads, total, page, pageCount, kpis, respons
             <h2 id="disqualify-title" className="font-semibold text-neutral-900">Desqualificar lead</h2>
             <p className="mt-1 text-sm text-neutral-500">Registre o motivo para manter o histórico comercial útil.</p>
             <textarea autoFocus value={disqualifying.reason} onChange={(event) => setDisqualifying({ ...disqualifying, reason: event.target.value })} className={`${INPUT_CLASS} mt-4 min-h-24 py-2`} placeholder="Ex.: região não atendida ou prazo incompatível" />
-            <div className="mt-4 flex justify-end gap-2"><button type="button" onClick={() => setDisqualifying(null)} className="rounded-md border border-neutral-300 px-3 py-2 text-sm">Cancelar</button><button type="button" disabled={!disqualifying.reason.trim()} onClick={() => { commitStatus(disqualifying.id, "desqualificado", disqualifying.reason.trim()); setDisqualifying(null); }} className="rounded-md bg-neutral-900 px-3 py-2 text-sm text-white disabled:opacity-40">Confirmar</button></div>
+            <div className="mt-4 flex justify-end gap-2"><button type="button" onClick={() => setDisqualifying(null)} className="min-h-11 rounded-md border border-neutral-300 px-3 py-2 text-sm">Cancelar</button><button type="button" disabled={!disqualifying.reason.trim()} onClick={() => { commitStatus(disqualifying.id, "desqualificado", disqualifying.reason.trim()); setDisqualifying(null); }} className="min-h-11 rounded-md bg-neutral-900 px-3 py-2 text-sm text-white disabled:opacity-40">Confirmar</button></div>
           </div>
         </div>
       )}
@@ -345,7 +365,7 @@ function withStatus(params: URLSearchParams, status: LeadStatus | null): string 
 }
 
 function StageChip({ href, active, children }: { href: string; active: boolean; children: React.ReactNode }) {
-  return <Link href={href} aria-current={active ? "page" : undefined} className={`inline-flex min-h-10 shrink-0 items-center rounded-full border px-3 text-xs font-medium ${active ? "border-neutral-950 bg-neutral-950 text-white" : "border-neutral-200 bg-white text-neutral-600"}`}>{children}</Link>;
+  return <Link href={href} aria-current={active ? "page" : undefined} className={`inline-flex min-h-11 shrink-0 items-center rounded-full border px-3 text-xs font-medium ${active ? "border-neutral-950 bg-neutral-950 text-white" : "border-neutral-200 bg-white text-neutral-600"}`}>{children}</Link>;
 }
 
 function priorityMeta(priority: LeadPriority) {
@@ -515,9 +535,12 @@ export function LeadDetail({
     <div className="mx-auto max-w-6xl space-y-5">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <Link href="/admin/leads" className="text-sm text-neutral-500 hover:text-neutral-900">← Voltar para leads</Link>
+          <Link href="/admin/leads" className="inline-flex min-h-11 items-center text-sm text-neutral-500 hover:text-neutral-900">← Voltar para leads</Link>
           <h1 className="mt-2 text-2xl font-semibold text-neutral-900">{lead.nome}</h1>
           <p className="text-sm text-neutral-500">Recebido em {new Intl.DateTimeFormat("pt-BR", { dateStyle: "medium", timeStyle: "short" }).format(new Date(lead.criado_em))}</p>
+          <p className={`mt-3 inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm ${lead.proxima_acao_em && new Date(lead.proxima_acao_em) < new Date() ? "bg-red-50 font-medium text-red-800" : "bg-neutral-100 text-neutral-700"}`}>
+            <Clock3 className="h-4 w-4" /> Próxima ação: {lead.proxima_acao_em ? new Intl.DateTimeFormat("pt-BR", { dateStyle: "short", timeStyle: "short" }).format(new Date(lead.proxima_acao_em)) : "não agendada"}
+          </p>
         </div>
         <div className="grid w-full grid-cols-3 gap-2 sm:flex sm:w-auto sm:flex-wrap">
           {lead.telefone && <a href={`tel:${phoneDigits}`} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-neutral-300 bg-white px-3 text-sm font-medium"><Phone className="h-4 w-4" /> Ligar</a>}
@@ -550,7 +573,7 @@ export function LeadDetail({
             <form className="mt-4 grid gap-3" onSubmit={(event) => { event.preventDefault(); run(() => registerLeadActivity(lead.id, activityType, note), () => setNote("")); }}>
               <select value={activityType} onChange={(event) => setActivityType(event.target.value as "nota" | "contato")} className={INPUT_CLASS}><option value="contato">Contato realizado</option><option value="nota">Nota</option></select>
               <textarea required value={note} onChange={(event) => setNote(event.target.value)} placeholder="Registre o resultado do contato ou uma nota operacional" className={`${INPUT_CLASS} min-h-24 py-2`} />
-              <button disabled={isPending} className="w-fit rounded-md bg-neutral-900 px-4 py-2 text-sm text-white disabled:opacity-50">Registrar atividade</button>
+              <button disabled={isPending} className="min-h-11 w-fit rounded-md bg-neutral-900 px-4 py-2 text-sm text-white disabled:opacity-50">Registrar atividade</button>
             </form>
             <ol className="mt-6 space-y-4 border-l border-neutral-200 pl-5">
               {activities.length === 0 ? <li className="text-sm text-neutral-500">Nenhuma atividade registrada.</li> : activities.map((activity) => (
@@ -712,8 +735,8 @@ function LeadArtifacts({
               <p className="truncate text-sm font-medium text-neutral-800">{artifact.nome}</p>
               <p className="text-[11px] text-neutral-500">{artifact.estado === "pending" ? "Upload pendente" : artifact.tipo === "upload" && artifact.size_bytes ? `${(artifact.size_bytes / 1024 / 1024).toFixed(1)} MB` : artifact.tipo === "drive_folder" ? "Pasta do Drive" : "Link externo"}</p>
             </div>
-            <button type="button" disabled={busyId === artifact.id || artifact.estado === "pending"} onClick={() => openArtifact(artifact)} className="rounded p-2 text-neutral-500 hover:bg-neutral-100 hover:text-neutral-900 disabled:opacity-40" aria-label={`Abrir ${artifact.nome}`}><ExternalLink className="h-4 w-4" /></button>
-            <button type="button" disabled={busyId === artifact.id} onClick={() => removeArtifact(artifact)} className="rounded p-2 text-neutral-500 hover:bg-red-50 hover:text-red-700 disabled:opacity-40" aria-label={`Remover ${artifact.nome}`}><Trash2 className="h-4 w-4" /></button>
+            <button type="button" disabled={busyId === artifact.id || artifact.estado === "pending"} onClick={() => openArtifact(artifact)} className="inline-flex min-h-11 min-w-11 items-center justify-center rounded text-neutral-500 hover:bg-neutral-100 hover:text-neutral-900 disabled:opacity-40" aria-label={`Abrir ${artifact.nome}`}><ExternalLink className="h-4 w-4" /></button>
+            <button type="button" disabled={busyId === artifact.id} onClick={() => removeArtifact(artifact)} className="inline-flex min-h-11 min-w-11 items-center justify-center rounded text-neutral-500 hover:bg-red-50 hover:text-red-700 disabled:opacity-40" aria-label={`Remover ${artifact.nome}`}><Trash2 className="h-4 w-4" /></button>
           </div>
         ))}
       </div>

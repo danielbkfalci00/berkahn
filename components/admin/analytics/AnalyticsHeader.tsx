@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter, usePathname, useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Printer, SplitSquareHorizontal, X } from "lucide-react";
 import { PeriodSelect } from "./PeriodSelect";
@@ -48,7 +48,6 @@ export function AnalyticsHeader({
   comparabilityReason,
   sources,
 }: AnalyticsHeaderProps) {
-  const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
@@ -59,7 +58,7 @@ export function AnalyticsHeader({
     } else {
       params.set("compare", "1");
     }
-    router.replace(`${pathname}?${params.toString()}`);
+    window.history.pushState(null, "", `${pathname}?${params.toString()}`);
   };
 
   return (
