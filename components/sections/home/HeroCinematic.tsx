@@ -73,8 +73,12 @@ function HeroPoster() {
   );
 }
 
-const framePath = (index: number, isMobile: boolean) =>
-  `/videos/hero/${isMobile ? "seq-m" : "seq"}/f_${String(index + 1).padStart(3, "0")}.webp`;
+// AVIF qualidade 50: 42% menor que o WebP q78 e mais fiel à fonte (SSIM
+// 0,990 contra 0,984 em luminância, medido sobre quadros do vídeo original).
+// O WebP fica como reserva para navegador que não decodifica AVIF.
+type FrameFormat = "avif" | "webp";
+const framePath = (index: number, isMobile: boolean, format: FrameFormat) =>
+  `/videos/hero/${isMobile ? "seq-m" : "seq"}/f_${String(index + 1).padStart(3, "0")}.${format}`;
 
 export function HeroCinematic() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -94,55 +98,150 @@ export function HeroCinematic() {
 
         const isMobile = window.matchMedia("(max-width: 767px)").matches;
         const frameCount = isMobile ? FRAME_COUNT_MOBILE : FRAME_COUNT_DESKTOP;
-        const images: HTMLImageElement[] = new Array(frameCount);
+        // Bytes de cada quadro, ainda comprimidos (7,7 MB no total). Decodificar
+        // a partir do Blob acontece sempre fora da thread principal; a partir
+        // de um <img> o Chrome pode decodificar na thread principal.
+        const blobs: (Blob | undefined)[] = new Array(frameCount);
+        let format: FrameFormat = "avif";
         const isLoaded: boolean[] = new Array(frameCount).fill(false);
-        let currentIndex = 0;
+        // Quadros já decodificados (ImageBitmap), só numa janela em volta do
+        // atual: decodificar um WebP de 1920px na hora do drawImage travava a
+        // tela por dezenas de ms a cada troca de quadro. createImageBitmap
+        // decodifica fora da thread principal. A janela existe porque os 56
+        // quadros decodificados ocupariam ~460 MB de memória.
+        const bitmaps: (ImageBitmap | undefined)[] = new Array(frameCount);
+        const pendingBitmap: boolean[] = new Array(frameCount).fill(false);
+        const BITMAP_WINDOW = 6;
+        let position = 0; // posição fracionária na sequência
+        let drawnPosition = -1;
         let isPosterHidden = false;
+        let rafId = 0;
+        // A mistura de dois quadros dobra o custo de pintura. Em aparelho que
+        // não dá conta (desenho acima de ~10 ms, três vezes seguidas), o hero
+        // volta ao quadro único e não liga a mistura de novo.
+        let blend = true;
+        let slowDraws = 0;
+
+        // Tamanho nativo dos quadros de cada sequência.
+        const frameW = isMobile ? 608 : 1920;
+        const frameH = 1080;
 
         // O foco vertical baixo preserva o piso e a leitura do percurso.
         const VERTICAL_FOCUS = 0.8;
 
-        const draw = (index: number) => {
-          let nearest = Math.min(index, frameCount - 1);
-          while (nearest > 0 && !isLoaded[nearest]) nearest--;
-          if (!isLoaded[nearest]) return;
+        const sourceFor = (index: number) => bitmaps[index];
 
-          const img = images[nearest];
+        const paint = (source: CanvasImageSource, alpha: number) => {
+          const cw = canvas.width;
+          const ch = canvas.height;
+          const scale = Math.max(cw / frameW, ch / frameH);
+          const w = frameW * scale;
+          const h = frameH * scale;
+          context2d.globalAlpha = alpha;
+          context2d.drawImage(source, (cw - w) / 2, (ch - h) * VERTICAL_FOCUS, w, h);
+        };
+
+        // Desenha a posição fracionária misturando os dois quadros vizinhos.
+        // Sem isso a imagem saltava de quadro em quadro (56 quadros para 2,6
+        // telas de rolagem, um salto a cada ~40px).
+        const draw = () => {
+          rafId = 0;
+          const started = performance.now();
+          if (position === drawnPosition) return;
+          let base = Math.min(Math.floor(position), frameCount - 1);
+          while (base > 0 && !sourceFor(base)) base--;
+          const baseSource = sourceFor(base);
+          if (!baseSource) return;
+
           // O padrão do Chrome é suavização "low": qualquer ampliação saía
           // serrilhada. Redefinido a cada desenho porque redimensionar o
           // canvas zera o estado do contexto.
           context2d.imageSmoothingEnabled = true;
           context2d.imageSmoothingQuality = "high";
-          const cw = canvas.width;
-          const ch = canvas.height;
-          const scale = Math.max(cw / img.naturalWidth, ch / img.naturalHeight);
-          const w = img.naturalWidth * scale;
-          const h = img.naturalHeight * scale;
-          context2d.drawImage(img, (cw - w) / 2, (ch - h) * VERTICAL_FOCUS, w, h);
+          paint(baseSource, 1);
+          const t = position - base;
+          const nextSource = base + 1 < frameCount ? sourceFor(base + 1) : undefined;
+          if (blend && t > 0.02 && nextSource) paint(nextSource, t);
+          context2d.globalAlpha = 1;
+          drawnPosition = position;
+
+          if (blend) {
+            slowDraws = performance.now() - started > 10 ? slowDraws + 1 : 0;
+            if (slowDraws >= 3) blend = false;
+          }
 
           if (!isPosterHidden && posterWrapRef.current) {
             posterWrapRef.current.style.opacity = "0";
             isPosterHidden = true;
           }
         };
+        // No máximo um desenho por quadro de tela, por mais eventos de
+        // rolagem que cheguem nesse intervalo.
+        const requestDraw = () => {
+          if (!rafId) rafId = requestAnimationFrame(draw);
+        };
 
+        const refreshBitmaps = () => {
+          const center = Math.round(position);
+          for (let i = 0; i < frameCount; i++) {
+            const inside = Math.abs(i - center) <= BITMAP_WINDOW;
+            if (!inside && bitmaps[i]) {
+              bitmaps[i]!.close();
+              bitmaps[i] = undefined;
+            } else if (inside && isLoaded[i] && !bitmaps[i] && !pendingBitmap[i]) {
+              pendingBitmap[i] = true;
+              createImageBitmap(blobs[i]!)
+                .then((bitmap) => {
+                  pendingBitmap[i] = false;
+                  if (Math.abs(i - Math.round(position)) <= BITMAP_WINDOW) {
+                    bitmaps[i] = bitmap;
+                    if (Math.abs(i - position) <= 1.5) {
+                      drawnPosition = -1;
+                      requestDraw();
+                    }
+                  } else {
+                    bitmap.close();
+                  }
+                })
+                .catch(() => {
+                  pendingBitmap[i] = false;
+                  // Navegador sem AVIF: recomeça tudo em WebP, uma vez só.
+                  if (format === "avif") switchToWebp();
+                });
+            }
+          }
+        };
+
+        // O canvas não precisa de mais pixels que o próprio quadro: num
+        // monitor retina ele tinha 2880px de largura para um vídeo de 1920, e
+        // pintava 2,25x mais pixels sem ganhar nitidez nenhuma.
         const resize = () => {
-          const dpr = Math.min(window.devicePixelRatio || 1, 2);
-          canvas.width = Math.round(canvas.clientWidth * dpr);
-          canvas.height = Math.round(canvas.clientHeight * dpr);
-          draw(currentIndex);
+          const cssW = canvas.clientWidth;
+          const cssH = canvas.clientHeight;
+          const coverScale = Math.max(cssW / frameW, cssH / frameH);
+          const dpr = Math.max(1, Math.min(window.devicePixelRatio || 1, 2, 1 / coverScale));
+          canvas.width = Math.round(cssW * dpr);
+          canvas.height = Math.round(cssH * dpr);
+          drawnPosition = -1;
+          requestDraw();
         };
         resize();
         window.addEventListener("resize", resize);
 
+        let generation = 0;
         const loadFrame = (index: number) => {
-          const img = new window.Image();
-          img.src = framePath(index, isMobile);
-          img.onload = () => {
-            isLoaded[index] = true;
-            if (Math.abs(index - currentIndex) <= 2) draw(currentIndex);
-          };
-          images[index] = img;
+          const requested = generation;
+          fetch(framePath(index, isMobile, format))
+            .then((response) => (response.ok ? response.blob() : Promise.reject(response.status)))
+            .then((blob) => {
+              if (requested !== generation) return;
+              blobs[index] = blob;
+              isLoaded[index] = true;
+              refreshBitmaps();
+            })
+            .catch(() => {
+              // Quadro que falhou fica de fora; o desenho usa o vizinho.
+            });
         };
 
         // Quatro e não seis: com os frames em 1920 cada um pesa ~180 KB, e o
@@ -161,6 +260,16 @@ export function HeroCinematic() {
         // O resto da sequência (até 7,7 MB) só começa quando a pessoa rola ou
         // depois de 2,5 s parada. Antes começava junto com a página e disputava
         // banda e CPU com o resto do carregamento.
+        const switchToWebp = () => {
+          format = "webp";
+          generation++;
+          blobs.fill(undefined);
+          isLoaded.fill(false);
+          for (let i = 0; i < EAGER_FRAMES; i++) loadFrame(i);
+          nextToLoad = EAGER_FRAMES;
+          if (started) loadRemaining();
+        };
+
         let started = false;
         const startBackground = () => {
           if (started) return;
@@ -189,11 +298,10 @@ export function HeroCinematic() {
               duration: 1,
               ease: "none",
               onUpdate: () => {
-                const index = Math.round(frameState.frame);
-                if (index !== currentIndex) {
-                  currentIndex = index;
-                  draw(index);
-                }
+                const previous = Math.round(position);
+                position = frameState.frame;
+                if (Math.round(position) !== previous) refreshBitmaps();
+                requestDraw();
               },
             },
             0
@@ -231,6 +339,8 @@ export function HeroCinematic() {
 
         return () => {
           window.removeEventListener("resize", resize);
+          if (rafId) cancelAnimationFrame(rafId);
+          bitmaps.forEach((bitmap) => bitmap?.close());
           if (backgroundLoader) clearTimeout(backgroundLoader);
           clearTimeout(idleStart);
           window.removeEventListener("scroll", startBackground);
