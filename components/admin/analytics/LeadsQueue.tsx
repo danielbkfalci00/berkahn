@@ -496,21 +496,59 @@ function LeadQuickView({ lead, preview, onClose, onRestoreFocus, onStatusChange,
   error: string | null;
   success: string | null;
 }) {
+  const [dragY, setDragY] = useState(0);
+  const dragStart = useRef<{ y: number; at: number } | null>(null);
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  useEffect(() => () => { if (closeTimer.current) clearTimeout(closeTimer.current); }, []);
+  useEffect(() => { setDragY(0); }, [lead?.id]);
+
+  function startDismissGesture(event: React.PointerEvent<HTMLElement>) {
+    if (window.innerWidth >= 768 || event.pointerType === "mouse" || (event.target as HTMLElement).closest("button, a, input, select, textarea")) return;
+    dragStart.current = { y: event.clientY, at: performance.now() };
+    event.currentTarget.setPointerCapture(event.pointerId);
+  }
+
+  function moveDismissGesture(event: React.PointerEvent<HTMLElement>) {
+    if (!dragStart.current) return;
+    setDragY(Math.max(0, Math.min(420, event.clientY - dragStart.current.y)));
+  }
+
+  function endDismissGesture(event: React.PointerEvent<HTMLElement>) {
+    const start = dragStart.current;
+    if (!start) return;
+    dragStart.current = null;
+    const distance = Math.max(0, event.clientY - start.y);
+    const velocity = distance / Math.max(1, performance.now() - start.at);
+    if (distance > 110 || (distance > 45 && velocity > 0.6)) {
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        onClose();
+        return;
+      }
+      setDragY(window.innerHeight);
+      closeTimer.current = setTimeout(onClose, 180);
+    } else {
+      setDragY(0);
+    }
+  }
+
   const phoneDigits = lead?.telefone?.replace(/\D/g, "") || "";
   const whatsappDigits = phoneDigits.length === 10 || phoneDigits.length === 11 ? `55${phoneDigits}` : phoneDigits;
   const details = preview?.status === "ok" ? preview.data : null;
   return <DialogPrimitive.Root open={Boolean(lead)} onOpenChange={(open) => { if (!open) onClose(); }}>
     <DialogPrimitive.Portal>
       <DialogPrimitive.Overlay className="fixed inset-0 z-[150] bg-black/45" />
-      {lead && <DialogPrimitive.Content onCloseAutoFocus={(event) => { event.preventDefault(); onRestoreFocus(); }} className="fixed inset-x-0 bottom-0 z-[151] flex max-h-[calc(100dvh-env(safe-area-inset-top))] min-h-[70dvh] flex-col overflow-hidden rounded-t-2xl bg-white shadow-2xl outline-none md:inset-y-0 md:left-auto md:right-0 md:w-[min(32rem,100vw)] md:max-h-none md:min-h-0 md:rounded-none">
-        <header className="flex items-start justify-between gap-4 border-b border-neutral-200 px-5 pb-4 pt-5">
+      {lead && <DialogPrimitive.Content onCloseAutoFocus={(event) => { event.preventDefault(); onRestoreFocus(); }} style={{ transform: `translateY(${dragY}px)`, transitionDuration: dragStart.current ? "0ms" : undefined }} className="fixed inset-x-0 bottom-0 z-[151] flex h-[min(42rem,calc(100dvh-env(safe-area-inset-top)-0.5rem))] flex-col overflow-hidden rounded-t-2xl bg-white shadow-2xl outline-none transition-transform duration-200 ease-out motion-reduce:transition-none md:inset-y-0 md:left-auto md:right-0 md:h-auto md:w-[min(32rem,100vw)] md:rounded-none">
+        <header onPointerDown={startDismissGesture} onPointerMove={moveDismissGesture} onPointerUp={endDismissGesture} onPointerCancel={() => { dragStart.current = null; setDragY(0); }} className="border-b border-neutral-200 px-5 pb-4 pt-2 touch-none md:pt-5 md:touch-auto">
+          <div aria-hidden className="mx-auto mb-3 h-1 w-10 rounded-full bg-neutral-300 md:hidden" />
+          <div className="flex items-start justify-between gap-4">
           <div className="min-w-0">
             <DialogPrimitive.Title className="truncate text-xl font-semibold text-neutral-950">{lead.nome}</DialogPrimitive.Title>
             <DialogPrimitive.Description className="mt-1 truncate text-sm text-neutral-500">{lead.email || lead.telefone || "Sem contato cadastrado"}</DialogPrimitive.Description>
           </div>
           <DialogPrimitive.Close aria-label="Fechar prévia do lead" className="-mr-2 -mt-2 inline-flex min-h-11 min-w-11 items-center justify-center rounded-md text-neutral-500 hover:bg-neutral-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900"><X className="h-5 w-5" /></DialogPrimitive.Close>
+          </div>
         </header>
-        <div className="flex-1 space-y-6 overflow-y-auto px-5 py-5">
+        <div className="min-h-0 flex-1 space-y-6 overflow-y-auto px-5 py-5">
           <div className="grid grid-cols-3 gap-2">
             {phoneDigits && <a href={`tel:${phoneDigits}`} className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-md border border-neutral-300 text-sm font-medium focus-visible:outline-2 focus-visible:outline-neutral-900"><Phone className="h-4 w-4" /> Ligar</a>}
             {phoneDigits && <a href={`https://wa.me/${whatsappDigits}`} target="_blank" rel="noreferrer" className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-md bg-neutral-950 text-sm font-medium text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900"><MessageCircle className="h-4 w-4" /> WhatsApp</a>}
@@ -528,7 +566,7 @@ function LeadQuickView({ lead, preview, onClose, onRestoreFocus, onStatusChange,
           </section>
           <section className="space-y-3">
             <h2 className="text-sm font-semibold text-neutral-900">Sobre este contato</h2>
-            {preview?.status === "loading" && <p role="status" className="text-sm text-neutral-500">Carregando contexto…</p>}
+            {preview?.status === "loading" && <div role="status" aria-label="Carregando contexto do lead" className="grid grid-cols-2 gap-3 animate-pulse motion-reduce:animate-none"><span className="h-10 rounded bg-neutral-100" /><span className="h-10 rounded bg-neutral-100" /><span className="h-10 rounded bg-neutral-100" /><span className="h-10 rounded bg-neutral-100" /></div>}
             {preview?.status === "unavailable" && <p role="alert" className="text-sm text-amber-800">{preview.reason}</p>}
             {details && <>
               <dl className="grid grid-cols-2 gap-x-4 gap-y-3 text-sm">

@@ -87,6 +87,8 @@ const navigation = [
   },
 ];
 
+export const primaryAdminPaths = navigation.slice(0, 3).map((item) => item.href);
+
 export function AdminSidebar({ membership }: { membership: AdminMembership | null }) {
   const pathname = usePathname();
   const router = useRouter();
