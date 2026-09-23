@@ -18,6 +18,17 @@ export interface PushDispatchResult {
   configured: boolean;
 }
 
+// Feedback novo (034) vai só para owners, que são quem decide o status. Não há
+// preferência própria: o volume é baixo e desligar o push inteiro já cobre quem
+// não quer. Lead continua respeitando as duas preferências da 031.
+function isEligible(
+  tipo: string,
+  member: { role: string; notificar_novos_leads: boolean; notificar_acoes_vencidas: boolean }
+): boolean {
+  if (tipo === "novo_feedback") return member.role === "owner";
+  return tipo === "novo_lead" ? member.notificar_novos_leads : member.notificar_acoes_vencidas;
+}
+
 export async function dispatchLeadPushNotifications(): Promise<PushDispatchResult> {
   const publicKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY?.trim();
   const privateKey = process.env.VAPID_PRIVATE_KEY?.trim();
@@ -55,9 +66,7 @@ export async function dispatchLeadPushNotifications(): Promise<PushDispatchResul
   for (const notification of notifications || []) {
     const payload = notification.payload as unknown as PushPayload;
     const eligibleUsers = new Set((members || [])
-      .filter((member) => notification.tipo === "novo_lead"
-        ? member.notificar_novos_leads
-        : member.notificar_acoes_vencidas)
+      .filter((member) => isEligible(notification.tipo, member))
       .map((member) => member.user_id)
       .filter(Boolean));
     const eligibleSubscriptions = (subscriptions || []).filter((subscription) => eligibleUsers.has(subscription.user_id));

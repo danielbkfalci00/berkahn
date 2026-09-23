@@ -197,6 +197,20 @@ node scripts/watermark-images.mjs --src="<dir>" --pick="a.jpeg,b.jpeg" --out="<d
 
 Flags: `--src` `--out` (default `<src>/com-marca-dagua`) `--logo` `--frac=0.58` `--opacity=0.15` `--color=auto|white|black` `--halo` `--halo-opacity=0.55` `--pick=a,b` `--limit=N` `--dry-run`. **Dependencia**: `sharp`. Read-only nos originais. Doc da entrega: `Berkahn-Vault/40-content/materiais/watermark-clube-quinta-dos-lagos.md`.
 
+### 9. `admin/feedback.mjs` — mural de feedback do admin (2026-09)
+
+Opera pelo terminal o mural de `/admin/feedback` (migration 034): lista sugestões, mostra a conversa, responde e marca o que foi implementado. Usa service role, então a CLI grava `autor_nome = "Claude"` e `origem = 'cli'` (a UI mostra o selo "via Claude") e registra o `activity_logs` ela mesma na mudança de status, em nome do owner ativo com `user_name = "Claude (CLI)"`.
+
+```bash
+node scripts/admin/feedback.mjs listar                      # abertos (padrão)
+node scripts/admin/feedback.mjs listar --status=todos --json
+node scripts/admin/feedback.mjs ver <id>
+node scripts/admin/feedback.mjs responder <id> --arquivo=scripts/.cache/resposta.txt --dry-run
+node scripts/admin/feedback.mjs status <id> implementado --nota="PR #123"
+```
+
+O texto da resposta vem sempre de arquivo (argv mutila acento e aspas no Windows). Sem a 034 aplicada, qualquer comando sai com código 2 dizendo isso. Doc: `Berkahn-Vault/60-arquitetura/admin-feedback.md`.
+
 ## Tech debt verificado
 
 A varredura de 405 arquivos encontrou zero JWT Supabase e zero `sb_secret_`

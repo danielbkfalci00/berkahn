@@ -17,6 +17,7 @@ import {
   KanbanSquare,
   Inbox,
   MoreHorizontal,
+  MessageSquarePlus,
   X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -25,6 +26,7 @@ import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import { disableCurrentAdminPush } from "@/components/admin/AdminPwa";
 import { roleCanAccessPath } from "@/lib/admin/access";
+import { EVENTO_FEEDBACK_MUDOU } from "@/components/admin/feedback/FeedbackRapido";
 import type { AdminMembership } from "@/types/analytics";
 
 const navigation = [
@@ -72,6 +74,11 @@ const navigation = [
     name: "Propostas",
     href: "/admin/propostas",
     icon: FileSpreadsheet,
+  },
+  {
+    name: "Feedback",
+    href: "/admin/feedback",
+    icon: MessageSquarePlus,
   },
   {
     name: "Configurações",
@@ -123,6 +130,27 @@ export function AdminSidebar({ membership }: { membership: AdminMembership | nul
       document.removeEventListener("keydown", closeOnEscape);
     };
   }, [mobileOpen]);
+
+  // Mesmo raciocínio do badge de leads: o COUNT só refaz ao entrar/sair do
+  // mural ou quando o formulário rápido avisa que criou um item, nunca a cada
+  // navegação. Tabela ausente (034 não aplicada) devolve erro e o badge some.
+  const [openFeedback, setOpenFeedback] = useState(0);
+  const [feedbackTick, setFeedbackTick] = useState(0);
+  const feedbackRefreshKey = pathname.startsWith("/admin/feedback") ? pathname : "fora-do-feedback";
+  useEffect(() => {
+    const bump = () => setFeedbackTick((n) => n + 1);
+    window.addEventListener(EVENTO_FEEDBACK_MUDOU, bump);
+    return () => window.removeEventListener(EVENTO_FEEDBACK_MUDOU, bump);
+  }, []);
+  useEffect(() => {
+    if (!membership) return;
+    const supabase = createClient();
+    void supabase
+      .from("feedback_itens")
+      .select("id", { count: "exact", head: true })
+      .eq("status", "aberto")
+      .then(({ count, error }) => setOpenFeedback(error ? 0 : count ?? 0));
+  }, [membership, feedbackRefreshKey, feedbackTick]);
 
   const handleLogout = async () => {
     const supabase = createClient();
@@ -231,6 +259,18 @@ export function AdminSidebar({ membership }: { membership: AdminMembership | nul
                     collapsed && "absolute left-9 top-1"
                   )}>
                     {unseenLeads > 99 ? "99+" : unseenLeads}
+                  </span>
+                )}
+                {item.name === "Feedback" && openFeedback > 0 && (
+                  <span
+                    aria-label={`${openFeedback} abertos`}
+                    className={cn(
+                      "ml-auto min-w-5 rounded-full px-1.5 py-0.5 text-center text-[10px] font-semibold",
+                      isActive ? "bg-white text-neutral-900" : "bg-neutral-200 text-neutral-700",
+                      collapsed && "absolute left-9 top-1"
+                    )}
+                  >
+                    {openFeedback > 99 ? "99+" : openFeedback}
                   </span>
                 )}
               </Link>

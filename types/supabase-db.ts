@@ -490,6 +490,89 @@ export type Database = {
           },
         ]
       }
+      feedback_itens: {
+        Row: {
+          atualizado_em: string
+          autor_id: string | null
+          autor_nome: string
+          categoria: string
+          criado_em: string
+          id: string
+          implementado_em: string | null
+          implementado_por: string | null
+          nota_implementacao: string | null
+          pagina_origem: string | null
+          status: string
+          titulo: string
+        }
+        Insert: {
+          atualizado_em?: string
+          autor_id?: string | null
+          autor_nome: string
+          categoria?: string
+          criado_em?: string
+          id?: string
+          implementado_em?: string | null
+          implementado_por?: string | null
+          nota_implementacao?: string | null
+          pagina_origem?: string | null
+          status?: string
+          titulo: string
+        }
+        Update: {
+          atualizado_em?: string
+          autor_id?: string | null
+          autor_nome?: string
+          categoria?: string
+          criado_em?: string
+          id?: string
+          implementado_em?: string | null
+          implementado_por?: string | null
+          nota_implementacao?: string | null
+          pagina_origem?: string | null
+          status?: string
+          titulo?: string
+        }
+        Relationships: []
+      }
+      feedback_mensagens: {
+        Row: {
+          autor_id: string | null
+          autor_nome: string
+          corpo: string
+          criado_em: string
+          id: string
+          item_id: string
+          origem: string
+        }
+        Insert: {
+          autor_id?: string | null
+          autor_nome: string
+          corpo: string
+          criado_em?: string
+          id?: string
+          item_id: string
+          origem?: string
+        }
+        Update: {
+          autor_id?: string | null
+          autor_nome?: string
+          corpo?: string
+          criado_em?: string
+          id?: string
+          item_id?: string
+          origem?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "feedback_mensagens_item_id_fkey"
+            columns: ["item_id"]
+            isOneToOne: false
+            referencedRelation: "feedback_itens"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       lead_responsaveis: {
         Row: {
           ativo: boolean
@@ -1320,6 +1403,10 @@ export type Database = {
       schedule_monthly_lead_retention: { Args: { p_function_url: string }; Returns: number }
       enqueue_overdue_lead_pushes: { Args: never; Returns: number }
       schedule_lead_push_dispatch: { Args: { p_dispatch_url: string }; Returns: number }
+      set_feedback_status: {
+        Args: { p_id: string; p_nota: string | null; p_status: string }
+        Returns: undefined
+      }
       set_lead_retention_exception: {
         Args: { p_ativo: boolean; p_id: string; p_motivo: string | null }
         Returns: undefined
