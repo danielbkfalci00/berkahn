@@ -32,7 +32,8 @@ export function AdminLayoutClient({ children, membership }: AdminLayoutClientPro
       <AdminSidebar membership={membership} />
       <div className="lg:pl-64">
         <AdminHeader membership={membership} />
-        <main className="px-4 pb-[calc(5.5rem+env(safe-area-inset-bottom))] pt-4 sm:p-6 lg:pb-6">
+        {/* Espaço de rolagem para os últimos controles não ficarem sob o feedback flutuante. */}
+        <main className="px-4 pb-[calc(10rem+env(safe-area-inset-bottom))] pt-4 sm:px-6 sm:pb-40 sm:pt-6 lg:pb-24 print:pb-0">
           {children}
         </main>
       </div>
