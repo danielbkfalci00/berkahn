@@ -166,18 +166,21 @@ export function validarNovoFeedback(input: {
   descricao?: unknown;
   paginaOrigem?: unknown;
 }): Validado<NovoFeedback> {
-  const titulo = typeof input.titulo === "string" ? input.titulo.trim().replace(/\s+/g, " ") : "";
+  const tituloInformado = typeof input.titulo === "string" ? input.titulo.trim().replace(/\s+/g, " ") : "";
+  const descricao = typeof input.descricao === "string" ? input.descricao.trim() : "";
+  if (descricao.length > LIMITES_FEEDBACK.corpoMax) {
+    return { ok: false, erro: `A descrição aceita até ${LIMITES_FEEDBACK.corpoMax} caracteres.` };
+  }
+  // O título é opcional na captura rápida; o banco continua recebendo um
+  // título válido, derivado do começo da descrição quando necessário.
+  const titulo = tituloInformado || descricao.replace(/\s+/g, " ").slice(0, 100);
   if (titulo.length < LIMITES_FEEDBACK.tituloMin) {
-    return { ok: false, erro: `O título precisa de ao menos ${LIMITES_FEEDBACK.tituloMin} caracteres.` };
+    return { ok: false, erro: `Escreva um título ou uma descrição com pelo menos ${LIMITES_FEEDBACK.tituloMin} caracteres.` };
   }
   if (titulo.length > LIMITES_FEEDBACK.tituloMax) {
     return { ok: false, erro: `O título aceita até ${LIMITES_FEEDBACK.tituloMax} caracteres.` };
   }
   if (!isCategoriaFeedback(input.categoria)) return { ok: false, erro: "Escolha uma categoria." };
-  const descricao = typeof input.descricao === "string" ? input.descricao.trim() : "";
-  if (descricao.length > LIMITES_FEEDBACK.corpoMax) {
-    return { ok: false, erro: `A descrição aceita até ${LIMITES_FEEDBACK.corpoMax} caracteres.` };
-  }
   return {
     ok: true,
     valor: { titulo, categoria: input.categoria, descricao, paginaOrigem: normalizarPagina(input.paginaOrigem) },

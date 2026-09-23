@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useTransition } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { Loader2, MessageSquarePlus } from "lucide-react";
@@ -17,6 +17,7 @@ import {
   CATEGORIAS_FEEDBACK,
   CATEGORIA_LABEL,
   LIMITES_FEEDBACK,
+  validarNovoFeedback,
   type CategoriaFeedback,
 } from "@/types/feedback";
 
@@ -44,6 +45,8 @@ export function FeedbackRapido() {
   const [erro, setErro] = useState<string | null>(null);
   const [criadoId, setCriadoId] = useState<string | null>(null);
   const [pendente, iniciar] = useTransition();
+  const tituloRef = useRef<HTMLInputElement>(null);
+  const descricaoRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
     const abrir = () => {
@@ -73,8 +76,14 @@ export function FeedbackRapido() {
     event.preventDefault();
     if (pendente) return;
     setErro(null);
+    const validado = validarNovoFeedback({ titulo, categoria, descricao, paginaOrigem: origem });
+    if (!validado.ok) {
+      setErro(validado.erro);
+      (titulo.trim() ? tituloRef : descricaoRef).current?.focus();
+      return;
+    }
     iniciar(async () => {
-      const { data, error } = await criarFeedback({ titulo, categoria, descricao, paginaOrigem: origem });
+      const { data, error } = await criarFeedback(validado.valor);
       if (error) setErro(error);
       if (data?.id) {
         setCriadoId(data.id);
@@ -121,7 +130,7 @@ export function FeedbackRapido() {
           <div className="mx-auto -mt-2 mb-1 h-1 w-10 rounded-full bg-neutral-200 sm:hidden" aria-hidden />
           <DialogTitle className="text-base">Enviar feedback</DialogTitle>
           <DialogDescription className="text-xs text-neutral-500">
-            Sugestão, bug ou ideia sobre o admin. Todo o time vê e pode responder.
+            Descreva a sugestão ou o problema. O título é opcional; todo o time pode responder.
           </DialogDescription>
 
           {criadoId ? (
@@ -144,13 +153,14 @@ export function FeedbackRapido() {
             <form onSubmit={enviar} className="space-y-4">
               <div className="space-y-1.5">
                 <label htmlFor="feedback-titulo" className="text-xs font-medium text-neutral-700">
-                  Título
+                  Título (opcional)
                 </label>
                 <input
+                  ref={tituloRef}
                   id="feedback-titulo"
                   autoFocus
                   value={titulo}
-                  onChange={(e) => setTitulo(e.target.value)}
+                  onChange={(e) => { setTitulo(e.target.value); setErro(null); }}
                   maxLength={LIMITES_FEEDBACK.tituloMax}
                   placeholder="Ex.: filtro de leads por cidade"
                   className="min-h-11 w-full rounded-md border border-neutral-200 px-3 text-base outline-none focus:border-neutral-500 sm:text-sm"
@@ -184,9 +194,10 @@ export function FeedbackRapido() {
                   Descrição
                 </label>
                 <textarea
+                  ref={descricaoRef}
                   id="feedback-descricao"
                   value={descricao}
-                  onChange={(e) => setDescricao(e.target.value)}
+                  onChange={(e) => { setDescricao(e.target.value); setErro(null); }}
                   maxLength={LIMITES_FEEDBACK.corpoMax}
                   rows={4}
                   placeholder="O que acontece hoje e o que ajudaria."
@@ -199,13 +210,13 @@ export function FeedbackRapido() {
                 )}
               </div>
 
-              {erro && <p role="alert" className="text-xs text-red-600">{erro}</p>}
+              {erro && <p role="alert" className="text-sm text-red-700">{erro}</p>}
 
               <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
                 <Button type="button" variant="outline" className="min-h-11" onClick={() => mudarAberto(false)}>
                   Cancelar
                 </Button>
-                <Button type="submit" className="min-h-11" disabled={pendente || titulo.trim().length < LIMITES_FEEDBACK.tituloMin}>
+                <Button type="submit" className="min-h-11" disabled={pendente}>
                   {pendente && <Loader2 className="mr-1.5 h-4 w-4 animate-spin" />}
                   Enviar
                 </Button>

@@ -31,10 +31,29 @@ interface BeforeInstallPromptEvent extends Event {
   userChoice: Promise<{ outcome: "accepted" | "dismissed" }>;
 }
 
+const INSTALL_PROMPT_CHANGED = "admin-pwa:install-prompt-changed";
+let pendingInstallPrompt: BeforeInstallPromptEvent | null = null;
+
 export function AdminPwaRegistration() {
   useEffect(() => {
-    if (!("serviceWorker" in navigator) || !isAdminOrigin()) return;
-    void navigator.serviceWorker.register("/admin-sw.js", { scope: "/admin/" });
+    const capture = (event: Event) => {
+      event.preventDefault();
+      pendingInstallPrompt = event as BeforeInstallPromptEvent;
+      window.dispatchEvent(new Event(INSTALL_PROMPT_CHANGED));
+    };
+    const clear = () => {
+      pendingInstallPrompt = null;
+      window.dispatchEvent(new Event(INSTALL_PROMPT_CHANGED));
+    };
+    window.addEventListener("beforeinstallprompt", capture);
+    window.addEventListener("appinstalled", clear);
+    if ("serviceWorker" in navigator && isAdminOrigin()) {
+      void navigator.serviceWorker.register("/admin-sw.js", { scope: "/admin/" });
+    }
+    return () => {
+      window.removeEventListener("beforeinstallprompt", capture);
+      window.removeEventListener("appinstalled", clear);
+    };
   }, []);
   return null;
 }
@@ -69,18 +88,16 @@ export function AdminPushSettings({ devices, configured, canReceivePush, prefere
 
   useEffect(() => {
     setInstalled(window.matchMedia("(display-mode: standalone)").matches);
-    const capture = (event: Event) => {
-      event.preventDefault();
-      setInstallPrompt(event as BeforeInstallPromptEvent);
-    };
+    const syncPrompt = () => setInstallPrompt(pendingInstallPrompt);
+    syncPrompt();
     const complete = () => {
       setInstalled(true);
       setInstallPrompt(null);
     };
-    window.addEventListener("beforeinstallprompt", capture);
+    window.addEventListener(INSTALL_PROMPT_CHANGED, syncPrompt);
     window.addEventListener("appinstalled", complete);
     return () => {
-      window.removeEventListener("beforeinstallprompt", capture);
+      window.removeEventListener(INSTALL_PROMPT_CHANGED, syncPrompt);
       window.removeEventListener("appinstalled", complete);
     };
   }, []);
@@ -192,17 +209,23 @@ export function AdminPushSettings({ devices, configured, canReceivePush, prefere
 
   async function install() {
     if (!installPrompt) return;
-    await installPrompt.prompt();
-    const choice = await installPrompt.userChoice;
-    if (choice.outcome === "accepted") setMessage({ kind: "ok", text: "Admin instalado neste dispositivo." });
-    setInstallPrompt(null);
+    try {
+      await installPrompt.prompt();
+      const choice = await installPrompt.userChoice;
+      if (choice.outcome === "accepted") setMessage({ kind: "ok", text: "Admin instalado neste dispositivo." });
+    } catch {
+      setMessage({ kind: "error", text: "O navegador não abriu a instalação. Use o menu do Chrome ou Edge para instalar este site como aplicativo." });
+    } finally {
+      pendingInstallPrompt = null;
+      setInstallPrompt(null);
+    }
   }
 
   return (
     <div className="space-y-4">
       <div className="flex flex-col gap-3 rounded-md border border-neutral-200 p-4 sm:flex-row sm:items-center sm:justify-between">
         <div><p className="font-medium text-neutral-900">Aplicativo Berkahn Admin</p><p className="mt-0.5 text-sm text-neutral-500">Instale para abrir em tela própria e receber alertas neste dispositivo.</p></div>
-        {installed ? <span className="text-sm font-medium text-emerald-700">Instalado</span> : installPrompt ? <button type="button" onClick={install} className="inline-flex h-10 items-center justify-center gap-2 rounded-md bg-neutral-900 px-4 text-sm font-medium text-white"><Download className="h-4 w-4" />Instalar</button> : <p className="max-w-xs text-xs text-neutral-500">No iPhone, use Compartilhar → Adicionar à Tela de Início. Em outros navegadores, use o menu “Instalar app”.</p>}
+        {installed ? <span className="text-sm font-medium text-emerald-700">Instalado</span> : installPrompt ? <button type="button" onClick={install} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md bg-neutral-900 px-4 text-sm font-medium text-white"><Download className="h-4 w-4" />Instalar</button> : <p className="max-w-sm text-xs leading-relaxed text-neutral-600">No PC, abra admin.berkahn.com.br/admin diretamente no Chrome ou Edge e use o ícone de instalação na barra de endereço ou o menu ⋮ → Instalar este site como app. Navegadores integrados podem não oferecer essa opção. No iPhone, use Compartilhar → Adicionar à Tela de Início.</p>}
       </div>
       {!configured && <p className="rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-900">A PWA pode ser instalada, mas o envio de alertas aguarda as chaves VAPID no ambiente de produção.</p>}
       {configured && !supported && <p className="rounded-md bg-amber-50 px-3 py-2 text-sm text-amber-900">Este navegador não oferece Web Push. O CRM continua funcionando normalmente.</p>}
