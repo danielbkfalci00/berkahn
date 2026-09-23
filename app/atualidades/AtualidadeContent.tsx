@@ -58,6 +58,7 @@ export function AtualidadeContent({
     <MasonryGrid
       posts={filteredPosts}
       title={activeCategory === "Todos" ? "Todos os artigos" : activeCategory}
+      description="Guias, custos, normas e decisões para construir melhor em Light Steel Frame."
       filter={
         <CategoryFilter
           categories={categories}

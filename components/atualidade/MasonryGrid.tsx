@@ -13,6 +13,8 @@ interface MasonryGridProps {
   emptyMessage?: string;
   /** Título da lista; muda com a categoria filtrada. */
   title?: string;
+  /** Frase curta sob o título. */
+  description?: string;
   /** Controles de filtro, renderizados sob o título. */
   filter?: ReactNode;
 }
@@ -22,6 +24,7 @@ export function MasonryGrid({
   variant = "masonry",
   emptyMessage = "Ainda não há publicações nesta categoria.",
   title = "Todos os artigos",
+  description,
   filter,
 }: MasonryGridProps) {
   const [displayCount, setDisplayCount] = useState(POSTS_PER_PAGE);
@@ -56,6 +59,7 @@ export function MasonryGrid({
               {posts.length} {posts.length === 1 ? "artigo" : "artigos"}
             </p>
           </div>
+          {description && <p className="mt-4 max-w-xl text-base leading-relaxed text-black-70">{description}</p>}
           {filter && <div className="mt-8">{filter}</div>}
         </div>
 
