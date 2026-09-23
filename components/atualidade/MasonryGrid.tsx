@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import type { BlogPost } from "@/types/blog";
 import { ArticleCard, ArticleCardMinimal } from "./ArticleCard";
 import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
@@ -11,12 +11,18 @@ interface MasonryGridProps {
   posts: BlogPost[];
   variant?: "masonry" | "minimal";
   emptyMessage?: string;
+  /** Título da lista; muda com a categoria filtrada. */
+  title?: string;
+  /** Controles de filtro, renderizados sob o título. */
+  filter?: ReactNode;
 }
 
 export function MasonryGrid({
   posts,
   variant = "masonry",
   emptyMessage = "Ainda não há publicações nesta categoria.",
+  title = "Todos os artigos",
+  filter,
 }: MasonryGridProps) {
   const [displayCount, setDisplayCount] = useState(POSTS_PER_PAGE);
 
@@ -29,65 +35,67 @@ export function MasonryGrid({
   }
 
   const visiblePosts = posts.slice(0, displayCount);
-  const bentoPosts = visiblePosts.slice(0, 5);
-  const remainingPosts = visiblePosts.slice(5);
-  const hasMore = displayCount < posts.length;
+  const leadPosts = visiblePosts.slice(0, 2);
+  const restPosts = visiblePosts.slice(2);
+  const remaining = posts.length - displayCount;
 
   return (
-    <section className="bg-off-white py-16 md:py-24">
+    <section className="bg-off-white pb-2xl pt-16 md:pb-3xl md:pt-24" aria-labelledby="arquivo-title">
       <div className="container">
-        <RevealOnScroll>
-          <div className="mb-10 flex items-end justify-between gap-6 border-b-[3px] border-black pb-5 md:mb-14">
-            <div>
-              <p className="mb-3 font-tech text-[10px] lowercase tracking-wide text-black-50 md:text-xs">
-                arquivo editorial
-              </p>
-              <h2 className="font-display text-4xl font-semibold tracking-tight md:text-6xl">
-                Mais artigos
-              </h2>
-            </div>
-            <p
-              role="status"
-              aria-live="polite"
-              className="shrink-0 font-tech text-[10px] lowercase tracking-wide text-black-50 md:text-xs"
+        <div className="mb-10 md:mb-14">
+          <div className="flex items-end justify-between gap-6">
+            <h2
+              id="arquivo-title"
+              className="font-display text-[clamp(2.2rem,1.2rem+3vw,4.2rem)] font-semibold leading-none tracking-[-0.04em]"
             >
-              {String(visiblePosts.length).padStart(2, "0")} / {String(posts.length).padStart(2, "0")}
+              {title}
+            </h2>
+            {/* Só para leitor de tela: as pílulas já mostram as contagens, e um
+                número visível aqui divergia delas (o destaque fica fora da lista). */}
+            <p role="status" aria-live="polite" className="sr-only">
+              {posts.length} {posts.length === 1 ? "artigo" : "artigos"}
             </p>
           </div>
+          {filter && <div className="mt-8">{filter}</div>}
+        </div>
 
-          {visiblePosts.length > 0 ? (
-            <>
-              <BentoGrid posts={bentoPosts} />
-
-              {remainingPosts.length > 0 && (
-                <div className="mt-8 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-                  {remainingPosts.map((post) => (
-                    <ArticleCard key={post.id} post={post} />
-                  ))}
-                </div>
-              )}
-            </>
-          ) : (
-            <div className="border-b-[3px] border-black py-20">
-              <p className="max-w-xl font-display text-2xl font-medium leading-tight tracking-tight md:text-3xl">
-                {emptyMessage}
-              </p>
+        {visiblePosts.length > 0 ? (
+          <>
+            {/* Os dois primeiros abrem maiores, lado a lado; o resto em três
+                colunas. Antes era um bento de cinco com tamanhos variados e
+                depois uma grade uniforme, sem motivo de leitura para a troca. */}
+            <div className="grid gap-x-8 gap-y-12 md:grid-cols-2">
+              {leadPosts.map((post, index) => (
+                <RevealOnScroll key={post.id} delay={index * 0.08}>
+                  <ArticleCard post={post} size="large" />
+                </RevealOnScroll>
+              ))}
             </div>
-          )}
-        </RevealOnScroll>
 
-        {hasMore && (
-          <div className="mt-14 text-center md:mt-20">
+            {restPosts.length > 0 && (
+              <div className="mt-16 grid gap-x-8 gap-y-14 border-t border-black-10 pt-16 md:grid-cols-2 lg:grid-cols-3">
+                {restPosts.map((post, index) => (
+                  <RevealOnScroll key={post.id} delay={(index % 3) * 0.08}>
+                    <ArticleCard post={post} />
+                  </RevealOnScroll>
+                ))}
+              </div>
+            )}
+          </>
+        ) : (
+          <p className="max-w-xl py-20 font-display text-2xl font-medium leading-tight tracking-tight md:text-3xl">
+            {emptyMessage}
+          </p>
+        )}
+
+        {remaining > 0 && (
+          <div className="mt-16 flex justify-center md:mt-20">
             <button
               type="button"
-              onClick={() =>
-                setDisplayCount((current) =>
-                  Math.min(current + POSTS_PER_PAGE, posts.length)
-                )
-              }
-              className="border-[3px] border-black px-7 py-4 font-tech text-xs lowercase tracking-wide text-black transition-colors duration-300 hover:bg-black hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-black"
+              onClick={() => setDisplayCount((current) => Math.min(current + POSTS_PER_PAGE, posts.length))}
+              className="inline-flex h-12 items-center gap-2 rounded-full border border-black px-7 text-sm font-medium text-black transition-colors duration-300 hover:bg-black hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2"
             >
-              carregar mais · {Math.min(POSTS_PER_PAGE, posts.length - displayCount)}
+              Mostrar mais {Math.min(POSTS_PER_PAGE, remaining)}
             </button>
           </div>
         )}
@@ -116,31 +124,6 @@ function MinimalGrid({ posts }: { posts: BlogPost[] }) {
         </div>
       </div>
     </section>
-  );
-}
-
-export function BentoGrid({ posts }: { posts: BlogPost[] }) {
-  if (posts.length === 0) return null;
-
-  const layouts = [
-    "lg:col-span-7",
-    "lg:col-span-5",
-    "lg:col-span-4",
-    "lg:col-span-4",
-    "lg:col-span-4",
-  ];
-
-  return (
-    <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-12">
-      {posts.map((post, index) => (
-        <div
-          key={post.id}
-          className={index === 0 ? layouts[index] : `${layouts[index]} md:col-span-1`}
-        >
-          <ArticleCard post={post} size={index === 0 ? "large" : "small"} />
-        </div>
-      ))}
-    </div>
   );
 }
 

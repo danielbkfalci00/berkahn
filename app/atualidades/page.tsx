@@ -7,9 +7,9 @@ import { HeroEditorial } from "@/components/atualidade/HeroEditorial";
 import { CTA } from "@/components/sections/CTA";
 
 export const metadata: Metadata = {
-  title: "Atualidades | Berkahn Steel Frame",
+  title: "Atualidades | Berkahn",
   description:
-    "Artigos e guias sobre Steel Frame: custos, prazos, comparativos e tendências da construção industrializada. Blog da Berkahn Construtora em São Paulo.",
+    "Artigos e guias sobre Light Steel Frame: custos, prazos, comparativos e tendências da construção industrializada. Blog da Berkahn Construtora em São Paulo.",
   keywords: [
     "steel frame notícias",
     "construção industrializada",
@@ -20,9 +20,9 @@ export const metadata: Metadata = {
     "tendências construção",
   ],
   openGraph: {
-    title: "Atualidades | Berkahn Steel Frame",
+    title: "Atualidades | Berkahn",
     description:
-      "Artigos e guias sobre Steel Frame: custos, prazos, comparativos e tendências da construção industrializada. Blog da Berkahn.",
+      "Artigos e guias sobre Light Steel Frame: custos, prazos, comparativos e tendências da construção industrializada. Blog da Berkahn.",
     type: "website",
   },
   alternates: {
@@ -95,9 +95,9 @@ export default async function AtualidadePage() {
         {JSON.stringify({
           "@context": "https://schema.org",
           "@type": "CollectionPage",
-          name: "Atualidades | Berkahn Steel Frame",
+          name: "Atualidades | Berkahn",
           description:
-            "Artigos e guias sobre Steel Frame: custos, prazos, comparativos e tendências da construção industrializada.",
+            "Artigos e guias sobre Light Steel Frame: custos, prazos, comparativos e tendências da construção industrializada.",
           url: "https://www.berkahn.com.br/atualidades",
           mainEntity: {
             "@type": "ItemList",
@@ -131,7 +131,7 @@ export default async function AtualidadePage() {
             featuredPostId={featuredPost?.id}
             featuredPostCategory={featuredPost?.category}
           />
-          <CTA />
+          <CTA variant="editorial" />
         </main>
       </div>
     </div>

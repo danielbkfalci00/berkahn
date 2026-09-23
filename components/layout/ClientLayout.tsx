@@ -48,4 +48,5 @@ const FULL_BLEED_ROUTES = new Set([
   "/comercial-industrial",
   "/perguntas-frequentes",
   "/sustentabilidade",
+  "/atualidades",
 ]);
