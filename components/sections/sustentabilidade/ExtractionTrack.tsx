@@ -87,8 +87,8 @@ export function ExtractionTrack() {
                   src={EXTRACTION_SECTION.image.src}
                   alt={EXTRACTION_SECTION.image.alt}
                   fill
-                  quality={85}
-                  sizes="max(54vw, 205vh)"
+                  quality={80}
+                  sizes="(max-width: 1023px) 100vh, max(54vw, 205vh)"
                   className={`object-cover grayscale contrast-[1.08] ${EXTRACTION_SECTION.image.focus ?? ""}`}
                 />
               </div>
@@ -100,8 +100,8 @@ export function ExtractionTrack() {
                   src={HERO.image.src}
                   alt=""
                   fill
-                  quality={85}
-                  sizes="max(54vw, 205vh)"
+                  quality={80}
+                  sizes="(max-width: 1023px) 100vh, max(54vw, 205vh)"
                   className="object-cover saturate-[.9] contrast-[.98]"
                 />
               </div>
