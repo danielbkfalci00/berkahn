@@ -117,3 +117,31 @@ gate que originou a v1.2.
 ## Como sinalizar no vault
 
 Notas com `locked: true` no frontmatter têm essa proteção. Hook `validate-write` (futuro) bloqueia edits sem flag explícita.
+
+## 2026-09-22 — post da fachada, três reprovações e um leitor externo
+
+O post de `revestimento-externo-steel-frame` passou em 20 de 20 no gate quatro vezes
+e foi reprovado quatro vezes. O Bruno escreveu "esse assunto não entendi" e o
+Bertevas, sem ter combinado, "ficou meio confuso mesmo". Duas pessoas chegando na
+mesma palavra, como em 03/09, e aqui isso vale como calibragem.
+
+- **Não abrir pelo dado técnico que o leitor não tem na cabeça.** Chuva anual em
+  mm, conversão para polegadas e mapa de relatório estrangeiro são prova, não
+  gancho. Quem escolhe fachada não pensa em chuva.
+- **A pergunta precisa ser a dúvida que a pessoa já tem.** "Quanto chove onde você
+  vai construir?" foi reprovada como estranha. "Aquela fachada que você salvou
+  como referência" foi reprovada como generalização: inventa um comportamento e
+  atribui ao leitor.
+- **O blog aparece uma vez só, no fim, colado ao link.** Mencionar o blog no
+  meio do texto foi reprovado.
+- **Não pôr na mesma lista coisas de categorias diferentes.** "EIFS, placa
+  cimentícia ou siding" mistura sistema, placa e acabamento. O Daniel corrigiu
+  no grupo que EIFS é tipo de sistema, não marca, e que Glasroc é placa.
+- **O ângulo que funcionou para o grupo** foi o do Bertevas: a parede de LSF é
+  feita de camadas e cada uma é escolhida pela necessidade daquele trecho da
+  casa, com a personalização da vedação como exemplo.
+
+O gate não pega nada disso por construção. Candidato a check executável: abertura
+com número técnico nas duas primeiras linhas, dois-pontos usado como recurso de
+estilo (proibido no prompt e não verificado), e a palavra "blog" fora do último
+parágrafo.

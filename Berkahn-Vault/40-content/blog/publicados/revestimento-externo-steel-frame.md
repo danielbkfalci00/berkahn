@@ -14,7 +14,7 @@ slug: revestimento-externo-steel-frame
 data_publicacao: 2026-09-22
 title: "Revestimento externo em steel frame: cinco sistemas de fachada lado a lado"
 seo_title: "Revestimento Externo Steel Frame: 5 Sistemas, 0 no SINAPI"
-description: "EIFS, placa cimentícia, siding, fachada ventilada e painel metálico comparados por água, fogo, impacto, juntas e manutenção, e o que existe de preço público."
+description: "EIFS, placa cimentícia com acabamento, siding, fachada ventilada e painel metálico: cinco caminhos de fachada comparados por água, fogo, impacto, juntas e manutenção."
 seo_description: "Compare os cinco sistemas de revestimento externo para steel frame por água, fogo, impacto e junta, e veja por que o SINAPI não precifica nenhum dos cinco."
 palavras_chave:
   - revestimento externo steel frame
@@ -37,9 +37,7 @@ contextos_aplicados:
 material_visual_slug: cover.webp
 ---
 
-São Paulo recebe 1.658,3 mm de chuva por ano, valor que o INMET imprime na coluna anual da Normal Climatológica de 1991 a 2020 do Mirante de Santana. Na unidade em que a literatura de controle de chuva em fachada trabalha, são 65 polegadas. Joseph Lstiburek publicou pela Building Science Corporation, em março de 2004, um relatório cuja Figura 4 mapeia a chuva anual da América do Norte e amarra, na legenda, cada faixa a uma estratégia de fachada. Acima de 60 polegadas fica a faixa mais exigente de todas, a que pede tela ventilada com equalização de pressão, um degrau acima da fachada ventilada que o mercado brasileiro conhece. Vedação de face, o sistema aderido sem caminho de saída para a água, aparece uma única vez naquela legenda, abaixo de 20 polegadas.
-
-Quem constrói em Light Steel Frame, sistema de perfis leves de aço galvanizado formados a frio fechados com placas delgadas, costuma escolher a fachada no fim do projeto e pelo catálogo de textura. A pergunta entra como estética e sai como orçamento, mas é, antes disso, uma decisão sobre para onde a água vai quando entrar, porque ela entra.
+Quem constrói em Light Steel Frame, sistema de perfis leves de aço galvanizado formados a frio fechados com placas delgadas, não compra uma parede pronta, compra camadas, e a externa pode ser escolhida face por face. A face que pega chuva de vento o dia inteiro pede caminho para a água sair, enquanto a protegida pela varanda não precisa pagar por essa proteção. Antes da cor, a pergunta é para onde a água vai quando entrar.
 
 [STATS:revestimento-externo-numeros]
 
@@ -52,6 +50,8 @@ A ABNT NBR 15498, atualizada em maio de 2021, já faz essa separação ao dividi
 [TABLE:cinco-sistemas-fachada]
 
 ## Água e vapor eliminam candidatos antes do gosto entrar na conversa
+
+São Paulo recebe 1.658,3 mm de chuva por ano, pela Normal Climatológica 1991-2020 do INMET, na estação do Mirante de Santana. Em polegadas, a unidade da literatura de fachada, são 65. Joseph Lstiburek publicou pela Building Science Corporation, em março de 2004, um relatório cuja Figura 4 mapeia a chuva anual da América do Norte e amarra, na legenda, cada faixa a uma estratégia de fachada. Acima de 60 polegadas fica a faixa mais exigente de todas, a que pede tela ventilada com equalização de pressão, um degrau acima da fachada ventilada que o mercado brasileiro conhece. Vedação de face, o sistema aderido sem saída para a água, só aparece abaixo de 20 polegadas.
 
 O relatório de 2004 separa duas estratégias de controle de chuva. A de barreira conta com a massa da parede para armazenar a água que entrou até ela secar, e nasceu para pedra, tijolo e concreto. A de gestão de água aceita que parte da chuva atravessa o revestimento e devolve essa parte para fora por um plano de drenagem com câmara de ar e saída na base. Lstiburek nomeia explicitamente a estrutura de aço leve no segundo grupo, por serem paredes leves, ocas e sensíveis à umidade. E escreve a recomendação sem meio termo: fora das regiões de baixa exposição à chuva, sistemas de vedação de face ou de barreira usados com componentes sensíveis à umidade devem ser evitados.
 
