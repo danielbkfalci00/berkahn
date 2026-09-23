@@ -55,21 +55,21 @@ export function AtualidadeContent({
     featuredPostCategory === activeCategory;
 
   return (
-    <>
-      <CategoryFilter
-        categories={categories}
-        activeCategory={activeCategory}
-        onCategoryChange={setActiveCategory}
-      />
-
-      <MasonryGrid
-        posts={filteredPosts}
-        emptyMessage={
-          featuredIsOnlyResult
-            ? "A publicação desta categoria está em destaque na abertura."
-            : "Ainda não há publicações nesta categoria."
-        }
-      />
-    </>
+    <MasonryGrid
+      posts={filteredPosts}
+      title={activeCategory === "Todos" ? "Todos os artigos" : activeCategory}
+      filter={
+        <CategoryFilter
+          categories={categories}
+          activeCategory={activeCategory}
+          onCategoryChange={setActiveCategory}
+        />
+      }
+      emptyMessage={
+        featuredIsOnlyResult
+          ? "A publicação desta categoria está em destaque na abertura."
+          : "Ainda não há publicações nesta categoria."
+      }
+    />
   );
 }

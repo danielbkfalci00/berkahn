@@ -13,6 +13,12 @@ interface ArticleCardProps {
   index?: number;
 }
 
+/**
+ * Cartão da lista de /atualidades: foto, categoria e data numa linha discreta,
+ * título. Antes tinha etiqueta preta sobre a foto, régua de 3px, rótulos em
+ * fonte monoespaçada e "ler artigo" com barra em todos os cartões; o cartão
+ * inteiro já é o link.
+ */
 export function ArticleCard({ post, size = "small" }: ArticleCardProps) {
   const isLarge = size === "large";
 
@@ -21,59 +27,39 @@ export function ArticleCard({ post, size = "small" }: ArticleCardProps) {
       <Link
         href={`/atualidades/${post.slug}`}
         prefetch={false}
-        className="block h-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-black"
+        className="block h-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-4"
       >
-        <div
-          className={cn(
-            "relative overflow-hidden bg-carbon-soft",
-            isLarge ? "aspect-[16/10]" : "aspect-[4/3]"
-          )}
-        >
+        <div className={cn("relative overflow-hidden bg-black-5", isLarge ? "aspect-[16/10]" : "aspect-[3/2]")}>
           <Image
             src={post.image}
-            alt={post.title}
+            alt=""
             fill
-            className="object-cover grayscale-[12%] transition duration-700 ease-expo group-hover:scale-[1.025] group-hover:grayscale-0 motion-reduce:transform-none motion-reduce:transition-none"
-            sizes={
-              isLarge
-                ? "(max-width: 768px) 100vw, 58vw"
-                : "(max-width: 768px) 100vw, 33vw"
-            }
+            quality={80}
+            className="object-cover transition-transform duration-700 ease-expo group-hover:scale-[1.04] motion-reduce:transition-none"
+            sizes={isLarge ? "(max-width: 767px) 100vw, 50vw" : "(max-width: 767px) 100vw, (max-width: 1023px) 50vw, 33vw"}
           />
-          <span className="absolute left-0 top-0 bg-black px-3 py-2 font-tech text-[10px] lowercase tracking-wide text-white md:text-xs">
-            {post.category}
-          </span>
         </div>
 
-        <div className="border-t-[3px] border-black pt-4">
-          <div className="mb-3 flex items-center justify-between gap-4 font-tech text-[10px] lowercase tracking-wide text-black-50 md:text-xs">
-            <span>{post.date}</span>
-            <span>{post.readTime}</span>
-          </div>
+        <p className="mt-5 text-xs font-medium uppercase tracking-[0.14em] text-black-50">
+          {post.category}
+          <span className="mx-2 text-black-30" aria-hidden="true">·</span>
+          {post.date}
+        </p>
 
-          <h3
-            className={cn(
-              "font-display font-semibold leading-[1.04] tracking-tight text-black transition-colors duration-300 group-hover:text-black-70",
-              isLarge ? "text-3xl md:text-5xl" : "text-2xl md:text-[1.7rem]"
-            )}
-          >
-            {post.title}
-          </h3>
-
-          {isLarge && (
-            <p className="mt-4 line-clamp-2 max-w-2xl text-sm leading-relaxed text-black-70 md:text-base">
-              {post.excerpt}
-            </p>
+        <h3
+          className={cn(
+            "mt-3 font-display font-semibold leading-[1.08] tracking-[-0.02em] text-black decoration-[1.5px] underline-offset-4 group-hover:underline",
+            isLarge ? "text-[clamp(1.6rem,1rem+1.6vw,2.4rem)]" : "text-xl md:text-[1.4rem]"
           )}
+        >
+          {post.title}
+        </h3>
 
-          <span className="mt-5 flex items-center gap-3 font-tech text-[10px] lowercase tracking-wide text-black md:text-xs">
-            ler artigo
-            <span
-              className="h-[3px] w-8 bg-black transition-[width] duration-500 ease-expo group-hover:w-14 motion-reduce:transition-none"
-              aria-hidden="true"
-            />
-          </span>
-        </div>
+        {isLarge && (
+          <p className="mt-3 line-clamp-2 max-w-xl text-base leading-relaxed text-black-70">{post.excerpt}</p>
+        )}
+
+        <p className="mt-3 text-sm text-black-50">{post.readTime} de leitura</p>
       </Link>
     </article>
   );

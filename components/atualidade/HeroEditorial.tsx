@@ -1,80 +1,109 @@
+"use client";
+
+import { useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { gsap, useGSAP } from "@/lib/gsap";
 import type { BlogPost } from "@/types/blog";
 
 interface HeroEditorialProps {
   post?: BlogPost;
 }
 
+/**
+ * Abertura de /atualidades: o artigo em destaque ocupa a primeira tela, com a
+ * capa de borda a borda e o texto por cima, e a pílula da navbar passa
+ * transparente sobre ela (a rota está em FULL_BLEED_ROUTES).
+ *
+ * Antes: título "Atualidades" pequeno, destaque espremido numa caixa com réguas
+ * de 3px e rótulos em fonte monoespaçada, e uma faixa branca sobrando acima do
+ * bloco preto por causa do espaço reservado ao header antigo.
+ *
+ * O H1 continua sendo o nome da seção, pequeno, para a página ter um título
+ * que não muda a cada artigo destacado. O título do artigo é o H2.
+ */
 export function HeroEditorial({ post }: HeroEditorialProps) {
+  const sectionRef = useRef<HTMLElement>(null);
+
+  useGSAP(
+    () => {
+      const root = sectionRef.current;
+      if (!root) return;
+      const mm = gsap.matchMedia();
+      mm.add("(prefers-reduced-motion: no-preference)", () => {
+        const photo = root.querySelector<HTMLElement>("[data-hero-photo]");
+        const text = root.querySelector<HTMLElement>("[data-hero-text]");
+        const scrollTrigger = { trigger: root, start: "top top", end: "bottom top", scrub: 0.4 };
+        if (photo) gsap.fromTo(photo, { scale: 1.06, yPercent: 0 }, { scale: 1, yPercent: 10, ease: "none", scrollTrigger });
+        if (text) gsap.to(text, { yPercent: -12, autoAlpha: 0.2, ease: "none", scrollTrigger: { ...scrollTrigger, start: "40% top" } });
+      });
+    },
+    { scope: sectionRef }
+  );
+
+  if (!post) {
+    return (
+      <section className="bg-carbon pb-16 pt-40 text-white">
+        <div className="container">
+          <h1 className="font-display text-[clamp(3rem,6vw,6rem)] font-semibold tracking-[-0.045em]">Atualidades</h1>
+        </div>
+      </section>
+    );
+  }
+
   return (
-    <section className="bg-carbon pb-10 pt-24 text-white md:pb-12 md:pt-20 lg:pb-14">
-      <div className="container">
-        <header>
-          <p className="font-tech text-[11px] lowercase tracking-wide text-white-50 md:text-xs">
-            caderno técnico · atualidades
+    <section ref={sectionRef} className="relative h-[92svh] min-h-[600px] overflow-hidden bg-carbon text-white">
+      <div data-hero-photo className="absolute inset-0 will-change-transform">
+        <Image
+          src={post.image}
+          alt=""
+          fill
+          priority
+          fetchPriority="high"
+          quality={80}
+          sizes="(max-width: 767px) 100vh, max(100vw, 160vh)"
+          className="object-cover"
+        />
+      </div>
+      <div
+        className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,.55)_0%,rgba(0,0,0,.15)_30%,rgba(0,0,0,.35)_55%,rgba(0,0,0,.92)_100%)]"
+        aria-hidden="true"
+      />
+
+      <div data-hero-text className="relative flex h-full flex-col justify-between pb-12 pt-28 md:pb-16 md:pt-32">
+        <div className="container">
+          <h1 className="text-xs font-medium uppercase tracking-[0.18em] text-white/70">Atualidades</h1>
+          <p className="mt-3 max-w-md text-sm leading-relaxed text-white/70">
+            Guias, custos, normas e decisões para construir melhor em Light Steel Frame.
           </p>
+        </div>
 
-          <div className="mt-4 border-t-[3px] border-white pt-5 md:pt-6">
-            <div className="grid gap-4 md:grid-cols-12 md:items-end md:gap-6">
-              <h1 className="font-display text-[clamp(3.5rem,4.6vw,5rem)] font-semibold leading-[0.88] tracking-[-0.06em] md:col-span-7">
-                Atualidades
-              </h1>
-              <p className="max-w-md text-sm leading-relaxed text-white-70 md:col-span-4 md:col-start-9 md:text-base">
-                Engenharia explicada com rigor: guias, custos, normas e decisões
-                para construir melhor em Steel Frame.
-              </p>
+        <div className="container">
+          <Link
+            href={`/atualidades/${post.slug}`}
+            prefetch={false}
+            className="group block max-w-4xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-4 focus-visible:ring-offset-transparent"
+          >
+            <p className="text-xs font-medium uppercase tracking-[0.18em] text-white/80">
+              Em destaque · {post.category}
+            </p>
+            <h2 className="mt-4 font-display text-[clamp(2.4rem,1.2rem+4vw,5.4rem)] font-semibold leading-[0.98] tracking-[-0.04em] [text-shadow:0_2px_30px_rgba(0,0,0,.35)]">
+              {post.title}
+            </h2>
+            <p className="mt-5 line-clamp-3 max-w-2xl text-base leading-relaxed text-white/80 md:text-lg">
+              {post.excerpt}
+            </p>
+            <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm">
+              <span className="inline-flex h-11 items-center gap-2 rounded-full bg-white px-6 font-medium text-black transition-colors duration-300 group-hover:bg-white/85">
+                Ler artigo
+                <span aria-hidden="true" className="transition-transform duration-300 group-hover:translate-x-1">→</span>
+              </span>
+              <span className="text-white/70">
+                {post.date} · {post.readTime} de leitura
+              </span>
             </div>
-          </div>
-        </header>
-
-        {post && (
-          <article className="mt-8" aria-label="Artigo em destaque">
-            <Link
-              href={`/atualidades/${post.slug}`}
-              prefetch={false}
-              className="group grid border-b-[3px] border-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white lg:grid-cols-12 lg:items-stretch"
-            >
-              <div className="relative aspect-[16/9] overflow-hidden bg-carbon-soft lg:col-span-7 lg:aspect-auto lg:min-h-[420px] xl:min-h-[460px]">
-                <Image
-                  src={post.image}
-                  alt={post.title}
-                  fill
-                  priority
-                  fetchPriority="high"
-                  sizes="(max-width: 1024px) 100vw, 58vw"
-                  className="object-cover grayscale-[12%] transition duration-700 ease-expo group-hover:scale-[1.025] group-hover:grayscale-0 motion-reduce:transform-none motion-reduce:transition-none"
-                />
-              </div>
-
-              <div className="flex flex-col border-t-[3px] border-white py-5 lg:col-span-5 lg:border-l-[3px] lg:border-t-0 lg:py-7 lg:pl-8 xl:pl-10">
-                <div className="flex items-start justify-between gap-5 font-tech text-[10px] lowercase leading-relaxed tracking-wide md:text-xs">
-                  <p className="text-white">em destaque · {post.category}</p>
-                  <p className="shrink-0 text-right text-white-50">
-                    {post.date} · {post.readTime}
-                  </p>
-                </div>
-
-                <div className="mt-10 lg:my-auto lg:py-8">
-                  <h2 className="font-display text-[clamp(2.25rem,3.2vw,3.5rem)] font-semibold leading-[0.98] tracking-[-0.035em]">
-                    {post.title}
-                  </h2>
-                  <p className="mt-4 line-clamp-3 max-w-xl text-sm leading-relaxed text-white-70 md:text-base">
-                    {post.excerpt}
-                  </p>
-                </div>
-
-                <span className="mt-8 inline-flex items-center gap-3 self-start font-tech text-[10px] lowercase tracking-wide text-white md:text-xs lg:mt-0">
-                  ler análise
-                  <span
-                    className="h-[3px] w-8 bg-white transition-[width] duration-500 ease-expo group-hover:w-14 motion-reduce:transition-none"
-                    aria-hidden="true"
-                  />
-                </span>
-              </div>
-            </Link>
-          </article>
-        )}
+          </Link>
+        </div>
       </div>
     </section>
   );
