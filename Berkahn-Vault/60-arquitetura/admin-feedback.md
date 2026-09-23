@@ -1,7 +1,7 @@
 ---
 tipo: documentacao
 criado: 2026-09-22
-atualizado: 2026-09-22
+atualizado: 2026-09-23
 tags:
   - domain/admin
   - project/site
@@ -36,7 +36,7 @@ Contexto: [[admin-setup]], [[stack-nextjs-supabase]]. Desenho de threads herdado
 | Contador na sidebar | `components/admin/AdminSidebar.tsx` |
 | CLI | `scripts/admin/feedback.mjs` |
 
-**Duas tabelas** (`feedback_itens` e `feedback_mensagens`), pelo mesmo motivo da 009: o item é dono do status, a mensagem é dona do texto. A descrição do formulário vira a primeira mensagem.
+**Duas tabelas** (`feedback_itens` e `feedback_mensagens`), pelo mesmo motivo da 009: o item é dono do status, a mensagem é dona do texto. A descrição do formulário vira a primeira mensagem. No formulário rápido, título e descrição podem ser preenchidos separadamente; quando só a descrição é informada, seus primeiros 100 caracteres normalizados formam o título obrigatório da tabela. A validação compartilhada mostra erro explícito para formulário vazio ou texto curto, em vez de manter o botão Enviar desabilitado sem motivo visível.
 
 **Autoria amarrada à sessão.** Um trigger `BEFORE INSERT` sobrescreve `autor_id` com `auth.uid()`, `autor_nome` com o nome do cadastro (ou o e-mail do JWT) e força `origem = 'admin'`. Ninguém consegue forjar o selo "via Claude" nem criar um item já implementado pelo PostgREST. Sem sessão (service role) o trigger não mexe, e é assim que a CLI grava como "Claude".
 

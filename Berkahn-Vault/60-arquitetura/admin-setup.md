@@ -1,7 +1,7 @@
 ---
 tipo: context
 criado: 2025-12-01
-atualizado: 2026-09-22
+atualizado: 2026-09-23
 tags:
   - ai/context
   - project/site
@@ -221,7 +221,7 @@ O `proxy.ts` bloqueia rotas incompatíveis antes da renderização; RLS e RPCs r
 
 Arquivos de até 6 MB (`PDF`, `DOCX`, `XLSX`, `JPEG`, `PNG`, `WebP`) usam upload assinado direto ao bucket privado `lead-files`; o arquivo não atravessa a função Vercel. Arquivos grandes e pastas permanecem no Drive e entram como URL HTTPS. O Drive não é duplicado nem sincronizado automaticamente. Ao anonimizar, links externos são removidos e objetos privados entram em `lead_storage_cleanup` até a Edge Function confirmar a exclusão.
 
-A PWA do admin usa o manifesto estático `public/admin/manifest.webmanifest`, servido em `/admin/manifest.webmanifest`, com `id: /admin/`, `scope: /admin/` e `start_url: /admin`. O manifesto público continua separado e abre `/`. Instalações anteriores precisam ser removidas e instaladas novamente para o sistema operacional incorporar o novo identificador e destino. O `/admin-sw.js` permanece exclusivo para push, sem cachear telas ou PII. A tela de configurações oferece instalação quando o navegador expõe `beforeinstallprompt` e orientação manual no iPhone. Cada usuário escolhe os tipos de alerta e cada dispositivo opta separadamente por Web Push. A outbox `lead_notification_outbox` recebe apenas título, texto, URL genérica e tag; não contém nome, contato ou UUID do lead. Novos contatos e próximas ações vencidas são deduplicados. As chaves abaixo foram configuradas nos dois projetos Vercel em 2026-08-14:
+A PWA do admin usa o manifesto estático `public/admin/manifest.webmanifest`, servido em `/admin/manifest.webmanifest`, com `id: /admin/`, `scope: /admin` e `start_url: /admin`. O escopo inclui o endereço inicial e as subrotas, sem alterar o identificador de instalações existentes. O manifesto público continua separado e abre `/`. Instalações antigas que ainda abrem a home precisam ser removidas e instaladas novamente. O `/admin-sw.js` permanece exclusivo para push, sem cachear telas ou PII. O shell captura `beforeinstallprompt` mesmo antes de abrir Configurações; a tela oferece o botão quando o navegador emite esse evento e orienta a instalação manual pelo menu do Chrome/Edge no PC ou pelo Compartilhar no iPhone. Navegadores integrados podem não oferecer instalação. Cada usuário escolhe os tipos de alerta e cada dispositivo opta separadamente por Web Push. A outbox `lead_notification_outbox` recebe apenas título, texto, URL genérica e tag; não contém nome, contato ou UUID do lead. Novos contatos e próximas ações vencidas são deduplicados. As chaves abaixo foram configuradas nos dois projetos Vercel em 2026-08-14:
 
 ```text
 NEXT_PUBLIC_VAPID_PUBLIC_KEY

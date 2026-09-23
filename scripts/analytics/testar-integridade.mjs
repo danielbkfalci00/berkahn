@@ -122,7 +122,11 @@ const leadsQuery = readFileSync('lib/analytics/leads-queries.ts', 'utf8');
 ok('funil exclui leads arquivados', leadsQuery.includes('.is("arquivado_em", null)'));
 ok('funil retorna estado indisponivel', leadsQuery.includes('status: "unavailable"'));
 const manifest = JSON.parse(readFileSync('public/admin/manifest.webmanifest', 'utf8'));
-ok('PWA admin abre dashboard', manifest.id === '/admin/' && manifest.start_url === '/admin' && manifest.scope === '/admin/');
+ok('PWA admin abre dashboard no proprio escopo',
+  manifest.id === '/admin/' &&
+  manifest.start_url === '/admin' &&
+  manifest.scope === '/admin' &&
+  manifest.start_url.startsWith(manifest.scope));
 const nextConfig = readFileSync('next.config.ts', 'utf8');
 ok('manifest tem MIME explicito', nextConfig.includes('application/manifest+json; charset=utf-8'));
 const analyticsContent = readFileSync('app/admin/analytics/AnalyticsContent.tsx', 'utf8');
