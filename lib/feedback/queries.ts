@@ -26,14 +26,16 @@ export type Leitura<T> =
   | { estado: "pendente"; mensagem: string }
   | { estado: "erro"; mensagem: string };
 
-export async function listarFeedback(filtro: FiltroFeedback): Promise<Leitura<ItemFeedback[]>> {
+export async function listarFeedback(filtro: FiltroFeedback): Promise<Leitura<{ itens: ItemFeedback[]; completo: boolean }>> {
   const supabase = await createClient();
   // O count embutido vem numa query só; sem ele seriam N contagens por página.
   let query = supabase
     .from("feedback_itens")
     .select(`${COLUNAS_ITEM}, feedback_mensagens(count)`)
     .order("atualizado_em", { ascending: false })
-    .limit(200);
+    // O registro extra informa se as abas podem filtrar localmente sem omitir
+    // itens. Acima do limite, a página mantém a consulta filtrada no servidor.
+    .limit(201);
   if (filtro !== "todos") query = query.eq("status", filtro);
 
   const { data, error } = await query;
@@ -41,7 +43,13 @@ export async function listarFeedback(filtro: FiltroFeedback): Promise<Leitura<It
     if (isTabelaAusente(error)) return { estado: "pendente", mensagem: MSG_MIGRATION_PENDENTE };
     return { estado: "erro", mensagem: error.message };
   }
-  return { estado: "ok", data: ((data ?? []) as unknown as ItemFeedbackRow[]).map(toItemFeedback) };
+  return {
+    estado: "ok",
+    data: {
+      itens: ((data ?? []).slice(0, 200) as unknown as ItemFeedbackRow[]).map(toItemFeedback),
+      completo: (data ?? []).length <= 200,
+    },
+  };
 }
 
 export async function buscarFeedback(

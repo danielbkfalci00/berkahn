@@ -1,8 +1,8 @@
-import { LeadsQueue, type LeadKpis } from "@/components/admin/analytics/LeadsQueue";
+import { LeadsQueue, type LeadKpis, type LeadListItem } from "@/components/admin/analytics/LeadsQueue";
 import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 import { createClient } from "@/lib/supabase/server";
-import type { AdminDataResult, AnalyticsLead, LeadChannel, LeadPriority, LeadResponsible, LeadSegment, LeadStatus } from "@/types/analytics";
+import type { AdminDataResult, LeadChannel, LeadPriority, LeadResponsible, LeadSegment, LeadStatus } from "@/types/analytics";
 
 export const dynamic = "force-dynamic";
 
@@ -12,7 +12,9 @@ const CLOSED_STATUSES = "(convertido,desqualificado)";
 // Qualificado pelo estado atual: qualificado_em nunca é limpo pela RPC (024), então
 // contar pelo carimbo somaria leads que depois foram desqualificados ou voltaram atrás.
 const QUALIFIED_STATUSES: LeadStatus[] = ["qualificado", "proposta_enviada", "convertido"];
-const LEAD_COLUMNS = "id,nome,email,telefone,telefone_normalizado,segmento,mensagem,canal,status,prioridade,responsavel_id,resumo_status,resumo_status_em,tipo_projeto,empresa,cargo,pagina_origem,landing_page,referrer,slug_origem,cta_location,utm,post_id,pauta_id,visualizado_em,ultimo_contato_em,proxima_acao_em,motivo_desqualificacao,qualificado_em,desqualificado_em,convertido_em,arquivado_em,anonimizado_em,origem_legado,importado_em,criado_em,lead_responsaveis(id,nome),lead_artifacts(count)";
+// A fila não precisa transportar mensagem, atribuição, UTM ou histórico de cada
+// lead. Esses campos continuam disponíveis na rota de detalhe.
+const LEAD_COLUMNS = "id,nome,email,telefone,status,prioridade,resumo_status,proxima_acao_em,visualizado_em,lead_responsaveis(id,nome),lead_artifacts(count)";
 
 interface PageProps {
   searchParams: Promise<{
@@ -100,7 +102,7 @@ export default async function LeadsPage({ searchParams }: PageProps) {
 
   const total = count ?? 0;
   const leads = (data ?? []).map((row) => {
-    const raw = row as unknown as Omit<AnalyticsLead, "responsavel" | "artifact_count"> & {
+    const raw = row as unknown as Omit<LeadListItem, "responsavel" | "artifact_count"> & {
       lead_responsaveis: { id: string; nome: string } | null;
       lead_artifacts: Array<{ count: number }>;
     };
@@ -108,7 +110,7 @@ export default async function LeadsPage({ searchParams }: PageProps) {
       ...raw,
       responsavel: raw.lead_responsaveis,
       artifact_count: raw.lead_artifacts?.[0]?.count ?? 0,
-    } as AnalyticsLead;
+    } as LeadListItem;
   });
   return (
     <LeadsQueue

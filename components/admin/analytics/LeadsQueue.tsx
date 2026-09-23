@@ -68,8 +68,14 @@ export interface LeadKpis {
   eligible: number;
 }
 
+export type LeadListItem = Pick<
+  AnalyticsLead,
+  "id" | "nome" | "email" | "telefone" | "status" | "prioridade" |
+  "responsavel" | "resumo_status" | "artifact_count" | "visualizado_em" | "proxima_acao_em"
+>;
+
 interface LeadsQueueProps {
-  initialLeads: AnalyticsLead[];
+  initialLeads: LeadListItem[];
   total: number;
   page: number;
   pageCount: number;
@@ -100,9 +106,15 @@ export function LeadsQueue({ initialLeads, total, page, pageCount, kpis, respons
   const [pendingLeadId, setPendingLeadId] = useState<string | null>(null);
   const [disqualifying, setDisqualifying] = useState<{ id: string; reason: string } | null>(null);
   const [filtersOpen, setFiltersOpen] = useState(false);
+  const [pendingFilterHref, setPendingFilterHref] = useState<string | null>(null);
   const filtersToggleRef = useRef<HTMLButtonElement>(null);
   const filterPanelRef = useRef<HTMLFormElement>(null);
   const [, startTransition] = useTransition();
+  const currentQuery = searchParams.toString();
+
+  useEffect(() => {
+    setPendingFilterHref(null);
+  }, [currentQuery]);
 
   function closeFilters() {
     setFiltersOpen(false);
@@ -164,7 +176,6 @@ export function LeadsQueue({ initialLeads, total, page, pageCount, kpis, respons
         setError(result.error || "Não foi possível alterar o status.");
       } else {
         setSuccess("Status atualizado.");
-        router.refresh();
       }
       setPendingLeadId(null);
     });
@@ -212,6 +223,22 @@ export function LeadsQueue({ initialLeads, total, page, pageCount, kpis, respons
   const qualificationRate = kpiData?.eligible ? Math.round((kpiData.qualified / kpiData.eligible) * 100) : null;
   const activeFilterCount = ["q", "status", "canal", "segmento", "prioridade", "responsavel", "periodo", "vencida", "semResponsavel", "semAcao", "arquivados"]
     .filter((key) => Boolean(searchParams.get(key))).length;
+  const selectedStatus = pendingFilterHref
+    ? new URLSearchParams(pendingFilterHref.slice(1)).get("status")
+    : searchParams.get("status");
+
+  function applyFilters(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const next = new URLSearchParams();
+    for (const [key, value] of new FormData(event.currentTarget)) {
+      if (typeof value === "string" && value.trim()) next.set(key, value);
+    }
+    const href = `?${next.toString()}`;
+    if (filtersOpen) closeFilters();
+    if (href === `?${currentQuery}`) return;
+    setPendingFilterHref(href);
+    router.push(href, { scroll: false });
+  }
 
   return (
     <div className="mx-auto max-w-7xl space-y-5">
@@ -248,9 +275,10 @@ export function LeadsQueue({ initialLeads, total, page, pageCount, kpis, respons
       </div>
 
       <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 md:hidden" aria-label="Filtrar por etapa">
-        <StageChip href={withStatus(searchParams, null)} active={!searchParams.get("status")}>Todos</StageChip>
-        {STATUS.map((item) => <StageChip key={item.value} href={withStatus(searchParams, item.value)} active={searchParams.get("status") === item.value}>{item.label}</StageChip>)}
+        <StageChip href={withStatus(searchParams, null)} active={!selectedStatus} onNavigate={setPendingFilterHref}>Todos</StageChip>
+        {STATUS.map((item) => <StageChip key={item.value} href={withStatus(searchParams, item.value)} active={selectedStatus === item.value} onNavigate={setPendingFilterHref}>{item.label}</StageChip>)}
       </div>
+      {pendingFilterHref && <p role="status" className="text-xs text-neutral-500">Atualizando lista de leads…</p>}
 
       {manualOpen && (
         <form onSubmit={submitManual} className="space-y-4 rounded-lg border border-neutral-200 bg-white p-5">
@@ -294,7 +322,7 @@ export function LeadsQueue({ initialLeads, total, page, pageCount, kpis, respons
       <button ref={filtersToggleRef} type="button" aria-expanded={filtersOpen} aria-controls="lead-filters" onClick={() => setFiltersOpen((value) => !value)} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-neutral-300 bg-white px-4 text-sm font-medium md:hidden"><SlidersHorizontal className="h-4 w-4" /> Filtros{activeFilterCount > 0 ? ` (${activeFilterCount})` : ""}</button>
 
       {filtersOpen && <div aria-hidden="true" onClick={closeFilters} className="fixed inset-0 z-40 bg-neutral-950/30 md:hidden" />}
-      <form ref={filterPanelRef} id="lead-filters" role={filtersOpen ? "dialog" : undefined} aria-modal={filtersOpen ? true : undefined} aria-label={filtersOpen ? "Filtrar leads" : undefined} className={`${filtersOpen ? "grid" : "hidden"} fixed inset-x-3 bottom-[calc(5rem+env(safe-area-inset-bottom))] z-50 max-h-[70vh] gap-3 overflow-y-auto rounded-lg border border-neutral-200 bg-white p-4 shadow-2xl md:static md:grid md:max-h-none md:grid-cols-2 md:shadow-none lg:grid-cols-4 xl:grid-cols-5`}>
+      <form key={currentQuery} ref={filterPanelRef} onSubmit={applyFilters} id="lead-filters" role={filtersOpen ? "dialog" : undefined} aria-modal={filtersOpen ? true : undefined} aria-label={filtersOpen ? "Filtrar leads" : undefined} className={`${filtersOpen ? "grid" : "hidden"} fixed inset-x-3 bottom-[calc(5rem+env(safe-area-inset-bottom))] z-50 max-h-[70vh] gap-3 overflow-y-auto rounded-lg border border-neutral-200 bg-white p-4 shadow-2xl md:static md:grid md:max-h-none md:grid-cols-2 md:shadow-none lg:grid-cols-4 xl:grid-cols-5`}>
         <div className="flex items-center justify-between md:hidden"><p className="text-sm font-semibold text-neutral-900">Filtros</p><button type="button" onClick={closeFilters} aria-label="Fechar filtros" className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-md text-neutral-500 hover:text-neutral-900"><X className="h-5 w-5" /></button></div>
         <input type="hidden" name="view" value={view} />
         <input name="q" defaultValue={searchParams.get("q") || ""} placeholder="Nome, telefone ou email" className={`${INPUT_CLASS} md:col-span-2`} />
@@ -364,8 +392,10 @@ function withStatus(params: URLSearchParams, status: LeadStatus | null): string 
   return `?${next.toString()}`;
 }
 
-function StageChip({ href, active, children }: { href: string; active: boolean; children: React.ReactNode }) {
-  return <Link href={href} aria-current={active ? "page" : undefined} className={`inline-flex min-h-11 shrink-0 items-center rounded-full border px-3 text-xs font-medium ${active ? "border-neutral-950 bg-neutral-950 text-white" : "border-neutral-200 bg-white text-neutral-600"}`}>{children}</Link>;
+function StageChip({ href, active, onNavigate, children }: { href: string; active: boolean; onNavigate: (href: string) => void; children: React.ReactNode }) {
+  return <Link href={href} onClick={(event) => {
+    if (!active && event.button === 0 && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey) onNavigate(href);
+  }} aria-current={active ? "page" : undefined} className={`inline-flex min-h-11 shrink-0 items-center rounded-full border px-3 text-xs font-medium ${active ? "border-neutral-950 bg-neutral-950 text-white" : "border-neutral-200 bg-white text-neutral-600"}`}>{children}</Link>;
 }
 
 function priorityMeta(priority: LeadPriority) {
@@ -374,7 +404,7 @@ function priorityMeta(priority: LeadPriority) {
   return { label: "Normal", className: "border-neutral-200 bg-neutral-50 text-neutral-600" };
 }
 
-function LeadInbox({ leads, pendingLeadId, onStatusChange }: { leads: AnalyticsLead[]; pendingLeadId: string | null; onStatusChange: (id: string, status: LeadStatus) => void }) {
+function LeadInbox({ leads, pendingLeadId, onStatusChange }: { leads: LeadListItem[]; pendingLeadId: string | null; onStatusChange: (id: string, status: LeadStatus) => void }) {
   return <div className="overflow-hidden rounded-lg border border-neutral-200 bg-white">
     <div className="hidden grid-cols-[1fr_1.4fr_.75fr_.85fr_.8fr_.25fr] gap-4 border-b bg-neutral-50 px-4 py-2 text-[11px] font-medium uppercase tracking-wider text-neutral-500 lg:grid">
       <span>Contato</span><span>Situação</span><span>Responsável</span><span>Próxima ação</span><span>Status</span><span />
@@ -402,7 +432,7 @@ function LeadInbox({ leads, pendingLeadId, onStatusChange }: { leads: AnalyticsL
   </div>;
 }
 
-function LeadKanban({ leads, pendingLeadId, onStatusChange }: { leads: AnalyticsLead[]; pendingLeadId: string | null; onStatusChange: (id: string, status: LeadStatus) => void }) {
+function LeadKanban({ leads, pendingLeadId, onStatusChange }: { leads: LeadListItem[]; pendingLeadId: string | null; onStatusChange: (id: string, status: LeadStatus) => void }) {
   const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 6 } }), useSensor(KeyboardSensor));
   const leadById = useMemo(() => new Map(leads.map((lead) => [lead.id, lead])), [leads]);
   function handleDragEnd(event: DragEndEvent) {
@@ -419,7 +449,7 @@ function LeadKanban({ leads, pendingLeadId, onStatusChange }: { leads: Analytics
   </div>;
 }
 
-function KanbanColumn({ status, leads, pendingLeadId, onStatusChange }: { status: { value: LeadStatus; label: string }; leads: AnalyticsLead[]; pendingLeadId: string | null; onStatusChange: (id: string, status: LeadStatus) => void }) {
+function KanbanColumn({ status, leads, pendingLeadId, onStatusChange }: { status: { value: LeadStatus; label: string }; leads: LeadListItem[]; pendingLeadId: string | null; onStatusChange: (id: string, status: LeadStatus) => void }) {
   const { setNodeRef, isOver } = useDroppable({ id: status.value });
   return <section ref={setNodeRef} className={`min-h-[360px] rounded-lg border p-3 transition-colors ${isOver ? "border-neutral-900 bg-neutral-100" : "border-neutral-200 bg-neutral-50"}`}>
     <div className="mb-3 flex items-center justify-between"><h2 className="text-xs font-semibold uppercase tracking-wider text-neutral-700">{status.label}</h2><span className="rounded-full bg-white px-2 py-0.5 text-xs text-neutral-500">{leads.length}</span></div>
@@ -427,7 +457,7 @@ function KanbanColumn({ status, leads, pendingLeadId, onStatusChange }: { status
   </section>;
 }
 
-function KanbanCard({ lead, disabled, onStatusChange }: { lead: AnalyticsLead; disabled: boolean; onStatusChange: (id: string, status: LeadStatus) => void }) {
+function KanbanCard({ lead, disabled, onStatusChange }: { lead: LeadListItem; disabled: boolean; onStatusChange: (id: string, status: LeadStatus) => void }) {
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({ id: lead.id, data: { status: lead.status }, disabled });
   const priority = priorityMeta(lead.prioridade);
   return <article ref={setNodeRef} style={{ transform: CSS.Translate.toString(transform) }} className={`rounded-md border border-neutral-200 bg-white p-3 shadow-sm ${isDragging ? "z-20 opacity-70 shadow-lg" : ""}`}>
@@ -522,7 +552,6 @@ export function LeadDetail({
       }
       onSuccess?.();
       setSuccess("Alterações salvas.");
-      router.refresh();
     });
   }
 
