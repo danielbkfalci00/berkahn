@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useRef, useState, useTransition } from "react";
+import * as DialogPrimitive from "@radix-ui/react-dialog";
 import {
   Archive, ChevronLeft, ChevronRight, Clock3, ExternalLink,
   FileText, FolderOpen, GripVertical, LayoutList, Link2, Mail, MessageCircle,
@@ -20,6 +21,7 @@ import {
   deleteLeadArtifact,
   finalizeLeadUpload,
   findLeadDuplicates,
+  getLeadPreview,
   getLeadArtifactUrl,
   markLeadViewed,
   prepareLeadUpload,
@@ -29,6 +31,7 @@ import {
   updateLeadOperations,
   updateLeadStatus,
   type ManualLeadInput,
+  type LeadPreviewDetails,
 } from "@/app/admin/leads/actions";
 import { createClient } from "@/lib/supabase/client";
 import type {
@@ -106,6 +109,12 @@ export function LeadsQueue({ initialLeads, allStageLeads, total, page, pageCount
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [pendingLeadId, setPendingLeadId] = useState<string | null>(null);
+  const [selectedLead, setSelectedLead] = useState<LeadListItem | null>(null);
+  const [preview, setPreview] = useState<
+    { id: string; status: "loading" } |
+    { id: string; status: "ok"; data: LeadPreviewDetails } |
+    { id: string; status: "unavailable"; reason: string } | null
+  >(null);
   const [disqualifying, setDisqualifying] = useState<{ id: string; reason: string } | null>(null);
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [pendingFilterHref, setPendingFilterHref] = useState<string | null>(null);
@@ -113,6 +122,7 @@ export function LeadsQueue({ initialLeads, allStageLeads, total, page, pageCount
   const filterPanelRef = useRef<HTMLFormElement>(null);
   const [, startTransition] = useTransition();
   const currentQuery = searchParams.toString();
+  const selectedLeadId = selectedLead?.id ?? null;
 
   useEffect(() => {
     setPendingFilterHref(null);
@@ -130,6 +140,19 @@ export function LeadsQueue({ initialLeads, allStageLeads, total, page, pageCount
   useEffect(() => {
     setStageLeads(allStageLeads);
   }, [allStageLeads]);
+
+  useEffect(() => {
+    if (!selectedLeadId) return;
+    let current = true;
+    const id = selectedLeadId;
+    setPreview({ id, status: "loading" });
+    void getLeadPreview(id).then((result) => {
+      if (current) setPreview({ id, ...result });
+    }).catch(() => {
+      if (current) setPreview({ id, status: "unavailable", reason: "Não foi possível carregar o contexto deste lead." });
+    });
+    return () => { current = false; };
+  }, [selectedLeadId]);
 
   useEffect(() => {
     if (searchParams.get("view") !== "kanban" || !window.matchMedia("(max-width: 767px)").matches) return;
@@ -172,8 +195,10 @@ export function LeadsQueue({ initialLeads, allStageLeads, total, page, pageCount
   function commitStatus(id: string, status: LeadStatus, reason?: string) {
     const previous = leads;
     const previousStageLeads = stageLeads;
+    const previousSelectedLead = selectedLead;
     setLeads((current) => current.map((lead) => (lead.id === id ? { ...lead, status } : lead)));
     setStageLeads((current) => current?.map((lead) => (lead.id === id ? { ...lead, status } : lead)) ?? null);
+    setSelectedLead((current) => current?.id === id ? { ...current, status } : current);
     setError(null);
     setSuccess(null);
     setPendingLeadId(id);
@@ -182,6 +207,7 @@ export function LeadsQueue({ initialLeads, allStageLeads, total, page, pageCount
       if (!result.ok) {
         setLeads(previous);
         setStageLeads(previousStageLeads);
+        setSelectedLead(previousSelectedLead);
         setError(result.error || "Não foi possível alterar o status.");
       } else {
         setSuccess("Status atualizado.");
@@ -245,6 +271,9 @@ export function LeadsQueue({ initialLeads, allStageLeads, total, page, pageCount
   const visibleTotal = stageMatches?.length ?? total;
   const visiblePage = stageMatches ? localPage : page;
   const visiblePageCount = stageMatches ? Math.ceil(stageMatches.length / 25) : pageCount;
+  const activeLead = selectedLead && (stageLeads?.find((lead) => lead.id === selectedLead.id)
+    ?? leads.find((lead) => lead.id === selectedLead.id)
+    ?? selectedLead);
 
   function navigateStage(href: string) {
     setPendingFilterHref(href);
@@ -262,6 +291,24 @@ export function LeadsQueue({ initialLeads, allStageLeads, total, page, pageCount
     if (href === `?${currentQuery}`) return;
     setPendingFilterHref(href);
     router.push(href, { scroll: false });
+  }
+
+  function openLead(lead: LeadListItem) {
+    setError(null);
+    setSuccess(null);
+    setSelectedLead(lead);
+    if (lead.visualizado_em) return;
+    const viewedAt = new Date().toISOString();
+    setSelectedLead({ ...lead, visualizado_em: viewedAt });
+    setLeads((current) => current.map((item) => item.id === lead.id ? { ...item, visualizado_em: viewedAt } : item));
+    setStageLeads((current) => current?.map((item) => item.id === lead.id ? { ...item, visualizado_em: viewedAt } : item) ?? null);
+    void markLeadViewed(lead.id).then((result) => {
+      if (result.ok) return;
+      setError("Não foi possível marcar este lead como visualizado.");
+      setLeads((current) => current.map((item) => item.id === lead.id ? { ...item, visualizado_em: lead.visualizado_em } : item));
+      setStageLeads((current) => current?.map((item) => item.id === lead.id ? { ...item, visualizado_em: lead.visualizado_em } : item) ?? null);
+      setSelectedLead((current) => current?.id === lead.id ? { ...current, visualizado_em: lead.visualizado_em } : current);
+    }).catch(() => setError("Não foi possível marcar este lead como visualizado."));
   }
 
   return (
@@ -367,12 +414,25 @@ export function LeadsQueue({ initialLeads, allStageLeads, total, page, pageCount
       {view === "kanban" ? (
         <>
           {total > leads.length && <p className="rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-900">O Kanban mostra os {leads.length} leads mais recentes deste filtro. Refine a busca para operar os demais.</p>}
-          <div className="md:hidden"><LeadInbox leads={leads} pendingLeadId={pendingLeadId} onStatusChange={changeStatus} /></div>
-          <div className="hidden md:block"><LeadKanban leads={leads} pendingLeadId={pendingLeadId} onStatusChange={changeStatus} /></div>
+          <div className="md:hidden"><LeadInbox leads={leads} pendingLeadId={pendingLeadId} onStatusChange={changeStatus} onOpen={openLead} /></div>
+          <div className="hidden md:block"><LeadKanban leads={leads} pendingLeadId={pendingLeadId} onStatusChange={changeStatus} onOpen={openLead} /></div>
         </>
       ) : (
-        <LeadInbox leads={visibleLeads} pendingLeadId={pendingLeadId} onStatusChange={changeStatus} />
+        <LeadInbox leads={visibleLeads} pendingLeadId={pendingLeadId} onStatusChange={changeStatus} onOpen={openLead} />
       )}
+
+      <LeadQuickView
+        lead={activeLead}
+        preview={preview?.id === activeLead?.id ? preview : null}
+        onClose={() => setSelectedLead(null)}
+        onStatusChange={(id, status) => {
+          if (status === "desqualificado") setSelectedLead(null);
+          changeStatus(id, status);
+        }}
+        pending={pendingLeadId !== null}
+        error={error}
+        success={success}
+      />
 
       {view === "inbox" && <div className="flex flex-wrap items-center justify-between gap-2 text-sm text-neutral-600">
         <span>{visibleTotal} registro{visibleTotal === 1 ? "" : "s"}</span>
@@ -431,7 +491,72 @@ function priorityMeta(priority: LeadPriority) {
   return { label: "Normal", className: "border-neutral-200 bg-neutral-50 text-neutral-600" };
 }
 
-function LeadInbox({ leads, pendingLeadId, onStatusChange }: { leads: LeadListItem[]; pendingLeadId: string | null; onStatusChange: (id: string, status: LeadStatus) => void }) {
+function LeadQuickView({ lead, preview, onClose, onStatusChange, pending, error, success }: {
+  lead: LeadListItem | null;
+  preview: { id: string; status: "loading" } |
+    { id: string; status: "ok"; data: LeadPreviewDetails } |
+    { id: string; status: "unavailable"; reason: string } | null;
+  onClose: () => void;
+  onStatusChange: (id: string, status: LeadStatus) => void;
+  pending: boolean;
+  error: string | null;
+  success: string | null;
+}) {
+  const phoneDigits = lead?.telefone?.replace(/\D/g, "") || "";
+  const whatsappDigits = phoneDigits.length === 10 || phoneDigits.length === 11 ? `55${phoneDigits}` : phoneDigits;
+  const details = preview?.status === "ok" ? preview.data : null;
+  return <DialogPrimitive.Root open={Boolean(lead)} onOpenChange={(open) => { if (!open) onClose(); }}>
+    <DialogPrimitive.Portal>
+      <DialogPrimitive.Overlay className="fixed inset-0 z-[150] bg-black/45" />
+      {lead && <DialogPrimitive.Content className="fixed inset-x-0 bottom-0 z-[151] flex max-h-[calc(100dvh-env(safe-area-inset-top))] min-h-[70dvh] flex-col overflow-hidden rounded-t-2xl bg-white shadow-2xl outline-none md:inset-y-0 md:left-auto md:right-0 md:w-[min(32rem,100vw)] md:max-h-none md:min-h-0 md:rounded-none">
+        <header className="flex items-start justify-between gap-4 border-b border-neutral-200 px-5 pb-4 pt-5">
+          <div className="min-w-0">
+            <DialogPrimitive.Title className="truncate text-xl font-semibold text-neutral-950">{lead.nome}</DialogPrimitive.Title>
+            <DialogPrimitive.Description className="mt-1 truncate text-sm text-neutral-500">{lead.email || lead.telefone || "Sem contato cadastrado"}</DialogPrimitive.Description>
+          </div>
+          <DialogPrimitive.Close aria-label="Fechar prévia do lead" className="-mr-2 -mt-2 inline-flex min-h-11 min-w-11 items-center justify-center rounded-md text-neutral-500 hover:bg-neutral-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900"><X className="h-5 w-5" /></DialogPrimitive.Close>
+        </header>
+        <div className="flex-1 space-y-6 overflow-y-auto px-5 py-5">
+          <div className="grid grid-cols-3 gap-2">
+            {phoneDigits && <a href={`tel:${phoneDigits}`} className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-md border border-neutral-300 text-sm font-medium focus-visible:outline-2 focus-visible:outline-neutral-900"><Phone className="h-4 w-4" /> Ligar</a>}
+            {phoneDigits && <a href={`https://wa.me/${whatsappDigits}`} target="_blank" rel="noreferrer" className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-md bg-neutral-950 text-sm font-medium text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900"><MessageCircle className="h-4 w-4" /> WhatsApp</a>}
+            {lead.email && <a href={`mailto:${lead.email}`} className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-md border border-neutral-300 text-sm font-medium focus-visible:outline-2 focus-visible:outline-neutral-900"><Mail className="h-4 w-4" /> Email</a>}
+          </div>
+          <section className="space-y-3 border-b border-neutral-200 pb-5">
+            <div className="flex items-center justify-between gap-3"><span className="text-sm text-neutral-500">Etapa</span><select value={lead.status} onChange={(event) => onStatusChange(lead.id, event.target.value as LeadStatus)} disabled={pending} aria-label={`Etapa de ${lead.nome}`} className="min-h-11 max-w-[65%] rounded-md border border-neutral-300 bg-white px-3 text-sm font-medium text-neutral-900 focus-visible:outline-2 focus-visible:outline-neutral-900">{STATUS.map((item) => <option key={item.value} value={item.value}>{item.label}</option>)}</select></div>
+            <div className="flex justify-between gap-3 text-sm"><span className="text-neutral-500">Prioridade</span><span className="font-medium text-neutral-900">{priorityMeta(lead.prioridade).label}</span></div>
+            <div className="flex justify-between gap-3 text-sm"><span className="text-neutral-500">Responsável</span><span className="text-right font-medium text-neutral-900">{lead.responsavel?.nome || "Pendente"}</span></div>
+            <div className="flex justify-between gap-3 text-sm"><span className="text-neutral-500">Próxima ação</span><span className="text-right font-medium text-neutral-900">{lead.proxima_acao_em ? new Intl.DateTimeFormat("pt-BR", { dateStyle: "short", timeStyle: "short" }).format(new Date(lead.proxima_acao_em)) : "Não agendada"}</span></div>
+            {lead.resumo_status && <p className="rounded-md bg-neutral-50 p-3 text-sm leading-relaxed text-neutral-700">{lead.resumo_status}</p>}
+            {pending && <p role="status" className="text-xs text-neutral-500">Salvando etapa…</p>}
+            {error && <p role="alert" className="text-sm text-red-700">{error}</p>}
+            {success && !pending && <p role="status" className="text-xs text-emerald-700">{success}</p>}
+          </section>
+          <section className="space-y-3">
+            <h2 className="text-sm font-semibold text-neutral-900">Sobre este contato</h2>
+            {preview?.status === "loading" && <p role="status" className="text-sm text-neutral-500">Carregando contexto…</p>}
+            {preview?.status === "unavailable" && <p role="alert" className="text-sm text-amber-800">{preview.reason}</p>}
+            {details && <>
+              <dl className="grid grid-cols-2 gap-x-4 gap-y-3 text-sm">
+                <div><dt className="text-neutral-500">Recebido</dt><dd className="mt-0.5 text-neutral-900">{new Intl.DateTimeFormat("pt-BR", { dateStyle: "short", timeStyle: "short" }).format(new Date(details.criado_em))}</dd></div>
+                <div><dt className="text-neutral-500">Canal</dt><dd className="mt-0.5 text-neutral-900">{details.canal}</dd></div>
+                <div><dt className="text-neutral-500">Segmento</dt><dd className="mt-0.5 text-neutral-900">{details.segmento === "nao_definido" ? "Não definido" : details.segmento}</dd></div>
+                <div><dt className="text-neutral-500">Projeto</dt><dd className="mt-0.5 text-neutral-900">{details.tipo_projeto || "—"}</dd></div>
+              </dl>
+              {details.mensagem && <div><p className="text-xs text-neutral-500">Mensagem</p><p className="mt-1 whitespace-pre-wrap break-words text-sm leading-relaxed text-neutral-800">{details.mensagem}</p></div>}
+              {details.pagina_origem && <p className="break-all text-xs text-neutral-500">Origem: {details.pagina_origem}</p>}
+            </>}
+          </section>
+        </div>
+        <footer className="border-t border-neutral-200 bg-white px-5 pb-[calc(1.25rem+env(safe-area-inset-bottom))] pt-4 md:pb-5">
+          <Link href={`/admin/leads/${lead.id}`} onClick={onClose} className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-md border border-neutral-300 text-sm font-medium text-neutral-900 hover:bg-neutral-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900">Ver ficha completa <ChevronRight className="h-4 w-4" /></Link>
+        </footer>
+      </DialogPrimitive.Content>}
+    </DialogPrimitive.Portal>
+  </DialogPrimitive.Root>;
+}
+
+function LeadInbox({ leads, pendingLeadId, onStatusChange, onOpen }: { leads: LeadListItem[]; pendingLeadId: string | null; onStatusChange: (id: string, status: LeadStatus) => void; onOpen: (lead: LeadListItem) => void }) {
   return <div className="overflow-hidden rounded-lg border border-neutral-200 bg-white">
     <div className="hidden grid-cols-[1fr_1.4fr_.75fr_.85fr_.8fr_.25fr] gap-4 border-b bg-neutral-50 px-4 py-2 text-[11px] font-medium uppercase tracking-wider text-neutral-500 lg:grid">
       <span>Contato</span><span>Situação</span><span>Responsável</span><span>Próxima ação</span><span>Status</span><span />
@@ -440,10 +565,17 @@ function LeadInbox({ leads, pendingLeadId, onStatusChange }: { leads: LeadListIt
       const priority = priorityMeta(lead.prioridade);
       // Mesma regra do filtro e do push (028): lead encerrado não tem ação vencida.
       const overdue = Boolean(lead.proxima_acao_em && new Date(lead.proxima_acao_em) < new Date() && lead.status !== "convertido" && lead.status !== "desqualificado");
-      return <article key={lead.id} className="grid gap-3 border-b px-4 py-4 text-sm last:border-0 lg:grid-cols-[1fr_1.4fr_.75fr_.85fr_.8fr_.25fr] lg:items-center">
+      return <article key={lead.id} className="relative grid gap-3 border-b py-4 pl-4 pr-10 text-sm transition-colors last:border-0 hover:bg-neutral-50 focus-within:bg-neutral-50 lg:grid-cols-[1fr_1.4fr_.75fr_.85fr_.8fr_.25fr] lg:items-center lg:pr-4">
+        <Link href={`/admin/leads/${lead.id}`} prefetch={false} onClick={(event) => {
+          if (event.button === 0 && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey) {
+            event.preventDefault();
+            onOpen(lead);
+          }
+        }} aria-label={`Pré-visualizar ${lead.nome}`} className="absolute inset-0 z-10 rounded-sm focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-neutral-900" />
         <div className="min-w-0">
           <div className="flex items-center gap-2"><p className="truncate font-semibold text-neutral-900">{lead.nome}</p>{!lead.visualizado_em && <span className="h-2 w-2 shrink-0 rounded-full bg-blue-600" title="Não visualizado" />}</div>
           <p className="truncate text-xs text-neutral-500">{lead.email || lead.telefone || "Sem contato"}</p>
+          {lead.resumo_status && <p className="mt-1 line-clamp-1 text-xs text-neutral-600 lg:hidden">{lead.resumo_status}</p>}
           <div className="mt-2 flex flex-wrap gap-2 lg:hidden"><span className={`rounded-full border px-2 py-0.5 text-[10px] font-medium ${priority.className}`}>{priority.label}</span><span className="rounded-full border border-neutral-200 px-2 py-0.5 text-[10px] font-medium text-neutral-600">{STATUS.find((item) => item.value === lead.status)?.label}</span>{lead.artifact_count > 0 && <span className="inline-flex items-center gap-1 text-[10px] text-neutral-500"><FileText className="h-3 w-3" />{lead.artifact_count}</span>}</div>
         </div>
         <div className="hidden min-w-0 lg:block">
@@ -452,14 +584,14 @@ function LeadInbox({ leads, pendingLeadId, onStatusChange }: { leads: LeadListIt
         </div>
         <p className="inline-flex items-center gap-1.5 text-xs text-neutral-600"><UserRound className="h-3.5 w-3.5" />{lead.responsavel?.nome || "Sem responsável"}</p>
         <p className={`inline-flex items-center gap-1.5 text-xs ${overdue ? "font-semibold text-red-700" : "text-neutral-600"}`}><Clock3 className="h-3.5 w-3.5" />{lead.proxima_acao_em ? new Intl.DateTimeFormat("pt-BR", { dateStyle: "short", timeStyle: "short" }).format(new Date(lead.proxima_acao_em)) : "Não agendada"}</p>
-        <select value={lead.status} onChange={(event) => onStatusChange(lead.id, event.target.value as LeadStatus)} disabled={pendingLeadId !== null} className={`${INPUT_CLASS} hidden h-9 text-xs lg:block`} aria-label={`Status de ${lead.nome}`}>{STATUS.map((status) => <option key={status.value} value={status.value}>{status.label}</option>)}</select>
-        <Link href={`/admin/leads/${lead.id}`} className="inline-flex min-h-11 items-center text-sm font-medium underline underline-offset-4">Abrir</Link>
+        <select value={lead.status} onChange={(event) => onStatusChange(lead.id, event.target.value as LeadStatus)} disabled={pendingLeadId !== null} className={`${INPUT_CLASS} relative z-20 hidden h-9 text-xs lg:block`} aria-label={`Status de ${lead.nome}`}>{STATUS.map((status) => <option key={status.value} value={status.value}>{status.label}</option>)}</select>
+        <ChevronRight className="absolute right-4 top-5 h-4 w-4 text-neutral-400 lg:static lg:justify-self-end" aria-hidden />
       </article>;
     })}
   </div>;
 }
 
-function LeadKanban({ leads, pendingLeadId, onStatusChange }: { leads: LeadListItem[]; pendingLeadId: string | null; onStatusChange: (id: string, status: LeadStatus) => void }) {
+function LeadKanban({ leads, pendingLeadId, onStatusChange, onOpen }: { leads: LeadListItem[]; pendingLeadId: string | null; onStatusChange: (id: string, status: LeadStatus) => void; onOpen: (lead: LeadListItem) => void }) {
   const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 6 } }), useSensor(KeyboardSensor));
   const leadById = useMemo(() => new Map(leads.map((lead) => [lead.id, lead])), [leads]);
   function handleDragEnd(event: DragEndEvent) {
@@ -470,28 +602,34 @@ function LeadKanban({ leads, pendingLeadId, onStatusChange }: { leads: LeadListI
   return <div className="overflow-x-auto pb-2">
     <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
       <div className="grid min-w-[1380px] grid-cols-6 gap-3">
-        {STATUS.map((status) => <KanbanColumn key={status.value} status={status} leads={leads.filter((lead) => lead.status === status.value)} pendingLeadId={pendingLeadId} onStatusChange={onStatusChange} />)}
+        {STATUS.map((status) => <KanbanColumn key={status.value} status={status} leads={leads.filter((lead) => lead.status === status.value)} pendingLeadId={pendingLeadId} onStatusChange={onStatusChange} onOpen={onOpen} />)}
       </div>
     </DndContext>
   </div>;
 }
 
-function KanbanColumn({ status, leads, pendingLeadId, onStatusChange }: { status: { value: LeadStatus; label: string }; leads: LeadListItem[]; pendingLeadId: string | null; onStatusChange: (id: string, status: LeadStatus) => void }) {
+function KanbanColumn({ status, leads, pendingLeadId, onStatusChange, onOpen }: { status: { value: LeadStatus; label: string }; leads: LeadListItem[]; pendingLeadId: string | null; onStatusChange: (id: string, status: LeadStatus) => void; onOpen: (lead: LeadListItem) => void }) {
   const { setNodeRef, isOver } = useDroppable({ id: status.value });
   return <section ref={setNodeRef} className={`min-h-[360px] rounded-lg border p-3 transition-colors ${isOver ? "border-neutral-900 bg-neutral-100" : "border-neutral-200 bg-neutral-50"}`}>
     <div className="mb-3 flex items-center justify-between"><h2 className="text-xs font-semibold uppercase tracking-wider text-neutral-700">{status.label}</h2><span className="rounded-full bg-white px-2 py-0.5 text-xs text-neutral-500">{leads.length}</span></div>
-    <div className="space-y-2">{leads.map((lead) => <KanbanCard key={lead.id} lead={lead} disabled={pendingLeadId !== null} onStatusChange={onStatusChange} />)}</div>
+    <div className="space-y-2">{leads.map((lead) => <KanbanCard key={lead.id} lead={lead} disabled={pendingLeadId !== null} onStatusChange={onStatusChange} onOpen={onOpen} />)}</div>
   </section>;
 }
 
-function KanbanCard({ lead, disabled, onStatusChange }: { lead: LeadListItem; disabled: boolean; onStatusChange: (id: string, status: LeadStatus) => void }) {
+function KanbanCard({ lead, disabled, onStatusChange, onOpen }: { lead: LeadListItem; disabled: boolean; onStatusChange: (id: string, status: LeadStatus) => void; onOpen: (lead: LeadListItem) => void }) {
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({ id: lead.id, data: { status: lead.status }, disabled });
   const priority = priorityMeta(lead.prioridade);
-  return <article ref={setNodeRef} style={{ transform: CSS.Translate.toString(transform) }} className={`rounded-md border border-neutral-200 bg-white p-3 shadow-sm ${isDragging ? "z-20 opacity-70 shadow-lg" : ""}`}>
-    <div className="flex items-start justify-between gap-2"><Link href={`/admin/leads/${lead.id}`} className="line-clamp-2 text-sm font-semibold text-neutral-900 hover:underline">{lead.nome}</Link><button type="button" aria-label={`Mover ${lead.nome}`} className="cursor-grab touch-none rounded p-1 text-neutral-400 hover:bg-neutral-100 hover:text-neutral-700" {...listeners} {...attributes}><GripVertical className="h-4 w-4" /></button></div>
+  return <article ref={setNodeRef} style={{ transform: CSS.Translate.toString(transform) }} className={`relative rounded-md border border-neutral-200 bg-white p-3 shadow-sm hover:border-neutral-400 focus-within:border-neutral-900 ${isDragging ? "z-20 opacity-70 shadow-lg" : ""}`}>
+    <Link href={`/admin/leads/${lead.id}`} prefetch={false} onClick={(event) => {
+      if (event.button === 0 && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey) {
+        event.preventDefault();
+        onOpen(lead);
+      }
+    }} aria-label={`Pré-visualizar ${lead.nome}`} className="absolute inset-0 z-10 rounded-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900" />
+    <div className="flex items-start justify-between gap-2"><span className="line-clamp-2 text-sm font-semibold text-neutral-900">{lead.nome}</span><button type="button" aria-label={`Mover ${lead.nome}`} className="relative z-20 cursor-grab touch-none rounded p-1 text-neutral-400 hover:bg-neutral-100 hover:text-neutral-700" {...listeners} {...attributes}><GripVertical className="h-4 w-4" /></button></div>
     <p className="mt-2 line-clamp-3 text-xs leading-relaxed text-neutral-600">{lead.resumo_status || "Sem atualização operacional"}</p>
     <div className="mt-3 flex items-center justify-between gap-2"><span className={`rounded-full border px-2 py-0.5 text-[10px] font-medium ${priority.className}`}>{priority.label}</span><span className="truncate text-[10px] text-neutral-500">{lead.responsavel?.nome || "Sem responsável"}</span></div>
-    <select value={lead.status} onChange={(event) => onStatusChange(lead.id, event.target.value as LeadStatus)} disabled={disabled} className={`${INPUT_CLASS} mt-3 h-8 text-[11px]`} aria-label={`Mover ${lead.nome} para outra etapa`}>{STATUS.map((item) => <option key={item.value} value={item.value}>{item.label}</option>)}</select>
+    <select value={lead.status} onChange={(event) => onStatusChange(lead.id, event.target.value as LeadStatus)} disabled={disabled} className={`${INPUT_CLASS} relative z-20 mt-3 h-8 text-[11px]`} aria-label={`Mover ${lead.nome} para outra etapa`}>{STATUS.map((item) => <option key={item.value} value={item.value}>{item.label}</option>)}</select>
   </article>;
 }
 

@@ -5,7 +5,7 @@ import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { createServiceClient } from "@/lib/supabase/admin";
 import { getAdminSession } from "@/lib/supabase/sessao";
-import type { LeadChannel, LeadPriority, LeadSegment, LeadStatus } from "@/types/analytics";
+import type { AnalyticsLead, LeadChannel, LeadPriority, LeadSegment, LeadStatus } from "@/types/analytics";
 
 export interface LeadActionResult {
   ok: boolean;
@@ -44,6 +44,33 @@ async function requireOwnerAdmin() {
   const session = await getAdminSession();
   if (!session || session.membership.role !== "owner") return null;
   return session;
+}
+
+export type LeadPreviewDetails = Pick<
+  AnalyticsLead,
+  "id" | "criado_em" | "canal" | "segmento" | "tipo_projeto" |
+  "mensagem" | "pagina_origem" | "cta_location" | "empresa"
+>;
+
+export async function getLeadPreview(id: string): Promise<
+  { status: "ok"; data: LeadPreviewDetails } |
+  { status: "unavailable"; reason: string }
+> {
+  if (!await requireCommercialAdmin()) {
+    return { status: "unavailable", reason: "Você não tem acesso a este lead." };
+  }
+  if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id)) {
+    return { status: "unavailable", reason: "Lead inválido." };
+  }
+  const supabase = await createClient();
+  const { data, error } = await supabase.from("leads")
+    .select("id,criado_em,canal,segmento,tipo_projeto,mensagem,pagina_origem,cta_location,empresa")
+    .eq("id", id)
+    .maybeSingle();
+  if (error || !data) {
+    return { status: "unavailable", reason: "Não foi possível carregar o contexto deste lead." };
+  }
+  return { status: "ok", data: data as LeadPreviewDetails };
 }
 
 // A migration 032 cria as RPCs de LGPD; até ela ser aplicada o PostgREST
