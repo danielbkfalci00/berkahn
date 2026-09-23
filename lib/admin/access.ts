@@ -15,6 +15,9 @@ export function roleCanAccessPath(role: AdminRole, pathname: string): boolean {
     pathname === "/admin"
     || pathname.startsWith("/admin/configuracoes")
     || pathname.startsWith("/admin/analytics")
+    // Mural de feedback é compartilhado por decisão do dono: todo papel
+    // sugere e conversa; só a mudança de status é restrita (RPC da 034).
+    || pathname.startsWith("/admin/feedback")
   ) return true;
   if (role === "comercial") {
     return ["/admin/leads", "/admin/orcamentos", "/admin/propostas"].some((prefix) => pathname.startsWith(prefix));

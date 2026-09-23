@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 import { AdminSidebar } from "./AdminSidebar";
 import { AdminHeader } from "./AdminHeader";
 import { AdminPwaRegistration } from "./AdminPwa";
+import { FeedbackRapido } from "./feedback/FeedbackRapido";
 import type { AdminMembership } from "@/types/analytics";
 
 interface AdminLayoutClientProps {
@@ -35,6 +36,8 @@ export function AdminLayoutClient({ children, membership }: AdminLayoutClientPro
           {children}
         </main>
       </div>
+      {/* Só com membro resolvido: sem sessão a action recusaria de qualquer jeito. */}
+      {membership && <FeedbackRapido />}
     </div>
   );
 }

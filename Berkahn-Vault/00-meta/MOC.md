@@ -87,6 +87,7 @@ Query do acervo: [[artigos.base]] | [[calendario.base]] · Operação: [[quadro-
 - [[stack-nextjs-supabase]] — Stack técnica
 - [[admin-setup]] — Painel admin
 - [[comentarios-inline-documentacoes]] — Comentários inline nas documentações
+- [[admin-feedback]] — Mural de feedback do admin em `/admin/feedback`, botão flutuante e CLI para o Claude
 - [[quadro-conteudo]] — Quadro Kanban de pautas em `/admin/conteudo`, e por que os comandos gravam no banco
 - [[analytics-calor]] — Coleta truncada em 20 de 1.126 queries, e as três matrizes de calor que isso destravou
 - [[google-sheets]] — Legado desativado; Supabase é a fonte operacional
