@@ -1,12 +1,12 @@
 ---
 tipo: context
 criado: 2025-12-01
-atualizado: 2026-09-10
+atualizado: 2026-09-22
 tags:
   - ai/context
   - project/site
   - domain/admin
-ai_summary: Sistema Admin Berkahn com contas individuais, quatro papéis, CRM em /admin/leads e PWA/Web Push por usuário e dispositivo. Migrations 024–031, retenção e dispatcher estão ativos; analytics mensal roda hospedado no GitHub Actions.
+ai_summary: Sistema Admin Berkahn com contas individuais, quatro papéis, CRM em /admin/leads e PWA/Web Push por usuário e dispositivo. Migrations 024–034 (LGPD em 032, busca trigram em 033, mural de feedback em 034), retenção e dispatcher estão ativos; analytics mensal roda hospedado no GitHub Actions.
 status: active
 escopo: berkahn
 ---
@@ -204,7 +204,7 @@ Configure um único projeto Vercel com o build completo:
 
 O funil canônico é `novo` → `em_contato` → `qualificado` → `proposta_enviada` → `convertido`, com `desqualificado` exigindo motivo. `qualificado_em` registra a primeira qualificação e não é apagado por regressão posterior; `convertido_em` representa fechamento efetivo. Cadastro manual aceita WhatsApp, telefone, email e indicação, mostra candidatos a duplicidade e nunca dispara GA4.
 
-As mutações de funil vivem em RPCs transacionais da migration `024_leads_crm_supabase.sql`; `027_lead_operations_artifacts.sql` acrescenta equipe, prioridade, resumo operacional e anexos, e `029_lead_artifact_atomic_delete.sql` torna a remoção do vínculo + entrada na fila de Storage uma única transação. A migration `031_admin_members_multiuser.sql` reaproveita `lead_responsaveis` como cadastro de membros, vincula cada linha a `auth.users` e substitui o email canônico por papéis ativos. Logs usam `Lead <prefixo-do-UUID>` em `entity_name`; PII e notas ficam em `details` e seguem a retenção. A matriz anon / membro sem papel / comercial / conteúdo / proprietário / service role, a reversão atômica, a fila de arquivos e o payload push sem PII são cobertos por RLS e pelos testes transacionais do CRM.
+As mutações de funil vivem em RPCs transacionais da migration `024_leads_crm_supabase.sql`; `027_lead_operations_artifacts.sql` acrescenta equipe, prioridade, resumo operacional e anexos, e `029_lead_artifact_atomic_delete.sql` torna a remoção do vínculo + entrada na fila de Storage uma única transação. A migration `031_admin_members_multiuser.sql` reaproveita `lead_responsaveis` como cadastro de membros, vincula cada linha a `auth.users` e substitui o email canônico por papéis ativos. Logs usam `Lead <prefixo-do-UUID>` em `entity_name`; PII e notas ficam em `details` e seguem a retenção. A `032_lead_lgpd_hardening.sql` (aplicada em 2026-09-22) completa a anonimização (utm, landing_page, sheet_sync_error; `origem_legado` fica por ser a chave de idempotência do import), faz o relógio de retenção contar de `GREATEST(criado_em, ultimo_contato_em)` em vez de `atualizado_em`, cria a flag de retenção legal (`set_lead_retention_exception`, só owner) e a eliminação auditada a pedido do titular (`anonymize_lead_on_request`, só owner, recusa convertido ou lead em retenção), e amarra a autoria de `activity_logs` a `auth.uid()` por trigger. As duas RPCs aparecem no detalhe do lead, na seção "Privacidade (LGPD)", visível só ao owner. A `033_leads_busca_e_limpeza.sql` cria índices GIN trigram em nome, email e telefones para a busca com ILIKE; as colunas `sheet_sync_*` continuam porque `scripts/leads/import-leads-csv.mjs` ainda as grava. O mural de feedback (034) está em [[admin-feedback]]. A matriz anon / membro sem papel / comercial / conteúdo / proprietário / service role, a reversão atômica, a fila de arquivos e o payload push sem PII são cobertos por RLS e pelos testes transacionais do CRM.
 
 ### Identidade e papéis
 

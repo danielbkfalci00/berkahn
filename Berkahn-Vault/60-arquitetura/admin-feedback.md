@@ -6,7 +6,7 @@ tags:
   - domain/admin
   - project/site
   - status/active
-ai_summary: "Mural de feedback do admin em /admin/feedback: qualquer membro sugere e conversa em formato de chat, só owner (RPC) ou a CLI mudam status aberto/implementado. Migration 034 (ainda não aplicada), botão flutuante em todas as telas e CLI scripts/admin/feedback.mjs para o Claude operar pelo terminal."
+ai_summary: "Mural de feedback do admin em /admin/feedback: qualquer membro sugere e conversa em formato de chat, só owner (RPC) ou a CLI mudam status aberto/implementado. Migration 034 aplicada e verificada em produção em 2026-09-22, botão flutuante em todas as telas e CLI scripts/admin/feedback.mjs para o Claude operar pelo terminal."
 status: active
 projeto: site
 ---
@@ -48,7 +48,7 @@ Contexto: [[admin-setup]], [[stack-nextjs-supabase]]. Desenho de threads herdado
 
 **Contador sem custo por navegação.** A sidebar faz um `COUNT` com `head: true` só ao entrar ou sair do mural, ou quando o formulário rápido avisa que criou um item. Mesmo padrão do badge de leads.
 
-**Migration pendente não quebra a tela.** Enquanto a 034 não for aplicada, o PostgREST responde `PGRST205`. A lista e o detalhe mostram um aviso explicando o que aplicar; o badge some; a CLI sai com código 2.
+**Migration pendente não quebra a tela.** A 034 foi aplicada em 2026-09-22 (tabelas, RPC e CLI conferidas contra o banco). Se um ambiente novo rodar o código antes dela, o PostgREST responde `PGRST205`. A lista e o detalhe mostram um aviso explicando o que aplicar; o badge some; a CLI sai com código 2.
 
 ## Como o Claude usa a CLI
 

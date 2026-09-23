@@ -1,11 +1,11 @@
 ---
 tipo: projeto
 criado: 2026-05-22
-atualizado: 2026-09-10
+atualizado: 2026-09-22
 tags:
   - project/site
   - status/active
-ai_summary: "Hub do Site — /sustentabilidade foi remodelada e validada em quatro viewports na branch feat/sustentabilidade; PR 80 segue aberto, sem merge ou deploy. Admin tem contas individuais, PWA/push por usuário e analytics mensal hospedado."
+ai_summary: "Hub do Site. Admin em produção em 2026-09-22 com auditoria de 74 achados aplicada (PR #94), migrations 032 (LGPD), 033 (busca) e 034 (mural de feedback com CLI, PR #96) aplicadas e verificadas, PWA abrindo em /admin. Pendentes do admin: Secure password change no Supabase e reinstalar o atalho no celular. /sustentabilidade segue no PR #80."
 status: active
 projeto: site
 kpi_paginas_indexadas: 34
@@ -71,10 +71,18 @@ Site em produção (Next.js 16 App Router + Supabase + Vercel + Tailwind + shadc
 - [x] **Analytics mensal hospedado**: workflow GitHub Actions no dia 4 reutiliza o pipeline GA4/GSC e elimina dependência do computador local. Validado em 2026-08-27 com Julho/2026: run verde e snapshot persistido no Supabase às 14:42 BRT. A primeira tentativa revelou que a anon key já armazenada não estava exposta ao job; corrigido pela PR #70. Operação e segredos em [[admin-setup]].
 - [x] **GA4 Admin concluído**: OAuth de edição validado; `article_slug` e `percent_scrolled` registrados em 10/08
 - [x] **Apps Script encerrado**: nenhuma captura ou notificação depende de Google Sheets; Web Push é o canal opcional do admin
+- [x] ~~**PWA do admin abria a home do site**~~ — resolvido em 2026-09-22. `app/admin/manifest.ts` nunca gerou rota (a convenção só vale na raiz de `app/`), e o gate de sessão devolvia 307 ao manifest, que o navegador busca sem cookie; o Chrome caía no `/manifest.json` público (`start_url: "/"`). Hoje `public/admin/manifest.webmanifest` é servido sem sessão, com `start_url: /admin`, único destino que vale para os quatro papéis. Verificado em produção: 200. **Quem instalou antes precisa remover e reinstalar o atalho**
+- [x] ~~**Auditoria completa do admin (PWA, auth, leads, analytics)**~~ — PR [#94](https://github.com/danielbkfalci00/berkahn/pull/94) mergeado em 2026-09-22. 81 achados, 74 confirmados por três céticos cada (27 médios, 47 baixos, zero críticos). Entre eles: open redirect pós-login, cookies de sessão renovados descartados nos redirects, filtro de ação vencida contando lead convertido, KPI de qualificados contando desqualificados, WhatsApp sem DDI 55, MoM de mês parcial marcando o acervo como frio, `engagementRate` multiplicado por 100 duas vezes, erro transitório do URL Inspection virando "não indexada", aviso ao usuário bloqueado por papel
+- [x] ~~**LGPD em leads**~~ — migrations 032 e 033 aplicadas e verificadas em 2026-09-22 (funções, trigger de autoria, policy e 4 índices trigram conferidos no banco). Detalhe em [[admin-setup]]
+- [x] **Mural de feedback no admin** — PR [#96](https://github.com/danielbkfalci00/berkahn/pull/96) mergeado e migration 034 aplicada em 2026-09-22. Botão flutuante em todas as telas, `/admin/feedback` em formato de chat, status aberto/implementado só por owner ou CLI, push para owner, CLI `scripts/admin/feedback.mjs`. Ver [[admin-feedback]]
 - **Core Web Vitals de campo**: otimizações estruturais entregues em [[2026-08-diagnostico-integrado-site]]; a tarefa de medição vive em “Próximos 7 dias”.
 
 ## Próximos 7 dias
 
+- [ ] @bruno Ativar "Secure password change" no Supabase (Authentication > Providers > Email): hoje a troca de senha não pede reautenticação, e a correção é de configuração, não de código #pendencia
+- [ ] @bruno Remover e reinstalar o atalho do admin no celular, para ele pegar o manifest novo e abrir em `/admin` #pendencia
+- [ ] @bruno Testar o mural de feedback logado no celular: enviar um feedback e confirmar que o push chega #pendencia
+- [ ] @codex Dar CTA ao artigo `construir-ou-comprar-pronto-numeros-grande-sp`, o único dos 40 publicados sem nenhum #pendencia
 - [x] ~~**Home redesign — fechar o PR #43**~~ — mergeado em 2026-08-06 com hub reconciliado; `@design-review` executado e follow-up PR #44 mergeado
 - [x] ~~**Trocar take e restaurar copy institucional da home**~~ — 1080p integral convertido em 72/36 frames; copy conferida contra `bc6515f`; rail de projetos preservado no código e desmontado da composição
 - [ ] @bruno Medir CWV no Speed Insights por 7 dias e consolidar em 28 dias, sem misturar as séries anterior e posterior ao Consent Mode de 2026-07-30; baseline em [[2026-08-diagnostico-integrado-site]] #pendencia
@@ -171,6 +179,8 @@ Site em produção (Next.js 16 App Router + Supabase + Vercel + Tailwind + shadc
 - [[paginas-conteudo-v2]] — estratégia de páginas (migrado de Docs/)
 
 ## Histórico recente
+
+- 2026-09-22: admin fechado em produção. Auditoria de 74 achados (#94), LGPD e busca (032/033), mural de feedback com CLI (#96, migration 034) e PWA abrindo em `/admin`. Tudo conferido em produção e no banco. Ver [[admin-setup]] e [[admin-feedback]].
 
 - 2026-09-10: `/sustentabilidade` concluída na branch `feat/sustentabilidade`: seis cenas mais CTA, 192px de respiro, fotografia híbrida, parede 3D como gesto central e cor como virada narrativa. Permaneceram somente três figuras com fonte e a ressalva do ACV brasileiro. Todas as cenas passaram por captura e medição em quatro viewports, inclusive movimento reduzido e JavaScript desligado; lint, typecheck e build verdes. PR #80 segue aberto, sem merge ou deploy. Ver [[retomada-sustentabilidade]].
 
