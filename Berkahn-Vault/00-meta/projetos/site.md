@@ -1,7 +1,7 @@
 ---
 tipo: projeto
 criado: 2026-05-22
-atualizado: 2026-09-22
+atualizado: 2026-09-23
 tags:
   - project/site
   - status/active
@@ -75,6 +75,7 @@ Site em produção (Next.js 16 App Router + Supabase + Vercel + Tailwind + shadc
 - [x] ~~**Auditoria completa do admin (PWA, auth, leads, analytics)**~~ — PR [#94](https://github.com/danielbkfalci00/berkahn/pull/94) mergeado em 2026-09-22. 81 achados, 74 confirmados por três céticos cada (27 médios, 47 baixos, zero críticos). Entre eles: open redirect pós-login, cookies de sessão renovados descartados nos redirects, filtro de ação vencida contando lead convertido, KPI de qualificados contando desqualificados, WhatsApp sem DDI 55, MoM de mês parcial marcando o acervo como frio, `engagementRate` multiplicado por 100 duas vezes, erro transitório do URL Inspection virando "não indexada", aviso ao usuário bloqueado por papel
 - [x] ~~**LGPD em leads**~~ — migrations 032 e 033 aplicadas e verificadas em 2026-09-22 (funções, trigger de autoria, policy e 4 índices trigram conferidos no banco). Detalhe em [[admin-setup]]
 - [x] **Mural de feedback no admin** — PR [#96](https://github.com/danielbkfalci00/berkahn/pull/96) mergeado e migration 034 aplicada em 2026-09-22. Botão flutuante em todas as telas, `/admin/feedback` em formato de chat, status aberto/implementado só por owner ou CLI, push para owner, CLI `scripts/admin/feedback.mjs`. Ver [[admin-feedback]]
+- [ ] **Caminhos de contato no Admin** — implementação local em 2026-09-23: resumo separa clique no WhatsApp (GA4), formulário confirmado e lead com origem WhatsApp (CRM); mensagem pré-preenchida identifica página/CTA e cadastro manual pode salvá-los. Testes analytics, lint e build passaram. Pendente deploy, novo snapshot para detalhamento GA4 por página/CTA e smoke autenticado. O caso formulário + conversa WhatsApp na mesma pessoa ainda não é vínculo automático; ver [[analytics-methodology#Caminhos de contato no Admin]].
 - **Core Web Vitals de campo**: otimizações estruturais entregues em [[2026-08-diagnostico-integrado-site]]; a tarefa de medição vive em “Próximos 7 dias”.
 
 ## Próximos 7 dias

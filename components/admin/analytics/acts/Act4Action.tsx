@@ -4,7 +4,6 @@ import { InsightsList } from "../InsightsList";
 import { TaskBoard } from "../TaskBoard";
 import { IndexationStatus } from "../IndexationStatus";
 import { FallingQueriesPanel } from "../FallingQueriesPanel";
-import { ConversionEvents } from "../ConversionEvents";
 import { FunilLeads } from "../FunilLeads";
 import { narrativeAct4Action } from "@/lib/analytics/narrative";
 import { comparisonAvailability } from "@/lib/analytics/comparability";
@@ -58,10 +57,6 @@ export function Act4Action({ context, posts = [], tasks = [], funilLeads }: Act4
           }
         />
       </div>
-      <ConversionEvents
-        events={context.ga4.events ?? []}
-        monthSlug={context.monthSlug}
-      />
       <FunilLeads funil={funilLeads} monthSlug={context.monthSlug} />
     </section>
   );

@@ -104,6 +104,8 @@ export interface ManualLeadInput {
   empresa?: string;
   cargo?: string;
   proximaAcaoEm?: string;
+  paginaOrigem?: string;
+  ctaLocation?: string;
 }
 
 function revalidateLead(id?: string) {
@@ -140,6 +142,10 @@ export async function createManualLead(input: ManualLeadInput): Promise<LeadActi
   if (!input.email?.trim() && !input.telefone?.replace(/\D/g, "")) {
     return { ok: false, error: "Informe telefone ou email." };
   }
+  const paginaOrigem = input.paginaOrigem?.trim() || "";
+  if (paginaOrigem && !/^\/[a-z0-9/_-]*$/i.test(paginaOrigem)) {
+    return { ok: false, error: "Informe apenas o caminho da página, começando com /." };
+  }
 
   const supabase = await createClient();
   const { data, error } = await supabase.rpc("create_manual_lead", {
@@ -152,8 +158,8 @@ export async function createManualLead(input: ManualLeadInput): Promise<LeadActi
     p_tipo_projeto: input.tipoProjeto?.trim() || "",
     p_empresa: input.empresa?.trim() || "",
     p_cargo: input.cargo?.trim() || "",
-    p_pagina_origem: "",
-    p_cta_location: "cadastro_manual",
+    p_pagina_origem: paginaOrigem.slice(0, 500),
+    p_cta_location: input.ctaLocation?.trim().slice(0, 160) || "cadastro_manual",
     p_proxima_acao_em: input.proximaAcaoEm || null,
   });
   if (error || !data) return { ok: false, error: error?.message || "Não foi possível criar o lead." };

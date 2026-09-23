@@ -91,6 +91,12 @@ export interface Ga4Event {
   topPages?: string;
 }
 
+export interface Ga4WhatsAppBreakdown {
+  available: boolean;
+  rows: { pagePath: string; ctaLocation: string; clicks: number }[];
+  reason?: string;
+}
+
 export interface Ga4Data {
   users: number;
   sessions: number;
@@ -102,6 +108,8 @@ export interface Ga4Data {
   byDevice: Ga4Device[];
   byArea: Ga4Area[];
   events: Ga4Event[];
+  eventsAvailable?: boolean;
+  whatsappBreakdown?: Ga4WhatsAppBreakdown;
   period: { startDate: string; endDate: string };
   articleProgress?: Ga4ArticleProgress;
 }
