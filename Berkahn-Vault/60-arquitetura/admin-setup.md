@@ -51,12 +51,18 @@ No desktop, o admin mantém a sidebar. No celular, a navegação principal fixa
 Dashboard, Analytics e Leads na barra inferior e concentra os demais destinos
 permitidos por papel em **Mais**. Header, conteúdo, drawer e barra inferior
 respeitam as safe areas do iOS/PWA.
+Nas três rotas principais, o gesto horizontal no conteúdo troca para a próxima
+aba permitida ao papel. O gesto não começa sobre controles, diálogos, gráficos
+ou listas com rolagem horizontal; as bordas da tela ficam livres para o gesto
+de voltar do sistema. A barra inferior continua sendo a navegação explícita.
 
 O Dashboard prioriza o backlog comercial ativo: leads novos, ações vencidas e
 leads sem responsável. Falha de consulta nunca é convertida em zero ou atividade
 fictícia. Analytics usa as abas Resumo, Aquisição, Conteúdo e Diagnóstico; todas
 as seções continuam disponíveis na impressão. A Inbox é a operação móvel de
-Leads e o Kanban permanece desktop-only.
+Leads e o Kanban permanece desktop-only. A prévia do lead no celular mantém
+altura fixa enquanto o contexto carrega e rola internamente; arrastar o
+cabeçalho para baixo a fecha, sem interferir na rolagem ou nos campos.
 
 > [!warning] Corrigido em 2026-07-31
 > Este diagrama dizia `output: "export"` para o site público, e a seção de
