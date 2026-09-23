@@ -156,13 +156,6 @@ export function LeadsQueue({ initialLeads, allStageLeads, total, page, pageCount
   }, [selectedLeadId]);
 
   useEffect(() => {
-    if (searchParams.get("view") !== "kanban" || !window.matchMedia("(max-width: 767px)").matches) return;
-    const inboxUrl = withView(searchParams, "inbox");
-    if (view === "inbox") window.history.replaceState(null, "", inboxUrl);
-    else router.replace(inboxUrl, { scroll: false });
-  }, [router, searchParams, view]);
-
-  useEffect(() => {
     if (!filtersOpen) return;
     const panel = filterPanelRef.current;
     panel?.querySelector<HTMLInputElement>('input[name="q"]')?.focus();
@@ -316,10 +309,7 @@ export function LeadsQueue({ initialLeads, allStageLeads, total, page, pageCount
   return (
     <div className="mx-auto max-w-7xl space-y-5">
       <div className="flex flex-wrap items-start justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-semibold text-neutral-900">Leads</h1>
-          <p className="text-sm text-neutral-500">Priorize o próximo contato.</p>
-        </div>
+        <p className="text-sm text-neutral-500">Priorize o próximo contato.</p>
         <button
           type="button"
           onClick={() => setManualOpen((value) => !value)}
@@ -344,13 +334,13 @@ export function LeadsQueue({ initialLeads, allStageLeads, total, page, pageCount
 
       <div className="flex items-center gap-1 border-b border-neutral-200" aria-label="Visualização dos leads">
         <ViewTab href={withView(searchParams, "inbox")} active={view === "inbox"}><LayoutList className="h-4 w-4" /> Inbox</ViewTab>
-        <span className="hidden md:contents"><ViewTab href={withView(searchParams, "kanban")} active={view === "kanban"}><GripVertical className="h-4 w-4" /> Kanban</ViewTab></span>
+        <ViewTab href={withView(searchParams, "kanban")} active={view === "kanban"}><GripVertical className="h-4 w-4" /> Kanban</ViewTab>
       </div>
 
-      <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 md:hidden" aria-label="Filtrar por etapa">
+      {view === "inbox" && <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 md:hidden" aria-label="Filtrar por etapa">
         <StageChip href={withStatus(searchParams, null)} active={!selectedStatus} local={localStageMode} onNavigate={navigateStage}>Todos</StageChip>
         {STATUS.map((item) => <StageChip key={item.value} href={withStatus(searchParams, item.value)} active={selectedStatus === item.value} local={localStageMode} onNavigate={navigateStage}>{item.label}</StageChip>)}
-      </div>
+      </div>}
       {pendingFilterHref && <p role="status" className="text-xs text-neutral-500">Atualizando lista de leads…</p>}
 
       {manualOpen && (
@@ -416,8 +406,8 @@ export function LeadsQueue({ initialLeads, allStageLeads, total, page, pageCount
       {view === "kanban" ? (
         <>
           {total > leads.length && <p className="rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-900">O Kanban mostra os {leads.length} leads mais recentes deste filtro. Refine a busca para operar os demais.</p>}
-          <div className="md:hidden"><LeadInbox leads={leads} pendingLeadId={pendingLeadId} onStatusChange={changeStatus} onOpen={openLead} /></div>
-          <div className="hidden md:block"><LeadKanban leads={leads} pendingLeadId={pendingLeadId} onStatusChange={changeStatus} onOpen={openLead} /></div>
+          <p className="text-xs text-neutral-500 md:hidden">Deslize para ver as etapas. Toque no card para abrir a prévia.</p>
+          <LeadKanban leads={leads} pendingLeadId={pendingLeadId} onStatusChange={changeStatus} onOpen={openLead} />
         </>
       ) : (
         <LeadInbox leads={visibleLeads} pendingLeadId={pendingLeadId} onStatusChange={changeStatus} onOpen={openLead} />
@@ -603,9 +593,9 @@ function LeadKanban({ leads, pendingLeadId, onStatusChange, onOpen }: { leads: L
     const target = event.over?.id as LeadStatus | undefined;
     if (lead && target && STATUS.some((status) => status.value === target) && lead.status !== target) onStatusChange(lead.id, target);
   }
-  return <div className="overflow-x-auto pb-2">
+  return <div className="-mx-4 overflow-x-auto overscroll-x-contain px-4 pb-2 snap-x snap-mandatory md:mx-0 md:px-0 md:snap-none" aria-label="Kanban de leads">
     <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-      <div className="grid min-w-[1380px] grid-cols-6 gap-3">
+      <div className="flex gap-3 md:grid md:min-w-[1380px] md:grid-cols-6">
         {STATUS.map((status) => <KanbanColumn key={status.value} status={status} leads={leads.filter((lead) => lead.status === status.value)} pendingLeadId={pendingLeadId} onStatusChange={onStatusChange} onOpen={onOpen} />)}
       </div>
     </DndContext>
@@ -614,7 +604,7 @@ function LeadKanban({ leads, pendingLeadId, onStatusChange, onOpen }: { leads: L
 
 function KanbanColumn({ status, leads, pendingLeadId, onStatusChange, onOpen }: { status: { value: LeadStatus; label: string }; leads: LeadListItem[]; pendingLeadId: string | null; onStatusChange: (id: string, status: LeadStatus) => void; onOpen: (lead: LeadListItem, trigger: HTMLElement) => void }) {
   const { setNodeRef, isOver } = useDroppable({ id: status.value });
-  return <section ref={setNodeRef} className={`min-h-[360px] rounded-lg border p-3 transition-colors ${isOver ? "border-neutral-900 bg-neutral-100" : "border-neutral-200 bg-neutral-50"}`}>
+  return <section ref={setNodeRef} className={`w-[min(80vw,20rem)] shrink-0 snap-start min-h-[360px] rounded-lg border p-3 transition-colors md:w-auto ${isOver ? "border-neutral-900 bg-neutral-100" : "border-neutral-200 bg-neutral-50"}`}>
     <div className="mb-3 flex items-center justify-between"><h2 className="text-xs font-semibold uppercase tracking-wider text-neutral-700">{status.label}</h2><span className="rounded-full bg-white px-2 py-0.5 text-xs text-neutral-500">{leads.length}</span></div>
     <div className="space-y-2">{leads.map((lead) => <KanbanCard key={lead.id} lead={lead} disabled={pendingLeadId !== null} onStatusChange={onStatusChange} onOpen={onOpen} />)}</div>
   </section>;
@@ -630,7 +620,7 @@ function KanbanCard({ lead, disabled, onStatusChange, onOpen }: { lead: LeadList
         onOpen(lead, event.currentTarget);
       }
     }} aria-label={`Pré-visualizar ${lead.nome}`} className="absolute inset-0 z-10 rounded-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900" />
-    <div className="flex items-start justify-between gap-2"><span className="line-clamp-2 text-sm font-semibold text-neutral-900">{lead.nome}</span><button type="button" aria-label={`Mover ${lead.nome}`} className="relative z-20 cursor-grab touch-none rounded p-1 text-neutral-400 hover:bg-neutral-100 hover:text-neutral-700" {...listeners} {...attributes}><GripVertical className="h-4 w-4" /></button></div>
+    <div className="flex items-start justify-between gap-2"><span className="line-clamp-2 text-sm font-semibold text-neutral-900">{lead.nome}</span><button type="button" aria-label={`Mover ${lead.nome}`} className="relative z-20 hidden min-h-11 min-w-11 cursor-grab touch-none items-center justify-center rounded text-neutral-400 hover:bg-neutral-100 hover:text-neutral-700 md:inline-flex" {...listeners} {...attributes}><GripVertical className="h-4 w-4" /></button></div>
     <p className="mt-2 line-clamp-3 text-xs leading-relaxed text-neutral-600">{lead.resumo_status || "Sem atualização operacional"}</p>
     <div className="mt-3 flex items-center justify-between gap-2"><span className={`rounded-full border px-2 py-0.5 text-[10px] font-medium ${priority.className}`}>{priority.label}</span><span className="truncate text-[10px] text-neutral-500">{lead.responsavel?.nome || "Sem responsável"}</span></div>
     <select value={lead.status} onChange={(event) => onStatusChange(lead.id, event.target.value as LeadStatus)} disabled={disabled} className={`${INPUT_CLASS} relative z-20 mt-3 h-8 text-[11px]`} aria-label={`Mover ${lead.nome} para outra etapa`}>{STATUS.map((item) => <option key={item.value} value={item.value}>{item.label}</option>)}</select>
