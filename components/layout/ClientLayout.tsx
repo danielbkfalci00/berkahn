@@ -20,14 +20,32 @@ export function ClientLayout({ children }: { children: React.ReactNode }) {
     return <>{children}</>;
   }
 
-  // Home: hero full-bleed encosta no topo (sem pt-20) sob header transparente
+  // Rotas que abrem com foto em tela cheia: o hero encosta no topo (sem pt-20)
+  // e a pílula começa transparente por cima dele. As demais nascem com a
+  // pílula branca e o conteúdo começa abaixo dela.
   const isHome = pathname === "/";
+  const isFullBleed = isHome || FULL_BLEED_ROUTES.has(pathname ?? "");
+
+  // Home: hero pinado com runway de 260vh, o flip para branco vem tarde.
+  // Internas: vira branco em 0.75 do viewport, antes do fim do hero; o menor
+  // deles (Empresa, 85vh no celular) sai de baixo da pílula por volta de 0.77.
+  const heroEndFactor = isHome ? 1.55 : 0.75;
 
   return (
     <MenuProvider>
-      <Header variant={isHome ? "overlay" : "default"} />
+      <Header variant={isFullBleed ? "overlay" : "default"} heroEndFactor={heroEndFactor} />
       <Sidebar />
-      <main className={isHome ? undefined : "pt-20"}>{children}</main>
+      <main className={isFullBleed ? undefined : "pt-20"}>{children}</main>
     </MenuProvider>
   );
 }
+
+const FULL_BLEED_ROUTES = new Set([
+  "/empresa",
+  "/servicos",
+  "/lsf",
+  "/residencial",
+  "/comercial-industrial",
+  "/perguntas-frequentes",
+  "/sustentabilidade",
+]);

@@ -1,11 +1,15 @@
 import Image from "next/image";
 import { RevealOnScroll } from "@/components/animations/RevealOnScroll";
 
+// Os arquivos antigos tinham nome trocado: brand-01.webp é o logo da Eternit e
+// lumen.webp o da SICLA, então o texto alternativo dizia "Brand 01" e "Lumen".
+// Os logo-*.webp são as mesmas marcas com o retângulo branco removido (fundo
+// transparente) e recortados, para não virarem caixas brancas no fundo cinza.
 const defaultPartners = [
-  { name: "Brand 01", logo: "/images/parceiros/brand-01.webp" },
-  { name: "Lumen", logo: "/images/parceiros/lumen.webp" },
-  { name: "Knauf", logo: "/images/parceiros/knauf.webp" },
-  { name: "Aquapanel", logo: "/images/parceiros/aquapanel.webp" },
+  { name: "Eternit", logo: "/images/parceiros/logo-eternit.webp" },
+  { name: "SICLA", logo: "/images/parceiros/logo-sicla.webp" },
+  { name: "Knauf", logo: "/images/parceiros/logo-knauf.webp" },
+  { name: "Aquapanel", logo: "/images/parceiros/logo-aquapanel.webp" },
 ];
 
 interface PartnersProps {
@@ -29,15 +33,17 @@ function LogoMarquee({ partners }: { partners: { name: string; logo: string }[] 
         {doubled.map((partner, i) => (
           <div
             key={`${partner.name}-${i}`}
-            className={`flex items-center justify-center shrink-0 h-32 md:h-28 w-40 md:w-48 mr-3 md:mr-16 lg:mr-24 ${i >= partners.length ? "motion-reduce:hidden" : ""}`}
+            className={`flex items-center justify-center shrink-0 h-24 w-44 md:h-28 md:w-56 mr-8 md:mr-16 lg:mr-24 ${i >= partners.length ? "motion-reduce:hidden" : ""}`}
           >
-            <div className="relative w-full h-full md:grayscale md:opacity-50 md:hover:grayscale-0 md:hover:opacity-100 transition-all duration-500 motion-reduce:transition-none">
+            {/* Em cor e opacidade cheia: com tons de cinza e 50% de opacidade,
+                logos pequenos sobre fundo cinza mal se liam. */}
+            <div className="relative h-10 w-full md:h-12">
               <Image
                 src={partner.logo}
                 alt={`Logo ${partner.name}`}
                 fill
                 className="object-contain"
-                sizes="200px"
+                sizes="224px"
               />
             </div>
           </div>

@@ -67,8 +67,10 @@ function CardStack({
   return (
     <div className="stack-perspective relative flex items-center justify-center w-[280px] h-[200px] md:w-[400px] md:h-[280px]">
       {cards.map((card, index) => {
+        // Pseudoaleatório a partir do id, não Math.random: o sorteio saía
+        // diferente no servidor e no navegador e quebrava a hidratação.
         const randomRotate = randomRotation
-          ? Math.random() * 8 - 4
+          ? ((((Number(card.id) || index + 1) * 2654435761) % 1000) / 1000) * 8 - 4
           : 0;
 
         return (
