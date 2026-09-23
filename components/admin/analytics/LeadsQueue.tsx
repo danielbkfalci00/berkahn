@@ -549,9 +549,9 @@ function LeadQuickView({ lead, preview, onClose, onRestoreFocus, onStatusChange,
           </div>
         </header>
         <div className="min-h-0 flex-1 space-y-6 overflow-y-auto px-5 py-5">
-          <div className="grid grid-cols-3 gap-2">
+          <div className="grid grid-cols-3 gap-2 max-[360px]:grid-cols-2">
             {phoneDigits && <a href={`tel:${phoneDigits}`} className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-md border border-neutral-300 text-sm font-medium focus-visible:outline-2 focus-visible:outline-neutral-900"><Phone className="h-4 w-4" /> Ligar</a>}
-            {phoneDigits && <a href={`https://wa.me/${whatsappDigits}`} target="_blank" rel="noreferrer" className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-md bg-neutral-950 text-sm font-medium text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900"><MessageCircle className="h-4 w-4" /> WhatsApp</a>}
+            {phoneDigits && <a href={`https://wa.me/${whatsappDigits}`} target="_blank" rel="noreferrer" className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-md bg-neutral-950 text-sm font-medium text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900 max-[360px]:order-first max-[360px]:col-span-2"><MessageCircle className="h-4 w-4" /> WhatsApp</a>}
             {lead.email && <a href={`mailto:${lead.email}`} className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-md border border-neutral-300 text-sm font-medium focus-visible:outline-2 focus-visible:outline-neutral-900"><Mail className="h-4 w-4" /> Email</a>}
           </div>
           <section className="space-y-3 border-b border-neutral-200 pb-5">
