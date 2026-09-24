@@ -1,16 +1,17 @@
 ---
 tipo: draft-content
 criado: 2026-09-22
-atualizado: 2026-09-22
+atualizado: 2026-09-23
 tags:
   - project/blog
   - status/draft
   - domain/lsf
   - domain/normas
 ai_summary: "Pauta 3 do lote dos sócios. O projeto integrado em Light Steel Frame lido como calendário de decisão, com a tese de que o projeto congela mais cedo que em alvenaria porque o painel vira ordem de fabricação. Ancorado nas três janelas do item 10.5 do manual Steel Framing: Arquitetura do CBCA (Santiago, Freitas e Crasto, 2012), na malha de referência de 1200 mm adotada porque a modulação de 400 ou 600 mm ainda não está decidida, nos 70% de custo definidos na fase de projeto segundo o texto original de Cambiaghi na AsBEA, que o manual do CBCA estreita para a concepção arquitetônica, e na seção H8 do AISI S202-20, que manda precificar a mudança pelo quanto ela chega tarde diante do detalhamento e da fabricação. Registra que o Decreto 10.306/2020 do BIM não alcança obra privada e que o Ministério da Infraestrutura citado no artigo 2º foi repartido pela Lei 14.600/2023. A NBR 16636:2017 entra com Parte e item conferidos. Sem preço de projeto, sem rito de prefeitura e sem refazer painelizado contra stick."
-status: draft
+status: published
 projeto: blog
 slug: projeto-integrado-light-steel-frame
+data_publicacao: 2026-09-23
 title: "Projeto integrado em Light Steel Frame: o que congela antes da obra"
 seo_title: "Projeto Integrado Light Steel Frame: o Que Fechar Antes"
 description: "Em Light Steel Frame o projeto para de aceitar mudança antes de a obra começar. Veja quais decisões fecham em cada etapa e o que muda tarde custa a mais."
@@ -26,6 +27,8 @@ category: Guias e Tutoriais
 read_time: 8 min
 author: Equipe Berkahn
 answer_summary: "Em Light Steel Frame o projeto congela antes de a obra começar, porque o painel deixa de ser desenho e vira ordem de fabricação. O manual Steel Framing: Arquitetura, do CBCA, organiza esse fechamento em três janelas, estudo preliminar, anteprojeto e projeto executivo. Nele o arquiteto desenha sobre uma malha de 1200 mm porque ainda não sabe se a modulação será de 400 ou de 600 mm. Segundo Cambiaghi, a fase de projeto custa de 5% a 6% da obra e as decisões tomadas nela representam mais de 70% das despesas. O código norte-americano AISI S202-20 manda precificar a mudança pelo quanto ela chega tarde diante do detalhamento e da fabricação, e o Brasil não tem equivalente."
+supabase_id: 8d71501b-2b87-445e-b6a8-1de8f77f4349
+url_final: "https://www.berkahn.com.br/atualidades/projeto-integrado-light-steel-frame"
 contextos_aplicados:
   - berkahn-brand
   - seo-aeo-strategy
