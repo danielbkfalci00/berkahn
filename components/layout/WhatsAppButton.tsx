@@ -15,6 +15,39 @@ interface TrackedWhatsAppLinkProps
   segment?: string;
 }
 
+const PAGINAS: Record<string, string> = {
+  "/": "Estava na página inicial do site.",
+  "/atualidades": "Estava no blog do site.",
+  "/residencial": "Estava na página de construção residencial.",
+  "/comercial-industrial": "Estava na página de construção comercial e industrial.",
+  "/lsf": "Estava na página sobre Light Steel Frame.",
+  "/servicos": "Estava na página de serviços.",
+  "/portfolio": "Estava vendo o portfólio.",
+  "/contato": "Vim pela página de contato.",
+  "/perguntas-frequentes": "Estava nas perguntas frequentes.",
+  "/empresa": "Estava na página sobre a empresa.",
+  "/sustentabilidade": "Estava na página de sustentabilidade.",
+};
+
+function tituloDaPagina(): string | null {
+  const h1 = document.querySelector("h1")?.textContent?.replace(/\s+/g, " ").trim();
+  if (!h1) return null;
+  return h1.length > 90 ? `${h1.slice(0, 87).trimEnd()}...` : h1;
+}
+
+function descreverPagina(pathname: string | null): string | null {
+  const caminho = pathname || "/";
+  if (PAGINAS[caminho]) return PAGINAS[caminho];
+  const titulo = tituloDaPagina();
+  if (caminho.startsWith("/atualidades/")) {
+    return titulo ? `Estava lendo o artigo "${titulo}" no site.` : "Estava lendo um artigo no site.";
+  }
+  if (caminho.startsWith("/projetos/")) {
+    return titulo ? `Estava vendo o projeto "${titulo}" no site.` : "Estava vendo um projeto no site.";
+  }
+  return titulo ? `Estava na página "${titulo}" do site.` : "Vim pelo site.";
+}
+
 export function TrackedWhatsAppLink({
   href,
   ctaLocation,
@@ -26,16 +59,23 @@ export function TrackedWhatsAppLink({
   const pathname = usePathname();
   const url = new URL(href);
   const originalMessage = url.searchParams.get("text")?.trim() || "Olá! Gostaria de falar com a Berkahn.";
-  const origin = `Origem no site: ${pathname || "/"} · ${ctaLocation}`;
-  if (!originalMessage.includes("Origem no site:")) {
-    url.searchParams.set("text", `${originalMessage}\n${origin}`);
-  }
+  url.searchParams.set("text", originalMessage);
 
   return (
     <a
       {...props}
       href={url.toString()}
       onClick={(event) => {
+        // A origem entra na mensagem só no clique, em linguagem natural. Antes
+        // ia como "Origem no site: /atualidades/slug · whatsapp_flutuante",
+        // código interno que o visitante via e enviava. Ler o título no clique
+        // evita mapear cada rota e acompanha páginas novas sozinho.
+        const origem = descreverPagina(pathname);
+        if (origem) {
+          const destino = new URL(url.toString());
+          destino.searchParams.set("text", `${originalMessage} ${origem}`);
+          event.currentTarget.href = destino.toString();
+        }
         trackEvent("whatsapp_click", {
           page_path: pathname ?? undefined,
           cta_location: ctaLocation,
