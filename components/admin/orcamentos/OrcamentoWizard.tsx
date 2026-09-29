@@ -304,6 +304,7 @@ export function OrcamentoWizard({ orcamentoInicial, dadosIniciais, returnTo = "/
         <fieldset disabled={salvar.status === "salvando" || salvar.status === "finalizando"}>
         {stepAtivo === 1 && (
           <Step1Cliente
+            returnTo={returnTo}
             dados={state.dados}
             erros={erros}
             onChange={onChange}

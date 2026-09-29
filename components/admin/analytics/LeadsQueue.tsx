@@ -56,6 +56,10 @@ const STATUS: Array<{ value: LeadStatus; label: string }> = [
 
 const INPUT_CLASS = "min-h-11 w-full rounded-md border border-neutral-300 bg-white px-3 text-sm text-neutral-900 outline-none focus:border-neutral-900 focus:ring-2 focus:ring-neutral-200";
 
+// Match the dashboard's operational timezone on both server and browser.
+const LEAD_DATE_SHORT = new Intl.DateTimeFormat("pt-BR", { dateStyle: "short", timeStyle: "short", timeZone: "America/Sao_Paulo" });
+const LEAD_DATE_MEDIUM = new Intl.DateTimeFormat("pt-BR", { dateStyle: "medium", timeStyle: "short", timeZone: "America/Sao_Paulo" });
+
 function isoToLocalInput(value?: string | null): string {
   if (!value) return "";
   const date = new Date(value);
@@ -607,7 +611,7 @@ function LeadQuickView({ lead, preview, onClose, onRestoreFocus, onStatusChange,
             <div className="flex items-center justify-between gap-3"><span className="text-sm text-neutral-500">Etapa</span><select value={lead.status} onChange={(event) => onStatusChange(lead.id, event.target.value as LeadStatus)} disabled={pending} aria-label={`Etapa de ${lead.nome}`} className="min-h-11 max-w-[65%] rounded-md border border-neutral-300 bg-white px-3 text-sm font-medium text-neutral-900 focus-visible:outline-2 focus-visible:outline-neutral-900">{STATUS.map((item) => <option key={item.value} value={item.value}>{item.label}</option>)}</select></div>
             <div className="flex justify-between gap-3 text-sm"><span className="text-neutral-500">Prioridade</span><span className="font-medium text-neutral-900">{priorityMeta(lead.prioridade).label}</span></div>
             <div className="flex justify-between gap-3 text-sm"><span className="text-neutral-500">Responsável</span><span className="text-right font-medium text-neutral-900">{lead.responsavel?.nome || "Pendente"}</span></div>
-            <div className="flex justify-between gap-3 text-sm"><span className="text-neutral-500">Próxima ação</span><span className="text-right font-medium text-neutral-900">{lead.proxima_acao_em ? new Intl.DateTimeFormat("pt-BR", { dateStyle: "short", timeStyle: "short" }).format(new Date(lead.proxima_acao_em)) : "Não agendada"}</span></div>
+            <div className="flex justify-between gap-3 text-sm"><span className="text-neutral-500">Próxima ação</span><span className="text-right font-medium text-neutral-900">{lead.proxima_acao_em ? LEAD_DATE_SHORT.format(new Date(lead.proxima_acao_em)) : "Não agendada"}</span></div>
             {lead.resumo_status && <p className="rounded-md bg-neutral-50 p-3 text-sm leading-relaxed text-neutral-700">{lead.resumo_status}</p>}
             {savingStatus && <p role="status" className="text-xs text-neutral-500">Salvando etapa…</p>}
             {error && <p role="alert" className="text-sm text-red-700">{error}</p>}
@@ -619,7 +623,7 @@ function LeadQuickView({ lead, preview, onClose, onRestoreFocus, onStatusChange,
             {preview?.status === "unavailable" && <p role="alert" className="text-sm text-amber-800">{preview.reason}</p>}
             {details && <>
               <dl className="grid grid-cols-2 gap-x-4 gap-y-3 text-sm">
-                <div><dt className="text-neutral-500">Recebido</dt><dd className="mt-0.5 text-neutral-900">{new Intl.DateTimeFormat("pt-BR", { dateStyle: "short", timeStyle: "short" }).format(new Date(details.criado_em))}</dd></div>
+                <div><dt className="text-neutral-500">Recebido</dt><dd className="mt-0.5 text-neutral-900">{LEAD_DATE_SHORT.format(new Date(details.criado_em))}</dd></div>
                 <div><dt className="text-neutral-500">Canal</dt><dd className="mt-0.5 text-neutral-900">{details.canal}</dd></div>
                 <div><dt className="text-neutral-500">Segmento</dt><dd className="mt-0.5 text-neutral-900">{details.segmento === "nao_definido" ? "Não definido" : details.segmento}</dd></div>
                 <div><dt className="text-neutral-500">Projeto</dt><dd className="mt-0.5 text-neutral-900">{details.tipo_projeto || "—"}</dd></div>
@@ -665,7 +669,7 @@ function LeadInbox({ leads, pendingLeadId, onStatusChange, onOpen }: { leads: Le
           <div className="mt-1 hidden items-center gap-2 lg:flex"><span className={`rounded-full border px-2 py-0.5 text-[10px] font-medium ${priority.className}`}>{priority.label}</span>{lead.artifact_count > 0 && <span className="inline-flex items-center gap-1 text-[10px] text-neutral-500"><FileText className="h-3 w-3" />{lead.artifact_count}</span>}</div>
         </div>
         <p className="inline-flex items-center gap-1.5 text-xs text-neutral-600"><UserRound className="h-3.5 w-3.5" />{lead.responsavel?.nome || "Sem responsável"}</p>
-        <p className={`inline-flex items-center gap-1.5 text-xs ${overdue ? "font-semibold text-red-700" : "text-neutral-600"}`}><Clock3 className="h-3.5 w-3.5" />{lead.proxima_acao_em ? new Intl.DateTimeFormat("pt-BR", { dateStyle: "short", timeStyle: "short" }).format(new Date(lead.proxima_acao_em)) : "Não agendada"}</p>
+        <p className={`inline-flex items-center gap-1.5 text-xs ${overdue ? "font-semibold text-red-700" : "text-neutral-600"}`}><Clock3 className="h-3.5 w-3.5" />{lead.proxima_acao_em ? LEAD_DATE_SHORT.format(new Date(lead.proxima_acao_em)) : "Não agendada"}</p>
         <select value={lead.status} onChange={(event) => onStatusChange(lead.id, event.target.value as LeadStatus)} disabled={pendingLeadId !== null} className={`${INPUT_CLASS} relative z-20 hidden h-9 text-xs lg:block`} aria-label={`Status de ${lead.nome}`}>{STATUS.map((status) => <option key={status.value} value={status.value}>{status.label}</option>)}</select>
         <ChevronRight className="absolute right-4 top-5 h-4 w-4 text-neutral-400 lg:static lg:justify-self-end" aria-hidden />
       </article>;
@@ -857,8 +861,8 @@ export function LeadDetail({
         <div>
           <Link href={backPath} className="inline-flex min-h-11 items-center text-sm text-neutral-500 hover:text-neutral-900">← Voltar para leads</Link>
           <h1 className="mt-2 text-2xl font-semibold text-neutral-900">{lead.nome}</h1>
-          <p className="text-sm text-neutral-500">Recebido em {new Intl.DateTimeFormat("pt-BR", { dateStyle: "medium", timeStyle: "short" }).format(new Date(lead.criado_em))} · {STATUS.find((item) => item.value === lead.status)?.label}</p>
-          <p className={`mt-3 inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm ${lead.proxima_acao_em && new Date(lead.proxima_acao_em) < new Date() && !["convertido", "desqualificado"].includes(lead.status) ? "bg-red-50 font-medium text-red-800" : "bg-neutral-100 text-neutral-700"}`}><Clock3 className="h-4 w-4" /> Próxima ação: {lead.proxima_acao_em ? new Intl.DateTimeFormat("pt-BR", { dateStyle: "short", timeStyle: "short" }).format(new Date(lead.proxima_acao_em)) : "não agendada"}</p>
+          <p className="text-sm text-neutral-500">Recebido em {LEAD_DATE_MEDIUM.format(new Date(lead.criado_em))} · {STATUS.find((item) => item.value === lead.status)?.label}</p>
+          <p className={`mt-3 inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm ${lead.proxima_acao_em && new Date(lead.proxima_acao_em) < new Date() && !["convertido", "desqualificado"].includes(lead.status) ? "bg-red-50 font-medium text-red-800" : "bg-neutral-100 text-neutral-700"}`}><Clock3 className="h-4 w-4" /> Próxima ação: {lead.proxima_acao_em ? LEAD_DATE_SHORT.format(new Date(lead.proxima_acao_em)) : "não agendada"}</p>
         </div>
         <div className="grid w-full grid-cols-3 gap-2 sm:flex sm:w-auto sm:flex-wrap">
           {phoneDigits && <a href={`tel:+${phoneDigits}`} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-neutral-300 bg-white px-3 text-sm font-medium"><Phone className="h-4 w-4" /> Ligar</a>}
@@ -893,7 +897,7 @@ export function LeadDetail({
           <section className="rounded-lg border border-neutral-200 bg-white p-5">
             <h2 className="font-medium text-neutral-900">Linha do tempo</h2>
             <ol className="mt-5 space-y-4 border-l border-neutral-200 pl-5">
-              {timeline.length === 0 ? <li className="text-sm text-neutral-500">Nenhuma atividade registrada.</li> : timeline.map((activity) => <li key={activity.id} className="relative text-sm"><span className="absolute -left-[25px] top-1 h-2 w-2 rounded-full bg-neutral-900" /><p className="font-medium text-neutral-900">{activity.action}</p><p className="text-xs text-neutral-500">{new Intl.DateTimeFormat("pt-BR", { dateStyle: "short", timeStyle: "short" }).format(new Date(activity.created_at))} · {activity.user_name || "Admin"}</p><ActivityDetails details={activity.details} responsibles={responsibles} returnTo={detailHref} /></li>)}
+              {timeline.length === 0 ? <li className="text-sm text-neutral-500">Nenhuma atividade registrada.</li> : timeline.map((activity) => <li key={activity.id} className="relative text-sm"><span className="absolute -left-[25px] top-1 h-2 w-2 rounded-full bg-neutral-900" /><p className="font-medium text-neutral-900">{activity.action}</p><p className="text-xs text-neutral-500">{LEAD_DATE_SHORT.format(new Date(activity.created_at))} · {activity.user_name || "Admin"}</p><ActivityDetails details={activity.details} responsibles={responsibles} returnTo={detailHref} /></li>)}
             </ol>
             {hasMore && <button type="button" disabled={loadingHistory} onClick={olderActivities} className="mt-4 min-h-11 rounded border px-3 text-sm">{loadingHistory ? "Carregando…" : "Carregar anteriores"}</button>}
           </section>
@@ -954,7 +958,7 @@ function ActivityDetails({ details, responsibles, returnTo }: { details: Record<
     {details.status_novo !== undefined && <p>{stage(details.status_anterior)} → {stage(details.status_novo)}</p>}
     {typeof details.motivo_desqualificacao === "string" && <p>Motivo: {details.motivo_desqualificacao}</p>}
     {typeof details.nota === "string" && <p className="whitespace-pre-wrap">{details.nota}</p>}
-    {"proxima_acao_em" in details && <p>Próxima ação: {nextAction && !Number.isNaN(nextAction.getTime()) ? nextAction.toLocaleString("pt-BR") : "concluída / sem agendamento"}</p>}
+    {"proxima_acao_em" in details && <p>Próxima ação: {nextAction && !Number.isNaN(nextAction.getTime()) ? LEAD_DATE_SHORT.format(nextAction) : "concluída / sem agendamento"}</p>}
     {"responsavel_id" in details && <p>Responsável: {responsibles.find((item) => item.id === details.responsavel_id)?.nome || (details.responsavel_id ? "Integrante anterior" : "sem responsável")}</p>}
     {typeof details.prioridade === "string" && <p>Prioridade: {details.prioridade}</p>}
     {typeof details.resumo_status === "string" && <p className="whitespace-pre-wrap">{details.resumo_status}</p>}

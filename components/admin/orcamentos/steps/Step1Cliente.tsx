@@ -2,12 +2,14 @@
 
 import { useState, useTransition } from "react"
 import Link from "next/link"
+import { leadHref } from "@/lib/admin/return-to"
 import { searchBudgetLeads } from "@/app/admin/orcamentos/actions"
 
 import type { OrcamentoInsert } from "@/types/orcamento-estimativa"
 import { TextField } from "../form-fields"
 
 interface Props {
+  returnTo?: string
   dados: OrcamentoInsert
   erros: Record<string, string>
   onChange: <K extends keyof OrcamentoInsert>(
@@ -16,7 +18,7 @@ interface Props {
   ) => void
 }
 
-export function Step1Cliente({ dados, erros, onChange }: Props) {
+export function Step1Cliente({ dados, erros, onChange, returnTo = "/admin/leads" }: Props) {
   const [query, setQuery] = useState("")
   const [results, setResults] = useState<Awaited<ReturnType<typeof searchBudgetLeads>>>([])
   const [pending, startTransition] = useTransition()
@@ -33,7 +35,7 @@ export function Step1Cliente({ dados, erros, onChange }: Props) {
       <div className="space-y-4">
         <div className="space-y-2 rounded-md border border-neutral-200 p-3">
           <p className="text-sm font-medium">Lead vinculado</p>
-          {dados.lead_id ? <div className="flex gap-3 text-sm"><Link href={`/admin/leads/${dados.lead_id}`} className="underline">Abrir lead</Link><button type="button" onClick={() => onChange("lead_id", null)} className="underline">Remover vínculo</button></div> : <p className="text-xs text-neutral-500">Vincule ao CRM para acompanhar envio e retorno.</p>}
+          {dados.lead_id ? <div className="flex gap-3 text-sm"><Link href={leadHref(dados.lead_id, returnTo)} className="underline">Abrir lead</Link><button type="button" onClick={() => onChange("lead_id", null)} className="underline">Remover vínculo</button></div> : <p className="text-xs text-neutral-500">Vincule ao CRM para acompanhar envio e retorno.</p>}
           <div className="flex gap-2"><input aria-label="Buscar lead por nome, email ou telefone" value={query} onChange={(event) => setQuery(event.target.value)} className="min-h-11 min-w-0 flex-1 rounded border px-3 text-sm" placeholder="Nome, email ou telefone" /><button type="button" disabled={pending || query.trim().length < 2} className="min-h-11 rounded border px-3 text-sm disabled:opacity-50" onClick={() => startTransition(async () => { try { const found = await searchBudgetLeads(query); setResults(found); setMessage(found.length ? "" : "Nenhum lead encontrado."); } catch (error) { setMessage(error instanceof Error ? error.message : "Falha na busca."); } })}>{pending ? "Buscando…" : "Buscar"}</button></div>
           {message && <p role="status" className="text-xs text-neutral-600">{message}</p>}
           {results.map((lead) => <button key={lead.id} type="button" className="block min-h-11 w-full rounded border px-3 text-left text-sm hover:bg-neutral-50" onClick={() => { onChange("lead_id", lead.id); onChange("cliente_nome", lead.nome); onChange("cliente_email", lead.email); onChange("cliente_telefone", lead.telefone); setResults([]); setQuery(""); }}>{lead.nome} · {lead.email || lead.telefone}</button>)}
