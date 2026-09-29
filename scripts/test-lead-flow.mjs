@@ -84,6 +84,7 @@ const initialRevision = '2026-09-29T16:00:00.000000+00:00';
     useRef(initial) { const i = cursor++; slots[i] ??= { current: initial }; return slots[i]; },
     useCallback(callback) { cursor++; return callback; },
     useMemo(compute) { cursor++; return compute(); },
+    useTransition() { cursor++; return [false, (callback) => callback()]; },
   };
   const element = (type, props) => ({ type, props });
   const symbols = new Proxy({}, { get: (_, name) => String(name) });
@@ -113,6 +114,7 @@ const initialRevision = '2026-09-29T16:00:00.000000+00:00';
   const record = { ...wizardModule.initialState().dados, id: 'existing', numero: 'TEST-1', atualizado_em: initialRevision, cliente_nome: 'Teste', obra_endereco: 'Rua de teste', obra_cidade: 'Cidade', projeto_area_m2: 100, valor_min: 100, valor_max: 200, valor_m2_min: 1, valor_m2_max: 2 };
   const render = () => { cursor = 0; return wizard({ orcamentoInicial: record, returnTo: context }); };
   let tree = render();
+  assert.equal(nodes(tree, (node) => node.type === 'Step1Cliente')[0].props.returnTo, context);
   nodes(tree, (node) => node.type === 'Step1Cliente')[0].props.onChange('cliente_nome', 'Teste revisado');
   tree = render();
   assert.equal(dirty.at(-1), true);
@@ -123,6 +125,12 @@ const initialRevision = '2026-09-29T16:00:00.000000+00:00';
   assert.equal(nodes(tree, (node) => node.type === 'Link')[0].props.href, returns.commercialHref('/admin/orcamentos/existing', context));
   await button(tree, 'Finalizar').props.onClick();
   assert.equal(destinations.at(-1), returns.commercialHref('/admin/orcamentos/existing', context));
+
+  slots.length = 0;
+  cursor = 0;
+  const step = loadCommonModule(readFileSync(new URL('../components/admin/orcamentos/steps/Step1Cliente.tsx', import.meta.url), 'utf8'), { ...imports, '../form-fields': symbols }).Step1Cliente;
+  const stepTree = step({ dados: { ...record, lead_id: '12345678-1234-1234-1234-123456789abc' }, erros: {}, onChange() {}, returnTo: context });
+  assert.equal(nodes(stepTree, (node) => node.type === 'Link')[0].props.href, context, 'The linked lead shortcut inside the form also preserves the queue');
 
   slots.length = 0;
   const upload = loadCommonModule(readFileSync(new URL('../components/admin/orcamentos/PlanilhaUpload.tsx', import.meta.url), 'utf8'), imports).PlanilhaUpload;

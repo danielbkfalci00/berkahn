@@ -580,6 +580,26 @@ for (const navigationApi of [false, true]) {
   const detailLead = { ...leadA, email: null, telefone: null, segmento: 'nao_definido', utm: {}, criado_em: '2026-09-29T10:00:00Z' };
   const detailProps = { lead: detailLead, activities: Array.from({ length: 25 }, (_, i) => activity(i + 1)), hasMoreActivities: true, budgets: [], proposals: [], artifacts: [], responsibles: [], contextLinks: {} };
   {
+    const originalTimezone = process.env.TZ;
+    const output = [];
+    try {
+      for (const timezone of ['UTC', 'America/Sao_Paulo', 'Asia/Tokyo']) {
+        process.env.TZ = timezone;
+        const h = crmHarness();
+        const tree = h.render('LeadDetail', { ...detailProps, lead: { ...detailLead, criado_em: '2026-09-29T01:30:00Z', proxima_acao_em: '2030-01-01T01:00:00Z' } });
+        const text = (value) => Array.isArray(value) ? value.map(text).join('') : value?.props ? text(value.props.children) : typeof value === 'string' ? value : '';
+        output.push(text(tree));
+        h.unmount();
+      }
+    } finally {
+      if (originalTimezone === undefined) delete process.env.TZ;
+      else process.env.TZ = originalTimezone;
+    }
+    assert.equal(output[0], output[1], 'SSR and browser timezones must not change CRM timestamp text');
+    assert.equal(output[0], output[2]);
+    assert.ok(output[0].includes('22:30'), 'Received timestamp uses the same Brasilia timezone as the dashboard');
+  }
+  {
     const queue = '/admin/leads?q=Casa+azul&status=qualificado&page=3&view=inbox';
     const leadId = '12345678-1234-1234-1234-123456789abc';
     const context = returnHelpers.leadHref(leadId, queue);
