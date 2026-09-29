@@ -185,7 +185,7 @@ export function PostsTable({ posts, search, statusFilter, page, pageSize, total 
       </div>
 
       {/* Table */}
-      <div className="divide-y divide-neutral-200 md:hidden">
+      <div className="divide-y divide-neutral-200 xl:hidden">
         {filteredPosts.length === 0 ? (
           <p className="p-6 text-center text-neutral-500">Nenhum post encontrado</p>
         ) : filteredPosts.map((post) => (
@@ -201,16 +201,16 @@ export function PostsTable({ posts, search, statusFilter, page, pageSize, total 
           </article>
         ))}
       </div>
-      <div className="hidden md:block">
-      <Table>
+      <div className="hidden xl:block">
+      <Table className="table-fixed">
         <TableHeader>
           <TableRow>
-            <TableHead className="w-12"></TableHead>
+            <TableHead className="w-8"></TableHead>
             <TableHead>Título</TableHead>
-            <TableHead>Categoria</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Data</TableHead>
-            <TableHead className="text-right">Ações</TableHead>
+            <TableHead className="w-32">Categoria</TableHead>
+            <TableHead className="w-24">Status</TableHead>
+            <TableHead className="w-36">Data</TableHead>
+            <TableHead className="w-52 text-right">Ações</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -227,8 +227,8 @@ export function PostsTable({ posts, search, statusFilter, page, pageSize, total 
                   {post.featured && <Star className="h-4 w-4 fill-amber-500 text-amber-500" aria-label="Destaque" />}
                 </TableCell>
                 <TableCell>
-                  <div className="max-w-md">
-                    <p className="font-medium text-neutral-900 truncate">
+                  <div className="min-w-0">
+                    <p className="font-medium text-neutral-900 truncate" title={post.title}>
                       {post.title}
                     </p>
                     <p className="text-sm text-neutral-500 truncate">
