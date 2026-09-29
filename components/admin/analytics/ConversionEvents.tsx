@@ -5,7 +5,7 @@ import type { FunilLeads } from "@/lib/analytics/leads-funnel";
 
 interface ConversionEventsProps {
   ga4: Ga4Data;
-  funil: AdminDataResult<FunilLeads>;
+  funil: AdminDataResult<FunilLeads> | null;
   /** Mês do snapshot ("2026-08"), para o estado vazio saber o que dizer. */
   monthSlug?: string;
 }
@@ -46,8 +46,8 @@ export function ConversionEvents({ ga4, funil, monthSlug }: ConversionEventsProp
   const events = ga4.events ?? [];
   const ordenados = ordenar(events.filter((event) => event.name !== "article_progress"));
   const whatsappClicks = events.find((e) => e.name === "whatsapp_click")?.count ?? 0;
-  const formLeads = funil.status === "ok" ? funil.data.porCanal.find((c) => c.rotulo === "form")?.total ?? 0 : null;
-  const whatsappLeads = funil.status === "ok" ? funil.data.porCanal.find((c) => c.rotulo === "whatsapp")?.total ?? 0 : null;
+  const formLeads = funil?.status === "ok" ? funil.data.porCanal.find((c) => c.rotulo === "form")?.total ?? 0 : null;
+  const whatsappLeads = funil?.status === "ok" ? funil.data.porCanal.find((c) => c.rotulo === "whatsapp")?.total ?? 0 : null;
   const gaEventsAvailable = ga4.eventsAvailability?.available ?? ga4.eventsAvailable ?? events.length > 0;
   const breakdown = ga4.whatsappBreakdown;
 
@@ -57,14 +57,14 @@ export function ConversionEvents({ ga4, funil, monthSlug }: ConversionEventsProp
   return (
     <div className="rounded-lg border border-neutral-200 bg-white p-4 sm:p-6">
       <h3 className="text-base font-semibold text-neutral-900">Caminhos de contato</h3>
-      <p className="mt-1 text-xs text-neutral-600">No período selecionado · cliques são intenção; registros no CRM são contatos recebidos.</p>
-      <dl className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-4">
+      <p className="mt-1 text-xs text-neutral-600">No período selecionado · cliques são intenção{funil ? "; registros no CRM são contatos recebidos." : " de contato."}</p>
+      <dl className={`mt-4 grid gap-2 sm:gap-4 ${funil ? "grid-cols-2 sm:grid-cols-3" : "grid-cols-1"}`}>
         <div className="rounded-md bg-neutral-50 p-3"><dt className="text-xs text-neutral-600">Cliques no WhatsApp</dt><dd className="mt-1 text-xl font-semibold tabular-nums">{gaEventsAvailable ? whatsappClicks.toLocaleString("pt-BR") : "—"}</dd><span className="text-[11px] text-neutral-500">GA4 · com consentimento</span></div>
-        <div className="rounded-md bg-neutral-50 p-3"><dt className="text-xs text-neutral-600">Formulários</dt><dd className="mt-1 text-xl font-semibold tabular-nums">{formLeads?.toLocaleString("pt-BR") ?? "—"}</dd><span className="text-[11px] text-neutral-500">CRM · confirmados</span></div>
-        <div className="col-span-2 rounded-md bg-neutral-50 p-3 sm:col-span-1"><dt className="text-xs text-neutral-600">Leads via WhatsApp</dt><dd className="mt-1 text-xl font-semibold tabular-nums">{whatsappLeads?.toLocaleString("pt-BR") ?? "—"}</dd><span className="text-[11px] text-neutral-500">CRM · origem registrada</span></div>
+        {funil && <><div className="rounded-md bg-neutral-50 p-3"><dt className="text-xs text-neutral-600">Formulários</dt><dd className="mt-1 text-xl font-semibold tabular-nums">{formLeads?.toLocaleString("pt-BR") ?? "—"}</dd><span className="text-[11px] text-neutral-500">CRM · confirmados</span></div>
+        <div className="col-span-2 rounded-md bg-neutral-50 p-3 sm:col-span-1"><dt className="text-xs text-neutral-600">Leads via WhatsApp</dt><dd className="mt-1 text-xl font-semibold tabular-nums">{whatsappLeads?.toLocaleString("pt-BR") ?? "—"}</dd><span className="text-[11px] text-neutral-500">CRM · origem registrada</span></div></>}
       </dl>
-      {(funil.status === "unavailable" || !gaEventsAvailable) && <p role="status" className="mt-3 text-xs text-amber-800">{funil.status === "unavailable" ? "CRM indisponível. " : ""}{!gaEventsAvailable ? ga4.eventsAvailability?.reason ?? "Eventos GA4 não verificados neste snapshot." : ""}</p>}
-      <p className="mt-3 text-xs text-neutral-600">Eventos não representam pessoas únicas. As bases têm coberturas diferentes: não some estes números. Um clique não comprova conversa; quem enviou formulário e depois chamou no WhatsApp continua com origem “form” no CRM.</p>
+      {(funil?.status === "unavailable" || !gaEventsAvailable) && <p role="status" className="mt-3 text-xs text-amber-800">{funil?.status === "unavailable" ? "CRM indisponível. " : ""}{!gaEventsAvailable ? ga4.eventsAvailability?.reason ?? "Eventos GA4 não verificados neste snapshot." : ""}</p>}
+      <p className="mt-3 text-xs text-neutral-600">Eventos não representam pessoas únicas. Um clique não comprova conversa.{funil && " As bases têm coberturas diferentes: não some estes números. Quem enviou formulário e depois chamou no WhatsApp continua com origem “form” no CRM."}</p>
 
       <details className="mt-3 border-t border-neutral-100 pt-2">
         <summary className="flex min-h-11 cursor-pointer items-center text-sm font-medium text-neutral-700">Ver origens e eventos</summary>

@@ -418,4 +418,186 @@ for (const navigationApi of [false, true]) {
   assert.equal(duplicatedParams.props.children[1].props.page, 1);
 }
 
-console.log('Admin navigation: confirmations, history rollback, Next state, cleanup, safe editorial return paths, pagination recovery and production harness isolation passed.');
+// Render the actual CRM components with minimal hooks and deferred actions.
+// No browser, server or database is needed to exercise request ordering.
+{
+  const crmSource = ts.transpileModule(readFileSync(new URL('../components/admin/analytics/LeadsQueue.tsx', import.meta.url), 'utf8'), {
+    compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022, jsx: ts.JsxEmit.ReactJSX },
+  }).outputText;
+  const deferred = () => {
+    let resolve, reject;
+    const promise = new Promise((yes, no) => { resolve = yes; reject = no; });
+    return { promise, resolve, reject };
+  };
+  function crmHarness(actions = {}) {
+    const slots = [], effects = [], transitions = [];
+    let cursor = 0, changed = false, component, props;
+    const react = {
+      useState(initial) {
+        const index = cursor++;
+        if (!(index in slots)) slots[index] = { value: typeof initial === 'function' ? initial() : initial };
+        return [slots[index].value, (next) => {
+          const value = typeof next === 'function' ? next(slots[index].value) : next;
+          if (!Object.is(value, slots[index].value)) { slots[index].value = value; changed = true; }
+        }];
+      },
+      useRef(initial) { const index = cursor++; slots[index] ??= { current: initial }; return slots[index]; },
+      useEffect(effect, deps) {
+        const index = cursor++, previous = slots[index];
+        if (!previous || deps.some((value, i) => !Object.is(value, previous.deps[i]))) {
+          slots[index] = { deps };
+          effects.push(() => { previous?.cleanup?.(); slots[index].cleanup = effect(); });
+        }
+      },
+      useMemo(compute) { cursor++; return compute(); },
+      useTransition() { cursor++; return [false, (callback) => { transitions.push(Promise.resolve(callback())); }]; },
+    };
+    const element = (type, elementProps, key) => ({ type, props: elementProps, key });
+    const symbols = new Proxy({}, { get: (_, name) => String(name) });
+    const api = {};
+    vm.runInNewContext(crmSource, {
+      exports: api, URLSearchParams, console,
+      require(name) {
+        if (name === 'react') return react;
+        if (name === 'react/jsx-runtime') return { jsx: element, jsxs: element, Fragment: 'Fragment' };
+        if (name === 'next/link') return { default: 'Link' };
+        if (name === 'next/navigation') return { useRouter: () => ({ refresh() {}, push() {} }), useSearchParams: () => new URLSearchParams() };
+        if (name === '@/app/admin/leads/actions') return { getLeadPreview: async () => ({ status: 'ok', data: {} }), markLeadViewed: async () => ({ ok: true }), ...actions };
+        if (name === '@/hooks/use-unsaved-changes') return { useUnsavedChanges: () => () => true };
+        if (name === '@/lib/contact') return { normalizeLeadPhone: () => '' };
+        if (name === '@/lib/supabase/client') return { createClient() { throw new Error('Unexpected database access'); } };
+        if (['lucide-react', '@radix-ui/react-dialog', '@dnd-kit/core', '@dnd-kit/utilities'].includes(name)) return symbols;
+        throw new Error(`Unexpected CRM import: ${name}`);
+      },
+    });
+    return {
+      transitions,
+      render(name, nextProps) {
+        component = api[name]; props = nextProps;
+        let tree, count = 0;
+        do {
+          assert.ok(count++ < 10, 'CRM effects should settle');
+          changed = false; cursor = 0;
+          tree = component(props);
+          for (const effect of effects.splice(0)) effect();
+        } while (changed);
+        return tree;
+      },
+      unmount() { for (const slot of slots) slot?.cleanup?.(); },
+    };
+  }
+  function nodes(tree, predicate) {
+    if (Array.isArray(tree)) return tree.flatMap((child) => nodes(child, predicate));
+    if (!tree || typeof tree !== 'object' || !tree.props) return [];
+    return [...(predicate(tree) ? [tree] : []), ...nodes(tree.props.children, predicate)];
+  }
+  const componentProps = (tree, name) => nodes(tree, (node) => node.type?.name === name)[0]?.props;
+  const leadA = { id: 'a', nome: 'Lead A', status: 'novo', prioridade: 'normal', tipo_captacao: 'contato', visualizado_em: '2026-09-29T10:00:00Z' };
+  const leadB = { ...leadA, id: 'b', nome: 'Lead B', visualizado_em: null };
+  const queueProps = { initialLeads: [leadA, leadB], allStageLeads: [leadA, leadB], total: 2, page: 1, pageCount: 1, kpis: { status: 'ok', data: {} }, responsibles: [], view: 'inbox' };
+  const trigger = { isConnected: false, focus() {} };
+
+  for (const nextSelection of ['other', 'closed']) {
+    const mutation = deferred();
+    const h = crmHarness({ updateLeadStatus: () => mutation.promise });
+    let tree = h.render('LeadsQueue', queueProps);
+    componentProps(tree, 'LeadInbox').onOpen(leadA, trigger);
+    tree = h.render('LeadsQueue', queueProps);
+    componentProps(tree, 'LeadQuickView').onStatusChange('a', 'em_contato');
+    tree = h.render('LeadsQueue', queueProps);
+    assert.equal(componentProps(tree, 'LeadQuickView').lead.status, 'em_contato');
+    componentProps(tree, 'LeadQuickView').onClose();
+    if (nextSelection === 'other') componentProps(tree, 'LeadInbox').onOpen(leadB, trigger);
+    tree = h.render('LeadsQueue', queueProps);
+    assert.equal(componentProps(tree, 'LeadQuickView').savingStatus, false, 'A pending mutation is not presented as saving B');
+    mutation.resolve({ ok: false, error: 'Falha simulada.' });
+    await Promise.all(h.transitions);
+    tree = h.render('LeadsQueue', queueProps);
+    const quickView = componentProps(tree, 'LeadQuickView');
+    assert.equal(quickView.lead?.id ?? null, nextSelection === 'other' ? 'b' : null, 'Rollback never reopens or replaces the selected lead');
+    assert.equal(quickView.error, null, 'A failure for A is not attributed to B');
+    const inbox = componentProps(tree, 'LeadInbox');
+    assert.equal(inbox.leads.find((lead) => lead.id === 'a').status, 'novo');
+    if (nextSelection === 'other') assert.ok(inbox.leads.find((lead) => lead.id === 'b').visualizado_em, 'Rollback preserves B’s newer viewed state');
+    assert.ok(nodes(tree, (node) => node.props.role === 'alert').some((node) => node.props.children.includes('Lead A')));
+    h.unmount();
+  }
+
+  for (const withStageCache of [true, false]) {
+    const mutation = deferred();
+    const h = crmHarness({ updateLeadStatus: () => mutation.promise });
+    const initialProps = { ...queueProps, allStageLeads: withStageCache ? queueProps.allStageLeads : null };
+    let tree = h.render('LeadsQueue', initialProps);
+    componentProps(tree, 'LeadInbox').onOpen(leadA, trigger);
+    tree = h.render('LeadsQueue', initialProps);
+    componentProps(tree, 'LeadQuickView').onStatusChange('a', 'em_contato');
+    tree = h.render('LeadsQueue', initialProps);
+    assert.equal(componentProps(tree, 'LeadQuickView').lead.status, 'em_contato');
+    const freshLead = { ...leadA, status: 'em_contato', nome: 'Lead A atualizado' };
+    const freshProps = { ...initialProps, initialLeads: [freshLead, leadB], allStageLeads: withStageCache ? [freshLead, leadB] : null };
+    h.render('LeadsQueue', freshProps);
+    mutation.resolve({ ok: false, error: 'Falha anterior ao refresh.' });
+    await Promise.all(h.transitions);
+    tree = h.render('LeadsQueue', freshProps);
+    const currentLead = componentProps(tree, 'LeadInbox').leads.find((lead) => lead.id === 'a');
+    assert.equal(currentLead.status, 'em_contato', 'A failed optimistic request cannot revert the same status received later from the server');
+    assert.equal(currentLead.nome, 'Lead A atualizado');
+    assert.equal(componentProps(tree, 'LeadQuickView').lead.status, 'em_contato', 'The preview preserves the refreshed status');
+    h.unmount();
+  }
+
+  for (const viewedOk of [true, false]) {
+    const mutation = deferred(), viewed = deferred();
+    const h = crmHarness({ updateLeadStatus: () => mutation.promise, markLeadViewed: () => viewed.promise });
+    const unreadLead = { ...leadA, visualizado_em: null };
+    const unreadProps = { ...queueProps, initialLeads: [unreadLead, leadB], allStageLeads: [unreadLead, leadB] };
+    let tree = h.render('LeadsQueue', unreadProps);
+    componentProps(tree, 'LeadInbox').onStatusChange('a', 'em_contato');
+    tree = h.render('LeadsQueue', unreadProps);
+    const inbox = componentProps(tree, 'LeadInbox');
+    inbox.onOpen(inbox.leads.find((lead) => lead.id === 'a'), trigger);
+    tree = h.render('LeadsQueue', unreadProps);
+    assert.ok(componentProps(tree, 'LeadQuickView').lead.visualizado_em);
+    viewed.resolve({ ok: viewedOk });
+    await viewed.promise;
+    mutation.resolve({ ok: false, error: 'Falha depois de abrir o lead.' });
+    await Promise.all(h.transitions);
+    tree = h.render('LeadsQueue', unreadProps);
+    const currentLead = componentProps(tree, 'LeadInbox').leads.find((lead) => lead.id === 'a');
+    assert.equal(currentLead.status, 'novo', 'Local viewed-state changes retain the identity needed to roll back the pending status');
+    assert.equal(Boolean(currentLead.visualizado_em), viewedOk, 'Status rollback preserves the result of marking the lead viewed');
+    assert.equal(componentProps(tree, 'LeadQuickView').lead.status, 'novo');
+    assert.equal(Boolean(componentProps(tree, 'LeadQuickView').lead.visualizado_em), viewedOk);
+    h.unmount();
+  }
+
+  const activity = (number) => ({ id: `activity-${number}`, action: `Registro ${number}`, created_at: new Date(Date.UTC(2026, 8, 29, 12, 0, -number)).toISOString(), details: {}, user_name: 'Admin' });
+  const detailLead = { ...leadA, email: null, telefone: null, segmento: 'nao_definido', utm: {}, criado_em: '2026-09-29T10:00:00Z' };
+  const detailProps = { lead: detailLead, activities: Array.from({ length: 25 }, (_, i) => activity(i + 1)), hasMoreActivities: true, budgets: [], proposals: [], artifacts: [], responsibles: [], contextLinks: {} };
+  const oldPage = deferred(), currentPage = deferred(), historyCalls = [];
+  const h = crmHarness({ loadLeadActivities: (id, cursor) => { historyCalls.push({ id, cursor }); return historyCalls.length === 1 ? oldPage.promise : currentPage.promise; } });
+  const historyButton = (tree) => nodes(tree, (node) => node.type === 'button' && ['Carregar anteriores', 'Carregando…'].includes(node.props.children))[0];
+  let tree = h.render('LeadDetail', detailProps);
+  const oldRequest = historyButton(tree).props.onClick();
+  await historyButton(tree).props.onClick();
+  assert.equal(historyCalls.length, 1, 'Repeated clicks share the same history request');
+  assert.equal(historyCalls[0].cursor.id, 'activity-25');
+  const refreshed = { ...detailProps, activities: Array.from({ length: 25 }, (_, i) => activity(i)) };
+  tree = h.render('LeadDetail', refreshed);
+  assert.equal(historyButton(tree).props.disabled, false, 'Refresh invalidates the old request and permits the new cursor');
+  const currentRequest = historyButton(tree).props.onClick();
+  assert.equal(historyCalls[1].cursor.id, 'activity-24');
+  oldPage.resolve({ ok: true, activities: [activity(26)], hasMore: false });
+  await oldRequest;
+  tree = h.render('LeadDetail', refreshed);
+  assert.equal(historyButton(tree).props.disabled, true, 'An old finally cannot release the current request');
+  assert.ok(!nodes(tree, (node) => node.key === 'activity-26').length, 'Stale records and hasMore are ignored');
+  currentPage.resolve({ ok: true, activities: [activity(25), activity(26)], hasMore: false });
+  await currentRequest;
+  tree = h.render('LeadDetail', refreshed);
+  assert.equal(nodes(tree, (node) => node.key === 'activity-25').length, 1, 'The refreshed cursor fills the intervening activity');
+  assert.equal(historyButton(tree), undefined);
+  h.unmount();
+}
+
+console.log('Admin navigation: confirmations, history rollback, Next state, cleanup, editorial returns, pagination recovery, CRM request ordering and production harness isolation passed.');

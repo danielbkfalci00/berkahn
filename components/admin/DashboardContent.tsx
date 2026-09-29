@@ -39,7 +39,6 @@ export function DashboardContent({
   leadOperations,
   membership,
 }: DashboardContentProps) {
-  const greeting = getGreeting();
   const firstName = membership?.nome.split(" ")[0] || fallbackName || "Admin";
   const canManageContent = membership?.role === "owner" || membership?.role === "conteudo";
   const canManageCommercial = membership?.role === "owner" || membership?.role === "comercial";
@@ -49,7 +48,7 @@ export function DashboardContent({
       <div className="flex items-center justify-between gap-4">
         <div>
           <h2 className="text-xl font-semibold tracking-tight text-neutral-950 sm:text-2xl">
-            {greeting}, {firstName}!
+            Olá, {firstName}!
           </h2>
         </div>
         {canManageContent && (
@@ -142,11 +141,4 @@ function SummaryMetric({ href, icon: Icon, label, value, detail }: { href: strin
 
 function formatDateTime(value: string): string {
   return new Intl.DateTimeFormat("pt-BR", { dateStyle: "short", timeStyle: "short", timeZone: "America/Sao_Paulo" }).format(new Date(value));
-}
-
-function getGreeting(): string {
-  const hour = new Date().getHours();
-  if (hour < 12) return "Bom dia";
-  if (hour < 18) return "Boa tarde";
-  return "Boa noite";
 }

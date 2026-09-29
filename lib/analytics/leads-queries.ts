@@ -2,6 +2,8 @@
 // Molde de lib/analytics/tasks-queries.ts.
 import "server-only";
 import { createClient } from "@/lib/supabase/server";
+import { getAdminSession } from "@/lib/supabase/sessao";
+import { roleCanAccessPath } from "@/lib/admin/access";
 import type { LeadParaFunil } from "./leads-funnel";
 import type { AdminDataResult } from "@/types/analytics";
 
@@ -47,6 +49,10 @@ export async function getDashboardLeadOperations(): Promise<AdminDataResult<Dash
  * trafegar. O funil precisa só de status, origem e datas.
  */
 export async function listarLeadsDoMes(monthSlug: string, periodEnd?: string): Promise<AdminDataResult<LeadParaFunil[]>> {
+  const session = await getAdminSession();
+  if (!session || !roleCanAccessPath(session.membership.role, "/admin/leads")) {
+    return { status: "unavailable", reason: "Seu perfil não tem acesso aos dados do CRM." };
+  }
   if (!/^\d{4}-\d{2}$/.test(monthSlug)) {
     return { status: "unavailable", reason: "Período de leads inválido." };
   }
@@ -63,7 +69,9 @@ export async function listarLeadsDoMes(monthSlug: string, periodEnd?: string): P
     fim = exclusiveEnd.toISOString().slice(0, 10) < fim ? exclusiveEnd.toISOString().slice(0, 10) : fim;
   }
 
-  const supabase = await createClient();
+  // Arquivar organiza a fila, sem apagar a aquisição nem mudar a conversão.
+  // A coorte mantém arquivados e continua excluindo dados anonimizados.
+  const supabase = session.supabase;
   const query = supabase
     .from("leads")
     .select(
@@ -71,7 +79,6 @@ export async function listarLeadsDoMes(monthSlug: string, periodEnd?: string): P
     )
     .gte("criado_em", inicio)
     .lt("criado_em", fim)
-    .is("arquivado_em", null)
     .is("anonimizado_em", null).order("criado_em").order("id");
 
   const rows: LeadParaFunil[] = [];

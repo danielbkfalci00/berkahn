@@ -24,11 +24,12 @@ interface Props {
   selecionados: ReadonlySet<string>;
   aoSelecionar: (id: string, selecionado: boolean) => void;
   tagsCatalogo: TagCatalogo[];
+  returnTo: string;
 }
 export function ColunaPauta({
   coluna, visao, pautas, arrastavel, aoCriar, aoMover, aoExcluir,
   idConfirmandoExclusao, aoPedirExclusao, pendente,
-  selecionados, aoSelecionar, tagsCatalogo,
+  selecionados, aoSelecionar, tagsCatalogo, returnTo,
 }: Props) {
 
   const podeArrastar = arrastavel;
@@ -59,7 +60,7 @@ export function ColunaPauta({
           strategy={verticalListSortingStrategy}>
           <ul className="flex flex-col gap-2">
             {pautas.map((pauta) => (
-              <CartaoPauta key={pauta.id} pauta={pauta} visao={visao}
+              <CartaoPauta key={pauta.id} pauta={pauta} visao={visao} returnTo={returnTo}
                 colunas={!podeArrastar || visao === "geral" ? [] : visao === "blog"
                   ? ["planejada", "pesquisa", "draft", "produzido", "aprovado", "publicado"]
                   : ["planejada", "producao", "produzido", "aprovado", "publicado"]}

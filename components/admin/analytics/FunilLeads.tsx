@@ -84,7 +84,7 @@ export function FunilLeads({ funil, monthSlug }: FunilLeadsProps) {
       ) : (
         <>
           <p className="mt-3 text-xs text-neutral-500">
-            Situação atual dos leads recebidos até o corte do relatório. As etapas
+            Situação atual dos leads recebidos até o corte do relatório, incluindo arquivados e excluindo anonimizados. As etapas
             abaixo mostram estoque, não perdas nem uma progressão obrigatória.
             {" "}{data.novos} ainda novos · {data.qualificados} com qualificação registrada.
           </p>

@@ -16,6 +16,7 @@ import { listarLeadsDoMes } from "@/lib/analytics/leads-queries";
 import { getTasks } from "@/lib/analytics/tasks-queries";
 import { AnalyticsContent } from "./AnalyticsContent";
 import { getAdminSession } from "@/lib/supabase/sessao";
+import { roleCanAccessPath } from "@/lib/admin/access";
 
 export const dynamic = "force-dynamic";
 
@@ -68,10 +69,11 @@ export default async function AnalyticsPage({ searchParams }: PageProps) {
     history: historyResult.status === "rejected",
     tasks: tasksResult.status === "rejected",
   };
-  const [leadsResult, session] = await Promise.all([
-    listarLeadsDoMes(currentMonth, snapshot.context.periodEnd),
-    getAdminSession(),
-  ]);
+  const session = await getAdminSession();
+  const canReadLeads = session && roleCanAccessPath(session.membership.role, "/admin/leads");
+  const leadsResult = canReadLeads
+    ? await listarLeadsDoMes(currentMonth, snapshot.context.periodEnd)
+    : null;
   const canManageTasks = session?.membership.role === "owner" || session?.membership.role === "conteudo";
 
   const postPerformance = buildPostPerformance(
@@ -89,7 +91,7 @@ export default async function AnalyticsPage({ searchParams }: PageProps) {
   const matrizAcervo = construirMatrizArtigoMes(historicalBySlug, postsMap);
   const mapaLeitura = construirMapaLeitura(snapshot.ga4_data?.articleProgress, postsMap);
   const oportunidade = construirMapaOportunidade(snapshot.gsc_data?.topQueries, snapshot.gsc_data?.queryCoverage);
-  const funilLeads = leadsResult.status === "ok"
+  const funilLeads = leadsResult?.status === "ok"
     ? { status: "ok" as const, data: construirFunilLeads(leadsResult.data) }
     : leadsResult;
 
