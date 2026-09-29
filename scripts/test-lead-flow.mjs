@@ -48,6 +48,127 @@ assert.notEqual(getOrcamentoPdfRevision({ ...budget, hero_image_url: 'test/new-h
 assert.equal(isOrcamentoPdfCurrent({ ...budget, pdf_revision_hash: revision, pdf_storage_path: 'test/document.pdf' }), true);
 assert.equal(isOrcamentoPdfCurrent({ ...budget, valor_min: 101, pdf_revision_hash: revision, pdf_storage_path: 'test/document.pdf' }), false);
 
+// Executa as actions e a rota reais, substituindo apenas banco, storage e Next.
+function loadCommonModule(source, imports) {
+  const output = ts.transpileModule(source, { compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.CommonJS, esModuleInterop: true } }).outputText;
+  const module = { exports: {} };
+  new Function('require', 'module', 'exports', output)((name) => {
+    assert.ok(Object.hasOwn(imports, name), `Import inesperado: ${name}`);
+    return imports[name];
+  }, module, module.exports);
+  return module.exports;
+}
+const wizardModule = loadCommonModule(wizardSource, { '@/types/orcamento-estimativa': { CARDS_ENTREGA_DEFAULT: ['engenharia'] } });
+const actionsSource = readFileSync(new URL('../app/admin/orcamentos/actions.ts', import.meta.url), 'utf8');
+const heroSource = readFileSync(new URL('../app/api/admin/orcamentos/[id]/hero/route.ts', import.meta.url), 'utf8');
+const pdfUrlSource = readFileSync(new URL('../app/api/admin/orcamentos/[id]/pdf-url/route.ts', import.meta.url), 'utf8');
+const initialRevision = '2026-09-29T16:00:00.000000+00:00';
+function createBudgetHarness({ onUpdate, signingFails = false } = {}) {
+  let version = 0;
+  const row = { ...wizardModule.initialState().dados, id: 'budget-test', numero: 'TEST-001', atualizado_em: initialRevision, cliente_nome: 'Cliente sintético', obra_endereco: 'Endereço sintético', obra_cidade: 'Cidade', projeto_area_m2: 100, valor_min: 100, valor_max: 200, valor_m2_min: 1, valor_m2_max: 2, hero_image_url: 'budget-test/old.webp' };
+  const calls = { writes: 0, logs: 0, signedPdfs: 0, uploaded: [], removed: [] };
+  const nextRevision = () => `2026-09-29T16:00:00.${String(++version).padStart(6, '0')}+00:00`;
+  const supabase = {
+    from(table) {
+      assert.ok(['orcamentos', 'activity_logs'].includes(table));
+      const filters = [];
+      let patch;
+      let insertion = false;
+      const execute = async () => {
+        if (table === 'activity_logs') { calls.logs++; return { error: null }; }
+        if (patch && !insertion) await onUpdate?.(row, { nextRevision });
+        if (!filters.every(([key, value]) => row[key] === value)) return { data: null, error: null };
+        if (patch) { Object.assign(row, patch, { atualizado_em: nextRevision() }); calls.writes++; }
+        return { data: structuredClone(row), error: null };
+      };
+      const query = {
+        select() { return query; },
+        eq(key, value) { filters.push([key, value]); return query; },
+        update(value) { patch = value; return query; },
+        insert(value) { patch = value; insertion = true; return query; },
+        single: execute,
+        maybeSingle: execute,
+        then(resolve, reject) { return execute().then(resolve, reject); },
+      };
+      return query;
+    },
+    storage: { from(bucket) {
+      assert.equal(bucket, 'orcamento-heroes');
+      return {
+        async upload(path) { calls.uploaded.push(path); return { error: null }; },
+        async createSignedUrl(path) { return signingFails ? { data: null, error: { message: 'Assinatura indisponível' } } : { data: { signedUrl: `https://example.invalid/${path}` }, error: null }; },
+        async remove(paths) { calls.removed.push(...paths); return { error: null }; },
+      };
+    } },
+  };
+  const cache = { revalidatePath() {} };
+  const session = { async getAdminSession() { return { supabase, user: { id: 'synthetic-user', email: 'test@example.invalid' }, membership: { role: 'owner' } }; }, async exigirSessao() { return null; } };
+  const actions = loadCommonModule(actionsSource, { 'next/cache': cache, '@/lib/supabase/sessao': session, '@/components/admin/orcamentos/wizard-state': wizardModule, '@/lib/orcamento-planilha': { rowParaInsert: (value) => value } });
+  const sharp = () => { const image = { resize() { return image; }, webp() { return image; }, async toBuffer() { return Buffer.from('synthetic-image'); } }; return image; };
+  const hero = loadCommonModule(heroSource, { 'next/cache': cache, 'next/server': { NextResponse: Response }, sharp, 'node:crypto': { randomUUID: () => 'new-upload' }, '@/lib/supabase/admin': { createServiceClient: () => supabase }, '@/lib/supabase/sessao': session });
+  const pdfUrl = loadCommonModule(pdfUrlSource, { 'next/server': { NextResponse: Response }, '@/lib/supabase/admin': { createServiceClient: () => supabase }, '@/lib/supabase/sessao': session, '@/lib/orcamento-pdf-storage': { isOrcamentoPdfCurrent, async gerarSignedUrlPdf() { calls.signedPdfs++; return 'https://example.invalid/current.pdf'; } } });
+  return { row, calls, actions, hero, pdfUrl };
+}
+
+const editedBudget = createBudgetHarness();
+const savedBudget = await editedBudget.actions.atualizarOrcamento('budget-test', { cliente_nome: 'Editor A' }, initialRevision);
+assert.equal(savedBudget.ok, true);
+assert.equal(savedBudget.atualizadoEm, editedBudget.row.atualizado_em, 'Resposta preserva timestamp exato do banco, incluindo microssegundos.');
+assert.equal((await editedBudget.actions.atualizarOrcamento('budget-test', { cliente_nome: 'Editor B' }, initialRevision)).conflito, true);
+assert.equal(editedBudget.row.cliente_nome, 'Editor A', 'Segundo editor não sobrescreve a versão já salva.');
+assert.equal((await editedBudget.actions.finalizarOrcamento('budget-test', {}, initialRevision)).conflito, true);
+assert.equal((await editedBudget.actions.atualizarOrcamento('budget-test', { cliente_nome: 'Sem versão' }, '')).conflito, true);
+const archivedBudget = await editedBudget.actions.arquivarOrcamento('budget-test', savedBudget.atualizadoEm);
+assert.equal(archivedBudget.ok, true);
+assert.equal((await editedBudget.actions.atualizarOrcamento('budget-test', { status: 'rascunho' }, savedBudget.atualizadoEm)).conflito, true);
+assert.equal(editedBudget.row.status, 'arquivado', 'Editor antigo não reabre orçamento arquivado.');
+assert.equal((await editedBudget.actions.desarquivarOrcamento('budget-test', archivedBudget.atualizadoEm)).ok, true);
+
+const finalizationRace = createBudgetHarness({ onUpdate(row, { nextRevision }) { row.cliente_nome = 'Edição concorrente'; row.atualizado_em = nextRevision(); } });
+assert.equal((await finalizationRace.actions.finalizarOrcamento('budget-test', {}, initialRevision)).conflito, true, 'CAS precisa proteger também o intervalo entre validação e update.');
+assert.equal(finalizationRace.row.status, 'rascunho');
+assert.equal(finalizationRace.calls.logs, 0);
+const finalized = createBudgetHarness();
+const finalResult = await finalized.actions.finalizarOrcamento('budget-test', {}, initialRevision);
+assert.equal(finalResult.ok, true);
+assert.equal(finalized.row.status, 'finalizado');
+assert.equal(finalResult.atualizadoEm, finalized.row.atualizado_em);
+const created = createBudgetHarness();
+const creation = await created.actions.criarOrcamento(wizardModule.initialState().dados);
+assert.equal(creation.ok, true);
+assert.equal(creation.atualizadoEm, created.row.atualizado_em);
+
+const heroContext = { params: Promise.resolve({ id: 'budget-test' }) };
+const heroRequest = (revision, method = 'DELETE') => ({ headers: new Headers({ 'If-Match': `"${revision}"` }), method, async formData() { return new Map([['file', new File(['synthetic'], 'test.webp', { type: 'image/webp' })]]); } });
+const removedHero = createBudgetHarness();
+assert.equal((await removedHero.hero.DELETE(heroRequest('old-revision'), heroContext)).status, 409);
+assert.equal((await removedHero.hero.DELETE(heroRequest('2026-09-28T16:00:00.000000+00:00'), heroContext)).status, 409);
+assert.equal(removedHero.calls.removed.length, 0, 'Conflito de revisão não remove o arquivo atual.');
+assert.equal((await removedHero.hero.DELETE(heroRequest(initialRevision), heroContext)).status, 200);
+assert.equal(removedHero.row.hero_image_url, null);
+assert.deepEqual(removedHero.calls.removed, [], 'Remover vínculo preserva arquivos que outros orçamentos podem compartilhar.');
+const uploadRace = createBudgetHarness({ onUpdate(row, { nextRevision }) { row.hero_image_url = 'budget-test/other-editor.webp'; row.atualizado_em = nextRevision(); } });
+assert.equal((await uploadRace.hero.POST(heroRequest(initialRevision, 'POST'), heroContext)).status, 409);
+assert.equal(uploadRace.row.hero_image_url, 'budget-test/other-editor.webp');
+assert.deepEqual(uploadRace.calls.removed, uploadRace.calls.uploaded, 'Upload perdedor limpa apenas seu arquivo novo.');
+const unsignedHero = createBudgetHarness({ signingFails: true });
+assert.equal((await unsignedHero.hero.POST(heroRequest(initialRevision, 'POST'), heroContext)).status, 500);
+assert.deepEqual(unsignedHero.calls.removed, unsignedHero.calls.uploaded, 'Falha de assinatura não deixa upload órfão.');
+assert.equal(unsignedHero.row.hero_image_url, 'budget-test/old.webp');
+const uploadedHero = createBudgetHarness();
+assert.equal((await uploadedHero.hero.POST(heroRequest(initialRevision, 'POST'), heroContext)).status, 200);
+assert.equal(uploadedHero.row.hero_image_url, 'budget-test/new-upload.webp');
+assert.deepEqual(uploadedHero.calls.removed, [], 'Trocar capa preserva arquivos anteriores potencialmente compartilhados.');
+const pdfDownload = createBudgetHarness();
+pdfDownload.row.pdf_storage_path = 'test/current.pdf';
+pdfDownload.row.pdf_generated_at = initialRevision;
+pdfDownload.row.pdf_revision_hash = getOrcamentoPdfRevision(pdfDownload.row);
+assert.equal((await pdfDownload.pdfUrl.GET({}, heroContext)).status, 200);
+assert.equal(pdfDownload.calls.signedPdfs, 1);
+pdfDownload.row.valor_min += 1;
+assert.equal((await pdfDownload.pdfUrl.GET({}, heroContext)).status, 409, 'Download consulta a revisão atual mesmo se a aba permaneceu aberta com o PDF anterior.');
+assert.equal(pdfDownload.calls.signedPdfs, 1, 'Documento obsoleto não recebe URL renovada.');
+
 if (!globalThis.crypto) Object.defineProperty(globalThis, 'crypto', { value: webcrypto, configurable: true });
 const storage = new Map();
 Object.defineProperty(globalThis, 'sessionStorage', {

@@ -13,9 +13,10 @@ import type { OrcamentoStatus } from "@/types/orcamento-estimativa"
 interface Props {
   orcamentoId: string
   status: OrcamentoStatus
+  atualizadoEm: string
 }
 
-export function ArquivarButton({ orcamentoId, status }: Props) {
+export function ArquivarButton({ orcamentoId, status, atualizadoEm }: Props) {
   const router = useRouter()
   const [pending, startTransition] = useTransition()
   const [erro, setErro] = useState<string | null>(null)
@@ -30,14 +31,18 @@ export function ArquivarButton({ orcamentoId, status }: Props) {
 
     setErro(null)
     startTransition(async () => {
-      const res = ehArquivado
-        ? await desarquivarOrcamento(orcamentoId)
-        : await arquivarOrcamento(orcamentoId)
-      if (!res.ok) {
-        setErro(res.erro)
-        return
+      try {
+        const res = ehArquivado
+          ? await desarquivarOrcamento(orcamentoId, atualizadoEm)
+          : await arquivarOrcamento(orcamentoId, atualizadoEm)
+        if (!res.ok) {
+          setErro(res.conflito ? "O orçamento mudou. Atualize a página e confira seu estado antes de tentar novamente." : res.erro)
+          return
+        }
+        router.refresh()
+      } catch {
+        setErro("Não foi possível alterar o orçamento. Tente novamente.")
       }
-      router.refresh()
     })
   }
 
@@ -58,7 +63,7 @@ export function ArquivarButton({ orcamentoId, status }: Props) {
         )}
         {ehArquivado ? "Desarquivar" : "Arquivar"}
       </Button>
-      {erro && <p className="text-xs text-red-600">{erro}</p>}
+      {erro && <p role="alert" className="text-xs text-red-600">{erro}</p>}
     </div>
   )
 }

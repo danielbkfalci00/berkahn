@@ -56,6 +56,8 @@ export async function POST(request: Request, ctx: RouteContext) {
     return NextResponse.json({ error: "Orçamento não encontrado" }, { status: 404 })
   }
   const orcamento = data as unknown as Orcamento
+  const expectedRevision = request.headers.get("If-Match")?.replace(/^"|"$/g, "")
+  if (!expectedRevision || expectedRevision !== orcamento.atualizado_em) return NextResponse.json({ error: "O orçamento mudou. Atualize a página e confira os dados antes de gerar o PDF." }, { status: 409 })
   if (orcamento.status === "arquivado") return NextResponse.json({ error: "Reabra o orçamento antes de gerar outra versão." }, { status: 409 })
   const validation = validarTudo(orcamento)
   if (!validation.ok) return NextResponse.json({ error: "Revise os campos antes de gerar o PDF.", campos: Object.values(validation.erros) }, { status: 400 })
@@ -132,7 +134,7 @@ export async function POST(request: Request, ctx: RouteContext) {
       })
       .eq("id", id)
       .eq("atualizado_em", orcamento.atualizado_em)
-      .select("id")
+      .select("id,atualizado_em")
       .maybeSingle()
 
     if (updateError || !savedVersion) {
@@ -149,6 +151,7 @@ export async function POST(request: Request, ctx: RouteContext) {
       pdf_url: signedUrl,
       pdf_storage_path: path,
       numero: orcamento.numero,
+      atualizado_em: savedVersion.atualizado_em,
     })
   } catch (err) {
     console.error("Erro ao gerar PDF:", err)

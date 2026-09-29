@@ -30,7 +30,11 @@ export function serviceRequest(method, path, body, headers = {}) {
         res.on('data', (c) => (buf += c));
         res.on('end', () => {
           if (res.statusCode >= 200 && res.statusCode < 300) {
-            resolve(buf ? JSON.parse(buf) : null);
+            try {
+              resolve(buf ? JSON.parse(buf) : null);
+            } catch {
+              reject(new Error('Supabase retornou uma resposta JSON inválida.'));
+            }
           } else {
             reject(new Error(`Supabase ${res.statusCode}: ${buf}`));
           }
@@ -38,6 +42,7 @@ export function serviceRequest(method, path, body, headers = {}) {
       }
     );
     req.on('error', reject);
+    req.setTimeout(30_000, () => req.destroy(new Error('Tempo limite ao persistir o snapshot no Supabase.')));
     if (data) req.write(data);
     req.end();
   });
@@ -52,7 +57,7 @@ export function serviceRequest(method, path, body, headers = {}) {
  * @param {object|null} gscPrev mês anterior (opcional)
  * @param {object} context contexto enriched (insights, actions, indexation, summary, etc)
  */
-export async function upsertSnapshot({ monthSlug, ga4, gsc, ga4Prev, gscPrev, context }) {
+export async function upsertSnapshot({ monthSlug, ga4, gsc, ga4Prev, gscPrev, context }, { request = serviceRequest } = {}) {
   if (!monthSlug || !/^\d{4}-\d{2}$/.test(monthSlug)) {
     throw new Error(`monthSlug inválido: ${monthSlug}`);
   }
@@ -71,7 +76,30 @@ export async function upsertSnapshot({ monthSlug, ga4, gsc, ga4Prev, gscPrev, co
   ];
 
   // PostgREST upsert: header Prefer resolution=merge-duplicates
-  return serviceRequest('POST', '/rest/v1/analytics_snapshots', payload, {
-    Prefer: 'resolution=merge-duplicates,return=minimal',
+  const written = await request('POST', '/rest/v1/analytics_snapshots?select=month,generated_at', payload, {
+    Prefer: 'resolution=merge-duplicates,return=representation',
   });
+  if (!Array.isArray(written) || written.length !== 1 || written[0].month !== month ||
+      Date.parse(written[0].generated_at) !== Date.parse(payload[0].generated_at)) {
+    throw new Error(`Persistência do snapshot ${monthSlug} não foi confirmada pelo Supabase.`);
+  }
+  return written[0];
+}
+
+/** O pipeline hospedado só pode ficar verde após confirmar a gravação. */
+export async function persistSnapshot(input, {
+  required = false,
+  serviceKey = getServiceKey(),
+  upload = upsertSnapshot,
+  warn = console.warn,
+} = {}) {
+  try {
+    if (!serviceKey) throw new Error('Chave de serviço do Supabase ausente; snapshot não foi enviado.');
+    await upload(input);
+    return true;
+  } catch (error) {
+    if (required) throw error;
+    warn(`Falha ao salvar snapshot: ${error.message}. O relatório local foi preservado.`);
+    return false;
+  }
 }

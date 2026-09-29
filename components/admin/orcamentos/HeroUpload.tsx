@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useCallback, useRef } from "react"
+import { useRouter } from "next/navigation"
 import { Upload, ImageIcon, Loader2, X } from "lucide-react"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -12,6 +13,8 @@ import { comprimirImagem, nomeComprimido } from "@/lib/imagens/comprimir"
 
 interface Props {
   orcamentoId: string
+  atualizadoEm: string
+  hasImage: boolean
   initialPreviewUrl?: string | null
 }
 
@@ -21,7 +24,11 @@ interface UploadState {
   message: string | null
 }
 
-export function HeroUpload({ orcamentoId, initialPreviewUrl }: Props) {
+export function HeroUpload({ orcamentoId, initialPreviewUrl, atualizadoEm, hasImage }: Props) {
+  const router = useRouter()
+  const busy = useRef(false)
+  const revision = useRef(atualizadoEm)
+  const [imageExists, setImageExists] = useState(hasImage)
   const [state, setState] = useState<UploadState>({
     status: "idle",
     previewUrl: initialPreviewUrl ?? null,
@@ -32,7 +39,9 @@ export function HeroUpload({ orcamentoId, initialPreviewUrl }: Props) {
 
   const upload = useCallback(
     async (file: File) => {
-      setState({ status: "uploading", previewUrl: null, message: null })
+      if (busy.current) return
+      busy.current = true
+      setState((current) => ({ ...current, status: "uploading", message: null }))
       try {
         const payload = await comprimirImagem(file)
         const fd = new FormData()
@@ -40,6 +49,7 @@ export function HeroUpload({ orcamentoId, initialPreviewUrl }: Props) {
 
         const res = await fetch(`/api/admin/orcamentos/${orcamentoId}/hero`, {
           method: "POST",
+          headers: { "If-Match": `"${revision.current}"` },
           body: fd,
         })
         // Server pode retornar texto plain em erros de infra (413 do Vercel etc)
@@ -49,6 +59,7 @@ export function HeroUpload({ orcamentoId, initialPreviewUrl }: Props) {
           signedUrl?: string
           sizeBytes?: number
           path?: string
+          atualizado_em?: string
         } = {}
         try {
           json = JSON.parse(texto)
@@ -59,33 +70,58 @@ export function HeroUpload({ orcamentoId, initialPreviewUrl }: Props) {
           const msg =
             json.error ??
             (texto && texto.length < 200 ? texto : `HTTP ${res.status}`)
-          setState({ status: "error", previewUrl: null, message: msg })
+          setState((current) => ({ ...current, status: "error", message: msg }))
           return
         }
+        if (json.atualizado_em) revision.current = json.atualizado_em
+        setImageExists(true)
         setState({
           status: "success",
           previewUrl: json.signedUrl ?? null,
           message: `Imagem processada (${Math.round((json.sizeBytes ?? 0) / 1024)}KB)`,
         })
+        router.refresh()
       } catch (err) {
-        setState({
+        setState((current) => ({
+          ...current,
           status: "error",
-          previewUrl: null,
           message: err instanceof Error ? err.message : "Erro inesperado",
-        })
+        }))
+      } finally {
+        busy.current = false
+        if (inputRef.current) inputRef.current.value = ""
       }
     },
-    [orcamentoId]
+    [orcamentoId, router]
   )
+
+  const remove = async () => {
+    if (busy.current || !window.confirm("Remover a foto da capa deste orçamento? Será necessário gerar o PDF novamente.")) return
+    busy.current = true
+    setState((current) => ({ ...current, status: "uploading", message: null }))
+    try {
+      const response = await fetch(`/api/admin/orcamentos/${orcamentoId}/hero`, { method: "DELETE", headers: { "If-Match": `"${revision.current}"` } })
+      const result = await response.json()
+      if (!response.ok) throw new Error(result.error ?? "Não foi possível remover a capa.")
+      revision.current = result.atualizado_em
+      setImageExists(false)
+      setState({ status: "success", previewUrl: null, message: "Capa removida. Gere o PDF atualizado antes de enviar." })
+      router.refresh()
+    } catch (error) {
+      setState((current) => ({ ...current, status: "error", message: error instanceof Error ? error.message : "Não foi possível remover a capa." }))
+    } finally {
+      busy.current = false
+    }
+  }
 
   const onFileSelected = (file: File | null) => {
     if (!file) return
     if (!file.type.startsWith("image/")) {
-      setState({
+      setState((current) => ({
+        ...current,
         status: "error",
-        previewUrl: null,
         message: "Selecione um arquivo de imagem",
-      })
+      }))
       return
     }
     void upload(file)
@@ -100,16 +136,22 @@ export function HeroUpload({ orcamentoId, initialPreviewUrl }: Props) {
             Recomendado: 1920×1080, até 10MB. É processada automaticamente.
           </p>
         </div>
-        {state.previewUrl && (
+        {imageExists && (
+          <div className="flex items-center gap-1">
+          <Button type="button" variant="ghost" size="sm" disabled={state.status === "uploading"} onClick={() => inputRef.current?.click()}>
+            Trocar foto
+          </Button>
           <Button
+            type="button"
             variant="ghost"
             size="sm"
-            onClick={() =>
-              setState({ status: "idle", previewUrl: null, message: null })
-            }
+            aria-label="Remover foto da capa"
+            disabled={state.status === "uploading"}
+            onClick={remove}
           >
             <X className="h-4 w-4" />
           </Button>
+          </div>
         )}
       </div>
 
@@ -125,6 +167,7 @@ export function HeroUpload({ orcamentoId, initialPreviewUrl }: Props) {
       ) : (
         <button
           type="button"
+          disabled={state.status === "uploading"}
           onClick={() => inputRef.current?.click()}
           onDragOver={(e) => {
             e.preventDefault()
@@ -158,18 +201,14 @@ export function HeroUpload({ orcamentoId, initialPreviewUrl }: Props) {
               </span>
             </>
           )}
-          <input
-            ref={inputRef}
-            type="file"
-            accept="image/*"
-            className="hidden"
-            onChange={(e) => onFileSelected(e.target.files?.[0] ?? null)}
-          />
         </button>
       )}
+      <input ref={inputRef} type="file" accept="image/jpeg,image/png,image/webp" className="hidden" disabled={state.status === "uploading"} onChange={(e) => onFileSelected(e.target.files?.[0] ?? null)} />
+      {state.status === "uploading" && state.previewUrl && <p role="status" className="mt-3 text-xs text-neutral-500">Processando capa...</p>}
 
       {state.message && (
         <p
+          role={state.status === "error" ? "alert" : "status"}
           className={`mt-3 text-xs ${
             state.status === "error" ? "text-red-600" : "text-neutral-500"
           }`}

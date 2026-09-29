@@ -10,10 +10,12 @@ export const metadata: Metadata = {
 
 interface Props {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{ returnTo?: string }>;
 }
 
-export default async function PautaPage({ params }: Props) {
+export default async function PautaPage({ params, searchParams }: Props) {
   const { id } = await params;
+  const { returnTo } = await searchParams;
   const [pauta, artigosLivres, tagsCatalogo] = await Promise.all([
     getPauta(id),
     listarArtigosVinculaveis(),
@@ -21,5 +23,5 @@ export default async function PautaPage({ params }: Props) {
   ]);
   if (!pauta) notFound();
 
-  return <PainelPauta pauta={pauta} artigosLivres={artigosLivres} tagsCatalogo={tagsCatalogo} />;
+  return <PainelPauta pauta={pauta} artigosLivres={artigosLivres} tagsCatalogo={tagsCatalogo} returnTo={returnTo} />;
 }

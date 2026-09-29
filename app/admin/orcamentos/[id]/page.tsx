@@ -97,7 +97,7 @@ export default async function OrcamentoDetalhePage({ params }: PageProps) {
                 </Button>
               </Link>
             )}
-            <ArquivarButton orcamentoId={o.id} status={o.status} />
+            <ArquivarButton orcamentoId={o.id} status={o.status} atualizadoEm={o.atualizado_em} />
             <Badge variant={o.status === "finalizado" ? "default" : "secondary"}>
               {o.status === "rascunho" ? "Rascunho" : o.status === "finalizado" ? "Finalizado" : "Arquivado"}
             </Badge>
@@ -222,7 +222,10 @@ export default async function OrcamentoDetalhePage({ params }: PageProps) {
         <div className="space-y-6">
           {o.status !== "arquivado" && (
             <HeroUpload
+              key={o.atualizado_em}
               orcamentoId={o.id}
+              atualizadoEm={o.atualizado_em}
+              hasImage={Boolean(o.hero_image_url)}
               initialPreviewUrl={heroPreviewUrl}
             />
           )}
@@ -231,7 +234,7 @@ export default async function OrcamentoDetalhePage({ params }: PageProps) {
             <Card className="p-6">
               <h3 className="text-sm font-semibold text-neutral-900 mb-3">PDF</h3>
               {o.status !== "arquivado" && (
-                <GerarPdfButton orcamentoId={o.id} />
+                <GerarPdfButton orcamentoId={o.id} atualizadoEm={o.atualizado_em} />
               )}
               {o.pdf_storage_path && (
                 <div

@@ -18,10 +18,13 @@ import { BlocoCapa } from "./BlocoCapa";
 import { BlocoArtigo, type ArtigoLivre } from "./BlocoArtigo";
 import { BotaoCopiar } from "./BotaoCopiar";
 import { cn } from "@/lib/utils";
+import { editorialHref, editorialReturnTo } from "@/lib/admin/return-to";
 
-interface Props { pauta: Pauta; artigosLivres: ArtigoLivre[]; tagsCatalogo: TagCatalogo[]; }
+interface Props { pauta: Pauta; artigosLivres: ArtigoLivre[]; tagsCatalogo: TagCatalogo[]; returnTo?: string; }
 
-export function PainelPauta({ pauta, artigosLivres, tagsCatalogo }: Props) {
+export function PainelPauta({ pauta, artigosLivres, tagsCatalogo, returnTo }: Props) {
+  const backHref = editorialReturnTo(returnTo, "/admin/conteudo");
+  const pautaHref = editorialHref(`/admin/conteudo/${pauta.id}`, backHref);
   const [local, setLocal] = useState(pauta);
   const [pendentes, setPendentes] = useState<Set<BlocoTextoPauta>>(new Set());
   const temPendencia = pendentes.size > 0;
@@ -45,10 +48,10 @@ export function PainelPauta({ pauta, artigosLivres, tagsCatalogo }: Props) {
   return (
     <div className="space-y-5">
       <header className="space-y-3">
-        <Link href="/admin/conteudo"
+        <Link href={backHref}
           className="inline-flex items-center gap-1.5 rounded text-sm text-neutral-500 transition-colors hover:text-neutral-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900">
           <ArrowLeft className="h-4 w-4" strokeWidth={2} aria-hidden />
-          Conteúdo
+          {backHref.startsWith("/admin/posts") ? "Posts" : "Conteúdo"}
         </Link>
 
         <div className="flex flex-wrap items-start justify-between gap-3">
@@ -66,7 +69,7 @@ export function PainelPauta({ pauta, artigosLivres, tagsCatalogo }: Props) {
           {local.statusBlog && <StatusCabecalho nome="Blog" status={local.statusBlog} />}
           {local.statusLinkedin && <StatusCabecalho nome="LinkedIn" status={local.statusLinkedin} />}
           <BadgesPlataforma plataformas={local.plataformas} />
-          <SeloPostVinculado pauta={local} />
+          <SeloPostVinculado pauta={local} returnTo={pautaHref} />
         </div>
       </header>
 
@@ -86,7 +89,7 @@ export function PainelPauta({ pauta, artigosLivres, tagsCatalogo }: Props) {
               valorInicial={local.pesquisaConteudo}
               placeholder="Resultado do /pesquisa: gaps da SERP, ângulo e estrutura do artigo…"
               altura="min-h-[400px]" aoMudarPendencia={aoMudarPendencia} />
-            <BlocoArtigo pauta={local} artigosLivres={artigosLivres} />
+            <BlocoArtigo pauta={local} artigosLivres={artigosLivres} returnTo={pautaHref} />
             <BlocoCapa pautaId={local.id} tipo="blog" titulo="Capa Blog"
               proporcao="aspect-[3/2]"
               dica="Staging 3:2. /artigo produzir converte para public/images/.../cover.webp."

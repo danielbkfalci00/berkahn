@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Printer, SplitSquareHorizontal, X } from "lucide-react";
 import { PeriodSelect } from "./PeriodSelect";
 import { cn } from "@/lib/utils";
+import { snapshotFreshnessNotice } from "@/lib/analytics/period";
 import type { SnapshotSourceProvenance } from "@/types/analytics";
 
 interface AnalyticsHeaderProps {
@@ -54,6 +55,7 @@ export function AnalyticsHeader({
 }: AnalyticsHeaderProps) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const freshnessNotice = snapshotFreshnessNotice({ monthSlug: currentMonth, periodEnd, partial: isPartial });
 
   const toggleCompare = () => {
     const params = new URLSearchParams(searchParams);
@@ -90,7 +92,7 @@ export function AnalyticsHeader({
           {isPartial && daysCovered != null && daysInMonth != null && (
             <span className="text-amber-700">
               {" "}
-              · {daysCovered} de {daysInMonth} dias — o mês ainda não fechou
+              · {daysCovered} de {daysInMonth} dias cobertos
             </span>
           )}
         </p>
@@ -129,6 +131,12 @@ export function AnalyticsHeader({
       {comparabilityReason && (
         <p role="note" className="rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-900">
           {comparabilityReason}
+        </p>
+      )}
+
+      {freshnessNotice && (
+        <p role="status" className="rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-900">
+          {freshnessNotice}
         </p>
       )}
 

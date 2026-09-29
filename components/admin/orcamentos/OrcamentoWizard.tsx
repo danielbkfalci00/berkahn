@@ -54,6 +54,7 @@ const STEPS: { id: StepId; titulo: string }[] = [
 interface SaveState {
   status: "idle" | "salvando" | "finalizando" | "ok" | "erro"
   mensagem: string | null
+  conflito?: boolean
 }
 
 function StatusIcon({
@@ -115,6 +116,7 @@ export function OrcamentoWizard({ orcamentoInicial, dadosIniciais }: Props) {
   const [orcamentoId, setOrcamentoId] = useState<string | undefined>(
     orcamentoInicial?.id
   )
+  const [atualizadoEm, setAtualizadoEm] = useState(orcamentoInicial?.atualizado_em ?? "")
 
   const ehNovo = !orcamentoInicial && !orcamentoId
   const titulo = orcamentoInicial
@@ -153,6 +155,7 @@ export function OrcamentoWizard({ orcamentoInicial, dadosIniciais }: Props) {
           return
         }
         setOrcamentoId(res.id)
+        setAtualizadoEm(res.atualizadoEm)
         dispatch({ type: "MARK_SAVED", snapshot: state.dados })
         setSalvar({
           status: "ok",
@@ -160,13 +163,14 @@ export function OrcamentoWizard({ orcamentoInicial, dadosIniciais }: Props) {
         })
       } else {
         const id = orcamentoId ?? orcamentoInicial!.id
-        const res = await atualizarOrcamento(id, state.dados)
+        const res = await atualizarOrcamento(id, state.dados, atualizadoEm)
         if (!res.ok) {
-          setSalvar({ status: "erro", mensagem: res.erro })
+          setSalvar({ status: "erro", mensagem: res.erro, conflito: res.conflito })
           return
         }
+        setAtualizadoEm(res.atualizadoEm)
         dispatch({ type: "MARK_SAVED", snapshot: state.dados })
-        setSalvar({ status: "ok", mensagem: "Rascunho atualizado" })
+        setSalvar({ status: "ok", mensagem: "Alterações salvas" })
       }
     } catch (err) {
       setSalvar({
@@ -197,6 +201,7 @@ export function OrcamentoWizard({ orcamentoInicial, dadosIniciais }: Props) {
 
     try {
       let id = orcamentoId
+      let revisao = atualizadoEm
       if (ehNovo) {
         const criacao = await criarOrcamento(state.dados)
         if (!criacao.ok) {
@@ -205,13 +210,16 @@ export function OrcamentoWizard({ orcamentoInicial, dadosIniciais }: Props) {
         }
         id = criacao.id
         setOrcamentoId(id)
+        revisao = criacao.atualizadoEm
+        setAtualizadoEm(revisao)
       }
       const idFinal = id ?? orcamentoInicial!.id
-      const finalizacao = await finalizarOrcamento(idFinal, state.dados)
+      const finalizacao = await finalizarOrcamento(idFinal, state.dados, revisao)
       if (!finalizacao.ok) {
-        setSalvar({ status: "erro", mensagem: finalizacao.erro })
+        setSalvar({ status: "erro", mensagem: finalizacao.erro, conflito: finalizacao.conflito })
         return
       }
+      setAtualizadoEm(finalizacao.atualizadoEm)
       dispatch({ type: "MARK_SAVED", snapshot: state.dados })
       setSalvar({ status: "ok", mensagem: "Orçamento finalizado" })
       router.push(`/admin/orcamentos/${idFinal}`)
@@ -310,6 +318,7 @@ export function OrcamentoWizard({ orcamentoInicial, dadosIniciais }: Props) {
 
       {salvar.mensagem && (
         <div
+          role={salvar.status === "erro" ? "alert" : "status"}
           className={cn(
             "rounded-md border p-3 text-sm",
             salvar.status === "erro"
@@ -325,6 +334,11 @@ export function OrcamentoWizard({ orcamentoInicial, dadosIniciais }: Props) {
             )}
             <span>{salvar.mensagem}</span>
           </div>
+          {salvar.conflito && orcamentoId && (
+            <a href={`/admin/orcamentos/${orcamentoId}`} target="_blank" rel="noopener noreferrer" className="mt-2 inline-flex min-h-11 items-center underline">
+              Conferir versão atual em outra aba
+            </a>
+          )}
         </div>
       )}
 

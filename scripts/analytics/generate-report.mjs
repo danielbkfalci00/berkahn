@@ -22,7 +22,7 @@ import { fetchGa4 } from './fetch-ga4.mjs';
 import { fetchGsc } from './fetch-gsc.mjs';
 import { renderHtml } from './render-html.mjs';
 import { updateHubKpis } from './update-hub-kpis.mjs';
-import { upsertSnapshot } from './lib/supabase-snapshot.mjs';
+import { persistSnapshot } from './lib/supabase-snapshot.mjs';
 import { enrichRowsWithTitle, getAllPostUrls, isIndexationEligibleSlug } from './lib/posts.mjs';
 import { buildInsights, buildActions, buildSummary, isIndexedState, isKnownInspection } from './lib/insights.mjs';
 import { comparisonPolicyFor } from '../../lib/analytics/comparison-policy.mjs';
@@ -330,7 +330,7 @@ async function buildContext({ year, month, useFixture, fromCache = false, partia
   };
 }
 
-async function generateOne({ year, month, useFixture, fromCache = false, partial = false, asOf = new Date(), dryRun = false }) {
+async function generateOne({ year, month, useFixture, fromCache = false, partial = false, asOf = new Date(), dryRun = false, requirePersistence = false }) {
   console.log(`\n📊 Gerando relatório de ${monthLabel(year, month)}...`);
 
   const context = await buildContext({ year, month, useFixture, fromCache, partial, asOf });
@@ -365,26 +365,18 @@ async function generateOne({ year, month, useFixture, fromCache = false, partial
     console.log(`   ✅ Hubs atualizados (blog.md, seo-aeo.md)`);
   }
 
-  // Upsert no Supabase (analytics_snapshots) — não bloqueia se falhar
-  if (process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY) {
-    try {
-      const { _raw, ...contextForDb } = context;
-      await upsertSnapshot({
-        monthSlug: slug,
-        ga4: _raw.ga4,
-        gsc: _raw.gsc,
-        ga4Prev: _raw.ga4Prev,
-        gscPrev: _raw.gscPrev,
-        context: contextForDb,
-      });
-      console.log(`   ✅ Snapshot salvo no Supabase (analytics_snapshots)`);
-    } catch (e) {
-      console.warn(`   ⚠️  Falha ao salvar snapshot no Supabase: ${e.message}`);
-      console.warn(`      (relatório local foi gerado normalmente)`);
-    }
-  } else {
-    console.log(`   ℹ️  SUPABASE_SERVICE_ROLE_KEY ausente — snapshot não foi enviado ao Supabase`);
-  }
+  // Falha da coleta principal já aborta buildContext antes de qualquer upsert,
+  // preservando o último snapshot. Falha de publicação deve reprovar o job hospedado.
+  const { _raw, ...contextForDb } = context;
+  const persisted = await persistSnapshot({
+    monthSlug: slug,
+    ga4: _raw.ga4,
+    gsc: _raw.gsc,
+    ga4Prev: _raw.ga4Prev,
+    gscPrev: _raw.gscPrev,
+    context: contextForDb,
+  }, { required: requirePersistence });
+  if (persisted) console.log(`   ✅ Snapshot confirmado no Supabase (analytics_snapshots)`);
 
   return { mdPath, htmlPath, context };
 }
@@ -422,6 +414,7 @@ async function main() {
   const bootstrap = args.includes('--bootstrap');
   const fromCache = args.includes('--from-cache');
   const dryRun = args.includes('--dry-run');
+  const requirePersistence = process.env.ANALYTICS_REQUIRE_PERSISTENCE === 'true';
   const partialFlag = args.includes('--partial');
 
   const learningFlag = args.includes('--learning');
@@ -436,6 +429,9 @@ async function main() {
   }
 
   try {
+    if (requirePersistence && !dryRun && !(process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY)) {
+      throw new Error('Pipeline hospedado exige a chave de serviço do Supabase para publicar o snapshot.');
+    }
     if (bootstrap) {
       console.log(fromCache
         ? '🚀 Bootstrap (cache): re-render dos últimos 3 meses a partir de fixtures...'
@@ -445,7 +441,7 @@ async function main() {
         let y = last.year;
         let m = last.month - offset;
         while (m <= 0) { m += 12; y -= 1; }
-        await generateOne({ year: y, month: m, fromCache, dryRun });
+        await generateOne({ year: y, month: m, fromCache, dryRun, requirePersistence });
       }
     } else {
       let target;
@@ -471,7 +467,7 @@ async function main() {
       // recriaria o footgun de esquecê-la e publicar dado incompleto como fechamento.
       const partial = partialFlag || isCurrentMonth(target.year, target.month, asOf);
 
-      await generateOne({ year: target.year, month: target.month, useFixture, fromCache, partial, asOf, dryRun });
+      await generateOne({ year: target.year, month: target.month, useFixture, fromCache, partial, asOf, dryRun, requirePersistence });
     }
 
     console.log('\n✅ Relatório(s) gerado(s). Abra o HTML no browser para apresentar.');
