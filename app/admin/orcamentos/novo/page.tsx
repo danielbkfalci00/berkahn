@@ -1,18 +1,21 @@
+import { commercialHref, commercialReturnTo } from "@/lib/admin/return-to"
 import Link from "next/link"
 import { Card } from "@/components/ui/card"
 import { FileText, FileSpreadsheet, ArrowRight } from "lucide-react"
 
-export default function NovoOrcamentoPage() {
+export default async function NovoOrcamentoPage({ searchParams }: { searchParams: Promise<{ returnTo?: string | string[] }> }) {
+  const returnTo = commercialReturnTo((await searchParams).returnTo)
   return (
     <div className="space-y-6">
       <div>
+        <Link href={returnTo} className="inline-flex min-h-11 items-center text-sm text-neutral-500 hover:text-neutral-900">← Voltar</Link>
         <h1 className="text-2xl font-semibold text-neutral-900">Novo Orçamento</h1>
         <p className="text-neutral-500">Escolha como quer alimentar os dados desta estimativa.</p>
       </div>
 
       <div className="grid gap-4 md:grid-cols-2">
         <Link
-          href="/admin/orcamentos/novo/form"
+          href={commercialHref("/admin/orcamentos/novo/form", returnTo)}
           className="group"
         >
           <Card className="p-6 transition-all hover:border-neutral-900 hover:shadow-sm">
@@ -34,7 +37,7 @@ export default function NovoOrcamentoPage() {
         </Link>
 
         <Link
-          href="/admin/orcamentos/novo/upload"
+          href={commercialHref("/admin/orcamentos/novo/upload", returnTo)}
           className="group"
         >
           <Card className="p-6 transition-all hover:border-neutral-900 hover:shadow-sm">

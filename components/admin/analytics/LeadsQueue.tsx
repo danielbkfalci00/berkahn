@@ -39,6 +39,7 @@ import {
 } from "@/app/admin/leads/actions";
 import { createClient } from "@/lib/supabase/client";
 import { normalizeLeadPhone } from "@/lib/contact";
+import { commercialHref, leadHref, leadsReturnTo } from "@/lib/admin/return-to";
 import { useUnsavedChanges } from "@/hooks/use-unsaved-changes";
 import type {
   AdminDataResult, AnalyticsLead, LeadArtifact, LeadPriority, LeadResponsible, LeadStatus,
@@ -629,7 +630,7 @@ function LeadQuickView({ lead, preview, onClose, onRestoreFocus, onStatusChange,
           </section>
         </div>
         <footer className="border-t border-neutral-200 bg-white px-5 pb-[calc(1.25rem+env(safe-area-inset-bottom))] pt-4 md:pb-5">
-          <Link href={`/admin/leads/${lead.id}?returnTo=${encodeURIComponent(`/admin/leads?${params.toString()}`)}`} onClick={onClose} className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-md border border-neutral-300 text-sm font-medium text-neutral-900 hover:bg-neutral-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900">Ver ficha completa <ChevronRight className="h-4 w-4" /></Link>
+          <Link href={leadHref(lead.id, `/admin/leads?${params.toString()}`)} onClick={onClose} className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-md border border-neutral-300 text-sm font-medium text-neutral-900 hover:bg-neutral-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900">Ver ficha completa <ChevronRight className="h-4 w-4" /></Link>
         </footer>
       </DialogPrimitive.Content>}
     </DialogPrimitive.Portal>
@@ -647,7 +648,7 @@ function LeadInbox({ leads, pendingLeadId, onStatusChange, onOpen }: { leads: Le
       // Mesma regra do filtro e do push (028): lead encerrado não tem ação vencida.
       const overdue = Boolean(lead.proxima_acao_em && new Date(lead.proxima_acao_em) < new Date() && lead.status !== "convertido" && lead.status !== "desqualificado");
       return <article key={lead.id} className="relative grid gap-3 border-b py-4 pl-4 pr-10 text-sm transition-colors last:border-0 hover:bg-neutral-50 focus-within:bg-neutral-50 lg:grid-cols-[1fr_1.4fr_.75fr_.85fr_.8fr_.25fr] lg:items-center lg:pr-4">
-        <Link href={`/admin/leads/${lead.id}?returnTo=${encodeURIComponent(`/admin/leads?${params.toString()}`)}`} prefetch={false} onClick={(event) => {
+        <Link href={leadHref(lead.id, `/admin/leads?${params.toString()}`)} prefetch={false} onClick={(event) => {
           if (event.button === 0 && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey) {
             event.preventDefault();
             onOpen(lead, event.currentTarget);
@@ -702,7 +703,7 @@ function KanbanCard({ lead, disabled, onStatusChange, onOpen }: { lead: LeadList
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({ id: lead.id, data: { status: lead.status }, disabled });
   const priority = priorityMeta(lead.prioridade);
   return <article ref={setNodeRef} style={{ transform: CSS.Translate.toString(transform) }} className={`relative rounded-md border border-neutral-200 bg-white p-3 shadow-sm hover:border-neutral-400 focus-within:border-neutral-900 ${isDragging ? "z-20 opacity-70 shadow-lg" : ""}`}>
-    <Link href={`/admin/leads/${lead.id}?returnTo=${encodeURIComponent(`/admin/leads?${params.toString()}`)}`} prefetch={false} onClick={(event) => {
+    <Link href={leadHref(lead.id, `/admin/leads?${params.toString()}`)} prefetch={false} onClick={(event) => {
       if (event.button === 0 && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey) {
         event.preventDefault();
         onOpen(lead, event.currentTarget);
@@ -848,8 +849,8 @@ export function LeadDetail({
   const phoneDigits = normalizeLeadPhone(lead.telefone);
   const terminal = status === "convertido" || status === "desqualificado";
   const utmEntries = Object.entries(lead.utm || {}).filter(([, value]) => value);
-  const rawBack = params.get("returnTo");
-  const backPath = rawBack?.startsWith("/admin/leads?") ? rawBack : "/admin/leads";
+  const backPath = leadsReturnTo(params.get("returnTo"));
+  const detailHref = leadHref(lead.id, backPath);
   return (
     <div className="mx-auto max-w-6xl space-y-5">
       <div className="flex flex-wrap items-start justify-between gap-4">
@@ -892,7 +893,7 @@ export function LeadDetail({
           <section className="rounded-lg border border-neutral-200 bg-white p-5">
             <h2 className="font-medium text-neutral-900">Linha do tempo</h2>
             <ol className="mt-5 space-y-4 border-l border-neutral-200 pl-5">
-              {timeline.length === 0 ? <li className="text-sm text-neutral-500">Nenhuma atividade registrada.</li> : timeline.map((activity) => <li key={activity.id} className="relative text-sm"><span className="absolute -left-[25px] top-1 h-2 w-2 rounded-full bg-neutral-900" /><p className="font-medium text-neutral-900">{activity.action}</p><p className="text-xs text-neutral-500">{new Intl.DateTimeFormat("pt-BR", { dateStyle: "short", timeStyle: "short" }).format(new Date(activity.created_at))} · {activity.user_name || "Admin"}</p><ActivityDetails details={activity.details} responsibles={responsibles} /></li>)}
+              {timeline.length === 0 ? <li className="text-sm text-neutral-500">Nenhuma atividade registrada.</li> : timeline.map((activity) => <li key={activity.id} className="relative text-sm"><span className="absolute -left-[25px] top-1 h-2 w-2 rounded-full bg-neutral-900" /><p className="font-medium text-neutral-900">{activity.action}</p><p className="text-xs text-neutral-500">{new Intl.DateTimeFormat("pt-BR", { dateStyle: "short", timeStyle: "short" }).format(new Date(activity.created_at))} · {activity.user_name || "Admin"}</p><ActivityDetails details={activity.details} responsibles={responsibles} returnTo={detailHref} /></li>)}
             </ol>
             {hasMore && <button type="button" disabled={loadingHistory} onClick={olderActivities} className="mt-4 min-h-11 rounded border px-3 text-sm">{loadingHistory ? "Carregando…" : "Carregar anteriores"}</button>}
           </section>
@@ -918,7 +919,7 @@ export function LeadDetail({
               <div className="flex gap-3"><button className="min-h-11 rounded bg-neutral-950 px-3 text-sm text-white">Salvar contato</button><button type="button" className="min-h-11 px-2 text-sm" onClick={() => setEditingContact(false)}>Cancelar</button></div>
             </fieldset></form>}
             <button type="button" disabled={isPending} className="min-h-11 text-sm underline" onClick={() => startTransition(async () => { try { const result = await findLeadDuplicates(contact.email, contact.telefone); if (!result.ok) { setError(result.error || "Falha na busca."); return; } const matches = (result.duplicates || []).filter((item) => item.id !== lead.id); setDuplicates(matches); setSuccess(matches.length ? "Revise os contatos semelhantes abaixo. Nenhum registro foi unido." : "Nenhum contato semelhante encontrado."); } catch { setError("Não foi possível verificar contatos semelhantes."); } })}>Verificar contatos semelhantes</button>
-            {duplicates.map((item) => <Link key={item.id} href={`/admin/leads/${item.id}`} className="block rounded border border-amber-200 bg-amber-50 p-2 text-sm underline">Possível duplicado: {item.nome} · {item.email || item.telefone}</Link>)}
+            {duplicates.map((item) => <Link key={item.id} href={leadHref(item.id, backPath)} className="block rounded border border-amber-200 bg-amber-50 p-2 text-sm underline">Possível duplicado: {item.nome} · {item.email || item.telefone}</Link>)}
           </section>
           <section className="rounded-lg border border-neutral-200 bg-white p-5">
             <h2 className="font-medium">Organização do atendimento</h2>
@@ -930,9 +931,9 @@ export function LeadDetail({
             </fieldset>
           </section>
           <LeadArtifacts leadId={lead.id} artifacts={artifacts} onError={setError} onSuccess={(message) => { setSuccess(message); router.refresh(); }} />
-          <CommercialLinks title="Orçamentos" records={budgets} empty="Nenhum orçamento vinculado." />
+          <CommercialLinks title="Orçamentos" records={budgets} returnTo={detailHref} empty="Nenhum orçamento vinculado." />
           {proposals.length > 0 && <CommercialLinks title="Propostas anteriores" records={proposals} empty="" />}
-          <Link href={`/admin/orcamentos/novo/form?lead=${lead.id}`} className="block min-h-11 rounded-md bg-neutral-950 px-4 py-3 text-center text-sm font-medium text-white">Criar orçamento</Link>
+          <Link href={commercialHref(`/admin/orcamentos/novo/form?lead=${lead.id}`, detailHref)} className="block min-h-11 rounded-md bg-neutral-950 px-4 py-3 text-center text-sm font-medium text-white">Criar orçamento</Link>
           {privacyPanel}
           <div className="border-t border-neutral-200 pt-4"><button disabled={isPending} onClick={() => {
             if (!confirmLeave()) return;
@@ -945,7 +946,7 @@ export function LeadDetail({
   );
 }
 
-function ActivityDetails({ details, responsibles }: { details: Record<string, unknown> | null; responsibles: LeadResponsible[] }) {
+function ActivityDetails({ details, responsibles, returnTo }: { details: Record<string, unknown> | null; responsibles: LeadResponsible[]; returnTo: string }) {
   if (!details) return null;
   const stage = (value: unknown) => STATUS.find((item) => item.value === value)?.label || String(value || "—");
   const nextAction = typeof details.proxima_acao_em === "string" ? new Date(details.proxima_acao_em) : null;
@@ -957,7 +958,7 @@ function ActivityDetails({ details, responsibles }: { details: Record<string, un
     {"responsavel_id" in details && <p>Responsável: {responsibles.find((item) => item.id === details.responsavel_id)?.nome || (details.responsavel_id ? "Integrante anterior" : "sem responsável")}</p>}
     {typeof details.prioridade === "string" && <p>Prioridade: {details.prioridade}</p>}
     {typeof details.resumo_status === "string" && <p className="whitespace-pre-wrap">{details.resumo_status}</p>}
-    {typeof details.orcamento_id === "string" && <Link href={`/admin/orcamentos/${details.orcamento_id}`} className="underline">Abrir orçamento</Link>}
+    {typeof details.orcamento_id === "string" && <Link href={commercialHref(`/admin/orcamentos/${details.orcamento_id}`, returnTo)} className="underline">Abrir orçamento</Link>}
     {details.tipo === "contato_atualizado" && <p>Dados de contato revisados.</p>}
   </div>;
 }
@@ -966,8 +967,8 @@ function Info({ label, value }: { label: string; value: string | null }) {
   return <div className="min-w-0"><dt className="text-xs font-medium uppercase tracking-wide text-neutral-400">{label}</dt><dd className="mt-1 break-words capitalize text-neutral-800">{value || "—"}</dd></div>;
 }
 
-function CommercialLinks({ title, records, empty }: { title: string; records: LinkedCommercialRecord[]; empty: string }) {
-  return <section className="rounded-lg border border-neutral-200 bg-white p-5"><h2 className="font-medium text-neutral-900">{title}</h2><div className="mt-3 space-y-2">{records.length === 0 ? <p className="text-sm text-neutral-500">{empty}</p> : records.map((record) => record.href ? <Link key={record.id} href={record.href} className="flex justify-between text-sm underline"><span>{record.label}</span><span>{record.status}</span></Link> : <div key={record.id} className="flex justify-between text-sm"><span>{record.label}</span><span>{record.status}</span></div>)}</div></section>;
+function CommercialLinks({ title, records, empty, returnTo }: { title: string; records: LinkedCommercialRecord[]; empty: string; returnTo?: string }) {
+  return <section className="rounded-lg border border-neutral-200 bg-white p-5"><h2 className="font-medium text-neutral-900">{title}</h2><div className="mt-3 space-y-2">{records.length === 0 ? <p className="text-sm text-neutral-500">{empty}</p> : records.map((record) => record.href ? <Link key={record.id} href={returnTo ? commercialHref(record.href, returnTo) : record.href} className="flex justify-between text-sm underline"><span>{record.label}</span><span>{record.status}</span></Link> : <div key={record.id} className="flex justify-between text-sm"><span>{record.label}</span><span>{record.status}</span></div>)}</div></section>;
 }
 
 function LeadArtifacts({

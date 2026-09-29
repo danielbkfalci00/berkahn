@@ -2,6 +2,8 @@
 
 import { useReducer, useState, useCallback, useMemo, useRef } from "react"
 import { useRouter } from "next/navigation"
+import Link from "next/link"
+import { commercialHref } from "@/lib/admin/return-to"
 import { useUnsavedChanges } from "@/hooks/use-unsaved-changes"
 import {
   CheckCircle2,
@@ -39,6 +41,7 @@ import {
 } from "@/app/admin/orcamentos/actions"
 
 interface Props {
+  returnTo?: string
   orcamentoInicial?: Orcamento
   dadosIniciais?: Partial<OrcamentoInsert>
 }
@@ -106,7 +109,7 @@ function errosDoStep(
   return {}
 }
 
-export function OrcamentoWizard({ orcamentoInicial, dadosIniciais }: Props) {
+export function OrcamentoWizard({ orcamentoInicial, dadosIniciais, returnTo = "/admin/orcamentos" }: Props) {
   const router = useRouter()
   const [state, dispatch] = useReducer(reducer, initialState(orcamentoInicial, dadosIniciais))
   const [stepAtivo, setStepAtivo] = useState<StepId>(1)
@@ -233,7 +236,7 @@ export function OrcamentoWizard({ orcamentoInicial, dadosIniciais }: Props) {
       setAtualizadoEm(finalizacao.atualizadoEm)
       dispatch({ type: "MARK_SAVED", snapshot: state.dados })
       setSalvar({ status: "ok", mensagem: "Orçamento finalizado" })
-      router.push(`/admin/orcamentos/${idFinal}`)
+      router.push(commercialHref(`/admin/orcamentos/${idFinal}`, returnTo))
     } catch (err) {
       setSalvar({
         status: "erro",
@@ -348,9 +351,12 @@ export function OrcamentoWizard({ orcamentoInicial, dadosIniciais }: Props) {
             <span>{salvar.mensagem}</span>
           </div>
           {salvar.conflito && (salvar.existenteId || orcamentoId) && (
-            <a href={`/admin/orcamentos/${salvar.existenteId || orcamentoId}`} target="_blank" rel="noopener noreferrer" className="mt-2 inline-flex min-h-11 items-center underline">
+            <a href={commercialHref(`/admin/orcamentos/${salvar.existenteId || orcamentoId}`, returnTo)} target="_blank" rel="noopener noreferrer" className="mt-2 inline-flex min-h-11 items-center underline">
               Conferir versão atual em outra aba
             </a>
+          )}
+          {salvar.status === "ok" && orcamentoId && (
+            <Link href={commercialHref(`/admin/orcamentos/${orcamentoId}`, returnTo)} className="mt-2 inline-flex min-h-11 items-center underline">Abrir orçamento salvo</Link>
           )}
         </div>
       )}

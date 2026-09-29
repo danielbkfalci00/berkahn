@@ -10,6 +10,10 @@ const source = ts.transpileModule(readFileSync(filename, 'utf8'), {
   compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 },
 }).outputText;
 const origin = 'https://admin.example.test';
+const returnHelpers = {};
+vm.runInNewContext(ts.transpileModule(readFileSync(new URL('../lib/admin/return-to.ts', import.meta.url), 'utf8'), {
+  compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 },
+}).outputText, { exports: returnHelpers, URL, URLSearchParams });
 const nextState = (page) => ({ __NA: true, __PRIVATE_NEXTJS_INTERNALS_TREE: { page }, other: 'preserved' });
 
 class Hub {
@@ -429,7 +433,7 @@ for (const navigationApi of [false, true]) {
     const promise = new Promise((yes, no) => { resolve = yes; reject = no; });
     return { promise, resolve, reject };
   };
-  function crmHarness(actions = {}) {
+  function crmHarness(actions = {}, search = "") {
     const slots = [], effects = [], transitions = [];
     let cursor = 0, changed = false, component, props;
     const react = {
@@ -461,9 +465,10 @@ for (const navigationApi of [false, true]) {
         if (name === 'react') return react;
         if (name === 'react/jsx-runtime') return { jsx: element, jsxs: element, Fragment: 'Fragment' };
         if (name === 'next/link') return { default: 'Link' };
-        if (name === 'next/navigation') return { useRouter: () => ({ refresh() {}, push() {} }), useSearchParams: () => new URLSearchParams() };
+        if (name === 'next/navigation') return { useRouter: () => ({ refresh() {}, push() {} }), useSearchParams: () => new URLSearchParams(search) };
         if (name === '@/app/admin/leads/actions') return { getLeadPreview: async () => ({ status: 'ok', data: {} }), markLeadViewed: async () => ({ ok: true }), ...actions };
         if (name === '@/hooks/use-unsaved-changes') return { useUnsavedChanges: () => () => true };
+        if (name === '@/lib/admin/return-to') return returnHelpers;
         if (name === '@/lib/contact') return { normalizeLeadPhone: () => '' };
         if (name === '@/lib/supabase/client') return { createClient() { throw new Error('Unexpected database access'); } };
         if (['lucide-react', '@radix-ui/react-dialog', '@dnd-kit/core', '@dnd-kit/utilities'].includes(name)) return symbols;
@@ -574,6 +579,23 @@ for (const navigationApi of [false, true]) {
   const activity = (number) => ({ id: `activity-${number}`, action: `Registro ${number}`, created_at: new Date(Date.UTC(2026, 8, 29, 12, 0, -number)).toISOString(), details: {}, user_name: 'Admin' });
   const detailLead = { ...leadA, email: null, telefone: null, segmento: 'nao_definido', utm: {}, criado_em: '2026-09-29T10:00:00Z' };
   const detailProps = { lead: detailLead, activities: Array.from({ length: 25 }, (_, i) => activity(i + 1)), hasMoreActivities: true, budgets: [], proposals: [], artifacts: [], responsibles: [], contextLinks: {} };
+  {
+    const queue = '/admin/leads?q=Casa+azul&status=qualificado&page=3&view=inbox';
+    const leadId = '12345678-1234-1234-1234-123456789abc';
+    const context = returnHelpers.leadHref(leadId, queue);
+    const h = crmHarness({}, new URLSearchParams({ returnTo: queue, atendimento: 'envio', orcamento: 'TEST-1' }).toString());
+    const tree = h.render('LeadDetail', { ...detailProps, lead: { ...detailLead, id: leadId }, activities: [{ ...activity(1), details: { orcamento_id: 'budget' } }], budgets: [{ id: 'budget', label: 'TEST-1', status: 'rascunho', href: '/admin/orcamentos/budget' }] });
+    const create = nodes(tree, (node) => node.type === 'Link' && node.props.children === 'Criar orçamento')[0];
+    assert.equal(new URL(create.props.href, origin).searchParams.get('lead'), leadId);
+    assert.equal(new URL(create.props.href, origin).searchParams.get('returnTo'), context, 'Creating from a lead preserves the filtered queue, without replaying the send form');
+    for (const name of ['CommercialLinks', 'ActivityDetails']) {
+      const component = nodes(tree, (node) => node.type?.name === name)[0];
+      const rendered = component.type(component.props);
+      const link = nodes(rendered, (node) => node.type === 'Link')[0];
+      assert.equal(new URL(link.props.href, origin).searchParams.get('returnTo'), context, `${name} preserves the lead context`);
+    }
+    h.unmount();
+  }
   const oldPage = deferred(), currentPage = deferred(), historyCalls = [];
   const h = crmHarness({ loadLeadActivities: (id, cursor) => { historyCalls.push({ id, cursor }); return historyCalls.length === 1 ? oldPage.promise : currentPage.promise; } });
   const historyButton = (tree) => nodes(tree, (node) => node.type === 'button' && ['Carregar anteriores', 'Carregando…'].includes(node.props.children))[0];
@@ -600,4 +622,122 @@ for (const navigationApi of [false, true]) {
   h.unmount();
 }
 
-console.log('Admin navigation: confirmations, history rollback, Next state, cleanup, editorial returns, pagination recovery, CRM request ordering and production harness isolation passed.');
+// Follow the commercial journey through the actual server pages and links.
+{
+  const { commercialReturnTo, commercialHref, leadHref, leadsReturnTo } = returnHelpers;
+  const leadId = '12345678-1234-1234-1234-123456789abc';
+  const budgetId = '87654321-1234-1234-1234-123456789abc';
+  const queue = '/admin/leads?q=Casa+azul&page=3&status=qualificado&prioridade=alta&view=inbox';
+  const context = leadHref(leadId, queue);
+  assert.equal(commercialReturnTo(context), context);
+  assert.equal(leadHref(leadId, context), context);
+  assert.equal(leadsReturnTo(new URL(context, origin).searchParams.get('returnTo')), queue);
+  assert.equal(leadHref(budgetId, context), leadHref(budgetId, '/admin/leads'), 'Another lead does not inherit unrelated context');
+  assert.equal(commercialReturnTo(`${context}&atendimento=envio&orcamento=TEST#atendimento`), context);
+  assert.equal(commercialReturnTo(`/admin/leads/${leadId}?returnTo=${encodeURIComponent(context)}`), leadHref(leadId, '/admin/leads'), 'Detail chains are bounded');
+  for (const invalid of [undefined, null, [], 1, 'https://evil.test/admin/leads', '//evil.test/admin/leads', '/\\evil.test/admin/leads', '/admin/leads/../orcamentos', '/admin/%6ceads', '/admin/leads\n', '/admin/leads-evil', '/admin/leads/invalid', `/admin/orcamentos/${budgetId}`, '/admin/login', '/admin/posts', '/admin/leads?' + 'q'.repeat(4096)]) {
+    assert.equal(commercialReturnTo(invalid), '/admin/orcamentos');
+    assert.equal(leadsReturnTo(invalid), '/admin/leads');
+  }
+  const element = (type, props) => ({ type, props });
+  const symbols = new Proxy({}, { get: (_, name) => String(name) });
+  function nodes(tree, predicate) {
+    if (Array.isArray(tree)) return tree.flatMap((child) => nodes(child, predicate));
+    if (!tree?.props) return [];
+    return [...(predicate(tree) ? [tree] : []), ...nodes(tree.props.children, predicate)];
+  }
+  const links = (tree) => nodes(tree, (node) => node.type === 'Link');
+  const linkWithText = (tree, text) => links(tree).find((node) => JSON.stringify(node.props.children).includes(text));
+  const component = (tree, name) => nodes(tree, (node) => node.type === name)[0];
+  let row = { id: budgetId, lead_id: leadId, numero: 'TEST-1', status: 'finalizado', cliente_nome: 'Cliente sintético', data_cotacao: '2026-09-29', data_elaboracao: '2026-09-29', pdf_url: null, pdf_storage_path: 'test/document.pdf' };
+  let leadReads = 0, listError = null, countError = null, count = 30;
+  const supabase = { from(table) {
+    if (table === 'leads') leadReads++;
+    let counting = false;
+    const query = {
+      select(_columns, options) { counting = Boolean(options?.head); return this; },
+      eq() { return this; }, in() { return this; }, ilike() { return this; }, order() { return this; }, range() { return this; },
+      async single() { return { data: row }; },
+      async maybeSingle() { return { data: { id: leadId, nome: 'Lead sintético' } }; },
+      then(resolve, reject) { return Promise.resolve(counting ? { count, error: countError } : { data: [], error: listError }).then(resolve, reject); },
+    };
+    return query;
+  } };
+  function load(file, overrides = {}) {
+    const api = {};
+    vm.runInNewContext(ts.transpileModule(readFileSync(new URL(`../${file}`, import.meta.url), 'utf8'), {
+      compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022, jsx: ts.JsxEmit.ReactJSX },
+    }).outputText, {
+      exports: api, URL, URLSearchParams, console: { error() {} },
+      require(name) {
+        if (Object.hasOwn(overrides, name)) return overrides[name];
+        if (name === 'react/jsx-runtime') return { jsx: element, jsxs: element, Fragment: 'Fragment' };
+        if (name === 'next/link') return { default: 'Link' };
+        if (name === 'next/navigation') return { redirect(destination) { throw Object.assign(new Error('redirect'), { destination }); }, notFound() { throw new Error('not found'); } };
+        if (name === '@/lib/admin/return-to') return returnHelpers;
+        if (name === '@/lib/supabase/server') return { createClient: async () => supabase };
+        if (name === '@/lib/orcamento-estimativa-data') return { PADROES_ACABAMENTO: [], REGIMES_COMERCIAIS: [] };
+        if (name === '@/lib/orcamento-pdf-storage') return { isOrcamentoPdfCurrent: () => false };
+        if (name === 'lucide-react' || name.startsWith('@/components/') || name === './BaixarPdfButton') return symbols;
+        throw new Error(`Unexpected commercial import: ${name}`);
+      },
+    });
+    return api;
+  }
+  const pageProps = { params: Promise.resolve({ id: budgetId }), searchParams: Promise.resolve({ returnTo: context }) };
+  const form = load('app/admin/orcamentos/novo/form/page.tsx').default;
+  const formTree = await form({ searchParams: Promise.resolve({ lead: leadId, returnTo: context }) });
+  assert.equal(linkWithText(formTree, 'Voltar para lead').props.href, context);
+  assert.equal(component(formTree, 'OrcamentoWizard').props.returnTo, context);
+  assert.equal(component(formTree, 'OrcamentoWizard').props.dadosIniciais.lead_id, leadId);
+  for (const lead of [[leadId], 'invalid']) await form({ searchParams: Promise.resolve({ lead, returnTo: ['bad'] }) });
+  assert.equal(leadReads, 1, 'Malformed or repeated lead IDs do not reach the database');
+
+  const detail = load('app/admin/orcamentos/[id]/page.tsx').default;
+  const detailTree = await detail(pageProps);
+  assert.equal(linkWithText(detailTree, 'Voltar para lead').props.href, context);
+  assert.equal(linkWithText(detailTree, 'Abrir lead vinculado').props.href, context);
+  const send = new URL(linkWithText(detailTree, 'Registrar envio').props.href, origin);
+  assert.equal(send.searchParams.get('returnTo'), queue);
+  assert.equal(send.searchParams.get('atendimento'), 'envio');
+  assert.equal(send.searchParams.get('orcamento'), 'TEST-1');
+  assert.equal(send.hash, '#atendimento');
+  const editLink = new URL(linkWithText(detailTree, 'Editar').props.href, origin);
+  assert.equal(editLink.searchParams.get('returnTo'), context);
+  const edit = load('app/admin/orcamentos/[id]/edit/page.tsx').default;
+  const editTree = await edit(pageProps);
+  assert.equal(component(editTree, 'OrcamentoWizard').props.returnTo, context);
+  assert.equal(new URL(linkWithText(editTree, 'Voltar para detalhe').props.href, origin).searchParams.get('returnTo'), context);
+  row = { ...row, status: 'arquivado' };
+  const archived = await detail(pageProps);
+  assert.ok(component(archived, 'BaixarPdfButton'), 'Archived legacy PDF remains downloadable without a cached signed URL');
+  assert.equal(component(archived, 'GerarPdfButton'), undefined);
+  await assert.rejects(edit(pageProps), (error) => error.destination === commercialHref(`/admin/orcamentos/${budgetId}`, context));
+
+  const list = '/admin/orcamentos?status=rascunho&q=Casa&page=2';
+  const listProps = { searchParams: Promise.resolve({ returnTo: list }) };
+  const chooser = await load('app/admin/orcamentos/novo/page.tsx').default(listProps);
+  for (const link of links(chooser).filter((node) => node.props.href.includes('/novo/'))) {
+    assert.equal(new URL(link.props.href, origin).searchParams.get('returnTo'), list);
+  }
+  const upload = await load('app/admin/orcamentos/novo/upload/page.tsx').default(listProps);
+  assert.equal(component(upload, 'PlanilhaUpload').props.returnTo, list);
+  const table = load('components/admin/orcamentos/OrcamentosTable.tsx').OrcamentosTable({ orcamentos: [row], returnTo: list });
+  for (const link of links(table)) assert.equal(new URL(link.props.href, origin).searchParams.get('returnTo'), list);
+  const listPage = load('app/admin/orcamentos/page.tsx').default;
+  const listTree = await listPage({ searchParams: Promise.resolve({ status: 'rascunho', q: 'Casa', page: '2' }) });
+  assert.equal(component(listTree, 'OrcamentosTable').props.returnTo, list);
+  assert.equal(new URL(linkWithText(listTree, 'Novo Orçamento').props.href, origin).searchParams.get('returnTo'), list);
+  count = 25;
+  await assert.rejects(listPage({ searchParams: Promise.resolve({ status: 'rascunho', q: 'Casa', page: '2' }) }), (error) => error.destination === list.replace('page=2', 'page=1'));
+  listError = { code: 'PGRST103' }; count = 0;
+  await assert.rejects(listPage({ searchParams: Promise.resolve({ page: '99' }) }), (error) => error.destination.includes('page=1'));
+  countError = { code: 'offline' };
+  const failed = await listPage({ searchParams: Promise.resolve({ page: '99' }) });
+  assert.ok(nodes(failed, (node) => node.props.role === 'alert').length, 'Count failures do not redirect as an empty list');
+  countError = null; listError = null;
+  const duplicated = await listPage({ searchParams: Promise.resolve({ q: ['a', 'b'], status: ['ativos'], page: ['2'] }) });
+  assert.equal(component(duplicated, 'OrcamentosTable').props.returnTo, '/admin/orcamentos?status=ativos&q=&page=1');
+}
+
+console.log('Admin navigation: confirmations, history rollback, Next state, cleanup, editorial/commercial journeys, pagination recovery, CRM request ordering and production harness isolation passed.');

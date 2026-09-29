@@ -92,6 +92,15 @@ O CI [36617603862](https://github.com/danielbkfalci00/berkahn/actions/runs/36617
 
 PR121 integrado em `014a19e`, com CI do main [36618494115](https://github.com/danielbkfalci00/berkahn/actions/runs/36618494115) e deploys do site/ADMIN aprovados. O smoke pós-deploy confirmou quadro com busca “Projeto integrado” → pauta → artigo → pauta → quadro, preservando a busca e o resultado único; o Dashboard recarregou com saudação estável e sem erro de hidratação nessa verificação. Site/login responderam 200, API não autenticada 401 e harness de desenvolvimento 404. A checagem visual revelou que a data sem quebra comprimira a coluna de ações; o ajuste de largura descrito acima complementa essa entrega.
 
+### Continuação: jornada comercial e retorno ao contexto
+
+- `lib/admin/return-to.ts:44` estende o validador existente com destinos comerciais explícitos: filas de leads/orçamentos e uma ficha de lead com sua fila. Rejeita destinos externos, caminhos normalizados e encadeamentos de detalhes. O retorno não reabre o formulário transitório de registro de envio.
+- `components/admin/analytics/LeadsQueue.tsx:852` mantém filtros, busca, visão e página nos links de criação, orçamentos vinculados e histórico. As páginas de detalhe/edição, a finalização e a importação carregam a mesma origem. `OrcamentoWizard.tsx:359` oferece acesso direto ao orçamento salvo.
+- `app/admin/orcamentos/page.tsx:113` recupera a última página válida após redução do total, preserva busca/status e trata parâmetros repetidos sem erro de renderização. Falhas de contagem continuam explícitas.
+- `app/admin/orcamentos/[id]/page.tsx:237` usa a existência do arquivo armazenado para mostrar o PDF arquivado, mesmo sem URL assinada antiga; a renovação e a verificação de versão continuam no endpoint de download.
+
+As regressões locais `test-admin-navigation.mjs` e `test-lead-flow.mjs` passaram com módulos reais e dependências externas simuladas: criação a partir da ficha, retorno de edição, salvamento/finalização, importação, registro de envio, destinos inválidos, paginação e arquivo legado arquivado. Não há migration nem alteração de registros comerciais neste lote. A validação completa do CI e o smoke pós-deploy serão registrados no PR. Os cenários manuais de múltiplos papéis, edição simultânea e PDF alterado continuam separados da cobertura automatizada.
+
 > [!info] Migração para vault
 > Este arquivo era duplicado em `Docs/ADMIN_SETUP.md` e `Docs/site/ADMIN_SETUP.md`. Consolidado aqui como fonte única. Referenciado por [[stack-nextjs-supabase]].
 

@@ -1,4 +1,6 @@
+import { commercialHref } from "@/lib/admin/return-to"
 import Link from "next/link"
+import { redirect } from "next/navigation"
 import { createClient } from "@/lib/supabase/server"
 import { OrcamentosTable } from "@/components/admin/orcamentos/OrcamentosTable"
 import {
@@ -20,11 +22,11 @@ const STATUS_VALIDOS: StatusFiltro[] = [
 ]
 
 interface PageProps {
-  searchParams: Promise<{ status?: string; q?: string; page?: string }>
+  searchParams: Promise<{ status?: string | string[]; q?: string | string[]; page?: string | string[] }>
 }
 
-function normalizarStatus(s: string | undefined): StatusFiltro {
-  if (s && STATUS_VALIDOS.includes(s as StatusFiltro)) {
+function normalizarStatus(s: unknown): StatusFiltro {
+  if (typeof s === "string" && STATUS_VALIDOS.includes(s as StatusFiltro)) {
     return s as StatusFiltro
   }
   return "ativos"
@@ -35,10 +37,10 @@ const SELECT_LIST =
 
 export default async function OrcamentosPage({ searchParams }: PageProps) {
   const { status: statusParam, q: qParam, page: pageParam } = await searchParams
-  const page = Math.max(1, Number.parseInt(pageParam || "1", 10) || 1)
+  const page = Math.min(100_000, Math.max(1, Number.parseInt(typeof pageParam === "string" ? pageParam : "1", 10) || 1))
   const pageSize = 25
   const statusAtivo = normalizarStatus(statusParam)
-  const qAtivo = (qParam ?? "").trim().slice(0, 120)
+  const qAtivo = (typeof qParam === "string" ? qParam : "").trim().slice(0, 120)
 
   const supabase = await createClient()
 
@@ -90,9 +92,10 @@ export default async function OrcamentosPage({ searchParams }: PageProps) {
       contarPorStatus("arquivado"),
     ])
 
-    const results = [listResult, countRascunhoResult, countFinalizadoResult, countArquivadoResult]
+    const results = [countRascunhoResult, countFinalizadoResult, countArquivadoResult]
     const failed = results.find((result) => result.error)
     if (failed?.error) throw failed.error
+    if (listResult.error && listResult.error.code !== "PGRST103") throw listResult.error
 
     orcamentos = (listResult.data ?? []) as OrcamentoListItem[]
     contagens.rascunho = countRascunhoResult.count ?? 0
@@ -107,6 +110,7 @@ export default async function OrcamentosPage({ searchParams }: PageProps) {
 
   const pageCount = Math.max(1, Math.ceil(contagens[statusAtivo] / pageSize))
   const pageHref = (next: number) => `/admin/orcamentos?${new URLSearchParams({ status: statusAtivo, q: qAtivo, page: String(next) })}`
+  if (!unavailable && page > pageCount) redirect(pageHref(pageCount))
 
   return (
     <div className="space-y-6">
@@ -116,7 +120,7 @@ export default async function OrcamentosPage({ searchParams }: PageProps) {
             Estimativas preliminares geradas via admin (formulário ou planilha).
           </p>
         </div>
-        <Link href="/admin/orcamentos/novo">
+        <Link href={commercialHref("/admin/orcamentos/novo", pageHref(page))}>
           <Button className="bg-neutral-900 text-white hover:bg-neutral-800">
             <Plus className="h-4 w-4 mr-2" />
             Novo Orçamento
@@ -131,7 +135,7 @@ export default async function OrcamentosPage({ searchParams }: PageProps) {
       ) : (
         <>
           <OrcamentosFiltros statusAtivo={statusAtivo} qAtivo={qAtivo} contagens={contagens} />
-          <OrcamentosTable orcamentos={orcamentos} />
+          <OrcamentosTable orcamentos={orcamentos} returnTo={pageHref(page)} />
           <nav aria-label="Páginas de orçamentos" className="flex items-center justify-between text-sm"><span>{contagens[statusAtivo]} orçamentos · Página {page} de {pageCount}</span><div className="flex gap-4">{page > 1 && <Link className="inline-flex min-h-11 items-center underline" href={pageHref(page - 1)}>Anterior</Link>}{page < pageCount && <Link className="inline-flex min-h-11 items-center underline" href={pageHref(page + 1)}>Próxima</Link>}</div></nav>
         </>
       )}

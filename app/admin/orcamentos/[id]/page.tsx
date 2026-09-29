@@ -12,11 +12,13 @@ import { BaixarPdfButton } from "@/components/admin/orcamentos/BaixarPdfButton"
 import { PADROES_ACABAMENTO, REGIMES_COMERCIAIS } from "@/lib/orcamento-estimativa-data"
 import type { Orcamento } from "@/types/orcamento-estimativa"
 import { isOrcamentoPdfCurrent } from "@/lib/orcamento-pdf-storage"
+import { commercialHref, commercialReturnTo, leadHref } from "@/lib/admin/return-to"
 
 export const dynamic = "force-dynamic"
 
 interface PageProps {
   params: Promise<{ id: string }>
+  searchParams: Promise<{ returnTo?: string | string[] }>
 }
 
 function formatarMoeda(valor: number): string {
@@ -33,8 +35,9 @@ function formatarData(iso: string): string {
   return new Date(y, (m ?? 1) - 1, d ?? 1).toLocaleDateString("pt-BR")
 }
 
-export default async function OrcamentoDetalhePage({ params }: PageProps) {
+export default async function OrcamentoDetalhePage({ params, searchParams }: PageProps) {
   const { id } = await params
+  const returnTo = commercialReturnTo((await searchParams).returnTo)
   const supabase = await createClient()
 
   const { data, error } = await supabase
@@ -49,6 +52,7 @@ export default async function OrcamentoDetalhePage({ params }: PageProps) {
   const o = data as Orcamento
   const pdfCurrent = isOrcamentoPdfCurrent(o)
   const pdfLegacy = !o.pdf_revision_hash && !o.pdf_generated_at
+  const linkedLead = o.lead_id ? leadHref(o.lead_id, returnTo) : null
 
   // Gera signed URL da hero (bucket privado) pra preview persistir entre reloads
   let heroPreviewUrl: string | null = null
@@ -73,11 +77,11 @@ export default async function OrcamentoDetalhePage({ params }: PageProps) {
     <div className="space-y-6">
       <div>
         <Link
-          href="/admin/orcamentos"
+          href={returnTo}
           className="inline-flex items-center gap-1 text-xs text-neutral-500 hover:text-neutral-900 mb-2"
         >
           <ArrowLeft className="h-3 w-3" />
-          Voltar para lista
+          {returnTo.startsWith("/admin/leads/") ? "Voltar para lead" : "Voltar para lista"}
         </Link>
         <div className="flex items-center justify-between gap-4">
           <div>
@@ -85,12 +89,12 @@ export default async function OrcamentoDetalhePage({ params }: PageProps) {
               {o.cliente_nome}
             </h1>
             <p className="text-sm text-neutral-500 font-mono">{o.numero}</p>
-            {o.lead_id && <Link href={`/admin/leads/${o.lead_id}`} className="inline-flex min-h-11 items-center text-sm underline">Abrir lead vinculado</Link>}
-            {o.lead_id && o.status === "finalizado" && <Link href={`/admin/leads/${o.lead_id}?atendimento=envio&orcamento=${encodeURIComponent(o.numero)}#atendimento`} className="ml-3 inline-flex min-h-11 items-center text-sm underline">Registrar envio e próximo contato</Link>}
+            {linkedLead && <Link href={linkedLead} className="inline-flex min-h-11 items-center text-sm underline">Abrir lead vinculado</Link>}
+            {linkedLead && o.status === "finalizado" && <Link href={`${linkedLead}&atendimento=envio&orcamento=${encodeURIComponent(o.numero)}#atendimento`} className="ml-3 inline-flex min-h-11 items-center text-sm underline">Registrar envio e próximo contato</Link>}
           </div>
           <div className="flex items-center gap-3">
             {o.status !== "arquivado" && (
-              <Link href={`/admin/orcamentos/${o.id}/edit`}>
+              <Link href={commercialHref(`/admin/orcamentos/${o.id}/edit`, returnTo)}>
                 <Button variant="outline" size="sm">
                   <Pencil className="h-3.5 w-3.5 mr-1.5" />
                   Editar
@@ -230,7 +234,7 @@ export default async function OrcamentoDetalhePage({ params }: PageProps) {
             />
           )}
 
-          {(o.status !== "arquivado" || o.pdf_url) && (
+          {(o.status !== "arquivado" || o.pdf_storage_path) && (
             <Card className="p-6">
               <h3 className="text-sm font-semibold text-neutral-900 mb-3">PDF</h3>
               {o.status !== "arquivado" && (
