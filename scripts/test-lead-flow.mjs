@@ -51,13 +51,13 @@ assert.equal(isOrcamentoPdfCurrent({ ...budget, pdf_revision_hash: revision, pdf
 assert.equal(isOrcamentoPdfCurrent({ ...budget, valor_min: 101, pdf_revision_hash: revision, pdf_storage_path: 'test/document.pdf' }), false);
 
 // Executa as actions e a rota reais, substituindo apenas banco, storage e Next.
-function loadCommonModule(source, imports) {
+function loadCommonModule(source, imports, globals = {}) {
   const output = ts.transpileModule(source, { compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.CommonJS, esModuleInterop: true, jsx: ts.JsxEmit.ReactJSX } }).outputText;
   const testModule = { exports: {} };
-  new Function('require', 'module', 'exports', output)((name) => {
+  new Function('require', 'module', 'exports', ...Object.keys(globals), output)((name) => {
     assert.ok(Object.hasOwn(imports, name), `Import inesperado: ${name}`);
     return imports[name];
-  }, testModule, testModule.exports);
+  }, testModule, testModule.exports, ...Object.values(globals));
   return testModule.exports;
 }
 const budgetTypes = loadCommonModule(readFileSync(new URL('../types/orcamento-estimativa.ts', import.meta.url), 'utf8'), {});
@@ -66,6 +66,8 @@ const planilhaModule = loadCommonModule(readFileSync(new URL('../lib/orcamento-p
 const actionsSource = readFileSync(new URL('../app/admin/orcamentos/actions.ts', import.meta.url), 'utf8');
 const heroSource = readFileSync(new URL('../app/api/admin/orcamentos/[id]/hero/route.ts', import.meta.url), 'utf8');
 const pdfUrlSource = readFileSync(new URL('../app/api/admin/orcamentos/[id]/pdf-url/route.ts', import.meta.url), 'utf8');
+const pdfRouteSource = readFileSync(new URL('../app/api/admin/orcamentos/[id]/pdf/route.ts', import.meta.url), 'utf8');
+const sessionSource = readFileSync(new URL('../lib/supabase/sessao.ts', import.meta.url), 'utf8');
 const initialRevision = '2026-09-29T16:00:00.000000+00:00';
 
 // Preserve the origin after real wizard saves/finalization and spreadsheet import.
@@ -149,26 +151,92 @@ const initialRevision = '2026-09-29T16:00:00.000000+00:00';
     await open.props.onClick();
     assert.equal(destinations.at(-1), returns.commercialHref('/admin/orcamentos/imported/edit', context));
   } finally { globalThis.fetch = realFetch; }
+
+  // Two clicks before React renders must still make a single request.
+  slots.length = 0;
+  let requests = 0, refreshes = 0, complete;
+  const generate = loadCommonModule(readFileSync(new URL('../components/admin/orcamentos/GerarPdfButton.tsx', import.meta.url), 'utf8'), {
+    ...imports, 'next/navigation': { useRouter: () => ({ refresh() { refreshes++; } }) },
+  }, { fetch: () => { requests++; return new Promise((resolve, reject) => { complete = { resolve, reject }; }); } }).GerarPdfButton;
+  const renderGenerate = (atualizadoEm = initialRevision) => { cursor = 0; return generate({ orcamentoId: 'budget-test', atualizadoEm }); };
+  for (const failure of [409, 503, 'network']) {
+    const click = nodes(renderGenerate(), (node) => node.type === 'Button')[0].props.onClick;
+    const before = requests;
+    const first = click();
+    await click();
+    assert.equal(requests, before + 1, 'Cliques simultâneos geram somente uma solicitação');
+    assert.equal(nodes(renderGenerate(), (node) => node.type === 'Button')[0].props.disabled, true);
+    if (failure === 'network') complete.reject(new Error('Conexão interrompida'));
+    else complete.resolve(Response.json({ error: 'Confira a versão atual' }, { status: failure }));
+    await first;
+    const result = renderGenerate();
+    assert.equal(nodes(result, (node) => node.props.role === 'alert').length, 1);
+    nodes(result, (node) => node.type === 'button' && node.props.children === 'Atualizar orçamento')[0].props.onClick();
+    assert.equal(nodes(result, (node) => node.type === 'Button')[0].props.disabled, false, 'Falha libera nova tentativa');
+  }
+  const success = nodes(renderGenerate(), (node) => node.type === 'Button')[0].props.onClick();
+  complete.resolve(Response.json({ atualizado_em: 'new-version' }));
+  await success;
+  assert.equal(refreshes, 4);
+  assert.equal(nodes(renderGenerate('new-version'), (node) => node.props.role === 'status').length, 1);
+
+  slots.length = 0;
+  let downloads = 0, removed = 0, revoked = 0;
+  const requested = [];
+  const download = loadCommonModule(readFileSync(new URL('../components/admin/orcamentos/BaixarPdfButton.tsx', import.meta.url), 'utf8'), imports, {
+    fetch: (url, options) => {
+      requested.push({ url, options });
+      return url.startsWith('/api/') ? new Promise((resolve) => { complete = { resolve }; }) : Promise.resolve(new Response('synthetic-pdf'));
+    },
+    document: { body: { appendChild() {} }, createElement: () => ({ click() { downloads++; }, remove() { removed++; } }) },
+    URL: { createObjectURL: () => 'blob:synthetic', revokeObjectURL() { revoked++; } },
+    setTimeout: (callback) => callback(),
+  }).BaixarPdfButton;
+  const renderDownload = () => { cursor = 0; return download({ orcamentoId: 'budget-test', filename: 'teste.pdf' }); };
+  let downloadClick = nodes(renderDownload(), (node) => node.type === 'Button')[0].props.onClick;
+  const failedDownload = downloadClick();
+  await downloadClick();
+  assert.equal(requested.length, 1);
+  complete.resolve(Response.json({ error: 'Gere novamente após editar' }, { status: 409 }));
+  await failedDownload;
+  assert.equal(nodes(renderDownload(), (node) => node.props.role === 'alert').length, 1);
+  downloadClick = nodes(renderDownload(), (node) => node.type === 'Button')[0].props.onClick;
+  const successfulDownload = downloadClick();
+  await downloadClick();
+  assert.equal(requested.length, 2, 'Falha libera download e clique duplo continua bloqueado');
+  complete.resolve(Response.json({ pdf_url: 'https://example.invalid/fresh.pdf' }));
+  await successfulDownload;
+  assert.equal(requested[1].options.cache, 'no-store');
+  assert.equal(requested[2].url, 'https://example.invalid/fresh.pdf');
+  assert.deepEqual([downloads, removed, revoked], [1, 1, 1]);
+  assert.equal(nodes(renderDownload(), (node) => node.type === 'Button')[0].props.disabled, false);
 }
 
-function createBudgetHarness({ onUpdate, signingFails = false, loseFirstCreateResponse = false, normalizeStoredValues = (value) => value } = {}) {
+function createBudgetHarness({ onUpdate, signingFails = false, loseFirstCreateResponse = false, normalizeStoredValues = (value) => value, role = 'owner', active = true, authenticated = true, pdf = {} } = {}) {
   let version = 0;
   let responseLost = false;
+  let pdfResponseLost = false;
+  const member = { user_id: 'synthetic-user', role, ativo: active };
   const row = { ...wizardModule.initialState().dados, id: 'budget-test', numero: 'TEST-001', atualizado_em: initialRevision, cliente_nome: 'Cliente sintético', obra_endereco: 'Endereço sintético', obra_cidade: 'Cidade', projeto_area_m2: 100, valor_min: 100, valor_max: 200, valor_m2_min: 1, valor_m2_max: 2, hero_image_url: 'budget-test/old.webp' };
-  const calls = { writes: 0, logs: 0, signedPdfs: 0, uploaded: [], removed: [] };
+  const calls = { writes: 0, logs: 0, signedPdfs: 0, uploaded: [], removed: [], privileged: 0, launched: 0, closed: 0, pdfs: 0, pdfUploads: 0, diagnostics: [] };
   const nextRevision = () => `2026-09-29T16:00:00.${String(++version).padStart(6, '0')}+00:00`;
   const supabase = {
+    auth: { async getUser() { return { data: { user: authenticated ? { id: 'synthetic-user', email: 'test@example.invalid' } : null } }; } },
     from(table) {
-      assert.ok(['orcamentos', 'activity_logs'].includes(table));
+      assert.ok(['orcamentos', 'activity_logs', 'lead_responsaveis'].includes(table));
       const filters = [];
       let patch;
       let insertion = false;
       const execute = async () => {
+        if (table === 'lead_responsaveis') return { data: filters.every(([key, value]) => member[key] === value) ? member : null };
         if (table === 'activity_logs') { calls.logs++; return { error: null }; }
+        if (pdf.failConfirmation && pdfResponseLost && !patch) return { data: null, error: { message: 'Leitura indisponível' } };
         if (insertion && patch.id && patch.id === row.id) return { data: null, error: { code: '23505', message: 'Chave já existente' } };
         if (patch && !insertion) await onUpdate?.(row, { nextRevision });
         if (!filters.every(([key, value]) => row[key] === value)) return { data: null, error: null };
+        if (pdf.failUpdate && patch?.pdf_storage_path) return { data: null, error: { message: 'Gravação indisponível' } };
         if (patch) { Object.assign(row, normalizeStoredValues(patch), { atualizado_em: nextRevision() }); calls.writes++; }
+        if (pdf.loseResponse && patch?.pdf_storage_path) { pdfResponseLost = true; return { data: null, error: { message: 'Resposta perdida após commit' } }; }
         if (insertion && loseFirstCreateResponse && !responseLost) { responseLost = true; return { data: null, error: { code: 'FETCH_ERROR', message: 'Resposta perdida depois do commit' } }; }
         return { data: structuredClone(row), error: null };
       };
@@ -184,21 +252,68 @@ function createBudgetHarness({ onUpdate, signingFails = false, loseFirstCreateRe
       return query;
     },
     storage: { from(bucket) {
-      assert.equal(bucket, 'orcamento-heroes');
+      assert.ok(['orcamento-heroes', 'orcamento-pdfs'].includes(bucket));
       return {
         async upload(path) { calls.uploaded.push(path); return { error: null }; },
         async createSignedUrl(path) { return signingFails ? { data: null, error: { message: 'Assinatura indisponível' } } : { data: { signedUrl: `https://example.invalid/${path}` }, error: null }; },
-        async remove(paths) { calls.removed.push(...paths); return { error: null }; },
+        async remove(paths) { calls.removed.push(...paths); if (pdf.cleanupThrows) throw new Error('Falha simulada na limpeza'); return { error: null }; },
       };
     } },
   };
   const cache = { revalidatePath() {} };
-  const session = { async getAdminSession() { return { supabase, user: { id: 'synthetic-user', email: 'test@example.invalid' }, membership: { role: 'owner' } }; }, async exigirSessao() { return null; } };
+  const session = loadCommonModule(sessionSource, { 'server-only': {}, react: { cache: (fn) => fn }, 'next/server': { NextResponse: Response }, '@/lib/supabase/server': { createClient: async () => supabase } });
+  const service = { createServiceClient() { calls.privileged++; return supabase; } };
   const actions = loadCommonModule(actionsSource, { 'next/cache': cache, 'node:util': { isDeepStrictEqual }, '@/lib/supabase/sessao': session, '@/components/admin/orcamentos/wizard-state': wizardModule, '@/lib/orcamento-planilha': planilhaModule });
   const sharp = () => { const image = { resize() { return image; }, webp() { return image; }, async toBuffer() { return Buffer.from('synthetic-image'); } }; return image; };
-  const hero = loadCommonModule(heroSource, { 'next/cache': cache, 'next/server': { NextResponse: Response }, sharp, 'node:crypto': { randomUUID: () => 'new-upload' }, '@/lib/supabase/admin': { createServiceClient: () => supabase }, '@/lib/supabase/sessao': session });
-  const pdfUrl = loadCommonModule(pdfUrlSource, { 'next/server': { NextResponse: Response }, '@/lib/supabase/admin': { createServiceClient: () => supabase }, '@/lib/supabase/sessao': session, '@/lib/orcamento-pdf-storage': { isOrcamentoPdfCurrent, async gerarSignedUrlPdf() { calls.signedPdfs++; return 'https://example.invalid/current.pdf'; } } });
-  return { row, calls, actions, hero, pdfUrl };
+  const hero = loadCommonModule(heroSource, { 'next/cache': cache, 'next/server': { NextResponse: Response }, sharp, 'node:crypto': { randomUUID: () => 'new-upload' }, '@/lib/supabase/admin': service, '@/lib/supabase/sessao': session });
+  const pdfUrl = loadCommonModule(pdfUrlSource, { 'next/server': { NextResponse: Response }, '@/lib/supabase/admin': service, '@/lib/supabase/sessao': session, '@/lib/orcamento-pdf-storage': { isOrcamentoPdfCurrent, async gerarSignedUrlPdf() { calls.signedPdfs++; return `https://example.invalid/current.pdf?token=${calls.signedPdfs}`; } } });
+  const page = {
+    async setViewport() {}, async evaluateOnNewDocument() {}, async setExtraHTTPHeaders() {},
+    async goto() { return { ok: () => !pdf.rendererFails, status: () => pdf.rendererFails ? 500 : 200 }; },
+    async waitForSelector() {}, async evaluateHandle() {},
+    async waitForFunction() { if (pdf.imageTimeout) throw new Error('Timeout de imagem'); },
+    async $eval(selector, fn) {
+      return fn({ getAttribute: () => pdf.wrongId ? 'another-budget' : row.id, querySelectorAll: () => [{ naturalWidth: pdf.brokenImage ? 0 : 100 }] });
+    },
+    async pdf(options) { calls.pdfs++; calls.pdfOptions = options; await pdf.onRender?.(row, nextRevision); return Buffer.from('%PDF-synthetic'); },
+  };
+  const pdfRoute = loadCommonModule(pdfRouteSource, {
+    'next/server': { NextResponse: Response }, '@/lib/supabase/admin': service, '@/lib/supabase/sessao': session,
+    '@/lib/puppeteer-launch': { getBaseUrl: () => 'https://renderer.example.invalid', async launchBrowser() { calls.launched++; return { newPage: async () => page, async close() { calls.closed++; } }; } },
+    '@/lib/orcamento-token': { assinarToken: () => 'synthetic-token', ORCAMENTO_TOKEN_HEADER: 'x-orcamento-token' },
+    '@/lib/orcamento-pdf-storage': { getOrcamentoPdfRevision, async salvarPdfOrcamento() { calls.pdfUploads++; return { path: `test/generated-${calls.pdfUploads}.pdf`, signedUrl: 'https://example.invalid/generated.pdf' }; } },
+    '@/components/admin/orcamentos/wizard-state': wizardModule, '@/lib/orcamento-logo-data-uri': { LOGO_DATA_URI: 'data:image/png;base64,AA==' },
+  }, { console: { error: (...args) => calls.diagnostics.push(args) } });
+  return { row, calls, actions, hero, pdfUrl, pdfRoute, session, supabase };
+}
+
+// The real renderer must not replace a configured cover after a signing failure.
+{
+  const rendererSource = readFileSync(new URL('../app/orcamento/estimativa/[id]/page.tsx', import.meta.url), 'utf8');
+  const element = (type, props) => ({ type, props });
+  const sections = ['CapaHero', 'IndiceEstimativa', 'NaturezaDocumento', 'SobreBerkahn', 'OQueEntregamos', 'PadroesAcabamento', 'EstimativaInvestimento', 'Premissas', 'CondicionantesExclusoes', 'RegimesComerciais', 'ProximosPassos', 'ContatoFinal'];
+  let validToken = true, reads = 0;
+  const harness = createBudgetHarness({ signingFails: true });
+  const renderer = loadCommonModule(rendererSource, {
+    'react/jsx-runtime': { jsx: element, jsxs: element },
+    'next/headers': { headers: async () => new Headers() },
+    'next/navigation': { notFound() { throw new Error('NOT_FOUND'); } },
+    '@/lib/supabase/admin': { createServiceClient() { reads++; return harness.supabase; } },
+    '@/lib/orcamento-token': { validarToken: () => validToken, ORCAMENTO_TOKEN_HEADER: 'x-orcamento-token' },
+    '@/lib/orcamento-estimativa-data': { SECOES_INDICE: [], HERO_DEFAULT: '/default-cover.webp' },
+    './styles.module.css': { root: 'root' },
+    ...Object.fromEntries(sections.map((name) => [`@/components/orcamento/estimativa/${name}`, { [name]: name }])),
+  }).default;
+  const render = () => renderer({ params: Promise.resolve({ id: 'budget-test' }) });
+  await assert.rejects(render(), /carregar a capa/);
+  harness.row.hero_image_url = null;
+  assert.equal((await render()).props.children[0].props.heroUrl, '/default-cover.webp');
+  harness.row.hero_image_url = 'https://example.invalid/selected-cover.webp';
+  assert.equal((await render()).props.children[0].props.heroUrl, harness.row.hero_image_url);
+  validToken = false;
+  const before = reads;
+  await assert.rejects(render(), /NOT_FOUND/);
+  assert.equal(reads, before, 'Token inválido não inicia consulta privilegiada');
 }
 
 const editedBudget = createBudgetHarness();
@@ -337,6 +452,83 @@ assert.equal(pdfDownload.calls.signedPdfs, 1);
 pdfDownload.row.valor_min += 1;
 assert.equal((await pdfDownload.pdfUrl.GET({}, heroContext)).status, 409, 'Download consulta a revisão atual mesmo se a aba permaneceu aberta com o PDF anterior.');
 assert.equal(pdfDownload.calls.signedPdfs, 1, 'Documento obsoleto não recebe URL renovada.');
+
+// Same public handlers as production; no browser launch, storage or network.
+const pdfRequest = (revision = initialRevision) => new Request('https://admin.example.invalid/api/admin/orcamentos/budget-test/pdf', { method: 'POST', headers: { 'If-Match': `"${revision}"` } });
+for (const role of ['owner', 'comercial', 'conteudo', 'viewer']) {
+  const h = createBudgetHarness({ role });
+  const allowed = ['owner', 'comercial'].includes(role);
+  assert.equal((await h.pdfRoute.POST(pdfRequest(), heroContext)).status, allowed ? 200 : 403, `${role}: geração`);
+  assert.equal((await h.pdfUrl.GET({}, heroContext)).status, allowed ? 200 : 403, `${role}: download`);
+  assert.equal((await h.hero.DELETE(heroRequest(h.row.atualizado_em), heroContext)).status, allowed ? 200 : 403, `${role}: capa`);
+  assert.equal((await h.actions.atualizarOrcamento('budget-test', { cliente_nome: 'Revisão' }, h.row.atualizado_em)).ok, allowed, `${role}: edição`);
+  if (!allowed) {
+    assert.equal(h.calls.privileged, 0, 'Papel sem acesso não chega ao cliente service role');
+    assert.equal(h.calls.writes, 0);
+    assert.equal(h.calls.launched, 0);
+  }
+}
+for (const options of [{ authenticated: false }, { active: false }]) {
+  const h = createBudgetHarness(options);
+  assert.equal((await h.pdfRoute.POST(pdfRequest(), heroContext)).status, 401);
+  assert.equal((await h.pdfUrl.GET({}, heroContext)).status, 401);
+  assert.equal(h.calls.privileged, 0);
+}
+const access = loadCommonModule(readFileSync(new URL('../lib/admin/access.ts', import.meta.url), 'utf8'), {});
+for (const [role, expected] of [['owner', [true, true, true]], ['comercial', [true, false, true]], ['conteudo', [false, true, true]], ['viewer', [false, false, true]]]) {
+  assert.deepEqual(['/admin/orcamentos', '/admin/posts', '/admin/analytics'].map((path) => access.roleCanAccessPath(role, path)), expected);
+}
+
+const successfulPdf = createBudgetHarness();
+successfulPdf.row.pdf_storage_path = 'test/previous.pdf';
+successfulPdf.row.cliente_nome = '<Teste & revisão>';
+assert.equal((await successfulPdf.pdfRoute.POST(pdfRequest(), heroContext)).status, 200);
+assert.equal(isOrcamentoPdfCurrent(successfulPdf.row), true);
+assert.equal(successfulPdf.row.status, 'finalizado');
+assert.equal(successfulPdf.calls.closed, 1);
+assert.deepEqual(successfulPdf.calls.removed, ['test/previous.pdf']);
+assert.ok(successfulPdf.calls.pdfOptions.headerTemplate.includes('&lt;Teste &amp; revisão&gt;'));
+const signedOnce = await (await successfulPdf.pdfUrl.GET({}, heroContext)).json();
+const signedAgain = await (await successfulPdf.pdfUrl.GET({}, heroContext)).json();
+assert.notEqual(signedOnce.pdf_url, signedAgain.pdf_url, 'Cada download renova a URL em vez de reutilizar token expirado');
+assert.equal((await successfulPdf.pdfUrl.GET({}, heroContext)).headers.get('Cache-Control'), 'private, no-store');
+successfulPdf.row.hero_image_url = 'test/changed-cover.webp';
+assert.equal((await successfulPdf.pdfUrl.GET({}, heroContext)).status, 409, 'Troca da capa invalida PDF existente');
+
+for (const [patch, revision, expected] of [[{}, 'stale', 409], [{ status: 'arquivado' }, initialRevision, 409], [{ cliente_nome: '' }, initialRevision, 400]]) {
+  const h = createBudgetHarness(); Object.assign(h.row, patch);
+  assert.equal((await h.pdfRoute.POST(pdfRequest(revision), heroContext)).status, expected);
+  assert.equal(h.calls.launched, 0, 'Revisão/estado/campos inválidos falham antes do trabalho pesado');
+}
+for (const pdf of [{ rendererFails: true }, { wrongId: true }, { brokenImage: true }, { imageTimeout: true }]) {
+  const h = createBudgetHarness({ pdf });
+  assert.equal((await h.pdfRoute.POST(pdfRequest(), heroContext)).status, 500);
+  assert.equal(h.calls.pdfUploads, 0, 'Renderer ou imagem inválida não é persistido como documento válido');
+  assert.equal(h.calls.closed, 1, 'Falha fecha o browser da geração');
+}
+const renderRace = createBudgetHarness({ pdf: { onRender(row, revision) { row.hero_image_url = 'test/newer.webp'; row.atualizado_em = revision(); } } });
+assert.equal((await renderRace.pdfRoute.POST(pdfRequest(), heroContext)).status, 409);
+assert.equal(renderRace.row.hero_image_url, 'test/newer.webp');
+assert.equal(renderRace.row.pdf_storage_path, null);
+assert.deepEqual(renderRace.calls.removed, ['test/generated-1.pdf']);
+
+const cleanupFailure = createBudgetHarness({ pdf: { cleanupThrows: true } });
+cleanupFailure.row.pdf_storage_path = 'test/previous.pdf';
+assert.equal((await cleanupFailure.pdfRoute.POST(pdfRequest(), heroContext)).status, 200, 'Falha na limpeza não transforma commit concluído em erro de geração');
+assert.equal(isOrcamentoPdfCurrent(cleanupFailure.row), true);
+assert.ok(cleanupFailure.calls.diagnostics.length);
+const cleanupConflict = createBudgetHarness({ pdf: { cleanupThrows: true }, onUpdate(row, { nextRevision }) { row.atualizado_em = nextRevision(); } });
+assert.equal((await cleanupConflict.pdfRoute.POST(pdfRequest(), heroContext)).status, 409, 'Conflito continua identificado mesmo se a limpeza falhar');
+const lostPdfResponse = createBudgetHarness({ pdf: { loseResponse: true } });
+assert.equal((await lostPdfResponse.pdfRoute.POST(pdfRequest(), heroContext)).status, 200, 'Resposta perdida é conciliada com o arquivo gravado');
+assert.deepEqual(lostPdfResponse.calls.removed, [], 'PDF confirmado nunca é removido após resposta perdida');
+const unknownPdfResult = createBudgetHarness({ pdf: { loseResponse: true, failConfirmation: true } });
+assert.equal((await unknownPdfResult.pdfRoute.POST(pdfRequest(), heroContext)).status, 503);
+assert.deepEqual(unknownPdfResult.calls.removed, [], 'Resultado incerto preserva arquivo potencialmente referenciado');
+assert.equal(unknownPdfResult.calls.closed, 1);
+const failedPdfWrite = createBudgetHarness({ pdf: { failUpdate: true } });
+assert.equal((await failedPdfWrite.pdfRoute.POST(pdfRequest(), heroContext)).status, 503);
+assert.deepEqual(failedPdfWrite.calls.removed, ['test/generated-1.pdf'], 'Leitura confirma que upload rejeitado não está referenciado');
 
 if (!globalThis.crypto) Object.defineProperty(globalThis, 'crypto', { value: webcrypto, configurable: true });
 const storage = new Map();

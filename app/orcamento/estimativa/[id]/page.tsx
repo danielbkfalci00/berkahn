@@ -31,10 +31,11 @@ async function resolveHeroUrl(
 ): Promise<string> {
   if (!heroPath) return HERO_DEFAULT
   if (heroPath.startsWith("http")) return heroPath
-  const { data } = await supabase.storage
+  const { data, error } = await supabase.storage
     .from("orcamento-heroes")
     .createSignedUrl(heroPath, 60 * 10)
-  return data?.signedUrl ?? HERO_DEFAULT
+  if (error || !data?.signedUrl) throw new Error("Não foi possível carregar a capa deste orçamento.")
+  return data.signedUrl
 }
 
 export default async function EstimativaPage({ params }: PageProps) {

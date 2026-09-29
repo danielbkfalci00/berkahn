@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useRef, useState } from "react"
 import { Download, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
@@ -13,8 +13,11 @@ interface Props {
 export function BaixarPdfButton({ orcamentoId, filename, label = "Baixar PDF" }: Props) {
   const [downloading, setDownloading] = useState(false)
   const [erro, setErro] = useState<string | null>(null)
+  const pending = useRef(false)
 
   const baixar = async () => {
+    if (pending.current) return
+    pending.current = true
     setErro(null)
     setDownloading(true)
     try {
@@ -35,6 +38,7 @@ export function BaixarPdfButton({ orcamentoId, filename, label = "Baixar PDF" }:
     } catch (err) {
       setErro(err instanceof Error ? err.message : "Falha ao baixar")
     } finally {
+      pending.current = false
       setDownloading(false)
     }
   }

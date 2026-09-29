@@ -37,6 +37,15 @@ interface RouteContext {
   params: Promise<{ id: string }>
 }
 
+async function limparPdf(supabase: ReturnType<typeof createServiceClient>, path: string) {
+  try {
+    const { error } = await supabase.storage.from("orcamento-pdfs").remove([path])
+    if (error) console.error("Falha ao limpar PDF:", error.message)
+  } catch (error) {
+    console.error("Falha ao limpar PDF:", error)
+  }
+}
+
 export async function POST(request: Request, ctx: RouteContext) {
   // `assinarToken` abaixo autentica a chamada ao RENDERER, não esta entrada:
   // sem esta checagem, gerar PDF de qualquer orçamento era público.
@@ -104,7 +113,9 @@ export async function POST(request: Request, ctx: RouteContext) {
     const renderedId = await page.$eval("main[data-orcamento-id]", (element) => element.getAttribute("data-orcamento-id"))
     if (renderedId !== id) throw new Error("O renderer não confirmou o orçamento solicitado.")
     await page.evaluateHandle("document.fonts.ready")
-    await new Promise((resolve) => setTimeout(resolve, 800))
+    await page.waitForFunction(() => Array.from(document.querySelectorAll<HTMLImageElement>("main img")).every((image) => image.complete), { timeout: 10_000 })
+    const imagesReady = await page.$eval("main", (element) => Array.from(element.querySelectorAll<HTMLImageElement>("img")).every((image) => image.naturalWidth > 0))
+    if (!imagesReady) throw new Error("Uma imagem do orçamento não carregou. Tente gerar novamente.")
 
     const cliente = escapeHtml(orcamento.cliente_nome)
     const numero = escapeHtml(orcamento.numero)
@@ -123,7 +134,7 @@ export async function POST(request: Request, ctx: RouteContext) {
 
     const { path, signedUrl } = await salvarPdfOrcamento(orcamento.numero, pdfBuffer)
 
-    const { data: savedVersion, error: updateError } = await supabase
+    let { data: savedVersion, error: updateError } = await supabase
       .from("orcamentos")
       .update({
         pdf_url: signedUrl,
@@ -137,14 +148,25 @@ export async function POST(request: Request, ctx: RouteContext) {
       .select("id,atualizado_em")
       .maybeSingle()
 
-    if (updateError || !savedVersion) {
-      await supabase.storage.from("orcamento-pdfs").remove([path])
-      console.error("Falha ao atualizar pdf_url:", updateError)
-      return NextResponse.json({ error: updateError ? "Não foi possível registrar a versão do PDF. Tente novamente." : "O orçamento mudou durante a geração. Gere novamente para usar os dados atuais." }, { status: updateError ? 503 : 409 })
+    // A lost response can follow a successful commit. Confirm which file is
+    // referenced before deleting the upload or reporting an unsuccessful save.
+    if (updateError) {
+      const { data: current, error: readError } = await supabase.from("orcamentos")
+        .select("id,atualizado_em,pdf_storage_path").eq("id", id).maybeSingle()
+      if (!readError && current?.pdf_storage_path === path) {
+        savedVersion = current
+      } else {
+        if (!readError && current) await limparPdf(supabase, path)
+        console.error("Falha ao confirmar versão do PDF:", updateError)
+        return NextResponse.json({ error: "Não foi possível confirmar a gravação do PDF. Atualize a página antes de tentar novamente." }, { status: 503 })
+      }
+    }
+    if (!savedVersion) {
+      await limparPdf(supabase, path)
+      return NextResponse.json({ error: "O orçamento mudou durante a geração. Atualize a página antes de gerar novamente." }, { status: 409 })
     }
     if (orcamento.pdf_storage_path && orcamento.pdf_storage_path !== path) {
-      const { error: cleanupError } = await supabase.storage.from("orcamento-pdfs").remove([orcamento.pdf_storage_path])
-      if (cleanupError) console.error("Falha ao limpar PDF substituído:", cleanupError.message)
+      await limparPdf(supabase, orcamento.pdf_storage_path)
     }
 
     return NextResponse.json({
