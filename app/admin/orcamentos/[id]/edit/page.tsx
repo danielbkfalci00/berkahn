@@ -1,7 +1,7 @@
 import Link from "next/link"
-import { notFound } from "next/navigation"
+import { notFound, redirect } from "next/navigation"
 import { ArrowLeft } from "lucide-react"
-import { createServiceClient } from "@/lib/supabase/admin"
+import { createClient } from "@/lib/supabase/server"
 import { OrcamentoWizard } from "@/components/admin/orcamentos/OrcamentoWizard"
 import type { Orcamento } from "@/types/orcamento-estimativa"
 
@@ -13,7 +13,7 @@ interface PageProps {
 
 export default async function EditarOrcamentoPage({ params }: PageProps) {
   const { id } = await params
-  const supabase = createServiceClient()
+  const supabase = await createClient()
   const { data, error } = await supabase
     .from("orcamentos")
     .select("*")
@@ -23,6 +23,7 @@ export default async function EditarOrcamentoPage({ params }: PageProps) {
   if (error || !data) {
     notFound()
   }
+  if (data.status === "arquivado") redirect(`/admin/orcamentos/${id}`)
 
   return (
     <div className="space-y-2">

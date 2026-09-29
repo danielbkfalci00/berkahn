@@ -6,11 +6,7 @@ import "@fontsource-variable/playfair-display";
 import "@fontsource/space-mono/400.css";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { ClientLayout } from "@/components/layout/ClientLayout";
-import { ConditionalFooter } from "@/components/layout/ConditionalFooter";
-import { CookieConsentProvider } from "@/components/providers/CookieConsentProvider";
 import { scriptBootstrapGa } from "@/lib/consent";
-import { CookieBanner } from "@/components/layout/CookieBanner";
-import { WhatsAppButton } from "@/components/layout/WhatsAppButton";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -99,12 +95,7 @@ export default function RootLayout({
         <link rel="alternate" type="application/rss+xml" title="Blog Berkahn - Atualidades" href="/feed.xml" />
       </head>
       <body>
-        <CookieConsentProvider>
-          <ClientLayout>{children}</ClientLayout>
-          <ConditionalFooter />
-          <CookieBanner />
-          <WhatsAppButton />
-        </CookieConsentProvider>
+        <ClientLayout>{children}</ClientLayout>
 
         {/* Structured data — Organization + WebSite for Google Knowledge Panel & sitelinks */}
         <script type="application/ld+json">

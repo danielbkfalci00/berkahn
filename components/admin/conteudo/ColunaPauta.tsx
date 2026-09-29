@@ -15,7 +15,7 @@ interface Props {
   visao: VisaoQuadro;
   pautas: ItemQuadro[];
   arrastavel: boolean;
-  aoCriar: (titulo: string, coluna: StatusQuadro) => void;
+  aoCriar: (titulo: string, coluna: StatusQuadro) => Promise<{ error: string | null }>;
   aoMover: (id: string, coluna: StatusQuadro) => void;
   aoExcluir: (id: string) => void;
   idConfirmandoExclusao: string | null;

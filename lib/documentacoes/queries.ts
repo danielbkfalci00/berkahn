@@ -37,7 +37,8 @@ export async function listarDocumentos(): Promise<DocumentoMeta[]> {
     .select(COLUNAS_META)
     .order("referencia_data", { ascending: false });
 
-  if (error || !data) return [];
+  if (error) throw new Error("Não foi possível carregar os documentos.");
+  if (!data) return [];
   return (data as unknown as DocumentoRow[]).map(toMeta);
 }
 
@@ -51,9 +52,10 @@ export async function getDocumentoMeta(
     .from("documentos")
     .select(COLUNAS_META)
     .eq("slug", slug)
-    .single();
+    .maybeSingle();
 
-  if (error || !data) return null;
+  if (error) throw new Error("Não foi possível carregar o documento.");
+  if (!data) return null;
   return toMeta(data as unknown as DocumentoRow);
 }
 
@@ -68,8 +70,9 @@ export async function getDocumentoHtml(slug: string): Promise<string | null> {
     .from("documentos")
     .select("html")
     .eq("slug", slug)
-    .single();
+    .maybeSingle();
 
-  if (error || !data) return null;
+  if (error) throw new Error("Não foi possível carregar o documento.");
+  if (!data) return null;
   return (data as { html: string }).html;
 }

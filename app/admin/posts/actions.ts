@@ -4,6 +4,50 @@ import { createClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
 import type { Post, PostInsert, PostUpdate } from '@/types/admin'
 import { normalizeBlogCategory } from '@/types/blog'
+import { getAdminSession } from '@/lib/supabase/sessao'
+
+/** Uses the pauta revision already consumed by the approved publishing flow. */
+export async function savePostRevision(
+  id: string, payload: PostInsert, postUpdatedAt: string, pautaUpdatedAt: string | null
+): Promise<{ error: string | null; pautaId?: string; updatedAt?: string }> {
+  const session = await getAdminSession()
+  if (!session || !['owner', 'conteudo'].includes(session.membership.role))
+    return { error: 'Sua sessão não permite editar artigos.' }
+  if (!payload.title.trim() || !payload.slug.trim() || !payload.content.trim())
+    return { error: 'Preencha título, slug e conteúdo antes de salvar.' }
+  const { status: _status, published_at: _publishedAt, scheduled_at: _scheduledAt, ...revision } = payload
+  const { data, error } = await session.supabase.rpc('salvar_revisao_post_admin', {
+    p_post_id: id,
+    p_payload: { ...revision, category: normalizeBlogCategory(payload.category) },
+    p_post_updated_at: postUpdatedAt,
+    p_pauta_updated_at: pautaUpdatedAt,
+  })
+  if (error) return { error: error.message }
+  if (!data?.pauta_id || !data?.atualizado_em) return { error: 'Não foi possível confirmar a revisão salva.' }
+  revalidatePath('/admin/conteudo')
+  revalidatePath(`/admin/conteudo/${data.pauta_id}`)
+  revalidatePath(`/admin/posts/${id}`)
+  return { error: null, pautaId: data.pauta_id, updatedAt: data.atualizado_em }
+}
+
+export async function publishPostRevision(
+  id: string, postUpdatedAt: string, pautaUpdatedAt: string
+): Promise<{ error: string | null; postUpdatedAt?: string; updatedAt?: string }> {
+  const session = await getAdminSession()
+  if (!session || !['owner', 'conteudo'].includes(session.membership.role))
+    return { error: 'Sua sessão não permite publicar artigos.' }
+  const { data, error } = await session.supabase.rpc('publicar_revisao_post_admin', {
+    p_post_id: id, p_post_updated_at: postUpdatedAt, p_pauta_updated_at: pautaUpdatedAt,
+  })
+  if (error) return { error: error.message }
+  if (!data?.post_updated_at || !data?.atualizado_em) return { error: 'Não foi possível confirmar a publicação.' }
+  revalidatePath('/admin/posts')
+  revalidatePath(`/admin/posts/${id}`)
+  revalidatePath('/admin/conteudo')
+  revalidatePath(`/admin/conteudo/${data.pauta_id}`)
+  revalidatePath('/atualidades', 'layout')
+  return { error: null, postUpdatedAt: data.post_updated_at, updatedAt: data.atualizado_em }
+}
 
 // Webhook helper for N8N integration
 async function triggerPublishWebhook(post: Post): Promise<void> {
@@ -89,12 +133,22 @@ export async function createPost(data: PostInsert): Promise<{ data: Post | null;
   return { data: post as Post, error: null }
 }
 
-export async function updatePost(id: string, data: PostUpdate): Promise<{ data: Post | null; error: string | null }> {
+export async function updatePost(id: string, data: PostUpdate, expectedUpdatedAt: string): Promise<{ data: Post | null; error: string | null }> {
   const supabase = await createClient()
 
   const normalizedData: PostUpdate = data.category
     ? { ...data, category: normalizeBlogCategory(data.category) }
     : data
+
+  const { data: previousPost, error: previousError } = await supabase
+    .from('posts').select('status,published_at,updated_at').eq('id', id).single()
+  if (previousError || !previousPost) return { data: null, error: 'Não foi possível carregar a versão atual do artigo.' }
+  if (previousPost.status === 'published')
+    return { data: null, error: 'Artigos publicados devem ser salvos como revisão na pauta antes de publicar alterações.' }
+  if (previousPost.updated_at !== expectedUpdatedAt)
+    return { data: null, error: 'Este artigo mudou em outra aba ou por outra pessoa. Copie suas alterações e atualize a página.' }
+  normalizedData.published_at = normalizedData.status === 'published'
+    ? previousPost.published_at ?? new Date().toISOString() : previousPost.published_at
 
   if (normalizedData.featured) {
     const { error: featuredError } = await supabase
@@ -108,19 +162,13 @@ export async function updatePost(id: string, data: PostUpdate): Promise<{ data: 
     }
   }
 
-  // Get previous status to detect publish action
-  const { data: previousPost } = await supabase
-    .from('posts')
-    .select('status')
-    .eq('id', id)
-    .single()
-
   const previousStatus = previousPost?.status
 
   const { data: post, error } = await supabase
     .from('posts')
     .update(normalizedData)
     .eq('id', id)
+    .eq('updated_at', expectedUpdatedAt)
     .select()
     .single()
 

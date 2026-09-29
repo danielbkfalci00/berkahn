@@ -3,6 +3,9 @@ import { cpSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:f
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { fetchTopPages, fetchEvents } from './fetch-ga4.mjs';
+import { computeDelta } from './fetch-gsc.mjs';
+import { buildActions, buildInsights, isKnownInspection } from './lib/insights.mjs';
 import { comparisonPolicyFor } from '../../lib/analytics/comparison-policy.mjs';
 import { isIndexationEligibleSlug } from './lib/posts.mjs';
 
@@ -114,6 +117,38 @@ const performance = posts.buildPostPerformance(
 )[0];
 ok('post de agosto nao recebe delta', performance.pageviewsMoMPct === null);
 ok('post de agosto nao vira rising/cold', !['rising', 'cold'].includes(performance.status));
+
+console.log('janelas, falhas parciais e coletores');
+const postMap = new Map([['post', { slug: 'post', title: 'Post', category: 'SEO', readTimeMin: 5, publishedAt: null }]]);
+const partialCurrent = { ...current, context: { ...baseContext, monthSlug: '2026-10', partial: true, prevPeriodStart: '2026-09-01', prevPeriodEnd: '2026-09-20' }, ga4_prev: { period: { startDate: '2026-09-01', endDate: '2026-09-20' }, topPages: [{ slug: 'post', pageviews: 100 }] } };
+const partialPerformance = posts.buildPostPerformance(partialCurrent, previous, postMap,
+  new Map([['2026-10', new Map([['post', 200]])], ['2026-11', new Map([['post', 9000]])]]))[0];
+ok('artigo parcial usa baseline equivalente salvo no snapshot', partialPerformance.pageviewsMoMPct === 100);
+ok('artigo nao inclui meses futuros no sparkline', partialPerformance.pageviewsSparkline.length === 1 && partialPerformance.pageviewsSparkline[0] === 200);
+const withoutPartialBaseline = posts.buildPostPerformance({ ...partialCurrent, ga4_prev: null }, previous, postMap, new Map())[0];
+ok('parcial sem baseline nao compara contra mes inteiro', withoutPartialBaseline.pageviewsMoMPct === null);
+const wrongWindow = posts.buildPostPerformance({ ...partialCurrent, ga4_prev: { ...partialCurrent.ga4_prev, period: { startDate: '2026-09-01', endDate: '2026-09-30' } } }, previous, postMap, new Map())[0];
+ok('baseline salvo com janela incorreta nao produz comparacao parcial', wrongWindow.pageviewsMoMPct === null);
+const metricValues = (values) => values.map((value) => ({ value: String(value) }));
+const fakeGa4 = { properties: { runReport: async ({ requestBody }) => {
+  if (requestBody.metrics.length === 8) throw Object.assign(new Error('invalid combination'), { code: 400 });
+  return { data: { rows: [{ dimensionValues: [{ value: '/atualidades/post' }],
+    metricValues: metricValues(requestBody.metrics.length === 3 ? [100, 20, 600] : [0.3, 0.7, 30, 12, 21]) }] } };
+} } };
+const fallbackPages = await fetchTopPages(fakeGa4, 'test', '2026-10-01', '2026-10-20', 200);
+ok('GA4 fallback le a resposta data desembrulhada', fallbackPages.length === 1 && fallbackPages[0].pageviews === 100 && fallbackPages[0].bounceRate === 30);
+const failedEvents = await fetchEvents({ properties: { runReport: async () => { throw new Error('timeout'); } } }, 'test', '2026-10-01', '2026-10-20');
+ok('falha de eventos nao vira zero valido', failedEvents.available === false && failedEvents.reason.length > 0);
+const missing = computeDelta([], [{ query: 'sumiu', clicks: 15 }], 'falling', 5, { possiblyTruncated: false });
+ok('query desaparecida permanece na comparacao com ressalva', missing.length === 1 && missing[0].currentMissing === true && missing[0].clicksPrevious === 15);
+ok('query ausente com teto de coleta nao vira queda', computeDelta([], [{ query: 'sumiu', clicks: 15 }], 'falling', 5, { possiblyTruncated: true }).length === 0);
+const inspectionError = { slug: 'post', verdict: 'ERROR', error: 'timeout' };
+ok('erro de inspecao nao vira nao indexada', !isKnownInspection(inspectionError));
+const evidenceInput = { ga4: { topPages: [], topSources: [], byDevice: [] }, gsc: { topQueries: [], topPages: [] }, indexation: [inspectionError] };
+ok('erro de inspecao nao recomenda reindexacao', buildActions(evidenceInput).actionsP0.length === 0);
+ok('sem sinal nao inventa insight', buildInsights(evidenceInput).length === 0);
+const incompleteHealth = health.computeHealthScore({ ...baseContext, totalArticles: 1, indexedCount: 1, indexation: [{ slug: 'ok' }, inspectionError] });
+ok('score exclui indexacao com cobertura incompleta', incompleteHealth.weights.indexation === 0 && !incompleteHealth.components.indexation.available);
 
 console.log('exclusoes, leads e PWA');
 ok('redirect nao entra na inspecao', !isIndexationEligibleSlug('steel-frame-futuro-construcao'));

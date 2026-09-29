@@ -11,12 +11,15 @@
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "test:conteudo": "node scripts/db/testar-ordem.mjs && node scripts/db/testar-autosave.mjs && node scripts/db/testar-estados.mjs && node --check scripts/conteudo/pauta.mjs",
+    "test:conteudo": "node scripts/db/testar-ordem.mjs && node scripts/db/testar-autosave.mjs && node scripts/db/testar-estados.mjs && node scripts/test-rich-post-renderer.mjs && node --check scripts/conteudo/pauta.mjs",
     "test:conteudo:db": "node scripts/db/verificar-012.mjs",
     "test:analytics": "node --check scripts/analytics/fetch-ga4.mjs && node --check scripts/analytics/fetch-gsc.mjs && node --check scripts/analytics/generate-report.mjs && node scripts/analytics/test-learning.mjs && node scripts/analytics/testar-heatmaps.mjs && node scripts/analytics/testar-integridade.mjs && node scripts/analytics/testar-feedback.mjs && node --check scripts/admin/feedback.mjs",
     "test:leads": "node --env-file=.env.local scripts/db/testar-leads-crm.mjs && node --check scripts/leads/import-leads-csv.mjs",
     "analytics:report": "node --env-file=.env.local scripts/analytics/generate-report.mjs",
-    "analytics:learning": "node --env-file=.env.local scripts/analytics/generate-report.mjs --learning"
+    "analytics:learning": "node --env-file=.env.local scripts/analytics/generate-report.mjs --learning",
+    "test:crm": "node scripts/test-lead-flow.mjs",
+    "test:admin:db": "node scripts/db/verificar-012.mjs --admin-reliability",
+    "test:admin": "node scripts/test-admin-navigation.mjs"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",

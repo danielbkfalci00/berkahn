@@ -24,7 +24,7 @@ export type WizardAction =
       valor: OrcamentoInsert[keyof OrcamentoInsert]
     }
   | { type: "UPDATE_BULK"; patch: Partial<OrcamentoInsert> }
-  | { type: "MARK_SAVED" }
+  | { type: "MARK_SAVED"; snapshot: OrcamentoInsert }
   | { type: "VISITAR_STEP"; step: StepId }
   | { type: "RESET"; dados: OrcamentoInsert }
 
@@ -106,7 +106,7 @@ export function reducer(state: WizardState, action: WizardAction): WizardState {
         hasUnsavedChanges: true,
       }
     case "MARK_SAVED":
-      return { ...state, hasUnsavedChanges: false }
+      return { ...state, hasUnsavedChanges: JSON.stringify(state.dados) !== JSON.stringify(action.snapshot) }
     case "VISITAR_STEP":
       return { ...state, ultimoStepVisitado: action.step }
     case "RESET":

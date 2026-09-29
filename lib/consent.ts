@@ -60,6 +60,7 @@ export function consentPayload(level: ConsentLevel): Record<string, "granted" | 
 export function scriptBootstrapGa(): string {
   const granted = JSON.stringify(consentPayload("all"));
   return `(function(){try{
+if(location.pathname.startsWith('/admin'))return;
 var s=localStorage.getItem(${JSON.stringify(CONSENT_STORAGE_KEY)});
 if(!s)return;
 var c=JSON.parse(s);

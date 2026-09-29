@@ -28,8 +28,14 @@ import { cn } from "@/lib/utils";
 import { deletePost, toggleFeatured } from "@/app/admin/posts/actions";
 
 interface PostsTableProps {
-  posts: Post[];
+  posts: PostListItem[];
+  search: string;
+  statusFilter: PostStatus | "all";
+  page: number;
+  pageSize: number;
+  total: number;
 }
+export type PostListItem = Pick<Post, "id" | "title" | "slug" | "category" | "status" | "featured" | "published_at" | "created_at">;
 
 const statusConfig: Record<PostStatus, { label: string; className: string }> = {
   draft: {
@@ -50,14 +56,12 @@ const statusConfig: Record<PostStatus, { label: string; className: string }> = {
   },
 };
 
-export function PostsTable({ posts }: PostsTableProps) {
+export function PostsTable({ posts, search, statusFilter, page, pageSize, total }: PostsTableProps) {
   const router = useRouter();
-  const [search, setSearch] = useState("");
-  const [statusFilter, setStatusFilter] = useState<PostStatus | "all">("all");
   const [togglingFeatured, setTogglingFeatured] = useState<string | null>(null);
   const [deletingPost, setDeletingPost] = useState<string | null>(null);
 
-  const handleToggleFeatured = async (post: Post) => {
+  const handleToggleFeatured = async (post: PostListItem) => {
     setTogglingFeatured(post.id);
 
     try {
@@ -77,13 +81,15 @@ export function PostsTable({ posts }: PostsTableProps) {
     }
   };
 
-  const filteredPosts = posts.filter((post) => {
-    const matchesSearch =
-      post.title.toLowerCase().includes(search.toLowerCase()) ||
-      post.category.toLowerCase().includes(search.toLowerCase());
-    const matchesStatus = statusFilter === "all" || post.status === statusFilter;
-    return matchesSearch && matchesStatus;
-  });
+  const filteredPosts = posts;
+  const totalPages = Math.max(1, Math.ceil(total / pageSize));
+  const listUrl = (nextPage: number, nextStatus = statusFilter) => {
+    const params = new URLSearchParams();
+    if (search) params.set("q", search);
+    if (nextStatus !== "all") params.set("status", nextStatus);
+    if (nextPage > 1) params.set("page", String(nextPage));
+    return `/admin/posts?${params}`;
+  };
 
   const formatDate = (dateString: string | null) => {
     if (!dateString) return "-";
@@ -112,7 +118,7 @@ export function PostsTable({ posts }: PostsTableProps) {
     }
   };
 
-  const postActions = (post: Post) => (
+  const postActions = (post: PostListItem) => (
     <div className="flex items-center gap-1">
       <button
         type="button"
@@ -147,16 +153,18 @@ export function PostsTable({ posts }: PostsTableProps) {
     <Card className="min-w-0 overflow-hidden">
       {/* Filters */}
       <div className="p-4 border-b border-neutral-200 flex flex-col gap-3 lg:flex-row lg:items-center">
-        <div className="relative flex-1">
+        <form action="/admin/posts" method="get" className="relative flex flex-1 gap-2">
+          {statusFilter !== "all" && <input type="hidden" name="status" value={statusFilter} />}
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral-400" />
           <Input
             placeholder="Buscar posts..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            name="q"
+            defaultValue={search}
             className="h-11 pl-9"
             aria-label="Buscar posts"
           />
-        </div>
+          <Button type="submit" variant="outline" className="h-11">Buscar</Button>
+        </form>
         <div className="flex max-w-full gap-2 overflow-x-auto pb-1" aria-label="Filtrar por status">
           {(["all", "published", "draft", "scheduled", "archived"] as const).map(
             (status) => (
@@ -168,10 +176,11 @@ export function PostsTable({ posts }: PostsTableProps) {
                   "h-11 shrink-0 px-3",
                   statusFilter === status && "bg-neutral-100 border-neutral-300"
                 )}
-                onClick={() => setStatusFilter(status)}
-                aria-pressed={statusFilter === status}
+                asChild
               >
+                <Link href={listUrl(1, status)} aria-current={statusFilter === status ? "page" : undefined}>
                 {status === "all" ? "Todos" : statusConfig[status].label}
+                </Link>
               </Button>
             )
           )}
@@ -252,6 +261,13 @@ export function PostsTable({ posts }: PostsTableProps) {
         </TableBody>
       </Table>
       </div>
+      <nav aria-label="Paginação de posts" className="flex flex-wrap items-center justify-between gap-3 border-t p-4 text-sm text-neutral-600">
+        <span>{total} posts · Página {page} de {totalPages}</span>
+        <div className="flex gap-2">
+          {page > 1 && <Button variant="outline" asChild><Link href={listUrl(page - 1)}>Anterior</Link></Button>}
+          {page < totalPages && <Button variant="outline" asChild><Link href={listUrl(page + 1)}>Próxima</Link></Button>}
+        </div>
+      </nav>
     </Card>
   );
 }

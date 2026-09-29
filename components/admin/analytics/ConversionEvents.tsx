@@ -23,7 +23,7 @@ const ROTULO: Record<string, string> = {
   architect_berkahn_whatsapp: "WhatsApp via arquiteto",
 };
 
-/** A ordem do funil importa mais que a contagem — deixa a queda visível. */
+/** Ordem de leitura dos eventos; as contagens não compõem um funil. */
 const ORDEM_FUNIL = [
   "cta_click",
   "form_submit",
@@ -44,11 +44,11 @@ function ordenar(events: Ga4Event[]): Ga4Event[] {
 
 export function ConversionEvents({ ga4, funil, monthSlug }: ConversionEventsProps) {
   const events = ga4.events ?? [];
-  const ordenados = ordenar(events);
+  const ordenados = ordenar(events.filter((event) => event.name !== "article_progress"));
   const whatsappClicks = events.find((e) => e.name === "whatsapp_click")?.count ?? 0;
   const formLeads = funil.status === "ok" ? funil.data.porCanal.find((c) => c.rotulo === "form")?.total ?? 0 : null;
   const whatsappLeads = funil.status === "ok" ? funil.data.porCanal.find((c) => c.rotulo === "whatsapp")?.total ?? 0 : null;
-  const gaEventsAvailable = ga4.eventsAvailable === true || (ga4.eventsAvailable === undefined && events.length > 0);
+  const gaEventsAvailable = ga4.eventsAvailability?.available ?? ga4.eventsAvailable ?? events.length > 0;
   const breakdown = ga4.whatsappBreakdown;
 
   const anteriorAInstrumentacao =
@@ -63,8 +63,8 @@ export function ConversionEvents({ ga4, funil, monthSlug }: ConversionEventsProp
         <div className="rounded-md bg-neutral-50 p-3"><dt className="text-xs text-neutral-600">Formulários</dt><dd className="mt-1 text-xl font-semibold tabular-nums">{formLeads?.toLocaleString("pt-BR") ?? "—"}</dd><span className="text-[11px] text-neutral-500">CRM · confirmados</span></div>
         <div className="col-span-2 rounded-md bg-neutral-50 p-3 sm:col-span-1"><dt className="text-xs text-neutral-600">Leads via WhatsApp</dt><dd className="mt-1 text-xl font-semibold tabular-nums">{whatsappLeads?.toLocaleString("pt-BR") ?? "—"}</dd><span className="text-[11px] text-neutral-500">CRM · origem registrada</span></div>
       </dl>
-      {(funil.status === "unavailable" || !gaEventsAvailable) && <p role="status" className="mt-3 text-xs text-amber-800">{funil.status === "unavailable" ? "CRM indisponível. " : ""}{!gaEventsAvailable ? "Eventos GA4 não verificados neste snapshot." : ""}</p>}
-      <p className="mt-3 text-xs text-neutral-600">As bases têm coberturas diferentes: não some estes números. Um clique não comprova conversa; quem enviou formulário e depois chamou no WhatsApp continua com origem “form” no CRM.</p>
+      {(funil.status === "unavailable" || !gaEventsAvailable) && <p role="status" className="mt-3 text-xs text-amber-800">{funil.status === "unavailable" ? "CRM indisponível. " : ""}{!gaEventsAvailable ? ga4.eventsAvailability?.reason ?? "Eventos GA4 não verificados neste snapshot." : ""}</p>}
+      <p className="mt-3 text-xs text-neutral-600">Eventos não representam pessoas únicas. As bases têm coberturas diferentes: não some estes números. Um clique não comprova conversa; quem enviou formulário e depois chamou no WhatsApp continua com origem “form” no CRM.</p>
 
       <details className="mt-3 border-t border-neutral-100 pt-2">
         <summary className="flex min-h-11 cursor-pointer items-center text-sm font-medium text-neutral-700">Ver origens e eventos</summary>
@@ -72,7 +72,7 @@ export function ConversionEvents({ ga4, funil, monthSlug }: ConversionEventsProp
           breakdown.rows.length > 0 ? <ul className="mt-2 space-y-2 text-xs text-neutral-700">{breakdown.rows.slice(0, 10).map((row, index) => <li key={`${row.pagePath}-${row.ctaLocation}-${index}`} className="flex justify-between gap-3"><span className="min-w-0 truncate" title={`${row.pagePath} · ${row.ctaLocation}`}>{row.pagePath} · {row.ctaLocation}</span><strong className="tabular-nums">{row.clicks}</strong></li>)}</ul> : <p className="mt-2 text-xs text-neutral-500">Nenhum clique rastreado por página e botão.</p>
         ) : <p className="mt-2 text-xs text-neutral-500">Detalhamento por página e botão indisponível neste snapshot.</p>}
         {anteriorAInstrumentacao && <p className="mt-2 text-xs text-neutral-500">Período anterior à instrumentação de conversão.</p>}
-        {ordenados.length > 0 && <dl className="mt-3 divide-y divide-neutral-100 border-t border-neutral-100">
+        {gaEventsAvailable && ordenados.length > 0 && <dl className="mt-3 divide-y divide-neutral-100 border-t border-neutral-100">
           {ordenados.map((evento) => (
             <div
               key={evento.name}

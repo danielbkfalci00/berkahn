@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
-import { getLeadAttribution, LEAD_ENDPOINT } from "@/lib/contact";
+import { getLeadAttribution, submitLeadInput } from "@/lib/contact";
 import {
   Dialog,
   DialogContent,
@@ -88,10 +88,7 @@ export function ResourceDownload({
 
     try {
       const attribution = getLeadAttribution();
-      const response = await fetch(LEAD_ENDPOINT, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
+      const response = await submitLeadInput({
           kind: "resource",
           email,
           resourceTitle: selectedResource.title,
@@ -100,8 +97,7 @@ export function ResourceDownload({
           startedAt: startedAt.current,
           website: "",
           ...attribution,
-        }),
-      });
+        });
       const result = (await response.json().catch(() => null)) as
         | { success?: boolean; message?: string }
         | null;

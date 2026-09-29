@@ -63,7 +63,7 @@ data_diagnostico: {{generatedDate}}
 | Engagement rate | {{ga4.engagementRate}}% | {{ga4.engagementRateMoMText}} |
 | Tempo médio sessão | {{ga4.avgSessionDuration}}s | {{ga4.avgSessionDurationMoMText}} |
 
-### Top 15 páginas (por pageviews)
+### Páginas coletadas (por pageviews)
 
 | Página | Pageviews | Users | Tempo médio | MoM |
 |--------|----------:|------:|------------:|:---:|
@@ -95,7 +95,12 @@ data_diagnostico: {{generatedDate}}
 | {{device}} | {{users}} | {{pctOfTotal}}% |
 {{/ga4.byDevice}}
 
-### Eventos / Conversões
+### Eventos de contato e leitura
+
+Contagens com consentimento; não representam pessoas únicas nem um funil de conversão.
+{{#eventsUnavailable}}
+Coleta de eventos indisponível. Ausência de dados não equivale a zero eventos.
+{{/eventsUnavailable}}
 
 {{#ga4.events.length}}
 | Evento | Count | Páginas top |
@@ -105,7 +110,7 @@ data_diagnostico: {{generatedDate}}
 {{/ga4.events}}
 {{/ga4.events.length}}
 {{^ga4.events.length}}
-Nenhum evento de conversão configurado no GA4 detectado no período.
+{{^eventsUnavailable}}Nenhum evento retornado pela coleta deste período.{{/eventsUnavailable}}
 {{/ga4.events.length}}
 
 ## GSC, performance no Google Search
@@ -119,7 +124,7 @@ Nenhum evento de conversão configurado no GA4 detectado no período.
 | CTR | {{gsc.ctr}}% | {{gsc.ctrMoMText}} |
 | Posição média | {{gsc.position}} | {{gsc.positionMoMText}} |
 
-### Top 20 queries
+### Consultas coletadas
 
 | Query | Clicks | Impressions | CTR | Posição |
 |-------|-------:|------------:|----:|--------:|
@@ -127,7 +132,7 @@ Nenhum evento de conversão configurado no GA4 detectado no período.
 | {{query}} | {{clicks}} | {{impressions}} | {{ctr}}% | {{position}} |
 {{/gsc.topQueries}}
 
-### Top 15 páginas (por clicks)
+### Páginas coletadas (por clicks)
 
 | Página | Clicks | Impressions | CTR | Posição |
 |--------|-------:|------------:|----:|--------:|
@@ -145,23 +150,25 @@ Nenhum evento de conversão configurado no GA4 detectado no período.
 {{/gsc.risingQueries}}
 {{/gsc.risingQueries.length}}
 {{^gsc.risingQueries.length}}
-Sem variações significativas vs mês anterior.
+{{#queriesComparisonUnavailable}}Comparação de consultas indisponível.{{/queriesComparisonUnavailable}}{{^queriesComparisonUnavailable}}Sem variações significativas nas consultas comparáveis.{{/queriesComparisonUnavailable}}
 {{/gsc.risingQueries.length}}
 
 ### Queries em queda
+
+Consultas ausentes não atingiram o limite de linhas, mas também podem ter sido omitidas por privacidade. Ausência não comprova zero cliques.
 
 {{#gsc.fallingQueries.length}}
 | Query | Clicks atual | Clicks anterior | Perda |
 |-------|-------------:|----------------:|------:|
 {{#gsc.fallingQueries}}
-| {{query}} | {{clicksCurrent}} | {{clicksPrevious}} | {{clicksDelta}} |
+| {{query}} | {{#currentMissing}}Ausente na coleta{{/currentMissing}}{{^currentMissing}}{{clicksCurrent}}{{/currentMissing}} | {{clicksPrevious}} | {{#currentMissing}}Indisponível{{/currentMissing}}{{^currentMissing}}{{clicksDelta}}{{/currentMissing}} |
 {{/gsc.fallingQueries}}
 {{/gsc.fallingQueries.length}}
 {{^gsc.fallingQueries.length}}
-Sem quedas significativas vs mês anterior.
+{{#queriesComparisonUnavailable}}Comparação de consultas indisponível.{{/queriesComparisonUnavailable}}{{^queriesComparisonUnavailable}}Sem quedas significativas nas consultas comparáveis.{{/queriesComparisonUnavailable}}
 {{/gsc.fallingQueries.length}}
 
-## Indexação no Google ({{indexedCount}} de {{totalArticles}})
+## Indexação no Google ({{indexedCount}} de {{totalArticles}} com inspeção válida)
 
 | Slug | Status | Último crawl | Observação |
 |------|:------:|:------------:|:-----------|
@@ -172,7 +179,7 @@ Sem quedas significativas vs mês anterior.
 ## Insights
 
 {{#insights}}
-{{position}}. {{text}}
+{{position}}. {{text}} {{#evidence}}Evidência: {{evidence}}{{/evidence}}
 {{/insights}}
 
 ## Ações priorizadas

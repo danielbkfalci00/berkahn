@@ -3,7 +3,8 @@ import { createServiceClient } from "@/lib/supabase/admin"
 import { exigirSessao } from "@/lib/supabase/sessao"
 import { launchBrowser, getBaseUrl } from "@/lib/puppeteer-launch"
 import { assinarToken, ORCAMENTO_TOKEN_HEADER } from "@/lib/orcamento-token"
-import { salvarPdfOrcamento } from "@/lib/orcamento-pdf-storage"
+import { getOrcamentoPdfRevision, salvarPdfOrcamento } from "@/lib/orcamento-pdf-storage"
+import { validarTudo } from "@/components/admin/orcamentos/wizard-state"
 import { LOGO_DATA_URI } from "@/lib/orcamento-logo-data-uri"
 import type { Orcamento } from "@/types/orcamento-estimativa"
 
@@ -55,6 +56,9 @@ export async function POST(request: Request, ctx: RouteContext) {
     return NextResponse.json({ error: "Orçamento não encontrado" }, { status: 404 })
   }
   const orcamento = data as unknown as Orcamento
+  if (orcamento.status === "arquivado") return NextResponse.json({ error: "Reabra o orçamento antes de gerar outra versão." }, { status: 409 })
+  const validation = validarTudo(orcamento)
+  if (!validation.ok) return NextResponse.json({ error: "Revise os campos antes de gerar o PDF.", campos: Object.values(validation.erros) }, { status: 400 })
 
   const ausentes = CAMPOS_OBRIGATORIOS.filter(
     (campo) =>
@@ -92,7 +96,11 @@ export async function POST(request: Request, ctx: RouteContext) {
 
     const baseUrl = getBaseUrl(request.url)
     const url = `${baseUrl}/orcamento/estimativa/${id}`
-    await page.goto(url, { waitUntil: "networkidle0", timeout: 30000 })
+    const response = await page.goto(url, { waitUntil: "networkidle0", timeout: 30000 })
+    if (!response?.ok()) throw new Error(`Renderer indisponível (${response?.status() ?? "sem resposta"}).`)
+    await page.waitForSelector("main[data-orcamento-id]", { timeout: 10_000 })
+    const renderedId = await page.$eval("main[data-orcamento-id]", (element) => element.getAttribute("data-orcamento-id"))
+    if (renderedId !== id) throw new Error("O renderer não confirmou o orçamento solicitado.")
     await page.evaluateHandle("document.fonts.ready")
     await new Promise((resolve) => setTimeout(resolve, 800))
 
@@ -113,22 +121,34 @@ export async function POST(request: Request, ctx: RouteContext) {
 
     const { path, signedUrl } = await salvarPdfOrcamento(orcamento.numero, pdfBuffer)
 
-    const { error: updateError } = await supabase
+    const { data: savedVersion, error: updateError } = await supabase
       .from("orcamentos")
       .update({
         pdf_url: signedUrl,
         pdf_storage_path: path,
+        pdf_generated_at: new Date().toISOString(),
+        pdf_revision_hash: getOrcamentoPdfRevision(orcamento),
         status: orcamento.status === "rascunho" ? "finalizado" : orcamento.status,
       })
       .eq("id", id)
+      .eq("atualizado_em", orcamento.atualizado_em)
+      .select("id")
+      .maybeSingle()
 
-    if (updateError) {
+    if (updateError || !savedVersion) {
+      await supabase.storage.from("orcamento-pdfs").remove([path])
       console.error("Falha ao atualizar pdf_url:", updateError)
+      return NextResponse.json({ error: updateError ? "Não foi possível registrar a versão do PDF. Tente novamente." : "O orçamento mudou durante a geração. Gere novamente para usar os dados atuais." }, { status: updateError ? 503 : 409 })
+    }
+    if (orcamento.pdf_storage_path && orcamento.pdf_storage_path !== path) {
+      const { error: cleanupError } = await supabase.storage.from("orcamento-pdfs").remove([orcamento.pdf_storage_path])
+      if (cleanupError) console.error("Falha ao limpar PDF substituído:", cleanupError.message)
     }
 
     return NextResponse.json({
       pdf_url: signedUrl,
       pdf_storage_path: path,
+      numero: orcamento.numero,
     })
   } catch (err) {
     console.error("Erro ao gerar PDF:", err)

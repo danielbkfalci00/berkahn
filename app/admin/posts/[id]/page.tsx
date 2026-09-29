@@ -1,7 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { PostEditor } from "@/components/admin/posts/PostEditor";
 import { notFound } from "next/navigation";
-import type { Post } from "@/types/admin";
+import type { Post, PostInsert } from "@/types/admin";
 
 interface EditPostPageProps {
   params: Promise<{
@@ -18,12 +18,10 @@ export default async function EditPostPage({ params }: EditPostPageProps) {
     .from('posts')
     .select('*')
     .eq('id', id)
-    .single();
+    .maybeSingle();
 
-  if (error || !post) {
-    console.error('Error fetching post:', error);
-    notFound();
-  }
+  if (error) throw new Error("Não foi possível carregar o artigo.");
+  if (!post) notFound();
 
   // Ensure components field exists (for backwards compatibility)
   const postWithComponents: Post = {
@@ -31,5 +29,12 @@ export default async function EditPostPage({ params }: EditPostPageProps) {
     components: post.components || {},
   };
 
-  return <PostEditor post={postWithComponents} />;
+  const { data: revision, error: revisionError } = await supabase.from('conteudo_pautas')
+    .select('id,atualizado_em,post_draft_payload').eq('post_id', id).maybeSingle();
+  if (revisionError) throw new Error("Não foi possível carregar a revisão editorial.");
+  return <PostEditor post={postWithComponents} revision={revision ? {
+    pautaId: revision.id,
+    updatedAt: revision.atualizado_em,
+    payload: revision.post_draft_payload as PostInsert | null,
+  } : undefined} />;
 }

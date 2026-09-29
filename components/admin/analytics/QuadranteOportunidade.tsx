@@ -60,31 +60,32 @@ export function QuadranteOportunidade({ mapa }: QuadranteOportunidadeProps) {
     <Card className="bg-white border-neutral-200 p-6">
       <div className="flex flex-wrap items-baseline justify-between gap-2 mb-1">
         <h3 className="text-sm uppercase tracking-wider font-medium text-neutral-500">
-          Onde há clique na mesa
+          Consultas para investigar
         </h3>
         {mapa.oportunidades.length > 0 && (
           <p className="text-xs text-neutral-500">
             <strong className="font-semibold text-neutral-900">
               {mapa.oportunidades.length}
             </strong>{" "}
-            queries no quadrante · ganho estimado{" "}
+            consultas no quadrante · cenário com CTR de {CTR_ALVO}%:{" "}
             <strong className="font-semibold text-neutral-900">
               +{mapa.ganhoTotal}
             </strong>{" "}
-            cliques/mês
+            cliques no período
           </p>
         )}
       </div>
       <p className="text-xs text-neutral-500 mb-4">
         Posição {POSICAO_MIN}–{POSICAO_MAX} com CTR abaixo de {CTR_ALVO}% e ao
-        menos {IMPRESSOES_MIN} impressões: o Google já mostra a página e o título
-        não converte. Corrige-se reescrevendo title e meta, sem artigo novo.
+        menos {IMPRESSOES_MIN} impressões. O cenário mantém as impressões e
+        simula o CTR de referência; não é previsão de ganho. Verifique intenção,
+        concorrência e snippet antes de escolher uma alteração.
       </p>
 
       {mapa.provavelmenteTruncado && (
         <p className="text-xs text-amber-800 bg-amber-50 border border-amber-200 rounded-md px-3 py-2 mb-4">
-          Este mês foi coletado com o limite antigo de 20 queries. O quadrante só
-          fica completo a partir do próximo run do pipeline.
+          A coleta pode estar limitada. O quadrante representa apenas as
+          consultas retornadas e não comprova ausência de outras oportunidades.
         </p>
       )}
 
@@ -130,7 +131,7 @@ export function QuadranteOportunidade({ mapa }: QuadranteOportunidadeProps) {
                 />
                 <ZAxis type="number" dataKey="impressions" range={[24, 420]} name="Impressões" />
                 <Tooltip content={<TooltipQuery />} cursor={{ strokeDasharray: "3 3" }} />
-                <Scatter data={mapa.plotaveis} fill="#000000" fillOpacity={0.35} />
+                <Scatter data={mapa.plotaveis} fill="#000000" fillOpacity={0.35} isAnimationActive={false} />
               </ScatterChart>
             </ResponsiveContainer>
           </div>

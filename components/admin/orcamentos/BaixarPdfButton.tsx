@@ -5,11 +5,12 @@ import { Download, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 interface Props {
-  pdfUrl: string
+  orcamentoId: string
   filename: string
+  label?: string
 }
 
-export function BaixarPdfButton({ pdfUrl, filename }: Props) {
+export function BaixarPdfButton({ orcamentoId, filename, label = "Baixar PDF" }: Props) {
   const [downloading, setDownloading] = useState(false)
   const [erro, setErro] = useState<string | null>(null)
 
@@ -17,7 +18,10 @@ export function BaixarPdfButton({ pdfUrl, filename }: Props) {
     setErro(null)
     setDownloading(true)
     try {
-      const res = await fetch(pdfUrl)
+      const refreshed = await fetch(`/api/admin/orcamentos/${orcamentoId}/pdf-url`, { cache: "no-store" })
+      const result = await refreshed.json()
+      if (!refreshed.ok) throw new Error(result.error || "Não foi possível abrir o PDF")
+      const res = await fetch(result.pdf_url)
       if (!res.ok) throw new Error(`HTTP ${res.status}`)
       const blob = await res.blob()
       const objectUrl = URL.createObjectURL(blob)
@@ -43,7 +47,7 @@ export function BaixarPdfButton({ pdfUrl, filename }: Props) {
         ) : (
           <Download className="h-3.5 w-3.5 mr-1.5" />
         )}
-        Baixar PDF
+        {label}
       </Button>
       {erro && <p className="text-xs text-red-600">{erro}</p>}
     </div>

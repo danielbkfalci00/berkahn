@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server"
 import { createServiceClient } from "@/lib/supabase/admin"
 import { exigirSessao } from "@/lib/supabase/sessao"
-import { gerarSignedUrlPdf } from "@/lib/orcamento-pdf-storage"
+import { gerarSignedUrlPdf, isOrcamentoPdfCurrent } from "@/lib/orcamento-pdf-storage"
+import type { Orcamento } from "@/types/orcamento-estimativa"
 
 interface RouteContext {
   params: Promise<{ id: string }>
@@ -18,7 +19,7 @@ export async function GET(_: Request, ctx: RouteContext) {
   const supabase = createServiceClient()
   const { data, error } = await supabase
     .from("orcamentos")
-    .select("pdf_storage_path")
+    .select("*")
     .eq("id", id)
     .single()
 
@@ -29,14 +30,15 @@ export async function GET(_: Request, ctx: RouteContext) {
       { status: 404 }
     )
   }
+  const budget = data as unknown as Orcamento
+  const legacy = !budget.pdf_revision_hash && !budget.pdf_generated_at;
+  if (!legacy && !isOrcamentoPdfCurrent(budget)) {
+    return NextResponse.json({ error: "Este PDF é de uma versão anterior. Abra o orçamento e gere o PDF atualizado." }, { status: 409 })
+  }
 
   try {
     const signedUrl = await gerarSignedUrlPdf(storagePath)
-    await supabase
-      .from("orcamentos")
-      .update({ pdf_url: signedUrl })
-      .eq("id", id)
-    return NextResponse.json({ pdf_url: signedUrl })
+    return NextResponse.json({ pdf_url: signedUrl, verified: !legacy }, { headers: { "Cache-Control": "private, no-store" } })
   } catch (err) {
     return NextResponse.json(
       {

@@ -67,6 +67,8 @@ export interface Orcamento {
 
   pdf_url: string | null;
   pdf_storage_path: string | null;
+  pdf_generated_at: string | null;
+  pdf_revision_hash: string | null;
 
   criado_em: string;
   atualizado_em: string;
@@ -76,7 +78,7 @@ export interface Orcamento {
 
 export type OrcamentoInsert = Omit<
   Orcamento,
-  "id" | "numero" | "slug" | "criado_em" | "atualizado_em"
+  "id" | "numero" | "slug" | "criado_em" | "atualizado_em" | "pdf_generated_at" | "pdf_revision_hash"
 > & {
   id?: string;
   numero?: string;
@@ -98,6 +100,8 @@ export interface OrcamentoListItem {
   valor_max: number;
   data_elaboracao: string;
   pdf_url: string | null;
+  pdf_storage_path?: string | null;
+  pdf_generated_at?: string | null;
   criado_em: string;
 }
 

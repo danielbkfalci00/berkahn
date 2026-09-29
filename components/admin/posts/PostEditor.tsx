@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
+import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
@@ -14,10 +15,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   ArrowLeft,
   Save,
-  Eye,
   Send,
   Clock,
-  Image as ImageIcon,
   Bold,
   Italic,
   Heading1,
@@ -30,17 +29,22 @@ import {
   X,
   Loader2,
   Upload,
-  Calendar,
 } from "lucide-react";
 import type { Post, PostInsert, PostStatus } from "@/types/admin";
 import { BLOG_CATEGORIES, normalizeBlogCategory } from "@/types/blog";
 import { cn } from "@/lib/utils";
 import { uploadCoverImage } from "@/app/admin/posts/upload-actions";
 import { useToast } from "@/hooks/use-toast";
-import { createPost, updatePost } from "@/app/admin/posts/actions";
+import { createPost, updatePost, savePostRevision, publishPostRevision } from "@/app/admin/posts/actions";
+import { useUnsavedChanges } from "@/hooks/use-unsaved-changes";
+
+const RichPostRenderer = dynamic(() => import("@/components/blog/RichPostRenderer").then((module) => module.RichPostRenderer), {
+  loading: () => <p role="status" className="p-4 text-sm text-neutral-500">Carregando prévia…</p>,
+});
 
 interface PostEditorProps {
   post?: Post;
+  revision?: { pautaId: string; updatedAt: string; payload: PostInsert | null };
 }
 
 const defaultPost: PostInsert = {
@@ -53,32 +57,36 @@ const defaultPost: PostInsert = {
   tags: [],
   author: "Berkahn",
   status: "draft",
-  read_time: 5,
+  read_time: 1,
   featured: false,
 };
 
-export function PostEditor({ post }: PostEditorProps) {
+export function PostEditor({ post, revision }: PostEditorProps) {
   const router = useRouter();
   const isEditing = !!post;
+  const [isPublished, setIsPublished] = useState(post?.status === "published");
   const { toast } = useToast();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  const sourcePost = post && revision?.payload ? { ...post, ...revision.payload } : post;
   const [formData, setFormData] = useState<PostInsert>(
-    post
+    sourcePost
       ? {
-          title: post.title,
-          slug: post.slug,
-          excerpt: post.excerpt,
-          content: post.content,
-          cover_image: post.cover_image,
-          category: normalizeBlogCategory(post.category),
-          tags: post.tags,
-          author: post.author,
-          status: post.status,
-          read_time: post.read_time,
-          featured: post.featured,
-          meta_title: post.meta_title,
-          meta_description: post.meta_description,
+          title: sourcePost.title,
+          slug: sourcePost.slug,
+          excerpt: sourcePost.excerpt,
+          content: sourcePost.content,
+          cover_image: sourcePost.cover_image,
+          category: normalizeBlogCategory(sourcePost.category),
+          tags: sourcePost.tags,
+          author: sourcePost.author,
+          status: post?.status ?? "draft",
+          read_time: Math.max(1, Math.ceil(sourcePost.content.split(/\s+/).filter(Boolean).length / 200)),
+          featured: sourcePost.featured,
+          meta_title: sourcePost.meta_title,
+          meta_description: sourcePost.meta_description,
+          answer_summary: sourcePost.answer_summary,
+          components: sourcePost.components,
         }
       : defaultPost
   );
@@ -89,7 +97,16 @@ export function PostEditor({ post }: PostEditorProps) {
   const [isSaving, setIsSaving] = useState(false);
   const [isPublishing, setIsPublishing] = useState(false);
   const [activeTab, setActiveTab] = useState<"write" | "preview">("write");
-  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+  const [savedBaseline, setSavedBaseline] = useState(() => JSON.stringify(formData));
+  const hasUnsavedChanges = JSON.stringify(formData) !== savedBaseline;
+  useUnsavedChanges(hasUnsavedChanges);
+  const currentForm = useRef(formData);
+  currentForm.current = formData;
+  const [revisionVersion, setRevisionVersion] = useState(revision?.updatedAt ?? null);
+  const [pautaId, setPautaId] = useState(revision?.pautaId);
+  const [hasRevision, setHasRevision] = useState(Boolean(revision?.payload));
+  const [postVersion, setPostVersion] = useState(post?.updated_at);
+  const [savedPostId, setSavedPostId] = useState(post?.id);
 
   // Auto-generate slug from title
   useEffect(() => {
@@ -110,23 +127,6 @@ export function PostEditor({ post }: PostEditorProps) {
     const readTime = Math.max(1, Math.ceil(words / 200));
     setFormData((prev) => ({ ...prev, read_time: readTime }));
   }, [formData.content]);
-
-  // Track unsaved changes
-  useEffect(() => {
-    setHasUnsavedChanges(true);
-  }, [formData]);
-
-  // Warn before leaving with unsaved changes
-  useEffect(() => {
-    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
-      if (hasUnsavedChanges) {
-        e.preventDefault();
-        e.returnValue = "";
-      }
-    };
-    window.addEventListener("beforeunload", handleBeforeUnload);
-    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
-  }, [hasUnsavedChanges]);
 
   const handleAddTag = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && tagInput.trim()) {
@@ -241,19 +241,35 @@ export function PostEditor({ post }: PostEditorProps) {
   };
 
   const handleSave = async (publish: boolean = false) => {
+    if (isSaving || isPublishing || isUploading) return;
+    const submitted = JSON.stringify(formData);
     const saveMethod = publish ? setIsPublishing : setIsSaving;
     saveMethod(true);
 
     try {
       const dataToSave = {
         ...formData,
-        status: publish ? ("published" as PostStatus) : formData.status,
-        published_at: publish ? new Date().toISOString() : null,
+        status: publish ? ("published" as PostStatus) : ("draft" as PostStatus),
+        published_at: publish ? post?.published_at ?? new Date().toISOString() : post?.published_at ?? null,
       };
 
+      if (isPublished && savedPostId && postVersion) {
+        const result = await savePostRevision(savedPostId, formData, postVersion, revisionVersion);
+        if (result.error) {
+          toast({ title: "Revisão não salva", description: result.error, variant: "destructive" });
+          return;
+        }
+        setRevisionVersion(result.updatedAt ?? null);
+        setPautaId(result.pautaId);
+        setHasRevision(true);
+        setSavedBaseline(submitted);
+        toast({ title: "Revisão salva", description: "O artigo publicado foi preservado. Revise e aprove as alterações na pauta." });
+        return;
+      }
+
       // Chamar server action apropriada
-      const result = post
-        ? await updatePost(post.id, { ...dataToSave, id: post.id })
+      const result = savedPostId && postVersion
+        ? await updatePost(savedPostId, { ...dataToSave, id: savedPostId }, postVersion)
         : await createPost(dataToSave);
 
       if (result.error) {
@@ -273,8 +289,14 @@ export function PostEditor({ post }: PostEditorProps) {
           : "As alterações foram salvas como rascunho.",
       });
 
-      setHasUnsavedChanges(false);
-      router.push("/admin/posts");
+      setSavedBaseline(JSON.stringify({ ...formData, status: result.data?.status ?? formData.status }));
+      if (result.data) {
+        setSavedPostId(result.data.id);
+        setPostVersion(result.data.updated_at);
+        setIsPublished(result.data.status === "published");
+        setFormData((current) => ({ ...current, status: result.data!.status }));
+      }
+      if (JSON.stringify(currentForm.current) === submitted) router.push("/admin/posts");
     } catch (error) {
       console.error("Error saving post:", error);
       toast({
@@ -287,34 +309,37 @@ export function PostEditor({ post }: PostEditorProps) {
     }
   };
 
-  const renderMarkdownPreview = () => {
-    // Simple markdown-to-HTML conversion for preview
-    // In production, use a proper MDX renderer
-    let html = formData.content
-      .replace(/^### (.*$)/gim, '<h3 class="text-xl font-semibold mt-6 mb-3">$1</h3>')
-      .replace(/^## (.*$)/gim, '<h2 class="text-2xl font-semibold mt-8 mb-4">$1</h2>')
-      .replace(/^# (.*$)/gim, '<h1 class="text-3xl font-bold mt-8 mb-4">$1</h1>')
-      .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
-      .replace(/\*(.*?)\*/g, "<em>$1</em>")
-      .replace(/`(.*?)`/g, '<code class="bg-neutral-100 px-1 rounded">$1</code>')
-      .replace(/^\- (.*$)/gim, '<li class="ml-4">$1</li>')
-      .replace(/^\d\. (.*$)/gim, '<li class="ml-4 list-decimal">$1</li>')
-      .replace(/\n\n/g, "</p><p class='my-4'>")
-      .replace(/\n/g, "<br/>");
-
-    return `<p class='my-4'>${html}</p>`;
+  const handlePublishRevision = async () => {
+    if (!savedPostId || !postVersion || !revisionVersion || !hasRevision || hasUnsavedChanges || isSaving || isPublishing) return;
+    if (!window.confirm("Publicar a revisão salva agora? O conteúdo visível no site será atualizado e a data original de publicação será mantida. A cópia editorial no vault deve ser sincronizada após esta publicação.")) return;
+    setIsPublishing(true);
+    try {
+      const result = await publishPostRevision(savedPostId, postVersion, revisionVersion);
+      if (result.error) {
+        toast({ title: "Revisão não publicada", description: result.error, variant: "destructive" });
+        return;
+      }
+      setPostVersion(result.postUpdatedAt);
+      setRevisionVersion(result.updatedAt ?? null);
+      setHasRevision(false);
+      toast({ title: "Revisão publicada", description: "O artigo no site foi atualizado com a data original. A cópia editorial no vault deve ser sincronizada após esta publicação." });
+    } catch {
+      toast({ title: "Não foi possível confirmar a publicação", description: "Atualize a página para conferir o estado antes de tentar novamente.", variant: "destructive" });
+    } finally {
+      setIsPublishing(false);
+    }
   };
 
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-4">
-          <Link href="/admin/posts">
-            <Button variant="ghost" size="icon">
+            <Button variant="ghost" size="icon" asChild>
+          <Link href="/admin/posts" aria-label="Voltar para posts">
               <ArrowLeft className="h-5 w-5" />
-            </Button>
           </Link>
+            </Button>
           <div>
             <h2 className="text-xl font-semibold text-neutral-900">
               {isEditing ? "Editar Post" : "Novo Post"}
@@ -324,23 +349,23 @@ export function PostEditor({ post }: PostEditorProps) {
             )}
           </div>
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           <Button
             variant="outline"
             onClick={() => handleSave(false)}
-            disabled={isSaving || isPublishing}
+            disabled={isSaving || isPublishing || isUploading}
           >
             {isSaving ? (
               <Loader2 className="h-4 w-4 animate-spin mr-2" />
             ) : (
               <Save className="h-4 w-4 mr-2" />
             )}
-            Salvar rascunho
+            {isPublished ? "Salvar revisão" : "Salvar rascunho"}
           </Button>
-          <Button
+          {!isPublished && <Button
             className="bg-neutral-900 text-white hover:bg-neutral-800 hover:text-white"
             onClick={() => handleSave(true)}
-            disabled={isSaving || isPublishing}
+            disabled={isSaving || isPublishing || isUploading}
           >
             {isPublishing ? (
               <Loader2 className="h-4 w-4 animate-spin mr-2" />
@@ -348,9 +373,17 @@ export function PostEditor({ post }: PostEditorProps) {
               <Send className="h-4 w-4 mr-2" />
             )}
             Publicar
-          </Button>
+          </Button>}
+          {isPublished && hasRevision && <Button onClick={handlePublishRevision}
+            disabled={hasUnsavedChanges || isSaving || isPublishing || isUploading}>
+            {isPublishing ? "Publicando…" : "Publicar revisão salva"}
+          </Button>}
+          {isPublished && pautaId && <Button variant="outline" asChild><Link href={`/admin/conteudo/${pautaId}`}>Revisar na pauta</Link></Button>}
         </div>
       </div>
+      {isPublished && <p className="rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">
+        O artigo publicado permanece no site. Salve as alterações, confira a prévia e use Publicar revisão salva para aplicá-las.
+      </p>}
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Main content */}
@@ -396,7 +429,7 @@ export function PostEditor({ post }: PostEditorProps) {
               value={activeTab}
               onValueChange={(v) => setActiveTab(v as "write" | "preview")}
             >
-              <div className="flex items-center justify-between mb-4">
+              <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
                 <TabsList>
                   <TabsTrigger value="write">Escrever</TabsTrigger>
                   <TabsTrigger value="preview">Preview</TabsTrigger>
@@ -404,12 +437,13 @@ export function PostEditor({ post }: PostEditorProps) {
 
                 {/* Toolbar */}
                 {activeTab === "write" && (
-                  <div className="flex items-center gap-1">
+                  <div className="flex flex-wrap items-center gap-1" role="group" aria-label="Formatação do artigo">
                     <Button
                       variant="ghost"
                       size="icon"
                       className="h-8 w-8"
                       onClick={() => insertMarkdown("**", "**")}
+                      aria-label="Negrito"
                     >
                       <Bold className="h-4 w-4" />
                     </Button>
@@ -418,6 +452,7 @@ export function PostEditor({ post }: PostEditorProps) {
                       size="icon"
                       className="h-8 w-8"
                       onClick={() => insertMarkdown("*", "*")}
+                      aria-label="Itálico"
                     >
                       <Italic className="h-4 w-4" />
                     </Button>
@@ -426,6 +461,7 @@ export function PostEditor({ post }: PostEditorProps) {
                       size="icon"
                       className="h-8 w-8"
                       onClick={() => insertMarkdown("# ")}
+                      aria-label="Título principal"
                     >
                       <Heading1 className="h-4 w-4" />
                     </Button>
@@ -434,6 +470,7 @@ export function PostEditor({ post }: PostEditorProps) {
                       size="icon"
                       className="h-8 w-8"
                       onClick={() => insertMarkdown("## ")}
+                      aria-label="Subtítulo"
                     >
                       <Heading2 className="h-4 w-4" />
                     </Button>
@@ -442,6 +479,7 @@ export function PostEditor({ post }: PostEditorProps) {
                       size="icon"
                       className="h-8 w-8"
                       onClick={() => insertMarkdown("- ")}
+                      aria-label="Lista com marcadores"
                     >
                       <List className="h-4 w-4" />
                     </Button>
@@ -450,6 +488,7 @@ export function PostEditor({ post }: PostEditorProps) {
                       size="icon"
                       className="h-8 w-8"
                       onClick={() => insertMarkdown("1. ")}
+                      aria-label="Lista numerada"
                     >
                       <ListOrdered className="h-4 w-4" />
                     </Button>
@@ -458,6 +497,7 @@ export function PostEditor({ post }: PostEditorProps) {
                       size="icon"
                       className="h-8 w-8"
                       onClick={() => insertMarkdown("[", "](url)")}
+                      aria-label="Inserir link"
                     >
                       <LinkIcon className="h-4 w-4" />
                     </Button>
@@ -466,6 +506,7 @@ export function PostEditor({ post }: PostEditorProps) {
                       size="icon"
                       className="h-8 w-8"
                       onClick={() => insertMarkdown("`", "`")}
+                      aria-label="Código"
                     >
                       <Code className="h-4 w-4" />
                     </Button>
@@ -474,6 +515,7 @@ export function PostEditor({ post }: PostEditorProps) {
                       size="icon"
                       className="h-8 w-8"
                       onClick={() => insertMarkdown("> ")}
+                      aria-label="Citação"
                     >
                       <Quote className="h-4 w-4" />
                     </Button>
@@ -484,6 +526,7 @@ export function PostEditor({ post }: PostEditorProps) {
               <TabsContent value="write" className="mt-0">
                 <Textarea
                   id="content-editor"
+                  aria-label="Conteúdo do artigo"
                   placeholder="Escreva o conteúdo do post em Markdown..."
                   value={formData.content}
                   onChange={(e) =>
@@ -494,10 +537,9 @@ export function PostEditor({ post }: PostEditorProps) {
               </TabsContent>
 
               <TabsContent value="preview" className="mt-0">
-                <div
-                  className="min-h-[500px] prose prose-neutral max-w-none p-4 border rounded-lg bg-white"
-                  dangerouslySetInnerHTML={{ __html: renderMarkdownPreview() }}
-                />
+                {activeTab === "preview" && <div className="min-h-[500px] p-4 border rounded-lg bg-white">
+                  <RichPostRenderer post={{ ...post, ...formData, components: formData.components ?? {} } as Post} />
+                </div>}
               </TabsContent>
             </Tabs>
           </Card>
@@ -559,6 +601,7 @@ export function PostEditor({ post }: PostEditorProps) {
           <Card className="p-6">
             <h3 className="font-semibold text-neutral-900 mb-4">Categoria</h3>
             <select
+              aria-label="Categoria do artigo"
               value={formData.category}
               onChange={(e) =>
                 setFormData((prev) => ({ ...prev, category: e.target.value }))
@@ -578,6 +621,7 @@ export function PostEditor({ post }: PostEditorProps) {
             <h3 className="font-semibold text-neutral-900 mb-4">Tags</h3>
             <Input
               placeholder="Adicionar tag (Enter)"
+              aria-label="Adicionar tag"
               value={tagInput}
               onChange={(e) => setTagInput(e.target.value)}
               onKeyDown={handleAddTag}
@@ -592,6 +636,8 @@ export function PostEditor({ post }: PostEditorProps) {
                 >
                   {tag}
                   <button
+                    type="button"
+                    aria-label={`Remover tag ${tag}`}
                     onClick={() => handleRemoveTag(tag)}
                     className="hover:text-red-600"
                   >
@@ -637,6 +683,7 @@ export function PostEditor({ post }: PostEditorProps) {
                 />
                 <Button
                   variant="destructive"
+                  aria-label="Remover imagem de capa"
                   size="icon"
                   className="absolute top-2 right-2 h-6 w-6"
                   onClick={() =>

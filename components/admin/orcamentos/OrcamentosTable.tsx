@@ -1,9 +1,10 @@
 "use client"
 
 import Link from "next/link"
+import { BaixarPdfButton } from "./BaixarPdfButton"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { FileText, Download, FileSpreadsheet } from "lucide-react"
+import { FileText, FileSpreadsheet } from "lucide-react"
 import type { OrcamentoListItem } from "@/types/orcamento-estimativa"
 
 interface Props {
@@ -20,7 +21,7 @@ function formatarMoeda(valor: number): string {
 }
 
 function formatarData(iso: string): string {
-  return new Date(iso).toLocaleDateString("pt-BR", {
+  return new Date(`${iso.slice(0, 10)}T12:00:00`).toLocaleDateString("pt-BR", {
     day: "2-digit",
     month: "short",
     year: "numeric",
@@ -48,10 +49,10 @@ export function OrcamentosTable({ orcamentos }: Props) {
             <FileSpreadsheet className="h-8 w-8 text-neutral-500" />
           </div>
           <h2 className="text-lg font-semibold text-neutral-900 mb-1">
-            Nenhum orçamento ainda
+            Nenhum orçamento encontrado
           </h2>
           <p className="text-sm text-neutral-500 max-w-md">
-            Crie o primeiro orçamento pelo formulário ou subindo a planilha-modelo.
+            Revise os filtros ou crie um orçamento pelo formulário ou pela planilha.
           </p>
         </div>
       </Card>
@@ -79,11 +80,7 @@ export function OrcamentosTable({ orcamentos }: Props) {
               <Link href={`/admin/orcamentos/${o.id}`} className="inline-flex min-h-11 items-center gap-2 rounded-lg border border-neutral-200 px-4 text-sm font-medium text-neutral-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900">
                 <FileText className="h-4 w-4" /> Abrir
               </Link>
-              {o.pdf_url && (
-                <a href={o.pdf_url} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center gap-2 rounded-lg border border-neutral-200 px-4 text-sm font-medium text-neutral-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900">
-                  <Download className="h-4 w-4" /> PDF
-                </a>
-              )}
+              {o.pdf_storage_path && <BaixarPdfButton orcamentoId={o.id} label={o.pdf_generated_at ? "Baixar PDF" : "PDF do acervo"} filename={`Orcamento-${o.numero}.pdf`} />}
             </div>
           </article>
         ))}
@@ -125,17 +122,7 @@ export function OrcamentosTable({ orcamentos }: Props) {
                       <FileText className="h-3.5 w-3.5" />
                       Abrir
                     </Link>
-                    {o.pdf_url && (
-                      <a
-                        href={o.pdf_url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex min-h-11 items-center gap-1 rounded px-2 text-xs text-neutral-700 hover:text-neutral-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-neutral-900"
-                      >
-                        <Download className="h-3.5 w-3.5" />
-                        PDF
-                      </a>
-                    )}
+                    {o.pdf_storage_path && <BaixarPdfButton orcamentoId={o.id} label={o.pdf_generated_at ? "Baixar PDF" : "PDF do acervo"} filename={`Orcamento-${o.numero}.pdf`} />}
                   </div>
                 </td>
               </tr>

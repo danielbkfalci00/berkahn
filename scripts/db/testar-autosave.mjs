@@ -39,10 +39,10 @@ function montar({ atrasoMs = 30, responder } = {}) {
     atrasoMs,
     aoMudar: () => {},
     agora: () => 1_000_000,
-    salvar: (texto) => {
-      const registro = { texto };
+    salvar: (texto, anterior) => {
+      const registro = { texto, anterior };
       chamadas.push(registro);
-      return responder ? responder(texto, chamadas.length) : Promise.resolve({ error: null });
+      return responder ? responder(texto, chamadas.length, anterior) : Promise.resolve({ error: null });
     },
   });
   return { motor, chamadas };
@@ -90,29 +90,40 @@ console.log("\nDEBOUNCE E BLUR");
 }
 
 // --------------------------------------------------------------------------
-console.log("\nSEQUENCIAMENTO — resposta antiga não pode vencer a nova");
+console.log("\nSEQUENCIAMENTO — escritas nunca concorrem");
 {
-  // Primeira gravação demora 120ms e FALHA; a segunda demora 10ms e passa.
-  // Sem o contador, o erro antigo chega por último e a tela mente.
-  const { motor } = montar({
+  let banco = "";
+  let ativas = 0;
+  let maxAtivas = 0;
+  const { motor, chamadas } = montar({
     atrasoMs: 5,
-    responder: (_t, n) =>
-      n === 1
-        ? esperar(120).then(() => ({ error: "erro antigo" }))
-        : esperar(10).then(() => ({ error: null })),
+    responder: async (texto, n) => {
+      ativas++;
+      maxAtivas = Math.max(maxAtivas, ativas);
+      await esperar(n === 1 ? 120 : 10);
+      banco = texto;
+      ativas--;
+      return { error: null };
+    },
   });
 
   motor.digitar("primeiro");
   await esperar(20);           // dispara a 1ª, que fica em voo
   motor.digitar("segundo");
-  await esperar(20);           // dispara a 2ª
-  await esperar(150);          // a 1ª responde depois da 2ª
+  motor.sair();
+  motor.salvarAgora();
+  await esperar(20);
+  checar("blur, debounce e salvar aguardam a escrita em voo", chamadas.length === 1);
+  await esperar(150);
 
   checar(
-    "resposta atrasada que falhou não sobrescreve o salvo novo",
+    "estado confirma a última versão",
     motor.estado().fase === "salvo",
     `terminou em "${motor.estado().fase}"`
   );
+  checar("banco termina com a última versão", banco === "segundo", banco);
+  checar("no máximo uma escrita simultânea", maxAtivas === 1);
+  checar("a segunda escrita usa baseline confirmada", chamadas[1]?.anterior === "primeiro");
   motor.destruir();
 }
 {
@@ -136,6 +147,32 @@ console.log("\nSEQUENCIAMENTO — resposta antiga não pode vencer a nova");
 
 // --------------------------------------------------------------------------
 console.log("\nERRO E RETRY");
+{
+  const { motor, chamadas } = montar({ atrasoMs: 5, responder: () => Promise.reject(new Error("rede caiu")) });
+  motor.digitar("preservar texto");
+  await esperar(40);
+  checar("rejeição não deixa salvando para sempre", motor.estado().fase === "erro");
+  checar("rejeição preserva texto local", motor.valor() === "preservar texto");
+  checar("erro não entra em retry automático", chamadas.length === 1);
+  motor.destruir();
+}
+{
+  const { motor, chamadas } = montar({ atrasoMs: 5, responder: (texto) => Promise.resolve({ error: null, valorSalvo: texto.trim() }) });
+  motor.digitar("  texto  ");
+  await esperar(40);
+  motor.digitar("novo texto");
+  await esperar(40);
+  checar("próxima gravação usa valor normalizado no servidor", chamadas[1]?.anterior === "texto");
+  motor.destruir();
+}
+{
+  const { motor, chamadas } = montar({ atrasoMs: 5 });
+  motor.digitar("mudança");
+  motor.digitar("");
+  await esperar(40);
+  checar("voltar à baseline não grava", chamadas.length === 0 && motor.estado().fase === "limpo");
+  motor.destruir();
+}
 {
   let deveFalhar = true;
   const { motor, chamadas } = montar({

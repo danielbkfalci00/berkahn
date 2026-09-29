@@ -20,7 +20,7 @@ const STATUS_VALIDOS: StatusFiltro[] = [
 ]
 
 interface PageProps {
-  searchParams: Promise<{ status?: string; q?: string }>
+  searchParams: Promise<{ status?: string; q?: string; page?: string }>
 }
 
 function normalizarStatus(s: string | undefined): StatusFiltro {
@@ -31,12 +31,14 @@ function normalizarStatus(s: string | undefined): StatusFiltro {
 }
 
 const SELECT_LIST =
-  "id, numero, status, cliente_nome, obra_cidade, projeto_area_m2, valor_min, valor_max, data_elaboracao, pdf_url, criado_em"
+  "id, numero, status, cliente_nome, obra_cidade, projeto_area_m2, valor_min, valor_max, data_elaboracao, pdf_url, pdf_storage_path, pdf_generated_at, criado_em"
 
 export default async function OrcamentosPage({ searchParams }: PageProps) {
-  const { status: statusParam, q: qParam } = await searchParams
+  const { status: statusParam, q: qParam, page: pageParam } = await searchParams
+  const page = Math.max(1, Number.parseInt(pageParam || "1", 10) || 1)
+  const pageSize = 25
   const statusAtivo = normalizarStatus(statusParam)
-  const qAtivo = (qParam ?? "").trim()
+  const qAtivo = (qParam ?? "").trim().slice(0, 120)
 
   const supabase = await createClient()
 
@@ -54,7 +56,8 @@ export default async function OrcamentosPage({ searchParams }: PageProps) {
     let listQuery = supabase
       .from("orcamentos")
       .select(SELECT_LIST)
-      .order("criado_em", { ascending: false })
+      .order("criado_em", { ascending: false }).order("id")
+      .range((page - 1) * pageSize, page * pageSize - 1)
 
     if (statusAtivo === "ativos") {
       listQuery = listQuery.in("status", ["rascunho", "finalizado"])
@@ -80,16 +83,14 @@ export default async function OrcamentosPage({ searchParams }: PageProps) {
       countRascunhoResult,
       countFinalizadoResult,
       countArquivadoResult,
-      countTodosResult,
     ] = await Promise.all([
       listQuery,
       contarPorStatus("rascunho"),
       contarPorStatus("finalizado"),
       contarPorStatus("arquivado"),
-      contarPorStatus(),
     ])
 
-    const results = [listResult, countRascunhoResult, countFinalizadoResult, countArquivadoResult, countTodosResult]
+    const results = [listResult, countRascunhoResult, countFinalizadoResult, countArquivadoResult]
     const failed = results.find((result) => result.error)
     if (failed?.error) throw failed.error
 
@@ -97,12 +98,15 @@ export default async function OrcamentosPage({ searchParams }: PageProps) {
     contagens.rascunho = countRascunhoResult.count ?? 0
     contagens.finalizado = countFinalizadoResult.count ?? 0
     contagens.arquivado = countArquivadoResult.count ?? 0
-    contagens.todos = countTodosResult.count ?? 0
+    contagens.todos = contagens.rascunho + contagens.finalizado + contagens.arquivado
     contagens.ativos = contagens.rascunho + contagens.finalizado
   } catch (error) {
     unavailable = true
     console.error("Orcamentos: failed to load", error)
   }
+
+  const pageCount = Math.max(1, Math.ceil(contagens[statusAtivo] / pageSize))
+  const pageHref = (next: number) => `/admin/orcamentos?${new URLSearchParams({ status: statusAtivo, q: qAtivo, page: String(next) })}`
 
   return (
     <div className="space-y-6">
@@ -128,6 +132,7 @@ export default async function OrcamentosPage({ searchParams }: PageProps) {
         <>
           <OrcamentosFiltros statusAtivo={statusAtivo} qAtivo={qAtivo} contagens={contagens} />
           <OrcamentosTable orcamentos={orcamentos} />
+          <nav aria-label="Páginas de orçamentos" className="flex items-center justify-between text-sm"><span>{contagens[statusAtivo]} orçamentos · Página {page} de {pageCount}</span><div className="flex gap-4">{page > 1 && <Link className="inline-flex min-h-11 items-center underline" href={pageHref(page - 1)}>Anterior</Link>}{page < pageCount && <Link className="inline-flex min-h-11 items-center underline" href={pageHref(page + 1)}>Próxima</Link>}</div></nav>
         </>
       )}
     </div>

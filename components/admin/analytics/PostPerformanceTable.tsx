@@ -63,7 +63,7 @@ export function PostPerformanceTable({
         initialLimit={initialLimit}
         storageKey="posts"
         initialSorting={[{ id: "pageviews", desc: true }]}
-        emptyDataText="Nenhum post publicado encontrado para o período. Publique seu primeiro post para ver a performance aqui."
+        emptyDataText="Nenhum artigo publicado encontrado entre as páginas retornadas pela coleta deste período."
         emptyFilteredText="Sem resultados. Ajuste os filtros."
         toolbar={(table) => (
           <PostsToolbar

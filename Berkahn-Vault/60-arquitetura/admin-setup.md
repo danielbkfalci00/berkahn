@@ -1,17 +1,73 @@
 ---
 tipo: context
 criado: 2025-12-01
-atualizado: 2026-09-23
+atualizado: 2026-09-29
 tags:
   - ai/context
   - project/site
   - domain/admin
-ai_summary: Sistema Admin Berkahn com contas individuais, quatro papéis, CRM em /admin/leads e PWA/Web Push por usuário e dispositivo. Migrations 024–034 (LGPD em 032, busca trigram em 033, mural de feedback em 034), retenção e dispatcher estão ativos; analytics mensal roda hospedado no GitHub Actions.
+ai_summary: Sistema Admin Berkahn com contas individuais, quatro papéis, CRM em /admin/leads e PWA/Web Push por usuário e dispositivo. Migrations 024–034 (LGPD em 032, busca trigram em 033, mural de feedback em 034), retenção e dispatcher estão ativos; analytics mensal roda hospedado no GitHub Actions. Integração das melhorias de 29/09 e migração 20260929141528 em preparação para publicação autorizada.
 status: active
+projeto: site
 escopo: berkahn
 ---
 
 # Sistema Admin Berkahn
+
+## Melhoria integral do ADMIN (29/09/2026)
+
+Escopo autorizado: implementar a auditoria do repositório em ciclos de correção e validação. Fonte de continuidade: esta nota, vinculada a [[site]] e [[quadro-conteudo]]. As alterações editoriais locais que já existiam no início devem ser preservadas.
+
+Critérios de aceite no repositório (a ativação hospedada é separada):
+- [x] Editorial: revisão publicada em staging, data preservada, autosave sequencial com conflito explícito, preview seguro e saída protegida.
+- [x] CRM: papéis consistentes, WhatsApp internacional, atendimento com próximo passo, timeline legível, fila por pendência, correção de contato e retry idempotente.
+- [x] Orçamentos: vínculo ao lead, PDF renovável/versionado, dirty state correto e paginação.
+- [x] Analytics: períodos comparáveis, denominador correto, falha diferente de zero, aprovação das recomendações, séries recortadas e insights fundamentados.
+- [x] Interface: atalhos por papel, menu/foco acessíveis, estados vazios úteis e retirada de CTAs sem destino.
+- [x] Carregamento: projeções/paginação, painéis sob demanda e isolamento dos componentes públicos.
+- [x] Banco: migration aditiva para os contratos novos, guardas de papel e agregados corretos, sem apagar acervo.
+- [x] Verificação: testes de regressão, lint, typecheck e build serializados; registrar limites reais de SQL/produção.
+
+Aplicação da migration hospedada e deploy não fazem parte das ações já executadas. Não iniciar Docker/WSL, Supabase local, n8n nem servidores persistentes. O smoke visual autenticado continua separado da evidência estática e dos testes locais.
+
+
+### Entrega no repositório
+
+- **Editorial:** `app/admin/posts/actions.ts:10`, `components/admin/posts/PostEditor.tsx:64` e a migration separam revisão de conteúdo live. Salvar cria/atualiza o payload da pauta com comparação de versões; publicar exige um clique explícito e preserva a data original. Publicação pelo ADMIN registra `sync_vault_pendente`: a cópia editorial deve ser reconciliada no vault.
+- **Autosave e saída:** `lib/conteudo/autosave.ts` serializa gravações e preserva o texto em falhas; `salvarBloco` faz comparação atômica do valor anterior. `hooks/use-unsaved-changes.ts:70` reúne pendências para links, histórico e logout. Em navegadores sem Navigation API, entradas anteriores ao rastreamento podem exigir restaurar o formulário substituindo o ramo Avançar; os dados locais são preservados.
+- **CRM:** `components/admin/analytics/LeadsQueue.tsx:98` e `app/admin/leads/actions.ts:74` concentram atendimento, etapa e próximo passo, edição de contato, filtros, prioridade e histórico paginado. Encerrar lead limpa ação pendente. Conversão mantém seu marco temporal. Contatos e downloads de materiais passam a ter classificação explícita.
+- **Captação:** `lib/contact.ts:48` e `app/api/leads/route.ts:81` usam UUID + hash canônico por submissão, mantendo retry após troca de rede. Storage do navegador guarda somente hash e UUID; identificadores técnicos entram na anonimização do lead.
+- **Orçamentos:** associação com lead, listagem paginada, estado salvo por snapshot, autorização por papel e revisão de PDF por hash do conteúdo. URLs são renovadas no download; geração confirma HTTP e identidade do orçamento, usa caminho único e compara versão antes de atualizar o registro. PDFs do acervo permanecem acessíveis com aviso de versão não verificada.
+- **Notificações:** `lib/push/dispatch.ts:39` revalida a pendência, direciona ações vencidas ao responsável e novos leads conforme preferências, guarda recibos por dispositivo e limita o trabalho por prazo. Entregas não tentadas voltam à fila sem consumir tentativa. Continua sendo entrega com possíveis repetições após interrupção entre envio e comprovante, não garantia de envio único.
+- **Analytics:** períodos parciais usam baseline equivalente; conversão inclui desqualificados no denominador; estado atual da coorte é identificado como atual. Falhas GA4/GSC/inspeção ficam distintas de zero. Consultas ausentes respeitam limites de cobertura, sugestões exibem evidência/aprovação e séries param no mês escolhido.
+- **Carregamento e interface:** `PublicLayout` cria uma fronteira para o código institucional; abas e preview pesados ficam sob demanda; projeções e paginação reduzem respostas. Dashboard usa métricas do fluxo de orçamentos existente; a rota Propostas é um redirect. Navegação respeita papéis, largura recolhida, foco, tablet e safe area. Erros têm recuperação explícita em `app/admin/error.tsx:7`.
+
+### Evidência de validação e carregamento
+
+Testes offline aprovados: `test:conteudo` (ordenação, autosave, estados e renderer), `test:analytics` (76 asserções nos mapas/funil e 39 de integridade, além do aprendizado), `test:crm` (idempotência, concorrência de gravação/PDF e entrega parcial/prazo do push) e `test:admin` (links/histórico/logout, estado do Next e bloqueio do harness em produção). `typecheck` passou; lint completo sem erros, seguido de lint sem erros e sem avisos nos arquivos alterados na revisão final. O build final de produção passou, incluindo TypeScript e geração de 98 páginas. As exceções do `.gitignore` e o CI incluem os três novos testes offline; `git diff --check` passou.
+
+Comparação com o build local anterior disponível, usando a soma dos mesmos conjuntos de chunks em `entryJSFiles` + `rootMainFiles`, sem compressão ou cache:
+
+| Rota | Antes | Depois | Redução |
+|---|---:|---:|---:|
+| `/admin/analytics` | 1.560.549 bytes | 880.442 bytes | 43,6% |
+| `/admin` | 807.357 bytes | 747.442 bytes | 7,4% |
+| `/admin/orcamentos/novo/form` | 845.608 bytes | 787.391 bytes | 6,9% |
+| `/admin/leads` | 888.603 bytes | 838.908 bytes | 5,6% |
+| `/admin/posts/[id]` | 844.977 bytes | 797.849 bytes | 5,6% |
+| `/admin/conteudo` | 977.127 bytes | 948.166 bytes | 3,0% |
+
+Isso mede JavaScript inicial associado à rota, não tempo real de resposta, transferência comprimida ou Core Web Vitals. O baseline é o artefato local anterior disponível, não um experimento controlado de produção. O build encontrou o harness local ignorado pelo Git; `proxy.ts:4` agora bloqueia `/dev-harness/**` em produção antes de qualquer consulta, com regressão automatizada e matcher confirmado no `functions-config-manifest.json` gerado. Nenhum desses arquivos locais foi apagado. Os comandos de validação encerraram; nenhum servidor de desenvolvimento ou stack local foi iniciado.
+
+### Banco e entrada em operação
+
+Migration preparada: `supabase/migrations/20260929141528_admin_reliability.sql`. Deve ser aplicada **antes** do deploy correspondente. Contém colunas/índices, RPCs atômicas, guardas de papel, agregados com RLS e extensão da retenção. A normalização dos telefones legados preserva `atualizado_em`, para não reiniciar o prazo de retenção. O backfill de materiais usa somente os quatro marcadores determinísticos da captura antiga.
+
+A aplicação hospedada, deploy, regeneração dos snapshots históricos e smoke autenticado não foram executados nesta tarefa. Os relatórios existentes não são corrigidos retroativamente pelo novo coletor; a próxima geração aplica as regras novas. A contagem do dashboard distingue ausência dos novos campos de um valor zero.
+
+Checks SQL preparados (exigem banco já migrado e execução autorizada): `npm run test:admin:db` testa staging/publicação/versões/RLS dentro de rollback; `npm run test:leads` testa CRM/RLS/atendimento/retenção de marcos e idempotência dentro de rollback. Esses checks não iniciam infraestrutura.
+
+Smoke após implantação: testar os quatro papéis, editar e sair por link/histórico/logout, atendimento com e sem próxima ação, lead→orçamento→registro de envio, PDF vencido e alterado, preferências/dispositivo revogado, Analytics parcial/fonte indisponível e impressão das abas sob demanda.
 
 > [!info] Migração para vault
 > Este arquivo era duplicado em `Docs/ADMIN_SETUP.md` e `Docs/site/ADMIN_SETUP.md`. Consolidado aqui como fonte única. Referenciado por [[stack-nextjs-supabase]].
@@ -24,7 +80,7 @@ O Sistema Admin Berkahn é um painel administrativo para gerenciar:
 - **Conteúdo e documentação interna**
 - **Orçamentos vinculados a leads**
 - **Apresentações Executivas**
-- **Propostas de Orçamento**
+- **Propostas legadas** (a antiga rota administrativa redireciona para Orçamentos)
 
 ## Arquitetura
 
@@ -48,8 +104,9 @@ nas páginas públicas, onde navegação legal e social fazem sentido.
 ### Shell e hierarquia responsiva
 
 No desktop, o admin mantém a sidebar. No celular, a navegação principal fixa
-Dashboard, Analytics e Leads na barra inferior e concentra os demais destinos
-permitidos por papel em **Mais**. Header, conteúdo, drawer e barra inferior
+os atalhos adequados ao papel: comercial/owner com Dashboard, Leads e Orçamentos;
+conteúdo com Dashboard, Conteúdo e Posts; viewer com Dashboard, Analytics e Documentações.
+Os demais destinos permitidos ficam em **Mais**. Header, conteúdo, drawer e barra inferior
 respeitam as safe areas do iOS/PWA.
 Nas três rotas principais, o gesto horizontal no conteúdo troca para a próxima
 aba permitida ao papel. O gesto não começa sobre controles, diálogos, gráficos
@@ -59,10 +116,8 @@ de voltar do sistema. A barra inferior continua sendo a navegação explícita.
 O Dashboard prioriza o backlog comercial ativo: leads novos, ações vencidas e
 leads sem responsável. Falha de consulta nunca é convertida em zero ou atividade
 fictícia. Analytics usa as abas Resumo, Aquisição, Conteúdo e Diagnóstico; todas
-as seções continuam disponíveis na impressão. A Inbox é a operação móvel de
-Leads e o Kanban permanece desktop-only. A prévia do lead no celular mantém
-altura fixa enquanto o contexto carrega e rola internamente; arrastar o
-cabeçalho para baixo a fecha, sem interferir na rolagem ou nos campos.
+as seções são carregadas sob demanda; Exportar PDF e Ctrl/Cmd+P preparam o relatório completo. A impressão pelo menu nativo do navegador identifica as seções abertas. A Inbox é a operação móvel de
+Leads; o Kanban também oferece navegação por etapa no celular. A prévia do lead mantém altura estável, rolagem interna e gesto no cabeçalho para fechar.
 
 > [!warning] Corrigido em 2026-07-31
 > Este diagrama dizia `output: "export"` para o site público, e a seção de
@@ -223,7 +278,7 @@ O acesso é por convite no Supabase Auth. Cada pessoa recebe email, define a pr�
 | `conteudo` | Conteúdo, posts, documentações, apresentações e analytics |
 | `viewer` | Dashboard, analytics e documentações em leitura |
 
-O `proxy.ts` bloqueia rotas incompatíveis antes da renderização; RLS e RPCs repetem a autorização no banco. `is_berkahn_admin()` permanece como guarda comercial para RPCs legados, enquanto `has_admin_role()` expressa leituras e mutações dos outros domínios.
+O `proxy.ts:4` bloqueia rotas incompatíveis antes da renderização; RLS e RPCs repetem a autorização no banco. `is_berkahn_admin()` permanece como guarda comercial para RPCs legados, enquanto `has_admin_role()` expressa leituras e mutações dos outros domínios.
 
 Arquivos de até 6 MB (`PDF`, `DOCX`, `XLSX`, `JPEG`, `PNG`, `WebP`) usam upload assinado direto ao bucket privado `lead-files`; o arquivo não atravessa a função Vercel. Arquivos grandes e pastas permanecem no Drive e entram como URL HTTPS. O Drive não é duplicado nem sincronizado automaticamente. Ao anonimizar, links externos são removidos e objetos privados entram em `lead_storage_cleanup` até a Edge Function confirmar a exclusão.
 

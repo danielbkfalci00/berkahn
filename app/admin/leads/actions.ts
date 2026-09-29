@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase/server";
 import { createServiceClient } from "@/lib/supabase/admin";
 import { getAdminSession } from "@/lib/supabase/sessao";
 import type { AnalyticsLead, LeadChannel, LeadPriority, LeadSegment, LeadStatus } from "@/types/analytics";
+import { normalizeLeadPhone } from "@/lib/contact";
 
 export interface LeadActionResult {
   ok: boolean;
@@ -109,6 +110,7 @@ export interface ManualLeadInput {
 }
 
 function revalidateLead(id?: string) {
+  revalidatePath("/admin");
   revalidatePath("/admin/leads");
   revalidatePath("/admin/analytics");
   if (id) revalidatePath(`/admin/leads/${id}`);
@@ -119,13 +121,13 @@ export async function findLeadDuplicates(
   telefone?: string
 ): Promise<LeadActionResult> {
   const normalizedEmail = email?.trim().toLowerCase();
-  const normalizedPhone = telefone?.replace(/\D/g, "");
+  const normalizedPhone = normalizeLeadPhone(telefone);
   if (!normalizedEmail && !normalizedPhone) return { ok: true, duplicates: [] };
 
   const supabase = await createClient();
   const [emailResult, phoneResult] = await Promise.all([
     normalizedEmail
-      ? supabase.from("leads").select("id,nome,email,telefone").ilike("email", normalizedEmail).is("anonimizado_em", null).limit(5)
+      ? supabase.from("leads").select("id,nome,email,telefone").ilike("email", normalizedEmail.replace(/[\\%_]/g, "\\$&")).is("anonimizado_em", null).limit(5)
       : Promise.resolve({ data: [], error: null }),
     normalizedPhone
       ? supabase.from("leads").select("id,nome,email,telefone").eq("telefone_normalizado", normalizedPhone).is("anonimizado_em", null).limit(5)
@@ -199,6 +201,72 @@ export async function registerLeadActivity(
   if (error) return { ok: false, error: error.message };
   revalidateLead(id);
   return { ok: true };
+}
+
+export interface LeadContactInput {
+  nome: string;
+  email: string;
+  telefone: string;
+  segmento: LeadSegment;
+  tipoProjeto: string;
+  empresa: string;
+  cargo: string;
+}
+
+export async function updateLeadContact(id: string, input: LeadContactInput): Promise<LeadActionResult> {
+  if (!input.nome.trim()) return { ok: false, error: "Nome é obrigatório." };
+  if (!input.email.trim() && !input.telefone.trim()) return { ok: false, error: "Informe telefone ou email." };
+  if (input.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.email.trim())) return { ok: false, error: "Email inválido." };
+  const phone = normalizeLeadPhone(input.telefone);
+  if (phone && (phone.length < 10 || phone.length > 15)) return { ok: false, error: "Telefone inválido." };
+  const admin = await requireCommercialAdmin();
+  if (!admin) return { ok: false, error: "Não autorizado." };
+  const { error } = await admin.supabase.rpc("update_lead_contact", {
+    p_id: id, p_nome: input.nome.trim(), p_email: input.email.trim().toLowerCase(),
+    p_telefone: input.telefone.trim(), p_segmento: input.segmento,
+    p_tipo_projeto: input.tipoProjeto.trim(), p_empresa: input.empresa.trim(), p_cargo: input.cargo.trim(),
+  });
+  if (error) return { ok: false, error: error.message };
+  revalidateLead(id);
+  return { ok: true };
+}
+
+export async function registerLeadAttendance(id: string, input: { nota: string; status: LeadStatus; proximaAcaoEm?: string; motivo?: string }): Promise<LeadActionResult> {
+  if (!input.nota.trim()) return { ok: false, error: "Registre o resultado do atendimento." };
+  const admin = await requireCommercialAdmin();
+  if (!admin) return { ok: false, error: "Não autorizado." };
+  const terminal = input.status === "convertido" || input.status === "desqualificado";
+  const { error } = await admin.supabase.rpc("register_lead_attendance", {
+    p_id: id, p_nota: input.nota.trim(), p_status: input.status,
+    p_proxima_acao_em: terminal ? null : input.proximaAcaoEm || null,
+    p_motivo: input.motivo?.trim() || null,
+  });
+  if (error) return { ok: false, error: error.message };
+  revalidateLead(id);
+  return { ok: true };
+}
+
+export interface LeadActivityRow {
+  id: string;
+  action: string;
+  details: Record<string, unknown> | null;
+  created_at: string;
+  user_name: string | null;
+}
+
+export async function loadLeadActivities(id: string, cursor?: { createdAt: string; id: string }): Promise<{ ok: boolean; error?: string; activities: LeadActivityRow[]; hasMore: boolean }> {
+  const admin = await requireCommercialAdmin();
+  if (!admin) return { ok: false, error: "Não autorizado.", activities: [], hasMore: false };
+  let query = admin.supabase.from("activity_logs").select("id,action,details,created_at,user_name")
+    .eq("entity_type", "lead").eq("entity_id", id)
+    .order("created_at", { ascending: false }).order("id", { ascending: false }).limit(26);
+  if (cursor) {
+    if (!/^[0-9a-f-]{36}$/i.test(cursor.id) || !Number.isFinite(Date.parse(cursor.createdAt))) return { ok: false, error: "Cursor inválido.", activities: [], hasMore: false };
+    query = query.or(`created_at.lt.${cursor.createdAt},and(created_at.eq.${cursor.createdAt},id.lt.${cursor.id})`);
+  }
+  const { data, error } = await query;
+  return error ? { ok: false, error: "Não foi possível carregar o histórico.", activities: [], hasMore: false }
+    : { ok: true, activities: (data || []).slice(0, 25) as unknown as LeadActivityRow[], hasMore: (data?.length || 0) > 25 };
 }
 
 export async function setLeadNextAction(id: string, date?: string): Promise<LeadActionResult> {
@@ -294,6 +362,15 @@ export async function deactivateAdminPushSubscription(endpoint: string): Promise
   return { ok: true };
 }
 
+export async function getCurrentAdminPushState(endpoint: string): Promise<{ ok: boolean; active?: boolean; deviceId?: string; error?: string }> {
+  const admin = await requireCommercialAdmin();
+  if (!admin) return { ok: false, error: "Não autorizado." };
+  const { data, error } = await admin.supabase.from("admin_push_subscriptions")
+    .select("id,ativo").eq("user_id", admin.user.id).eq("endpoint", endpoint).maybeSingle();
+  if (error) return { ok: false, error: "Não foi possível consultar este dispositivo." };
+  return { ok: true, active: data?.ativo === true, deviceId: data?.id };
+}
+
 export async function revokeAdminPushDevice(id: string): Promise<LeadActionResult> {
   const admin = await requireCommercialAdmin();
   if (!admin) return { ok: false, error: "Não autorizado." };
@@ -376,10 +453,11 @@ export async function finalizeLeadUpload(id: string): Promise<LeadActionResult> 
   if (!admin) return { ok: false, error: "Não autorizado." };
   const { data: artifact, error } = await admin.supabase
     .from("lead_artifacts")
-    .select("id,lead_id,storage_path,estado")
+    .select("id,lead_id,storage_path,estado,mime_type,size_bytes")
     .eq("id", id)
     .single();
   if (error || !artifact?.storage_path) return { ok: false, error: error?.message || "Arquivo não encontrado." };
+  if (artifact.estado === "ready") return { ok: true };
 
   const fileName = artifact.storage_path.split("/").pop() || "";
   const service = createServiceClient();
@@ -388,6 +466,10 @@ export async function finalizeLeadUpload(id: string): Promise<LeadActionResult> 
     .list(artifact.lead_id, { search: fileName, limit: 1 });
   if (listError || !objects?.some((object) => object.name === fileName)) {
     return { ok: false, error: listError?.message || "O upload não foi confirmado no Storage." };
+  }
+  const stored = objects.find((object) => object.name === fileName);
+  if (!stored?.metadata || Number(stored.metadata.size) !== artifact.size_bytes || stored.metadata.mimetype !== artifact.mime_type) {
+    return { ok: false, error: "O arquivo recebido difere do upload preparado. Envie novamente." };
   }
 
   const { error: updateError } = await admin.supabase

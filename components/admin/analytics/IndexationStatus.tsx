@@ -10,6 +10,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import type { GscIndexation } from "@/types/analytics";
+import { isKnownIndexation } from "@/lib/analytics/comparability";
 
 interface IndexationStatusProps {
   indexation: GscIndexation[];
@@ -26,9 +27,11 @@ function isIndexedState(coverageState: string | null | undefined): boolean {
 }
 
 export function IndexationStatus({ indexation }: IndexationStatusProps) {
-  const total = indexation.length;
-  const indexed = indexation.filter((i) => isIndexedState(i.coverageState)).length;
-  const notIndexed = indexation.filter((i) => !isIndexedState(i.coverageState));
+  const inspected = indexation.filter(isKnownIndexation);
+  const unavailable = indexation.filter((item) => !isKnownIndexation(item));
+  const total = inspected.length;
+  const indexed = inspected.filter((i) => isIndexedState(i.coverageState)).length;
+  const notIndexed = inspected.filter((i) => !isIndexedState(i.coverageState));
   const pct = total > 0 ? Math.round((indexed / total) * 100) : 0;
 
   return (
@@ -45,7 +48,8 @@ export function IndexationStatus({ indexation }: IndexationStatusProps) {
       </div>
 
       <Progress value={pct} className="h-2 mb-2" />
-      <p className="text-xs text-neutral-500 mb-4">{pct}% do catálogo indexado</p>
+      <p className="text-xs text-neutral-500 mb-4">{total > 0 ? `${pct}% dos artigos com inspeção válida` : "Nenhuma inspeção válida disponível."}</p>
+      {unavailable.length > 0 && <p role="status" className="mb-4 text-sm text-amber-800">{unavailable.length} inspeções indisponíveis. Falha de coleta não significa artigo fora do índice.</p>}
 
       {notIndexed.length > 0 ? (
         <Accordion type="single" collapsible className="mt-4">
@@ -69,11 +73,11 @@ export function IndexationStatus({ indexation }: IndexationStatusProps) {
             </AccordionContent>
           </AccordionItem>
         </Accordion>
-      ) : (
+      ) : total > 0 && unavailable.length === 0 ? (
         <div className="mt-4 p-3 rounded-md bg-[#E8F3EC] text-[#1F6F3D] text-sm font-medium">
           ✓ Todos os artigos indexados no Google
         </div>
-      )}
+      ) : null}
     </Card>
   );
 }

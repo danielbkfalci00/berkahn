@@ -254,6 +254,8 @@ export interface AdminUser {
 // ============================================
 
 export interface DashboardStats {
+  budgets?: { total: number; drafts: number; finalized: number };
+  documents?: number;
   posts: {
     total: number;
     published: number;

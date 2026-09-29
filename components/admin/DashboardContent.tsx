@@ -5,11 +5,8 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
   FileText,
-  Presentation,
   FileSpreadsheet,
   Plus,
-  Clock,
-  DollarSign,
   Inbox,
   UserRoundX,
   AlertTriangle,
@@ -18,6 +15,7 @@ import {
 import type { DashboardStats } from "@/types/admin";
 import type { AdminDataResult, AdminMembership } from "@/types/analytics";
 import type { DashboardLeadOperations } from "@/lib/analytics/leads-queries";
+import { roleCanAccessPath } from "@/lib/admin/access";
 
 interface Activity {
   id: string;
@@ -45,7 +43,6 @@ export function DashboardContent({
   const firstName = membership?.nome.split(" ")[0] || fallbackName || "Admin";
   const canManageContent = membership?.role === "owner" || membership?.role === "conteudo";
   const canManageCommercial = membership?.role === "owner" || membership?.role === "comercial";
-  const canReadContent = canManageContent || membership?.role === "viewer";
 
   return (
     <div className="mx-auto max-w-6xl space-y-7">
@@ -57,9 +54,9 @@ export function DashboardContent({
         </div>
         {canManageContent && (
           <Button asChild className="min-h-11 bg-neutral-950 text-white hover:bg-neutral-800">
-            <Link href="/admin/posts/new">
+            <Link href="/admin/conteudo?nova=1">
               <Plus className="h-4 w-4 mr-2" />
-              Novo post
+              Nova pauta
             </Link>
           </Button>
         )}
@@ -101,10 +98,9 @@ export function DashboardContent({
           <Card className="border-amber-200 p-4 text-sm text-amber-800">Indicadores indisponíveis. {stats.reason}</Card>
         ) : (
           <div className="grid grid-cols-2 gap-px overflow-hidden rounded-lg border border-neutral-200 bg-neutral-200 lg:grid-cols-4">
-            {canReadContent && <SummaryMetric href="/admin/posts" icon={FileText} label="Posts" value={stats.data.posts.total} detail={`${stats.data.posts.drafts} rascunhos`} />}
-            {canManageCommercial && <SummaryMetric href="/admin/propostas" icon={FileSpreadsheet} label="Propostas" value={stats.data.proposals.total} detail={`${stats.data.proposals.pending} pendentes`} />}
-            {canReadContent && <SummaryMetric href="/admin/apresentacoes" icon={Presentation} label="Apresentações" value={stats.data.presentations.total} detail={`${stats.data.presentations.viewed} visualizadas`} />}
-            {canManageCommercial && <SummaryMetric href="/admin/propostas" icon={DollarSign} label="Aprovado" value={`R$ ${(stats.data.proposals.total_value / 1000).toFixed(0)}k`} detail={`${stats.data.proposals.approved} propostas`} />}
+            {canManageContent && <SummaryMetric href="/admin/posts" icon={FileText} label="Posts publicados" value={stats.data.posts.published} detail={`${stats.data.posts.drafts} rascunhos`} />}
+            {canManageCommercial && <SummaryMetric href="/admin/orcamentos" icon={FileSpreadsheet} label="Orçamentos" value={stats.data.budgets?.total ?? "—"} detail={stats.data.budgets ? `${stats.data.budgets.drafts} rascunhos · ${stats.data.budgets.finalized} finalizados` : "Contagem indisponível"} />}
+            {membership && roleCanAccessPath(membership.role, "/admin/documentacoes") && <SummaryMetric href="/admin/documentacoes" icon={FileText} label="Documentações" value={stats.data.documents ?? "—"} detail={stats.data.documents == null ? "Contagem indisponível" : "Relatórios e referências"} />}
           </div>
         )}
       </section>

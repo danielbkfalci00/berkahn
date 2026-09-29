@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto";
 import { after, NextResponse, type NextRequest } from "next/server";
-import { validateLeadInput, type LeadInput } from "@/lib/contact";
+import { getLeadSubmissionContent, validateLeadInput, type LeadInput } from "@/lib/contact";
 import { dispatchLeadPushNotifications } from "@/lib/push/dispatch";
 import { createServiceClient } from "@/lib/supabase/admin";
 
@@ -104,6 +104,14 @@ export async function POST(request: NextRequest) {
 
   const supabase = createServiceClient();
   const fingerprint = clientFingerprint(request);
+  // O UUID identifica o envio, o conteúdo o autoriza; uma troca de rede não muda a identidade.
+  const submissionHash = createHash("sha256").update(getLeadSubmissionContent(lead)).digest("hex");
+  if (lead.submissionId) {
+    const { data: existing, error: retryError } = await supabase.from("leads")
+      .select("id").eq("submission_id", lead.submissionId).eq("submission_payload_hash", submissionHash).maybeSingle();
+    if (retryError) return NextResponse.json({ success: false, message: "Não foi possível enviar agora." }, { status: 503 });
+    if (existing) return NextResponse.json({ success: true, leadId: existing.id });
+  }
   const cutoff = new Date(Date.now() - WINDOW_MS).toISOString();
   const { count, error: countError } = await supabase
     .from("leads")
@@ -152,6 +160,7 @@ export async function POST(request: NextRequest) {
         ? `Material solicitado: ${lead.resourceTitle}`
         : lead.message || "Contato pelo formulário",
       canal: lead.kind === "resource" ? "email" : "form",
+      tipo_captacao: lead.kind === "resource" ? "material" : "contato",
       tipo_projeto: lead.kind === "resource" ? null : lead.projectType ?? null,
       empresa: lead.kind === "resource" ? null : lead.company ?? null,
       cargo: lead.kind === "resource" ? null : lead.role ?? null,
@@ -164,11 +173,18 @@ export async function POST(request: NextRequest) {
       post_id: postId,
       pauta_id: pautaId,
       request_fingerprint: fingerprint,
+      submission_id: lead.submissionId ?? null,
+      submission_payload_hash: lead.submissionId ? submissionHash : null,
     })
     .select("id")
     .single();
 
   if (error || !saved) {
+    if (error?.code === "23505" && lead.submissionId) {
+      const { data: existing } = await supabase.from("leads").select("id")
+        .eq("submission_id", lead.submissionId).eq("submission_payload_hash", submissionHash).maybeSingle();
+      if (existing) return NextResponse.json({ success: true, leadId: existing.id });
+    }
     console.error("lead insert:", error?.message);
     return NextResponse.json(
       { success: false, message: "Não foi possível salvar o contato." },
@@ -178,7 +194,7 @@ export async function POST(request: NextRequest) {
 
   after(async () => {
     try {
-      await dispatchLeadPushNotifications();
+      await dispatchLeadPushNotifications({ budgetMs: 5_000 });
     } catch (pushError) {
       console.error("lead push:", pushError instanceof Error ? pushError.message : "unknown error");
     }

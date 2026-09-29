@@ -1,17 +1,25 @@
 "use client";
 
 import { usePathname, useSearchParams } from "next/navigation";
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import dynamic from "next/dynamic";
+import { flushSync } from "react-dom";
 import { AnalyticsHeader } from "@/components/admin/analytics/AnalyticsHeader";
 import { Act0Status } from "@/components/admin/analytics/acts/Act0Status";
-import { Act2Origin } from "@/components/admin/analytics/acts/Act2Origin";
-import { Act3Posts } from "@/components/admin/analytics/acts/Act3Posts";
-import { Act4Action } from "@/components/admin/analytics/acts/Act4Action";
-import { KpiCardGrid } from "@/components/admin/analytics/KpiCardGrid";
-import { GrowthChart } from "@/components/admin/analytics/GrowthChart";
+const loadAct2Origin = () => import("@/components/admin/analytics/acts/Act2Origin");
+const Act2Origin = dynamic(() => loadAct2Origin().then((module) => module.Act2Origin), { loading: () => <p role="status" className="py-6 text-sm text-neutral-500">Carregando análise…</p> });
+const loadAct3Posts = () => import("@/components/admin/analytics/acts/Act3Posts");
+const Act3Posts = dynamic(() => loadAct3Posts().then((module) => module.Act3Posts), { loading: () => <p role="status" className="py-6 text-sm text-neutral-500">Carregando análise…</p> });
+const loadAct4Action = () => import("@/components/admin/analytics/acts/Act4Action");
+const Act4Action = dynamic(() => loadAct4Action().then((module) => module.Act4Action), { loading: () => <p role="status" className="py-6 text-sm text-neutral-500">Carregando análise…</p> });
 import { ConversionEvents } from "@/components/admin/analytics/ConversionEvents";
-import { MatrizArtigoMes } from "@/components/admin/analytics/MatrizArtigoMes";
-import { ComparisonView } from "@/components/admin/analytics/ComparisonView";
+import { KpiCardGrid } from "@/components/admin/analytics/KpiCardGrid";
+const loadGrowthChart = () => import("@/components/admin/analytics/GrowthChart");
+const GrowthChart = dynamic(() => loadGrowthChart().then((module) => module.GrowthChart), { loading: () => <p role="status" className="py-6 text-sm text-neutral-500">Carregando análise…</p> });
+const loadMatrizArtigoMes = () => import("@/components/admin/analytics/MatrizArtigoMes");
+const MatrizArtigoMes = dynamic(() => loadMatrizArtigoMes().then((module) => module.MatrizArtigoMes), { loading: () => <p role="status" className="py-6 text-sm text-neutral-500">Carregando análise…</p> });
+const loadComparisonView = () => import("@/components/admin/analytics/ComparisonView");
+const ComparisonView = dynamic(() => loadComparisonView().then((module) => module.ComparisonView), { loading: () => <p role="status" className="py-6 text-sm text-neutral-500">Carregando análise…</p> });
 import { computeMonthlyGoals, computeGoalProgress, formatGoalLabel, formulaLabel, goalStatusColor } from "@/lib/analytics/goals";
 import { detectRedFlags } from "@/lib/analytics/red-flags";
 import { comparisonAvailability } from "@/lib/analytics/comparability";
@@ -30,11 +38,13 @@ import type {
 } from "@/types/analytics";
 
 interface AnalyticsContentProps {
-  snapshot: AnalyticsSnapshot;
-  previousSnapshot: AnalyticsSnapshot | null;
+  snapshot: Pick<AnalyticsSnapshot, "context">;
+  previousSnapshot: Pick<AnalyticsSnapshot, "context"> | null;
   trendPoints: TrendPoint[];
   postPerformance: PostPerformance[];
-  postsPublishedInMonth: number;
+  postsPublishedInMonth?: number;
+  canManageTasks: boolean;
+  sectionErrors: { comparison: boolean; trend: boolean; posts: boolean; history: boolean; tasks: boolean };
   availableMonths: string[];
   currentMonth: string;
   timelineEvents: TimelineEvent[];
@@ -52,7 +62,7 @@ function deltaDirection(deltaPct?: number): "up" | "down" | "flat" {
 }
 
 function buildKpis(
-  snapshot: AnalyticsSnapshot,
+  snapshot: Pick<AnalyticsSnapshot, "context">,
   trend: TrendPoint[],
   currentMonth: string
 ): KpiCardData[] {
@@ -156,6 +166,8 @@ function buildKpis(
 
 export function AnalyticsContent({
   snapshot,
+  canManageTasks,
+  sectionErrors,
   previousSnapshot,
   trendPoints,
   postPerformance,
@@ -172,6 +184,9 @@ export function AnalyticsContent({
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const reportRef = useRef<HTMLDivElement>(null);
+  const [printAll, setPrintAll] = useState(false);
+  const [preparingPrint, setPreparingPrint] = useState(false);
+  const [printError, setPrintError] = useState<string | null>(null);
   const requestedComparisonMode = searchParams.get("compare") === "1";
   const requestedTab = searchParams.get("tab");
   const activeTab = ["resumo", "aquisicao", "conteudo", "diagnostico"].includes(requestedTab ?? "")
@@ -179,12 +194,12 @@ export function AnalyticsContent({
     : "resumo";
 
   const ctx = snapshot.context;
-  const kpis = buildKpis(snapshot, trendPoints, currentMonth);
+  const kpis = buildKpis(snapshot, trendPoints, currentMonth).map((kpi) => sectionErrors.trend || ctx.partial ? { ...kpi, goal: undefined } : kpi);
   const topQueries: TopQueryWithTrend[] = ctx.gsc.topQueries.map((q) => ({ ...q }));
 
   const redFlags = detectRedFlags(ctx, previousSnapshot, postsPublishedInMonth);
 
-  // O modo comparativo lê ga4_data/gsc_data das duas linhas, e a linha do mês
+  // O modo comparativo lê os contextos das duas linhas, e a linha do mês
   // anterior guarda o mês INTEIRO. Contra um mês parcial isso compara janelas
   // de tamanhos diferentes — os deltas inline do context não têm esse problema
   // porque são calculados contra a janela equivalente na geração do snapshot.
@@ -200,8 +215,36 @@ export function AnalyticsContent({
           : " Métricas absolutas permanecem válidas."
       }`
     : undefined;
-  const comparisonDisabled = previousSnapshot === null || isPartial || !comparability.ga4MoM || !comparability.gscMoM;
+  const comparisonDisabled = previousSnapshot === null || isPartial || previousSnapshot.context.partial === true || !comparability.ga4MoM || !comparability.gscMoM;
   const comparisonMode = requestedComparisonMode && !comparisonDisabled;
+
+  const exportReport = useCallback(async () => {
+    if (preparingPrint) return;
+    setPreparingPrint(true);
+    setPrintError(null);
+    try {
+      await Promise.all([loadAct2Origin(), loadAct3Posts(), loadAct4Action(), loadGrowthChart(), loadMatrizArtigoMes(), loadComparisonView()]);
+      flushSync(() => setPrintAll(true));
+      await new Promise<void>((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve())));
+      window.print();
+    } catch {
+      setPrintError("Não foi possível preparar o relatório completo. Tente exportar novamente.");
+    } finally {
+      setPrintAll(false);
+      setPreparingPrint(false);
+    }
+  }, [preparingPrint]);
+
+  useEffect(() => {
+    const printShortcut = (event: KeyboardEvent) => {
+      if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "p") {
+        event.preventDefault();
+        void exportReport();
+      }
+    };
+    window.addEventListener("keydown", printShortcut);
+    return () => window.removeEventListener("keydown", printShortcut);
+  }, [exportReport]);
 
   function setTab(tab: string) {
     if (tab === activeTab) return;
@@ -259,6 +302,8 @@ export function AnalyticsContent({
   return (
     <div ref={reportRef} className="mx-auto max-w-[1400px] space-y-7">
       <AnalyticsHeader
+        onPrint={exportReport}
+        preparingPrint={preparingPrint}
         monthLabel={ctx.monthLabel}
         periodStart={ctx.periodStart}
         periodEnd={ctx.periodEnd}
@@ -266,8 +311,8 @@ export function AnalyticsContent({
         currentMonth={currentMonth}
         comparisonDisabled={comparisonDisabled}
         comparisonDisabledReason={
-          isPartial
-            ? "Indisponível em mês parcial: o snapshot anterior guarda o mês inteiro, então a comparação mediria janelas de tamanhos diferentes"
+          isPartial || previousSnapshot?.context.partial
+            ? "Indisponível: um dos relatórios cobre um mês parcial e as janelas não são equivalentes"
             : !comparability.ga4MoM
               ? comparability.reason
               : "Sem mês anterior pra comparar"
@@ -281,6 +326,8 @@ export function AnalyticsContent({
         sources={ctx.sources}
       />
 
+      {printError && <p role="alert" className="text-sm text-amber-800">{printError}</p>}
+      {Object.values(sectionErrors).some(Boolean) && <p role="status" className="rounded-md border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">Parte dos dados está indisponível. As seções afetadas estão identificadas abaixo. <button type="button" onClick={() => window.location.reload()} className="underline">Tentar novamente</button></p>}
       {comparisonMode && previousSnapshot && !comparisonDisabled ? (
         <ComparisonView current={snapshot} previous={previousSnapshot} />
       ) : (
@@ -293,14 +340,15 @@ export function AnalyticsContent({
             ))}
           </div>
 
-          <section id="analytics-panel-resumo" aria-labelledby="analytics-tab-resumo" role="tabpanel" className={activeTab === "resumo" ? "space-y-6" : "hidden print:block print:space-y-6"}>
+          <section id="analytics-panel-resumo" aria-labelledby="analytics-tab-resumo" role="tabpanel" className={activeTab === "resumo" || printAll ? "space-y-6" : "hidden print:block print:space-y-6"}>
             <Act0Status context={ctx} trendPoints={trendPoints} redFlags={redFlags} />
+            {sectionErrors.trend && <p role="status" className="text-sm text-amber-800">Série histórica indisponível; metas e tendências omitidas.</p>}
             <KpiCardGrid kpis={summaryKpis} />
             <ConversionEvents ga4={ctx.ga4} funil={funilLeads} monthSlug={ctx.monthSlug} />
             <div className="grid gap-4 lg:grid-cols-2">
               <div className="border-t border-neutral-200 pt-4">
-                <h3 className="text-sm font-semibold text-neutral-950">Principal insight</h3>
-                <p className="mt-2 text-sm leading-relaxed text-neutral-600">{ctx.insights[0]?.text ?? "Nenhuma mudança relevante detectada neste período."}</p>
+                <h3 className="text-sm font-semibold text-neutral-950">Destaque do período</h3>
+                <p className="mt-2 text-sm leading-relaxed text-neutral-600">{[...ctx.insights].sort((a, b) => (b.impact ?? 0) - (a.impact ?? 0))[0]?.text ?? "Nenhuma mudança relevante detectada neste período."}</p>
               </div>
               <div className="border-t border-neutral-200 pt-4">
                 <h3 className="text-sm font-semibold text-neutral-950">Próximas ações</h3>
@@ -309,27 +357,34 @@ export function AnalyticsContent({
             </div>
           </section>
 
-          <section id="analytics-panel-aquisicao" aria-labelledby="analytics-tab-aquisicao" role="tabpanel" className={activeTab === "aquisicao" ? "space-y-8" : "hidden print:block print:space-y-8"}>
-            <GrowthChart data={trendPoints} events={timelineEvents} />
+          <section id="analytics-panel-aquisicao" aria-labelledby="analytics-tab-aquisicao" role="tabpanel" className={activeTab === "aquisicao" || printAll ? "space-y-8" : "hidden print:block print:space-y-8"}>
+            {(activeTab === "aquisicao" || printAll) && <>
+            {sectionErrors.trend ? <p role="status" className="text-sm text-amber-800">Histórico de aquisição indisponível.</p> : <GrowthChart data={trendPoints} events={timelineEvents} />}
             <Act2Origin context={ctx} topQueries={topQueries} oportunidade={oportunidade} />
+            </>}
           </section>
 
-          <section id="analytics-panel-conteudo" aria-labelledby="analytics-tab-conteudo" role="tabpanel" className={activeTab === "conteudo" ? "space-y-8" : "hidden print:block print:space-y-8"}>
-            <Act3Posts context={ctx} posts={postPerformance} mapaLeitura={mapaLeitura} />
-            <MatrizArtigoMes matriz={matrizAcervo} />
+          <section id="analytics-panel-conteudo" aria-labelledby="analytics-tab-conteudo" role="tabpanel" className={activeTab === "conteudo" || printAll ? "space-y-8" : "hidden print:block print:space-y-8"}>
+            {(activeTab === "conteudo" || printAll) && <>
+            {sectionErrors.posts ? <p role="status" className="text-sm text-amber-800">Metadados dos artigos indisponíveis.</p> : <Act3Posts context={ctx} posts={postPerformance} mapaLeitura={mapaLeitura} />}
+            {sectionErrors.history || sectionErrors.posts ? <p role="status" className="text-sm text-amber-800">Matriz histórica indisponível.</p> : <MatrizArtigoMes matriz={matrizAcervo} />}
+            </>}
           </section>
 
-          <section id="analytics-panel-diagnostico" aria-labelledby="analytics-tab-diagnostico" role="tabpanel" className={activeTab === "diagnostico" ? "space-y-8" : "hidden print:block print:space-y-8"}>
+          <section id="analytics-panel-diagnostico" aria-labelledby="analytics-tab-diagnostico" role="tabpanel" className={activeTab === "diagnostico" || printAll ? "space-y-8" : "hidden print:block print:space-y-8"}>
+            {(activeTab === "diagnostico" || printAll) && <>
             <details className="rounded-lg border border-neutral-200 bg-white p-4">
               <summary className="flex min-h-11 cursor-pointer items-center text-sm font-medium text-neutral-800">Todos os indicadores</summary>
               <div className="mt-4"><KpiCardGrid kpis={kpis} /></div>
             </details>
-            <Act4Action context={ctx} posts={postPerformance} tasks={tasks} funilLeads={funilLeads} />
+            <Act4Action context={ctx} posts={postPerformance} tasks={tasks} funilLeads={funilLeads} canManageTasks={canManageTasks} tasksUnavailable={sectionErrors.tasks} />
+            </>}
           </section>
         </>
       )}
       <footer className="text-xs text-neutral-400 pt-8 border-t border-neutral-100 print:pt-3">
         Atualizado em {ctx.generatedAt}
+        {!printAll && <p className="hidden print:block">Impressão das seções abertas. Use Exportar PDF para incluir todas as seções do relatório.</p>}
         <span className="hidden print:inline">
           {" "}· GA4 property {ctx.ga4PropertyId} · GSC {ctx.gscSiteUrl}
         </span>

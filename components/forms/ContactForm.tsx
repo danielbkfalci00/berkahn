@@ -15,7 +15,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { usePathname } from "next/navigation";
-import { getLeadAttribution, LEAD_ENDPOINT, WHATSAPP_URL } from "@/lib/contact";
+import { getLeadAttribution, submitLeadInput, WHATSAPP_URL } from "@/lib/contact";
 import { TrackedWhatsAppLink } from "@/components/layout/WhatsAppButton";
 import { trackEvent } from "@/lib/analytics";
 
@@ -139,12 +139,7 @@ export function ContactForm({
     trackEvent("form_submit", { ...contexto(), channel: "form" });
 
     try {
-      const response = await fetch(LEAD_ENDPOINT, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
+      const response = await submitLeadInput({
           name: formData.name,
           email: formData.email,
           phone: formData.phone,
@@ -155,8 +150,7 @@ export function ContactForm({
           ...getLeadAttribution(),
           website,
           startedAt,
-        }),
-      });
+        });
 
       const result = await response.json();
 

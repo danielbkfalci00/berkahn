@@ -4,6 +4,7 @@ import {
   countWords,
   progressBySlug,
   recommendationFor,
+  qualifiedLeadsPath,
 } from './lib/content-learning.mjs';
 
 assert.equal(countWords('# Título\nTexto com cinco palavras úteis.'), 6);
@@ -39,5 +40,9 @@ assert.equal(recommendationFor({
   retentionPct: 34,
   slug: 'retencao',
 })?.kind, 'retencao');
+
+const leadsPath = qualifiedLeadsPath('2026-09-01', '2026-09-20');
+assert.ok(leadsPath.includes('arquivado_em=is.null&anonimizado_em=is.null'));
+assert.ok(leadsPath.includes('criado_em=lt.2026-09-21T00%3A00%3A00Z'));
 
 console.log('✓ aprendizado de conteúdo: cenários determinísticos passaram');

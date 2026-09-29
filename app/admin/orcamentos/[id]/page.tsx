@@ -1,6 +1,6 @@
 import Link from "next/link"
 import { notFound } from "next/navigation"
-import { ArrowLeft, ExternalLink, Pencil, Archive } from "lucide-react"
+import { ArrowLeft, Pencil, Archive } from "lucide-react"
 import { createClient } from "@/lib/supabase/server"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -11,6 +11,7 @@ import { ArquivarButton } from "@/components/admin/orcamentos/ArquivarButton"
 import { BaixarPdfButton } from "@/components/admin/orcamentos/BaixarPdfButton"
 import { PADROES_ACABAMENTO, REGIMES_COMERCIAIS } from "@/lib/orcamento-estimativa-data"
 import type { Orcamento } from "@/types/orcamento-estimativa"
+import { isOrcamentoPdfCurrent } from "@/lib/orcamento-pdf-storage"
 
 export const dynamic = "force-dynamic"
 
@@ -46,6 +47,8 @@ export default async function OrcamentoDetalhePage({ params }: PageProps) {
     notFound()
   }
   const o = data as Orcamento
+  const pdfCurrent = isOrcamentoPdfCurrent(o)
+  const pdfLegacy = !o.pdf_revision_hash && !o.pdf_generated_at
 
   // Gera signed URL da hero (bucket privado) pra preview persistir entre reloads
   let heroPreviewUrl: string | null = null
@@ -82,6 +85,8 @@ export default async function OrcamentoDetalhePage({ params }: PageProps) {
               {o.cliente_nome}
             </h1>
             <p className="text-sm text-neutral-500 font-mono">{o.numero}</p>
+            {o.lead_id && <Link href={`/admin/leads/${o.lead_id}`} className="inline-flex min-h-11 items-center text-sm underline">Abrir lead vinculado</Link>}
+            {o.lead_id && o.status === "finalizado" && <Link href={`/admin/leads/${o.lead_id}?atendimento=envio&orcamento=${encodeURIComponent(o.numero)}#atendimento`} className="ml-3 inline-flex min-h-11 items-center text-sm underline">Registrar envio e próximo contato</Link>}
           </div>
           <div className="flex items-center gap-3">
             {o.status !== "arquivado" && (
@@ -228,7 +233,7 @@ export default async function OrcamentoDetalhePage({ params }: PageProps) {
               {o.status !== "arquivado" && (
                 <GerarPdfButton orcamentoId={o.id} />
               )}
-              {o.pdf_url && (
+              {o.pdf_storage_path && (
                 <div
                   className={
                     o.status !== "arquivado"
@@ -237,23 +242,14 @@ export default async function OrcamentoDetalhePage({ params }: PageProps) {
                   }
                 >
                   <p className="text-xs text-neutral-500 mb-2">
-                    {o.status === "arquivado"
-                      ? "PDF gerado antes de arquivar:"
-                      : "Última versão gerada:"}
+                    {pdfCurrent ? `PDF atualizado${o.pdf_generated_at ? ` · ${new Date(o.pdf_generated_at).toLocaleString("pt-BR")}` : ""}` : pdfLegacy ? "PDF do acervo: a correspondência com os dados atuais não foi verificada. Confira o conteúdo antes de enviar." : "O documento mudou após a geração. Gere um PDF atualizado antes de enviar."}
                   </p>
                   <div className="flex flex-wrap items-center gap-3">
-                    <BaixarPdfButton
-                      pdfUrl={o.pdf_url}
+                    {(pdfCurrent || pdfLegacy) && <BaixarPdfButton
+                      orcamentoId={o.id}
+                      label={pdfLegacy ? "Baixar PDF do acervo" : "Baixar PDF"}
                       filename={`Orcamento-${o.numero}.pdf`}
-                    />
-                    <a
-                      href={o.pdf_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 text-xs text-neutral-600 hover:text-neutral-900 hover:underline"
-                    >
-                      Abrir em nova aba <ExternalLink className="h-3 w-3" />
-                    </a>
+                    />}
                   </div>
                 </div>
               )}

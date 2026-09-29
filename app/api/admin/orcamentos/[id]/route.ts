@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server"
 import { createClient } from "@/lib/supabase/server"
 import { exigirSessao } from "@/lib/supabase/sessao"
+import { atualizarOrcamento, arquivarOrcamento, finalizarOrcamento } from "@/app/admin/orcamentos/actions"
 import type { OrcamentoUpdate } from "@/types/orcamento-estimativa"
 
 interface RouteContext {
@@ -39,16 +40,10 @@ export async function PATCH(request: Request, ctx: RouteContext) {
     return NextResponse.json({ error: "JSON inválido" }, { status: 400 })
   }
 
-  const { data, error } = await supabase
-    .from("orcamentos")
-    .update(body)
-    .eq("id", id)
-    .select()
-    .single()
-
-  if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 })
-  }
+  const result = body?.status === "finalizado" ? await finalizarOrcamento(id, body) : await atualizarOrcamento(id, body)
+  if (!result.ok) return NextResponse.json({ error: result.erro }, { status: 400 })
+  const { data, error } = await supabase.from("orcamentos").select("*").eq("id", id).single()
+  if (error) return NextResponse.json({ error: "Não foi possível reler o orçamento salvo" }, { status: 503 })
   return NextResponse.json({ data })
 }
 
@@ -57,15 +52,7 @@ export async function DELETE(_: Request, ctx: RouteContext) {
   if (barrado) return barrado
 
   const { id } = await ctx.params
-  const supabase = await createClient()
-
-  const { error } = await supabase
-    .from("orcamentos")
-    .update({ status: "arquivado" })
-    .eq("id", id)
-
-  if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 })
-  }
+  const result = await arquivarOrcamento(id)
+  if (!result.ok) return NextResponse.json({ error: result.erro }, { status: 400 })
   return NextResponse.json({ data: { id, status: "arquivado" } })
 }

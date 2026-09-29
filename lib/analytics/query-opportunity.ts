@@ -41,7 +41,7 @@ export interface MapaOportunidade {
   provavelmenteTruncado: boolean;
 }
 
-export function construirMapaOportunidade(queries: GscQuery[] | undefined): MapaOportunidade {
+export function construirMapaOportunidade(queries: GscQuery[] | undefined, coverage?: { possiblyTruncated: boolean }): MapaOportunidade {
   const todas = queries ?? [];
   const plotaveis = todas.filter((q) => q.impressions >= IMPRESSOES_MIN);
 
@@ -59,6 +59,6 @@ export function construirMapaOportunidade(queries: GscQuery[] | undefined): Mapa
     ganhoTotal: oportunidades.reduce((soma, q) => soma + q.ganhoEstimado, 0),
     // 20 e 15 eram os tetos antigos de fetch-gsc.mjs. Bater exatamente neles é
     // assinatura de truncamento, não de distribuição.
-    provavelmenteTruncado: todas.length === 20 || todas.length === 15,
+    provavelmenteTruncado: coverage?.possiblyTruncated ?? (todas.length === 20 || todas.length === 15),
   };
 }

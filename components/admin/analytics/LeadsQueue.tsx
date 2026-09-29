@@ -26,6 +26,10 @@ import {
   markLeadViewed,
   prepareLeadUpload,
   registerLeadActivity,
+  registerLeadAttendance,
+  updateLeadContact,
+  loadLeadActivities,
+  type LeadContactInput,
   setLeadArchived,
   setLeadNextAction,
   updateLeadOperations,
@@ -34,6 +38,8 @@ import {
   type LeadPreviewDetails,
 } from "@/app/admin/leads/actions";
 import { createClient } from "@/lib/supabase/client";
+import { normalizeLeadPhone } from "@/lib/contact";
+import { useUnsavedChanges } from "@/hooks/use-unsaved-changes";
 import type {
   AdminDataResult, AnalyticsLead, LeadArtifact, LeadPriority, LeadResponsible, LeadStatus,
 } from "@/types/analytics";
@@ -75,7 +81,7 @@ export type LeadListItem = Pick<
   AnalyticsLead,
   "id" | "nome" | "email" | "telefone" | "status" | "prioridade" |
   "responsavel" | "resumo_status" | "artifact_count" | "visualizado_em" | "proxima_acao_em"
->;
+> & { tipo_captacao: "contato" | "material" };
 
 interface LeadsQueueProps {
   initialLeads: LeadListItem[];
@@ -121,7 +127,7 @@ export function LeadsQueue({ initialLeads, allStageLeads, total, page, pageCount
   const filtersToggleRef = useRef<HTMLButtonElement>(null);
   const filterPanelRef = useRef<HTMLFormElement>(null);
   const previewTriggerRef = useRef<HTMLElement | null>(null);
-  const [, startTransition] = useTransition();
+  const [isPending, startTransition] = useTransition();
   const currentQuery = searchParams.toString();
   const selectedLeadId = selectedLead?.id ?? null;
 
@@ -197,16 +203,15 @@ export function LeadsQueue({ initialLeads, allStageLeads, total, page, pageCount
     setSuccess(null);
     setPendingLeadId(id);
     startTransition(async () => {
-      const result = await updateLeadStatus(id, status, reason);
-      if (!result.ok) {
-        setLeads(previous);
-        setStageLeads(previousStageLeads);
-        setSelectedLead(previousSelectedLead);
-        setError(result.error || "Não foi possível alterar o status.");
-      } else {
-        setSuccess("Status atualizado.");
-      }
-      setPendingLeadId(null);
+      try {
+        const result = await updateLeadStatus(id, status, reason);
+        if (!result.ok) throw new Error(result.error || "Não foi possível alterar a etapa.");
+        setSuccess("Etapa atualizada.");
+        router.refresh();
+      } catch (error) {
+        setLeads(previous); setStageLeads(previousStageLeads); setSelectedLead(previousSelectedLead);
+        setError(error instanceof Error ? error.message : "Falha de conexão. Tente novamente.");
+      } finally { setPendingLeadId(null); }
     });
   }
 
@@ -250,16 +255,16 @@ export function LeadsQueue({ initialLeads, allStageLeads, total, page, pageCount
 
   const kpiData = kpis.status === "ok" ? kpis.data : null;
   const qualificationRate = kpiData?.eligible ? Math.round((kpiData.qualified / kpiData.eligible) * 100) : null;
-  const activeFilterCount = ["q", "status", "canal", "segmento", "prioridade", "responsavel", "periodo", "vencida", "semResponsavel", "semAcao", "arquivados"]
+  const activeFilterCount = ["q", "status", "canal", "segmento", "prioridade", "responsavel", "periodo", "vencida", "semResponsavel", "semAcao", "arquivados", "meus", "situacao", "captacao"]
     .filter((key) => Boolean(searchParams.get(key))).length;
   const selectedStatus = pendingFilterHref
     ? new URLSearchParams(pendingFilterHref.slice(1)).get("status")
     : searchParams.get("status");
   const localStageMode = stageLeads !== null && view === "inbox" &&
-    [...searchParams.keys()].every((key) => key === "view" || key === "status" || key === "page");
+    [...searchParams.keys()].every((key) => key === "view" || key === "status" || key === "page" || key === "situacao");
   const localPage = Math.max(1, Number.parseInt(searchParams.get("page") || "1", 10) || 1);
   const stageMatches = localStageMode
-    ? stageLeads.filter((lead) => !searchParams.get("status") || lead.status === searchParams.get("status"))
+    ? stageLeads.filter((lead) => searchParams.get("status") ? lead.status === searchParams.get("status") : searchParams.get("situacao") === "todos" || !["convertido", "desqualificado"].includes(lead.status))
     : null;
   const visibleLeads = stageMatches?.slice((localPage - 1) * 25, localPage * 25) ?? leads;
   const visibleTotal = stageMatches?.length ?? total;
@@ -307,7 +312,7 @@ export function LeadsQueue({ initialLeads, allStageLeads, total, page, pageCount
   }
 
   return (
-    <div className="mx-auto max-w-7xl space-y-5">
+    <div aria-busy={isPending} className="mx-auto max-w-7xl space-y-5">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <p className="text-sm text-neutral-500">Priorize o próximo contato.</p>
         <button
@@ -320,10 +325,10 @@ export function LeadsQueue({ initialLeads, allStageLeads, total, page, pageCount
       </div>
 
       <div className="grid grid-cols-3 gap-3 border-y border-neutral-300 py-3 text-sm sm:flex sm:flex-wrap sm:gap-x-6 sm:gap-y-2">
-        <Metric label="Recebidos · 28d" value={kpiData?.received ?? "—"} />
+        <Metric label="Solicitações · 28d" value={kpiData?.received ?? "—"} />
         <Metric label="Novos" value={kpiData?.new ?? "—"} />
         <span className="hidden sm:contents"><Metric label="Qualificados" value={kpiData?.qualified ?? "—"} /><Metric label="Convertidos" value={kpiData?.converted ?? "—"} /></span>
-        <Metric label="Taxa" value={qualificationRate === null ? "—" : `${qualificationRate}%`} />
+        <Metric label="Qualificação · 28d" value={qualificationRate === null ? "—" : `${qualificationRate}%`} />
       </div>
 
       {kpis.status === "unavailable" && (
@@ -332,13 +337,14 @@ export function LeadsQueue({ initialLeads, allStageLeads, total, page, pageCount
         </p>
       )}
 
+      <div className="flex flex-wrap gap-2" aria-label="Filas de atendimento"><StageChip href="?view=inbox" active={!activeFilterCount}>Em aberto</StageChip><StageChip href="?meus=1" active={searchParams.get("meus") === "1"}>Meus leads</StageChip><StageChip href="?vencida=1" active={searchParams.get("vencida") === "1"}>Vencidos</StageChip><StageChip href="?semResponsavel=1" active={searchParams.get("semResponsavel") === "1"}>Sem responsável</StageChip><StageChip href="?semAcao=1" active={searchParams.get("semAcao") === "1"}>Sem próxima ação</StageChip></div>
       <div className="flex items-center gap-1 border-b border-neutral-200" aria-label="Visualização dos leads">
         <ViewTab href={withView(searchParams, "inbox")} active={view === "inbox"}><LayoutList className="h-4 w-4" /> Inbox</ViewTab>
         <ViewTab href={withView(searchParams, "kanban")} active={view === "kanban"}><GripVertical className="h-4 w-4" /> Kanban</ViewTab>
       </div>
 
       {view === "inbox" && <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 md:hidden" aria-label="Filtrar por etapa">
-        <StageChip href={withStatus(searchParams, null)} active={!selectedStatus} local={localStageMode} onNavigate={navigateStage}>Todos</StageChip>
+        <StageChip href={withStatus(searchParams, null)} active={!selectedStatus && searchParams.get("situacao") === "todos"} local={localStageMode} onNavigate={navigateStage}>Todos</StageChip>
         {STATUS.map((item) => <StageChip key={item.value} href={withStatus(searchParams, item.value)} active={selectedStatus === item.value} local={localStageMode} onNavigate={navigateStage}>{item.label}</StageChip>)}
       </div>}
       {pendingFilterHref && <p role="status" className="text-xs text-neutral-500">Atualizando lista de leads…</p>}
@@ -394,9 +400,12 @@ export function LeadsQueue({ initialLeads, allStageLeads, total, page, pageCount
       <form key={currentQuery} ref={filterPanelRef} onSubmit={applyFilters} id="lead-filters" role={filtersOpen ? "dialog" : undefined} aria-modal={filtersOpen ? true : undefined} aria-label={filtersOpen ? "Filtrar leads" : undefined} className={`${filtersOpen ? "grid" : "hidden"} fixed inset-x-3 bottom-[calc(5rem+env(safe-area-inset-bottom))] z-50 max-h-[70vh] gap-3 overflow-y-auto rounded-lg border border-neutral-200 bg-white p-4 shadow-2xl md:static md:grid md:max-h-none md:grid-cols-2 md:shadow-none lg:grid-cols-4 xl:grid-cols-5`}>
         <div className="flex items-center justify-between md:hidden"><p className="text-sm font-semibold text-neutral-900">Filtros</p><button type="button" onClick={closeFilters} aria-label="Fechar filtros" className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-md text-neutral-500 hover:text-neutral-900"><X className="h-5 w-5" /></button></div>
         <input type="hidden" name="view" value={view} />
-        <input name="q" defaultValue={searchParams.get("q") || ""} placeholder="Nome, telefone ou email" className={`${INPUT_CLASS} md:col-span-2`} />
-        <FilterSelect name="status" label="Todos os status" options={STATUS} current={searchParams.get("status")} />
+        {searchParams.get("meus") === "1" && <input type="hidden" name="meus" value="1" />}
+        <FilterSelect name="situacao" label="Em aberto" options={[{value:"todos",label:"Todos, inclusive encerrados"}]} current={searchParams.get("situacao")} />
+        <input name="q" defaultValue={searchParams.get("q") || ""} aria-label="Buscar por nome, telefone ou email" placeholder="Nome, telefone ou email" className={`${INPUT_CLASS} md:col-span-2`} />
+        <FilterSelect name="status" label="Todas as etapas da fila" options={STATUS} current={searchParams.get("status")} />
         <FilterSelect name="canal" label="Todos os canais" options={[{value:"form",label:"Formulário"},{value:"whatsapp",label:"WhatsApp"},{value:"telefone",label:"Telefone"},{value:"email",label:"Email"},{value:"indicacao",label:"Indicação"},{value:"manual",label:"Manual"}]} current={searchParams.get("canal")} />
+        <FilterSelect name="captacao" label="Todas as solicitações" options={[{value:"contato",label:"Contato comercial"},{value:"material",label:"Download de material"}]} current={searchParams.get("captacao")} />
         <FilterSelect name="segmento" label="Todos os segmentos" options={[{value:"residencial",label:"Residencial"},{value:"comercial",label:"Comercial"},{value:"nao_definido",label:"Não definido"}]} current={searchParams.get("segmento")} />
         <FilterSelect name="prioridade" label="Toda prioridade" options={[{value:"urgente",label:"Urgente"},{value:"alta",label:"Alta"},{value:"normal",label:"Normal"}]} current={searchParams.get("prioridade")} />
         <FilterSelect name="responsavel" label="Toda a equipe" options={responsibles.map((item) => ({ value: item.id, label: item.nome }))} current={searchParams.get("responsavel")} />
@@ -411,7 +420,7 @@ export function LeadsQueue({ initialLeads, allStageLeads, total, page, pageCount
 
       {view === "kanban" ? (
         <>
-          {total > leads.length && <p className="rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-900">O Kanban mostra os {leads.length} leads mais recentes deste filtro. Refine a busca para operar os demais.</p>}
+          {total > leads.length && <p className="rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-900">Esta página do Kanban mostra {leads.length} de {total} leads, por próxima ação e prioridade. Use a paginação para ver os demais.</p>}
           <p className="text-xs text-neutral-500 md:hidden">Deslize para ver as etapas. Toque no card para abrir a prévia.</p>
           <LeadKanban leads={leads} pendingLeadId={pendingLeadId} onStatusChange={changeStatus} onOpen={openLead} />
         </>
@@ -433,7 +442,7 @@ export function LeadsQueue({ initialLeads, allStageLeads, total, page, pageCount
         success={success}
       />
 
-      {view === "inbox" && <div className="flex flex-wrap items-center justify-between gap-2 text-sm text-neutral-600">
+      {<div className="flex flex-wrap items-center justify-between gap-2 text-sm text-neutral-600">
         <span>{visibleTotal} registro{visibleTotal === 1 ? "" : "s"}</span>
         <div className="flex items-center gap-3"><PageLink page={visiblePage - 1} disabled={visiblePage <= 1}><ChevronLeft className="h-4 w-4" /> Anterior</PageLink><span>{visiblePage} / {Math.max(visiblePageCount, 1)}</span><PageLink page={visiblePage + 1} disabled={visiblePage >= visiblePageCount}>Próxima <ChevronRight className="h-4 w-4" /></PageLink></div>
       </div>}
@@ -471,15 +480,15 @@ function withStatus(params: URLSearchParams, status: LeadStatus | null): string 
   const next = new URLSearchParams(params.toString());
   next.set("view", "inbox");
   next.delete("page");
-  if (status) next.set("status", status); else next.delete("status");
+  if (status) next.set("status", status); else { next.delete("status"); next.set("situacao", "todos"); }
   return `?${next.toString()}`;
 }
 
-function StageChip({ href, active, local, onNavigate, children }: { href: string; active: boolean; local: boolean; onNavigate: (href: string) => void; children: React.ReactNode }) {
+function StageChip({ href, active, local, onNavigate, children }: { href: string; active: boolean; local?: boolean; onNavigate?: (href: string) => void; children: React.ReactNode }) {
   return <Link href={href} onClick={(event) => {
     if (!active && event.button === 0 && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey) {
       if (local) event.preventDefault();
-      onNavigate(href);
+      onNavigate?.(href);
     }
   }} aria-current={active ? "page" : undefined} className={`inline-flex min-h-11 shrink-0 items-center rounded-full border px-3 text-xs font-medium ${active ? "border-neutral-950 bg-neutral-950 text-white" : "border-neutral-200 bg-white text-neutral-600"}`}>{children}</Link>;
 }
@@ -502,6 +511,7 @@ function LeadQuickView({ lead, preview, onClose, onRestoreFocus, onStatusChange,
   error: string | null;
   success: string | null;
 }) {
+  const params = useSearchParams();
   const [dragY, setDragY] = useState(0);
   const dragStart = useRef<{ y: number; at: number } | null>(null);
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -537,8 +547,7 @@ function LeadQuickView({ lead, preview, onClose, onRestoreFocus, onStatusChange,
     }
   }
 
-  const phoneDigits = lead?.telefone?.replace(/\D/g, "") || "";
-  const whatsappDigits = phoneDigits.length === 10 || phoneDigits.length === 11 ? `55${phoneDigits}` : phoneDigits;
+  const phoneDigits = normalizeLeadPhone(lead?.telefone);
   const details = preview?.status === "ok" ? preview.data : null;
   return <DialogPrimitive.Root open={Boolean(lead)} onOpenChange={(open) => { if (!open) onClose(); }}>
     <DialogPrimitive.Portal>
@@ -556,8 +565,8 @@ function LeadQuickView({ lead, preview, onClose, onRestoreFocus, onStatusChange,
         </header>
         <div className="min-h-0 flex-1 space-y-6 overflow-y-auto px-5 py-5">
           <div className="grid grid-cols-3 gap-2 max-[360px]:grid-cols-2">
-            {phoneDigits && <a href={`tel:${phoneDigits}`} className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-md border border-neutral-300 text-sm font-medium focus-visible:outline-2 focus-visible:outline-neutral-900"><Phone className="h-4 w-4" /> Ligar</a>}
-            {phoneDigits && <a href={`https://wa.me/${whatsappDigits}`} target="_blank" rel="noreferrer" className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-md bg-neutral-950 text-sm font-medium text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900 max-[360px]:order-first max-[360px]:col-span-2"><MessageCircle className="h-4 w-4" /> WhatsApp</a>}
+            {phoneDigits && <a href={`tel:+${phoneDigits}`} className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-md border border-neutral-300 text-sm font-medium focus-visible:outline-2 focus-visible:outline-neutral-900"><Phone className="h-4 w-4" /> Ligar</a>}
+            {phoneDigits && <a href={`https://wa.me/${phoneDigits}`} target="_blank" rel="noreferrer" className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-md bg-neutral-950 text-sm font-medium text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900 max-[360px]:order-first max-[360px]:col-span-2"><MessageCircle className="h-4 w-4" /> WhatsApp</a>}
             {lead.email && <a href={`mailto:${lead.email}`} className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-md border border-neutral-300 text-sm font-medium focus-visible:outline-2 focus-visible:outline-neutral-900"><Mail className="h-4 w-4" /> Email</a>}
           </div>
           <section className="space-y-3 border-b border-neutral-200 pb-5">
@@ -587,7 +596,7 @@ function LeadQuickView({ lead, preview, onClose, onRestoreFocus, onStatusChange,
           </section>
         </div>
         <footer className="border-t border-neutral-200 bg-white px-5 pb-[calc(1.25rem+env(safe-area-inset-bottom))] pt-4 md:pb-5">
-          <Link href={`/admin/leads/${lead.id}`} onClick={onClose} className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-md border border-neutral-300 text-sm font-medium text-neutral-900 hover:bg-neutral-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900">Ver ficha completa <ChevronRight className="h-4 w-4" /></Link>
+          <Link href={`/admin/leads/${lead.id}?returnTo=${encodeURIComponent(`/admin/leads?${params.toString()}`)}`} onClick={onClose} className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-md border border-neutral-300 text-sm font-medium text-neutral-900 hover:bg-neutral-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900">Ver ficha completa <ChevronRight className="h-4 w-4" /></Link>
         </footer>
       </DialogPrimitive.Content>}
     </DialogPrimitive.Portal>
@@ -595,16 +604,17 @@ function LeadQuickView({ lead, preview, onClose, onRestoreFocus, onStatusChange,
 }
 
 function LeadInbox({ leads, pendingLeadId, onStatusChange, onOpen }: { leads: LeadListItem[]; pendingLeadId: string | null; onStatusChange: (id: string, status: LeadStatus) => void; onOpen: (lead: LeadListItem, trigger: HTMLElement) => void }) {
+  const params = useSearchParams();
   return <div className="overflow-hidden rounded-lg border border-neutral-200 bg-white">
     <div className="hidden grid-cols-[1fr_1.4fr_.75fr_.85fr_.8fr_.25fr] gap-4 border-b bg-neutral-50 px-4 py-2 text-[11px] font-medium uppercase tracking-wider text-neutral-500 lg:grid">
-      <span>Contato</span><span>Situação</span><span>Responsável</span><span>Próxima ação</span><span>Status</span><span />
+      <span>Contato</span><span>Resumo</span><span>Responsável</span><span>Próxima ação</span><span>Etapa</span><span />
     </div>
     {leads.length === 0 ? <p className="px-4 py-10 text-center text-sm text-neutral-500">Nenhum lead corresponde aos filtros.</p> : leads.map((lead) => {
       const priority = priorityMeta(lead.prioridade);
       // Mesma regra do filtro e do push (028): lead encerrado não tem ação vencida.
       const overdue = Boolean(lead.proxima_acao_em && new Date(lead.proxima_acao_em) < new Date() && lead.status !== "convertido" && lead.status !== "desqualificado");
       return <article key={lead.id} className="relative grid gap-3 border-b py-4 pl-4 pr-10 text-sm transition-colors last:border-0 hover:bg-neutral-50 focus-within:bg-neutral-50 lg:grid-cols-[1fr_1.4fr_.75fr_.85fr_.8fr_.25fr] lg:items-center lg:pr-4">
-        <Link href={`/admin/leads/${lead.id}`} prefetch={false} onClick={(event) => {
+        <Link href={`/admin/leads/${lead.id}?returnTo=${encodeURIComponent(`/admin/leads?${params.toString()}`)}`} prefetch={false} onClick={(event) => {
           if (event.button === 0 && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey) {
             event.preventDefault();
             onOpen(lead, event.currentTarget);
@@ -612,7 +622,7 @@ function LeadInbox({ leads, pendingLeadId, onStatusChange, onOpen }: { leads: Le
         }} aria-label={`Pré-visualizar ${lead.nome}`} className="absolute inset-0 z-10 rounded-sm focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-neutral-900" />
         <div className="min-w-0">
           <div className="flex items-center gap-2"><p className="truncate font-semibold text-neutral-900">{lead.nome}</p>{!lead.visualizado_em && <span className="h-2 w-2 shrink-0 rounded-full bg-blue-600" title="Não visualizado" />}</div>
-          <p className="truncate text-xs text-neutral-500">{lead.email || lead.telefone || "Sem contato"}</p>
+          <p className="truncate text-xs text-neutral-500">{lead.email || lead.telefone || "Sem contato"}</p>{lead.tipo_captacao === "material" && <p className="mt-1 text-xs text-neutral-500">Download de material</p>}
           {lead.resumo_status && <p className="mt-1 line-clamp-1 text-xs text-neutral-600 lg:hidden">{lead.resumo_status}</p>}
           <div className="mt-2 flex flex-wrap gap-2 lg:hidden"><span className={`rounded-full border px-2 py-0.5 text-[10px] font-medium ${priority.className}`}>{priority.label}</span><span className="rounded-full border border-neutral-200 px-2 py-0.5 text-[10px] font-medium text-neutral-600">{STATUS.find((item) => item.value === lead.status)?.label}</span>{lead.artifact_count > 0 && <span className="inline-flex items-center gap-1 text-[10px] text-neutral-500"><FileText className="h-3 w-3" />{lead.artifact_count}</span>}</div>
         </div>
@@ -655,10 +665,11 @@ function KanbanColumn({ status, leads, pendingLeadId, onStatusChange, onOpen }: 
 }
 
 function KanbanCard({ lead, disabled, onStatusChange, onOpen }: { lead: LeadListItem; disabled: boolean; onStatusChange: (id: string, status: LeadStatus) => void; onOpen: (lead: LeadListItem, trigger: HTMLElement) => void }) {
+  const params = useSearchParams();
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({ id: lead.id, data: { status: lead.status }, disabled });
   const priority = priorityMeta(lead.prioridade);
   return <article ref={setNodeRef} style={{ transform: CSS.Translate.toString(transform) }} className={`relative rounded-md border border-neutral-200 bg-white p-3 shadow-sm hover:border-neutral-400 focus-within:border-neutral-900 ${isDragging ? "z-20 opacity-70 shadow-lg" : ""}`}>
-    <Link href={`/admin/leads/${lead.id}`} prefetch={false} onClick={(event) => {
+    <Link href={`/admin/leads/${lead.id}?returnTo=${encodeURIComponent(`/admin/leads?${params.toString()}`)}`} prefetch={false} onClick={(event) => {
       if (event.button === 0 && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey) {
         event.preventDefault();
         onOpen(lead, event.currentTarget);
@@ -676,7 +687,7 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
 }
 
 function FilterSelect({ name, label, options, current }: { name: string; label: string; options: Array<{value:string;label:string}>; current: string | null }) {
-  return <select name={name} defaultValue={current || ""} className={INPUT_CLASS}><option value="">{label}</option>{options.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}</select>;
+  return <select aria-label={label} name={name} defaultValue={current || ""} className={INPUT_CLASS}><option value="">{label}</option>{options.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}</select>;
 }
 
 function PageLink({ page, disabled, children }: { page: number; disabled: boolean; children: React.ReactNode }) {
@@ -716,8 +727,9 @@ export function LeadDetail({
   responsibles,
   contextLinks,
   privacyPanel,
+  hasMoreActivities = false, sectionErrors = [],
 }: {
-  lead: AnalyticsLead;
+  lead: AnalyticsLead & { tipo_captacao?: "contato" | "material" };
   activities: LeadActivity[];
   budgets: LinkedCommercialRecord[];
   proposals: LinkedCommercialRecord[];
@@ -726,125 +738,179 @@ export function LeadDetail({
   contextLinks: LeadContextLinks;
   /** Painel LGPD; a página só passa para owner. */
   privacyPanel?: React.ReactNode;
+  hasMoreActivities?: boolean;
+  sectionErrors?: string[];
 }) {
   const router = useRouter();
-  const [status, setStatus] = useState(lead.status);
+  const params = useSearchParams();
+  const sendingBudget = params.get("atendimento") === "envio";
+  const [status, setStatus] = useState<LeadStatus>(sendingBudget ? "proposta_enviada" : lead.status);
   const [reason, setReason] = useState(lead.motivo_desqualificacao || "");
-  const [note, setNote] = useState("");
-  const [activityType, setActivityType] = useState<"nota" | "contato">("contato");
-  const [nextAction, setNextAction] = useState(isoToLocalInput(lead.proxima_acao_em));
+  const [note, setNote] = useState(sendingBudget ? `Orçamento ${params.get("orcamento") || ""} enviado.`.trim() : "");
+  const [activityType, setActivityType] = useState<"nota" | "contato" | "agendamento">("contato");
+  const [initialNextAction] = useState(() => lead.proxima_acao_em && Date.parse(lead.proxima_acao_em) > Date.now() ? isoToLocalInput(lead.proxima_acao_em) : "");
+  const [nextAction, setNextAction] = useState(initialNextAction);
   const [priority, setPriority] = useState<LeadPriority>(lead.prioridade);
   const [responsibleId, setResponsibleId] = useState(lead.responsavel_id || "");
   const [summary, setSummary] = useState(lead.resumo_status || "");
+  const originalContact: LeadContactInput = { nome: lead.nome, email: lead.email || "", telefone: lead.telefone || "", segmento: lead.segmento, tipoProjeto: lead.tipo_projeto || "", empresa: lead.empresa || "", cargo: lead.cargo || "" };
+  const [contact, setContact] = useState(originalContact);
+  const [editingContact, setEditingContact] = useState(false);
+  const [duplicates, setDuplicates] = useState<NonNullable<Awaited<ReturnType<typeof findLeadDuplicates>>["duplicates"]>>([]);
+  const [timeline, setTimeline] = useState(activities);
+  const [hasMore, setHasMore] = useState(hasMoreActivities);
+  const [loadingHistory, setLoadingHistory] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
+  const [savedAttendance, setSavedAttendance] = useState(false);
+  const attendanceDirty = !savedAttendance && Boolean(note || status !== lead.status || nextAction !== initialNextAction || reason !== (lead.motivo_desqualificacao || ""));
+  const operationsDirty = priority !== lead.prioridade || responsibleId !== (lead.responsavel_id || "") || summary !== (lead.resumo_status || "");
+  const contactDirty = editingContact && JSON.stringify(contact) !== JSON.stringify(originalContact);
+  const confirmLeave = useUnsavedChanges(attendanceDirty || operationsDirty || contactDirty);
 
-  useEffect(() => {
-    if (!lead.visualizado_em) void markLeadViewed(lead.id);
-  }, [lead.id, lead.visualizado_em]);
+  useEffect(() => { if (!lead.visualizado_em) void markLeadViewed(lead.id); }, [lead.id, lead.visualizado_em]);
+  useEffect(() => { setTimeline(activities); setHasMore(hasMoreActivities); }, [activities, hasMoreActivities]);
 
   function run(action: () => Promise<{ ok: boolean; error?: string }>, onSuccess?: () => void) {
-    setError(null);
-    setSuccess(null);
+    setError(null); setSuccess(null);
     startTransition(async () => {
-      const result = await action();
-      if (!result.ok) {
-        setError(result.error || "Não foi possível concluir a ação.");
-        return;
-      }
-      onSuccess?.();
-      setSuccess("Alterações salvas.");
+      try {
+        const result = await action();
+        if (!result.ok) { setError(result.error || "Não foi possível concluir a ação."); return; }
+        onSuccess?.(); setSuccess("Alterações salvas."); router.refresh();
+      } catch { setError("Não foi possível salvar. Suas alterações continuam aqui para tentar novamente."); }
     });
   }
 
-  const phoneDigits = lead.telefone?.replace(/\D/g, "") || "";
-  // wa.me exige DDI; telefone digitado no formulário chega como (11) 99999-8888.
-  const whatsappDigits = phoneDigits.length === 10 || phoneDigits.length === 11 ? `55${phoneDigits}` : phoneDigits;
-  const utmEntries = Object.entries(lead.utm || {}).filter(([, value]) => value);
+  async function olderActivities() {
+    const last = timeline.at(-1);
+    if (!last) return;
+    setLoadingHistory(true);
+    try {
+      const result = await loadLeadActivities(lead.id, { createdAt: last.created_at, id: last.id });
+      if (!result.ok) { setError(result.error || "Histórico indisponível."); return; }
+      setTimeline((current) => [...current, ...result.activities.filter((row) => !current.some((old) => old.id === row.id))]);
+      setHasMore(result.hasMore);
+    } catch { setError("Não foi possível carregar as atividades anteriores."); }
+    finally { setLoadingHistory(false); }
+  }
 
+  const phoneDigits = normalizeLeadPhone(lead.telefone);
+  const terminal = status === "convertido" || status === "desqualificado";
+  const utmEntries = Object.entries(lead.utm || {}).filter(([, value]) => value);
+  const rawBack = params.get("returnTo");
+  const backPath = rawBack?.startsWith("/admin/leads?") ? rawBack : "/admin/leads";
   return (
     <div className="mx-auto max-w-6xl space-y-5">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <Link href="/admin/leads" className="inline-flex min-h-11 items-center text-sm text-neutral-500 hover:text-neutral-900">← Voltar para leads</Link>
+          <Link href={backPath} className="inline-flex min-h-11 items-center text-sm text-neutral-500 hover:text-neutral-900">← Voltar para leads</Link>
           <h1 className="mt-2 text-2xl font-semibold text-neutral-900">{lead.nome}</h1>
-          <p className="text-sm text-neutral-500">Recebido em {new Intl.DateTimeFormat("pt-BR", { dateStyle: "medium", timeStyle: "short" }).format(new Date(lead.criado_em))}</p>
-          <p className={`mt-3 inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm ${lead.proxima_acao_em && new Date(lead.proxima_acao_em) < new Date() ? "bg-red-50 font-medium text-red-800" : "bg-neutral-100 text-neutral-700"}`}>
-            <Clock3 className="h-4 w-4" /> Próxima ação: {lead.proxima_acao_em ? new Intl.DateTimeFormat("pt-BR", { dateStyle: "short", timeStyle: "short" }).format(new Date(lead.proxima_acao_em)) : "não agendada"}
-          </p>
+          <p className="text-sm text-neutral-500">Recebido em {new Intl.DateTimeFormat("pt-BR", { dateStyle: "medium", timeStyle: "short" }).format(new Date(lead.criado_em))} · {STATUS.find((item) => item.value === lead.status)?.label}</p>
+          <p className={`mt-3 inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm ${lead.proxima_acao_em && new Date(lead.proxima_acao_em) < new Date() && !["convertido", "desqualificado"].includes(lead.status) ? "bg-red-50 font-medium text-red-800" : "bg-neutral-100 text-neutral-700"}`}><Clock3 className="h-4 w-4" /> Próxima ação: {lead.proxima_acao_em ? new Intl.DateTimeFormat("pt-BR", { dateStyle: "short", timeStyle: "short" }).format(new Date(lead.proxima_acao_em)) : "não agendada"}</p>
         </div>
         <div className="grid w-full grid-cols-3 gap-2 sm:flex sm:w-auto sm:flex-wrap">
-          {lead.telefone && <a href={`tel:${phoneDigits}`} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-neutral-300 bg-white px-3 text-sm font-medium"><Phone className="h-4 w-4" /> Ligar</a>}
-          {lead.telefone && <a href={`https://wa.me/${whatsappDigits}`} target="_blank" rel="noreferrer" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md bg-neutral-950 px-3 text-sm font-medium text-white"><MessageCircle className="h-4 w-4" /> WhatsApp</a>}
+          {phoneDigits && <a href={`tel:+${phoneDigits}`} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-neutral-300 bg-white px-3 text-sm font-medium"><Phone className="h-4 w-4" /> Ligar</a>}
+          {phoneDigits && <a href={`https://wa.me/${phoneDigits}`} target="_blank" rel="noreferrer" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md bg-neutral-950 px-3 text-sm font-medium text-white"><MessageCircle className="h-4 w-4" /> WhatsApp</a>}
           {lead.email && <a href={`mailto:${lead.email}`} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-neutral-300 bg-white px-3 text-sm font-medium"><Mail className="h-4 w-4" /> Email</a>}
         </div>
       </div>
-
       {error && <p role="alert" className="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p>}
       {success && <p role="status" className="rounded-md border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-800">{success}</p>}
-
+      {sectionErrors.map((message) => <p key={message} role="alert" className="rounded border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">{message}</p>)}
       <div className="grid gap-6 xl:grid-cols-[1.1fr_.9fr]">
-        <div className="order-2 space-y-5 xl:order-1">
-          <details className="rounded-lg border border-neutral-200 bg-white p-4 sm:p-5">
-            <summary className="flex min-h-11 cursor-pointer items-center font-medium text-neutral-900">Contato e contexto</summary>
-            <dl className="mt-4 grid gap-4 text-sm sm:grid-cols-2">
-              <Info label="Telefone" value={lead.telefone} /><Info label="Email" value={lead.email} />
-              <Info label="Segmento" value={lead.segmento.replace("nao_definido", "não definido")} /><Info label="Canal" value={lead.canal} />
-              <Info label="Tipo de projeto" value={lead.tipo_projeto} /><Info label="Empresa / cargo" value={[lead.empresa, lead.cargo].filter(Boolean).join(" · ") || null} />
-              <Info label="Página de conversão" value={lead.pagina_origem} /><Info label="Landing page" value={lead.landing_page} />
-              <Info label="CTA" value={lead.cta_location} />
-              <div className="min-w-0"><dt className="text-xs font-medium uppercase tracking-wide text-neutral-400">Post / pauta</dt><dd className="mt-1 space-y-1 text-sm">{contextLinks.post && <Link href={contextLinks.post.href} className="block break-words text-neutral-800 underline">{contextLinks.post.label}</Link>}{contextLinks.pauta && <Link href={contextLinks.pauta.href} className="block break-words text-neutral-800 underline">{contextLinks.pauta.label}</Link>}{!contextLinks.post && !contextLinks.pauta && "—"}</dd></div>
-              <Info label="Referrer" value={lead.referrer} /><Info label="UTMs" value={utmEntries.map(([key, value]) => `${key}: ${value}`).join(" · ") || null} />
-            </dl>
-            {lead.mensagem && <p className="mt-5 whitespace-pre-wrap rounded-md bg-neutral-50 p-4 text-sm text-neutral-700">{lead.mensagem}</p>}
-          </details>
-
-          <details className="rounded-lg border border-neutral-200 bg-white p-4 sm:p-5">
-            <summary className="flex min-h-11 cursor-pointer items-center font-medium text-neutral-900">Linha do tempo</summary>
-            <form className="mt-4 grid gap-3" onSubmit={(event) => { event.preventDefault(); run(() => registerLeadActivity(lead.id, activityType, note), () => setNote("")); }}>
-              <select value={activityType} onChange={(event) => setActivityType(event.target.value as "nota" | "contato")} className={INPUT_CLASS}><option value="contato">Contato realizado</option><option value="nota">Nota</option></select>
-              <textarea required value={note} onChange={(event) => setNote(event.target.value)} placeholder="Registre o resultado do contato ou uma nota operacional" className={`${INPUT_CLASS} min-h-24 py-2`} />
-              <button disabled={isPending} className="min-h-11 w-fit rounded-md bg-neutral-900 px-4 py-2 text-sm text-white disabled:opacity-50">Registrar atividade</button>
+        <div className="space-y-5">
+          <section id="atendimento" className="rounded-lg border border-neutral-200 bg-white p-5">
+            <h2 className="font-medium text-neutral-900">Registrar atendimento</h2>
+            <form className="mt-4" onSubmit={(event) => {
+              event.preventDefault();
+              run(() => activityType === "agendamento" ? setLeadNextAction(lead.id, localInputToIso(nextAction)) : activityType === "nota" ? registerLeadActivity(lead.id, "nota", note) : registerLeadAttendance(lead.id, { nota: note, status, proximaAcaoEm: localInputToIso(nextAction), motivo: reason }), () => { setNote(""); setSavedAttendance(true); if (terminal) setNextAction(""); });
+            }}>
+              <fieldset disabled={isPending} className="space-y-3" onChange={() => setSavedAttendance(false)}>
+                <Field label="Tipo de registro"><select value={activityType} onChange={(event) => setActivityType(event.target.value as "nota" | "contato" | "agendamento")} className={INPUT_CLASS}><option value="contato">Contato realizado</option><option value="nota">Nota interna</option><option value="agendamento" disabled={["convertido", "desqualificado"].includes(lead.status)}>Agendar sem contato realizado</option></select></Field>
+                {activityType !== "agendamento" && <Field label={activityType === "contato" ? "Resultado do contato" : "Nota"}><textarea required maxLength={4000} value={note} onChange={(event) => setNote(event.target.value)} placeholder="O que ficou combinado?" className={`${INPUT_CLASS} min-h-24 py-2`} /></Field>}
+                {activityType === "contato" && <>
+                  <Field label="Etapa após o contato"><select value={status} onChange={(event) => setStatus(event.target.value as LeadStatus)} className={INPUT_CLASS}>{STATUS.map((item) => <option key={item.value} value={item.value}>{item.label}</option>)}</select></Field>
+                  {status === "desqualificado" && <Field label="Motivo da desqualificação"><textarea required maxLength={1000} value={reason} onChange={(event) => setReason(event.target.value)} className={`${INPUT_CLASS} min-h-20 py-2`} /></Field>}
+                  {!terminal ? <Field label="Próximo contato (deixe vazio para concluir a pendência)"><input type="datetime-local" value={nextAction} onChange={(event) => setNextAction(event.target.value)} className={INPUT_CLASS} /></Field> : <p className="text-xs text-neutral-500">Ao encerrar, a próxima ação será concluída.</p>}
+                </>}
+                {activityType === "agendamento" && <Field label="Data do próximo contato (vazio remove agendamento)"><input type="datetime-local" value={nextAction} onChange={(event) => setNextAction(event.target.value)} className={INPUT_CLASS} /></Field>}
+                <button className="min-h-11 rounded-md bg-neutral-950 px-4 text-sm text-white disabled:opacity-50">{isPending ? "Salvando…" : activityType === "agendamento" ? "Salvar agendamento" : activityType === "nota" ? "Salvar nota" : "Salvar atendimento e próximo passo"}</button>
+              </fieldset>
             </form>
-            <ol className="mt-6 space-y-4 border-l border-neutral-200 pl-5">
-              {activities.length === 0 ? <li className="text-sm text-neutral-500">Nenhuma atividade registrada.</li> : activities.map((activity) => (
-                <li key={activity.id} className="relative text-sm"><span className="absolute -left-[25px] top-1 h-2 w-2 rounded-full bg-neutral-900" /><p className="font-medium text-neutral-900">{activity.action}</p><p className="text-xs text-neutral-500">{new Intl.DateTimeFormat("pt-BR", { dateStyle: "short", timeStyle: "short" }).format(new Date(activity.created_at))} · {activity.user_name || "Admin"}</p>{typeof activity.details?.nota === "string" && <p className="mt-1 whitespace-pre-wrap text-neutral-700">{activity.details.nota}</p>}</li>
-              ))}
+          </section>
+          <section className="rounded-lg border border-neutral-200 bg-white p-5">
+            <h2 className="font-medium text-neutral-900">Linha do tempo</h2>
+            <ol className="mt-5 space-y-4 border-l border-neutral-200 pl-5">
+              {timeline.length === 0 ? <li className="text-sm text-neutral-500">Nenhuma atividade registrada.</li> : timeline.map((activity) => <li key={activity.id} className="relative text-sm"><span className="absolute -left-[25px] top-1 h-2 w-2 rounded-full bg-neutral-900" /><p className="font-medium text-neutral-900">{activity.action}</p><p className="text-xs text-neutral-500">{new Intl.DateTimeFormat("pt-BR", { dateStyle: "short", timeStyle: "short" }).format(new Date(activity.created_at))} · {activity.user_name || "Admin"}</p><ActivityDetails details={activity.details} responsibles={responsibles} /></li>)}
             </ol>
+            {hasMore && <button type="button" disabled={loadingHistory} onClick={olderActivities} className="mt-4 min-h-11 rounded border px-3 text-sm">{loadingHistory ? "Carregando…" : "Carregar anteriores"}</button>}
+          </section>
+          <details className="rounded-lg border border-neutral-200 bg-white p-5">
+            <summary className="min-h-11 cursor-pointer font-medium">Origem e contexto</summary>
+            <dl className="mt-3 grid gap-4 text-sm sm:grid-cols-2"><Info label="Solicitação" value={lead.tipo_captacao === "material" ? "Download de material" : "Contato comercial"} /><Info label="Canal" value={lead.canal} /><Info label="Página de conversão" value={lead.pagina_origem} /><Info label="Landing page" value={lead.landing_page} /><Info label="CTA" value={lead.cta_location} /><Info label="Referrer" value={lead.referrer} /><Info label="UTMs" value={utmEntries.map(([key, value]) => `${key}: ${value}`).join(" · ") || null} /></dl>
+            {contextLinks.post && <Link href={contextLinks.post.href} className="mt-3 block text-sm underline">{contextLinks.post.label}</Link>}
+            {contextLinks.pauta && <Link href={contextLinks.pauta.href} className="mt-3 block text-sm underline">{contextLinks.pauta.label}</Link>}
+            {lead.mensagem && <p className="mt-4 whitespace-pre-wrap rounded bg-neutral-50 p-3 text-sm">{lead.mensagem}</p>}
           </details>
         </div>
-
-        <div className="order-1 space-y-5 xl:order-2">
-          <section className="rounded-lg border border-neutral-200 bg-white p-4 sm:p-5">
-            <h2 className="font-medium text-neutral-900">Situação atual</h2>
-            <div className="mt-4 space-y-3">
-              <Field label="Último status"><textarea value={summary} onChange={(event) => setSummary(event.target.value)} maxLength={500} placeholder="Resumo curto que aparece na inbox e no Kanban" className={`${INPUT_CLASS} min-h-24 py-2`} /></Field>
-              <div className="grid grid-cols-2 gap-3"><Field label="Responsável"><select value={responsibleId} onChange={(event) => setResponsibleId(event.target.value)} className={INPUT_CLASS}><option value="">Sem responsável</option>{responsibles.map((item) => <option key={item.id} value={item.id} disabled={!item.ativo}>{item.nome}{item.ativo ? "" : " (inativo)"}</option>)}</select></Field><Field label="Prioridade"><select value={priority} onChange={(event) => setPriority(event.target.value as LeadPriority)} className={INPUT_CLASS}><option value="normal">Normal</option><option value="alta">Alta</option><option value="urgente">Urgente</option></select></Field></div>
-              <button disabled={isPending} onClick={() => run(() => updateLeadOperations(lead.id, { responsavelId: responsibleId || undefined, prioridade: priority, resumoStatus: summary }))} className="min-h-11 rounded-md bg-neutral-950 px-4 text-sm text-white disabled:opacity-50">Salvar situação</button>
-              <div className="border-t border-neutral-200 pt-3" />
-              <Field label="Status"><select value={status} onChange={(event) => setStatus(event.target.value as LeadStatus)} className={INPUT_CLASS}>{STATUS.map((item) => <option key={item.value} value={item.value}>{item.label}</option>)}</select></Field>
-              {status === "desqualificado" && <Field label="Motivo obrigatório"><textarea required value={reason} onChange={(event) => setReason(event.target.value)} className={`${INPUT_CLASS} min-h-20 py-2`} /></Field>}
-              <button disabled={isPending || (status === "desqualificado" && !reason.trim())} onClick={() => run(() => updateLeadStatus(lead.id, status, reason))} className="min-h-11 rounded-md bg-neutral-950 px-4 text-sm text-white disabled:opacity-50">Salvar status</button>
-              <Field label="Próxima ação"><div className="grid gap-2 sm:grid-cols-[1fr_auto]"><input type="datetime-local" value={nextAction} onChange={(event) => setNextAction(event.target.value)} className={INPUT_CLASS} /><button onClick={() => run(() => setLeadNextAction(lead.id, localInputToIso(nextAction)))} className="min-h-11 rounded-md border border-neutral-300 px-3 text-sm">Salvar</button></div></Field>
-            </div>
+        <div className="space-y-5">
+          <section className="rounded-lg border border-neutral-200 bg-white p-5">
+            <h2 className="font-medium">Contato</h2>
+            {!editingContact ? <><dl className="mt-4 grid gap-3 text-sm"><Info label="Telefone" value={lead.telefone} /><Info label="Email" value={lead.email} /><Info label="Segmento" value={lead.segmento.replace("nao_definido", "não definido")} /><Info label="Projeto" value={lead.tipo_projeto} /><Info label="Empresa / cargo" value={[lead.empresa, lead.cargo].filter(Boolean).join(" · ") || null} /></dl><button type="button" className="mt-3 min-h-11 text-sm underline" onClick={() => { setContact(originalContact); setEditingContact(true); }}>Editar contato</button></> : <form className="mt-4 space-y-3" onSubmit={(event) => { event.preventDefault(); run(() => updateLeadContact(lead.id, contact), () => setEditingContact(false)); }}><fieldset disabled={isPending} className="space-y-3">
+              <Field label="Nome"><input required maxLength={160} value={contact.nome} onChange={(event) => setContact({ ...contact, nome: event.target.value })} className={INPUT_CLASS} /></Field>
+              <Field label="Email"><input type="email" maxLength={254} value={contact.email} onChange={(event) => setContact({ ...contact, email: event.target.value })} className={INPUT_CLASS} /></Field>
+              <Field label="Telefone"><input type="tel" maxLength={40} value={contact.telefone} onChange={(event) => setContact({ ...contact, telefone: event.target.value })} className={INPUT_CLASS} /></Field>
+              <Field label="Segmento"><select value={contact.segmento} onChange={(event) => setContact({ ...contact, segmento: event.target.value as LeadContactInput["segmento"] })} className={INPUT_CLASS}><option value="nao_definido">Não definido</option><option value="residencial">Residencial</option><option value="comercial">Comercial</option></select></Field>
+              <Field label="Tipo de projeto"><input maxLength={160} value={contact.tipoProjeto} onChange={(event) => setContact({ ...contact, tipoProjeto: event.target.value })} className={INPUT_CLASS} /></Field>
+              <Field label="Empresa"><input maxLength={200} value={contact.empresa} onChange={(event) => setContact({ ...contact, empresa: event.target.value })} className={INPUT_CLASS} /></Field>
+              <Field label="Cargo"><input maxLength={160} value={contact.cargo} onChange={(event) => setContact({ ...contact, cargo: event.target.value })} className={INPUT_CLASS} /></Field>
+              <div className="flex gap-3"><button className="min-h-11 rounded bg-neutral-950 px-3 text-sm text-white">Salvar contato</button><button type="button" className="min-h-11 px-2 text-sm" onClick={() => setEditingContact(false)}>Cancelar</button></div>
+            </fieldset></form>}
+            <button type="button" disabled={isPending} className="min-h-11 text-sm underline" onClick={() => startTransition(async () => { try { const result = await findLeadDuplicates(contact.email, contact.telefone); if (!result.ok) { setError(result.error || "Falha na busca."); return; } const matches = (result.duplicates || []).filter((item) => item.id !== lead.id); setDuplicates(matches); setSuccess(matches.length ? "Revise os contatos semelhantes abaixo. Nenhum registro foi unido." : "Nenhum contato semelhante encontrado."); } catch { setError("Não foi possível verificar contatos semelhantes."); } })}>Verificar contatos semelhantes</button>
+            {duplicates.map((item) => <Link key={item.id} href={`/admin/leads/${item.id}`} className="block rounded border border-amber-200 bg-amber-50 p-2 text-sm underline">Possível duplicado: {item.nome} · {item.email || item.telefone}</Link>)}
           </section>
-
+          <section className="rounded-lg border border-neutral-200 bg-white p-5">
+            <h2 className="font-medium">Organização do atendimento</h2>
+            <fieldset disabled={isPending} className="mt-4 space-y-3">
+              <Field label="Resumo operacional"><textarea value={summary} onChange={(event) => setSummary(event.target.value)} maxLength={500} placeholder="Contexto curto para a equipe" className={`${INPUT_CLASS} min-h-20 py-2`} /></Field>
+              <Field label="Responsável"><select value={responsibleId} onChange={(event) => setResponsibleId(event.target.value)} className={INPUT_CLASS}><option value="">Sem responsável</option>{responsibles.map((item) => <option key={item.id} value={item.id} disabled={!item.ativo}>{item.nome}{item.ativo ? "" : " (inativo)"}</option>)}</select></Field>
+              <Field label="Prioridade"><select value={priority} onChange={(event) => setPriority(event.target.value as LeadPriority)} className={INPUT_CLASS}><option value="normal">Normal</option><option value="alta">Alta</option><option value="urgente">Urgente</option></select></Field>
+              <button disabled={!operationsDirty} onClick={() => run(() => updateLeadOperations(lead.id, { responsavelId: responsibleId || undefined, prioridade: priority, resumoStatus: summary }))} className="min-h-11 rounded border px-3 text-sm disabled:opacity-50">Salvar organização</button>
+            </fieldset>
+          </section>
           <LeadArtifacts leadId={lead.id} artifacts={artifacts} onError={setError} onSuccess={(message) => { setSuccess(message); router.refresh(); }} />
-
           <CommercialLinks title="Orçamentos" records={budgets} empty="Nenhum orçamento vinculado." />
-          <CommercialLinks title="Propostas" records={proposals} empty="Nenhuma proposta vinculada." />
+          {proposals.length > 0 && <CommercialLinks title="Propostas anteriores" records={proposals} empty="" />}
           <Link href={`/admin/orcamentos/novo/form?lead=${lead.id}`} className="block min-h-11 rounded-md bg-neutral-950 px-4 py-3 text-center text-sm font-medium text-white">Criar orçamento</Link>
           {privacyPanel}
           <div className="border-t border-neutral-200 pt-4"><button disabled={isPending} onClick={() => {
-            // Arquivar tira o lead da fila e sai da tela; confirma como na remoção de arquivo.
+            if (!confirmLeave()) return;
             if (!lead.arquivado_em && !window.confirm(`Arquivar “${lead.nome}”? Ele sai da fila de leads.`)) return;
-            run(() => setLeadArchived(lead.id, !lead.arquivado_em), () => router.push("/admin/leads"));
+            run(() => setLeadArchived(lead.id, !lead.arquivado_em), () => router.push(backPath));
           }} className="inline-flex min-h-11 items-center gap-2 text-sm text-neutral-500 hover:text-neutral-900"><Archive className="h-4 w-4" /> {lead.arquivado_em ? "Reabrir lead" : "Arquivar lead"}</button></div>
         </div>
       </div>
     </div>
   );
+}
+
+function ActivityDetails({ details, responsibles }: { details: Record<string, unknown> | null; responsibles: LeadResponsible[] }) {
+  if (!details) return null;
+  const stage = (value: unknown) => STATUS.find((item) => item.value === value)?.label || String(value || "—");
+  const nextAction = typeof details.proxima_acao_em === "string" ? new Date(details.proxima_acao_em) : null;
+  return <div className="mt-1 space-y-1 text-neutral-700">
+    {details.status_novo !== undefined && <p>{stage(details.status_anterior)} → {stage(details.status_novo)}</p>}
+    {typeof details.motivo_desqualificacao === "string" && <p>Motivo: {details.motivo_desqualificacao}</p>}
+    {typeof details.nota === "string" && <p className="whitespace-pre-wrap">{details.nota}</p>}
+    {"proxima_acao_em" in details && <p>Próxima ação: {nextAction && !Number.isNaN(nextAction.getTime()) ? nextAction.toLocaleString("pt-BR") : "concluída / sem agendamento"}</p>}
+    {"responsavel_id" in details && <p>Responsável: {responsibles.find((item) => item.id === details.responsavel_id)?.nome || (details.responsavel_id ? "Integrante anterior" : "sem responsável")}</p>}
+    {typeof details.prioridade === "string" && <p>Prioridade: {details.prioridade}</p>}
+    {typeof details.resumo_status === "string" && <p className="whitespace-pre-wrap">{details.resumo_status}</p>}
+    {typeof details.orcamento_id === "string" && <Link href={`/admin/orcamentos/${details.orcamento_id}`} className="underline">Abrir orçamento</Link>}
+    {details.tipo === "contato_atualizado" && <p>Dados de contato revisados.</p>}
+  </div>;
 }
 
 function Info({ label, value }: { label: string; value: string | null }) {
@@ -925,15 +991,16 @@ function LeadArtifacts({
   }
 
   async function openArtifact(artifact: LeadArtifact) {
-    setBusyId(artifact.id);
-    onError(null);
-    const result = await getLeadArtifactUrl(artifact.id);
-    setBusyId(null);
-    if (!result.ok || !result.url) {
-      onError(result.error || "Não foi possível abrir o arquivo.");
-      return;
-    }
-    window.open(result.url, "_blank", "noopener,noreferrer");
+    const opened = window.open("about:blank", "_blank");
+    if (opened) opened.opener = null;
+    setBusyId(artifact.id); onError(null);
+    try {
+      const result = await getLeadArtifactUrl(artifact.id);
+      if (!result.ok || !result.url) throw new Error(result.error || "Não foi possível abrir o arquivo.");
+      if (opened) opened.location.replace(result.url);
+      else window.location.assign(result.url);
+    } catch (error) { opened?.close(); onError(error instanceof Error ? error.message : "Falha ao abrir arquivo."); }
+    finally { setBusyId(null); }
   }
 
   async function removeArtifact(artifact: LeadArtifact) {
@@ -954,7 +1021,7 @@ function LeadArtifacts({
       <div className="flex items-center justify-between gap-3">
         <div>
           <h2 className="font-medium text-neutral-900">Arquivos e links</h2>
-          <p className="mt-1 text-xs text-neutral-500">Anexos pequenos ficam no Supabase. Pastas e arquivos maiores permanecem no Drive.</p>
+          <p className="mt-1 text-xs text-neutral-500">Envie arquivos de até 6 MB ou vincule uma pasta para compartilhar documentos maiores.</p>
         </div>
         <span className="text-xs tabular-nums text-neutral-400">{artifacts.length}</span>
       </div>

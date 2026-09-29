@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { DndContext, DragOverlay, closestCorners } from "@dnd-kit/core";
 import { AlertCircle, CalendarDays, Search, SlidersHorizontal, Wifi, WifiOff, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -17,6 +17,7 @@ import {
   STATUS_LINKEDIN,
   TRILHA_LABEL,
   estadoGeral,
+  estadoDoQuadro,
   ordemNaVisao,
   statusNaVisao,
   type CanalConteudo,
@@ -40,6 +41,7 @@ import {
 } from "@/hooks/use-arrastar-entre-colunas";
 import { criarPauta, excluirPauta, moverPautas } from "@/app/admin/conteudo/actions";
 import { ColunaPauta } from "./ColunaPauta";
+import { NovaPautaInline } from "./NovaPautaInline";
 import { BadgesPlataforma } from "./BadgesPlataforma";
 import { CartaoPauta } from "./CartaoPauta";
 import { useUrlFilters } from "@/lib/analytics/use-url-filters";
@@ -64,6 +66,7 @@ function colunasDaVisao(visao: VisaoQuadro): readonly StatusQuadro[] {
 }
 function prazoCasa(pauta: Pauta, filtro: string) {
   if (filtro === TODOS) return true;
+  if (estadoDoQuadro(pauta) === "concluida") return false;
   if (!pauta.dataAlvo) return filtro === "sem-data";
   const hoje = new Date();
   hoje.setHours(0, 0, 0, 0);
@@ -79,6 +82,7 @@ function prazoCasa(pauta: Pauta, filtro: string) {
 
 export function QuadroConteudo({ pautas: doServidor, tagsCatalogo, worker }: Props) {
   const router = useRouter();
+  const novaPautaAberta = useSearchParams().get("nova") === "1";
   const filtrosUrl = useUrlFilters(URL_KEYS, { defaults: CONTEUDO_DEFAULTS });
   const buscaUrl = filtrosUrl.values.conteudo_q;
   const definirFiltro = filtrosUrl.setValue;
@@ -188,8 +192,7 @@ export function QuadroConteudo({ pautas: doServidor, tagsCatalogo, worker }: Pro
       },
     });
 
-  function handleCriar(titulo: string, coluna: StatusQuadro) {
-    void (async () => {
+  async function handleCriar(titulo: string, coluna: StatusQuadro) {
       const res =
         visao === "geral"
           ? await criarPauta({ titulo })
@@ -200,7 +203,8 @@ export function QuadroConteudo({ pautas: doServidor, tagsCatalogo, worker }: Pro
               plataformas: visao === "blog" ? ["blog", "linkedin"] : ["linkedin"],
             });
       if (res.error) mostrarErro(res.error);
-    })();
+      else router.refresh();
+      return res;
   }
 
   function handleMover(id: string, coluna: StatusQuadro) {
@@ -333,6 +337,9 @@ export function QuadroConteudo({ pautas: doServidor, tagsCatalogo, worker }: Pro
             </TabsList>
           </Tabs>
           <div className="ml-auto flex flex-wrap items-center justify-end gap-3">
+            <div className="w-64 max-w-full">
+              <NovaPautaInline coluna="planejada" aoCriar={handleCriar} desabilitado={pendente} abertoInicial={novaPautaAberta} />
+            </div>
             <span className={worker.online
               ? "inline-flex items-center gap-1.5 text-xs font-medium text-emerald-700"
               : "inline-flex items-center gap-1.5 text-xs font-medium text-amber-700"
@@ -467,7 +474,7 @@ function AgendaGeral({
     hoje.setHours(0, 0, 0, 0);
     const seteDias = new Date(hoje);
     seteDias.setDate(seteDias.getDate() + 7);
-    const ordenadas = [...pautas].sort((a, b) =>
+    const ordenadas = pautas.filter((pauta) => estadoDoQuadro(pauta) !== "concluida").sort((a, b) =>
       (a.dataAlvo ?? "9999-12-31").localeCompare(b.dataAlvo ?? "9999-12-31")
     );
     return [
@@ -507,6 +514,14 @@ function AgendaGeral({
         cor: "text-amber-700",
         itens: ordenadas.filter((pauta) => !pauta.dataAlvo),
       },
+      {
+        chave: "concluidas",
+        titulo: "Concluídas",
+        descricao: "Publicações registradas",
+        cor: "text-emerald-700",
+        itens: pautas.filter((pauta) => estadoDoQuadro(pauta) === "concluida")
+          .sort((a, b) => (b.dataAlvo ?? "").localeCompare(a.dataAlvo ?? "")),
+      },
     ];
   }, [pautas]);
 
@@ -515,6 +530,11 @@ function AgendaGeral({
 
   return (
     <div className="space-y-5">
+      {pautas.length === 0 && (
+        <p className="rounded-lg border border-dashed border-neutral-300 p-6 text-sm text-neutral-600">
+          Nenhuma pauta nesta visão. Use Nova pauta para começar ou ajuste os filtros.
+        </p>
+      )}
       <div className="flex items-center gap-2 text-xs text-neutral-500">
         <CalendarDays className="h-4 w-4" aria-hidden />
         Agenda geral ordenada por prazo. Use Blog ou LinkedIn para reordenar o Kanban.

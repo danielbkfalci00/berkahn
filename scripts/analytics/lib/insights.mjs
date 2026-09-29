@@ -15,6 +15,11 @@ export function isIndexedState(coverageState) {
   return state.includes('indexed') && !state.includes('not indexed');
 }
 
+export function isKnownInspection(item) {
+  return !item.error && item.verdict !== 'ERROR' && item.verdict !== 'UNKNOWN' &&
+    Boolean(item.coverageState && item.coverageState.toLowerCase() !== 'unknown');
+}
+
 export function buildInsights({ ga4, gsc, ga4Prev, gscPrev, indexation, posts }) {
   const insights = [];
 
@@ -24,7 +29,9 @@ export function buildInsights({ ga4, gsc, ga4Prev, gscPrev, indexation, posts })
     .slice(0, 3);
   lowCtrOpportunities.forEach((q) => {
     insights.push({
-      text: `Query "${q.query}" tem ${q.impressions} impressões mas só ${q.ctr}% de CTR (posição ${q.position}). Oportunidade de otimizar meta title/description ou subir posição.`,
+      text: `Revisar a intenção e o snippet exibido para "${q.query}" antes de alterar o artigo. CTR isolado não identifica a causa.`,
+      evidence: `${q.impressions} impressões, ${q.clicks} cliques, CTR ${q.ctr}%, posição média ${q.position}.`,
+      confidence: 'moderate', impact: q.impressions * 0.02,
     });
   });
 
@@ -33,7 +40,9 @@ export function buildInsights({ ga4, gsc, ga4Prev, gscPrev, indexation, posts })
   if (page2Pages.length > 0) {
     const p = page2Pages[0];
     insights.push({
-      text: `${page2Pages.length} página(s) na 2ª página do Google. Destaque: ${p.title || p.slug} (posição ${p.position}, ${p.impressions} impressões). Subir 5 posições pode triplicar cliques.`,
+      text: `Verificar as consultas e páginas concorrentes de "${p.title || p.slug}" para decidir se há conteúdo a atualizar. A posição média não prevê ganho de cliques.`,
+      evidence: `${page2Pages.length} páginas com posição média entre 11 e 20; esta página soma ${p.impressions} impressões e ${p.clicks} cliques.`,
+      confidence: 'moderate', impact: p.impressions * 0.01,
     });
   }
 
@@ -42,19 +51,14 @@ export function buildInsights({ ga4, gsc, ga4Prev, gscPrev, indexation, posts })
   if (lowEngagement.length > 0) {
     const p = lowEngagement[0];
     insights.push({
-      text: `Página ${p.title || p.slug} recebe ${p.users} users mas tempo médio é só ${p.avgEngagementTime}s. Investigar bounce ou problema de conteúdo.`,
+      text: `Conferir se "${p.title || p.slug}" resolve uma leitura curta ou apresenta abandono antes de propor uma reescrita.`,
+      evidence: `${p.users} usuários e ${p.avgEngagementTime}s de engajamento médio no período.`,
+      confidence: 'moderate', impact: p.users,
     });
   }
 
-  // Fonte de tráfego dominante
-  if (ga4.topSources.length > 0 && ga4.topSources[0].pctOfTotal >= 60) {
-    insights.push({
-      text: `${ga4.topSources[0].pctOfTotal}% do tráfego vem de "${ga4.topSources[0].label}". Diversificar fontes reduz risco.`,
-    });
-  }
-
-  // Adicionar índice
-  return insights.slice(0, 5).map((i, idx) => ({ ...i, position: idx + 1 }));
+  // Prioriza volume observável; concentração de tráfego sozinha não pede ação.
+  return insights.sort((a, b) => b.impact - a.impact).slice(0, 5).map((i, idx) => ({ ...i, position: idx + 1 }));
 }
 
 export function buildActions({ ga4, gsc, indexation, posts }) {
@@ -64,10 +68,10 @@ export function buildActions({ ga4, gsc, indexation, posts }) {
 
   // P0: artigos não indexados (case-insensitive)
   if (indexation && indexation.length > 0) {
-    const notIndexed = indexation.filter((i) => i.coverageState && !isIndexedState(i.coverageState));
+    const notIndexed = indexation.filter((i) => isKnownInspection(i) && !isIndexedState(i.coverageState));
     notIndexed.slice(0, 3).forEach((i) => {
       p0.push({
-        text: `Solicitar indexação manual no GSC para "/atualidades/${i.slug}" (status: ${i.coverageState}).`,
+        text: `Verificar o motivo da exclusão de "/atualidades/${i.slug}" no GSC (${i.coverageState}); solicitar indexação apenas se a URL estiver elegível.`,
       });
     });
   }
@@ -79,7 +83,7 @@ export function buildActions({ ga4, gsc, indexation, posts }) {
   const page2 = gsc.topPages.filter((p) => p.position >= 11 && p.position <= 20 && p.impressions >= 100).slice(0, 3);
   page2.forEach((p) => {
     p1.push({
-      text: `Otimizar "${p.title || p.slug}" (posição ${p.position}, ${p.impressions} impressões) — meta title/description + internal links.`,
+      text: `Revisar intenção, snippet e links de "${p.title || p.slug}" (posição média ${p.position}, ${p.impressions} impressões) antes de escolher uma alteração.`,
     });
   });
 
@@ -98,14 +102,6 @@ export function buildActions({ ga4, gsc, indexation, posts }) {
       text: `Analisar bounce de "${p.title || p.slug}" (tempo médio ${p.avgEngagementTime}s, ${p.users} users).`,
     });
   });
-
-  // P2: se mobile >70%, garantir mobile-first
-  const mobile = ga4.byDevice.find((d) => d.device === 'mobile');
-  if (mobile && mobile.pctOfTotal >= 70) {
-    p2.push({
-      text: `Mobile representa ${mobile.pctOfTotal}% dos users — auditar Core Web Vitals mobile com PageSpeed Insights.`,
-    });
-  }
 
   return { actionsP0: p0, actionsP1: p1, actionsP2: p2 };
 }
@@ -129,9 +125,10 @@ export function buildSummary({ ga4, gsc, ga4Prev, gscPrev, indexation }) {
   }
 
   if (indexation && indexation.length > 0) {
-    const indexed = indexation.filter((i) => isIndexedState(i.coverageState)).length;
+    const inspected = indexation.filter(isKnownInspection);
+    const indexed = inspected.filter((i) => isIndexedState(i.coverageState)).length;
     summary.push({
-      text: `${indexed} de ${indexation.length} artigos indexados no Google.`,
+      text: `${indexed} de ${inspected.length} artigos com inspeção válida estão indexados no Google.${inspected.length < indexation.length ? ` ${indexation.length - inspected.length} inspeções indisponíveis.` : ''}`,
     });
   }
 

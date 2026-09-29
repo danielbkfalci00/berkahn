@@ -9,6 +9,7 @@ export const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURICo
 )}`;
 
 interface LeadAttributionFields {
+  submissionId?: string;
   pagePath?: string;
   ctaLocation?: string;
   utmSource?: string;
@@ -43,6 +44,45 @@ export interface ResourceLeadInput extends LeadAttributionFields {
 
 export type LeadInput = ContactLeadInput | ResourceLeadInput;
 
+/** Telefones nacionais brasileiros usam DDI 55; internacionais explícitos são preservados. */
+export function normalizeLeadPhone(value?: string | null): string {
+  const raw = value?.trim() || "";
+  const digits = raw.replace(/\D/g, "");
+  if (raw.startsWith("+")) return digits;
+  if (digits.startsWith("00")) return digits.slice(2);
+  return digits.length === 10 || digits.length === 11 ? `55${digits}` : digits;
+}
+
+const pendingSubmissions = new Map<string, string>();
+
+export function getLeadSubmissionContent(input: LeadInput | Record<string, unknown>): string {
+  const { startedAt: _startedAt, submissionId: _submissionId, website: _website, ...content } = input;
+  void _startedAt; void _submissionId; void _website;
+  return JSON.stringify(Object.entries(content).filter(([, value]) => value !== undefined).sort(([left], [right]) => left.localeCompare(right)));
+}
+
+/** Retry da mesma submissão reutiliza o UUID. O storage guarda somente hash e UUID. */
+export async function submitLeadInput(input: LeadInput | Record<string, unknown>): Promise<Response> {
+  const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(getLeadSubmissionContent(input)));
+  const key = `berkahn-lead-submit:${Array.from(new Uint8Array(digest), (byte) => byte.toString(16).padStart(2, "0")).join("")}`;
+  let submissionId = pendingSubmissions.get(key);
+  try { submissionId ||= sessionStorage.getItem(key) || undefined; } catch { /* armazenamento opcional */ }
+  submissionId ||= crypto.randomUUID();
+  pendingSubmissions.set(key, submissionId);
+  try { sessionStorage.setItem(key, submissionId); } catch { /* retry em memória continua disponível */ }
+  const response = await fetch(LEAD_ENDPOINT, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ ...input, submissionId }),
+  });
+  const confirmation = response.ok ? await response.clone().json().catch(() => null) : null;
+  if (confirmation?.success === true) {
+    pendingSubmissions.delete(key);
+    try { sessionStorage.removeItem(key); } catch { /* armazenamento opcional */ }
+  }
+  return response;
+}
+
 export function validateLeadInput(input: unknown):
   | { success: true; data: LeadInput }
   | { success: false; message: string } {
@@ -60,6 +100,7 @@ export function validateLeadInput(input: unknown):
   const kind = text("kind", 32);
 
   const attribution = {
+    submissionId: typeof value.submissionId === "string" && /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value.submissionId) ? value.submissionId : undefined,
     pagePath: text("pagePath", 500) || undefined,
     ctaLocation: text("ctaLocation", 160) || undefined,
     utmSource: text("utmSource", 160) || undefined,

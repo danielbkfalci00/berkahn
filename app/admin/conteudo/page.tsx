@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { AlertCircle, KanbanSquare } from "lucide-react";
+import { AlertCircle } from "lucide-react";
 import { listarPautas, listarTagsConteudo, obterStatusWorkerConteudo } from "@/lib/conteudo/queries";
 import { QuadroConteudo } from "@/components/admin/conteudo/QuadroConteudo";
 
@@ -41,21 +41,6 @@ export default async function ConteudoPage() {
             <p className="font-medium">Não consegui carregar o quadro.</p>
             <p className="mt-1 text-[#8F3232]">{erro}</p>
           </div>
-        </div>
-      ) : pautas.length === 0 ? (
-        <div className="flex flex-col items-center rounded-lg border border-dashed border-neutral-300 px-6 py-16 text-center">
-          <KanbanSquare
-            className="h-8 w-8 text-neutral-300"
-            strokeWidth={1.5}
-            aria-hidden
-          />
-          <h2 className="mt-4 text-sm font-medium text-neutral-900">
-            Nenhuma pauta ainda
-          </h2>
-          <p className="mt-1 max-w-sm text-sm text-neutral-500">
-            Crie a primeira pauta planejada ou importe uma seleção aprovada do
-            calendário editorial.
-          </p>
         </div>
       ) : (
         <QuadroConteudo pautas={pautas} tagsCatalogo={tagsCatalogo} worker={worker} />

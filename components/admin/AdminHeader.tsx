@@ -16,11 +16,15 @@ const pageTitles: Record<string, string> = {
   "/admin/propostas": "Propostas",
   "/admin/propostas/new": "Nova Proposta",
   "/admin/configuracoes": "Configurações",
+  "/admin/feedback": "Feedback",
   "/admin/documentacoes": "Documentações",
   "/admin/analytics": "Analytics",
   "/admin/leads": "Leads",
   "/admin/conteudo": "Conteúdo",
   "/admin/orcamentos": "Orçamentos",
+  "/admin/orcamentos/novo": "Novo orçamento",
+  "/admin/orcamentos/novo/form": "Novo orçamento",
+  "/admin/orcamentos/novo/upload": "Importar orçamento",
 };
 
 function getPageTitle(pathname: string): string {
@@ -30,6 +34,11 @@ function getPageTitle(pathname: string): string {
   }
 
   // Check for edit pages
+  if (pathname.match(/\/admin\/leads\/[^/]+$/)) return "Lead";
+  if (pathname.match(/\/admin\/feedback\/[^/]+$/)) return "Feedback";
+  if (pathname.match(/\/admin\/conteudo\/[^/]+$/)) return "Pauta";
+  if (pathname.match(/\/admin\/orcamentos\/[^/]+\/edit$/)) return "Editar orçamento";
+  if (pathname.match(/\/admin\/orcamentos\/[^/]+$/)) return "Orçamento";
   if (pathname.match(/\/admin\/posts\/[^/]+$/)) {
     return "Editar Post";
   }

@@ -47,6 +47,11 @@ function searchPageMap(gsc) {
   );
 }
 
+export function qualifiedLeadsPath(startDate, endDate) {
+  const exclusiveEnd = dateOnly(new Date(new Date(`${endDate}T00:00:00Z`).getTime() + 86400000));
+  return `/rest/v1/leads?select=pauta_id,slug_origem,qualificado_em,criado_em&arquivado_em=is.null&anonimizado_em=is.null&qualificado_em=not.is.null&criado_em=gte.${encodeURIComponent(`${startDate}T00:00:00Z`)}&criado_em=lt.${encodeURIComponent(`${exclusiveEnd}T00:00:00Z`)}`;
+}
+
 async function loadContentRows(startDate, endDate) {
   const pautas = await serviceRequest(
     'GET',
@@ -65,7 +70,7 @@ async function loadContentRows(startDate, endDate) {
     ),
     serviceRequest(
       'GET',
-      `/rest/v1/leads?select=pauta_id,slug_origem,qualificado_em,criado_em&qualificado_em=not.is.null&criado_em=gte.${encodeURIComponent(startDate)}&criado_em=lte.${encodeURIComponent(`${endDate}T23:59:59Z`)}`,
+      qualifiedLeadsPath(startDate, endDate),
       null
     ),
   ]);

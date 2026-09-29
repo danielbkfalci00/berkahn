@@ -5,6 +5,13 @@ export async function proxy(request: NextRequest) {
   const hostname = request.headers.get("host") || "";
   const pathname = request.nextUrl.pathname;
 
+  // O harness local usa service role e pode existir no disco mesmo ignorado
+  // pelo Git. Um build/deploy local nunca deve publicar esse atalho de acesso.
+  if (process.env.NODE_ENV === "production"
+    && (pathname === "/dev-harness" || pathname.startsWith("/dev-harness/"))) {
+    return new NextResponse(null, { status: 404 });
+  }
+
   // O mesmo build atende site e painel, mas PWA, service worker, cookies e
   // push são isolados por origem. Em produção, /admin tem uma origem única.
   const isPublicProductionHost =
@@ -62,5 +69,6 @@ export const config = {
     "/",
     "/admin/:path*",
     "/api/admin/:path*",
+    "/dev-harness/:path*",
   ],
 };

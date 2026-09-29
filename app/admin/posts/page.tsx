@@ -1,27 +1,42 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
-import { PostsTable } from "@/components/admin/posts/PostsTable";
+import { PostsTable, type PostListItem } from "@/components/admin/posts/PostsTable";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
-import type { Post } from "@/types/admin";
+import type { PostStatus } from "@/types/admin";
 
-export default async function PostsPage() {
+export default async function PostsPage({ searchParams }: {
+  searchParams: Promise<{ q?: string; status?: string; page?: string }>;
+}) {
   const supabase = await createClient();
+  const params = await searchParams;
+  const search = (params.q ?? "").slice(0, 150);
+  const status = ["draft", "published", "scheduled", "archived"].includes(params.status ?? "")
+    ? params.status as PostStatus : "all";
+  const page = Math.max(1, Math.min(100000, Number.parseInt(params.page ?? "1", 10) || 1));
+  const pageSize = 30;
+  let total = 0;
 
   // Fetch posts from Supabase
-  let posts: Post[] = [];
+  let posts: PostListItem[] = [];
   let unavailable = false;
   try {
-    const { data, error } = await supabase
+    let query = supabase
       .from('posts')
-      .select('*')
-      .order('created_at', { ascending: false });
+      .select('id,title,slug,category,status,featured,published_at,created_at', { count: 'exact' });
+    if (status !== "all") query = query.eq('status', status);
+    const term = search.replace(/[^\p{L}\p{N}\s-]/gu, "").trim();
+    if (term) query = query.or(`title.ilike.%${term}%,category.ilike.%${term}%`);
+    const { data, error, count } = await query
+      .order('created_at', { ascending: false }).order('id', { ascending: false })
+      .range((page - 1) * pageSize, page * pageSize - 1);
 
     if (error) {
       unavailable = true;
       console.error('Posts: failed to load posts', error);
     } else if (data) {
-      posts = data as Post[];
+      posts = data as PostListItem[];
+      total = count ?? 0;
     }
   } catch (error) {
     unavailable = true;
@@ -51,7 +66,7 @@ export default async function PostsPage() {
           Não foi possível carregar os posts agora. Tente atualizar a página.
         </div>
       ) : (
-        <PostsTable posts={posts} />
+        <PostsTable key={`${search}:${status}:${page}`} posts={posts} search={search} statusFilter={status} page={page} pageSize={pageSize} total={total} />
       )}
     </div>
   );

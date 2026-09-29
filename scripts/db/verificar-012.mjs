@@ -25,6 +25,56 @@ function checar(nome, condicao, detalhe = "") {
 }
 
 await client.connect();
+
+// Contratos novos isolados dos dados/contagens históricas do verificador 012.
+// Executar somente em banco de validação já migrado; tudo reverte no finally.
+if (process.argv.includes("--admin-reliability")) {
+  try {
+    await client.query("BEGIN");
+    const { rows: [owner] } = await client.query("SELECT user_id,email FROM public.lead_responsaveis WHERE role='owner' AND ativo AND user_id IS NOT NULL LIMIT 1");
+    if (!owner) throw new Error("Owner ativo necessário para validar as RPCs com identidade real.");
+    const { rows: [post] } = await client.query(`
+      INSERT INTO public.posts(title,slug,excerpt,content,status,published_at,cover_image)
+      VALUES('Teste ADMIN','admin-test-' || gen_random_uuid()::text,'Teste','Conteúdo original','published','2025-01-10T12:00:00Z','/original.webp')
+      RETURNING id,slug,updated_at::text,published_at::text
+    `);
+    await client.query("SET LOCAL ROLE authenticated");
+    await client.query("SELECT set_config('request.jwt.claims',$1,true)", [JSON.stringify({sub:owner.user_id,email:owner.email,role:"authenticated"})]);
+    const payload = JSON.stringify({title:"Revisão confirmada",slug:post.slug,content:"Conteúdo revisado",cover_image:null});
+    const { rows: [saved] } = await client.query("SELECT public.salvar_revisao_post_admin($1,$2::jsonb,$3,NULL) AS result", [post.id,payload,post.updated_at]);
+    const current = (await client.query("SELECT content,published_at::text FROM public.posts WHERE id=$1",[post.id])).rows[0];
+    checar("salvar revisão preserva conteúdo live e data", current.content === "Conteúdo original" && current.published_at === post.published_at);
+    async function expectFailure(name, sql, args) {
+      await client.query("SAVEPOINT expected_error");
+      let rejected = false;
+      try { await client.query(sql,args); }
+      catch { rejected = true; await client.query("ROLLBACK TO SAVEPOINT expected_error"); }
+      await client.query("RELEASE SAVEPOINT expected_error");
+      checar(name,rejected);
+    }
+    await expectFailure("segunda sessão sem pauta conhecida não sobrescreve revisão", "SELECT public.salvar_revisao_post_admin($1,$2::jsonb,$3,NULL)", [post.id,payload,post.updated_at]);
+    await expectFailure("publicação rejeita revisão obsoleta", "SELECT public.publicar_revisao_post_admin($1,$2,'2000-01-01')", [post.id,post.updated_at]);
+    await expectFailure("staging rejeita status dentro do payload", "SELECT public.salvar_revisao_post_admin($1,$2::jsonb,$3,$4)", [post.id,JSON.stringify({title:"Teste",slug:post.slug,status:"published"}),post.updated_at,saved.result.atualizado_em]);
+    await client.query("SELECT public.publicar_revisao_post_admin($1,$2,$3)",[post.id,post.updated_at,saved.result.atualizado_em]);
+    const published = (await client.query("SELECT content,published_at::text,cover_image FROM public.posts WHERE id=$1",[post.id])).rows[0];
+    checar("publicação aplica payload e mantém data original",published.content === "Conteúdo revisado" && published.published_at === post.published_at);
+    checar("remoção explícita de capa é aplicada",published.cover_image === null);
+    const pauta = (await client.query("SELECT post_draft_payload,status_blog FROM public.conteudo_pautas WHERE post_id=$1",[post.id])).rows[0];
+    checar("publicação limpa staging",pauta.post_draft_payload === null && pauta.status_blog === "publicado");
+    const stats = (await client.query("SELECT public.get_dashboard_stats() AS data")).rows[0].data;
+    checar("dashboard retorna métricas do fluxo existente",typeof stats.budgets.total === "number" && typeof stats.documents === "number");
+    await client.query("SELECT set_config('request.jwt.claims',$1,true)",[JSON.stringify({sub:"00000000-0000-0000-0000-000000000001",role:"authenticated"})]);
+    await expectFailure("usuário sem membership não lê agregado", "SELECT public.get_dashboard_stats()", []);
+    await expectFailure("usuário sem membership não publica via definer", "SELECT public.publicar_revisao_post_admin($1,$2,$3)", [post.id,post.updated_at,saved.result.atualizado_em]);
+    await client.query("RESET ROLE");
+    const grants = (await client.query("SELECT has_function_privilege('anon','public.get_dashboard_stats()','EXECUTE') AS stats,has_function_privilege('anon','public.publicar_revisao_post_admin(uuid,timestamptz,timestamptz)','EXECUTE') AS publish")).rows[0];
+    checar("anon não executa RPCs administrativas",!grants.stats && !grants.publish);
+  } finally {
+    await client.query("ROLLBACK").catch(() => {});
+    await client.end();
+  }
+  process.exit(falhas === 0 ? 0 : 1);
+}
 if (process.argv.includes("--dry-run-013")) {
   try {
     const migrationUrl = new URL("../../supabase/migrations/013_remover_colunas_legadas_conteudo.sql", import.meta.url);

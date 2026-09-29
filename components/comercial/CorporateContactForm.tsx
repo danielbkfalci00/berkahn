@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/select";
 import { COMERCIAL_FORM_PROJECT_TYPES } from "@/lib/comercial-data";
 import { usePathname } from "next/navigation";
-import { getLeadAttribution, LEAD_ENDPOINT } from "@/lib/contact";
+import { getLeadAttribution, submitLeadInput } from "@/lib/contact";
 import { trackEvent } from "@/lib/analytics";
 
 /* ─── Types ─── */
@@ -108,10 +108,7 @@ export function CorporateContactForm() {
         (t) => t.value === formData.projectType
       )?.label;
 
-      const response = await fetch(LEAD_ENDPOINT, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
+      const response = await submitLeadInput({
           name: formData.name,
           email: formData.email,
           phone: formData.phone,
@@ -125,8 +122,7 @@ export function CorporateContactForm() {
           ...getLeadAttribution(),
           website,
           startedAt,
-        }),
-      });
+        });
       const result = await response.json();
 
       if (result.success) {

@@ -7,8 +7,8 @@ import { MetricTooltip } from "./MetricTooltip";
 import type { AnalyticsSnapshot, KpiCardData } from "@/types/analytics";
 
 interface ComparisonViewProps {
-  current: AnalyticsSnapshot;
-  previous: AnalyticsSnapshot;
+  current: Pick<AnalyticsSnapshot, "context">;
+  previous: Pick<AnalyticsSnapshot, "context">;
 }
 
 interface KpiPair {
