@@ -6,7 +6,7 @@ tags:
   - ai/context
   - project/site
   - domain/admin
-ai_summary: Sistema Admin Berkahn com contas individuais, quatro papéis, CRM em /admin/leads e PWA/Web Push por usuário e dispositivo. PR118–119 publicados; continuação corrige coorte arquivada, indicadores por permissão, criação repetida de orçamentos e respostas atrasadas no CRM, além de validar navegação editorial e mobile.
+ai_summary: Sistema Admin Berkahn com contas individuais, quatro papéis, CRM e PWA/Web Push. Sprints publicados até PR125 corrigem dados, navegação comercial/editorial e horários. Continuação protege geração de PDF contra imagens ausentes, respostas perdidas e cliques duplicados, com regressões de permissões e concorrência.
 status: active
 projeto: site
 escopo: berkahn
@@ -102,6 +102,17 @@ PR121 integrado em `014a19e`, com CI do main [36618494115](https://github.com/da
 As regressões locais `test-admin-navigation.mjs` e `test-lead-flow.mjs` passaram com módulos reais e dependências externas simuladas: criação a partir da ficha, retorno de edição, salvamento/finalização, importação, registro de envio, destinos inválidos, paginação e arquivo legado arquivado. Não há migration nem alteração de registros comerciais neste lote. O [PR124](https://github.com/danielbkfalci00/berkahn/pull/124) foi integrado em `bfdc6b4`: CI do PR [36624291734](https://github.com/danielbkfalci00/berkahn/actions/runs/36624291734), CI da main [36624803127](https://github.com/danielbkfalci00/berkahn/actions/runs/36624803127) e os dois deploys Vercel passaram. O smoke owner confirmou lista de orçamentos filtrada → detalhe → editor → lista e fila filtrada de leads → ficha já visualizada → criação preenchida → ficha → fila. Nenhum formulário foi salvo. A tentativa de confirmar download no navegador expirou sem resultado conclusivo. Os cenários manuais de múltiplos papéis, edição simultânea e PDF alterado continuam separados da cobertura automatizada.
 
 O smoke revelou erro de hidratação por horários diferentes no servidor e navegador. A regressão reproduziu o texto divergente sob UTC e São Paulo; `LeadsQueue.tsx:60` agora reutiliza dois formatadores no fuso `America/Sao_Paulo`, já adotado pelo Dashboard, para recebimento, próxima ação e timeline. A comparação também cobre Tóquio e virada de dia. O atalho “Abrir lead” em `steps/Step1Cliente.tsx` recebe a mesma origem do formulário para não perder a fila.
+
+O [PR125](https://github.com/danielbkfalci00/berkahn/pull/125) foi integrado em `c161ed1`; CI da main [36626211773](https://github.com/danielbkfalci00/berkahn/actions/runs/36626211773) e deploys do site/ADMIN passaram. O smoke owner confirmou a ficha e o atalho de retorno ao lead sem novos erros de hidratação.
+
+### Continuação: geração de PDF e matriz automatizada de acesso
+
+- `app/api/admin/orcamentos/[id]/pdf/route.ts:113` troca a espera fixa de 800 ms pela confirmação de carregamento das imagens. Imagem quebrada ou timeout impedem a publicação. A comparação de versão continua rejeitando edição ocorrida durante a renderização.
+- `app/orcamento/estimativa/[id]/page.tsx:29` interrompe a renderização se não consegue assinar a capa selecionada. A capa padrão permanece somente para orçamento sem capa própria.
+- A gravação do PDF consulta o registro novamente quando a resposta do banco é ambígua. Arquivo confirmado permanece acessível; confirmação indisponível devolve 503 e preserva o upload possivelmente referenciado. Falhas de limpeza ficam registradas sem transformar gravação bem-sucedida em erro nem mascarar conflito 409. Não há fila nova de limpeza: resíduos após indisponibilidade continuam sendo uma limitação operacional.
+- `GerarPdfButton` e `BaixarPdfButton` bloqueiam chamadas duplicadas antes da atualização visual do React e liberam nova tentativa ao terminar. Conflitos e respostas ambíguas oferecem “Atualizar orçamento”. `lib/supabase/sessao.ts:38` distingue sessão ausente (401) de papel ativo sem permissão (403).
+
+`scripts/test-lead-flow.mjs` executa handlers, sessão, renderer e botões reais com banco, navegador e Storage simulados. Cobre quatro papéis, usuário inativo/sem sessão, edição durante a geração, capa alterada, renovação de URL, imagem quebrada, resposta perdida após commit, falha na confirmação/limpeza, cliques duplicados e recuperação. A primeira execução local das regressões de servidor passou; a ampliação dos testes de botões/renderer segue para o CI porque outro projeto iniciou testes locais. Este lote não exige migration. Essa cobertura não equivale a impressão visual do PDF nem à matriz manual dos quatro perfis em produção; essas verificações permanecem pendentes.
 
 > [!info] Migração para vault
 > Este arquivo era duplicado em `Docs/ADMIN_SETUP.md` e `Docs/site/ADMIN_SETUP.md`. Consolidado aqui como fonte única. Referenciado por [[stack-nextjs-supabase]].

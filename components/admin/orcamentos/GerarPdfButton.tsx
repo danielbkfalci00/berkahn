@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useRef, useState } from "react"
 import { useRouter } from "next/navigation"
 import { Loader2, FileDown, AlertCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -14,13 +14,16 @@ type State =
   | { status: "idle" }
   | { status: "loading" }
   | { status: "success"; atualizadoEm: string }
-  | { status: "error"; message: string; campos?: string[] }
+  | { status: "error"; message: string; campos?: string[]; refreshable?: boolean }
 
 export function GerarPdfButton({ orcamentoId, atualizadoEm }: Props) {
   const [state, setState] = useState<State>({ status: "idle" })
   const router = useRouter()
+  const pending = useRef(false)
 
   const gerar = async () => {
+    if (pending.current) return
+    pending.current = true
     setState({ status: "loading" })
     try {
       const res = await fetch(`/api/admin/orcamentos/${orcamentoId}/pdf`, {
@@ -33,6 +36,7 @@ export function GerarPdfButton({ orcamentoId, atualizadoEm }: Props) {
           status: "error",
           message: json.error ?? "Falha ao gerar PDF",
           campos: json.campos,
+          refreshable: res.status === 409 || res.status === 503,
         })
         return
       }
@@ -42,7 +46,10 @@ export function GerarPdfButton({ orcamentoId, atualizadoEm }: Props) {
       setState({
         status: "error",
         message: err instanceof Error ? err.message : "Erro inesperado",
+        refreshable: true,
       })
+    } finally {
+      pending.current = false
     }
   }
 
@@ -71,11 +78,12 @@ export function GerarPdfButton({ orcamentoId, atualizadoEm }: Props) {
       )}
 
       {state.status === "error" && (
-        <div className="rounded border border-red-200 bg-red-50 p-3 text-sm text-red-700">
+        <div role="alert" className="rounded border border-red-200 bg-red-50 p-3 text-sm text-red-700">
           <div className="flex items-start gap-2">
             <AlertCircle className="h-4 w-4 flex-shrink-0 mt-0.5" />
             <div>
               <div className="font-medium">{state.message}</div>
+              {state.refreshable && <button type="button" onClick={() => router.refresh()} className="mt-1 inline-flex min-h-11 items-center underline">Atualizar orçamento</button>}
               {state.campos && state.campos.length > 0 && (
                 <ul className="mt-1 text-xs list-disc pl-4">
                   {state.campos.map((c) => (

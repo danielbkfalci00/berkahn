@@ -29,7 +29,7 @@ export const getAdminSession = cache(async () => {
  * abertas na internet, três delas usando service key. Esta checagem local é a
  * segunda barreira, para que a garantia não dependa de um arquivo distante.
  *
- * Devolve `null` quando há sessão, ou a resposta 401 pronta para retornar:
+ * Devolve `null` para papel permitido, 401 sem sessão ativa ou 403 sem permissão:
  *
  *   const barrado = await exigirSessao()
  *   if (barrado) return barrado
@@ -38,8 +38,11 @@ export async function exigirSessao(
   roles: AdminRole[] = ["owner", "comercial"]
 ): Promise<NextResponse | null> {
   const session = await getAdminSession();
-  if (!session || !roles.includes(session.membership.role)) {
+  if (!session) {
     return NextResponse.json({ error: "Não autorizado" }, { status: 401 });
+  }
+  if (!roles.includes(session.membership.role)) {
+    return NextResponse.json({ error: "Seu perfil não tem permissão para esta ação." }, { status: 403 });
   }
   return null;
 }
