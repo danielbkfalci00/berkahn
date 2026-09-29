@@ -100,13 +100,19 @@ function formatarCelula(
 export function PlanilhaUpload() {
   const router = useRouter()
   const inputRef = useRef<HTMLInputElement>(null)
+  const operationPending = useRef(false)
+  const creationAttempt = useRef<{ id: string; dataElaboracao: string } | null>(null)
   const [estado, setEstado] = useState<Estado>("idle")
   const [resp, setResp] = useState<RespostaParse | null>(null)
   const [mensagem, setMensagem] = useState<string | null>(null)
   const [dragOver, setDragOver] = useState(false)
   const [filename, setFilename] = useState<string | null>(null)
+  const [existenteId, setExistenteId] = useState<string | null>(null)
 
   const reset = useCallback(() => {
+    if (operationPending.current) return
+    creationAttempt.current = null
+    setExistenteId(null)
     setEstado("idle")
     setResp(null)
     setMensagem(null)
@@ -115,6 +121,11 @@ export function PlanilhaUpload() {
   }, [])
 
   const enviarArquivo = useCallback(async (file: File) => {
+    if (operationPending.current) return
+    operationPending.current = true
+    creationAttempt.current = null
+    setExistenteId(null)
+    setResp(null)
     setEstado("parsing")
     setMensagem(null)
     setFilename(file.name)
@@ -137,6 +148,8 @@ export function PlanilhaUpload() {
     } catch (err) {
       setEstado("erro")
       setMensagem(err instanceof Error ? err.message : "Falha ao enviar arquivo")
+    } finally {
+      operationPending.current = false
     }
   }, [])
 
@@ -159,16 +172,26 @@ export function PlanilhaUpload() {
   )
 
   const abrirNoWizard = useCallback(async () => {
-    if (!resp?.row) return
+    if (!resp?.row || operationPending.current) return
+    operationPending.current = true
     setEstado("criando")
     setMensagem(null)
-    const res = await criarRascunhoDePlanilha(resp.row)
-    if (!res.ok) {
-      setEstado("erro")
-      setMensagem(res.erro)
-      return
+    try {
+      creationAttempt.current ??= { id: crypto.randomUUID(), dataElaboracao: new Date().toISOString().slice(0, 10) }
+      const res = await criarRascunhoDePlanilha(resp.row, creationAttempt.current.id, creationAttempt.current.dataElaboracao)
+      if (!res.ok) {
+        setEstado("preview")
+        setMensagem(res.erro)
+        setExistenteId(res.existenteId ?? null)
+        return
+      }
+      router.push(`/admin/orcamentos/${res.id}/edit`)
+    } catch {
+      setEstado("preview")
+      setMensagem("Não foi possível confirmar a criação. Tente novamente; a mesma tentativa não criará outro rascunho.")
+    } finally {
+      operationPending.current = false
     }
-    router.push(`/admin/orcamentos/${res.id}/edit`)
   }, [resp, router])
 
   const podeAbrir =
@@ -309,11 +332,12 @@ export function PlanilhaUpload() {
           )}
 
           {mensagem && (
-            <Card className="p-3 border-red-200 bg-red-50">
+            <Card role="alert" className="p-3 border-red-200 bg-red-50">
               <div className="flex items-start gap-2 text-sm text-red-700">
                 <AlertCircle className="h-4 w-4 flex-shrink-0 mt-0.5" />
                 <span>{mensagem}</span>
               </div>
+              {existenteId && <a href={`/admin/orcamentos/${existenteId}`} target="_blank" rel="noopener noreferrer" className="mt-2 inline-flex min-h-11 items-center text-sm underline">Conferir orçamento existente em outra aba</a>}
             </Card>
           )}
 

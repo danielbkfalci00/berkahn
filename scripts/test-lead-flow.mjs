@@ -2,6 +2,8 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { webcrypto } from 'node:crypto';
+import { isDeepStrictEqual } from 'node:util';
+import Papa from 'papaparse';
 import ts from 'typescript';
 
 async function loadTypeScript(source) {
@@ -58,13 +60,16 @@ function loadCommonModule(source, imports) {
   }, testModule, testModule.exports);
   return testModule.exports;
 }
-const wizardModule = loadCommonModule(wizardSource, { '@/types/orcamento-estimativa': { CARDS_ENTREGA_DEFAULT: ['engenharia'] } });
+const budgetTypes = loadCommonModule(readFileSync(new URL('../types/orcamento-estimativa.ts', import.meta.url), 'utf8'), {});
+const wizardModule = loadCommonModule(wizardSource, { '@/types/orcamento-estimativa': budgetTypes });
+const planilhaModule = loadCommonModule(readFileSync(new URL('../lib/orcamento-planilha.ts', import.meta.url), 'utf8'), { papaparse: Papa, '@/types/orcamento-estimativa': budgetTypes, '@/components/admin/orcamentos/wizard-state': wizardModule });
 const actionsSource = readFileSync(new URL('../app/admin/orcamentos/actions.ts', import.meta.url), 'utf8');
 const heroSource = readFileSync(new URL('../app/api/admin/orcamentos/[id]/hero/route.ts', import.meta.url), 'utf8');
 const pdfUrlSource = readFileSync(new URL('../app/api/admin/orcamentos/[id]/pdf-url/route.ts', import.meta.url), 'utf8');
 const initialRevision = '2026-09-29T16:00:00.000000+00:00';
-function createBudgetHarness({ onUpdate, signingFails = false } = {}) {
+function createBudgetHarness({ onUpdate, signingFails = false, loseFirstCreateResponse = false, normalizeStoredValues = (value) => value } = {}) {
   let version = 0;
+  let responseLost = false;
   const row = { ...wizardModule.initialState().dados, id: 'budget-test', numero: 'TEST-001', atualizado_em: initialRevision, cliente_nome: 'Cliente sintético', obra_endereco: 'Endereço sintético', obra_cidade: 'Cidade', projeto_area_m2: 100, valor_min: 100, valor_max: 200, valor_m2_min: 1, valor_m2_max: 2, hero_image_url: 'budget-test/old.webp' };
   const calls = { writes: 0, logs: 0, signedPdfs: 0, uploaded: [], removed: [] };
   const nextRevision = () => `2026-09-29T16:00:00.${String(++version).padStart(6, '0')}+00:00`;
@@ -76,9 +81,11 @@ function createBudgetHarness({ onUpdate, signingFails = false } = {}) {
       let insertion = false;
       const execute = async () => {
         if (table === 'activity_logs') { calls.logs++; return { error: null }; }
+        if (insertion && patch.id && patch.id === row.id) return { data: null, error: { code: '23505', message: 'Chave já existente' } };
         if (patch && !insertion) await onUpdate?.(row, { nextRevision });
         if (!filters.every(([key, value]) => row[key] === value)) return { data: null, error: null };
-        if (patch) { Object.assign(row, patch, { atualizado_em: nextRevision() }); calls.writes++; }
+        if (patch) { Object.assign(row, normalizeStoredValues(patch), { atualizado_em: nextRevision() }); calls.writes++; }
+        if (insertion && loseFirstCreateResponse && !responseLost) { responseLost = true; return { data: null, error: { code: 'FETCH_ERROR', message: 'Resposta perdida depois do commit' } }; }
         return { data: structuredClone(row), error: null };
       };
       const query = {
@@ -103,7 +110,7 @@ function createBudgetHarness({ onUpdate, signingFails = false } = {}) {
   };
   const cache = { revalidatePath() {} };
   const session = { async getAdminSession() { return { supabase, user: { id: 'synthetic-user', email: 'test@example.invalid' }, membership: { role: 'owner' } }; }, async exigirSessao() { return null; } };
-  const actions = loadCommonModule(actionsSource, { 'next/cache': cache, '@/lib/supabase/sessao': session, '@/components/admin/orcamentos/wizard-state': wizardModule, '@/lib/orcamento-planilha': { rowParaInsert: (value) => value } });
+  const actions = loadCommonModule(actionsSource, { 'next/cache': cache, 'node:util': { isDeepStrictEqual }, '@/lib/supabase/sessao': session, '@/components/admin/orcamentos/wizard-state': wizardModule, '@/lib/orcamento-planilha': planilhaModule });
   const sharp = () => { const image = { resize() { return image; }, webp() { return image; }, async toBuffer() { return Buffer.from('synthetic-image'); } }; return image; };
   const hero = loadCommonModule(heroSource, { 'next/cache': cache, 'next/server': { NextResponse: Response }, sharp, 'node:crypto': { randomUUID: () => 'new-upload' }, '@/lib/supabase/admin': { createServiceClient: () => supabase }, '@/lib/supabase/sessao': session });
   const pdfUrl = loadCommonModule(pdfUrlSource, { 'next/server': { NextResponse: Response }, '@/lib/supabase/admin': { createServiceClient: () => supabase }, '@/lib/supabase/sessao': session, '@/lib/orcamento-pdf-storage': { isOrcamentoPdfCurrent, async gerarSignedUrlPdf() { calls.signedPdfs++; return 'https://example.invalid/current.pdf'; } } });
@@ -137,6 +144,84 @@ const created = createBudgetHarness();
 const creation = await created.actions.criarOrcamento(wizardModule.initialState().dados);
 assert.equal(creation.ok, true);
 assert.equal(creation.atualizadoEm, created.row.atualizado_em);
+
+const creationId = '12345678-1234-4234-8234-123456789abc';
+const creationInput = { ...wizardModule.initialState().dados, id: creationId, cliente_nome: 'Criação única', condicionantes_extras: [{ texto: 'Condição', detalhe: 'Mesmo objeto com outra ordem' }] };
+const retriedCreation = createBudgetHarness({ loseFirstCreateResponse: true });
+assert.equal((await retriedCreation.actions.criarOrcamento(creationInput)).ok, false, 'Simula commit confirmado pelo banco cuja resposta não chegou ao cliente.');
+const recoveredCreation = await retriedCreation.actions.criarOrcamento(creationInput);
+assert.equal(recoveredCreation.ok, true);
+assert.equal(recoveredCreation.id, creationId);
+assert.equal(retriedCreation.calls.writes, 1, 'Retry recupera o mesmo registro sem outro insert efetivo.');
+assert.equal((await retriedCreation.actions.criarOrcamento({ ...creationInput, condicionantes_extras: [{ detalhe: 'Mesmo objeto com outra ordem', texto: 'Condição' }] })).ok, true, 'Ordem de chaves JSONB não deve produzir falso conflito.');
+const divergentCreation = await retriedCreation.actions.criarOrcamento({ ...creationInput, cliente_nome: 'Alteração local após falha' });
+assert.equal(divergentCreation.ok, false);
+assert.equal(divergentCreation.conflito, true);
+assert.equal(divergentCreation.existenteId, creationId);
+assert.equal(retriedCreation.row.cliente_nome, 'Criação única', 'Recuperação não sobrescreve conteúdo divergente.');
+assert.equal(retriedCreation.calls.writes, 1);
+retriedCreation.row.status = 'finalizado';
+assert.equal((await retriedCreation.actions.criarOrcamento(creationInput)).conflito, true, 'Repetição não reabre orçamento que já avançou no fluxo.');
+
+const simultaneousCreation = createBudgetHarness();
+const simultaneousResults = await Promise.all([simultaneousCreation.actions.criarOrcamento(creationInput), simultaneousCreation.actions.criarOrcamento(creationInput)]);
+assert.ok(simultaneousResults.every((result) => result.ok && result.id === creationId));
+assert.equal(simultaneousCreation.calls.writes, 1, 'Dois envios simultâneos com a mesma chave criam apenas um orçamento.');
+const foreignCreation = createBudgetHarness();
+foreignCreation.row.id = creationId;
+foreignCreation.row.criado_por = 'other-user';
+const foreignResult = await foreignCreation.actions.criarOrcamento(creationInput);
+assert.equal(foreignResult.ok, false);
+assert.equal(foreignResult.existenteId, undefined, 'Não recupera nem revela orçamento de outro autor.');
+assert.equal(foreignCreation.calls.writes, 0);
+assert.equal((await foreignCreation.actions.criarOrcamento({ ...creationInput, id: 'invalid' })).ok, false);
+assert.equal(foreignCreation.calls.writes, 0);
+// O banco usa NUMERIC(..., 2): uma resposta perdida deve recuperar a versão
+// arredondada, inclusive quando o decimal representa metade de um centavo.
+const moneyInput = { ...creationInput, valor_min: 100.123, valor_max: 200.125, valor_m2_min: 1.005, valor_m2_max: 2.675 };
+const moneyCreation = createBudgetHarness({ loseFirstCreateResponse: true, normalizeStoredValues(value) {
+  const normalized = { ...value };
+  for (const field of ['valor_min', 'valor_max', 'valor_m2_min', 'valor_m2_max']) if (field in normalized) normalized[field] = Number(normalized[field].toFixed(2));
+  return normalized;
+} });
+assert.equal((await moneyCreation.actions.criarOrcamento(moneyInput)).ok, false);
+assert.deepEqual(['valor_min', 'valor_max', 'valor_m2_min', 'valor_m2_max'].map((field) => moneyCreation.row[field]), [100.12, 200.13, 1.01, 2.68]);
+assert.equal((await moneyCreation.actions.criarOrcamento(moneyInput)).id, creationId, 'Mesmos valores de origem recuperam os centavos persistidos.');
+assert.equal(moneyCreation.calls.writes, 1);
+assert.equal((await moneyCreation.actions.criarOrcamento({ ...moneyInput, valor_min: 100.14 })).conflito, true, 'Diferença real de centavos continua sendo conflito.');
+const tinyAmount = createBudgetHarness();
+assert.equal((await tinyAmount.actions.criarOrcamento({ ...creationInput, valor_min: 1e-7 })).ok, true);
+assert.equal(tinyAmount.row.valor_min, 0, 'Notação exponencial também respeita a escala do banco.');
+
+async function atUtcDate(iso, operation) {
+  const OriginalDate = globalThis.Date;
+  class FixedDate extends OriginalDate {
+    constructor(...args) { if (args.length) super(...args); else super(iso); }
+    static now() { return OriginalDate.parse(iso); }
+  }
+  globalThis.Date = FixedDate;
+  try { return await operation(); } finally { globalThis.Date = OriginalDate; }
+}
+const beforeMidnight = '2026-09-29T23:59:59.000Z';
+const afterMidnight = '2026-09-30T00:00:01.000Z';
+const datedWizard = createBudgetHarness({ loseFirstCreateResponse: true });
+const datedWizardInput = await atUtcDate(beforeMidnight, () => ({ ...wizardModule.initialState().dados, id: creationId }));
+assert.equal((await atUtcDate(beforeMidnight, () => datedWizard.actions.criarOrcamento(datedWizardInput))).ok, false);
+assert.equal((await atUtcDate(afterMidnight, () => datedWizard.actions.criarOrcamento(datedWizardInput))).id, creationId);
+assert.equal(datedWizard.row.data_elaboracao, '2026-09-29');
+assert.equal(datedWizard.row.data_cotacao, '2026-09-29', 'Datas do estado do wizard sobrevivem ao retry no dia seguinte.');
+assert.equal(datedWizard.calls.writes, 1);
+
+const importedCreation = createBudgetHarness({ loseFirstCreateResponse: true });
+const importedInput = { cliente_nome: 'Importação sintética', obra_endereco: 'Endereço sintético', obra_cidade: 'Cidade', area_m2: 120, pavimentos: 1, padrao_acabamento: 'alto', valor_min: 100, valor_max: 200, valor_m2_min: 1, valor_m2_max: 2, regime_recomendado: 'indefinido', data_cotacao: '2026-09-20' };
+const importDate = await atUtcDate(beforeMidnight, () => new Date().toISOString().slice(0, 10));
+assert.equal((await atUtcDate(beforeMidnight, () => importedCreation.actions.criarRascunhoDePlanilha(importedInput, creationId, importDate))).ok, false);
+assert.equal((await atUtcDate(afterMidnight, () => importedCreation.actions.criarRascunhoDePlanilha(importedInput, creationId, importDate))).id, creationId);
+assert.equal(importedCreation.row.data_elaboracao, '2026-09-29', 'Mapper real recebe a data original da tentativa, mesmo após mudar o dia.');
+assert.equal(importedCreation.row.data_cotacao, '2026-09-20', 'Data da planilha permanece independente da elaboração.');
+assert.equal(importedCreation.row.projeto_area_m2, 120, 'Exercita o mapeamento real dos nomes da planilha.');
+assert.equal(importedCreation.calls.writes, 1, 'Importação preserva chave e defaults de criação no retry.');
+assert.equal((await importedCreation.actions.criarRascunhoDePlanilha(importedInput, creationId, 'inválida')).ok, false, 'Data fornecida usa o validador existente.');
 
 const heroContext = { params: Promise.resolve({ id: 'budget-test' }) };
 const heroRequest = (revision, method = 'DELETE') => ({ headers: new Headers({ 'If-Match': `"${revision}"` }), method, async formData() { return new Map([['file', new File(['synthetic'], 'test.webp', { type: 'image/webp' })]]); } });

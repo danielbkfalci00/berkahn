@@ -10,6 +10,9 @@ import { buildActions, buildInsights, isKnownInspection } from './lib/insights.m
 import { comparisonPolicyFor } from '../../lib/analytics/comparison-policy.mjs';
 import { isIndexationEligibleSlug } from './lib/posts.mjs';
 import { persistSnapshot, upsertSnapshot } from './lib/supabase-snapshot.mjs';
+import ts from 'typescript';
+import * as jsxRuntime from 'react/jsx-runtime';
+import { renderToStaticMarkup } from 'react-dom/server';
 
 let failures = 0;
 let total = 0;
@@ -220,9 +223,82 @@ ok('score exclui indexacao com cobertura incompleta', incompleteHealth.weights.i
 console.log('exclusoes, leads e PWA');
 ok('redirect nao entra na inspecao', !isIndexationEligibleSlug('steel-frame-futuro-construcao'));
 ok('artigo elegivel entra na inspecao', isIndexationEligibleSlug('artigo-valido'));
-const leadsQuery = readFileSync('lib/analytics/leads-queries.ts', 'utf8');
-ok('funil exclui leads arquivados', leadsQuery.includes('.is("arquivado_em", null)'));
-ok('funil retorna estado indisponivel', leadsQuery.includes('status: "unavailable"'));
+
+// Mesmo padrão de scripts/test-lead-flow: executa o módulo real, simulando
+// apenas os limites de I/O. Nenhuma conexão ou infraestrutura é iniciada.
+function loadCommonModule(source, imports) {
+  const output = ts.transpileModule(source, { fileName: 'analytics-test.tsx', compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.CommonJS, jsx: ts.JsxEmit.ReactJSX, esModuleInterop: true } }).outputText;
+  const testModule = { exports: {} };
+  new Function('require', 'module', 'exports', output)((name) => {
+    assert.ok(Object.hasOwn(imports, name), `Import inesperado: ${name}`);
+    return imports[name];
+  }, testModule, testModule.exports);
+  return testModule.exports;
+}
+const access = loadCommonModule(readFileSync('lib/admin/access.ts', 'utf8'), {});
+const funnel = loadCommonModule(readFileSync('lib/analytics/leads-funnel.ts', 'utf8'), {});
+const cohortRows = [
+  { id: 'convertido', status: 'convertido', criado_em: '2026-09-01', convertido_em: '2026-09-10', arquivado_em: null, anonimizado_em: null, canal: 'form' },
+  { id: 'desqualificado', status: 'desqualificado', criado_em: '2026-09-03', convertido_em: null, arquivado_em: null, anonimizado_em: null, canal: 'form' },
+  { id: 'anonimizado', status: 'convertido', criado_em: '2026-09-03', convertido_em: '2026-09-10', arquivado_em: null, anonimizado_em: '2026-09-11' },
+  { id: 'depois-do-corte', status: 'novo', criado_em: '2026-09-21', arquivado_em: null, anonimizado_em: null },
+];
+let role = 'owner';
+let cohortQueries = 0;
+let queryFails = false;
+const cohortClient = { from(table) {
+  assert.equal(table, 'leads');
+  cohortQueries++;
+  const filters = [];
+  const query = {
+    select(columns) {
+      assert.ok(!columns.split(/\s*,\s*/).some((field) => ['*', 'nome', 'email', 'telefone', 'mensagem'].includes(field)));
+      return query;
+    },
+    gte(key, value) { filters.push((row) => row[key] >= value); return query; },
+    lt(key, value) { filters.push((row) => row[key] < value); return query; },
+    is(key, value) { filters.push((row) => row[key] === value); return query; },
+    order() { return query; },
+    async range(from, to) {
+      return queryFails ? { data: null, error: { message: 'CRM indisponível' } } : { data: cohortRows.filter((row) => filters.every((predicate) => predicate(row))).slice(from, to + 1), error: null };
+    },
+  };
+  return query;
+} };
+const leadQueries = loadCommonModule(readFileSync('lib/analytics/leads-queries.ts', 'utf8'), {
+  'server-only': {},
+  '@/lib/supabase/server': { createClient: async () => cohortClient },
+  '@/lib/supabase/sessao': { getAdminSession: async () => role ? { membership: { role }, supabase: cohortClient } : null },
+  '@/lib/admin/access': access,
+});
+const beforeArchive = await leadQueries.listarLeadsDoMes('2026-09', '2026-09-20');
+assert.equal(beforeArchive.status, 'ok');
+const beforeFunnel = funnel.construirFunilLeads(beforeArchive.data);
+ok('coorte exclui anonimizados e entradas apos o corte', beforeFunnel.total === 2 && beforeFunnel.convertidos === 1);
+cohortRows[1].arquivado_em = '2026-09-29';
+const afterArchive = await leadQueries.listarLeadsDoMes('2026-09', '2026-09-20');
+assert.equal(afterArchive.status, 'ok');
+const afterFunnel = funnel.construirFunilLeads(afterArchive.data);
+ok('arquivar nao muda recebidos nem conversao', afterFunnel.total === beforeFunnel.total && afterFunnel.taxaConversao === beforeFunnel.taxaConversao && afterFunnel.desqualificados === 1);
+for (const restrictedRole of ['conteudo', 'viewer', null]) {
+  role = restrictedRole;
+  const callsBefore = cohortQueries;
+  const result = await leadQueries.listarLeadsDoMes('2026-09', '2026-09-20');
+  ok(`perfil ${restrictedRole ?? 'sem sessao'} nao consulta CRM nem recebe zero`, result.status === 'unavailable' && !('data' in result) && cohortQueries === callsBefore);
+}
+role = 'comercial';
+ok('comercial continua consultando a coorte', (await leadQueries.listarLeadsDoMes('2026-09', '2026-09-20')).status === 'ok');
+queryFails = true;
+ok('falha do CRM nao vira coorte vazia', (await leadQueries.listarLeadsDoMes('2026-09', '2026-09-20')).status === 'unavailable');
+
+const { ConversionEvents } = loadCommonModule(readFileSync('components/admin/analytics/ConversionEvents.tsx', 'utf8'), { 'react/jsx-runtime': jsxRuntime });
+const contactGa4 = { events: [{ name: 'whatsapp_click', count: 12 }], eventsAvailable: true, whatsappBreakdown: { available: true, rows: [] } };
+const contactsMarkup = (funil) => renderToStaticMarkup(jsxRuntime.jsx(ConversionEvents, { ga4: contactGa4, funil, monthSlug: '2026-09' }));
+const restrictedMarkup = contactsMarkup(null);
+ok('perfil sem CRM mantem GA4 e omite cards de leads', restrictedMarkup.includes('Cliques no WhatsApp') && restrictedMarkup.includes('>12<') && !restrictedMarkup.includes('CRM') && !restrictedMarkup.includes('Leads via WhatsApp') && !restrictedMarkup.includes('Formulários'));
+const allowedMarkup = contactsMarkup({ status: 'ok', data: afterFunnel });
+ok('perfil autorizado ve contatos recebidos incluindo arquivados', allowedMarkup.includes('Formulários') && allowedMarkup.includes('>2<'));
+ok('indisponibilidade real continua visivel', contactsMarkup({ status: 'unavailable', reason: 'falha de consulta' }).includes('CRM indisponível'));
 const manifest = JSON.parse(readFileSync('public/admin/manifest.webmanifest', 'utf8'));
 ok('PWA admin abre dashboard no proprio escopo',
   manifest.id === '/admin/' &&

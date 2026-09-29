@@ -1,6 +1,6 @@
 "use client"
 
-import { useReducer, useState, useCallback, useMemo } from "react"
+import { useReducer, useState, useCallback, useMemo, useRef } from "react"
 import { useRouter } from "next/navigation"
 import { useUnsavedChanges } from "@/hooks/use-unsaved-changes"
 import {
@@ -55,6 +55,7 @@ interface SaveState {
   status: "idle" | "salvando" | "finalizando" | "ok" | "erro"
   mensagem: string | null
   conflito?: boolean
+  existenteId?: string
 }
 
 function StatusIcon({
@@ -117,6 +118,8 @@ export function OrcamentoWizard({ orcamentoInicial, dadosIniciais }: Props) {
     orcamentoInicial?.id
   )
   const [atualizadoEm, setAtualizadoEm] = useState(orcamentoInicial?.atualizado_em ?? "")
+  const savePending = useRef(false)
+  const creationId = useRef<string | null>(null)
 
   const ehNovo = !orcamentoInicial && !orcamentoId
   const titulo = orcamentoInicial
@@ -146,12 +149,15 @@ export function OrcamentoWizard({ orcamentoInicial, dadosIniciais }: Props) {
   }, [])
 
   const salvarRascunho = async () => {
+    if (savePending.current) return
+    savePending.current = true
     setSalvar({ status: "salvando", mensagem: null })
     try {
       if (ehNovo) {
-        const res = await criarOrcamento(state.dados)
+        creationId.current ??= crypto.randomUUID()
+        const res = await criarOrcamento({ ...state.dados, id: creationId.current })
         if (!res.ok) {
-          setSalvar({ status: "erro", mensagem: res.erro })
+          setSalvar({ status: "erro", mensagem: res.erro, conflito: res.conflito, existenteId: res.existenteId })
           return
         }
         setOrcamentoId(res.id)
@@ -180,10 +186,13 @@ export function OrcamentoWizard({ orcamentoInicial, dadosIniciais }: Props) {
             ? `Falha inesperada: ${err.message}`
             : "Falha inesperada ao salvar",
       })
+    } finally {
+      savePending.current = false
     }
   }
 
   const finalizar = async () => {
+    if (savePending.current) return
     if (!validacaoFinal.ok) {
       const ordem: StepId[] = [1, 2, 3, 4]
       const primeiroComErro = ordem.find(
@@ -197,15 +206,17 @@ export function OrcamentoWizard({ orcamentoInicial, dadosIniciais }: Props) {
       return
     }
 
+    savePending.current = true
     setSalvar({ status: "finalizando", mensagem: null })
 
     try {
       let id = orcamentoId
       let revisao = atualizadoEm
       if (ehNovo) {
-        const criacao = await criarOrcamento(state.dados)
+        creationId.current ??= crypto.randomUUID()
+        const criacao = await criarOrcamento({ ...state.dados, id: creationId.current })
         if (!criacao.ok) {
-          setSalvar({ status: "erro", mensagem: criacao.erro })
+          setSalvar({ status: "erro", mensagem: criacao.erro, conflito: criacao.conflito, existenteId: criacao.existenteId })
           return
         }
         id = criacao.id
@@ -231,6 +242,8 @@ export function OrcamentoWizard({ orcamentoInicial, dadosIniciais }: Props) {
             ? `Falha inesperada: ${err.message}`
             : "Falha inesperada ao finalizar",
       })
+    } finally {
+      savePending.current = false
     }
   }
 
@@ -334,8 +347,8 @@ export function OrcamentoWizard({ orcamentoInicial, dadosIniciais }: Props) {
             )}
             <span>{salvar.mensagem}</span>
           </div>
-          {salvar.conflito && orcamentoId && (
-            <a href={`/admin/orcamentos/${orcamentoId}`} target="_blank" rel="noopener noreferrer" className="mt-2 inline-flex min-h-11 items-center underline">
+          {salvar.conflito && (salvar.existenteId || orcamentoId) && (
+            <a href={`/admin/orcamentos/${salvar.existenteId || orcamentoId}`} target="_blank" rel="noopener noreferrer" className="mt-2 inline-flex min-h-11 items-center underline">
               Conferir versão atual em outra aba
             </a>
           )}

@@ -97,6 +97,23 @@ export function QuadroConteudo({ pautas: doServidor, tagsCatalogo, worker }: Pro
   const intencao = filtrosUrl.values.conteudo_intencao || TODOS;
   const prioridade = filtrosUrl.values.conteudo_prioridade || TODOS;
   const prazo = filtrosUrl.values.conteudo_prazo || TODOS;
+  // Links follow the filters actually rendering the board, including text
+  // typed before the debounced URL update reaches Next's search params.
+  const returnParams = new URLSearchParams();
+  for (const [key, value] of Object.entries({
+    conteudo_visao: visao === "geral" ? "" : visao,
+    conteudo_q: busca,
+    conteudo_plataforma: plataforma === TODOS ? "" : plataforma,
+    conteudo_trilha: trilha === TODOS ? "" : trilha,
+    conteudo_funil: funil === TODOS ? "" : funil,
+    conteudo_intencao: intencao === TODOS ? "" : intencao,
+    conteudo_prioridade: prioridade === TODOS ? "" : prioridade,
+    conteudo_prazo: prazo === TODOS ? "" : prazo,
+  })) {
+    if (value) returnParams.set(key, value);
+  }
+  const returnQuery = returnParams.toString();
+  const returnTo = `/admin/conteudo${returnQuery ? `?${returnQuery}` : ""}`;
   const setPlataforma = (valor: string) => filtrosUrl.setValue("conteudo_plataforma", valor === TODOS ? "" : valor);
   const setTrilha = (valor: string) => filtrosUrl.setValue("conteudo_trilha", valor === TODOS ? "" : valor);
   const setFunil = (valor: string) => filtrosUrl.setValue("conteudo_funil", valor === TODOS ? "" : valor);
@@ -426,7 +443,7 @@ export function QuadroConteudo({ pautas: doServidor, tagsCatalogo, worker }: Pro
       </div>
 
       {visao === "geral" ? (
-        <AgendaGeral pautas={itens} tagsCatalogo={tagsCatalogo}
+        <AgendaGeral pautas={itens} tagsCatalogo={tagsCatalogo} returnTo={returnTo}
           aoExcluir={handleExcluir} confirmandoExclusao={confirmandoExclusao}
           aoPedirExclusao={setConfirmandoExclusao} />
       ) : (
@@ -435,7 +452,7 @@ export function QuadroConteudo({ pautas: doServidor, tagsCatalogo, worker }: Pro
           <div className="-mx-4 overflow-x-auto px-4 pb-4 md:-mx-6 md:px-6">
             <div className="flex min-w-full flex-col items-stretch gap-4 md:min-w-max md:flex-row md:items-start">
               {colunas.map((coluna) => (
-                <ColunaPauta key={coluna} coluna={coluna} visao={visao}
+                <ColunaPauta key={coluna} coluna={coluna} visao={visao} returnTo={returnTo}
                   pautas={itens.filter((p) => p.coluna === coluna)}
                   arrastavel={arrastavel} aoCriar={handleCriar} aoMover={handleMover}
                   aoExcluir={handleExcluir}
@@ -460,10 +477,11 @@ export function QuadroConteudo({ pautas: doServidor, tagsCatalogo, worker }: Pro
 }
 
 function AgendaGeral({
-  pautas, tagsCatalogo, aoExcluir, confirmandoExclusao, aoPedirExclusao,
+  pautas, tagsCatalogo, returnTo, aoExcluir, confirmandoExclusao, aoPedirExclusao,
 }: {
   pautas: ItemQuadro[];
   tagsCatalogo: TagCatalogo[];
+  returnTo: string;
   aoExcluir: (id: string) => void;
   confirmandoExclusao: string | null;
   aoPedirExclusao: (id: string | null) => void;
@@ -554,7 +572,7 @@ function AgendaGeral({
             {visiveis.length > 0 && (
               <ul className="grid gap-3 lg:grid-cols-2 2xl:grid-cols-3">
                 {visiveis.map((pauta) => (
-                  <CartaoPauta key={pauta.id} pauta={pauta} visao="geral" colunas={[]}
+                  <CartaoPauta key={pauta.id} pauta={pauta} visao="geral" colunas={[]} returnTo={returnTo}
                     arrastavel={false} aoMover={() => undefined} aoExcluir={aoExcluir}
                     confirmandoExclusao={confirmandoExclusao === pauta.id}
                     aoPedirExclusao={aoPedirExclusao} selecionado={false}

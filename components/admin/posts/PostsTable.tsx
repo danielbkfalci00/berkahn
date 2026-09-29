@@ -244,7 +244,7 @@ export function PostsTable({ posts, search, statusFilter, page, pageSize, total 
                     {statusConfig[post.status].label}
                   </Badge>
                 </TableCell>
-                <TableCell className="text-neutral-500">
+                <TableCell className="whitespace-nowrap text-neutral-500">
                   {post.status === "published"
                     ? formatDate(post.published_at)
                     : formatDate(post.created_at)}

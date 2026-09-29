@@ -1,6 +1,7 @@
 "use server"
 
 import { revalidatePath } from "next/cache"
+import { isDeepStrictEqual } from "node:util"
 import { getAdminSession } from "@/lib/supabase/sessao"
 import { initialState, validarTudo } from "@/components/admin/orcamentos/wizard-state"
 import { rowParaInsert } from "@/lib/orcamento-planilha"
@@ -12,7 +13,7 @@ import type {
 
 type ActionResultCreate =
   | { ok: true; id: string; numero: string; atualizadoEm: string }
-  | { ok: false; erro: string }
+  | { ok: false; erro: string; conflito?: boolean; existenteId?: string }
 
 type ActionResultUpdate = { ok: true; atualizadoEm: string } | { ok: false; erro: string; conflito?: boolean }
 
@@ -70,12 +71,23 @@ export async function criarOrcamento(
 
   const inputError = budgetPatchError(input)
   if (inputError) return { ok: false, erro: inputError }
+  if (input.id !== undefined && (typeof input.id !== "string" || !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(input.id))) {
+    return { ok: false, erro: "Identificador de criação inválido." }
+  }
+  const creationId = input.id?.toLowerCase()
 
   const supabase = admin.supabase
   // Cast: JSONB columns (condicionantes_extras, exclusoes_extras, entrega_categorias_ativas)
   // tipam como Json no Database gerado, mas mantemos shapes específicos no domínio.
   const clean = { ...initialState().dados, ...editablePatch(input), criado_por: admin.user.id, status: "rascunho" }
-  const payload = clean as never
+  // NUMERIC(..., 2) persiste centavos. Canonicalizar antes do insert também
+  // permite recuperar a mesma tentativa após o banco arredondar o valor.
+  for (const field of ["valor_min", "valor_max", "valor_m2_min", "valor_m2_max"] as const) {
+    const [coefficient, exponent = "0"] = String(clean[field]).split("e")
+    const cents = Number(`${coefficient}e${Number(exponent) + 2}`)
+    if (Number.isFinite(cents)) clean[field] = Math.round(cents) / 100
+  }
+  const payload = { ...clean, ...(creationId ? { id: creationId } : {}) } as never
   const { data, error } = await supabase
     .from("orcamentos")
     .insert(payload)
@@ -83,6 +95,19 @@ export async function criarOrcamento(
     .single()
 
   if (error || !data) {
+    // A PK torna o retry atômico, inclusive se a primeira resposta se perdeu.
+    // Nunca usar upsert: uma repetição não pode alterar um orçamento existente.
+    if (creationId && error?.code === "23505") {
+      const { data: existing, error: readError } = await supabase.from("orcamentos")
+        .select("*").eq("id", creationId).eq("criado_por", admin.user.id).maybeSingle()
+      if (readError || !existing) return { ok: false, erro: "Não foi possível confirmar esta criação. Tente novamente ou confira a lista de orçamentos." }
+      const saved = existing as unknown as Record<string, unknown>
+      if (!Object.entries(clean).every(([field, value]) => isDeepStrictEqual(saved[field] ?? null, value ?? null))) {
+        return { ok: false, conflito: true, existenteId: existing.id, erro: "Esta tentativa já criou um orçamento com dados diferentes. Seus dados continuam nesta tela. Confira o orçamento existente antes de continuar." }
+      }
+      revalidateBudget(existing.id, existing.lead_id)
+      return { ok: true, id: existing.id, numero: existing.numero, atualizadoEm: existing.atualizado_em }
+    }
     return { ok: false, erro: error?.message ?? "Falha ao criar orçamento" }
   }
   const row = data as { id: string; numero: string; atualizado_em: string }
@@ -134,10 +159,16 @@ export async function atualizarOrcamento(
 }
 
 export async function criarRascunhoDePlanilha(
-  row: PlanilhaOrcamentoRow
+  row: PlanilhaOrcamentoRow,
+  creationId?: string,
+  dataElaboracao?: string
 ): Promise<ActionResultCreate> {
   const insert = rowParaInsert(row)
-  return criarOrcamento(insert)
+  return criarOrcamento({
+    ...insert,
+    ...(creationId ? { id: creationId } : {}),
+    ...(dataElaboracao !== undefined ? { data_elaboracao: dataElaboracao } : {}),
+  })
 }
 
 export async function arquivarOrcamento(

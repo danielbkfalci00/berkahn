@@ -52,7 +52,7 @@ interface AnalyticsContentProps {
   matrizAcervo: MatrizArtigoMesData;
   mapaLeitura: MapaLeitura;
   oportunidade: MapaOportunidade;
-  funilLeads: AdminDataResult<FunilLeads>;
+  funilLeads: AdminDataResult<FunilLeads> | null;
 }
 
 function deltaDirection(deltaPct?: number): "up" | "down" | "flat" {
@@ -294,10 +294,10 @@ export function AnalyticsContent({
     { id: "diagnostico", label: "Diagnóstico" },
   ];
   const actions = [...ctx.actionsP0, ...ctx.actionsP1, ...ctx.actionsP2].slice(0, 3);
-  const leadsKpi: KpiCardData = funilLeads.status === "ok"
+  const leadsKpi: KpiCardData | null = !funilLeads ? null : funilLeads.status === "ok"
     ? { label: "Leads", rawValue: funilLeads.data.total, value: funilLeads.data.total.toLocaleString("pt-BR"), description: "Recebidos no período" }
     : { label: "Leads", rawValue: 0, value: "—", description: "CRM indisponível" };
-  const summaryKpis = [kpis[0], kpis[1], kpis[3], leadsKpi];
+  const summaryKpis = [kpis[0], kpis[1], kpis[3], ...(leadsKpi ? [leadsKpi] : [])];
 
   return (
     <div ref={reportRef} className="mx-auto max-w-[1400px] space-y-7">

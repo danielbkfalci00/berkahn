@@ -115,6 +115,9 @@ export function LeadsQueue({ initialLeads, allStageLeads, total, page, pageCount
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [pendingLeadId, setPendingLeadId] = useState<string | null>(null);
+  const statusMutationRef = useRef(false);
+  const optimisticStatusRowsRef = useRef(new WeakMap<LeadListItem, symbol>());
+  const [statusResult, setStatusResult] = useState<{ leadId: string; message: string; failed: boolean } | null>(null);
   const [selectedLead, setSelectedLead] = useState<LeadListItem | null>(null);
   const [preview, setPreview] = useState<
     { id: string; status: "loading" } |
@@ -192,13 +195,31 @@ export function LeadsQueue({ initialLeads, allStageLeads, total, page, pageCount
     commitStatus(id, status);
   }
 
+  function patchLeadLocally(lead: LeadListItem, patch: Partial<LeadListItem>): LeadListItem {
+    const next = { ...lead, ...patch };
+    const mutation = optimisticStatusRowsRef.current.get(lead);
+    if (mutation) optimisticStatusRowsRef.current.set(next, mutation);
+    return next;
+  }
+
   function commitStatus(id: string, status: LeadStatus, reason?: string) {
-    const previous = leads;
-    const previousStageLeads = stageLeads;
-    const previousSelectedLead = selectedLead;
-    setLeads((current) => current.map((lead) => (lead.id === id ? { ...lead, status } : lead)));
-    setStageLeads((current) => current?.map((lead) => (lead.id === id ? { ...lead, status } : lead)) ?? null);
-    setSelectedLead((current) => current?.id === id ? { ...current, status } : current);
+    if (statusMutationRef.current) return;
+    const previous = stageLeads?.find((lead) => lead.id === id)
+      ?? leads.find((lead) => lead.id === id)
+      ?? (selectedLead?.id === id ? selectedLead : null);
+    if (!previous) return;
+    statusMutationRef.current = true;
+    setStatusResult(null);
+    const mutation = Symbol();
+    const applyStatus = (lead: LeadListItem) => {
+      if (lead.id !== id) return lead;
+      const next = { ...lead, status };
+      optimisticStatusRowsRef.current.set(next, mutation);
+      return next;
+    };
+    setLeads((current) => current.map(applyStatus));
+    setStageLeads((current) => current?.map(applyStatus) ?? null);
+    setSelectedLead((current) => current ? applyStatus(current) : null);
     setError(null);
     setSuccess(null);
     setPendingLeadId(id);
@@ -206,12 +227,20 @@ export function LeadsQueue({ initialLeads, allStageLeads, total, page, pageCount
       try {
         const result = await updateLeadStatus(id, status, reason);
         if (!result.ok) throw new Error(result.error || "Não foi possível alterar a etapa.");
-        setSuccess("Etapa atualizada.");
+        setStatusResult({ leadId: id, message: `Etapa de “${previous.nome}” atualizada.`, failed: false });
         router.refresh();
       } catch (error) {
-        setLeads(previous); setStageLeads(previousStageLeads); setSelectedLead(previousSelectedLead);
-        setError(error instanceof Error ? error.message : "Falha de conexão. Tente novamente.");
-      } finally { setPendingLeadId(null); }
+        // Server refreshes replace these rows without the optimistic token.
+        // Local field changes preserve it, so rollback only undoes this request.
+        const rollback = (lead: LeadListItem) => lead.id === id && lead.status === status
+          && optimisticStatusRowsRef.current.get(lead) === mutation
+          ? { ...lead, status: previous.status } : lead;
+        setLeads((current) => current.map(rollback));
+        setStageLeads((current) => current?.map(rollback) ?? null);
+        setSelectedLead((current) => current ? rollback(current) : null);
+        const detail = error instanceof Error ? error.message : "Falha de conexão. Tente novamente.";
+        setStatusResult({ leadId: id, message: `Não foi possível alterar a etapa de “${previous.nome}”. ${detail}`, failed: true });
+      } finally { statusMutationRef.current = false; setPendingLeadId(null); }
     });
   }
 
@@ -273,6 +302,7 @@ export function LeadsQueue({ initialLeads, allStageLeads, total, page, pageCount
   const activeLead = selectedLead && (stageLeads?.find((lead) => lead.id === selectedLead.id)
     ?? leads.find((lead) => lead.id === selectedLead.id)
     ?? selectedLead);
+  const activeStatusResult = statusResult?.leadId === activeLead?.id ? statusResult : null;
 
   function navigateStage(href: string) {
     setPendingFilterHref(href);
@@ -299,15 +329,15 @@ export function LeadsQueue({ initialLeads, allStageLeads, total, page, pageCount
     setSelectedLead(lead);
     if (lead.visualizado_em) return;
     const viewedAt = new Date().toISOString();
-    setSelectedLead({ ...lead, visualizado_em: viewedAt });
-    setLeads((current) => current.map((item) => item.id === lead.id ? { ...item, visualizado_em: viewedAt } : item));
-    setStageLeads((current) => current?.map((item) => item.id === lead.id ? { ...item, visualizado_em: viewedAt } : item) ?? null);
+    setSelectedLead(patchLeadLocally(lead, { visualizado_em: viewedAt }));
+    setLeads((current) => current.map((item) => item.id === lead.id ? patchLeadLocally(item, { visualizado_em: viewedAt }) : item));
+    setStageLeads((current) => current?.map((item) => item.id === lead.id ? patchLeadLocally(item, { visualizado_em: viewedAt }) : item) ?? null);
     void markLeadViewed(lead.id).then((result) => {
       if (result.ok) return;
       setError("Não foi possível marcar este lead como visualizado.");
-      setLeads((current) => current.map((item) => item.id === lead.id ? { ...item, visualizado_em: lead.visualizado_em } : item));
-      setStageLeads((current) => current?.map((item) => item.id === lead.id ? { ...item, visualizado_em: lead.visualizado_em } : item) ?? null);
-      setSelectedLead((current) => current?.id === lead.id ? { ...current, visualizado_em: lead.visualizado_em } : current);
+      setLeads((current) => current.map((item) => item.id === lead.id ? patchLeadLocally(item, { visualizado_em: lead.visualizado_em }) : item));
+      setStageLeads((current) => current?.map((item) => item.id === lead.id ? patchLeadLocally(item, { visualizado_em: lead.visualizado_em }) : item) ?? null);
+      setSelectedLead((current) => current?.id === lead.id ? patchLeadLocally(current, { visualizado_em: lead.visualizado_em }) : current);
     }).catch(() => setError("Não foi possível marcar este lead como visualizado."));
   }
 
@@ -393,6 +423,7 @@ export function LeadsQueue({ initialLeads, allStageLeads, total, page, pageCount
 
       {error && <p role="alert" className="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p>}
       {success && <p role="status" className="rounded-md border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-800">{success}</p>}
+      {statusResult && <p role={statusResult.failed ? "alert" : "status"} className={`rounded-md border px-3 py-2 text-sm ${statusResult.failed ? "border-red-200 bg-red-50 text-red-700" : "border-emerald-200 bg-emerald-50 text-emerald-800"}`}>{statusResult.message}</p>}
 
       <button ref={filtersToggleRef} type="button" aria-expanded={filtersOpen} aria-controls="lead-filters" onClick={() => setFiltersOpen((value) => !value)} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-neutral-300 bg-white px-4 text-sm font-medium md:hidden"><SlidersHorizontal className="h-4 w-4" /> Filtros{activeFilterCount > 0 ? ` (${activeFilterCount})` : ""}</button>
 
@@ -438,8 +469,9 @@ export function LeadsQueue({ initialLeads, allStageLeads, total, page, pageCount
           changeStatus(id, status);
         }}
         pending={pendingLeadId !== null}
-        error={error}
-        success={success}
+        savingStatus={pendingLeadId === activeLead?.id}
+        error={activeStatusResult?.failed ? activeStatusResult.message : error}
+        success={activeStatusResult && !activeStatusResult.failed ? activeStatusResult.message : success}
       />
 
       {<div className="flex flex-wrap items-center justify-between gap-2 text-sm text-neutral-600">
@@ -499,7 +531,7 @@ function priorityMeta(priority: LeadPriority) {
   return { label: "Normal", className: "border-neutral-200 bg-neutral-50 text-neutral-600" };
 }
 
-function LeadQuickView({ lead, preview, onClose, onRestoreFocus, onStatusChange, pending, error, success }: {
+function LeadQuickView({ lead, preview, onClose, onRestoreFocus, onStatusChange, pending, savingStatus, error, success }: {
   lead: LeadListItem | null;
   preview: { id: string; status: "loading" } |
     { id: string; status: "ok"; data: LeadPreviewDetails } |
@@ -508,6 +540,7 @@ function LeadQuickView({ lead, preview, onClose, onRestoreFocus, onStatusChange,
   onRestoreFocus: () => void;
   onStatusChange: (id: string, status: LeadStatus) => void;
   pending: boolean;
+  savingStatus: boolean;
   error: string | null;
   success: string | null;
 }) {
@@ -575,7 +608,7 @@ function LeadQuickView({ lead, preview, onClose, onRestoreFocus, onStatusChange,
             <div className="flex justify-between gap-3 text-sm"><span className="text-neutral-500">Responsável</span><span className="text-right font-medium text-neutral-900">{lead.responsavel?.nome || "Pendente"}</span></div>
             <div className="flex justify-between gap-3 text-sm"><span className="text-neutral-500">Próxima ação</span><span className="text-right font-medium text-neutral-900">{lead.proxima_acao_em ? new Intl.DateTimeFormat("pt-BR", { dateStyle: "short", timeStyle: "short" }).format(new Date(lead.proxima_acao_em)) : "Não agendada"}</span></div>
             {lead.resumo_status && <p className="rounded-md bg-neutral-50 p-3 text-sm leading-relaxed text-neutral-700">{lead.resumo_status}</p>}
-            {pending && <p role="status" className="text-xs text-neutral-500">Salvando etapa…</p>}
+            {savingStatus && <p role="status" className="text-xs text-neutral-500">Salvando etapa…</p>}
             {error && <p role="alert" className="text-sm text-red-700">{error}</p>}
             {success && !pending && <p role="status" className="text-xs text-emerald-700">{success}</p>}
           </section>
@@ -760,6 +793,7 @@ export function LeadDetail({
   const [timeline, setTimeline] = useState(activities);
   const [hasMore, setHasMore] = useState(hasMoreActivities);
   const [loadingHistory, setLoadingHistory] = useState(false);
+  const historyRequestRef = useRef<symbol | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
@@ -770,7 +804,13 @@ export function LeadDetail({
   const confirmLeave = useUnsavedChanges(attendanceDirty || operationsDirty || contactDirty);
 
   useEffect(() => { if (!lead.visualizado_em) void markLeadViewed(lead.id); }, [lead.id, lead.visualizado_em]);
-  useEffect(() => { setTimeline(activities); setHasMore(hasMoreActivities); }, [activities, hasMoreActivities]);
+  useEffect(() => {
+    historyRequestRef.current = null;
+    setTimeline(activities);
+    setHasMore(hasMoreActivities);
+    setLoadingHistory(false);
+    return () => { historyRequestRef.current = null; };
+  }, [activities, hasMoreActivities]);
 
   function run(action: () => Promise<{ ok: boolean; error?: string }>, onSuccess?: () => void) {
     setError(null); setSuccess(null);
@@ -785,15 +825,24 @@ export function LeadDetail({
 
   async function olderActivities() {
     const last = timeline.at(-1);
-    if (!last) return;
+    if (!last || historyRequestRef.current) return;
+    const request = Symbol();
+    historyRequestRef.current = request;
     setLoadingHistory(true);
     try {
       const result = await loadLeadActivities(lead.id, { createdAt: last.created_at, id: last.id });
+      if (historyRequestRef.current !== request) return;
       if (!result.ok) { setError(result.error || "Histórico indisponível."); return; }
       setTimeline((current) => [...current, ...result.activities.filter((row) => !current.some((old) => old.id === row.id))]);
       setHasMore(result.hasMore);
-    } catch { setError("Não foi possível carregar as atividades anteriores."); }
-    finally { setLoadingHistory(false); }
+    } catch {
+      if (historyRequestRef.current === request) setError("Não foi possível carregar as atividades anteriores.");
+    } finally {
+      if (historyRequestRef.current === request) {
+        historyRequestRef.current = null;
+        setLoadingHistory(false);
+      }
+    }
   }
 
   const phoneDigits = normalizeLeadPhone(lead.telefone);

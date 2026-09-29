@@ -15,7 +15,7 @@ interface Act4ActionProps {
   context: SnapshotContext;
   posts?: PostPerformance[];
   tasks?: AnalyticsTask[];
-  funilLeads: AdminDataResult<Funil>;
+  funilLeads: AdminDataResult<Funil> | null;
   canManageTasks?: boolean;
   tasksUnavailable?: boolean;
 }
@@ -60,7 +60,7 @@ export function Act4Action({ context, posts = [], tasks = [], funilLeads, canMan
           }
         />
       </div>
-      <FunilLeads funil={funilLeads} monthSlug={context.monthSlug} />
+      {funilLeads && <FunilLeads funil={funilLeads} monthSlug={context.monthSlug} />}
     </section>
   );
 }

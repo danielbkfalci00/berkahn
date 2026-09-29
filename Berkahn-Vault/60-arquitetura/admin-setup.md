@@ -6,7 +6,7 @@ tags:
   - ai/context
   - project/site
   - domain/admin
-ai_summary: Sistema Admin Berkahn com contas individuais, quatro papéis, CRM em /admin/leads e PWA/Web Push por usuário e dispositivo. Migrations 024–034 e 20260929141528 ativas; PR118 publicado com testes SQL e smoke autenticado. Continuação no PR119 adiciona confirmação dos snapshots, proteção de concorrência nos orçamentos e retorno aos filtros editoriais, com CI completo aprovado.
+ai_summary: Sistema Admin Berkahn com contas individuais, quatro papéis, CRM em /admin/leads e PWA/Web Push por usuário e dispositivo. PR118–119 publicados; continuação corrige coorte arquivada, indicadores por permissão, criação repetida de orçamentos e respostas atrasadas no CRM, além de validar navegação editorial e mobile.
 status: active
 projeto: site
 escopo: berkahn
@@ -78,6 +78,17 @@ Cobertura manual ainda pendente: matriz dos quatro papéis, confirmação nativa
 Regressões incorporadas nos testes existentes `test:analytics`, `test:crm` e `test:admin`, sem uma segunda infraestrutura de testes. Este lote não exige migration. O CI [36609723266](https://github.com/danielbkfalci00/berkahn/actions/runs/36609723266) aprovou lint, TypeScript, conteúdo, CRM, navegação, build e analytics no código do [PR119](https://github.com/danielbkfalci00/berkahn/pull/119). A primeira tentativa encontrou uma variável reservada no teste; foi corrigida antes da aprovação. Builds locais foram evitados porque havia verificações TypeScript de outras tarefas em execução. A nova tentativa de smoke pelo navegador integrado não conseguiu abrir a aba de teste; nenhuma aba temporária ficou aberta e nenhum dado comercial foi alterado. Capas anteriores são preservadas fisicamente porque podem ser compartilhadas/importadas; somente uploads novos rejeitados pela gravação são limpos.
 
 O workflow [36610054808](https://github.com/danielbkfalci00/berkahn/actions/runs/36610054808), executado com o código já aprovado pelo CI, confirmou a publicação do parcial de setembro. Consulta de leitura no Supabase verificou coleta em `2026-09-29T18:14:39.453Z`, período de 01 a 26/09, 26 dias e `partial: true`; o claim antigo sobre triplicar cliques não consta mais do snapshot. Históricos fechados permanecem armazenados como coletados. Próximo foco: completar a matriz de smoke manual pendente acima, incluindo dois editores e geração/download de PDF após troca de capa.
+
+### Continuação: consistência operacional e smoke de navegação
+
+- **Coorte e acesso:** `lib/analytics/leads-queries.ts` mantém arquivados no total recebido e na conversão, preservando a exclusão de anonimizados. Arquivar organiza a fila sem melhorar artificialmente o resultado comercial. Perfis `conteudo` e `viewer` continuam vendo Analytics, mas não consultam leads nem recebem indicadores CRM zerados por falta de permissão.
+- **Criação de orçamento:** `app/admin/orcamentos/actions.ts`, `OrcamentoWizard` e `PlanilhaUpload` reutilizam a PK como identificador estável da tentativa. Repetir após resposta perdida recupera apenas o registro do mesmo autor e com os mesmos dados; divergência preserva a edição local e oferece consulta do registro existente. A importação volta à prévia em falhas. A chave dura enquanto a tela estiver aberta; fechar/reabrir inicia outra tentativa.
+- **Respostas antigas no CRM:** `LeadsQueue` reverte somente o status afetado por falha, sem restaurar uma seleção anterior ou substituir os outros campos. A paginação do histórico é invalidada quando a primeira página é renovada; lotes antigos não podem misturar versões nem liberar uma requisição nova.
+- **Interface:** a saudação do Dashboard deixou de depender do relógio/fuso do cliente e do servidor, removendo essa fonte de divergência de hidratação. A data da tabela de Posts fica em uma linha, conforme o problema de legibilidade observado no smoke desktop.
+
+O smoke autenticado em produção confirmou busca de Posts → editor → retorno à mesma busca, menu mobile a 320 px, foco inicial no botão de fechar, Escape com retorno de foco e fechamento ao trocar de seção. O quadro Conteúdo não apresentou overflow horizontal nesse recorte. O percurso quadro filtrado → pauta revelou que a URL recebia a busca, mas os links ainda guardavam o retorno sem filtro; esse caso foi incluído na correção e na regressão do lote. Nenhum conteúdo editorial ou registro comercial foi salvo nesses testes. A cobertura acima é do perfil owner; a matriz manual dos demais papéis e os cenários de PDF/edição simultânea continuam pendentes.
+
+Validação de execução deste lote será registrada após o CI consolidado. Os testes existentes cobrem repetição após commit com resposta perdida, autoria/conflito na criação, denominador e permissões do CRM, troca de prévia durante uma falha e atualização do histórico durante paginação. Não há migration nova. Builds/testes locais permanecem evitados enquanto outras tarefas executam processos de desenvolvimento na máquina. Próximo lote de jornada: preservar também filtros/página de Leads ao criar um orçamento e voltar do detalhe ou registro de envio.
 
 > [!info] Migração para vault
 > Este arquivo era duplicado em `Docs/ADMIN_SETUP.md` e `Docs/site/ADMIN_SETUP.md`. Consolidado aqui como fonte única. Referenciado por [[stack-nextjs-supabase]].

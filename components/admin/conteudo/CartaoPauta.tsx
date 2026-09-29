@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState, useTransition } from "react";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
@@ -26,7 +26,7 @@ import {
 } from "@/app/admin/conteudo/actions";
 import { COLUNA_PONTO } from "@/lib/conteudo/colunas";
 import { cn } from "@/lib/utils";
-import { editorialHref, editorialReturnTo } from "@/lib/admin/return-to";
+import { editorialHref } from "@/lib/admin/return-to";
 import { SeloPostVinculado } from "./SeloPostVinculado";
 import type { ItemQuadro } from "./QuadroConteudo";
 
@@ -42,6 +42,7 @@ interface Props {
   selecionado: boolean;
   aoSelecionar: (id: string, selecionado: boolean) => void;
   tagsCatalogo: TagCatalogo[];
+  returnTo: string;
 }
 
 
@@ -68,11 +69,9 @@ const JOB_LABEL = {
 
 export function CartaoPauta({
   pauta, visao, colunas, arrastavel, aoMover, aoExcluir,
-  confirmandoExclusao, aoPedirExclusao, selecionado, aoSelecionar, tagsCatalogo,
+  confirmandoExclusao, aoPedirExclusao, selecionado, aoSelecionar, tagsCatalogo, returnTo,
 }: Props) {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const returnTo = editorialReturnTo(`/admin/conteudo?${searchParams}`, "/admin/conteudo");
   const [local, setLocal] = useState(pauta);
   const localRef = useRef(pauta);
   const filaSalvamento = useRef<Promise<void>>(Promise.resolve());
