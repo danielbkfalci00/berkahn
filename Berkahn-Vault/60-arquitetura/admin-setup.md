@@ -6,7 +6,7 @@ tags:
   - ai/context
   - project/site
   - domain/admin
-ai_summary: Sistema Admin Berkahn com contas individuais, quatro papéis, CRM em /admin/leads e PWA/Web Push por usuário e dispositivo. Migrations 024–034 e 20260929141528 ativas; melhorias de 29/09 publicadas pelo PR118, com CI, testes SQL transacionais e smoke autenticado. Próximo lote cobre confiabilidade dos snapshots, concorrência nos orçamentos e continuidade da navegação editorial.
+ai_summary: Sistema Admin Berkahn com contas individuais, quatro papéis, CRM em /admin/leads e PWA/Web Push por usuário e dispositivo. Migrations 024–034 e 20260929141528 ativas; PR118 publicado com testes SQL e smoke autenticado. Continuação no PR119 adiciona confirmação dos snapshots, proteção de concorrência nos orçamentos e retorno aos filtros editoriais, com CI completo aprovado.
 status: active
 projeto: site
 escopo: berkahn
@@ -75,9 +75,9 @@ Cobertura manual ainda pendente: matriz dos quatro papéis, confirmação nativa
 - **Orçamentos:** edição, finalização, arquivamento, capa e geração de PDF comparam a revisão exata de `atualizado_em`. Conflito mantém os dados do formulário e orienta conferir a versão atual. A API devolve a nova revisão e aceita `If-Match` nas operações correspondentes. Remover a capa passa a persistir a remoção; o download valida novamente a revisão do PDF.
 - **Continuidade editorial:** listas de Posts e Conteúdo preservam busca, filtros e página ao abrir, salvar e voltar. O retorno pauta→editor→pauta mantém a origem no quadro. `lib/admin/return-to.ts` centraliza a allowlist porque o CRM tinha apenas uma validação inline, sem helper reutilizável. A paginação se recupera após excluir o último item ou abrir uma página fora do total.
 
-Regressões incorporadas nos testes existentes `test:analytics`, `test:crm` e `test:admin`, sem uma segunda infraestrutura de testes. Este lote não exige migration. A validação completa usa o workflow `Quality`; builds locais foram evitados porque havia verificações TypeScript de outras tarefas em execução. A nova tentativa de smoke pelo navegador integrado não conseguiu abrir a aba de teste; nenhuma aba temporária ficou aberta e nenhum dado comercial foi alterado.
+Regressões incorporadas nos testes existentes `test:analytics`, `test:crm` e `test:admin`, sem uma segunda infraestrutura de testes. Este lote não exige migration. O CI [36609723266](https://github.com/danielbkfalci00/berkahn/actions/runs/36609723266) aprovou lint, TypeScript, conteúdo, CRM, navegação, build e analytics no código do [PR119](https://github.com/danielbkfalci00/berkahn/pull/119). A primeira tentativa encontrou uma variável reservada no teste; foi corrigida antes da aprovação. Builds locais foram evitados porque havia verificações TypeScript de outras tarefas em execução. A nova tentativa de smoke pelo navegador integrado não conseguiu abrir a aba de teste; nenhuma aba temporária ficou aberta e nenhum dado comercial foi alterado. Capas anteriores são preservadas fisicamente porque podem ser compartilhadas/importadas; somente uploads novos rejeitados pela gravação são limpos.
 
-Próxima ação operacional: após os checks e deploy deste lote, regenerar somente o parcial de setembro pelo workflow `Analytics snapshots`, verificar a cobertura efetivamente salva e registrar a execução. Históricos fechados permanecem armazenados como coletados.
+O workflow [36610054808](https://github.com/danielbkfalci00/berkahn/actions/runs/36610054808), executado com o código já aprovado pelo CI, confirmou a publicação do parcial de setembro. Consulta de leitura no Supabase verificou coleta em `2026-09-29T18:14:39.453Z`, período de 01 a 26/09, 26 dias e `partial: true`; o claim antigo sobre triplicar cliques não consta mais do snapshot. Históricos fechados permanecem armazenados como coletados. Próximo foco: completar a matriz de smoke manual pendente acima, incluindo dois editores e geração/download de PDF após troca de capa.
 
 > [!info] Migração para vault
 > Este arquivo era duplicado em `Docs/ADMIN_SETUP.md` e `Docs/site/ADMIN_SETUP.md`. Consolidado aqui como fonte única. Referenciado por [[stack-nextjs-supabase]].
