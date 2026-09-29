@@ -63,7 +63,7 @@ export default async function EstimativaPage({ params }: PageProps) {
   )
 
   return (
-    <main className={styles.root}>
+    <main className={styles.root} data-orcamento-id={orcamento.id}>
       <CapaHero
         clienteNome={orcamento.cliente_nome}
         numero={orcamento.numero}

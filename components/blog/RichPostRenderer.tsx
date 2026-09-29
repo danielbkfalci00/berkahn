@@ -294,8 +294,32 @@ function extractPlaceholders(content: string, components: PostComponents | null)
  * Renders markdown content to HTML
  * Simple markdown parser for basic formatting
  */
-function renderMarkdown(content: string): string {
-  return content
+export function renderMarkdown(content: string): string {
+  const fragments: string[] = [];
+  const keep = (html: string) => `\u0000MD${fragments.push(html) - 1}\u0000`;
+  // Only generated markup reaches innerHTML. User HTML stays text; attributes
+  // are escaped before insertion and URL schemes are explicitly allowlisted.
+  const safeUrl = (url: string, image = false) => {
+    if (/[\s\u0000-\u001f\u007f]/.test(url)) return false;
+    if (/^\/(?![/\\])/.test(url) || (!image && url.startsWith('#'))) return true;
+    return (image ? /^https?:\/\//i : /^(https?:\/\/|mailto:|tel:)/i).test(url);
+  };
+  return content.replace(/\u0000/g, '')
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#39;')
+    // Preserve literal code and generated attributes from later substitutions.
+    .replace(/`([^`]+)`/g, (_match, code: string) =>
+      keep(`<code class="bg-neutral-100 px-1 py-0.5 rounded text-sm font-mono">${code}</code>`))
+    // Images must be consumed before links, otherwise ![alt](url) becomes !<a>.
+    .replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (_match, alt: string, url: string) =>
+      safeUrl(url, true)
+        ? keep(`<figure class="my-8"><img src="${url}" alt="${alt}" class="rounded-lg w-full" loading="lazy" /><figcaption class="text-sm text-neutral-500 mt-2 text-center">${alt}</figcaption></figure>`)
+        : alt)
+    .replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_match, text: string, url: string) => {
+      if (!safeUrl(url)) return text;
+      const external = /^https?:\/\//i.test(url);
+      return keep(`<a href="${url}" class="text-neutral-900 underline hover:text-neutral-600"${external ? ' target="_blank" rel="noopener noreferrer"' : ''}>${text}</a>`);
+    })
     // Headers
     .replace(/^### (.*$)/gim, '<h3 class="text-xl font-semibold mt-8 mb-4">$1</h3>')
     .replace(/^## (.*$)/gim, '<h2 class="text-2xl font-bold mt-10 mb-5">$1</h2>')
@@ -304,19 +328,8 @@ function renderMarkdown(content: string): string {
     .replace(/\*\*\*(.*?)\*\*\*/gim, '<strong><em>$1</em></strong>')
     .replace(/\*\*(.*?)\*\*/gim, '<strong>$1</strong>')
     .replace(/\*(.*?)\*/gim, '<em>$1</em>')
-    // Inline code
-    .replace(/`([^`]+)`/gim, '<code class="bg-neutral-100 px-1 py-0.5 rounded text-sm font-mono">$1</code>')
-    // Links (internal links stay in same tab, external links open in new tab)
-    .replace(/\[([^\]]+)\]\(([^)]+)\)/gim, (_match: string, text: string, url: string) => {
-      const isInternal = url.startsWith('/');
-      return isInternal
-        ? `<a href="${url}" class="text-neutral-900 underline hover:text-neutral-600">${text}</a>`
-        : `<a href="${url}" class="text-neutral-900 underline hover:text-neutral-600" target="_blank" rel="noopener noreferrer">${text}</a>`;
-    })
-    // Images
-    .replace(/!\[([^\]]*)\]\(([^)]+)\)/gim, '<figure class="my-8"><img src="$2" alt="$1" class="rounded-lg w-full" loading="lazy" /><figcaption class="text-sm text-neutral-500 mt-2 text-center">$1</figcaption></figure>')
     // Blockquotes
-    .replace(/^> (.*$)/gim, '<blockquote class="border-l-4 border-neutral-300 pl-4 my-4 text-neutral-600 italic">$1</blockquote>')
+    .replace(/^&gt; (.*$)/gim, '<blockquote class="border-l-4 border-neutral-300 pl-4 my-4 text-neutral-600 italic">$1</blockquote>')
     // Unordered lists
     .replace(/^\s*[-*]\s(.*)$/gim, '<li class="ml-4">$1</li>')
     // Ordered lists
@@ -330,7 +343,8 @@ function renderMarkdown(content: string): string {
     // Clean up empty paragraphs
     .replace(/<p class="mb-4 leading-relaxed"><\/p>/gim, '')
     .replace(/<p class="mb-4 leading-relaxed">(<h[123])/gim, '$1')
-    .replace(/(<\/h[123]>)<\/p>/gim, '$1');
+    .replace(/(<\/h[123]>)<\/p>/gim, '$1')
+    .replace(/\u0000MD(\d+)\u0000/g, (_match, index: string) => fragments[Number(index)]);
 }
 
 /**

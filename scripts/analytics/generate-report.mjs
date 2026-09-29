@@ -24,7 +24,7 @@ import { renderHtml } from './render-html.mjs';
 import { updateHubKpis } from './update-hub-kpis.mjs';
 import { upsertSnapshot } from './lib/supabase-snapshot.mjs';
 import { enrichRowsWithTitle, getAllPostUrls, isIndexationEligibleSlug } from './lib/posts.mjs';
-import { buildInsights, buildActions, buildSummary, isIndexedState } from './lib/insights.mjs';
+import { buildInsights, buildActions, buildSummary, isIndexedState, isKnownInspection } from './lib/insights.mjs';
 import { comparisonPolicyFor } from '../../lib/analytics/comparison-policy.mjs';
 import { syncContentLearning } from './lib/content-learning.mjs';
 import {
@@ -212,8 +212,8 @@ async function buildContext({ year, month, useFixture, fromCache = false, partia
     const isIndexed = isIndexedState(i.coverageState);
     // Falha da URL Inspection (cota, 429) não diz nada sobre o índice: rotular
     // como "Não indexada" derrubava a cobertura e o Health Score sem motivo real.
-    const statusLabel = i.verdict === 'ERROR'
-      ? '⚠️ Falha na inspeção'
+    const statusLabel = !isKnownInspection(i)
+      ? '⚠️ Inspeção indisponível'
       : isIndexed ? '✅ Indexada' : (i.verdict === 'PASS' ? '⚠️ Crawled' : '❌ Não indexada');
     return {
       ...i,
@@ -223,7 +223,7 @@ async function buildContext({ year, month, useFixture, fromCache = false, partia
   });
 
   // Itens com falha de inspeção ficam na tabela, mas fora do universo medido.
-  const inspectedIndexation = indexationWithStatus.filter((i) => i.verdict !== 'ERROR');
+  const inspectedIndexation = indexationWithStatus.filter(isKnownInspection);
   const inspectionErrors = indexationWithStatus.length - inspectedIndexation.length;
   if (inspectionErrors > 0) {
     console.warn(`   ⚠️  URL Inspection falhou em ${inspectionErrors} de ${indexationWithStatus.length} URLs; excluídas da cobertura.`);
@@ -284,6 +284,8 @@ async function buildContext({ year, month, useFixture, fromCache = false, partia
     weekdayCompositionNote: isPartial && period.daysCovered % 7 !== 0
       ? `Ressalva: como ${period.daysCovered} não é múltiplo de 7, as janelas têm composições diferentes de dias da semana.`
       : 'As janelas cobrem semanas completas e têm a mesma composição de dias da semana.',
+    eventsUnavailable: (ga4Data.eventsAvailability?.available ?? ga4Data.eventsAvailable) === false,
+    queriesComparisonUnavailable: !comparability.gscMoM,
     ga4: ga4WithDeltas,
     gsc: gscWithDeltas,
     indexation: indexationWithStatus,
@@ -303,7 +305,9 @@ async function buildContext({ year, month, useFixture, fromCache = false, partia
     reportMode: isPartial ? 'partial' : 'closed',
     sources: {
       ga4: {
-        status: 'available', origin, collectedAt, dataThrough: period.endDate,
+        status: (ga4Data.eventsAvailability?.available ?? ga4Data.eventsAvailable) === false || ga4Data.articleProgress?.available === false ? 'partial' : 'available',
+        reason: [(ga4Data.eventsAvailability?.available ?? ga4Data.eventsAvailable) === false ? 'Eventos indisponíveis.' : null, ga4Data.articleProgress?.available === false ? 'Profundidade de leitura indisponível.' : null].filter(Boolean).join(' ') || undefined,
+        origin, collectedAt, dataThrough: period.endDate,
         completeness: isPartial ? 'partial' : 'closed', lagDays: 0,
         comparisonStatus: comparability.ga4MoM ? 'available' : 'unavailable',
         comparisonReason: comparability.ga4MoM ? undefined : ga4ComparisonReason,
@@ -315,7 +319,9 @@ async function buildContext({ year, month, useFixture, fromCache = false, partia
         comparisonReason: comparability.gscMoM ? undefined : gscComparisonReason,
       },
       indexation: {
-        status: 'available', origin, collectedAt, dataThrough: todayLocal(now),
+        status: indexationWithStatus.length === 0 || indexationWithStatus.every((item) => !isKnownInspection(item)) ? 'unavailable' : indexationWithStatus.some((item) => !isKnownInspection(item)) ? 'partial' : 'available',
+        reason: indexationWithStatus.some((item) => !isKnownInspection(item)) ? 'Uma ou mais inspeções não retornaram resultado válido.' : undefined,
+        origin, collectedAt, dataThrough: todayLocal(now),
         completeness: isPartial ? 'partial' : 'closed', lagDays: 0,
       },
     },

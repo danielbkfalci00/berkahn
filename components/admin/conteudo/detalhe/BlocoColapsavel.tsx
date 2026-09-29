@@ -103,7 +103,8 @@ export function BlocoColapsavel({
 
   return (
     <section className="rounded-lg border border-neutral-200 bg-white">
-      <h3>
+      <div className="flex flex-wrap items-center gap-x-3 pr-4">
+      <h3 className="min-w-0 flex-1">
         <button
           type="button"
           aria-expanded={aberto}
@@ -122,16 +123,15 @@ export function BlocoColapsavel({
           <span className="shrink-0 text-neutral-400">{icone}</span>
           <span className="flex-1 text-sm font-medium text-neutral-900">{titulo}</span>
 
-          <span className="flex items-center gap-3" aria-live="polite">
-            {estado ? (
-              <IndicadorSave estado={estado} aoTentarDeNovo={aoTentarDeNovo} />
-            ) : null}
             {!aberto && resumo && (
               <span className="text-xs tabular-nums text-neutral-400">{resumo}</span>
             )}
-          </span>
         </button>
       </h3>
+      {estado && <div aria-live="polite" className="px-4 pb-2 sm:p-0">
+        <IndicadorSave estado={estado} aoTentarDeNovo={aoTentarDeNovo} />
+      </div>}
+      </div>
 
       {/* Sempre renderizado — ver a nota acima. */}
       <div id={idCorpo} hidden={!aberto} className="border-t border-neutral-100 p-4">

@@ -59,12 +59,12 @@ checar("pauta somente LinkedIn produzida", estadoGeral(pauta(null, "produzido"))
 
 console.log("\nPRÓXIMA AÇÃO");
 checar("Blog vem antes quando aplicável", proximaAcao(pauta("pesquisa", "planejada", { pesquisaConteudo: "ok" })), "Criar draft do Blog");
-checar("LinkedIn assume após Blog publicado", proximaAcao(pauta("publicado", "aprovado", { pesquisaConteudo: "ok", draftPath: "draft.md", artigo: { status: "published" }, capaBlogUrl: "cover", linkedinTexto: "ok", capaLinkedinUrl: "cover" })), "Revisar, publicar e registrar URL");
+checar("LinkedIn assume após Blog publicado", proximaAcao(pauta("publicado", "aprovado", { pesquisaConteudo: "ok", draftPath: "draft.md", artigo: { status: "published" }, capaBlogUrl: "cover", linkedinTexto: "ok", capaLinkedinUrl: "cover" })), "Revisar, publicar e registrar data");
 
 console.log("\nPUBLICAÇÃO REAL E GAPS");
 const statusSemArtefatos = pauta("publicado", "publicado");
 checar("status Publicado não prova publicação real", publicacaoReal(statusSemArtefatos).blog, "sem-artigo");
-checar("LinkedIn Publicado sem URL/data continua irreal", publicacaoReal(statusSemArtefatos).linkedin, "sem-registro");
+checar("LinkedIn Publicado sem data continua irreal", publicacaoReal(statusSemArtefatos).linkedin, "sem-registro");
 checar("gaps continuam visíveis após mover status", gapsConteudo(statusSemArtefatos).length > 0, true);
 checar("visão Geral não conclui só pelo status", estadoDoQuadro(statusSemArtefatos), "pronta-publicar");
 const real = pauta("publicado", "publicado", {
@@ -74,6 +74,11 @@ const real = pauta("publicado", "publicado", {
 checar("artefatos comprovam publicação real do Blog", publicacaoReal(real).blog, "publicado");
 checar("URL e data comprovam LinkedIn real", publicacaoReal(real).linkedin, "publicado");
 checar("visão Geral conclui com publicação real", estadoDoQuadro(real), "concluida");
+const realSemUrl = pauta("publicado", "publicado", {
+  artigo: { status: "published" }, linkedinPublicadoEm: "2026-09-12",
+});
+checar("data sem URL também comprova LinkedIn real", publicacaoReal(realSemUrl).linkedin, "publicado");
+checar("visão Geral conclui quando a URL individual não foi coletada", estadoDoQuadro(realSemUrl), "concluida");
 
 console.log("\nTAXONOMIA");
 const vault = readFileSync("Berkahn-Vault/CLAUDE.md", "utf8");

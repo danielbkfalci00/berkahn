@@ -302,8 +302,7 @@ const lead = (status, extra = {}) => ({
 }
 
 {
-  // Funil cumulativo: quem converteu passou por qualificado. O status guarda so
-  // o ponto atual, entao cada degrau conta quem esta nele OU adiante.
+  // Estoque por status não implica passagem por todas as etapas.
   const r = fn.construirFunilLeads([
     lead("novo"), lead("novo"),
     lead("em_contato"),
@@ -312,19 +311,19 @@ const lead = (status, extra = {}) => ({
     lead("desqualificado"),
   ]);
   const alc = Object.fromEntries(r.degraus.map((d) => [d.etapa, d.alcancaram]));
-  ok("topo conta todos no funil", alc.novo === 5, `veio ${alc.novo}`);
-  ok("degrau e cumulativo", alc.qualificado === 2, `veio ${alc.qualificado}`);
+  ok("topo inclui todos recebidos", alc.novo === 6, `veio ${alc.novo}`);
+  ok("degrau mostra estoque atual", alc.qualificado === 1, `veio ${alc.qualificado}`);
   ok("convertido conta so o fim", alc.convertido === 1, `veio ${alc.convertido}`);
-  ok("desqualificado fora do funil", r.desqualificados === 1 && alc.novo === 5);
+  ok("desqualificado preservado no denominador", r.desqualificados === 1 && alc.novo === 6);
   ok("total inclui desqualificado", r.total === 6);
-  ok("taxa de conversao sobre o topo", perto(r.taxaConversao, 1 / 5));
+  ok("taxa de conversao sobre o topo", perto(r.taxaConversao, 1 / 6));
   ok("fracao do topo do primeiro degrau e 1", r.degraus[0].fracaoDoTopo === 1);
 }
 
 {
-  // desqualificado empilhado no funil faria a base parecer maior. Nao pode.
+  // Uma coorte com todos desqualificados ainda registra entradas.
   const so = fn.construirFunilLeads([lead("desqualificado"), lead("desqualificado")]);
-  ok("so desqualificados => funil vazio", so.degraus[0].alcancaram === 0);
+  ok("so desqualificados => entradas preservadas", so.degraus[0].alcancaram === 2);
   ok("so desqualificados => conversao 0", so.taxaConversao === 0);
   ok("mas contam no total", so.total === 2 && so.desqualificados === 2);
 }
@@ -332,7 +331,7 @@ const lead = (status, extra = {}) => ({
 {
   // Status fora do CHECK nao pode entrar em degrau nenhum.
   const r = fn.construirFunilLeads([lead("novo"), lead("status_inventado")]);
-  ok("status desconhecido ignorado", r.degraus[0].alcancaram === 1, `veio ${r.degraus[0].alcancaram}`);
+  ok("status desconhecido nao some do denominador", r.degraus[0].alcancaram === 2, `veio ${r.degraus[0].alcancaram}`);
 }
 
 {
@@ -362,8 +361,7 @@ const lead = (status, extra = {}) => ({
     ...Array.from({ length: 2 }, () => lead("convertido")),
   ];
   const r = fn.construirFunilLeads(leads);
-  ok("acha a maior perda", r.maiorPerda?.para === "Qualificados", `veio ${r.maiorPerda?.para}`);
-  ok("quantifica a perda", perto(r.maiorPerda.pct, (13 - 6) / 13), `veio ${r.maiorPerda.pct.toFixed(3)}`);
+  ok("estoque nao inventa perdas", r.maiorPerda === null && r.degraus.every((d) => d.perda === 0));
   ok("conversao ponta a ponta", perto(r.taxaConversao, 2 / 14));
 }
 
@@ -372,8 +370,15 @@ const lead = (status, extra = {}) => ({
   // hoje, em que ninguem passa de qualificado. A maior perda tem que apontar
   // para o degrau onde o funil morre, mesmo que seja o ultimo com gente.
   const r = fn.construirFunilLeads([lead("novo"), lead("qualificado")]);
-  ok("queda terminal aparece como 100%", r.maiorPerda?.pct === 1, `veio ${r.maiorPerda?.pct}`);
-  ok("aponta o degrau onde morre", r.maiorPerda?.para === "Proposta enviada", `veio ${r.maiorPerda?.para}`);
+  ok("lead aguardando proxima etapa nao e perda", r.maiorPerda === null);
+}
+
+{
+  const r = fn.construirFunilLeads([...Array.from({ length: 9 }, () => lead("desqualificado")), lead("convertido")]);
+  ok("9 desqualificados e 1 convertido resultam em 10%, nao 100%", perto(r.taxaConversao, 0.1));
+  const revised = fn.construirFunilLeads([lead("em_contato", { convertido_em: "2026-09-10", qualificado_em: "2026-09-05" })]);
+  ok("mudanca de etapa preserva conversao registrada", revised.convertidos === 1 && revised.taxaConversao === 1);
+  ok("estoque em contato separado de conversao historica", revised.degraus.find((d) => d.etapa === "convertido").alcancaram === 0);
 }
 
 rmSync(dir, { recursive: true, force: true });

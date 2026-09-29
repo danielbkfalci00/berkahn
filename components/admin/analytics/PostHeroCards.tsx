@@ -25,7 +25,7 @@ function BestCard({ post }: { post: PostPerformance | null }) {
       <Card className="p-5 bg-white border-neutral-200 border-l-4 border-l-neutral-200">
         <div className="flex items-center gap-2 text-xs uppercase tracking-wider font-semibold text-neutral-400 mb-2">
           <Trophy className="h-3.5 w-3.5" strokeWidth={2} />
-          <span>Melhor post do mês</span>
+          <span>Destaque de leitura</span>
         </div>
         <p className="text-sm text-neutral-400">Sem posts elegíveis no período.</p>
       </Card>
@@ -35,7 +35,7 @@ function BestCard({ post }: { post: PostPerformance | null }) {
     <Card className="p-5 bg-[#E8F3EC] border-l-4 border-l-[#1F6F3D]">
       <div className="flex items-center gap-2 text-xs uppercase tracking-wider font-semibold text-[#1F6F3D] mb-2">
         <Trophy className="h-3.5 w-3.5" strokeWidth={2.25} />
-        <span>Melhor post do mês</span>
+        <span>Destaque de leitura</span>
       </div>
       <h3 className="text-base font-semibold text-neutral-900 leading-snug line-clamp-2 mb-2">
         {post.title}
@@ -64,10 +64,10 @@ function OpportunityCard({ post }: { post: PostPerformance | null }) {
       <Card className="p-5 bg-white border-l-4 border-neutral-200 border-l-neutral-200">
         <div className="flex items-center gap-2 text-xs uppercase tracking-wider font-semibold text-neutral-400 mb-2">
           <AlertCircle className="h-3.5 w-3.5" strokeWidth={2} />
-          <span>Maior oportunidade</span>
+          <span>Leitura para investigar</span>
         </div>
         <p className="text-sm text-neutral-500">
-          Nenhum post com alto tráfego e baixa retenção. Saudável.
+          Nenhum artigo com volume acima da mediana e retenção estimada baixa nesta coleta.
         </p>
       </Card>
     );
@@ -76,7 +76,7 @@ function OpportunityCard({ post }: { post: PostPerformance | null }) {
     <Card className="p-5 bg-[#FDF4D8] border-l-4 border-l-[#B8801F]">
       <div className="flex items-center gap-2 text-xs uppercase tracking-wider font-semibold text-[#B8801F] mb-2">
         <AlertCircle className="h-3.5 w-3.5" strokeWidth={2.25} />
-        <span>Maior oportunidade</span>
+        <span>Leitura para investigar</span>
       </div>
       <h3 className="text-base font-semibold text-neutral-900 leading-snug line-clamp-2 mb-2">
         {post.title}
@@ -85,7 +85,7 @@ function OpportunityCard({ post }: { post: PostPerformance | null }) {
       <p className="text-sm text-neutral-700 leading-relaxed">
         Recebe <strong className="text-neutral-900 tabular-nums">{post.pageviews}</strong> pageviews
         mas só <strong className="text-neutral-900 tabular-nums">{post.retentionPct}%</strong> de
-        retenção. Revisar abertura, hierarquia e CTAs.
+        retenção estimada. Verifique a amostra e a intenção da visita antes de revisar o conteúdo.
       </p>
     </Card>
   );

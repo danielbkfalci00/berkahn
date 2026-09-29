@@ -67,15 +67,18 @@ async function fetchTopQueries(sc, siteUrl, startDate, endDate, limit) {
     dimensions: ['query'],
     rowLimit: limit,
   });
-  return rows
-    .filter((r) => r.impressions >= MIN_IMPRESSOES_ARMAZENADAS)
-    .map((r) => ({
+  const comparisonRows = rows.map((r) => ({
       query: r.keys[0],
       clicks: r.clicks,
       impressions: r.impressions,
       ctr: parseFloat((r.ctr * 100).toFixed(2)),
       position: parseFloat(r.position.toFixed(1)),
     }));
+  return {
+    rows: comparisonRows.filter((row) => row.impressions >= MIN_IMPRESSOES_ARMAZENADAS),
+    comparisonRows,
+    coverage: { rowsReturned: rows.length, limit, possiblyTruncated: rows.length >= limit, minImpressions: MIN_IMPRESSOES_ARMAZENADAS },
+  };
 }
 
 async function fetchTopPages(sc, siteUrl, startDate, endDate, limit) {
@@ -108,14 +111,20 @@ async function fetchTopPages(sc, siteUrl, startDate, endDate, limit) {
 const MIN_BASELINE_CLICKS = 5;
 const MIN_ABS_DELTA = 3;
 
-function computeDelta(current, previous, key, limit = 5) {
+export function computeDelta(current, previous, key, limit = 5, coverage = {}) {
+  const currentMap = new Map(current.map((q) => [q.query, q.clicks]));
   const prevMap = new Map(previous.map((q) => [q.query, q.clicks]));
-  const enriched = current.map((q) => ({
-    query: q.query,
-    clicksCurrent: q.clicks,
-    clicksPrevious: prevMap.get(q.query) ?? 0,
-    clicksDelta: q.clicks - (prevMap.get(q.query) ?? 0),
-  }));
+  const keys = new Set([...currentMap.keys(), ...prevMap.keys()]);
+  const enriched = [...keys]
+    // Se a coleta bateu no teto, ausência pode ser somente truncamento.
+    .filter((query) => currentMap.has(query) || coverage.possiblyTruncated === false)
+    .map((query) => ({
+      query,
+      clicksCurrent: currentMap.get(query) ?? 0,
+      clicksPrevious: prevMap.get(query) ?? 0,
+      clicksDelta: (currentMap.get(query) ?? 0) - (prevMap.get(query) ?? 0),
+      ...(!currentMap.has(query) ? { currentMissing: true } : {}),
+    }));
   const significant = enriched.filter(
     (q) => q.clicksPrevious >= MIN_BASELINE_CLICKS && Math.abs(q.clicksDelta) >= MIN_ABS_DELTA
   );
@@ -167,7 +176,7 @@ export async function fetchGsc(startDate, endDate, options = {}) {
   const siteUrl = getGscSiteUrl();
   const sc = google.searchconsole({ version: 'v1', auth });
 
-  const [overall, topQueries, topPages] = await Promise.all([
+  const [overall, queryResult, topPages] = await Promise.all([
     fetchOverall(sc, siteUrl, startDate, endDate),
     fetchTopQueries(sc, siteUrl, startDate, endDate, LIMITE_QUERIES),
     fetchTopPages(sc, siteUrl, startDate, endDate, LIMITE_PAGINAS),
@@ -203,8 +212,8 @@ export async function fetchGsc(startDate, endDate, options = {}) {
     }
 
     if (queriesResult.status === 'fulfilled') {
-      risingQueries = computeDelta(topQueries, queriesResult.value, 'rising', 5);
-      fallingQueries = computeDelta(topQueries, queriesResult.value, 'falling', 5);
+      risingQueries = computeDelta(queryResult.comparisonRows, queriesResult.value.comparisonRows, 'rising', 5, queryResult.coverage);
+      fallingQueries = computeDelta(queryResult.comparisonRows, queriesResult.value.comparisonRows, 'falling', 5, queryResult.coverage);
     } else {
       const queriesReason = `Baseline de queries do Search Console indisponível: ${queriesResult.reason?.message ?? queriesResult.reason}`;
       comparisonUnavailableReason = [comparisonUnavailableReason, queriesReason].filter(Boolean).join(' ');
@@ -220,7 +229,8 @@ export async function fetchGsc(startDate, endDate, options = {}) {
 
   return {
     ...overall,
-    topQueries,
+    topQueries: queryResult.rows,
+    queryCoverage: queryResult.coverage,
     topPages,
     risingQueries,
     fallingQueries,

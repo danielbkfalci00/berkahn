@@ -1,4 +1,5 @@
 import { LeadsQueue, type LeadKpis, type LeadListItem } from "@/components/admin/analytics/LeadsQueue";
+import { getAdminSession } from "@/lib/supabase/sessao";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import type { AdminDataResult, LeadChannel, LeadPriority, LeadResponsible, LeadSegment, LeadStatus } from "@/types/analytics";
@@ -14,7 +15,7 @@ const CLOSED_STATUSES = "(convertido,desqualificado)";
 const QUALIFIED_STATUSES: LeadStatus[] = ["qualificado", "proposta_enviada", "convertido"];
 // A fila não precisa transportar mensagem, atribuição, UTM ou histórico de cada
 // lead. Esses campos continuam disponíveis na rota de detalhe.
-const LEAD_COLUMNS = "id,nome,email,telefone,status,prioridade,resumo_status,proxima_acao_em,visualizado_em,lead_responsaveis(id,nome),lead_artifacts(count)";
+const LEAD_COLUMNS = "id,nome,email,telefone,tipo_captacao,status,prioridade,resumo_status,proxima_acao_em,visualizado_em,lead_responsaveis(id,nome),lead_artifacts(count)";
 
 function toLeadListItem(row: unknown): LeadListItem {
   const raw = row as Omit<LeadListItem, "responsavel" | "artifact_count"> & {
@@ -33,11 +34,14 @@ interface PageProps {
     q?: string;
     status?: LeadStatus;
     canal?: LeadChannel;
+    captacao?: string;
     segmento?: LeadSegment;
     prioridade?: LeadPriority;
     responsavel?: string;
     periodo?: string;
     vencida?: string;
+    meus?: string;
+    situacao?: string;
     semResponsavel?: string;
     semAcao?: string;
     arquivados?: string;
@@ -50,17 +54,22 @@ export default async function LeadsPage({ searchParams }: PageProps) {
   const params = await searchParams;
   const page = Math.max(1, Number.parseInt(params.page || "1", 10) || 1);
   const view = params.view === "kanban" ? "kanban" : "inbox";
-  const supabase = await createClient();
+  const session = await getAdminSession();
+  if (!session || !["owner", "comercial"].includes(session.membership.role)) throw new Error("Não autorizado.");
+  const supabase = session.supabase;
+  const currentResponsibleId = session.membership.id;
   const safeSearch = params.q?.trim().slice(0, 120).replace(/[,()%]/g, " ");
   const localStageCandidate = view === "inbox" && ![
     params.q, params.canal, params.segmento, params.prioridade, params.responsavel,
-    params.periodo, params.vencida, params.semResponsavel, params.semAcao, params.arquivados,
+    params.periodo, params.vencida, params.semResponsavel, params.semAcao, params.arquivados, params.meus, params.captacao,
   ].some(Boolean);
   function buildQuery(includeStatus: boolean) {
     let query = supabase
       .from("leads")
       .select(LEAD_COLUMNS, { count: "exact" })
-      .order("criado_em", { ascending: false });
+      .order("proxima_acao_em", { ascending: true, nullsFirst: false })
+      .order("prioridade_ordem", { ascending: true })
+      .order("criado_em", { ascending: true }).order("id");
     if (safeSearch) {
       const normalizedPhone = safeSearch.replace(/\D/g, "");
       const filters = [
@@ -74,10 +83,13 @@ export default async function LeadsPage({ searchParams }: PageProps) {
       query = query.or(filters.join(","));
     }
     if (includeStatus && params.status) query = query.eq("status", params.status);
+    else if (includeStatus && params.situacao !== "todos" && params.arquivados !== "1") query = query.not("status", "in", CLOSED_STATUSES);
     if (params.canal) query = query.eq("canal", params.canal);
+    if (["contato", "material"].includes(params.captacao || "")) query = query.eq("tipo_captacao", params.captacao!);
     if (params.segmento) query = query.eq("segmento", params.segmento);
     if (params.prioridade) query = query.eq("prioridade", params.prioridade);
-    if (params.semResponsavel === "1") query = query.is("responsavel_id", null);
+    if (params.meus === "1") query = query.eq("responsavel_id", currentResponsibleId);
+    else if (params.semResponsavel === "1") query = query.is("responsavel_id", null);
     else if (params.responsavel) query = query.eq("responsavel_id", params.responsavel);
     if (params.periodo && ["7", "28", "90"].includes(params.periodo)) {
       const from = new Date();
@@ -92,8 +104,8 @@ export default async function LeadsPage({ searchParams }: PageProps) {
     return params.arquivados === "1" ? query.not("arquivado_em", "is", null) : query.is("arquivado_em", null);
   }
 
-  const from = view === "kanban" ? 0 : (page - 1) * PAGE_SIZE;
-  const limit = view === "kanban" ? 150 : PAGE_SIZE;
+  const limit = view === "kanban" ? 60 : PAGE_SIZE;
+  const from = (page - 1) * limit;
   let [listResult, kpis, responsiblesResult] = await Promise.all([
     buildQuery(!localStageCandidate).range(localStageCandidate ? 0 : from, localStageCandidate ? LOCAL_STAGE_LIMIT : from + limit - 1),
     getLeadKpis(supabase),
@@ -108,7 +120,7 @@ export default async function LeadsPage({ searchParams }: PageProps) {
   // 416 (PGRST103). Volta para a última página válida em vez de derrubar a tela.
   if (error?.code === "PGRST103") {
     const { count: realCount } = await buildQuery(true).range(0, 0);
-    const lastPage = Math.max(1, Math.ceil((realCount ?? 0) / PAGE_SIZE));
+    const lastPage = Math.max(1, Math.ceil((realCount ?? 0) / limit));
     const next = new URLSearchParams(Object.entries(params).filter((entry): entry is [string, string] => typeof entry[1] === "string"));
     next.set("page", String(lastPage));
     redirect(`/admin/leads?${next.toString()}`);
@@ -117,7 +129,7 @@ export default async function LeadsPage({ searchParams }: PageProps) {
   if (responsiblesResult.error) throw new Error(`Falha ao carregar responsáveis: ${responsiblesResult.error.message}`);
 
   const allStageLeads = localStageEnabled ? (data ?? []).map(toLeadListItem) : null;
-  const matchedStageLeads = allStageLeads?.filter((lead) => !params.status || lead.status === params.status);
+  const matchedStageLeads = allStageLeads?.filter((lead) => params.status ? lead.status === params.status : params.situacao === "todos" || !["convertido", "desqualificado"].includes(lead.status));
   const total = matchedStageLeads?.length ?? count ?? 0;
   if (matchedStageLeads && page > Math.max(1, Math.ceil(total / PAGE_SIZE))) {
     const next = new URLSearchParams(Object.entries(params).filter((entry): entry is [string, string] => typeof entry[1] === "string"));
@@ -131,7 +143,7 @@ export default async function LeadsPage({ searchParams }: PageProps) {
       allStageLeads={allStageLeads}
       total={total}
       page={page}
-      pageCount={Math.ceil(total / PAGE_SIZE)}
+      pageCount={Math.ceil(total / limit)}
       kpis={kpis}
       responsibles={(responsiblesResult.data ?? []) as LeadResponsible[]}
       view={view}

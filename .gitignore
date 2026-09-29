@@ -80,6 +80,9 @@ tmpgitleaks*.json
 /scripts/*
 !/scripts/VAULT-SCRIPTS-README.md
 !/scripts/vault-validate.mjs
+!/scripts/test-admin-navigation.mjs
+!/scripts/test-lead-flow.mjs
+!/scripts/test-rich-post-renderer.mjs
 # ATENCAO: este bloco e denylist com negacao por arquivo, entao TODO script novo
 # em scripts/conteudo/ nasce ignorado e some do git add -A em silencio. Ja aconteceu
 # tres vezes (check-linkedin.mjs, adhoc-inspect-urls.mjs, check-lote-linkedin.mjs).

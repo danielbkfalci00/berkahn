@@ -98,9 +98,9 @@ export function computeHealthScore(
   const engagementScore = engagementToScore(ctx.ga4.engagementRate);
   const comparable = comparisonAvailability(ctx);
   const enabled = {
-    indexation: true,
-    usersGrowth: comparable.ga4MoM,
-    clicksGrowth: comparable.gscMoM,
+    indexation: ctx.totalArticles > 0 && (ctx.indexation?.length ?? ctx.totalArticles) <= ctx.totalArticles,
+    usersGrowth: comparable.ga4MoM && ctx.ga4.usersMoMPct !== undefined,
+    clicksGrowth: comparable.gscMoM && ctx.gsc.clicksMoMPct !== undefined,
     engagementRate: true,
   };
   const enabledWeight = Object.entries(weights).reduce(
@@ -127,8 +127,8 @@ export function computeHealthScore(
     components: {
       indexation: {
         value: indexationScore,
-        raw: `${ctx.indexedCount}/${ctx.totalArticles} indexados`,
-        available: true,
+        raw: enabled.indexation ? `${ctx.indexedCount}/${ctx.totalArticles} indexados` : "inspeção incompleta",
+        available: enabled.indexation,
       },
       usersGrowth: {
         value: usersScore,

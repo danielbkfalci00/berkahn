@@ -80,20 +80,20 @@ export function FallingQueriesPanel({ queries, unavailableReason }: FallingQueri
                           {q.query}
                         </TableCell>
                         <TableCell className="text-right text-xs tabular-nums text-neutral-700">
-                          {q.clicksCurrent.toLocaleString("pt-BR")}
+                          {q.currentMissing ? "Ausente na coleta" : q.clicksCurrent.toLocaleString("pt-BR")}
                         </TableCell>
                         <TableCell className="text-right text-xs tabular-nums text-neutral-600">
                           {q.clicksPrevious.toLocaleString("pt-BR")}
                         </TableCell>
                         <TableCell className="text-right text-xs tabular-nums font-semibold" style={{ color: "#B83A3A" }}>
-                          {q.clicksDelta > 0 ? "+" : ""}
-                          {q.clicksDelta.toLocaleString("pt-BR")}
+                          {q.currentMissing ? "—" : `${q.clicksDelta > 0 ? "+" : ""}${q.clicksDelta.toLocaleString("pt-BR")}`}
                         </TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
                 </Table>
               </div>
+              {queries.some((query) => query.currentMissing) && <p className="mt-3 text-xs text-neutral-500">Ausente significa que a consulta não voltou nesta coleta, sem atingir o limite de linhas. O Search Console também omite consultas por privacidade; isso não comprova zero cliques.</p>}
               {total > INITIAL_LIMIT && (
                 <button
                   type="button"

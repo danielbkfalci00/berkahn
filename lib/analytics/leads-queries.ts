@@ -19,35 +19,24 @@ const ACTIVE_LEAD_STATUSES = ["novo", "em_contato", "qualificado", "proposta_env
 /** Resumo operacional sem carregar nome, contato, mensagem ou atribuição. */
 export async function getDashboardLeadOperations(): Promise<AdminDataResult<DashboardLeadOperations>> {
   const supabase = await createClient();
-  const { data, error } = await supabase
-    .from("leads")
-    .select("id,status,responsavel_id,proxima_acao_em,criado_em")
-    .in("status", [...ACTIVE_LEAD_STATUSES])
-    .is("arquivado_em", null)
-    .is("anonimizado_em", null);
-
-  if (error || !data) {
-    console.error("Falha ao carregar pendencias do dashboard", error);
+  const active = () => supabase.from("leads").select("id", { count: "exact", head: true })
+    .in("status", [...ACTIVE_LEAD_STATUSES]).is("arquivado_em", null).is("anonimizado_em", null);
+  const now = new Date().toISOString();
+  const [fresh, overdue, unassigned, nextResult] = await Promise.all([
+    active().eq("status", "novo"), active().lt("proxima_acao_em", now), active().is("responsavel_id", null),
+    supabase.from("leads").select("id,proxima_acao_em")
+      .in("status", [...ACTIVE_LEAD_STATUSES]).is("arquivado_em", null).is("anonimizado_em", null)
+      .not("proxima_acao_em", "is", null).order("proxima_acao_em").order("prioridade_ordem").order("id").limit(1),
+  ]);
+  if ([fresh, overdue, unassigned, nextResult].some((result) => result.error)) {
     return { status: "unavailable", reason: "Não foi possível consultar o CRM agora." };
   }
-
-  const now = Date.now();
-  const scheduled = data
-    .filter((lead) => Boolean(lead.proxima_acao_em))
-    .sort((a, b) => new Date(a.proxima_acao_em!).getTime() - new Date(b.proxima_acao_em!).getTime());
-  const next = scheduled[0] ?? null;
-
-  return {
-    status: "ok",
-    data: {
-      newCount: data.filter((lead) => lead.status === "novo").length,
-      overdueCount: scheduled.filter((lead) => new Date(lead.proxima_acao_em!).getTime() < now).length,
-      unassignedCount: data.filter((lead) => !lead.responsavel_id).length,
-      nextLeadId: next?.id ?? null,
-      nextActionAt: next?.proxima_acao_em ?? null,
-      nextActionOverdue: next ? new Date(next.proxima_acao_em!).getTime() < now : false,
-    },
-  };
+  const next = nextResult.data?.[0];
+  return { status: "ok", data: {
+    newCount: fresh.count || 0, overdueCount: overdue.count || 0, unassignedCount: unassigned.count || 0,
+    nextLeadId: next?.id || null, nextActionAt: next?.proxima_acao_em || null,
+    nextActionOverdue: Boolean(next?.proxima_acao_em && next.proxima_acao_em < now),
+  } };
 }
 
 /**
@@ -57,7 +46,7 @@ export async function getDashboardLeadOperations(): Promise<AdminDataResult<Dash
  * (nome, e-mail, telefone, mensagem) que o dashboard não usa e não deve
  * trafegar. O funil precisa só de status, origem e datas.
  */
-export async function listarLeadsDoMes(monthSlug: string): Promise<AdminDataResult<LeadParaFunil[]>> {
+export async function listarLeadsDoMes(monthSlug: string, periodEnd?: string): Promise<AdminDataResult<LeadParaFunil[]>> {
   if (!/^\d{4}-\d{2}$/.test(monthSlug)) {
     return { status: "unavailable", reason: "Período de leads inválido." };
   }
@@ -66,10 +55,16 @@ export async function listarLeadsDoMes(monthSlug: string): Promise<AdminDataResu
   const [ano, mes] = monthSlug.split("-").map(Number);
   const proximoAno = mes === 12 ? ano + 1 : ano;
   const proximoMes = mes === 12 ? 1 : mes + 1;
-  const fim = `${proximoAno}-${String(proximoMes).padStart(2, "0")}-01`;
+  let fim = `${proximoAno}-${String(proximoMes).padStart(2, "0")}-01`;
+  if (periodEnd) {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(periodEnd) || !Number.isFinite(Date.parse(`${periodEnd}T00:00:00Z`))) return { status: "unavailable", reason: "Corte do período inválido." };
+    const exclusiveEnd = new Date(`${periodEnd}T00:00:00Z`);
+    exclusiveEnd.setUTCDate(exclusiveEnd.getUTCDate() + 1);
+    fim = exclusiveEnd.toISOString().slice(0, 10) < fim ? exclusiveEnd.toISOString().slice(0, 10) : fim;
+  }
 
   const supabase = await createClient();
-  const { data, error } = await supabase
+  const query = supabase
     .from("leads")
     .select(
       "status, canal, segmento, cta_location, pagina_origem, post_id, utm, criado_em, qualificado_em, convertido_em"
@@ -77,11 +72,14 @@ export async function listarLeadsDoMes(monthSlug: string): Promise<AdminDataResu
     .gte("criado_em", inicio)
     .lt("criado_em", fim)
     .is("arquivado_em", null)
-    .is("anonimizado_em", null);
+    .is("anonimizado_em", null).order("criado_em").order("id");
 
-  if (error || !data) {
-    console.error("Falha ao carregar o funil de leads", error);
-    return { status: "unavailable", reason: "Não foi possível consultar o CRM agora." };
+  const rows: LeadParaFunil[] = [];
+  for (let offset = 0; offset < 10000; offset += 1000) {
+    const { data, error } = await query.range(offset, offset + 999);
+    if (error || !data) return { status: "unavailable", reason: "Não foi possível consultar o CRM agora." };
+    rows.push(...data as unknown as LeadParaFunil[]);
+    if (data.length < 1000) return { status: "ok", data: rows };
   }
-  return { status: "ok", data: data as unknown as LeadParaFunil[] };
+  return { status: "unavailable", reason: "O período excede o limite de consulta. Use um período menor." };
 }

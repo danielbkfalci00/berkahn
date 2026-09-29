@@ -32,7 +32,9 @@ export function InsightsList({ insights }: InsightsListProps) {
             <span className="flex-shrink-0 w-7 h-7 rounded-full bg-neutral-900 text-white text-sm font-semibold flex items-center justify-center">
               {insight.position}
             </span>
-            <p className="text-neutral-800 leading-relaxed">{insight.text}</p>
+            <div><p className="text-neutral-800 leading-relaxed">{insight.text}</p>
+              {insight.evidence && <p className="mt-2 text-xs text-neutral-500">{insight.evidence} {insight.confidence === "moderate" ? "Hipótese para investigar." : ""}</p>}
+            </div>
           </li>
         ))}
       </ol>

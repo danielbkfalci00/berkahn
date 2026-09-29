@@ -9,6 +9,8 @@ import type { SnapshotSourceProvenance } from "@/types/analytics";
 
 interface AnalyticsHeaderProps {
   monthLabel: string;
+  onPrint?: () => void;
+  preparingPrint?: boolean;
   periodStart: string;
   periodEnd: string;
   availableMonths: string[];
@@ -34,6 +36,8 @@ interface AnalyticsHeaderProps {
 
 export function AnalyticsHeader({
   monthLabel,
+  onPrint,
+  preparingPrint,
   periodStart,
   periodEnd,
   availableMonths,
@@ -98,6 +102,7 @@ export function AnalyticsHeader({
           variant={comparisonMode ? "default" : "outline"}
           size="default"
           onClick={toggleCompare}
+          aria-label={comparisonMode ? "Sair do comparativo" : "Comparar períodos"}
           disabled={comparisonDisabled && !comparisonMode}
           className={cn(!comparisonMode && "bg-white")}
           title={comparisonDisabled ? (comparisonDisabledReason ?? "Sem mês anterior pra comparar") : undefined}
@@ -114,9 +119,9 @@ export function AnalyticsHeader({
             </>
           )}
         </Button>
-        <Button variant="outline" size="default" onClick={() => window.print()} className="bg-white">
+        <Button variant="outline" size="default" onClick={onPrint ?? (() => window.print())} disabled={preparingPrint} aria-label={preparingPrint ? "Preparando relatório completo" : "Exportar relatório completo em PDF"} className="bg-white">
           <Printer className="h-4 w-4 sm:mr-2" />
-          <span className="hidden sm:inline">Exportar PDF</span>
+          <span className="hidden sm:inline">{preparingPrint ? "Preparando…" : "Exportar PDF"}</span>
         </Button>
         </div>
       </div>
@@ -137,8 +142,9 @@ export function AnalyticsHeader({
               <span key={key}>
                 <strong className="block font-medium text-neutral-700">{label}</strong>
                 {source
-                  ? `Dados até ${source.dataThrough}${source.lagDays != null ? ` · defasagem ${source.lagDays}d` : ""}${source.origin === "fixture" ? " · cache" : ""}`
+                  ? `${source.status === "unavailable" ? "Indisponível · " : source.status === "partial" ? "Coleta incompleta · " : ""}Dados até ${source.dataThrough}${source.lagDays != null ? ` · defasagem ${source.lagDays}d` : ""}${source.origin === "fixture" ? " · cache" : ""}`
                   : `Snapshot legado · ${generatedAt}`}
+                {source?.reason && <span className="block text-amber-800">{source.reason}</span>}
               </span>
             );
           })}

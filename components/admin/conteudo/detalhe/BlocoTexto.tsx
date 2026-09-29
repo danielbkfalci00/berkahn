@@ -43,7 +43,7 @@ export function BlocoTexto({
 }: Props) {
   const { valor, estado, aoDigitar, aoSair, aoTeclar, salvarAgora } = useAutosave(
     valorInicial ?? "",
-    (texto) => salvarBloco(pautaId, bloco, texto)
+    (texto, anterior) => salvarBloco(pautaId, bloco, texto, anterior)
   );
 
   const pendente = estado.fase === "sujo" || estado.fase === "salvando" || estado.fase === "erro";

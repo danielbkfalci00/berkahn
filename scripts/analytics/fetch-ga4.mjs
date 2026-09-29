@@ -63,7 +63,7 @@ async function fetchOverall(data, propertyId, startDate, endDate) {
 
 // `limit` sem default de propósito: um default aqui truncou a cauda por três
 // meses sem ninguém notar, porque os totais vinham de outra chamada e batiam.
-async function fetchTopPages(data, propertyId, startDate, endDate, limit) {
+export async function fetchTopPages(data, propertyId, startDate, endDate, limit) {
   // Query unificada com 7 métricas. Se 400 (combinação inválida no v1beta), split em 2 queries.
   const primaryMetrics = [
     { name: 'screenPageViews' },
@@ -77,7 +77,6 @@ async function fetchTopPages(data, propertyId, startDate, endDate, limit) {
   ];
 
   let rows = [];
-  let usedSplit = false;
   try {
     const res = await runReport(data, propertyId, {
       dateRanges: [{ startDate, endDate }],
@@ -89,8 +88,7 @@ async function fetchTopPages(data, propertyId, startDate, endDate, limit) {
     rows = res.rows || [];
   } catch (e) {
     // Fallback: tenta 2 queries menores e dá join no client
-    if (!String(e?.message ?? '').includes('400')) throw e;
-    usedSplit = true;
+    if (Number(e?.code ?? e?.response?.status) !== 400 && !String(e?.message ?? '').includes('400')) throw e;
     const [resA, resB] = await Promise.all([
       runReport(data, propertyId, {
         dateRanges: [{ startDate, endDate }],
@@ -124,7 +122,7 @@ async function fetchTopPages(data, propertyId, startDate, endDate, limit) {
     rows = (resA.rows ?? []).map((r) => {
       const path = r.dimensionValues[0].value;
       const extra = mapB.get(path);
-      const combined = [...r.metricValues, ...(extra ?? Array.from({ length: 5 }, () => ({ value: '0' })))];
+      const combined = [...r.metricValues, ...(extra ?? [])];
       return { dimensionValues: r.dimensionValues, metricValues: combined };
     });
   }
@@ -142,15 +140,11 @@ async function fetchTopPages(data, propertyId, startDate, endDate, limit) {
         (parseFloat(r.metricValues[2]?.value || '0') / usersSafe).toFixed(1)
       ),
       // Novas métricas: bounceRate e engagementRate vêm como ratio 0-1 → multiplicamos por 100
-      bounceRate: parseFloat(
-        (parseFloat(r.metricValues[3]?.value || '0') * 100).toFixed(1)
-      ),
-      engagementRate: parseFloat(
-        (parseFloat(r.metricValues[4]?.value || '0') * 100).toFixed(1)
-      ),
-      sessions: parseInt(r.metricValues[5]?.value || '0'),
-      newUsers: parseInt(r.metricValues[6]?.value || '0'),
-      engagedSessions: parseInt(r.metricValues[7]?.value || '0'),
+      ...(r.metricValues[3] ? { bounceRate: Number((Number(r.metricValues[3].value) * 100).toFixed(1)) } : {}),
+      ...(r.metricValues[4] ? { engagementRate: Number((Number(r.metricValues[4].value) * 100).toFixed(1)) } : {}),
+      ...(r.metricValues[5] ? { sessions: Number(r.metricValues[5].value) } : {}),
+      ...(r.metricValues[6] ? { newUsers: Number(r.metricValues[6].value) } : {}),
+      ...(r.metricValues[7] ? { engagedSessions: Number(r.metricValues[7].value) } : {}),
     };
   });
 }
@@ -229,7 +223,7 @@ const EVENTOS_RASTREADOS = [
   'architect_berkahn_whatsapp',
 ];
 
-async function fetchEvents(data, propertyId, startDate, endDate) {
+export async function fetchEvents(data, propertyId, startDate, endDate) {
   const relevantEvents = EVENTOS_RASTREADOS;
   try {
     const res = await runReport(data, propertyId, {
@@ -252,7 +246,7 @@ async function fetchEvents(data, propertyId, startDate, endDate) {
     })) };
   } catch (e) {
     console.warn('GA4 conversion events unavailable:', e?.message || e);
-    return { available: false, rows: [] };
+    return { available: false, reason: 'A coleta de eventos do GA4 falhou. Tente atualizar o relatório.', rows: [] };
   }
 }
 
@@ -345,6 +339,8 @@ export async function fetchGa4(startDate, endDate) {
     byArea,
     events: eventsResult.rows,
     eventsAvailable: eventsResult.available,
+    eventsAvailability: { available: eventsResult.available, reason: eventsResult.reason },
+    pageCoverage: { limit: LIMITE_PAGINAS, rowsReturned: topPages.length, possiblyTruncated: topPages.length >= LIMITE_PAGINAS },
     whatsappBreakdown,
     period: { startDate, endDate },
     articleProgress,

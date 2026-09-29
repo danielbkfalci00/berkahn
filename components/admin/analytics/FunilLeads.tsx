@@ -64,7 +64,7 @@ export function FunilLeads({ funil, monthSlug }: FunilLeadsProps) {
     <Card className="bg-white border-neutral-200 p-6">
       <div className="flex flex-wrap items-baseline justify-between gap-2 mb-1">
         <h3 className="text-sm uppercase tracking-wider font-medium text-neutral-500">
-          Funil de leads
+          Coorte de leads
         </h3>
         {topo > 0 && (
           <p className="text-xs text-neutral-500">
@@ -72,27 +72,22 @@ export function FunilLeads({ funil, monthSlug }: FunilLeadsProps) {
             <strong className="font-semibold text-neutral-900">
               {pct(data.taxaConversao)}
             </strong>
-            {data.maiorPerda && (
-              <>
-                {" "}· maior perda em{" "}
-                <strong className="font-semibold text-neutral-900">
-                  {data.maiorPerda.de} → {data.maiorPerda.para}
-                </strong>{" "}
-                (−{pct(data.maiorPerda.pct)})
-              </>
-            )}
+            {" "}· {data.convertidos} de {data.total} recebidos
           </p>
         )}
       </div>
 
       {topo === 0 ? (
         <p className="text-sm text-neutral-500 mt-3">
-          Nenhum lead registrado em {monthSlug}. O CRM entrou em produção em
-          11/08/2026 — até o primeiro lead chegar, este bloco fica vazio por
-          fidelidade, não por falha.
+          Nenhum lead elegível recebido no período selecionado de {monthSlug}.
         </p>
       ) : (
         <>
+          <p className="mt-3 text-xs text-neutral-500">
+            Situação atual dos leads recebidos até o corte do relatório. As etapas
+            abaixo mostram estoque, não perdas nem uma progressão obrigatória.
+            {" "}{data.novos} ainda novos · {data.qualificados} com qualificação registrada.
+          </p>
           <div className="space-y-1.5 mt-4">
             {data.degraus.map((degrau) => (
               <div key={degrau.etapa} className="flex items-center gap-3">
@@ -122,14 +117,14 @@ export function FunilLeads({ funil, monthSlug }: FunilLeadsProps) {
 
           {data.desqualificados > 0 && (
             <p className="text-xs text-neutral-500 mt-3">
-              {data.desqualificados} desqualificados, fora da soma do funil — é
-              saída lateral a partir de qualquer etapa, não um degrau posterior.
+              {data.desqualificados} desqualificados, incluídos no total recebido
+              e no denominador da conversão.
             </p>
           )}
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-6 pt-5 border-t border-neutral-100">
             <ListaOrigem
-              titulo="Por gatilho (cta_location)"
+              titulo="Por ponto de contato"
               fatias={data.porCtaLocation}
               vazio="Nenhum lead com gatilho identificado."
             />
@@ -144,10 +139,8 @@ export function FunilLeads({ funil, monthSlug }: FunilLeadsProps) {
             <strong className="font-medium text-neutral-700">
               {data.comUtm} de {data.total}
             </strong>{" "}
-            leads têm UTM. Atribuição por campanha é enviesada por construção:
-            `utm`, `landing_page` e `referrer` só são gravados para quem aceitou
-            todos os cookies. Só `pagina_origem`, derivada do header no servidor,
-            sobrevive à recusa.
+            leads têm campanha identificada. Essa cobertura depende do
+            consentimento de cookies e não representa toda a aquisição.
           </p>
         </>
       )}

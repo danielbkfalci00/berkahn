@@ -75,20 +75,27 @@ export function buildPostPerformance(
 ): PostPerformance[] {
   const currentPages = current.ga4_data?.topPages ?? [];
   const ga4MoMAvailable = comparisonAvailability(current.context).ga4MoM;
+  // O baseline salvo junto ao snapshot usa a janela equivalente. A linha do
+  // mês anterior só é segura quando os dois meses estão fechados.
+  const savedBaseline = current.ga4_prev;
+  const equivalentBaseline = savedBaseline && (!current.context.partial || (
+    savedBaseline.period?.startDate === current.context.prevPeriodStart &&
+    savedBaseline.period?.endDate === current.context.prevPeriodEnd &&
+    Boolean(current.context.prevPeriodStart && current.context.prevPeriodEnd)
+  )) ? savedBaseline : null;
+  const baseline = equivalentBaseline ?? (
+    !current.context.partial && !previous?.context?.partial ? previous?.ga4_data : null
+  );
   const prevPagesMap = new Map<string, Ga4PageRow>();
-  // Snapshot parcial cobre N dias e o anterior é o mês fechado inteiro: a
-  // divisão página a página daria queda falsa e marcaria o acervo como "cold".
-  // Os KPIs agregados usam janela equivalente; por página não temos, então
-  // o MoM fica indisponível (null) em vez de mentir.
-  const eitherPartial = Boolean(current.context?.partial || previous?.context?.partial);
-  if (ga4MoMAvailable && !eitherPartial && previous?.ga4_data?.topPages) {
-    for (const p of previous.ga4_data.topPages) {
+  if (ga4MoMAvailable && baseline?.topPages) {
+    for (const p of baseline.topPages) {
       prevPagesMap.set(p.slug, p);
     }
   }
 
   // Lista ordenada de meses pra reconstruir sparkline em ordem cronológica
-  const sortedMonths = Array.from(historicalByMonthAndSlug.keys()).sort();
+  const sortedMonths = Array.from(historicalByMonthAndSlug.keys())
+    .filter((month) => month <= current.context.monthSlug).sort();
 
   const results: PostPerformance[] = [];
 
@@ -214,10 +221,10 @@ export const STATUS_META: Record<
     description: "Pageviews caíram 30% ou mais vs o mês anterior.",
   },
   abandoned: {
-    label: "Abandonado",
+    label: "Leitura breve",
     color: "#B83A3A",
     bg: "#F8E8E8",
-    description: "Tempo médio abaixo de 15s ou taxa de rejeição acima de 80%.",
+    description: "Tempo médio abaixo de 15s ou rejeição acima de 80%. Verifique amostra e intenção; isso não comprova abandono.",
   },
   neutral: {
     label: "Estável",

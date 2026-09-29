@@ -22,13 +22,15 @@ export interface MotorAutosave {
   sair(): void;
   /** Ctrl/Cmd+S e o botão de tentar de novo. */
   salvarAgora(): void;
+  /** Reativa a assinatura após o ciclo de efeitos do React Strict Mode. */
+  iniciar(): void;
   /** Limpa o timer pendente. Chamar no unmount. */
   destruir(): void;
 }
 
 interface Opcoes {
   valorInicial: string;
-  salvar: (texto: string) => Promise<{ error: string | null }>;
+  salvar: (texto: string, anterior: string) => Promise<{ error: string | null; valorSalvo?: string }>;
   aoMudar: () => void;
   atrasoMs?: number;
   maxChars?: number;
@@ -45,16 +47,14 @@ export function criarMotorAutosave(opcoes: Opcoes): MotorAutosave {
   let estado: EstadoSave = { fase: "limpo" };
   let timer: ReturnType<typeof setTimeout> | null = null;
 
-  // Gravado por último = quem manda. Debounce e blur podem estar em voo ao
-  // mesmo tempo; sem este contador, a resposta da gravação antiga chega depois
-  // e sobrescreve o estado da nova — a tela diria "falhou" para um texto que
-  // gravou, ou "salvo" para um que não gravou.
-  let seq = 0;
-  let seqSalva = 0;
+  let confirmado = opcoes.valorInicial;
+  let emVoo = false;
+  let gravacaoPendente = false;
+  let destruido = false;
 
   function mudar(proximo: EstadoSave) {
     estado = proximo;
-    opcoes.aoMudar();
+    if (!destruido) opcoes.aoMudar();
   }
 
   function cancelarTimer() {
@@ -66,28 +66,49 @@ export function criarMotorAutosave(opcoes: Opcoes): MotorAutosave {
 
   async function gravar() {
     cancelarTimer();
+    if (destruido || valor.length > maxChars) return;
+    // Uma única escrita por bloco. Ignorar respostas antigas não impediria a
+    // própria escrita antiga de chegar ao banco depois da nova.
+    if (emVoo) {
+      gravacaoPendente = true;
+      return;
+    }
     // Nada sujo para gravar: evita bater no banco a cada blur de campo intacto.
     if (estado.fase === "limpo" || estado.fase === "salvo") return;
 
-    const meuSeq = ++seq;
     const texto = valor;
-    mudar({ fase: "salvando" });
-
-    const res = await opcoes.salvar(texto);
-
-    // Chegou fora de ordem: outra gravação mais nova já respondeu. Descarta.
-    if (meuSeq < seqSalva) return;
-    seqSalva = meuSeq;
-
-    // A pessoa digitou enquanto isto estava em voo: continua sujo, e o timer
-    // que a digitação agendou é quem vai gravar o texto novo.
-    if (valor !== texto) {
-      if (estado.fase === "salvando") mudar({ fase: "sujo" });
+    if (texto === confirmado) {
+      mudar({ fase: "limpo" });
       return;
     }
+    emVoo = true;
+    gravacaoPendente = false;
+    mudar({ fase: "salvando" });
 
-    if (res.error) mudar({ fase: "erro", mensagem: res.error });
-    else mudar({ fase: "salvo", em: agora() });
+    let res: { error: string | null; valorSalvo?: string };
+    try {
+      res = await opcoes.salvar(texto, confirmado);
+    } catch {
+      res = { error: "Não foi possível salvar. Confira a conexão e tente de novo." };
+    } finally {
+      emVoo = false;
+    }
+
+    if (!res.error) confirmado = res.valorSalvo ?? texto;
+    if (destruido) return;
+    if (res.error) {
+      cancelarTimer();
+      gravacaoPendente = false;
+      mudar({ fase: "erro", mensagem: res.error });
+      return;
+    }
+    if (valor === texto) {
+      valor = confirmado;
+      mudar({ fase: "salvo", em: agora() });
+    } else if (valor.length <= maxChars) {
+      mudar({ fase: "sujo" });
+      if (gravacaoPendente) void gravar();
+    }
   }
 
   return {
@@ -127,7 +148,11 @@ export function criarMotorAutosave(opcoes: Opcoes): MotorAutosave {
       void gravar();
     },
 
-    destruir: cancelarTimer,
+    iniciar() { destruido = false; },
+    destruir() {
+      destruido = true;
+      cancelarTimer();
+    },
   };
 }
 

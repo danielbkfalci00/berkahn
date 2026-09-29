@@ -6,26 +6,40 @@ import type { StatusQuadro } from "@/types/conteudo";
 
 interface Props {
   coluna: StatusQuadro;
-  aoCriar: (titulo: string, coluna: StatusQuadro) => void;
+  aoCriar: (titulo: string, coluna: StatusQuadro) => Promise<{ error: string | null }>;
   desabilitado: boolean;
+  abertoInicial?: boolean;
 }
 
 /** "+ Nova página" do Notion: abre um campo no próprio fim da coluna. */
-export function NovaPautaInline({ coluna, aoCriar, desabilitado }: Props) {
-  const [aberto, setAberto] = useState(false);
+export function NovaPautaInline({ coluna, aoCriar, desabilitado, abertoInicial = false }: Props) {
+  const [aberto, setAberto] = useState(abertoInicial);
   const [titulo, setTitulo] = useState("");
+  const [salvando, setSalvando] = useState(false);
+  const [erro, setErro] = useState<string | null>(null);
+  const emVoo = useRef(false);
   const campo = useRef<HTMLTextAreaElement>(null);
 
-  function confirmar() {
+  async function confirmar() {
+    if (emVoo.current || desabilitado) return;
     const limpo = titulo.trim();
     if (!limpo) {
       setAberto(false);
       return;
     }
-    aoCriar(limpo, coluna);
-    setTitulo("");
-    // Segue aberto: cadastrar pauta é atividade em lote.
-    campo.current?.focus();
+    emVoo.current = true;
+    setSalvando(true);
+    setErro(null);
+    try {
+      const resultado = await aoCriar(limpo, coluna);
+      if (resultado.error) setErro(resultado.error);
+      else setTitulo("");
+    } catch {
+      setErro("Não foi possível criar a pauta. Seu título foi preservado.");
+    } finally {
+      emVoo.current = false;
+      setSalvando(false);
+    }
   }
 
   if (!aberto) {
@@ -49,8 +63,8 @@ export function NovaPautaInline({ coluna, aoCriar, desabilitado }: Props) {
         autoFocus
         rows={2}
         value={titulo}
+        disabled={salvando}
         onChange={(e) => setTitulo(e.target.value)}
-        onBlur={confirmar}
         onKeyDown={(e) => {
           if (e.key === "Enter" && !e.shiftKey) {
             e.preventDefault();
@@ -65,9 +79,14 @@ export function NovaPautaInline({ coluna, aoCriar, desabilitado }: Props) {
         aria-label="Título da nova pauta"
         className="w-full resize-none border-0 bg-transparent p-1 text-sm leading-snug text-neutral-900 placeholder:text-neutral-400 focus:outline-none"
       />
-      <p className="px-1 pb-0.5 text-[11px] text-neutral-400">
-        Enter cria · Esc cancela
-      </p>
+      {erro && <p role="alert" className="px-1 py-1 text-xs text-red-700">{erro}</p>}
+      <div className="flex items-center justify-between gap-2 px-1">
+        <p className="text-[11px] text-neutral-500">Enter cria · Esc cancela</p>
+        <button type="button" onClick={confirmar} disabled={salvando || !titulo.trim()}
+          className="rounded bg-neutral-900 px-3 py-1.5 text-xs font-medium text-white disabled:opacity-50">
+          {salvando ? "Criando…" : "Criar pauta"}
+        </button>
+      </div>
     </div>
   );
 }

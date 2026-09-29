@@ -260,7 +260,7 @@ export function FaixaMetadados({ pauta, tagsCatalogo, aoAtualizar }: Props) {
           <div className="mt-2 grid gap-2 md:grid-cols-[minmax(0,1fr)_220px_auto]">
             <Input type="url" value={urlLinkedin}
               onChange={(e) => setUrlLinkedin(e.target.value)}
-              placeholder="https://www.linkedin.com/posts/..." className="h-9 bg-white" />
+              placeholder="URL do post (opcional)" className="h-9 bg-white" />
             <Input type="datetime-local" value={dataLinkedin}
               onChange={(e) => setDataLinkedin(e.target.value)} className="h-9 bg-white" />
             {local.statusLinkedin === "publicado" && local.linkedinUrl ? (
@@ -268,6 +268,10 @@ export function FaixaMetadados({ pauta, tagsCatalogo, aoAtualizar }: Props) {
                 className="inline-flex h-9 items-center justify-center gap-1.5 rounded-md border border-neutral-200 bg-white px-3 text-sm font-medium text-neutral-700 hover:bg-neutral-50">
                 Abrir <ExternalLink className="h-3.5 w-3.5" aria-hidden />
               </a>
+            ) : local.statusLinkedin === "publicado" && local.linkedinPublicadoEm ? (
+              <span className="inline-flex h-9 items-center justify-center rounded-md border border-emerald-200 bg-emerald-50 px-3 text-sm font-medium text-emerald-700">
+                Publicação registrada
+              </span>
             ) : (
               <button type="button" onClick={publicarLinkedin} disabled={pendente}
                 className="inline-flex h-9 items-center justify-center gap-1.5 rounded-md bg-neutral-900 px-3 text-sm font-medium text-white hover:bg-neutral-800 disabled:opacity-50">

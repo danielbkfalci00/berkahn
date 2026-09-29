@@ -112,6 +112,8 @@ export interface Ga4Data {
   whatsappBreakdown?: Ga4WhatsAppBreakdown;
   period: { startDate: string; endDate: string };
   articleProgress?: Ga4ArticleProgress;
+  eventsAvailability?: { available: boolean; reason?: string };
+  pageCoverage?: { limit: number; rowsReturned: number; possiblyTruncated: boolean };
 }
 
 export interface GscQuery {
@@ -138,6 +140,7 @@ export interface GscDelta {
   clicksCurrent: number;
   clicksPrevious: number;
   clicksDelta: number;
+  currentMissing?: boolean;
 }
 
 export interface GscIndexation {
@@ -165,6 +168,7 @@ export interface GscData {
   fallingQueries: GscDelta[];
   indexation: GscIndexation[];
   period: { startDate: string; endDate: string };
+  queryCoverage?: { limit: number; rowsReturned: number; possiblyTruncated: boolean; minImpressions: number };
 }
 
 // ============================================
@@ -178,6 +182,9 @@ export interface SummaryItem {
 export interface Insight {
   position: number;
   text: string;
+  evidence?: string;
+  confidence?: "moderate" | "high";
+  impact?: number;
 }
 
 export interface ActionItem {
@@ -195,7 +202,8 @@ export interface SnapshotComparability {
 }
 
 export interface SnapshotSourceProvenance {
-  status: "available";
+  status: "available" | "partial" | "unavailable";
+  reason?: string;
   origin: "api" | "fixture";
   collectedAt: string;
   dataThrough: string;

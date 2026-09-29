@@ -764,6 +764,7 @@ export type Database = {
       }
       lead_notification_outbox: {
         Row: {
+          delivered_subscription_ids: string[]
           atualizado_em: string
           criado_em: string
           dedupe_key: string
@@ -778,6 +779,7 @@ export type Database = {
           ultimo_erro: string | null
         }
         Insert: {
+          delivered_subscription_ids?: string[]
           atualizado_em?: string
           criado_em?: string
           dedupe_key: string
@@ -792,6 +794,7 @@ export type Database = {
           ultimo_erro?: string | null
         }
         Update: {
+          delivered_subscription_ids?: string[]
           atualizado_em?: string
           criado_em?: string
           dedupe_key?: string
@@ -817,6 +820,10 @@ export type Database = {
       }
       leads: {
         Row: {
+          tipo_captacao: string
+          prioridade_ordem: number
+          submission_id: string | null
+          submission_payload_hash: string | null
           anonimizado_em: string | null
           arquivado_em: string | null
           atualizado_em: string
@@ -865,6 +872,10 @@ export type Database = {
           visualizado_em: string | null
         }
         Insert: {
+          tipo_captacao?: string
+          prioridade_ordem?: never
+          submission_id?: string | null
+          submission_payload_hash?: string | null
           anonimizado_em?: string | null
           arquivado_em?: string | null
           atualizado_em?: string
@@ -913,6 +924,10 @@ export type Database = {
           visualizado_em?: string | null
         }
         Update: {
+          tipo_captacao?: string
+          prioridade_ordem?: never
+          submission_id?: string | null
+          submission_payload_hash?: string | null
           anonimizado_em?: string | null
           arquivado_em?: string | null
           atualizado_em?: string
@@ -986,6 +1001,8 @@ export type Database = {
       }
       orcamentos: {
         Row: {
+          pdf_revision_hash: string | null
+          pdf_generated_at: string | null
           atualizado_em: string
           cliente_email: string | null
           cliente_nome: string
@@ -1021,6 +1038,8 @@ export type Database = {
           valor_min: number
         }
         Insert: {
+          pdf_revision_hash?: string | null
+          pdf_generated_at?: string | null
           atualizado_em?: string
           cliente_email?: string | null
           cliente_nome: string
@@ -1056,6 +1075,8 @@ export type Database = {
           valor_min: number
         }
         Update: {
+          pdf_revision_hash?: string | null
+          pdf_generated_at?: string | null
           atualizado_em?: string
           cliente_email?: string | null
           cliente_nome?: string
@@ -1358,6 +1379,22 @@ export type Database = {
       }
     }
     Functions: {
+      salvar_revisao_post_admin: {
+        Args: { p_post_id: string; p_payload: Json; p_post_updated_at: string; p_pauta_updated_at?: string | null }
+        Returns: Json
+      }
+      publicar_revisao_post_admin: {
+        Args: { p_post_id: string; p_post_updated_at: string; p_pauta_updated_at: string }
+        Returns: Json
+      }
+      register_lead_attendance: {
+        Args: { p_id: string; p_nota: string; p_status: string | null; p_proxima_acao_em: string | null; p_motivo?: string | null }
+        Returns: Database["public"]["Tables"]["leads"]["Row"]
+      }
+      update_lead_contact: {
+        Args: { p_id: string; p_nome: string; p_email: string | null; p_telefone: string | null; p_segmento: string; p_tipo_projeto: string | null; p_empresa: string | null; p_cargo: string | null }
+        Returns: Database["public"]["Tables"]["leads"]["Row"]
+      }
       anonymize_expired_lead: { Args: { p_id: string }; Returns: string[] }
       anonymize_lead_on_request: { Args: { p_id: string; p_motivo: string }; Returns: undefined }
       claim_lead_push_notifications: {

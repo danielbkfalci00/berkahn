@@ -1,5 +1,5 @@
 import { comparisonPolicyFor } from "./comparison-policy.mjs";
-import type { AnalyticsSnapshot, SnapshotComparability, SnapshotContext } from "@/types/analytics";
+import type { AnalyticsSnapshot, GscIndexation, SnapshotComparability, SnapshotContext } from "@/types/analytics";
 import { isExcludedFromSitemap } from "@/lib/seo/thin-content";
 
 export function comparisonAvailability(context: Pick<SnapshotContext, "monthSlug" | "comparability">): SnapshotComparability {
@@ -43,15 +43,21 @@ function withoutGscDeltas(context: SnapshotContext): SnapshotContext {
   return { ...context, gsc };
 }
 
-function isIndexedCoverage(coverageState: string | undefined): boolean {
+export function isIndexedCoverage(coverageState: string | undefined): boolean {
   const state = (coverageState ?? "").toLowerCase();
   return state.includes("indexed") && !state.includes("not indexed");
+}
+
+export function isKnownIndexation(item: GscIndexation): boolean {
+  return !item.error && item.verdict !== "ERROR" && item.verdict !== "UNKNOWN" &&
+    Boolean(item.coverageState && item.coverageState.toLowerCase() !== "unknown");
 }
 
 function withoutExcludedIndexation(context: SnapshotContext): SnapshotContext {
   const originalIndexation = context.indexation ?? [];
   const indexation = originalIndexation.filter((item) => !isExcludedFromSitemap(item.slug));
-  const indexedCount = indexation.filter((item) => isIndexedCoverage(item.coverageState)).length;
+  const inspected = indexation.filter(isKnownIndexation);
+  const indexedCount = inspected.filter((item) => isIndexedCoverage(item.coverageState)).length;
   const keepAction = (action: { text: string }) =>
     !originalIndexation.some(
       (item) => isExcludedFromSitemap(item.slug) && action.text.includes(item.slug)
@@ -64,12 +70,12 @@ function withoutExcludedIndexation(context: SnapshotContext): SnapshotContext {
     ...context,
     indexation,
     indexedCount,
-    totalArticles: indexation.length,
+    totalArticles: inspected.length,
     summary: context.summary.map((item) => ({
       ...item,
       text: item.text.replace(
         /\d+ de \d+ artigos indexados no Google\./i,
-        `${indexedCount} de ${indexation.length} artigos indexados no Google.`
+        `${indexedCount} de ${inspected.length} artigos com inspeção válida estão indexados no Google.`
       ),
     })),
     actionsP0,

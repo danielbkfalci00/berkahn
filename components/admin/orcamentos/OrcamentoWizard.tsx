@@ -1,7 +1,8 @@
 "use client"
 
-import { useReducer, useEffect, useState, useCallback, useMemo } from "react"
+import { useReducer, useState, useCallback, useMemo } from "react"
 import { useRouter } from "next/navigation"
+import { useUnsavedChanges } from "@/hooks/use-unsaved-changes"
 import {
   CheckCircle2,
   AlertCircle,
@@ -125,15 +126,7 @@ export function OrcamentoWizard({ orcamentoInicial, dadosIniciais }: Props) {
     [state.dados]
   )
 
-  useEffect(() => {
-    if (!state.hasUnsavedChanges) return
-    const handler = (e: BeforeUnloadEvent) => {
-      e.preventDefault()
-      e.returnValue = ""
-    }
-    window.addEventListener("beforeunload", handler)
-    return () => window.removeEventListener("beforeunload", handler)
-  }, [state.hasUnsavedChanges])
+  useUnsavedChanges(state.hasUnsavedChanges)
 
   const onChange = useCallback(
     <K extends keyof OrcamentoInsert>(
@@ -160,7 +153,7 @@ export function OrcamentoWizard({ orcamentoInicial, dadosIniciais }: Props) {
           return
         }
         setOrcamentoId(res.id)
-        dispatch({ type: "MARK_SAVED" })
+        dispatch({ type: "MARK_SAVED", snapshot: state.dados })
         setSalvar({
           status: "ok",
           mensagem: `Rascunho salvo (${res.numero})`,
@@ -172,7 +165,7 @@ export function OrcamentoWizard({ orcamentoInicial, dadosIniciais }: Props) {
           setSalvar({ status: "erro", mensagem: res.erro })
           return
         }
-        dispatch({ type: "MARK_SAVED" })
+        dispatch({ type: "MARK_SAVED", snapshot: state.dados })
         setSalvar({ status: "ok", mensagem: "Rascunho atualizado" })
       }
     } catch (err) {
@@ -219,7 +212,7 @@ export function OrcamentoWizard({ orcamentoInicial, dadosIniciais }: Props) {
         setSalvar({ status: "erro", mensagem: finalizacao.erro })
         return
       }
-      dispatch({ type: "MARK_SAVED" })
+      dispatch({ type: "MARK_SAVED", snapshot: state.dados })
       setSalvar({ status: "ok", mensagem: "Orçamento finalizado" })
       router.push(`/admin/orcamentos/${idFinal}`)
     } catch (err) {
@@ -240,7 +233,7 @@ export function OrcamentoWizard({ orcamentoInicial, dadosIniciais }: Props) {
       <div>
         <h1 className="text-2xl font-semibold text-neutral-900">{titulo}</h1>
         <p className="text-sm text-neutral-500">
-          Preencha os 5 passos e clique em Finalizar para gerar o PDF.
+          Preencha os dados e finalize a estimativa. Na próxima tela, gere o PDF para enviar.
         </p>
       </div>
 
@@ -284,6 +277,7 @@ export function OrcamentoWizard({ orcamentoInicial, dadosIniciais }: Props) {
       </Card>
 
       <Card className="p-6">
+        <fieldset disabled={salvar.status === "salvando" || salvar.status === "finalizando"}>
         {stepAtivo === 1 && (
           <Step1Cliente
             dados={state.dados}
@@ -311,6 +305,7 @@ export function OrcamentoWizard({ orcamentoInicial, dadosIniciais }: Props) {
         {stepAtivo === 5 && (
           <Step5Revisao dados={state.dados} onIrParaStep={irParaStep} />
         )}
+        </fieldset>
       </Card>
 
       {salvar.mensagem && (

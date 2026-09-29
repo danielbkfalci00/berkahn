@@ -10,7 +10,14 @@ export const metadata = {
 };
 
 export default async function DocumentacoesPage() {
-  const documentos = await listarDocumentos();
+  let documentos;
+  try {
+    documentos = await listarDocumentos();
+  } catch {
+    return <div role="alert" className="rounded-lg border border-amber-200 bg-amber-50 p-6 text-sm text-amber-900">
+      Não foi possível carregar os documentos. Atualize a página para tentar novamente.
+    </div>;
+  }
 
   if (documentos.length === 0) {
     return (
@@ -21,12 +28,8 @@ export default async function DocumentacoesPage() {
             Nenhum documento publicado
           </h2>
           <p className="mt-2 text-sm text-neutral-500">
-            Os relatórios de performance são publicados automaticamente pelo cron
-            mensal. Documentos de estratégia entram pelo seed.
+            Os relatórios e documentos de estratégia aparecerão aqui quando forem publicados.
           </p>
-          <pre className="mt-6 overflow-x-auto rounded bg-neutral-50 p-3 text-left text-xs text-neutral-600">
-            node --env-file=.env.local scripts/documentacoes/seed-documentos.mjs
-          </pre>
         </div>
       </div>
     );

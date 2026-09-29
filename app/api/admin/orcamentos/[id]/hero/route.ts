@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
 import sharp from "sharp"
+import { randomUUID } from "node:crypto"
 import { createServiceClient } from "@/lib/supabase/admin"
 import { exigirSessao } from "@/lib/supabase/sessao"
 
@@ -55,7 +56,9 @@ export async function POST(request: Request, ctx: RouteContext) {
   }
 
   const supabase = createServiceClient()
-  const path = `${id}/hero.webp`
+  const { data: budget } = await supabase.from("orcamentos").select("status,hero_image_url").eq("id", id).single()
+  if (!budget || budget.status === "arquivado") return NextResponse.json({ error: "Orçamento não disponível para edição" }, { status: 409 })
+  const path = `${id}/${randomUUID()}.webp`
 
   const { error: uploadError } = await supabase.storage
     .from("orcamento-heroes")
@@ -87,7 +90,11 @@ export async function POST(request: Request, ctx: RouteContext) {
     .eq("id", id)
 
   if (updateError) {
+    await supabase.storage.from("orcamento-heroes").remove([path])
     return NextResponse.json({ error: updateError.message }, { status: 500 })
+  }
+  if (budget.hero_image_url && !budget.hero_image_url.startsWith("http")) {
+    await supabase.storage.from("orcamento-heroes").remove([budget.hero_image_url])
   }
 
   return NextResponse.json({

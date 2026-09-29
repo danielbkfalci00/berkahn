@@ -13,11 +13,8 @@ export const ETAPAS_FUNIL = [
 export type EtapaFunil = (typeof ETAPAS_FUNIL)[number];
 
 /**
- * `desqualificado` existe no CHECK mas fica FORA da soma do funil.
- *
- * Não é uma etapa posterior a `convertido` — é uma saída lateral que pode
- * acontecer a partir de qualquer ponto. Empilhá-la no funil faria a base
- * parecer maior e a conversão, menor.
+ * Desqualificação é uma saída lateral. Continua no denominador de recebidos;
+ * status atual não prova que o lead passou por todas as etapas anteriores.
  */
 export const ETAPA_SAIDA = "desqualificado";
 
@@ -37,7 +34,7 @@ export interface LeadParaFunil {
 export interface DegrauFunil {
   etapa: EtapaFunil;
   rotulo: string;
-  /** Leads que alcançaram esta etapa ou qualquer posterior. */
+  /** Recebidos no primeiro degrau; estoque atual em cada estado nos demais. */
   alcancaram: number;
   /** Fração sobre o topo do funil (0..1). */
   fracaoDoTopo: number;
@@ -54,8 +51,11 @@ export interface FatiaOrigem {
 export interface FunilLeads {
   degraus: DegrauFunil[];
   total: number;
+  novos: number;
+  qualificados: number;
+  convertidos: number;
   desqualificados: number;
-  /** Convertidos ÷ total, ignorando desqualificados no denominador. */
+  /** Leads com conversão registrada ÷ total recebido elegível. */
   taxaConversao: number;
   porCtaLocation: FatiaOrigem[];
   porPagina: FatiaOrigem[];
@@ -90,7 +90,7 @@ function agrupar(
     if (!bruto) continue;
     const atual = mapa.get(bruto) ?? { total: 0, convertidos: 0 };
     atual.total++;
-    if (lead.status === "convertido") atual.convertidos++;
+    if (lead.convertido_em || lead.status === "convertido") atual.convertidos++;
     mapa.set(bruto, atual);
   }
   return Array.from(mapa.entries())
@@ -104,42 +104,33 @@ export function construirFunilLeads(leads: LeadParaFunil[] | undefined): FunilLe
   const desqualificados = todos.filter((l) => l.status === ETAPA_SAIDA).length;
   const noFunil = todos.filter((l) => indiceEtapa(l.status) >= 0);
 
-  // Funil é cumulativo: quem converteu passou por qualificado. O status guarda
-  // só o ponto atual, então cada degrau conta quem está nele ou adiante.
+  // Sem eventos de transição não inferimos progressão. Os demais degraus
+  // mostram a distribuição atual da coorte, não etapas obrigatórias percorridas.
   const degraus: DegrauFunil[] = ETAPAS_FUNIL.map((etapa, i) => {
-    const alcancaram = noFunil.filter((l) => indiceEtapa(l.status) >= i).length;
+    const alcancaram = i === 0 ? todos.length : noFunil.filter((l) => l.status === etapa).length;
     return { etapa, rotulo: ROTULOS[etapa], alcancaram, fracaoDoTopo: 0, perda: 0 };
   });
 
   const topo = degraus[0]?.alcancaram ?? 0;
   for (let i = 0; i < degraus.length; i++) {
     degraus[i].fracaoDoTopo = topo > 0 ? degraus[i].alcancaram / topo : 0;
-    const anterior = i > 0 ? degraus[i - 1].alcancaram : degraus[i].alcancaram;
-    degraus[i].perda = anterior > 0 ? (anterior - degraus[i].alcancaram) / anterior : 0;
+    degraus[i].perda = 0;
   }
 
-  let maiorPerda: FunilLeads["maiorPerda"] = null;
-  for (let i = 1; i < degraus.length; i++) {
-    if (degraus[i].perda > (maiorPerda?.pct ?? 0)) {
-      maiorPerda = {
-        de: degraus[i - 1].rotulo,
-        para: degraus[i].rotulo,
-        pct: degraus[i].perda,
-      };
-    }
-  }
-
-  const convertidos = degraus[degraus.length - 1]?.alcancaram ?? 0;
+  const convertidos = todos.filter((lead) => lead.convertido_em || lead.status === "convertido").length;
 
   return {
     degraus,
     total: todos.length,
+    novos: todos.filter((lead) => lead.status === "novo").length,
+    qualificados: todos.filter((lead) => lead.qualificado_em).length,
+    convertidos,
     desqualificados,
     taxaConversao: topo > 0 ? convertidos / topo : 0,
     porCtaLocation: agrupar(todos, (l) => l.cta_location),
     porPagina: agrupar(todos, (l) => l.pagina_origem),
     porCanal: agrupar(todos, (l) => l.canal),
     comUtm: todos.filter((l) => l.utm && Object.keys(l.utm).length > 0).length,
-    maiorPerda,
+    maiorPerda: null,
   };
 }

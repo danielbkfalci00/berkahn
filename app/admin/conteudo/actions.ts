@@ -254,21 +254,34 @@ const COLUNA_DO_BLOCO: Record<BlocoTextoPauta, string> = {
 export async function salvarBloco(
   id: string,
   bloco: BlocoTextoPauta,
-  texto: string
-): Promise<Resultado> {
+  texto: string,
+  anterior: string
+): Promise<Resultado & { valorSalvo?: string }> {
   if (!UUID_PATTERN.test(id)) return { data: null, error: "Pauta inválida." };
   const coluna = COLUNA_DO_BLOCO[bloco];
   if (!coluna) return { data: null, error: "Bloco desconhecido." };
+  if (typeof anterior !== "string" || typeof texto !== "string" || texto.length > LIMITES.blocoMax)
+    return { data: null, error: "Texto inválido ou acima do limite de caracteres." };
 
   const supabase = await createClient();
-  const { data: atual } = await supabase
+  const { data: row } = await supabase
     .from("conteudo_pautas")
-    .select("status_blog,status_linkedin,capa_linkedin_url")
+    .select(`status_blog,status_linkedin,capa_linkedin_url,${coluna}`)
     .eq("id", id)
     .maybeSingle();
+  // The dynamic field comes exclusively from COLUNA_DO_BLOCO above. All
+  // selected columns are nullable text; preserve that contract at this boundary.
+  const atual = row as unknown as Record<string, string | null> | null;
   if (!atual) return { data: null, error: SEM_LINHA };
-
+  const valorAtual = atual[coluna as keyof typeof atual] as string | null;
+  const conflito = "Este bloco mudou em outra aba ou por outra pessoa. Copie seu texto antes de atualizar a página para comparar as versões.";
   const valor = limpar(texto, LIMITES.blocoMax);
+  if ((valorAtual ?? "") !== anterior) {
+    // An interrupted response may have committed successfully. Retrying the
+    // same value is safe and must not force the user into a false conflict.
+    if (valorAtual === valor) return { data: null, error: null, valorSalvo: valor ?? "" };
+    return { data: null, error: conflito };
+  }
   const update: Record<string, unknown> = { [coluna]: valor };
   if (bloco === "pesquisa" && atual.status_blog === "planejada")
     update.status_blog = "pesquisa";
@@ -282,14 +295,17 @@ export async function salvarBloco(
     ) update.status_linkedin = "produzido";
   }
 
-  const { data, error } = await supabase
+  let consulta = supabase
     .from("conteudo_pautas")
     .update(update)
-    .eq("id", id)
-    .select("id");
+    .eq("id", id);
+  consulta = valorAtual === null ? consulta.is(coluna, null) : consulta.eq(coluna, valorAtual);
+  if (update.status_blog) consulta = consulta.eq("status_blog", atual.status_blog);
+  if (update.status_linkedin) consulta = consulta.eq("status_linkedin", atual.status_linkedin);
+  const { data, error } = await consulta.select("id");
   if (error) return { data: null, error: error.message };
-  if (!data?.length) return { data: null, error: SEM_LINHA };
-  return { data: null, error: null };
+  if (!data?.length) return { data: null, error: conflito };
+  return { data: null, error: null, valorSalvo: valor ?? "" };
 }
 
 export interface MudancaPauta {
@@ -378,16 +394,19 @@ export async function marcarLinkedinPublicado(
   dataInformada: string
 ): Promise<Resultado<Pauta | null>> {
   if (!UUID_PATTERN.test(id)) return { data: null, error: "Pauta inválida." };
-  let url: URL;
-  try {
-    url = new URL(urlInformada.trim());
-  } catch {
-    return { data: null, error: "Informe uma URL válida do LinkedIn." };
+  const urlTexto = urlInformada.trim();
+  let url: URL | null = null;
+  if (urlTexto) {
+    try {
+      url = new URL(urlTexto);
+    } catch {
+      return { data: null, error: "Informe uma URL válida do LinkedIn ou deixe o campo vazio." };
+    }
+    if (
+      url.protocol !== "https:" ||
+      !(url.hostname === "linkedin.com" || url.hostname.endsWith(".linkedin.com"))
+    ) return { data: null, error: "A URL precisa ser https://...linkedin.com/..." };
   }
-  if (
-    url.protocol !== "https:" ||
-    !(url.hostname === "linkedin.com" || url.hostname.endsWith(".linkedin.com"))
-  ) return { data: null, error: "A URL precisa ser https://...linkedin.com/..." };
 
   const instante = new Date(dataInformada);
   if (!dataInformada || Number.isNaN(instante.getTime()))
@@ -404,7 +423,7 @@ export async function marcarLinkedinPublicado(
   const { data, error } = await supabase
     .from("conteudo_pautas")
     .update({
-      linkedin_url: url.toString(),
+      linkedin_url: url?.toString() ?? null,
       linkedin_publicado_em: instante.toISOString(),
       status_linkedin: "publicado",
     })
@@ -420,6 +439,7 @@ export async function marcarLinkedinPublicado(
     anterior: anterior.status_linkedin,
     novo: "publicado",
     url: pauta.linkedinUrl,
+    url_omitida: !pauta.linkedinUrl,
   });
   revalidarPauta(id);
   return { data: pauta, error: null };

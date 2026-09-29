@@ -96,7 +96,7 @@ export function narrativeAct3Posts(ctx: SnapshotContext, input?: Act3NarrativeIn
 
   if (best) {
     parts.push(
-      `${best.title} liderou com ${intFmt(best.pageviews)} pageviews e ${best.retentionPct}% de retenção`
+      `${best.title} liderou com ${intFmt(best.pageviews)} pageviews e ${best.retentionPct}% de retenção estimada`
     );
   } else {
     const topPage = ctx.ga4.topPages[0];
@@ -110,7 +110,7 @@ export function narrativeAct3Posts(ctx: SnapshotContext, input?: Act3NarrativeIn
   if (input?.risingCount && input.risingCount > 0) counts.push(`${input.risingCount} em alta`);
   if (input?.coldCount && input.coldCount > 0) counts.push(`${input.coldCount} em queda`);
   if (input?.abandonedCount && input.abandonedCount > 0)
-    counts.push(`${input.abandonedCount} abandonados`);
+    counts.push(`${input.abandonedCount} com leitura breve`);
   if (counts.length > 0) parts.push(counts.join(", "));
 
   return parts.length > 0 ? parts.join(". ") + "." : "Análise de performance dos posts publicados.";
@@ -130,27 +130,27 @@ export function narrativeAct4Action(ctx: SnapshotContext, input?: Act4NarrativeI
 
   const bridge = (() => {
     if (input?.abandonedCount && input.abandonedCount > 0) {
-      const word = input.abandonedCount === 1 ? "post abandonado" : "posts abandonados";
-      return `${input.abandonedCount} ${word} pedem revisão`;
+      const word = input.abandonedCount === 1 ? "post com leitura breve" : "posts com leitura breve";
+      return `${input.abandonedCount} ${word} para verificar amostra e intenção`;
     }
     if (input?.coldCount && input.coldCount > 0) {
       const word = input.coldCount === 1 ? "post em queda" : "posts em queda";
       return `${input.coldCount} ${word} a investigar`;
     }
     if (input?.bestPostTitle) {
-      return `Após "${input.bestPostTitle}" liderar a leitura`;
+      return `"${input.bestPostTitle}" teve o maior volume ponderado por retenção estimada`;
     }
     return null;
   })();
 
   if (bridge) parts.push(bridge);
-  if (p0 > 0) parts.push(`${p0} ${p0 === 1 ? "ação P0" : "ações P0"} esta semana`);
-  if (p1 > 0) parts.push(`${p1} P1 nas próximas duas semanas`);
-  if (notIndexed > 0) parts.push(`${notIndexed} artigos aguardando indexação`);
+  if (p0 > 0) parts.push(`${p0} ${p0 === 1 ? "recomendação P0" : "recomendações P0"} para avaliar`);
+  if (p1 > 0) parts.push(`${p1} recomendações P1 para avaliar`);
+  if (notIndexed > 0) parts.push(`${notIndexed} artigos com inspeção válida e sem indexação confirmada`);
   if (parts.length === 0) {
-    parts.push("Nenhuma ação urgente. Foco em P1 e novos conteúdos");
+    parts.push("Nenhuma recomendação urgente sustentada pelos dados disponíveis");
   } else if (notIndexed === 0 && p0 === 0 && !bridge) {
-    parts.push("Nenhuma ação urgente. Foco em P1 e novos conteúdos");
+    parts.push("Nenhuma recomendação urgente sustentada pelos dados disponíveis");
   }
   return parts.length > 0 ? parts.join(". ") + "." : "Próximos passos do período.";
 }

@@ -16,7 +16,8 @@ export async function getTasks(): Promise<AnalyticsTask[]> {
     .select("*")
     .order("sort_order", { ascending: true });
 
-  if (error || !data) return [];
+  if (error) throw new Error("As tarefas não puderam ser carregadas.");
+  if (!data) return [];
 
   const tasks = data as AnalyticsTask[];
   return tasks.sort((a, b) => {

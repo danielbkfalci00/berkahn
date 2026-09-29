@@ -218,6 +218,7 @@ export function DocumentoViewer({ meta, threadsIniciais, authorName, canComment 
             variant="outline"
             size="sm"
             onClick={alternarPainel}
+            aria-label={painelVisivel ? "Ocultar comentários" : "Mostrar comentários"}
             aria-expanded={painelVisivel}
             aria-controls="painel-comentarios"
           >
@@ -228,7 +229,7 @@ export function DocumentoViewer({ meta, threadsIniciais, authorName, canComment 
             )}
             <span className="ml-1.5 hidden sm:inline">Comentários</span>
           </Button>
-          <Button variant="outline" size="sm" onClick={alternarTelaCheia}>
+          <Button variant="outline" size="sm" onClick={alternarTelaCheia} aria-label={emTelaCheia ? "Sair da tela cheia" : "Abrir em tela cheia"}>
             {emTelaCheia ? (
               <Minimize2 className="h-4 w-4" />
             ) : (
@@ -237,7 +238,7 @@ export function DocumentoViewer({ meta, threadsIniciais, authorName, canComment 
             <span className="ml-1.5 hidden sm:inline">Tela cheia</span>
           </Button>
           <Button variant="outline" size="sm" asChild>
-            <a href={rawUrl} target="_blank" rel="noopener noreferrer">
+            <a href={rawUrl} target="_blank" rel="noopener noreferrer" aria-label="Abrir documento em nova aba">
               <ExternalLink className="h-4 w-4" />
               <span className="ml-1.5 hidden sm:inline">Nova aba</span>
             </a>

@@ -13,6 +13,7 @@ import {
 } from "@/lib/analytics/health-score";
 import type { SnapshotContext, TrendPoint } from "@/types/analytics";
 import { comparisonAvailability } from "@/lib/analytics/comparability";
+import { previousMonthSlug } from "@/lib/analytics/period";
 
 interface HeroMetricProps {
   context: SnapshotContext;
@@ -34,14 +35,12 @@ export function HeroMetric({ context, trendPoints }: HeroMetricProps) {
   const pct = (weight: number) => `${Math.round(weight * 100)}%`;
 
   // Sparkline: score histórico não temos ainda — usamos users como proxy
-  const usersTrend = trendPoints.map((p) => p.users);
+  const visibleTrend = trendPoints.filter((p) => p.monthSlug <= context.monthSlug);
+  const usersTrend = visibleTrend.map((p) => p.users);
   const currentUsers = context.ga4.users;
-  // Compara com o mês imediatamente anterior ao selecionado (?month=), não com
-  // o penúltimo da série. Em mês parcial o total bruto é de N dias, então o
-  // ícone fica neutro para não sinalizar queda falsa.
-  const selectedIdx = trendPoints.findIndex((p) => p.monthSlug === context.monthSlug);
-  const prevUsers =
-    !context.partial && selectedIdx > 0 ? trendPoints[selectedIdx - 1].users : undefined;
+  const prevUsers = context.partial ? undefined : visibleTrend.find((p) =>
+    p.monthSlug === previousMonthSlug(context.monthSlug) && !p.partial
+  )?.users;
   const { Icon: TrendIcon, color: trendColor } = trendIcon(currentUsers, prevUsers);
 
   return (
@@ -58,11 +57,11 @@ export function HeroMetric({ context, trendPoints }: HeroMetricProps) {
               content={
                 <div className="space-y-2">
                   <p className="font-semibold text-neutral-900">Health Score 0-100</p>
-                  <p>Resume a saúde do projeto no mês a partir de 4 componentes:</p>
+                  <p>Índice indicativo com os componentes disponíveis; não mede resultado comercial:</p>
                   <ul className="space-y-1 pl-3 list-disc">
-                    <li>Indexação Google ({pct(health.weights.indexation)})</li>
+                    {health.components.indexation.available && <li>Indexação Google ({pct(health.weights.indexation)})</li>}
                     {health.components.usersGrowth.available && <li>Crescimento de users MoM ({pct(health.weights.usersGrowth)})</li>}
-                    <li>Crescimento de cliques GSC MoM ({pct(health.weights.clicksGrowth)})</li>
+                    {health.components.clicksGrowth.available && <li>Crescimento de cliques GSC MoM ({pct(health.weights.clicksGrowth)})</li>}
                     <li>Engagement rate atual ({pct(health.weights.engagementRate)})</li>
                   </ul>
                   <p className="text-neutral-600 pt-1">
@@ -113,7 +112,7 @@ export function HeroMetric({ context, trendPoints }: HeroMetricProps) {
             </div>
             <SparklineMini data={usersTrend} height={56} color={color} />
             <div className="text-xs text-neutral-500 mt-1">
-              {trendPoints.map((p) => p.monthLabel).join(" · ")}
+              {visibleTrend.map((p) => p.monthLabel).join(" · ")}
             </div>
           </div>
         )}

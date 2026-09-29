@@ -4,6 +4,7 @@
 // Documentação: Berkahn-Vault/10-memory/reference/analytics-methodology.md
 
 import type { AnalyticsSnapshot, SnapshotContext } from "@/types/analytics";
+import { isKnownIndexation, isIndexedCoverage } from "./comparability";
 
 export type RedFlagSeverity = "critical" | "warning";
 
@@ -37,7 +38,7 @@ function fmtInt(n: number): string {
  */
 export function detectRedFlags(
   context: SnapshotContext,
-  previous: AnalyticsSnapshot | null,
+  previous: Pick<AnalyticsSnapshot, "context"> | null,
   postsPublishedInMonth?: number
 ): RedFlag[] {
   const flags: RedFlag[] = [];
@@ -82,14 +83,17 @@ export function detectRedFlags(
 
   // indexation-drop
   if (previous?.context) {
-    const prevIndexed = previous.context.indexedCount;
-    if (context.indexedCount < prevIndexed) {
-      const delta = prevIndexed - context.indexedCount;
+    const previousIndexed = new Set((previous.context.indexation ?? [])
+      .filter((item) => isKnownIndexation(item) && isIndexedCoverage(item.coverageState)).map((item) => item.slug));
+    const lost = (context.indexation ?? []).filter((item) =>
+      isKnownIndexation(item) && !isIndexedCoverage(item.coverageState) && previousIndexed.has(item.slug));
+    if (lost.length > 0) {
+      const delta = lost.length;
       flags.push({
         id: "indexation-drop",
         severity: "critical",
         metric: "Indexação",
-        text: `Indexação caiu ${delta} artigo${delta === 1 ? "" : "s"} (${prevIndexed} → ${context.indexedCount}).`,
+        text: `${delta} artigo${delta === 1 ? "" : "s"} antes indexado${delta === 1 ? "" : "s"} agora sem indexação confirmada: ${lost.map((item) => item.title || item.slug).join(", ")}.`,
         action: "Verificar GSC Coverage report e solicitar reindexação dos URLs afetados.",
       });
     }

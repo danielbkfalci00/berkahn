@@ -7,7 +7,6 @@ import {
   LayoutDashboard,
   FileText,
   Presentation,
-  FileSpreadsheet,
   Calculator,
   Settings,
   LogOut,
@@ -28,6 +27,7 @@ import { disableCurrentAdminPush } from "@/components/admin/AdminPwa";
 import { roleCanAccessPath } from "@/lib/admin/access";
 import { EVENTO_FEEDBACK_MUDOU } from "@/components/admin/feedback/FeedbackRapido";
 import type { AdminMembership } from "@/types/analytics";
+import { confirmUnsavedChanges, installUnsavedNavigationGuard } from "@/hooks/use-unsaved-changes";
 
 const navigation = [
   {
@@ -71,11 +71,6 @@ const navigation = [
     icon: Calculator,
   },
   {
-    name: "Propostas",
-    href: "/admin/propostas",
-    icon: FileSpreadsheet,
-  },
-  {
     name: "Feedback",
     href: "/admin/feedback",
     icon: MessageSquarePlus,
@@ -87,17 +82,38 @@ const navigation = [
   },
 ];
 
-export const primaryAdminPaths = navigation.slice(0, 3).map((item) => item.href);
+export function getPrimaryAdminPaths(role: AdminMembership["role"] | undefined): string[] {
+  if (role === "conteudo") return ["/admin", "/admin/conteudo", "/admin/posts"];
+  if (role === "viewer") return ["/admin", "/admin/analytics", "/admin/documentacoes"];
+  return ["/admin", "/admin/leads", "/admin/orcamentos"];
+}
 
-export function AdminSidebar({ membership }: { membership: AdminMembership | null }) {
+export function AdminSidebar({ membership, collapsed, onCollapsedChange }: {
+  membership: AdminMembership | null;
+  collapsed: boolean;
+  onCollapsedChange: (value: boolean) => void;
+}) {
   const pathname = usePathname();
   const router = useRouter();
-  const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [unseenLeads, setUnseenLeads] = useState(0);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const moreButtonRef = useRef<HTMLButtonElement>(null);
   const drawerRef = useRef<HTMLElement>(null);
+  const [loggingOut, setLoggingOut] = useState(false);
+  const [logoutError, setLogoutError] = useState<string | null>(null);
+  const mobilePaths = getPrimaryAdminPaths(membership?.role);
+  const visibleNavigation = navigation.filter((item) => membership && roleCanAccessPath(membership.role, item.href));
+
+  useEffect(() => {
+    installUnsavedNavigationGuard();
+    const desktop = window.matchMedia("(min-width: 1024px)");
+    const closeOnDesktop = () => { if (desktop.matches) setMobileOpen(false); };
+    desktop.addEventListener("change", closeOnDesktop);
+    return () => desktop.removeEventListener("change", closeOnDesktop);
+  }, []);
+
+  useEffect(() => { setMobileOpen(false); }, [pathname]);
 
   // O badge só importa para quem acessa Leads, e só muda quando alguém abre
   // leads; fora de /admin/leads a chave fica fixa e a navegação não refaz o COUNT.
@@ -105,6 +121,7 @@ export function AdminSidebar({ membership }: { membership: AdminMembership | nul
   const leadsRefreshKey = pathname.startsWith("/admin/leads") ? pathname : "fora-de-leads";
   useEffect(() => {
     if (!canSeeLeads) return;
+    let cancelled = false;
     const supabase = createClient();
     void supabase
       .from("leads")
@@ -112,24 +129,27 @@ export function AdminSidebar({ membership }: { membership: AdminMembership | nul
       .is("visualizado_em", null)
       .is("arquivado_em", null)
       .is("anonimizado_em", null)
-      .then(({ count }) => setUnseenLeads(count ?? 0));
+      .then(({ count, error }) => { if (!cancelled && !error) setUnseenLeads(count ?? 0); });
+    return () => { cancelled = true; };
   }, [canSeeLeads, leadsRefreshKey]);
 
   useEffect(() => {
     if (!mobileOpen) return;
     const previousOverflow = document.body.style.overflow;
+    const returnFocusTarget = moreButtonRef.current;
+    const openedPathname = window.location.pathname;
     document.body.style.overflow = "hidden";
     closeButtonRef.current?.focus();
     const closeOnEscape = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
         setMobileOpen(false);
-        moreButtonRef.current?.focus();
       }
     };
     document.addEventListener("keydown", closeOnEscape);
     return () => {
       document.body.style.overflow = previousOverflow;
       document.removeEventListener("keydown", closeOnEscape);
+      if (window.location.pathname === openedPathname && returnFocusTarget?.getClientRects().length) returnFocusTarget.focus();
     };
   }, [mobileOpen]);
 
@@ -146,24 +166,35 @@ export function AdminSidebar({ membership }: { membership: AdminMembership | nul
   }, []);
   useEffect(() => {
     if (!membership) return;
+    let cancelled = false;
     const supabase = createClient();
     void supabase
       .from("feedback_itens")
       .select("id", { count: "exact", head: true })
       .eq("status", "aberto")
-      .then(({ count, error }) => setOpenFeedback(error ? 0 : count ?? 0));
+      .then(({ count, error }) => { if (!cancelled && !error) setOpenFeedback(count ?? 0); });
+    return () => { cancelled = true; };
   }, [membership, feedbackRefreshKey, feedbackTick]);
 
   const handleLogout = async () => {
+    if (loggingOut || !confirmUnsavedChanges()) return;
+    setLoggingOut(true);
+    setLogoutError(null);
     const supabase = createClient();
-    await disableCurrentAdminPush();
-    await supabase.auth.signOut();
-    router.push("/admin/login");
+    try {
+      try { await disableCurrentAdminPush(); } catch { /* Push failure must not prevent logout. */ }
+      const { error } = await supabase.auth.signOut();
+      if (error) throw error;
+      router.replace("/admin/login");
+      router.refresh();
+    } catch {
+      setLogoutError("Não foi possível sair. Tente novamente.");
+    } finally { setLoggingOut(false); }
   };
 
   const trapDrawerFocus = (event: React.KeyboardEvent<HTMLElement>) => {
     if (!mobileOpen || event.key !== "Tab") return;
-    const focusable = drawerRef.current?.querySelectorAll<HTMLElement>('a[href],button:not([disabled]),select,input,textarea,[tabindex]:not([tabindex="-1"])');
+    const focusable = Array.from(drawerRef.current?.querySelectorAll<HTMLElement>('a[href],button:not([disabled]),select,input,textarea,[tabindex]:not([tabindex="-1"])') ?? []).filter((element) => element.getClientRects().length > 0);
     if (!focusable?.length) return;
     const first = focusable[0];
     const last = focusable[focusable.length - 1];
@@ -178,6 +209,7 @@ export function AdminSidebar({ membership }: { membership: AdminMembership | nul
 
   return (
     <>
+      <a href="#admin-content" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded focus:bg-white focus:p-3">Ir para o conteúdo</a>
       {/* Mobile overlay */}
       {mobileOpen && (
         <div
@@ -195,26 +227,23 @@ export function AdminSidebar({ membership }: { membership: AdminMembership | nul
         aria-label={mobileOpen ? "Mais opcoes do admin" : undefined}
         onKeyDown={trapDrawerFocus}
         className={cn(
-          "fixed inset-y-0 left-0 z-50 flex flex-col border-r border-neutral-200 bg-white pb-[env(safe-area-inset-bottom)] pt-[env(safe-area-inset-top)] transition-all duration-300",
-          collapsed ? "w-16" : "w-64",
-          mobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
+          "fixed inset-y-0 left-0 z-50 flex flex-col border-r border-neutral-200 bg-white pb-[env(safe-area-inset-bottom)] pt-[env(safe-area-inset-top)] transition-[width,transform] duration-200 motion-reduce:transition-none",
+          collapsed ? "w-64 lg:w-16" : "w-64",
+          mobileOpen ? "visible translate-x-0" : "invisible -translate-x-full lg:visible lg:translate-x-0"
         )}
       >
         {/* Logo */}
         <div className="flex h-16 items-center justify-between border-b border-neutral-200 px-4">
-          {!collapsed && (
-            <Link href="/admin" className="flex items-center gap-2">
+            <Link href="/admin" className={cn("flex items-center gap-2", collapsed && "lg:hidden")}>
               <span className="text-lg font-bold text-neutral-900">BERKAHN</span>
               <span className="text-xs text-neutral-500 bg-neutral-100 px-2 py-0.5 rounded">
                 Admin
               </span>
             </Link>
-          )}
           <button
-            ref={closeButtonRef}
             type="button"
             aria-label={collapsed ? "Expandir menu" : "Recolher menu"}
-            onClick={() => setCollapsed(!collapsed)}
+            onClick={() => onCollapsedChange(!collapsed)}
             className="hidden lg:flex p-1.5 rounded-lg hover:bg-neutral-100 transition-colors"
           >
             <ChevronLeft
@@ -225,6 +254,7 @@ export function AdminSidebar({ membership }: { membership: AdminMembership | nul
             />
           </button>
           <button
+            ref={closeButtonRef}
             type="button"
             aria-label="Fechar menu"
             onClick={() => setMobileOpen(false)}
@@ -236,7 +266,7 @@ export function AdminSidebar({ membership }: { membership: AdminMembership | nul
 
         {/* Navigation */}
         <nav className="flex-1 py-4 px-2 space-y-1 overflow-y-auto">
-          {navigation.filter((item) => membership && roleCanAccessPath(membership.role, item.href)).map((item) => {
+          {visibleNavigation.map((item) => {
             const isActive =
               pathname === item.href ||
               (item.href !== "/admin" && pathname?.startsWith(item.href));
@@ -244,6 +274,9 @@ export function AdminSidebar({ membership }: { membership: AdminMembership | nul
               <Link
                 key={item.name}
                 href={item.href}
+                aria-label={item.name}
+                title={collapsed ? item.name : undefined}
+                aria-current={isActive ? "page" : undefined}
                 onClick={() => setMobileOpen(false)}
                 className={cn(
                   "relative flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors",
@@ -253,7 +286,7 @@ export function AdminSidebar({ membership }: { membership: AdminMembership | nul
                 )}
               >
                 <item.icon className="h-5 w-5 flex-shrink-0" />
-                {!collapsed && <span>{item.name}</span>}
+                <span className={collapsed ? "lg:hidden" : undefined}>{item.name}</span>
                 {item.name === "Leads" && unseenLeads > 0 && (
                   <span className={cn(
                     "ml-auto min-w-5 rounded-full px-1.5 py-0.5 text-center text-[10px] font-semibold",
@@ -282,13 +315,15 @@ export function AdminSidebar({ membership }: { membership: AdminMembership | nul
 
         {/* User section */}
         <div className="p-2 border-t border-neutral-200">
-          {!collapsed && membership && (
-            <div className="mb-2 px-3 py-2">
+          {membership && (
+            <div className={cn("mb-2 px-3 py-2", collapsed && "lg:hidden")}>
               <p className="truncate text-xs font-medium text-neutral-800">{membership.nome}</p>
               <p className="truncate text-[11px] text-neutral-500">{membership.email}</p>
             </div>
           )}
           <Button
+            aria-label="Sair da conta"
+            disabled={loggingOut}
             variant="ghost"
             className={cn(
               "w-full justify-start gap-3 text-neutral-600 hover:text-red-600 hover:bg-red-50",
@@ -297,8 +332,9 @@ export function AdminSidebar({ membership }: { membership: AdminMembership | nul
             onClick={handleLogout}
           >
             <LogOut className="h-5 w-5 flex-shrink-0" />
-            {!collapsed && <span>Sair</span>}
+            <span className={collapsed ? "lg:hidden" : undefined}>{loggingOut ? "Saindo…" : "Sair"}</span>
           </Button>
+          {logoutError && <p role="alert" className="p-2 text-xs text-red-700">{logoutError}</p>}
         </div>
       </aside>
 
@@ -306,8 +342,7 @@ export function AdminSidebar({ membership }: { membership: AdminMembership | nul
         aria-label="Navegacao principal"
         className="fixed inset-x-0 bottom-0 z-40 grid grid-cols-4 border-t border-neutral-200 bg-white/95 px-2 pb-[env(safe-area-inset-bottom)] backdrop-blur lg:hidden print:hidden"
       >
-        {navigation.slice(0, 3).map((item) => {
-          if (!membership || !roleCanAccessPath(membership.role, item.href)) return <span key={item.href} />;
+        {mobilePaths.flatMap((path) => visibleNavigation.filter((item) => item.href === path)).map((item) => {
           const active = pathname === item.href || (item.href !== "/admin" && pathname?.startsWith(item.href));
           return (
             <Link

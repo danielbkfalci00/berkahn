@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import Link from "next/link";
 import {
   DndContext,
   DragOverlay,
@@ -42,7 +43,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
-  AlertCircle,
   Check,
   ChevronDown,
   GripVertical,
@@ -60,6 +60,7 @@ import {
   deleteTask,
   reopenTask,
   reorderTasks,
+  reviewRecommendation,
   updateTask,
 } from "@/app/admin/analytics/actions";
 import { cn } from "@/lib/utils";
@@ -67,6 +68,7 @@ import type { ActionItem, AnalyticsTask, TaskPriority } from "@/types/analytics"
 
 interface TaskBoardProps {
   tasks: AnalyticsTask[];
+  canManage?: boolean;
   systemActions: { p0: ActionItem[]; p1: ActionItem[]; p2: ActionItem[] };
 }
 
@@ -84,7 +86,7 @@ const PRIORITIES: TaskPriority[] = ["p0", "p1", "p2"];
 // Tempo do aviso de erro de mutação na tela; 4s não dava para ler.
 const ERROR_VISIBLE_MS = 10000;
 
-export function TaskBoard({ tasks, systemActions }: TaskBoardProps) {
+export function TaskBoard({ tasks, systemActions, canManage = false }: TaskBoardProps) {
   const [isPending, startTransition] = React.useTransition();
   const [localTasks, setLocalTasks] = React.useState<AnalyticsTask[]>(tasks);
   const [newTitle, setNewTitle] = React.useState("");
@@ -123,8 +125,9 @@ export function TaskBoard({ tasks, systemActions }: TaskBoardProps) {
     ].filter((s) => !promotedSignals.has(s.text));
   }, [systemActions, promotedSignals]);
 
-  const openTasks = localTasks.filter((t) => t.status === "open");
-  const doneTasks = localTasks.filter((t) => t.status === "done");
+  const pendingTasks = localTasks.filter((t) => t.approval_status === "pendente");
+  const openTasks = localTasks.filter((t) => t.status === "open" && t.approval_status === "aprovada");
+  const doneTasks = localTasks.filter((t) => t.status === "done" && t.approval_status === "aprovada");
   const activeTask = activeId ? localTasks.find((t) => t.id === activeId) ?? null : null;
 
   // O aviso também é anunciado a leitores de tela via role="alert".
@@ -141,8 +144,10 @@ export function TaskBoard({ tasks, systemActions }: TaskBoardProps) {
   ) {
     setLocalTasks(optimistic);
     startTransition(async () => {
-      const res = await action();
-      if (res?.error) flashError(res.error);
+      try {
+        const res = await action();
+        if (res?.error) flashError(res.error);
+      } catch { flashError("Não foi possível salvar. Suas tarefas foram restauradas."); }
     });
   }
 
@@ -150,23 +155,33 @@ export function TaskBoard({ tasks, systemActions }: TaskBoardProps) {
     const title = newTitle.trim();
     if (!title) return;
     const priority = newPriority;
-    setNewTitle("");
     startTransition(async () => {
-      const res = await createTask({ title, priority });
-      if (res.error) flashError(res.error);
+      try {
+        const res = await createTask({ title, priority });
+        if (res.error) flashError(res.error);
+        else setNewTitle((current) => current.trim() === title ? "" : current);
+      } catch { flashError("Não foi possível criar a tarefa. O título foi preservado."); }
     });
   }
 
   function handlePromote(s: { text: string; priority: TaskPriority }) {
     startTransition(async () => {
-      const res = await createTask({
+      try {
+        const res = await createTask({
         title: s.text,
         priority: s.priority,
-        source: "manual",
+        source: "system",
+        approveSuggestion: true,
         origin_signal: s.text,
       });
-      if (res.error) flashError(res.error);
+        if (res.error) flashError(res.error);
+      } catch { flashError("Não foi possível adicionar a tarefa. Tente novamente."); }
     });
+  }
+
+  function handleReview(id: string, decision: "aprovada" | "rejeitada") {
+    runOptimistic((previous) => previous.map((task) => task.id === id ? { ...task, approval_status: decision } : task),
+      () => reviewRecommendation(id, decision));
   }
 
   function handleComplete(id: string) {
@@ -277,15 +292,17 @@ export function TaskBoard({ tasks, systemActions }: TaskBoardProps) {
       // Recalcula sort_order sequencial para todas as open tasks (ordem do array).
       let order = 0;
       const withOrder = moved.map((t) =>
-        t.status === "open" ? { ...t, sort_order: order++ } : t
+        t.status === "open" && t.approval_status === "aprovada" ? { ...t, sort_order: order++ } : t
       );
       const updates = withOrder
-        .filter((t) => t.status === "open")
+        .filter((t) => t.status === "open" && t.approval_status === "aprovada")
         .map((t) => ({ id: t.id, sort_order: t.sort_order, priority: t.priority }));
 
       startTransition(async () => {
-        const res = await reorderTasks(updates);
-        if (res?.error) flashError(res.error);
+        try {
+          const res = await reorderTasks(updates);
+          if (res?.error) flashError(res.error);
+        } catch { flashError("Não foi possível salvar a ordem. A ordem anterior foi restaurada."); }
       });
 
       return withOrder;
@@ -294,8 +311,21 @@ export function TaskBoard({ tasks, systemActions }: TaskBoardProps) {
 
   return (
     <div className="space-y-6">
+      {errorMsg && <p role="alert" className="rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-800">{errorMsg}</p>}
+      {pendingTasks.length > 0 && <Card className="space-y-4 border-amber-200 bg-white p-6">
+        <h3 className="text-sm font-semibold text-neutral-900">Recomendações aguardando decisão ({pendingTasks.length})</h3>
+        <ul className="space-y-4">{pendingTasks.map((task) => <li key={task.id} className="rounded-md border border-neutral-200 p-4">
+          <p className="font-medium text-neutral-900">{task.title}</p>
+          {task.description && <p className="mt-1 text-sm text-neutral-600">{task.description}</p>}
+          <TaskEvidence task={task} />
+          {canManage && <div className="mt-3 flex flex-wrap gap-2">
+            <Button size="sm" disabled={isPending} onClick={() => handleReview(task.id, "aprovada")}>Aprovar e assumir</Button>
+            <Button size="sm" variant="outline" disabled={isPending} onClick={() => handleReview(task.id, "rejeitada")}>Rejeitar recomendação</Button>
+          </div>}
+        </li>)}</ul>
+      </Card>}
       {/* Zona: sugestões do sistema */}
-      {systemSuggestions.length > 0 && (
+      {canManage && systemSuggestions.length > 0 && (
         <Card className="p-6 bg-[#FAF8F2] border-neutral-200">
           <div className="flex items-center gap-2 mb-4">
             <Lightbulb className="h-4 w-4 text-neutral-500" strokeWidth={1.75} />
@@ -328,7 +358,7 @@ export function TaskBoard({ tasks, systemActions }: TaskBoardProps) {
                   onClick={() => handlePromote(s)}
                 >
                   <Plus className="h-3 w-3 mr-1" />
-                  Adicionar
+                  Aprovar e assumir
                 </Button>
               </li>
             ))}
@@ -337,17 +367,13 @@ export function TaskBoard({ tasks, systemActions }: TaskBoardProps) {
       )}
 
       {/* Zona: tarefas do time */}
-      <Card className="p-6 bg-white border-neutral-200">
+      {!canManage ? <Card className="p-6 bg-white border-neutral-200">
+        <h3 className="text-sm font-semibold text-neutral-900">Tarefas aprovadas</h3>
+        {openTasks.length === 0 ? <p className="mt-3 text-sm text-neutral-500">Nenhuma tarefa aberta.</p> : <ul className="mt-3 space-y-3">{openTasks.map((task) => <li key={task.id}><p className="text-sm">{task.title}</p><TaskEvidence task={task} /></li>)}</ul>}
+      </Card> : <Card className="p-6 bg-white border-neutral-200">
         <h3 className="text-sm uppercase tracking-wider font-medium text-neutral-500 mb-4">
           Tarefas do time
         </h3>
-
-        {errorMsg && (
-          <div role="alert" className="flex items-center gap-2 mb-4 p-3 rounded-md bg-[#F8E8E8] text-[#B83A3A] text-sm">
-            <AlertCircle className="h-4 w-4 shrink-0" strokeWidth={2} />
-            {errorMsg}
-          </div>
-        )}
 
         {/* Form nova tarefa */}
         <div className="flex flex-wrap items-center gap-2 mb-5">
@@ -498,9 +524,22 @@ export function TaskBoard({ tasks, systemActions }: TaskBoardProps) {
             )}
           </div>
         )}
-      </Card>
+      </Card>}
     </div>
   );
+}
+
+function TaskEvidence({ task }: { task: AnalyticsTask }) {
+  const labels: Record<string, string> = {
+    janela_inicio: "Início", janela_fim: "Fim", sessoes_engajadas: "Sessões engajadas",
+    leads_qualificados: "Leads qualificados", leads_por_100_engajadas: "Qualificados por 100 sessões engajadas",
+    retention_estimate_pct: "Retenção estimada (%)",
+  };
+  const items = Object.entries(task.evidence ?? {}).filter(([key, value]) => labels[key] && value != null);
+  return <div className="mt-2 space-y-2">
+    {items.length > 0 && <dl className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-neutral-500">{items.map(([key, value]) => <div key={key}><dt className="inline">{labels[key]}: </dt><dd className="inline text-neutral-700">{String(value)}</dd></div>)}</dl>}
+    {task.pauta_id && <Link className="inline-flex min-h-9 items-center text-xs font-medium underline" href={`/admin/conteudo/${encodeURIComponent(task.pauta_id)}`}>Abrir pauta vinculada</Link>}
+  </div>;
 }
 
 interface PriorityColumnProps {
@@ -688,6 +727,8 @@ function SortableTaskRow({
           </DropdownMenu>
         </div>
       </div>
+
+      <TaskEvidence task={task} />
 
       {/* Concluir com comentário (inline) */}
       {isCompleting === task.id && (

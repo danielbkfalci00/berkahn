@@ -12,7 +12,7 @@ import type { AnalyticsLead, LeadArtifact, LeadResponsible } from "@/types/analy
 
 export const dynamic = "force-dynamic";
 
-const LEAD_COLUMNS = "id,nome,email,telefone,telefone_normalizado,segmento,mensagem,canal,status,prioridade,responsavel_id,resumo_status,resumo_status_em,tipo_projeto,empresa,cargo,pagina_origem,landing_page,referrer,slug_origem,cta_location,utm,post_id,pauta_id,visualizado_em,ultimo_contato_em,proxima_acao_em,motivo_desqualificacao,qualificado_em,desqualificado_em,convertido_em,arquivado_em,anonimizado_em,retencao_excecao,retencao_excecao_motivo,origem_legado,importado_em,criado_em,lead_responsaveis(id,nome)";
+const LEAD_COLUMNS = "id,nome,email,telefone,telefone_normalizado,segmento,mensagem,canal,tipo_captacao,status,prioridade,responsavel_id,resumo_status,resumo_status_em,tipo_projeto,empresa,cargo,pagina_origem,landing_page,referrer,slug_origem,cta_location,utm,post_id,pauta_id,visualizado_em,ultimo_contato_em,proxima_acao_em,motivo_desqualificacao,qualificado_em,desqualificado_em,convertido_em,arquivado_em,anonimizado_em,retencao_excecao,retencao_excecao_motivo,origem_legado,importado_em,criado_em,lead_responsaveis(id,nome)";
 
 export default async function LeadDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -26,8 +26,8 @@ export default async function LeadDetailPage({ params }: { params: Promise<{ id:
       .select("id,action,details,created_at,user_name")
       .eq("entity_type", "lead")
       .eq("entity_id", id)
-      .order("created_at", { ascending: false })
-      .limit(50),
+      .order("created_at", { ascending: false }).order("id", { ascending: false })
+      .limit(26),
     supabase.from("orcamentos").select("id,numero,status").eq("lead_id", id).order("criado_em", { ascending: false }),
     supabase.from("proposals").select("id,proposal_number,status").eq("lead_id", id).order("created_at", { ascending: false }),
     supabase.from("lead_artifacts").select("id,lead_id,tipo,estado,nome,external_url,storage_bucket,storage_path,mime_type,size_bytes,criado_em").eq("lead_id", id).order("criado_em", { ascending: false }),
@@ -36,11 +36,13 @@ export default async function LeadDetailPage({ params }: { params: Promise<{ id:
 
   if (leadResult.error) throw new Error(`Falha ao carregar lead: ${leadResult.error.message}`);
   if (!leadResult.data) notFound();
-  if (activityResult.error) throw new Error(`Falha ao carregar timeline: ${activityResult.error.message}`);
-  if (budgetResult.error) throw new Error(`Falha ao carregar orçamentos: ${budgetResult.error.message}`);
-  if (proposalResult.error) throw new Error(`Falha ao carregar propostas: ${proposalResult.error.message}`);
-  if (artifactsResult.error) throw new Error(`Falha ao carregar arquivos: ${artifactsResult.error.message}`);
-  if (responsiblesResult.error) throw new Error(`Falha ao carregar responsáveis: ${responsiblesResult.error.message}`);
+  const sectionErrors = [
+    activityResult.error && "A linha do tempo está indisponível. Os dados do contato continuam acessíveis.",
+    budgetResult.error && "Não foi possível carregar os orçamentos vinculados.",
+    proposalResult.error && "Não foi possível carregar as propostas anteriores.",
+    artifactsResult.error && "Não foi possível carregar os arquivos do lead.",
+    responsiblesResult.error && "Não foi possível carregar os responsáveis. Aguarde antes de alterar a atribuição.",
+  ].filter((message): message is string => Boolean(message));
 
   const rawLead = leadResult.data as unknown as Omit<AnalyticsLead, "responsavel" | "artifact_count"> & {
     lead_responsaveis: { id: string; nome: string } | null;
@@ -75,8 +77,11 @@ export default async function LeadDetailPage({ params }: { params: Promise<{ id:
 
   return (
     <LeadDetail
+      key={lead.id}
       lead={lead}
-      activities={(activityResult.data ?? []) as unknown as LeadActivity[]}
+      activities={(activityResult.data ?? []).slice(0, 25) as unknown as LeadActivity[]}
+      hasMoreActivities={(activityResult.data?.length || 0) > 25}
+      sectionErrors={sectionErrors}
       budgets={budgets}
       proposals={proposals}
       artifacts={(artifactsResult.data ?? []) as LeadArtifact[]}

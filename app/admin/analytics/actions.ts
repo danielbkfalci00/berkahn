@@ -1,6 +1,6 @@
 'use server'
 
-import { createClient } from '@/lib/supabase/server'
+import { getAdminSession } from '@/lib/supabase/sessao'
 import { revalidatePath } from 'next/cache'
 import type { AnalyticsTask, TaskPriority } from '@/types/analytics'
 
@@ -18,14 +18,14 @@ export async function createTask(input: {
   origin_signal?: string | null
   pauta_id?: string | null
   evidencias?: Record<string, unknown> | null
+  approveSuggestion?: boolean
 }): Promise<ActionResult<AnalyticsTask | null>> {
   const title = input.title?.trim()
   if (!title) return { data: null, error: 'Título obrigatório.' }
 
-  const supabase = await createClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  const session = await getAdminSession()
+  if (!session || !['owner', 'conteudo'].includes(session.membership.role)) return { data: null, error: 'Você não tem permissão para gerenciar estas tarefas.' }
+  const { supabase, user } = session
 
   // sort_order: coloca no fim da lista
   const { data: maxRow } = await supabase
@@ -46,7 +46,7 @@ export async function createTask(input: {
       origin_signal: input.origin_signal ?? null,
       pauta_id: input.pauta_id ?? null,
       evidence: input.evidencias ?? {},
-      approval_status: input.source === 'system' ? 'pendente' : 'aprovada',
+      approval_status: input.source === 'system' && !input.approveSuggestion ? 'pendente' : 'aprovada',
       sort_order: nextOrder,
       created_by: user?.email ?? null,
     })
@@ -72,9 +72,14 @@ export async function updateTask(
   id: string,
   patch: { title?: string; description?: string | null; priority?: TaskPriority }
 ): Promise<ActionResult<AnalyticsTask | null>> {
-  const supabase = await createClient()
+  const session = await getAdminSession()
+  if (!session || !['owner', 'conteudo'].includes(session.membership.role)) return { data: null, error: 'Você não tem permissão para gerenciar estas tarefas.' }
+  const { supabase } = session
   const update: Record<string, unknown> = {}
-  if (patch.title !== undefined) update.title = patch.title.trim()
+  if (patch.title !== undefined) {
+    if (!patch.title.trim()) return { data: null, error: 'Título obrigatório.' }
+    update.title = patch.title.trim()
+  }
   if (patch.description !== undefined) update.description = patch.description
   if (patch.priority !== undefined) update.priority = patch.priority
 
@@ -95,10 +100,9 @@ export async function updateTask(
 }
 
 export async function completeTask(id: string, note?: string): Promise<ActionResult> {
-  const supabase = await createClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  const session = await getAdminSession()
+  if (!session || !['owner', 'conteudo'].includes(session.membership.role)) return { data: null, error: 'Você não tem permissão para gerenciar estas tarefas.' }
+  const { supabase, user } = session
 
   const { data, error } = await supabase
     .from('analytics_tasks')
@@ -109,10 +113,11 @@ export async function completeTask(id: string, note?: string): Promise<ActionRes
       completed_at: new Date().toISOString(),
     })
     .eq('id', id)
+    .eq('approval_status', 'aprovada')
     .select()
     .single()
 
-  if (error) return { data: null, error: error.message }
+  if (error) return { data: null, error: 'A tarefa precisa estar aprovada e disponível para ser concluída.' }
   if (user && data) {
     await supabase.from('activity_logs').insert({
       user_id: user.id,
@@ -129,7 +134,9 @@ export async function completeTask(id: string, note?: string): Promise<ActionRes
 }
 
 export async function reopenTask(id: string): Promise<ActionResult> {
-  const supabase = await createClient()
+  const session = await getAdminSession()
+  if (!session || !['owner', 'conteudo'].includes(session.membership.role)) return { data: null, error: 'Você não tem permissão para gerenciar estas tarefas.' }
+  const { supabase } = session
   const { error } = await supabase
     .from('analytics_tasks')
     .update({
@@ -146,7 +153,9 @@ export async function reopenTask(id: string): Promise<ActionResult> {
 }
 
 export async function deleteTask(id: string): Promise<ActionResult> {
-  const supabase = await createClient()
+  const session = await getAdminSession()
+  if (!session || !['owner', 'conteudo'].includes(session.membership.role)) return { data: null, error: 'Você não tem permissão para gerenciar estas tarefas.' }
+  const { supabase } = session
   const { error } = await supabase.from('analytics_tasks').delete().eq('id', id)
   if (error) return { data: null, error: error.message }
   revalidatePath('/admin/analytics')
@@ -163,8 +172,28 @@ export async function reorderTasks(
   updates: { id: string; sort_order: number; priority: TaskPriority }[]
 ): Promise<ActionResult> {
   if (updates.length === 0) return { data: null, error: null }
-  const supabase = await createClient()
+  const session = await getAdminSession()
+  if (!session || !['owner', 'conteudo'].includes(session.membership.role)) return { data: null, error: 'Você não tem permissão para gerenciar estas tarefas.' }
+  const { supabase } = session
   const { error } = await supabase.rpc('reordenar_analytics_tasks', { p_updates: updates })
   if (error) return { data: null, error: error.message }
+  return { data: null, error: null }
+}
+
+/** Decisão explícita, separada da conclusão da tarefa. */
+export async function reviewRecommendation(id: string, decision: 'aprovada' | 'rejeitada'): Promise<ActionResult> {
+  const session = await getAdminSession()
+  if (!session || !['owner', 'conteudo'].includes(session.membership.role)) return { data: null, error: 'Você não tem permissão para avaliar recomendações.' }
+  if (!['aprovada', 'rejeitada'].includes(decision)) return { data: null, error: 'Decisão inválida.' }
+  const { data, error } = await session.supabase.from('analytics_tasks')
+    .update({ approval_status: decision }).eq('id', id).eq('approval_status', 'pendente')
+    .select('id,title').maybeSingle()
+  if (error || !data) return { data: null, error: 'A recomendação não está mais pendente. Atualize a página.' }
+  await session.supabase.from('activity_logs').insert({
+    user_id: session.user.id, user_name: session.user.email || 'Admin',
+    action: decision === 'aprovada' ? 'Recomendação aprovada' : 'Recomendação rejeitada',
+    entity_type: 'task', entity_id: id, entity_name: data.title,
+  })
+  revalidatePath('/admin/analytics')
   return { data: null, error: null }
 }

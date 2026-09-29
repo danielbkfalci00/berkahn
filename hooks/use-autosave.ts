@@ -19,7 +19,7 @@ import {
  */
 export function useAutosave(
   valorInicial: string,
-  salvar: (texto: string) => Promise<{ error: string | null }>
+  salvar: (texto: string, anterior: string) => Promise<{ error: string | null; valorSalvo?: string }>
 ) {
   const [valor, setValor] = useState(valorInicial);
   const [estado, setEstado] = useState<EstadoSave>({ fase: "limpo" });
@@ -33,7 +33,7 @@ export function useAutosave(
   if (motorRef.current === null) {
     motorRef.current = criarMotorAutosave({
       valorInicial,
-      salvar: (texto) => salvarRef.current(texto),
+      salvar: (texto, anterior) => salvarRef.current(texto, anterior),
       aoMudar: () => {
         const m = motorRef.current;
         if (!m) return;
@@ -44,7 +44,10 @@ export function useAutosave(
   }
   const motor = motorRef.current;
 
-  useEffect(() => () => motor.destruir(), [motor]);
+  useEffect(() => {
+    motor.iniciar();
+    return () => motor.destruir();
+  }, [motor]);
 
   const aoDigitar = useCallback(
     (e: React.ChangeEvent<HTMLTextAreaElement>) => {

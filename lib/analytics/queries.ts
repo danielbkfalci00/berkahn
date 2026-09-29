@@ -19,7 +19,8 @@ export async function getAvailableMonths(): Promise<string[]> {
     .select("month")
     .order("month", { ascending: false });
 
-  if (error || !data) return [];
+  if (error) throw new Error("Não foi possível consultar os períodos de Analytics.");
+  if (!data) return [];
   return data.map((row) => (row.month as string).slice(0, 7)); // "YYYY-MM"
 }
 
@@ -32,16 +33,16 @@ export async function getSnapshot(monthSlug: string): Promise<AnalyticsSnapshot 
   const monthDate = `${monthSlug}-01`;
   const { data, error } = await supabase
     .from("analytics_snapshots")
-    // ga4_prev/gsc_prev não são lidos pelo painel e este objeto vai inteiro
-    // para o client component; ficam fora da projeção para enxugar o payload.
-    .select("month, ga4_data, gsc_data, context, generated_at")
+    // O baseline GA4 permite comparar artigos em janelas equivalentes.
+    // Somente context cruza a fronteira do client; gsc_prev não é necessário aqui.
+    .select("month, ga4_data, ga4_prev, gsc_data, context, generated_at")
     .eq("month", monthDate)
-    .single();
+    .maybeSingle();
 
-  if (error || !data) return null;
+  if (error) throw new Error("Não foi possível carregar o relatório selecionado.");
+  if (!data) return null;
   return applySnapshotComparisonPolicy({
-    ...(data as Omit<AnalyticsSnapshot, "ga4_prev" | "gsc_prev">),
-    ga4_prev: null,
+    ...(data as Omit<AnalyticsSnapshot, "gsc_prev">),
     gsc_prev: null,
   });
 }
@@ -64,7 +65,8 @@ export async function getMultipleSnapshots(months: string[]): Promise<AnalyticsS
     .in("month", monthDates)
     .order("month", { ascending: true }); // crescente para trends
 
-  if (error || !data) return [];
+  if (error) throw new Error("Não foi possível carregar os relatórios.");
+  if (!data) return [];
   return (data as AnalyticsSnapshot[]).map(applySnapshotComparisonPolicy);
 }
 
@@ -79,7 +81,8 @@ export async function getPublishedPosts(): Promise<Map<string, PostMeta>> {
     .select("slug, title, category, read_time, published_at")
     .eq("status", "published");
 
-  if (error || !data) return new Map();
+  if (error) throw new Error("Metadados dos artigos indisponíveis.");
+  if (!data) return new Map();
 
   const map = new Map<string, PostMeta>();
   for (const row of data) {
@@ -135,14 +138,16 @@ function comoNumero(valor: unknown): number {
  * os meses custaria ~70 KB por mês depois que os limites de coleta subiram, para
  * ler um único campo — e esta rota é `force-dynamic`, sem cache absorvendo.
  */
-export async function getHistoricalPageviewsBySlug(): Promise<Map<string, Map<string, number>>> {
+export async function getHistoricalPageviewsBySlug(throughMonth: string): Promise<Map<string, Map<string, number>>> {
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("analytics_snapshots")
     .select("month, topPages:ga4_data->topPages")
+    .lte("month", `${throughMonth}-01`)
     .order("month", { ascending: true });
 
-  if (error || !data) return new Map();
+  if (error) throw new Error("Histórico de artigos indisponível.");
+  if (!data) return new Map();
 
   const result = new Map<string, Map<string, number>>();
   for (const row of data) {
@@ -167,7 +172,7 @@ export async function getHistoricalPageviewsBySlug(): Promise<Map<string, Map<st
  * 1.000 queries), cada snapshot passou de ~30 KB para ~145 KB. Em doze meses
  * isso seria ~1,7 MB por carregamento, numa rota `force-dynamic`.
  */
-export async function getAllTrendPoints(): Promise<TrendPoint[]> {
+export async function getAllTrendPoints(throughMonth: string): Promise<TrendPoint[]> {
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("analytics_snapshots")
@@ -182,9 +187,11 @@ export async function getAllTrendPoints(): Promise<TrendPoint[]> {
         "partial:context->>partial",
       ].join(", ")
     )
+    .lte("month", `${throughMonth}-01`)
     .order("month", { ascending: true });
 
-  if (error || !data) return [];
+  if (error) throw new Error("Série histórica indisponível.");
+  if (!data) return [];
 
   const PT_BR_MONTHS = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
 

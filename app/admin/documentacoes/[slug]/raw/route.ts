@@ -32,8 +32,19 @@ const HTML_404 = `<!DOCTYPE html>
 
 export async function GET(request: Request, { params }: Props) {
   const { slug } = await params;
-  const html = await getDocumentoHtml(slug);
   const origem = origemDoAdmin(request);
+  let html;
+  try {
+    html = await getDocumentoHtml(slug);
+  } catch {
+    const indisponivel = HTML_404
+      .replace("Documento não encontrado.", "Não foi possível carregar. Atualize a página para tentar novamente.")
+      .replace("Documento não encontrado", "Documento indisponível");
+    return new Response(injetarPonte(indisponivel, origem, slug), {
+      status: 503,
+      headers: HEADERS_HTML,
+    });
+  }
 
   // O 404 também leva a ponte: sem ela o admin ficaria esperando o handshake
   // até o timeout.

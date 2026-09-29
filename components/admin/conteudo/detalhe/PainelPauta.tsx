@@ -1,6 +1,7 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { useUnsavedChanges } from "@/hooks/use-unsaved-changes";
 import Link from "next/link";
 import {
   ArrowLeft, Image as ImagemIcone, Lightbulb, Linkedin, Palette, Search,
@@ -36,17 +37,7 @@ export function PainelPauta({ pauta, artigosLivres, tagsCatalogo }: Props) {
     });
   }, []);
 
-  const pendenciaRef = useRef(temPendencia);
-  pendenciaRef.current = temPendencia;
-  useEffect(() => {
-    function aoSair(evento: BeforeUnloadEvent) {
-      if (!pendenciaRef.current) return;
-      evento.preventDefault();
-      evento.returnValue = "";
-    }
-    window.addEventListener("beforeunload", aoSair);
-    return () => window.removeEventListener("beforeunload", aoSair);
-  }, []);
+  useUnsavedChanges(temPendencia);
 
   const temBlog = local.plataformas.includes("blog");
   const temLinkedin = local.plataformas.includes("linkedin");

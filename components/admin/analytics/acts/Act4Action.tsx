@@ -16,9 +16,11 @@ interface Act4ActionProps {
   posts?: PostPerformance[];
   tasks?: AnalyticsTask[];
   funilLeads: AdminDataResult<Funil>;
+  canManageTasks?: boolean;
+  tasksUnavailable?: boolean;
 }
 
-export function Act4Action({ context, posts = [], tasks = [], funilLeads }: Act4ActionProps) {
+export function Act4Action({ context, posts = [], tasks = [], funilLeads, canManageTasks, tasksUnavailable }: Act4ActionProps) {
   const counts = countByStatus(posts);
   const best = findBestPost(posts);
   const comparability = comparisonAvailability(context);
@@ -38,14 +40,15 @@ export function Act4Action({ context, posts = [], tasks = [], funilLeads }: Act4
         <p className="mt-1 text-sm text-neutral-600 sm:text-base">{narrative}</p>
       </div>
       <InsightsList insights={context.insights} />
-      <TaskBoard
+      {tasksUnavailable ? <p role="status" className="rounded-md border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">Tarefas indisponíveis. Atualize a página para tentar novamente.</p> : <TaskBoard
         tasks={tasks}
+        canManage={canManageTasks}
         systemActions={{
           p0: context.actionsP0,
           p1: context.actionsP1,
           p2: context.actionsP2,
         }}
-      />
+      />}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <IndexationStatus indexation={context.indexation} />
         <FallingQueriesPanel

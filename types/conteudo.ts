@@ -211,7 +211,7 @@ export interface PublicacaoReal {
 export function publicacaoReal(pauta: Pauta): PublicacaoReal {
   return {
     blog: !pauta.statusBlog ? "nao-se-aplica" : !pauta.artigo ? "sem-artigo" : pauta.artigo.status === "published" ? "publicado" : "draft",
-    linkedin: !pauta.statusLinkedin ? "nao-se-aplica" : pauta.linkedinUrl && pauta.linkedinPublicadoEm ? "publicado" : "sem-registro",
+    linkedin: !pauta.statusLinkedin ? "nao-se-aplica" : pauta.linkedinPublicadoEm ? "publicado" : "sem-registro",
   };
 }
 
@@ -236,7 +236,7 @@ export function gapsConteudo(pauta: Pauta): string[] {
   if (pauta.statusLinkedin) {
     if (!temArtefato(pauta, "linkedinTexto", pauta.linkedinTexto)) gaps.push("Texto do LinkedIn");
     if (!pauta.capaLinkedinUrl) gaps.push("Capa do LinkedIn");
-    if (pauta.statusLinkedin === "publicado" && publicacaoReal(pauta).linkedin !== "publicado") gaps.push("URL e data reais do LinkedIn");
+    if (pauta.statusLinkedin === "publicado" && publicacaoReal(pauta).linkedin !== "publicado") gaps.push("Data real do LinkedIn");
   }
   return gaps;
 }
@@ -252,7 +252,7 @@ export function proximaAcaoOperacional(pauta: Pauta): string {
   if (pauta.statusLinkedin) {
     if (!temArtefato(pauta, "linkedinTexto", pauta.linkedinTexto)) return "Produzir texto do LinkedIn";
     if (!pauta.capaLinkedinUrl) return "Produzir capa do LinkedIn";
-    if (real.linkedin !== "publicado") return "Revisar, publicar e registrar URL";
+    if (real.linkedin !== "publicado") return "Revisar, publicar e registrar data";
   }
   return "Publicação real concluída";
 }
