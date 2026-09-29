@@ -3,6 +3,7 @@ import sharp from "sharp"
 import { randomUUID } from "node:crypto"
 import { createServiceClient } from "@/lib/supabase/admin"
 import { exigirSessao } from "@/lib/supabase/sessao"
+import { revalidatePath } from "next/cache"
 
 const MAX_INPUT_BYTES = 10 * 1024 * 1024
 const TARGET_MAX_BYTES = 500 * 1024
@@ -10,6 +11,11 @@ const QUALITIES = [85, 75, 65]
 
 interface RouteContext {
   params: Promise<{ id: string }>
+}
+
+function requestRevision(request: Request): string | null {
+  const value = request.headers.get("If-Match")?.replace(/^"|"$/g, "")
+  return value && /^\d{4}-\d{2}-\d{2}T/.test(value) && Number.isFinite(Date.parse(value)) ? value : null
 }
 
 async function processarHero(buffer: Buffer): Promise<Buffer> {
@@ -30,6 +36,12 @@ export async function POST(request: Request, ctx: RouteContext) {
   if (barrado) return barrado
 
   const { id } = await ctx.params
+  const revision = requestRevision(request)
+  if (!revision) return NextResponse.json({ error: "Atualize a página antes de alterar a capa." }, { status: 409 })
+  const supabase = createServiceClient()
+  const { data: budget, error: readError } = await supabase.from("orcamentos").select("status,hero_image_url,atualizado_em").eq("id", id).eq("atualizado_em", revision).maybeSingle()
+  if (readError) return NextResponse.json({ error: "Não foi possível consultar o orçamento." }, { status: 503 })
+  if (!budget || budget.status === "arquivado") return NextResponse.json({ error: "O orçamento mudou ou foi arquivado. Atualize a página antes de alterar a capa." }, { status: 409 })
   const formData = await request.formData()
   const file = formData.get("file")
 
@@ -55,9 +67,6 @@ export async function POST(request: Request, ctx: RouteContext) {
     return NextResponse.json({ error: "Falha ao processar imagem" }, { status: 500 })
   }
 
-  const supabase = createServiceClient()
-  const { data: budget } = await supabase.from("orcamentos").select("status,hero_image_url").eq("id", id).single()
-  if (!budget || budget.status === "arquivado") return NextResponse.json({ error: "Orçamento não disponível para edição" }, { status: 409 })
   const path = `${id}/${randomUUID()}.webp`
 
   const { error: uploadError } = await supabase.storage
@@ -78,28 +87,50 @@ export async function POST(request: Request, ctx: RouteContext) {
     .createSignedUrl(path, 60 * 60 * 24 * 7)
 
   if (signedError || !signed) {
+    await supabase.storage.from("orcamento-heroes").remove([path])
     return NextResponse.json(
       { error: signedError?.message ?? "Falha ao gerar signed URL" },
       { status: 500 }
     )
   }
 
-  const { error: updateError } = await supabase
+  const { data: saved, error: updateError } = await supabase
     .from("orcamentos")
     .update({ hero_image_url: path })
     .eq("id", id)
+    .eq("atualizado_em", revision)
+    .select("atualizado_em")
+    .maybeSingle()
 
-  if (updateError) {
+  if (updateError || !saved) {
     await supabase.storage.from("orcamento-heroes").remove([path])
-    return NextResponse.json({ error: updateError.message }, { status: 500 })
+    return NextResponse.json({ error: updateError ? "Não foi possível salvar a capa." : "O orçamento mudou durante o envio. Atualize a página e tente novamente." }, { status: updateError ? 503 : 409 })
   }
-  if (budget.hero_image_url && !budget.hero_image_url.startsWith("http")) {
-    await supabase.storage.from("orcamento-heroes").remove([budget.hero_image_url])
-  }
+  revalidatePath(`/admin/orcamentos/${id}`)
+  // Capas anteriores podem ser compartilhadas por orçamentos importados/copias.
+  // Só limpamos o upload novo se ele não chegou a ser vinculado.
 
   return NextResponse.json({
     path,
     signedUrl: signed.signedUrl,
     sizeBytes: processed.byteLength,
+    atualizado_em: saved.atualizado_em,
   })
+}
+
+export async function DELETE(request: Request, ctx: RouteContext) {
+  const barrado = await exigirSessao()
+  if (barrado) return barrado
+  const { id } = await ctx.params
+  const revision = requestRevision(request)
+  if (!revision) return NextResponse.json({ error: "Atualize a página antes de remover a capa." }, { status: 409 })
+  const supabase = createServiceClient()
+  const { data: budget, error: readError } = await supabase.from("orcamentos").select("status,hero_image_url").eq("id", id).eq("atualizado_em", revision).maybeSingle()
+  if (readError) return NextResponse.json({ error: "Não foi possível consultar o orçamento." }, { status: 503 })
+  if (!budget || budget.status === "arquivado") return NextResponse.json({ error: "O orçamento mudou ou foi arquivado. Atualize a página antes de remover a capa." }, { status: 409 })
+  const { data: saved, error } = await supabase.from("orcamentos").update({ hero_image_url: null }).eq("id", id).eq("atualizado_em", revision).select("atualizado_em").maybeSingle()
+  if (error || !saved) return NextResponse.json({ error: error ? "Não foi possível remover a capa." : "O orçamento mudou. Atualize a página e tente novamente." }, { status: error ? 503 : 409 })
+  // Remover o vínculo não pode apagar uma imagem usada por outro orçamento.
+  revalidatePath(`/admin/orcamentos/${id}`)
+  return NextResponse.json({ atualizado_em: saved.atualizado_em })
 }

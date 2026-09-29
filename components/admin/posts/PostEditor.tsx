@@ -37,6 +37,7 @@ import { uploadCoverImage } from "@/app/admin/posts/upload-actions";
 import { useToast } from "@/hooks/use-toast";
 import { createPost, updatePost, savePostRevision, publishPostRevision } from "@/app/admin/posts/actions";
 import { useUnsavedChanges } from "@/hooks/use-unsaved-changes";
+import { editorialHref, editorialReturnTo } from "@/lib/admin/return-to";
 
 const RichPostRenderer = dynamic(() => import("@/components/blog/RichPostRenderer").then((module) => module.RichPostRenderer), {
   loading: () => <p role="status" className="p-4 text-sm text-neutral-500">Carregando prévia…</p>,
@@ -45,6 +46,7 @@ const RichPostRenderer = dynamic(() => import("@/components/blog/RichPostRendere
 interface PostEditorProps {
   post?: Post;
   revision?: { pautaId: string; updatedAt: string; payload: PostInsert | null };
+  returnTo?: string;
 }
 
 const defaultPost: PostInsert = {
@@ -61,8 +63,11 @@ const defaultPost: PostInsert = {
   featured: false,
 };
 
-export function PostEditor({ post, revision }: PostEditorProps) {
+export function PostEditor({ post, revision, returnTo }: PostEditorProps) {
   const router = useRouter();
+  const backHref = editorialReturnTo(returnTo, "/admin/posts");
+  const backLabel = backHref.startsWith("/admin/conteudo/") ? "Voltar para pauta"
+    : backHref.startsWith("/admin/conteudo") ? "Voltar para conteúdo" : "Voltar para posts";
   const isEditing = !!post;
   const [isPublished, setIsPublished] = useState(post?.status === "published");
   const { toast } = useToast();
@@ -296,7 +301,7 @@ export function PostEditor({ post, revision }: PostEditorProps) {
         setIsPublished(result.data.status === "published");
         setFormData((current) => ({ ...current, status: result.data!.status }));
       }
-      if (JSON.stringify(currentForm.current) === submitted) router.push("/admin/posts");
+      if (JSON.stringify(currentForm.current) === submitted) router.push(backHref);
     } catch (error) {
       console.error("Error saving post:", error);
       toast({
@@ -336,7 +341,7 @@ export function PostEditor({ post, revision }: PostEditorProps) {
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-4">
             <Button variant="ghost" size="icon" asChild>
-          <Link href="/admin/posts" aria-label="Voltar para posts">
+          <Link href={backHref} aria-label={backLabel}>
               <ArrowLeft className="h-5 w-5" />
           </Link>
             </Button>
@@ -378,7 +383,7 @@ export function PostEditor({ post, revision }: PostEditorProps) {
             disabled={hasUnsavedChanges || isSaving || isPublishing || isUploading}>
             {isPublishing ? "Publicando…" : "Publicar revisão salva"}
           </Button>}
-          {isPublished && pautaId && <Button variant="outline" asChild><Link href={`/admin/conteudo/${pautaId}`}>Revisar na pauta</Link></Button>}
+          {isPublished && pautaId && <Button variant="outline" asChild><Link href={backHref.split(/[?#]/, 1)[0] === `/admin/conteudo/${pautaId}` ? backHref : editorialHref(`/admin/conteudo/${pautaId}`, backHref)}>Revisar na pauta</Link></Button>}
         </div>
       </div>
       {isPublished && <p className="rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">

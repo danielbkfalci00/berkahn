@@ -49,7 +49,7 @@ export function BaixarPdfButton({ orcamentoId, filename, label = "Baixar PDF" }:
         )}
         {label}
       </Button>
-      {erro && <p className="text-xs text-red-600">{erro}</p>}
+      {erro && <p role="alert" className="text-xs text-red-600">{erro}</p>}
     </div>
   )
 }

@@ -14,6 +14,7 @@ import { vincularPost } from "@/app/admin/conteudo/actions";
 import { SeloPostVinculado } from "@/components/admin/conteudo/SeloPostVinculado";
 import type { Pauta } from "@/types/conteudo";
 import { BlocoColapsavel } from "./BlocoColapsavel";
+import { editorialHref } from "@/lib/admin/return-to";
 
 export interface ArtigoLivre {
   id: string;
@@ -26,6 +27,7 @@ interface Props {
   pauta: Pauta;
   /** Artigos que ainda não pertencem a nenhuma pauta. */
   artigosLivres: ArtigoLivre[];
+  returnTo?: string;
 }
 
 /**
@@ -38,7 +40,7 @@ interface Props {
  * com a lista faria um card que tem artigo mostrar "nenhum selecionado", e os
  * 22 cards de acervo são exatamente esse caso.
  */
-export function BlocoArtigo({ pauta, artigosLivres }: Props) {
+export function BlocoArtigo({ pauta, artigosLivres, returnTo = `/admin/conteudo/${pauta.id}` }: Props) {
   const [artigo, setArtigo] = useState(pauta.artigo);
   const [erro, setErro] = useState<string | null>(null);
   const [pendente, iniciar] = useTransition();
@@ -66,14 +68,14 @@ export function BlocoArtigo({ pauta, artigosLivres }: Props) {
         <div className="space-y-3">
           <div className="rounded-md border border-neutral-200 bg-neutral-50 p-3">
             <Link
-              href={`/admin/posts/${artigo.id}`}
+              href={editorialHref(`/admin/posts/${artigo.id}`, returnTo)}
               className="rounded text-sm font-medium text-neutral-900 underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900"
             >
               {artigo.titulo}
             </Link>
             <p className="mt-0.5 text-xs text-neutral-500">/{artigo.slug}</p>
             <div className="mt-2">
-              <SeloPostVinculado pauta={{ ...pauta, artigo }} />
+              <SeloPostVinculado pauta={{ ...pauta, artigo }} returnTo={returnTo} />
             </div>
           </div>
 

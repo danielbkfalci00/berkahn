@@ -323,4 +323,99 @@ for (const navigationApi of [false, true]) {
   assert.equal((await output.proxy(request('/dev-harness/pauta'))).status, 200);
 }
 
-console.log('Admin navigation: confirmations, history rollback, Next state, cleanup and production harness isolation passed.');
+// Editorial navigation keeps the list context through pauta and post editors,
+// without allowing a query-string destination to escape the editorial routes.
+{
+  const helperFilename = new URL('../lib/admin/return-to.ts', import.meta.url);
+  const helpers = {};
+  vm.runInNewContext(ts.transpileModule(readFileSync(helperFilename, 'utf8'), {
+    compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 },
+  }).outputText, { exports: helpers, URL, URLSearchParams });
+  const { editorialReturnTo, editorialHref, postsListHref } = helpers;
+  const list = postsListHref('steel frame', 'draft', 3);
+  assert.equal(list, '/admin/posts?q=steel+frame&status=draft&page=3');
+  assert.equal(postsListHref('', 'all', 1), '/admin/posts');
+  assert.equal(editorialReturnTo(list, '/admin/posts'), list);
+  const newPost = new URL(editorialHref('/admin/posts/new', list), origin);
+  assert.equal(editorialReturnTo(newPost.searchParams.get('returnTo'), '/admin/posts'), list);
+
+  const board = '/admin/conteudo?conteudo_visao=linkedin&conteudo_q=steel+frame&conteudo_prazo=atrasadas';
+  const pautaPath = '/admin/conteudo/12345678-1234-1234-1234-123456789abc';
+  const pauta = editorialHref(pautaPath, board);
+  const editor = new URL(editorialHref('/admin/posts/123', pauta), origin);
+  const backToPauta = editorialReturnTo(editor.searchParams.get('returnTo'), '/admin/posts');
+  assert.equal(backToPauta, pauta);
+  const backToBoard = editorialReturnTo(new URL(backToPauta, origin).searchParams.get('returnTo'), '/admin/conteudo');
+  assert.equal(backToBoard, board, 'Pauta → editor → pauta preserves the board filters');
+  const guarded = harness({ pages: [pauta] });
+  guarded.render('pauta', true);
+  guarded.answers.push(false);
+  assert.equal(guarded.click(editor.pathname + editor.search).defaultPrevented, true, 'Editorial links still prompt before discarding unsaved changes');
+  guarded.unmount('pauta');
+  assert.equal(editorialReturnTo(`${board}&nova=1`, '/admin/conteudo'), board, 'Returning does not reopen the transient creation form');
+  assert.equal(editorialReturnTo(`${pautaPath}?returnTo=${encodeURIComponent(pauta)}`, '/admin/conteudo'), pautaPath, 'Detail chains cannot loop');
+
+  for (const destination of [
+    undefined, null, ['/admin/posts'], 123, 'https://example.test/admin/posts',
+    '//example.test/admin/posts', '/\\example.test/admin/posts',
+    '/admin/posts-malicioso', '/admin/posts/123', '/admin/login', '/admin/logout',
+    '/admin/conteudo/invalid', '/admin/conteudo/../posts', '/admin/%70osts',
+    '/admin/posts\n', 'javascript:alert(1)', '/admin/posts?' + 'q'.repeat(4096),
+  ]) {
+    assert.equal(editorialReturnTo(destination, '/admin/conteudo'), '/admin/conteudo');
+  }
+  assert.equal(editorialReturnTo(`${pautaPath}?returnTo=https%3A%2F%2Fexample.test`, '/admin/conteudo'), pautaPath);
+
+  // A stale/deleted final page must recover while preserving search and status.
+  // Exercise the server page against successful, empty and failed queries.
+  const postsSource = ts.transpileModule(readFileSync(new URL('../app/admin/posts/page.tsx', import.meta.url), 'utf8'), {
+    compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022, jsx: ts.JsxEmit.ReactJSX },
+  }).outputText;
+  let response;
+  const calls = [];
+  const query = {
+    select() { return this; },
+    eq(...args) { calls.push(['eq', ...args]); return this; },
+    or(...args) { calls.push(['or', ...args]); return this; },
+    order() { return this; },
+    async range(...args) { calls.push(['range', ...args]); return response; },
+  };
+  const pageModule = {};
+  const element = (type, props) => ({ type, props });
+  vm.runInNewContext(postsSource, {
+    exports: pageModule, URLSearchParams, console: { error() {} },
+    require(name) {
+      if (name === 'react/jsx-runtime') return { jsx: element, jsxs: element };
+      if (name === '@/lib/supabase/server') return { createClient: async () => ({ from: () => query }) };
+      if (name === '@/lib/admin/return-to') return helpers;
+      if (name === 'next/navigation') return { redirect(path) { throw Object.assign(new Error('redirect'), { destination: path }); } };
+      if (name === 'next/link') return { default: 'Link' };
+      if (name === '@/components/admin/posts/PostsTable') return { PostsTable: 'PostsTable' };
+      if (name === '@/components/ui/button') return { Button: 'Button' };
+      if (name === 'lucide-react') return { Plus: 'Plus' };
+      throw new Error(`Unexpected posts import: ${name}`);
+    },
+  });
+  const renderPosts = (page = '3') => pageModule.default({ searchParams: Promise.resolve({ q: 'steel frame', status: 'draft', page }) });
+  response = { data: [], error: null, count: 31 };
+  await assert.rejects(renderPosts(), (error) => error.destination === postsListHref('steel frame', 'draft', 2));
+  response = { data: [], error: null, count: 0 };
+  await assert.rejects(renderPosts(), (error) => error.destination === postsListHref('steel frame', 'draft', 1));
+  response = { data: null, error: { code: 'PGRST103', message: 'Range not satisfiable' }, count: null };
+  await assert.rejects(renderPosts(), (error) => error.destination === postsListHref('steel frame', 'draft', 1));
+  response = { data: null, error: { code: 'unavailable', message: 'Offline' }, count: null };
+  const failure = await renderPosts();
+  assert.equal(failure.props.children[1].props.role, 'alert', 'A connection error is not treated as an empty collection');
+  response = { data: [{ id: '1' }], error: null, count: 61 };
+  const valid = await renderPosts();
+  const createLink = valid.props.children[0].props.children[1];
+  assert.equal(new URL(createLink.props.href, origin).searchParams.get('returnTo'), list);
+  assert.equal(valid.props.children[1].props.page, 3);
+  assert.ok(calls.some((call) => call[0] === 'eq' && call[1] === 'status' && call[2] === 'draft'));
+  const duplicatedParams = await pageModule.default({ searchParams: Promise.resolve({ q: ['steel', 'frame'], status: ['draft', 'published'], page: ['3', '4'] }) });
+  assert.equal(duplicatedParams.props.children[1].props.search, '');
+  assert.equal(duplicatedParams.props.children[1].props.statusFilter, 'all');
+  assert.equal(duplicatedParams.props.children[1].props.page, 1);
+}
+
+console.log('Admin navigation: confirmations, history rollback, Next state, cleanup, safe editorial return paths, pagination recovery and production harness isolation passed.');

@@ -3,9 +3,11 @@ import { AlertCircle, ExternalLink } from "lucide-react";
 import { ARTIGO_BADGE } from "@/lib/conteudo/colunas";
 import { STATUS_LABEL, divergeDoArtigo, type Pauta } from "@/types/conteudo";
 import { cn } from "@/lib/utils";
+import { editorialHref } from "@/lib/admin/return-to";
 
 interface Props {
   pauta: Pauta;
+  returnTo?: string;
 }
 
 /**
@@ -17,7 +19,7 @@ interface Props {
  * deixá-la silenciosa: é o preço, e a defesa, de manter as duas coisas
  * separadas.
  */
-export function SeloPostVinculado({ pauta }: Props) {
+export function SeloPostVinculado({ pauta, returnTo = "/admin/conteudo" }: Props) {
   if (!pauta.artigo) return null;
 
   const badge = ARTIGO_BADGE[pauta.artigo.status];
@@ -45,7 +47,7 @@ export function SeloPostVinculado({ pauta }: Props) {
       )}
 
       <Link
-        href={`/admin/posts/${pauta.artigo.id}`}
+        href={editorialHref(`/admin/posts/${pauta.artigo.id}`, returnTo)}
         className="inline-flex items-center gap-1 rounded text-[11px] text-neutral-500 underline-offset-2 hover:text-neutral-900 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900"
       >
         <ExternalLink className="h-3 w-3" strokeWidth={2} aria-hidden />

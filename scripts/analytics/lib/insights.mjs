@@ -20,7 +20,7 @@ export function isKnownInspection(item) {
     Boolean(item.coverageState && item.coverageState.toLowerCase() !== 'unknown');
 }
 
-export function buildInsights({ ga4, gsc, ga4Prev, gscPrev, indexation, posts }) {
+export function buildInsights({ ga4, gsc }) {
   const insights = [];
 
   // GSC: queries com alta impressão e CTR baixo (oportunidade)
@@ -61,7 +61,7 @@ export function buildInsights({ ga4, gsc, ga4Prev, gscPrev, indexation, posts })
   return insights.sort((a, b) => b.impact - a.impact).slice(0, 5).map((i, idx) => ({ ...i, position: idx + 1 }));
 }
 
-export function buildActions({ ga4, gsc, indexation, posts }) {
+export function buildActions({ ga4, gsc, indexation }) {
   const p0 = [];
   const p1 = [];
   const p2 = [];
@@ -99,7 +99,7 @@ export function buildActions({ ga4, gsc, indexation, posts }) {
   const lowEngagementPages = ga4.topPages.filter((p) => p.users >= 20 && p.avgEngagementTime < 30).slice(0, 2);
   lowEngagementPages.forEach((p) => {
     p2.push({
-      text: `Analisar bounce de "${p.title || p.slug}" (tempo médio ${p.avgEngagementTime}s, ${p.users} users).`,
+      text: `Conferir leitura e engajamento de "${p.title || p.slug}" (tempo médio ${p.avgEngagementTime}s, ${p.users} usuários).`,
     });
   });
 

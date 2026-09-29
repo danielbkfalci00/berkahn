@@ -11,10 +11,20 @@ import type {
 } from "@/types/orcamento-estimativa"
 
 type ActionResultCreate =
-  | { ok: true; id: string; numero: string }
+  | { ok: true; id: string; numero: string; atualizadoEm: string }
   | { ok: false; erro: string }
 
-type ActionResultUpdate = { ok: true } | { ok: false; erro: string }
+type ActionResultUpdate = { ok: true; atualizadoEm: string } | { ok: false; erro: string; conflito?: boolean }
+
+function revisionError(revision: unknown): ActionResultUpdate | null {
+  return typeof revision === "string" && /^\d{4}-\d{2}-\d{2}T/.test(revision) && Number.isFinite(Date.parse(revision))
+    ? null
+    : { ok: false, conflito: true, erro: "A versão do orçamento não foi informada. Abra a versão atual antes de salvar." }
+}
+
+function revisionConflict(): ActionResultUpdate {
+  return { ok: false, conflito: true, erro: "Este orçamento mudou em outra aba ou por outra pessoa. Suas alterações continuam neste formulário. Confira a versão atual antes de editar novamente." }
+}
 
 async function getAuthorizedAdmin() {
   const admin = await getAdminSession()
@@ -69,15 +79,15 @@ export async function criarOrcamento(
   const { data, error } = await supabase
     .from("orcamentos")
     .insert(payload)
-    .select("id, numero")
+    .select("id, numero, atualizado_em")
     .single()
 
   if (error || !data) {
     return { ok: false, erro: error?.message ?? "Falha ao criar orçamento" }
   }
-  const row = data as { id: string; numero: string }
+  const row = data as { id: string; numero: string; atualizado_em: string }
   revalidateBudget(row.id, clean.lead_id)
-  return { ok: true, id: row.id, numero: row.numero }
+  return { ok: true, id: row.id, numero: row.numero, atualizadoEm: row.atualizado_em }
 }
 
 export async function searchBudgetLeads(rawQuery: string): Promise<Array<{ id: string; nome: string; email: string | null; telefone: string | null }>> {
@@ -95,27 +105,32 @@ export async function searchBudgetLeads(rawQuery: string): Promise<Array<{ id: s
 
 export async function atualizarOrcamento(
   id: string,
-  patch: OrcamentoUpdate
+  patch: OrcamentoUpdate,
+  atualizadoEm: string
 ): Promise<ActionResultUpdate> {
   const admin = await getAuthorizedAdmin()
   if (!admin) return { ok: false, erro: "Não autorizado" }
   const inputError = budgetPatchError(patch)
   if (inputError) return { ok: false, erro: inputError }
-  if (patch.status === "finalizado") return finalizarOrcamento(id, patch)
+  const invalidRevision = revisionError(atualizadoEm)
+  if (invalidRevision) return invalidRevision
+  if (patch.status === "finalizado") return finalizarOrcamento(id, patch, atualizadoEm)
 
   const supabase = admin.supabase
   const { data, error } = await supabase
     .from("orcamentos")
     .update(editablePatch(patch) as never)
     .eq("id", id)
-    .select("id,lead_id")
-    .single()
+    .eq("atualizado_em", atualizadoEm)
+    .select("id,lead_id,atualizado_em")
+    .maybeSingle()
 
   if (error) {
     return { ok: false, erro: error.message }
   }
-  revalidateBudget(id, data?.lead_id)
-  return { ok: true }
+  if (!data) return revisionConflict()
+  revalidateBudget(id, data.lead_id)
+  return { ok: true, atualizadoEm: data.atualizado_em }
 }
 
 export async function criarRascunhoDePlanilha(
@@ -126,46 +141,51 @@ export async function criarRascunhoDePlanilha(
 }
 
 export async function arquivarOrcamento(
-  id: string
+  id: string,
+  atualizadoEm: string
 ): Promise<ActionResultUpdate> {
-  return atualizarOrcamento(id, { status: "arquivado" })
+  return atualizarOrcamento(id, { status: "arquivado" }, atualizadoEm)
 }
 
 export async function desarquivarOrcamento(
-  id: string
+  id: string,
+  atualizadoEm: string
 ): Promise<ActionResultUpdate> {
-  return atualizarOrcamento(id, { status: "rascunho" })
+  return atualizarOrcamento(id, { status: "rascunho" }, atualizadoEm)
 }
 
 export async function finalizarOrcamento(
   id: string,
-  patch: OrcamentoUpdate
+  patch: OrcamentoUpdate,
+  atualizadoEm: string
 ): Promise<ActionResultUpdate> {
   const admin = await getAuthorizedAdmin()
   if (!admin) return { ok: false, erro: "Não autorizado" }
   const inputError = budgetPatchError(patch)
   if (inputError) return { ok: false, erro: inputError }
+  const invalidRevision = revisionError(atualizadoEm)
+  if (invalidRevision) return invalidRevision
 
   const supabase = admin.supabase
-  const { data: current, error: readError } = await supabase.from("orcamentos").select("*").eq("id", id).single()
-  if (readError || !current) return { ok: false, erro: "Orçamento não encontrado" }
+  const { data: current, error: readError } = await supabase.from("orcamentos").select("*").eq("id", id).eq("atualizado_em", atualizadoEm).maybeSingle()
+  if (readError) return { ok: false, erro: "Não foi possível consultar o orçamento. Tente novamente." }
+  if (!current) return revisionConflict()
   const clean = editablePatch(patch)
   const validation = validarTudo({ ...current, ...clean } as OrcamentoInsert)
   if (!validation.ok) return { ok: false, erro: Object.values(validation.erros).join(". ") }
-  const { error } = await supabase
+  const { data: budget, error } = await supabase
     .from("orcamentos")
     .update({ ...clean, status: "finalizado" } as never)
     .eq("id", id)
+    .eq("atualizado_em", atualizadoEm)
+    .select("lead_id,atualizado_em")
+    .maybeSingle()
 
   if (error) {
     return { ok: false, erro: error.message }
   }
-  const { data: budget } = await admin.supabase
-    .from("orcamentos")
-    .select("lead_id")
-    .eq("id", id)
-    .maybeSingle()
-  if (budget?.lead_id) {
+  if (!budget) return revisionConflict()
+  if (budget.lead_id && current.status !== "finalizado") {
     const { error: logError } = await admin.supabase.from("activity_logs").insert({
       user_id: admin.user.id,
       user_name: admin.user.email || "Admin",
@@ -179,5 +199,5 @@ export async function finalizarOrcamento(
     revalidatePath(`/admin/leads/${budget.lead_id}`)
   }
   revalidateBudget(id, budget?.lead_id)
-  return { ok: true }
+  return { ok: true, atualizadoEm: budget.atualizado_em }
 }

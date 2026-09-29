@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState, useTransition } from "react";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
@@ -26,6 +26,7 @@ import {
 } from "@/app/admin/conteudo/actions";
 import { COLUNA_PONTO } from "@/lib/conteudo/colunas";
 import { cn } from "@/lib/utils";
+import { editorialHref, editorialReturnTo } from "@/lib/admin/return-to";
 import { SeloPostVinculado } from "./SeloPostVinculado";
 import type { ItemQuadro } from "./QuadroConteudo";
 
@@ -70,6 +71,8 @@ export function CartaoPauta({
   confirmandoExclusao, aoPedirExclusao, selecionado, aoSelecionar, tagsCatalogo,
 }: Props) {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const returnTo = editorialReturnTo(`/admin/conteudo?${searchParams}`, "/admin/conteudo");
   const [local, setLocal] = useState(pauta);
   const localRef = useRef(pauta);
   const filaSalvamento = useRef<Promise<void>>(Promise.resolve());
@@ -264,7 +267,7 @@ export function CartaoPauta({
             }}
             className="min-w-0 flex-1 rounded border border-neutral-300 px-1.5 py-0.5 text-sm font-medium leading-snug outline-none focus:ring-2 focus:ring-neutral-900" />
         ) : (
-          <Link href={`/admin/conteudo/${local.id}`}
+          <Link href={editorialHref(`/admin/conteudo/${local.id}`, returnTo)}
             className="min-w-0 flex-1 rounded text-sm font-medium leading-snug text-neutral-900 underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900">
             {local.titulo}
           </Link>
@@ -454,7 +457,7 @@ export function CartaoPauta({
             <Loader2 className="h-3 w-3 animate-spin" aria-hidden /> Salvando…
           </p>
         )}
-        <SeloPostVinculado pauta={local} />
+        <SeloPostVinculado pauta={local} returnTo={returnTo} />
       </div>
     </li>
   );

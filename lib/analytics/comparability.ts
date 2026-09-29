@@ -1,6 +1,7 @@
 import { comparisonPolicyFor } from "./comparison-policy.mjs";
 import type { AnalyticsSnapshot, GscIndexation, SnapshotComparability, SnapshotContext } from "@/types/analytics";
 import { isExcludedFromSitemap } from "@/lib/seo/thin-content";
+import { buildActions, buildInsights } from "@/scripts/analytics/lib/insights.mjs";
 
 export function comparisonAvailability(context: Pick<SnapshotContext, "monthSlug" | "comparability">): SnapshotComparability {
   return comparisonPolicyFor(context.monthSlug, context.comparability) as SnapshotComparability;
@@ -96,8 +97,23 @@ export function applySnapshotComparisonPolicy(snapshot: AnalyticsSnapshot): Anal
     ? indexationSafeContext
     : withoutGa4Deltas(indexationSafeContext);
   if (!comparability.gscMoM) context = withoutGscDeltas(context);
+  // Interpretações são derivadas, não fatos coletados. Reutilizar o gerador com
+  // os dados deste mesmo período corrige claims legados sem regravar o histórico
+  // nem consultar títulos, inspeções ou métricas posteriores à coleta original.
+  const evidence = {
+    ga4: { ...context.ga4, topPages: context.ga4.topPages ?? [] },
+    gsc: { ...context.gsc, topPages: context.gsc.topPages ?? [], topQueries: context.gsc.topQueries ?? [] },
+    indexation: context.indexation,
+  };
+  const actions = buildActions(evidence);
   return {
     ...snapshot,
-    context: { ...context, comparability },
+    context: {
+      ...context,
+      comparability,
+      insights: buildInsights(evidence) as SnapshotContext["insights"],
+      ...actions,
+      topAction: actions.actionsP0[0] ?? actions.actionsP1[0] ?? actions.actionsP2[0] ?? { text: "Sem ações priorizadas" },
+    },
   };
 }

@@ -4,22 +4,25 @@ import { PostsTable, type PostListItem } from "@/components/admin/posts/PostsTab
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import type { PostStatus } from "@/types/admin";
+import { redirect } from "next/navigation";
+import { editorialHref, postsListHref } from "@/lib/admin/return-to";
 
 export default async function PostsPage({ searchParams }: {
-  searchParams: Promise<{ q?: string; status?: string; page?: string }>;
+  searchParams: Promise<{ q?: string | string[]; status?: string | string[]; page?: string | string[] }>;
 }) {
   const supabase = await createClient();
   const params = await searchParams;
-  const search = (params.q ?? "").slice(0, 150);
-  const status = ["draft", "published", "scheduled", "archived"].includes(params.status ?? "")
+  const search = typeof params.q === "string" ? params.q.slice(0, 150) : "";
+  const status = typeof params.status === "string" && ["draft", "published", "scheduled", "archived"].includes(params.status)
     ? params.status as PostStatus : "all";
-  const page = Math.max(1, Math.min(100000, Number.parseInt(params.page ?? "1", 10) || 1));
+  const page = Math.max(1, Math.min(100000, Number.parseInt(typeof params.page === "string" ? params.page : "1", 10) || 1));
   const pageSize = 30;
   let total = 0;
 
   // Fetch posts from Supabase
   let posts: PostListItem[] = [];
   let unavailable = false;
+  let invalidPage = false;
   try {
     let query = supabase
       .from('posts')
@@ -32,6 +35,7 @@ export default async function PostsPage({ searchParams }: {
       .range((page - 1) * pageSize, page * pageSize - 1);
 
     if (error) {
+      invalidPage = error.code === "PGRST103" && page > 1;
       unavailable = true;
       console.error('Posts: failed to load posts', error);
     } else if (data) {
@@ -43,6 +47,10 @@ export default async function PostsPage({ searchParams }: {
     console.error('Posts: failed to load posts', error);
   }
 
+  if (invalidPage) redirect(postsListHref(search, status, 1));
+  const lastPage = Math.max(1, Math.ceil(total / pageSize));
+  if (!unavailable && page > lastPage) redirect(postsListHref(search, status, lastPage));
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -52,7 +60,7 @@ export default async function PostsPage({ searchParams }: {
             Gerencie os posts do blog Atualidade
           </p>
         </div>
-        <Link href="/admin/posts/new">
+        <Link href={editorialHref("/admin/posts/new", postsListHref(search, status, page))}>
           <Button className="bg-neutral-900 text-white hover:bg-neutral-800 hover:text-white">
             <Plus className="h-4 w-4 mr-2" />
             Novo Post

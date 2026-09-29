@@ -26,6 +26,7 @@ import {
 import type { Post, PostStatus } from "@/types/admin";
 import { cn } from "@/lib/utils";
 import { deletePost, toggleFeatured } from "@/app/admin/posts/actions";
+import { editorialHref, postsListHref } from "@/lib/admin/return-to";
 
 interface PostsTableProps {
   posts: PostListItem[];
@@ -83,13 +84,8 @@ export function PostsTable({ posts, search, statusFilter, page, pageSize, total 
 
   const filteredPosts = posts;
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
-  const listUrl = (nextPage: number, nextStatus = statusFilter) => {
-    const params = new URLSearchParams();
-    if (search) params.set("q", search);
-    if (nextStatus !== "all") params.set("status", nextStatus);
-    if (nextPage > 1) params.set("page", String(nextPage));
-    return `/admin/posts?${params}`;
-  };
+  const listUrl = (nextPage: number, nextStatus = statusFilter) => postsListHref(search, nextStatus, nextPage);
+  const returnTo = listUrl(page);
 
   const formatDate = (dateString: string | null) => {
     if (!dateString) return "-";
@@ -109,7 +105,8 @@ export function PostsTable({ posts, search, statusFilter, page, pageSize, total 
         alert(`Erro ao excluir post: ${result.error}`);
         return;
       }
-      router.refresh();
+      if (posts.length === 1 && page > 1) router.replace(listUrl(page - 1));
+      else router.refresh();
     } catch (error) {
       console.error("Error deleting post:", error);
       alert("Erro ao excluir post");
@@ -134,7 +131,7 @@ export function PostsTable({ posts, search, statusFilter, page, pageSize, total 
           <ExternalLink className="h-4 w-4" />
         </Link>
       )}
-      <Link href={`/admin/posts/${post.id}`} className="inline-flex size-11 items-center justify-center rounded-lg hover:bg-neutral-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900" aria-label={`Editar ${post.title}`}>
+      <Link href={editorialHref(`/admin/posts/${post.id}`, returnTo)} className="inline-flex size-11 items-center justify-center rounded-lg hover:bg-neutral-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900" aria-label={`Editar ${post.title}`}>
         <Edit className="h-4 w-4" />
       </Link>
       <button
@@ -194,7 +191,7 @@ export function PostsTable({ posts, search, statusFilter, page, pageSize, total 
         ) : filteredPosts.map((post) => (
           <article key={post.id} className="min-w-0 p-4">
             <div className="flex items-start justify-between gap-2">
-              <Link href={`/admin/posts/${post.id}`} className="min-w-0 font-medium text-neutral-900 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900">
+              <Link href={editorialHref(`/admin/posts/${post.id}`, returnTo)} className="min-w-0 font-medium text-neutral-900 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900">
                 {post.title}
               </Link>
               <Badge className={cn("shrink-0", statusConfig[post.status].className)}>{statusConfig[post.status].label}</Badge>

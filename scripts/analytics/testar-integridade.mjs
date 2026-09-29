@@ -1,4 +1,5 @@
 import { execFileSync } from 'node:child_process';
+import assert from 'node:assert/strict';
 import { cpSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -8,6 +9,7 @@ import { computeDelta } from './fetch-gsc.mjs';
 import { buildActions, buildInsights, isKnownInspection } from './lib/insights.mjs';
 import { comparisonPolicyFor } from '../../lib/analytics/comparison-policy.mjs';
 import { isIndexationEligibleSlug } from './lib/posts.mjs';
+import { persistSnapshot, upsertSnapshot } from './lib/supabase-snapshot.mjs';
 
 let failures = 0;
 let total = 0;
@@ -31,12 +33,15 @@ const dir = mkdtempSync(join(tmpdir(), 'analytics-integrity-'));
 cpSync('types/analytics.ts', join(dir, 'types.ts'));
 cpSync('lib/analytics/comparison-breaks.json', join(dir, 'comparison-breaks.json'));
 cpSync('lib/analytics/comparison-policy.mjs', join(dir, 'comparison-policy.mjs'));
+cpSync('scripts/analytics/lib/insights.mjs', join(dir, 'insights.mjs'));
+cpSync('lib/analytics/period.ts', join(dir, 'period.ts'));
 
 writeFileSync(
   join(dir, 'comparability.ts'),
   readFileSync('lib/analytics/comparability.ts', 'utf8')
     .replace('@/types/analytics', './types.js')
     .replace('./comparison-policy.mjs', './comparison-policy.mjs')
+    .replace('@/scripts/analytics/lib/insights.mjs', './insights.mjs')
     .replace(
       'import { isExcludedFromSitemap } from "@/lib/seo/thin-content";',
       'const isExcludedFromSitemap = (slug: string) => slug === "steel-frame-futuro-construcao";'
@@ -57,7 +62,7 @@ writeFileSync(
 
 execFileSync(process.execPath, [
   fileURLToPath(import.meta.resolve('typescript/lib/tsc.js')),
-  join(dir, 'types.ts'), join(dir, 'comparability.ts'), join(dir, 'health-score.ts'), join(dir, 'post-performance.ts'),
+  join(dir, 'types.ts'), join(dir, 'comparability.ts'), join(dir, 'health-score.ts'), join(dir, 'post-performance.ts'), join(dir, 'period.ts'),
   '--module', 'esnext', '--target', 'es2022', '--moduleResolution', 'bundler',
   '--resolveJsonModule', '--esModuleInterop', '--skipLibCheck', '--outDir', dir,
 ], { stdio: 'pipe' });
@@ -65,6 +70,7 @@ execFileSync(process.execPath, [
 const health = await import(pathToFileURL(join(dir, 'health-score.js')).href);
 const posts = await import(pathToFileURL(join(dir, 'post-performance.js')).href);
 const comparison = await import(pathToFileURL(join(dir, 'comparability.js')).href);
+const period = await import(pathToFileURL(join(dir, 'period.js')).href);
 
 const baseContext = {
   monthSlug: '2026-08', indexedCount: 8, totalArticles: 10,
@@ -94,6 +100,67 @@ ok('snapshot legado perde delta GA4', legacy.context.ga4.usersMoMPct === undefin
 ok('resumo legado perde claim MoM', !legacy.context.summary[0].text.includes('MoM'));
 ok('snapshot legado normaliza universo de indexacao', legacy.context.totalArticles === 1 && legacy.context.indexedCount === 1);
 ok('snapshot legado remove acao de redirect', legacy.context.actionsP0.length === 0);
+
+// Context enriched preserva a escala original: CTR em %, tempo em segundos.
+// Os textos antigos são descartados; números, deltas válidos e datas não mudam.
+const oldSnapshot = {
+  month: '2026-09-01', generated_at: '2026-09-23T16:14:41Z',
+  context: {
+    ...baseContext, monthSlug: '2026-09', generatedAt: '2026-09-23 16:14:41',
+    periodStart: '2026-09-01', periodEnd: '2026-09-20', partial: true,
+    ga4: { ...baseContext.ga4, topPages: [{ slug: 'artigo', title: 'Título da coleta', users: 40, avgEngagementTime: 18 }] },
+    gsc: {
+      ...baseContext.gsc,
+      topQueries: [{ query: 'steel frame', clicks: 2, impressions: 500, ctr: 0.4, position: 8 }],
+      topPages: [{ slug: 'artigo', title: 'Título da coleta', clicks: 9, impressions: 300, ctr: 3, position: 14 }],
+    },
+    indexation: [{ slug: 'inspecao-com-falha', verdict: 'ERROR', coverageState: 'unknown', error: 'timeout' }],
+    insights: [{ position: 1, text: 'Subir 5 posições pode triplicar cliques.', impact: 100 }],
+    actionsP0: [{ text: 'Solicitar indexação de inspecao-com-falha.' }],
+    actionsP1: [{ text: 'Reescrever artigo para triplicar cliques.' }],
+  },
+};
+const oldBefore = JSON.stringify(oldSnapshot);
+const refreshed = comparison.applySnapshotComparisonPolicy(oldSnapshot);
+assert.deepEqual(refreshed.context.insights, buildInsights({ ga4: oldSnapshot.context.ga4, gsc: oldSnapshot.context.gsc }));
+ok('leitura equivale ao gerador sobre os mesmos dados', refreshed.context.insights.length === 3);
+ok('leitura nao muta snapshot legado', JSON.stringify(oldSnapshot) === oldBefore);
+ok('datas da coleta permanecem originais', refreshed.generated_at === oldSnapshot.generated_at && refreshed.context.generatedAt === oldSnapshot.context.generatedAt && refreshed.context.periodEnd === oldSnapshot.context.periodEnd);
+ok('delta GSC valido permanece apos nova interpretacao', refreshed.context.gsc.clicksMoMPct === 10 && refreshed.context.gsc.clicksMoMText === '↑ 10%');
+ok('insight conserva escala CTR e evidencia do periodo', refreshed.context.insights.some((item) => item.evidence.includes('CTR 0.4%')));
+ok('claims antigos nao chegam ao painel', !JSON.stringify(refreshed.context.insights).includes('triplicar'));
+ok('acao legada de inspecao invalida desaparece', refreshed.context.actionsP0.length === 0);
+ok('P2 nao infere bounce de tempo baixo', refreshed.context.actionsP2[0].text.includes('40 usuários') && !refreshed.context.actionsP2[0].text.includes('bounce'));
+assert.deepEqual(refreshed.context.actionsP1, buildActions({ ga4: oldSnapshot.context.ga4, gsc: oldSnapshot.context.gsc, indexation: [] }).actionsP1);
+
+console.log('frescor da coleta e confirmacao de publicacao');
+const freshness = (input, date) => period.snapshotFreshnessNotice(input, new Date(`${date}T15:00:00Z`));
+const currentPartial = { monthSlug: '2026-09', periodEnd: '2026-09-20', partial: true };
+ok('cadencia semanal mais lag nao gera alarme precoce', freshness(currentPartial, '2026-09-29') === null);
+ok('coleta atrasada informa ultima cobertura', freshness({ ...currentPartial, periodEnd: '2026-09-18' }, '2026-09-29')?.includes('Atualização pendente'));
+ok('historico fechado nao fica vencido', freshness({ monthSlug: '2025-01', periodEnd: '2025-01-31', partial: false }, '2026-09-29') === null);
+ok('aguarda dia 4 para cobrar fechamento', freshness(currentPartial, '2026-10-03') === null);
+ok('parcial passado exige fechamento apos dia 4', freshness(currentPartial, '2026-10-04')?.includes('Fechamento pendente'));
+
+const uploadInput = { monthSlug: '2026-09', ga4: {}, gsc: {}, ga4Prev: null, gscPrev: null, context: oldSnapshot.context };
+let requestCount = 0;
+const confirmedUpload = (input) => upsertSnapshot(input, { request: async (method, url, body, headers) => {
+  requestCount++;
+  assert.equal(method, 'POST');
+  assert.ok(url.endsWith('?select=month,generated_at'));
+  assert.equal(headers.Prefer, 'resolution=merge-duplicates,return=representation');
+  assert.equal(body[0].context.periodEnd, '2026-09-20');
+  return [{ month: body[0].month, generated_at: body[0].generated_at }];
+} });
+ok('sucesso hospedado exige gravacao confirmada', await persistSnapshot(uploadInput, { required: true, serviceKey: 'mock', upload: confirmedUpload }) === true && requestCount === 1);
+await assert.rejects(() => persistSnapshot(uploadInput, { required: true, serviceKey: '', upload: confirmedUpload }), /ausente/);
+ok('chave ausente falha antes do upload', requestCount === 1);
+await assert.rejects(() => persistSnapshot(uploadInput, { required: true, serviceKey: 'mock', upload: async () => { throw new Error('gravação recusada'); } }), /gravação recusada/);
+await assert.rejects(() => upsertSnapshot(uploadInput, { request: async () => [] }), /não foi confirmada/);
+await assert.rejects(() => upsertSnapshot(uploadInput, { request: async () => [{ month: '2026-09-01', generated_at: '2020-01-01T00:00:00Z' }] }), /não foi confirmada/);
+const localWarnings = [];
+ok('modo local preserva artefato e sinaliza falha', await persistSnapshot(uploadInput, { serviceKey: '', warn: (message) => localWarnings.push(message) }) === false && localWarnings.length === 1);
+ok('workflow exige persistencia', readFileSync('.github/workflows/analytics-monthly.yml', 'utf8').includes('ANALYTICS_REQUIRE_PERSISTENCE: "true"'));
 
 const missingGscBaseline = comparison.applySnapshotComparisonPolicy({
   context: {

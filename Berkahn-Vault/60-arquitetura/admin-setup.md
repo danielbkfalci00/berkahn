@@ -6,7 +6,7 @@ tags:
   - ai/context
   - project/site
   - domain/admin
-ai_summary: Sistema Admin Berkahn com contas individuais, quatro papéis, CRM em /admin/leads e PWA/Web Push por usuário e dispositivo. Migrations 024–034 (LGPD em 032, busca trigram em 033, mural de feedback em 034), retenção e dispatcher estão ativos; analytics mensal roda hospedado no GitHub Actions. Melhorias de 29/09 conciliadas com main no PR #118; migração 20260929141528 aplicada no serviço hospedado, deploy em validação.
+ai_summary: Sistema Admin Berkahn com contas individuais, quatro papéis, CRM em /admin/leads e PWA/Web Push por usuário e dispositivo. Migrations 024–034 e 20260929141528 ativas; PR118 publicado com testes SQL e smoke autenticado. Continuação no PR119 adiciona confirmação dos snapshots, proteção de concorrência nos orçamentos e retorno aos filtros editoriais, com CI completo aprovado.
 status: active
 projeto: site
 escopo: berkahn
@@ -28,7 +28,7 @@ Critérios de aceite no repositório (a ativação hospedada é separada):
 - [x] Banco: migration aditiva para os contratos novos, guardas de papel e agregados corretos, sem apagar acervo.
 - [x] Verificação: testes de regressão, lint, typecheck e build serializados; registrar limites reais de SQL/produção.
 
-Aplicação e deploy autorizados em 29/09. A migration hospedada foi aplicada em 29/09/2026 às 13h11 BRT, após dry-run com ROLLBACK e testes transacionais; o deploy está em validação no PR118. Não iniciar Docker/WSL, Supabase local, n8n nem servidores persistentes. O smoke visual autenticado continua separado da evidência estática e dos testes locais.
+Aplicação e deploy autorizados em 29/09. A migration hospedada foi aplicada em 29/09/2026 às 13h11 BRT, após dry-run com ROLLBACK e testes transacionais. O PR118 foi integrado em `ee1157a` e publicado nos dois projetos Vercel (site e ADMIN). Não iniciar Docker/WSL, Supabase local, n8n nem servidores persistentes.
 
 
 ### Entrega no repositório
@@ -63,11 +63,21 @@ Isso mede JavaScript inicial associado à rota, não tempo real de resposta, tra
 
 Migration preparada: `supabase/migrations/20260929141528_admin_reliability.sql`. Deve ser aplicada **antes** do deploy correspondente. Contém colunas/índices, RPCs atômicas, guardas de papel, agregados com RLS e extensão da retenção. A normalização dos telefones legados preserva `atualizado_em`, para não reiniciar o prazo de retenção. O backfill de materiais usa somente os quatro marcadores determinísticos da captura antiga.
 
-A migration foi aplicada no projeto hospedado `sfqaknxomxwmviarpwfy` (SHA-256 `9185309e792c5b0f6ed603db4335a69c19ee8dd437b19f7043eb167e0ac635a2`). As definições anteriores das funções foram guardadas localmente, sem exportação dos dados dos leads. A conciliação parte de main `40b78e9`, preserva as migrations 032–034 e os recursos recentes de feedback, LGPD, WhatsApp e gestos. Deploy, regeneração dos snapshots históricos e smoke visual autenticado ainda não foram concluídos. Os relatórios existentes não são corrigidos retroativamente pelo novo coletor; a próxima geração aplica as regras novas. A contagem do dashboard distingue ausência dos novos campos de um valor zero.
+A migration foi aplicada no projeto hospedado `sfqaknxomxwmviarpwfy` (SHA-256 `9185309e792c5b0f6ed603db4335a69c19ee8dd437b19f7043eb167e0ac635a2`). As definições anteriores das funções foram guardadas localmente, sem exportação dos dados dos leads. A conciliação preservou as migrations 032–034 e os recursos recentes de feedback, LGPD, WhatsApp e gestos. CI do main `36597492753` e deploys Vercel concluídos. O smoke autenticado verificou Dashboard, Leads, Conteúdo, Orçamentos e Analytics; as telas verificadas em 320 px não apresentaram overflow horizontal. Site público e login responderam 200, API de orçamentos sem autenticação respondeu 401 e `/dev-harness` respondeu 404. Nenhum registro comercial foi alterado no smoke. Os snapshots históricos não foram recalculados; a contagem do dashboard distingue ausência dos novos campos de um valor zero.
 
-Checks SQL preparados (exigem banco já migrado e execução autorizada): `npm run test:admin:db` testa staging/publicação/versões/RLS dentro de rollback; `npm run test:leads` testa CRM/RLS/atendimento/retenção de marcos e idempotência dentro de rollback. Esses checks não iniciam infraestrutura.
+Checks SQL executados antes e depois da aplicação, sempre com rollback: `npm run test:admin:db` verifica staging/publicação/versões/RLS; `npm run test:leads` verifica CRM/RLS/atendimento/retenção de marcos e idempotência. Esses checks não iniciam infraestrutura.
 
-Smoke após implantação: testar os quatro papéis, editar e sair por link/histórico/logout, atendimento com e sem próxima ação, lead→orçamento→registro de envio, PDF vencido e alterado, preferências/dispositivo revogado, Analytics parcial/fonte indisponível e impressão das abas sob demanda.
+Cobertura manual ainda pendente: matriz dos quatro papéis, confirmação nativa de saída com edição, lead→orçamento→registro de envio, PDF vencido/alterado, dispositivo revogado e impressão completa das abas. A proteção de navegação tem testes automatizados; a tentativa de validar o diálogo nativo no navegador ficou inconclusiva e não foi registrada como aprovada.
+
+### Continuação dos sprints: dados e continuidade dos fluxos
+
+- **Analytics:** `lib/analytics/comparability.ts` reutiliza o gerador de insights com os dados do próprio período, removendo interpretações legadas sem regravar fatos, datas ou comparações válidas. `AnalyticsHeader` sinaliza cobertura atrasada e fechamento pendente, respeitando a coleta semanal e o lag de três dias do GSC. O pipeline hospedado exige confirmação da persistência em `analytics_snapshots`; erros de publicação deixam de aparecer como sucesso.
+- **Orçamentos:** edição, finalização, arquivamento, capa e geração de PDF comparam a revisão exata de `atualizado_em`. Conflito mantém os dados do formulário e orienta conferir a versão atual. A API devolve a nova revisão e aceita `If-Match` nas operações correspondentes. Remover a capa passa a persistir a remoção; o download valida novamente a revisão do PDF.
+- **Continuidade editorial:** listas de Posts e Conteúdo preservam busca, filtros e página ao abrir, salvar e voltar. O retorno pauta→editor→pauta mantém a origem no quadro. `lib/admin/return-to.ts` centraliza a allowlist porque o CRM tinha apenas uma validação inline, sem helper reutilizável. A paginação se recupera após excluir o último item ou abrir uma página fora do total.
+
+Regressões incorporadas nos testes existentes `test:analytics`, `test:crm` e `test:admin`, sem uma segunda infraestrutura de testes. Este lote não exige migration. O CI [36609723266](https://github.com/danielbkfalci00/berkahn/actions/runs/36609723266) aprovou lint, TypeScript, conteúdo, CRM, navegação, build e analytics no código do [PR119](https://github.com/danielbkfalci00/berkahn/pull/119). A primeira tentativa encontrou uma variável reservada no teste; foi corrigida antes da aprovação. Builds locais foram evitados porque havia verificações TypeScript de outras tarefas em execução. A nova tentativa de smoke pelo navegador integrado não conseguiu abrir a aba de teste; nenhuma aba temporária ficou aberta e nenhum dado comercial foi alterado. Capas anteriores são preservadas fisicamente porque podem ser compartilhadas/importadas; somente uploads novos rejeitados pela gravação são limpos.
+
+O workflow [36610054808](https://github.com/danielbkfalci00/berkahn/actions/runs/36610054808), executado com o código já aprovado pelo CI, confirmou a publicação do parcial de setembro. Consulta de leitura no Supabase verificou coleta em `2026-09-29T18:14:39.453Z`, período de 01 a 26/09, 26 dias e `partial: true`; o claim antigo sobre triplicar cliques não consta mais do snapshot. Históricos fechados permanecem armazenados como coletados. Próximo foco: completar a matriz de smoke manual pendente acima, incluindo dois editores e geração/download de PDF após troca de capa.
 
 > [!info] Migração para vault
 > Este arquivo era duplicado em `Docs/ADMIN_SETUP.md` e `Docs/site/ADMIN_SETUP.md`. Consolidado aqui como fonte única. Referenciado por [[stack-nextjs-supabase]].

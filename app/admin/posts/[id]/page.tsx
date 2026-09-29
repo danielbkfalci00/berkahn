@@ -7,10 +7,12 @@ interface EditPostPageProps {
   params: Promise<{
     id: string;
   }>;
+  searchParams: Promise<{ returnTo?: string }>;
 }
 
-export default async function EditPostPage({ params }: EditPostPageProps) {
+export default async function EditPostPage({ params, searchParams }: EditPostPageProps) {
   const { id } = await params;
+  const { returnTo } = await searchParams;
   const supabase = await createClient();
 
   // Fetch post from Supabase
@@ -32,7 +34,7 @@ export default async function EditPostPage({ params }: EditPostPageProps) {
   const { data: revision, error: revisionError } = await supabase.from('conteudo_pautas')
     .select('id,atualizado_em,post_draft_payload').eq('post_id', id).maybeSingle();
   if (revisionError) throw new Error("Não foi possível carregar a revisão editorial.");
-  return <PostEditor post={postWithComponents} revision={revision ? {
+  return <PostEditor post={postWithComponents} returnTo={returnTo} revision={revision ? {
     pautaId: revision.id,
     updatedAt: revision.atualizado_em,
     payload: revision.post_draft_payload as PostInsert | null,
