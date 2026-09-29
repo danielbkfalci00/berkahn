@@ -51,12 +51,12 @@ assert.equal(isOrcamentoPdfCurrent({ ...budget, valor_min: 101, pdf_revision_has
 // Executa as actions e a rota reais, substituindo apenas banco, storage e Next.
 function loadCommonModule(source, imports) {
   const output = ts.transpileModule(source, { compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.CommonJS, esModuleInterop: true } }).outputText;
-  const module = { exports: {} };
+  const testModule = { exports: {} };
   new Function('require', 'module', 'exports', output)((name) => {
     assert.ok(Object.hasOwn(imports, name), `Import inesperado: ${name}`);
     return imports[name];
-  }, module, module.exports);
-  return module.exports;
+  }, testModule, testModule.exports);
+  return testModule.exports;
 }
 const wizardModule = loadCommonModule(wizardSource, { '@/types/orcamento-estimativa': { CARDS_ENTREGA_DEFAULT: ['engenharia'] } });
 const actionsSource = readFileSync(new URL('../app/admin/orcamentos/actions.ts', import.meta.url), 'utf8');
