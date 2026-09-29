@@ -57,6 +57,7 @@ export default async function LeadsPage({ searchParams }: PageProps) {
   const session = await getAdminSession();
   if (!session || !["owner", "comercial"].includes(session.membership.role)) throw new Error("Não autorizado.");
   const supabase = session.supabase;
+  const currentResponsibleId = session.membership.id;
   const safeSearch = params.q?.trim().slice(0, 120).replace(/[,()%]/g, " ");
   const localStageCandidate = view === "inbox" && ![
     params.q, params.canal, params.segmento, params.prioridade, params.responsavel,
@@ -87,7 +88,7 @@ export default async function LeadsPage({ searchParams }: PageProps) {
     if (["contato", "material"].includes(params.captacao || "")) query = query.eq("tipo_captacao", params.captacao!);
     if (params.segmento) query = query.eq("segmento", params.segmento);
     if (params.prioridade) query = query.eq("prioridade", params.prioridade);
-    if (params.meus === "1") query = query.eq("responsavel_id", session.membership.id);
+    if (params.meus === "1") query = query.eq("responsavel_id", currentResponsibleId);
     else if (params.semResponsavel === "1") query = query.is("responsavel_id", null);
     else if (params.responsavel) query = query.eq("responsavel_id", params.responsavel);
     if (params.periodo && ["7", "28", "90"].includes(params.periodo)) {

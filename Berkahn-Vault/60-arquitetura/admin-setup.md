@@ -6,7 +6,7 @@ tags:
   - ai/context
   - project/site
   - domain/admin
-ai_summary: Sistema Admin Berkahn com contas individuais, quatro papéis, CRM em /admin/leads e PWA/Web Push por usuário e dispositivo. Migrations 024–034 (LGPD em 032, busca trigram em 033, mural de feedback em 034), retenção e dispatcher estão ativos; analytics mensal roda hospedado no GitHub Actions. Integração das melhorias de 29/09 e migração 20260929141528 em preparação para publicação autorizada.
+ai_summary: Sistema Admin Berkahn com contas individuais, quatro papéis, CRM em /admin/leads e PWA/Web Push por usuário e dispositivo. Migrations 024–034 (LGPD em 032, busca trigram em 033, mural de feedback em 034), retenção e dispatcher estão ativos; analytics mensal roda hospedado no GitHub Actions. Melhorias de 29/09 conciliadas com main no PR #118; migração 20260929141528 aplicada no serviço hospedado, deploy em validação.
 status: active
 projeto: site
 escopo: berkahn
@@ -28,7 +28,7 @@ Critérios de aceite no repositório (a ativação hospedada é separada):
 - [x] Banco: migration aditiva para os contratos novos, guardas de papel e agregados corretos, sem apagar acervo.
 - [x] Verificação: testes de regressão, lint, typecheck e build serializados; registrar limites reais de SQL/produção.
 
-Aplicação da migration hospedada e deploy não fazem parte das ações já executadas. Não iniciar Docker/WSL, Supabase local, n8n nem servidores persistentes. O smoke visual autenticado continua separado da evidência estática e dos testes locais.
+Aplicação e deploy autorizados em 29/09. A migration hospedada foi aplicada em 29/09/2026 às 13h11 BRT, após dry-run com ROLLBACK e testes transacionais; o deploy está em validação no PR118. Não iniciar Docker/WSL, Supabase local, n8n nem servidores persistentes. O smoke visual autenticado continua separado da evidência estática e dos testes locais.
 
 
 ### Entrega no repositório
@@ -63,7 +63,7 @@ Isso mede JavaScript inicial associado à rota, não tempo real de resposta, tra
 
 Migration preparada: `supabase/migrations/20260929141528_admin_reliability.sql`. Deve ser aplicada **antes** do deploy correspondente. Contém colunas/índices, RPCs atômicas, guardas de papel, agregados com RLS e extensão da retenção. A normalização dos telefones legados preserva `atualizado_em`, para não reiniciar o prazo de retenção. O backfill de materiais usa somente os quatro marcadores determinísticos da captura antiga.
 
-A aplicação hospedada, deploy, regeneração dos snapshots históricos e smoke autenticado não foram executados nesta tarefa. Os relatórios existentes não são corrigidos retroativamente pelo novo coletor; a próxima geração aplica as regras novas. A contagem do dashboard distingue ausência dos novos campos de um valor zero.
+A migration foi aplicada no projeto hospedado `sfqaknxomxwmviarpwfy` (SHA-256 `9185309e792c5b0f6ed603db4335a69c19ee8dd437b19f7043eb167e0ac635a2`). As definições anteriores das funções foram guardadas localmente, sem exportação dos dados dos leads. A conciliação parte de main `40b78e9`, preserva as migrations 032–034 e os recursos recentes de feedback, LGPD, WhatsApp e gestos. Deploy, regeneração dos snapshots históricos e smoke visual autenticado ainda não foram concluídos. Os relatórios existentes não são corrigidos retroativamente pelo novo coletor; a próxima geração aplica as regras novas. A contagem do dashboard distingue ausência dos novos campos de um valor zero.
 
 Checks SQL preparados (exigem banco já migrado e execução autorizada): `npm run test:admin:db` testa staging/publicação/versões/RLS dentro de rollback; `npm run test:leads` testa CRM/RLS/atendimento/retenção de marcos e idempotência dentro de rollback. Esses checks não iniciam infraestrutura.
 
