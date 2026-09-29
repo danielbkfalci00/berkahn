@@ -52,7 +52,7 @@ assert.equal(isOrcamentoPdfCurrent({ ...budget, valor_min: 101, pdf_revision_has
 
 // Executa as actions e a rota reais, substituindo apenas banco, storage e Next.
 function loadCommonModule(source, imports) {
-  const output = ts.transpileModule(source, { compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.CommonJS, esModuleInterop: true } }).outputText;
+  const output = ts.transpileModule(source, { compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.CommonJS, esModuleInterop: true, jsx: ts.JsxEmit.ReactJSX } }).outputText;
   const testModule = { exports: {} };
   new Function('require', 'module', 'exports', output)((name) => {
     assert.ok(Object.hasOwn(imports, name), `Import inesperado: ${name}`);
@@ -67,6 +67,82 @@ const actionsSource = readFileSync(new URL('../app/admin/orcamentos/actions.ts',
 const heroSource = readFileSync(new URL('../app/api/admin/orcamentos/[id]/hero/route.ts', import.meta.url), 'utf8');
 const pdfUrlSource = readFileSync(new URL('../app/api/admin/orcamentos/[id]/pdf-url/route.ts', import.meta.url), 'utf8');
 const initialRevision = '2026-09-29T16:00:00.000000+00:00';
+
+// Preserve the origin after real wizard saves/finalization and spreadsheet import.
+{
+  const returns = loadCommonModule(readFileSync(new URL('../lib/admin/return-to.ts', import.meta.url), 'utf8'), {});
+  const context = returns.leadHref('12345678-1234-1234-1234-123456789abc', '/admin/leads?q=Casa&page=3');
+  const slots = [], destinations = [], dirty = [];
+  let cursor = 0;
+  const react = {
+    useState(initial) {
+      const i = cursor++;
+      if (!(i in slots)) slots[i] = typeof initial === 'function' ? initial() : initial;
+      return [slots[i], (value) => { slots[i] = typeof value === 'function' ? value(slots[i]) : value; }];
+    },
+    useReducer(reduce, initial) { const [value, set] = react.useState(initial); return [value, (action) => set((state) => reduce(state, action))]; },
+    useRef(initial) { const i = cursor++; slots[i] ??= { current: initial }; return slots[i]; },
+    useCallback(callback) { cursor++; return callback; },
+    useMemo(compute) { cursor++; return compute(); },
+  };
+  const element = (type, props) => ({ type, props });
+  const symbols = new Proxy({}, { get: (_, name) => String(name) });
+  const imports = {
+    react, 'react/jsx-runtime': { jsx: element, jsxs: element },
+    'next/navigation': { useRouter: () => ({ push: (path) => destinations.push(path) }) },
+    'next/link': { __esModule: true, default: 'Link' },
+    '@/lib/admin/return-to': returns,
+    '@/hooks/use-unsaved-changes': { useUnsavedChanges: (value) => dirty.push(value) },
+    'lucide-react': symbols, '@/components/ui/card': symbols, '@/components/ui/button': symbols,
+    '@/lib/utils': { cn: (...args) => args.filter(Boolean).join(' ') },
+    './wizard-state': wizardModule,
+    ...Object.fromEntries(['Step1Cliente', 'Step2Obra', 'Step3ValoresRegime', 'Step4ListasEntrega', 'Step5Revisao'].map((name) => [`./steps/${name}`, symbols])),
+    '@/app/admin/orcamentos/actions': {
+      async criarOrcamento() { throw new Error('This case edits an existing draft'); },
+      async atualizarOrcamento() { return { ok: true, atualizadoEm: initialRevision }; },
+      async finalizarOrcamento() { return { ok: true, atualizadoEm: initialRevision }; },
+      async criarRascunhoDePlanilha() { return { ok: true, id: 'imported' }; },
+    },
+  };
+  function nodes(tree, predicate) {
+    if (Array.isArray(tree)) return tree.flatMap((child) => nodes(child, predicate));
+    if (!tree?.props) return [];
+    return [...(predicate(tree) ? [tree] : []), ...nodes(tree.props.children, predicate)];
+  }
+  const wizard = loadCommonModule(readFileSync(new URL('../components/admin/orcamentos/OrcamentoWizard.tsx', import.meta.url), 'utf8'), imports).OrcamentoWizard;
+  const record = { ...wizardModule.initialState().dados, id: 'existing', numero: 'TEST-1', atualizado_em: initialRevision, cliente_nome: 'Teste', obra_endereco: 'Rua de teste', obra_cidade: 'Cidade', projeto_area_m2: 100, valor_min: 100, valor_max: 200, valor_m2_min: 1, valor_m2_max: 2 };
+  const render = () => { cursor = 0; return wizard({ orcamentoInicial: record, returnTo: context }); };
+  let tree = render();
+  nodes(tree, (node) => node.type === 'Step1Cliente')[0].props.onChange('cliente_nome', 'Teste revisado');
+  tree = render();
+  assert.equal(dirty.at(-1), true);
+  const button = (tree, name) => nodes(tree, (node) => node.type === 'Button' && JSON.stringify(node.props.children).includes(name))[0];
+  await button(tree, 'Salvar rascunho').props.onClick();
+  tree = render();
+  assert.equal(dirty.at(-1), false);
+  assert.equal(nodes(tree, (node) => node.type === 'Link')[0].props.href, returns.commercialHref('/admin/orcamentos/existing', context));
+  await button(tree, 'Finalizar').props.onClick();
+  assert.equal(destinations.at(-1), returns.commercialHref('/admin/orcamentos/existing', context));
+
+  slots.length = 0;
+  const upload = loadCommonModule(readFileSync(new URL('../components/admin/orcamentos/PlanilhaUpload.tsx', import.meta.url), 'utf8'), imports).PlanilhaUpload;
+  const realFetch = globalThis.fetch;
+  globalThis.fetch = async () => Response.json({ row: { cliente_nome: 'Teste importação' }, erros: [], warnings: [] });
+  try {
+    cursor = 0;
+    tree = upload({ returnTo: context });
+    nodes(tree, (node) => node.type === 'input' && node.props.type === 'file')[0].props.onChange({ target: { files: [new File(['data'], 'teste.csv')] } });
+    // File selection starts an async parse from an event handler with no return value.
+    await new Promise((resolve) => setImmediate(resolve));
+    cursor = 0;
+    tree = upload({ returnTo: context });
+    const open = nodes(tree, (node) => node.type === 'Button' && !node.props.disabled && JSON.stringify(node.props.children).includes('wizard'))[0];
+    assert.ok(open, 'Parsed spreadsheet offers the existing wizard action');
+    await open.props.onClick();
+    assert.equal(destinations.at(-1), returns.commercialHref('/admin/orcamentos/imported/edit', context));
+  } finally { globalThis.fetch = realFetch; }
+}
+
 function createBudgetHarness({ onUpdate, signingFails = false, loseFirstCreateResponse = false, normalizeStoredValues = (value) => value } = {}) {
   let version = 0;
   let responseLost = false;

@@ -1,5 +1,6 @@
 "use client"
 
+import { commercialHref } from "@/lib/admin/return-to"
 import Link from "next/link"
 import { BaixarPdfButton } from "./BaixarPdfButton"
 import { Card } from "@/components/ui/card"
@@ -8,6 +9,7 @@ import { FileText, FileSpreadsheet } from "lucide-react"
 import type { OrcamentoListItem } from "@/types/orcamento-estimativa"
 
 interface Props {
+  returnTo?: string
   orcamentos: OrcamentoListItem[]
 }
 
@@ -40,7 +42,7 @@ const STATUS_VARIANT: Record<OrcamentoListItem["status"], "default" | "secondary
   arquivado: "outline",
 }
 
-export function OrcamentosTable({ orcamentos }: Props) {
+export function OrcamentosTable({ orcamentos, returnTo = "/admin/orcamentos" }: Props) {
   if (orcamentos.length === 0) {
     return (
       <Card className="p-12">
@@ -67,7 +69,7 @@ export function OrcamentosTable({ orcamentos }: Props) {
             <div className="flex items-start justify-between gap-3">
               <div className="min-w-0">
                 <p className="font-mono text-xs text-neutral-500">{o.numero}</p>
-                <Link href={`/admin/orcamentos/${o.id}`} className="mt-1 block font-semibold text-neutral-900 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900">
+                <Link href={commercialHref(`/admin/orcamentos/${o.id}`, returnTo)} className="mt-1 block font-semibold text-neutral-900 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900">
                   {o.cliente_nome}
                 </Link>
               </div>
@@ -77,7 +79,7 @@ export function OrcamentosTable({ orcamentos }: Props) {
             <p className="mt-1 text-sm font-medium tabular-nums text-neutral-900">{formatarMoeda(o.valor_min)} – {formatarMoeda(o.valor_max)}</p>
             <p className="mt-1 text-xs text-neutral-500">{formatarData(o.data_elaboracao)}</p>
             <div className="mt-3 flex gap-2 border-t border-neutral-100 pt-3">
-              <Link href={`/admin/orcamentos/${o.id}`} className="inline-flex min-h-11 items-center gap-2 rounded-lg border border-neutral-200 px-4 text-sm font-medium text-neutral-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900">
+              <Link href={commercialHref(`/admin/orcamentos/${o.id}`, returnTo)} className="inline-flex min-h-11 items-center gap-2 rounded-lg border border-neutral-200 px-4 text-sm font-medium text-neutral-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900">
                 <FileText className="h-4 w-4" /> Abrir
               </Link>
               {o.pdf_storage_path && <BaixarPdfButton orcamentoId={o.id} label={o.pdf_generated_at ? "Baixar PDF" : "PDF do acervo"} filename={`Orcamento-${o.numero}.pdf`} />}
@@ -116,7 +118,7 @@ export function OrcamentosTable({ orcamentos }: Props) {
                 <td className="px-4 py-3 text-right">
                   <div className="flex items-center justify-end gap-2">
                     <Link
-                      href={`/admin/orcamentos/${o.id}`}
+                      href={commercialHref(`/admin/orcamentos/${o.id}`, returnTo)}
                       className="inline-flex min-h-11 items-center gap-1 rounded px-2 text-xs text-neutral-700 hover:text-neutral-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-neutral-900"
                     >
                       <FileText className="h-3.5 w-3.5" />

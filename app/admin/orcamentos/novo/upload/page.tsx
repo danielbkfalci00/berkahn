@@ -1,13 +1,15 @@
+import { commercialHref, commercialReturnTo } from "@/lib/admin/return-to"
 import Link from "next/link"
 import { ArrowLeft, FileSpreadsheet, Download } from "lucide-react"
 import { Card } from "@/components/ui/card"
 import { PlanilhaUpload } from "@/components/admin/orcamentos/PlanilhaUpload"
 
-export default function NovoOrcamentoUploadPage() {
+export default async function NovoOrcamentoUploadPage({ searchParams }: { searchParams: Promise<{ returnTo?: string | string[] }> }) {
+  const returnTo = commercialReturnTo((await searchParams).returnTo)
   return (
     <div className="space-y-6">
       <Link
-        href="/admin/orcamentos/novo"
+        href={commercialHref("/admin/orcamentos/novo", returnTo)}
         className="inline-flex items-center gap-1 text-xs text-neutral-500 hover:text-neutral-900"
       >
         <ArrowLeft className="h-3 w-3" />
@@ -54,7 +56,7 @@ export default function NovoOrcamentoUploadPage() {
         <h2 className="text-base font-semibold text-neutral-900 mb-3">
           2. Preencher e subir
         </h2>
-        <PlanilhaUpload />
+        <PlanilhaUpload returnTo={returnTo} />
       </div>
     </div>
   )

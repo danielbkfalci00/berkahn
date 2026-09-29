@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useCallback, useRef } from "react"
+import { commercialHref } from "@/lib/admin/return-to"
 import { useRouter } from "next/navigation"
 import {
   Upload,
@@ -97,7 +98,7 @@ function formatarCelula(
   return String(valor)
 }
 
-export function PlanilhaUpload() {
+export function PlanilhaUpload({ returnTo = "/admin/orcamentos" }: { returnTo?: string }) {
   const router = useRouter()
   const inputRef = useRef<HTMLInputElement>(null)
   const operationPending = useRef(false)
@@ -185,14 +186,14 @@ export function PlanilhaUpload() {
         setExistenteId(res.existenteId ?? null)
         return
       }
-      router.push(`/admin/orcamentos/${res.id}/edit`)
+      router.push(commercialHref(`/admin/orcamentos/${res.id}/edit`, returnTo))
     } catch {
       setEstado("preview")
       setMensagem("Não foi possível confirmar a criação. Tente novamente; a mesma tentativa não criará outro rascunho.")
     } finally {
       operationPending.current = false
     }
-  }, [resp, router])
+  }, [resp, router, returnTo])
 
   const podeAbrir =
     estado === "preview" && resp?.row !== null && (resp?.erros.length ?? 0) === 0
@@ -337,7 +338,7 @@ export function PlanilhaUpload() {
                 <AlertCircle className="h-4 w-4 flex-shrink-0 mt-0.5" />
                 <span>{mensagem}</span>
               </div>
-              {existenteId && <a href={`/admin/orcamentos/${existenteId}`} target="_blank" rel="noopener noreferrer" className="mt-2 inline-flex min-h-11 items-center text-sm underline">Conferir orçamento existente em outra aba</a>}
+              {existenteId && <a href={commercialHref(`/admin/orcamentos/${existenteId}`, returnTo)} target="_blank" rel="noopener noreferrer" className="mt-2 inline-flex min-h-11 items-center text-sm underline">Conferir orçamento existente em outra aba</a>}
             </Card>
           )}
 
