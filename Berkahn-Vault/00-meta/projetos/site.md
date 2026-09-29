@@ -181,6 +181,8 @@ Site em produção (Next.js 16 App Router + Supabase + Vercel + Tailwind + shadc
 
 ## Histórico recente
 
+- 2026-09-29: mensagem pré-preenchida do WhatsApp deixou de expor código interno (PR [#120](https://github.com/danielbkfalci00/berkahn/pull/120)). Antes `components/layout/WhatsAppButton.tsx` anexava "Origem no site: /atualidades/slug · whatsapp_flutuante", que o visitante via e enviava. Agora, no clique, entra uma frase natural: título do artigo ou projeto (lido do `h1`), frase fixa para páginas principais (mapa `PAGINAS`) ou "Vim pelo site.". Vale para todo `TrackedWhatsAppLink`. O identificador técnico do botão segue só no GA4 (`whatsapp_click` com `cta_location` e `page_path`).
+
 - 2026-09-22: admin fechado em produção. Auditoria de 74 achados (#94), LGPD e busca (032/033), mural de feedback com CLI (#96, migration 034) e PWA abrindo em `/admin`. Tudo conferido em produção e no banco. Ver [[admin-setup]] e [[admin-feedback]].
 
 - 2026-09-10: `/sustentabilidade` concluída na branch `feat/sustentabilidade`: seis cenas mais CTA, 192px de respiro, fotografia híbrida, parede 3D como gesto central e cor como virada narrativa. Permaneceram somente três figuras com fonte e a ressalva do ACV brasileiro. Todas as cenas passaram por captura e medição em quatro viewports, inclusive movimento reduzido e JavaScript desligado; lint, typecheck e build verdes. PR #80 segue aberto, sem merge ou deploy. Ver [[retomada-sustentabilidade]].
