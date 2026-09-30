@@ -33,8 +33,8 @@ export function narrativeAct0Status(
   }[health.status];
   const monthName = ctx.partial ? `${ctx.monthLabel} (parcial)` : ctx.monthLabel;
   const parts = [`${monthName} ${statusWord}`];
-  if (win) parts.push(`maior ganho: ${win}`);
-  if (redFlag) parts.push(`maior risco: ${redFlag}`);
+  if (win) parts.push(`Maior ganho: ${win}`);
+  if (redFlag) parts.push(`Maior risco: ${redFlag}`);
   return parts.map((part) => part.replace(/\.+$/, "")).join(". ") + ".";
 }
 

@@ -254,7 +254,7 @@ const summaryWithRisk = narrative.narrativeAct0Status(
   { monthLabel: 'Setembro/2026', partial: true }, { status: 'good' }, null,
   '1 artigo antes indexado agora sem indexação confirmada: Reforma tributária.',
 );
-ok('resumo com risco pontuado tem um unico ponto final', summaryWithRisk.endsWith('Reforma tributária.') && !summaryWithRisk.endsWith('Reforma tributária..'));
+ok('resumo com risco pontuado tem frase legivel', summaryWithRisk.includes('. Maior risco: ') && summaryWithRisk.endsWith('Reforma tributária.') && !summaryWithRisk.endsWith('Reforma tributária..'));
 ok('narrativa nao inventa ganho de query sem baseline', !narrative.narrativeAct2Origin(noGscBaseline.context).includes('ganhou'));
 const lowCoverage = {
   ...baseContext, indexedCount: 4,
