@@ -6,7 +6,7 @@ tags:
   - ai/context
   - project/site
   - domain/admin
-ai_summary: Sistema Admin Berkahn com quatro papéis, CRM e PWA/Web Push. Sprints publicados até PR126 corrigem dados, navegação e geração de PDF. Continuação fecha exportação completa do Analytics, sem corte de 15 linhas nem perda dos filtros da tela; smokes manuais restantes são registrados separadamente.
+ai_summary: Sistema Admin Berkahn com quatro papéis, CRM e PWA/Web Push. Sprints publicados até PR128 corrigem dados, navegação, PDF e filtros do Analytics. Continuação limita toda a preparação da exportação, remove dependência de quadros de animação e evita cartões duplicados; confirmação visual do PDF e matriz manual de perfis permanecem pendentes.
 status: active
 projeto: site
 escopo: berkahn
@@ -116,7 +116,7 @@ O [PR125](https://github.com/danielbkfalci00/berkahn/pull/125) foi integrado em 
 
 ### Continuação: exportação completa do Analytics
 
-`app/admin/analytics/AnalyticsContent.tsx` inclui as quatro abas mesmo ao exportar do comparativo, espera os módulos/fontes/gráficos, abre os detalhes antes de medir e mantém o relatório até `afterprint`. Uma trava síncrona impede duas exportações; cancelamento, troca de período e desmontagem invalidam a preparação, com limpeza de timers/listeners. Carregamento visual excedendo 15 segundos devolve erro recuperável. O menu nativo continua limitado às seções abertas, com aviso no rodapé; Exportar PDF e Ctrl/Cmd+P preparam o conjunto completo.
+`app/admin/analytics/AnalyticsContent.tsx` inclui as quatro abas mesmo ao exportar do comparativo, espera os módulos/fontes/gráficos, abre os detalhes antes de medir e mantém o relatório até `afterprint`. Uma trava síncrona impede duas exportações; cancelamento, troca de período e desmontagem invalidam a preparação, com limpeza de timers/listeners. No PR127, o limite era de 15 segundos somente para o carregamento visual; a continuação abaixo inclui os módulos no prazo total. O menu nativo continua limitado às seções abertas, com aviso no rodapé; Exportar PDF e Ctrl/Cmd+P preparam o conjunto completo.
 
 `components/admin/analytics/DataTable.tsx` reaproveita os modelos de linha e componentes existentes para imprimir todas as linhas/colunas **disponíveis na coleta**, sem o limite visual de 15 ou filtros locais. Não amplia os limites de captura GA4/GSC. Ordenação, filtros e preferências de colunas da tela permanecem guardados. O relatório explica seu escopo no rodapé. CSS de impressão escopado evita corte horizontal, títulos truncados e espaço da sidebar recolhida; a matriz mobile deixa de duplicar a tabela na impressão.
 
@@ -126,7 +126,15 @@ Regressões incorporadas a `scripts/test-admin-navigation.mjs`: relatório norma
 
 O smoke em produção encontrou busca na URL sem atualização do campo/tabela. `lib/analytics/use-url-filters.ts:11` deixa o App Router preservar seu próprio estado; repassar `history.state` com `__NA` fazia o Next ignorar a atualização de `useSearchParams`. As operações partem da URL atual para acumular mudanças feitas antes do próximo render, mantendo mês, aba e filtros externos. Continua sendo uma atualização local, sem buscar novamente os dados no servidor a cada tecla.
 
-`scripts/test-admin-navigation.mjs` agora integra o hook, os toolbars de Posts/Queries e os modelos reais do TanStack com a semântica de histórico do Next simulada. A regressão falhou no código anterior e passou após a correção. Cobre entrada por link filtrado, digitação sem acentos, filtros combinados, limpeza parcial/total, atualização por histórico e exportação/restauração sem alterar a URL. Não há nova tabela, componente, dependência ou migration. Próxima verificação: repetir busca, limpeza e exportação no deploy; a ferramenta de navegador teve timeouts durante a investigação, portanto a impressão visual continua pendente.
+`scripts/test-admin-navigation.mjs` agora integra o hook, os toolbars de Posts/Queries e os modelos reais do TanStack com a semântica de histórico do Next simulada. A regressão falhou no código anterior e passou após a correção. Cobre entrada por link filtrado, digitação sem acentos, filtros combinados, limpeza parcial/total, atualização por histórico e exportação/restauração sem alterar a URL. O [PR128](https://github.com/danielbkfalci00/berkahn/pull/128) foi integrado em `418467d`, com [CI da main](https://github.com/danielbkfalci00/berkahn/actions/runs/36652011853) e ambos os deploys aprovados. Smoke owner confirmou troca da busca e limpeza em Posts (28 registros) e Queries (380), sem erros de console. A exportação chegou a montar as quatro abas e todas as linhas de Posts, mas terminou com timeout; outra tentativa encerrou a página no navegador integrado. A impressão visual permanece sem aprovação e a causa exata desse episódio não foi confirmada.
+
+### Continuação: preparação de exportação com prazo e cancelamento
+
+`app/admin/analytics/AnalyticsContent.tsx` reutiliza a espera existente, com prazo total de 30 segundos desde a importação dos módulos. Cancelamento, saída e troca de período encerram a espera mesmo se um módulo não responder; resultados tardios não montam uma tentativa antiga sobre a atual. A prontidão exige seções e fontes carregadas, gráficos com largura e altura positivas e duas verificações consecutivas. A conferência a cada 100 ms substitui a dependência de `requestAnimationFrame`, que pode parar em abas ocultas, e reduz a frequência de leituras do layout. Timers/listeners são removidos antes de abrir a impressão; o relatório permanece montado até `afterprint` ou cancelamento. Erros distinguem carregamento, seções, formatação e gráficos sem expor detalhes internos.
+
+`components/admin/analytics/DataTable.tsx` deixa de montar os cartões mobile durante a exportação; a tabela completa já representa os mesmos dados. As preferências e filtros continuam preservados. Nenhum arquivo, serviço, dependência ou migration foi criado.
+
+A regressão local falhou antes da correção porque não existia prazo para módulos pendentes e passou após o ajuste. A suíte também verifica carregamento sem resposta, cancelamento imediato, tentativa antiga seguida de retry, prazo único mesmo com importação lenta, suspensão de quadros de animação, altura zero, mensagens por etapa e ausência dos cartões duplicados. O typecheck local foi interrompido ao detectar testes de outro projeto; validações restantes seguem pelo CI. Nesta sessão, duas tentativas de abrir o ADMIN falharam antes da conexão da ferramenta ao navegador. Próxima ação: confirmar visualmente a exportação e seu layout em navegador disponível, incluindo mobile; os demais smokes manuais da lista inicial continuam pendentes.
 
 > [!info] Migração para vault
 > Este arquivo era duplicado em `Docs/ADMIN_SETUP.md` e `Docs/site/ADMIN_SETUP.md`. Consolidado aqui como fonte única. Referenciado por [[stack-nextjs-supabase]].

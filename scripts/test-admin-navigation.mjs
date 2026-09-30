@@ -820,20 +820,20 @@ for (const navigationApi of [false, true]) {
   const tick = () => new Promise((resolve) => setImmediate(resolve));
   function printHarness(search = '', { failChunk = false, deferredChunk = null, blockingPrint = false } = {}) {
     const state = hooks(), window = new Hub(), frames = new Map(), timers = new Map();
-    let id = 0, prints = 0, loads = 0, tree;
+    let id = 0, prints = 0, loads = 0, now = 0, tree;
     const details = [{ open: false }, { open: true }];
     const report = {
-      isConnected: true, pending: false, chartWidth: 100,
+      isConnected: true, pending: false, chartWidth: 100, chartHeight: 100,
       querySelector: () => report.pending ? {} : null,
       querySelectorAll(selector) {
         if (selector === 'details:not([open])') return details.filter((detail) => !detail.open);
         assert.equal(selector, '.recharts-responsive-container');
-        return [{ querySelector: () => ({ getBoundingClientRect: () => ({ width: report.chartWidth }) }) }];
+        return [{ querySelector: () => ({ getBoundingClientRect: () => ({ width: report.chartWidth, height: report.chartHeight }) }) }];
       },
     };
     const document = { fonts: { status: 'loaded' } };
     Object.assign(window, {
-      setTimeout(callback) { const key = ++id; timers.set(key, callback); return key; },
+      setTimeout(callback, delay = 0) { const key = ++id; timers.set(key, { callback, at: now + delay }); return key; },
       clearTimeout(key) { timers.delete(key); },
       print() { prints++; window.emit('beforeprint'); if (blockingPrint) window.emit('afterprint'); },
     });
@@ -870,10 +870,48 @@ for (const navigationApi of [false, true]) {
       header: () => nodes(render(), (node) => node.type === 'AnalyticsHeader')[0].props,
       panels: () => nodes(render(), (node) => node.props.role === 'tabpanel'),
       get prints() { return prints; }, get loads() { return loads; },
-      retryChunks() { failChunk = false; },
-      async frame() { const callbacks = [...frames.values()]; frames.clear(); for (const callback of callbacks) callback(); await tick(); },
+      retryChunks() { failChunk = false; deferredChunk = null; },
+      // Deliberately never run animation frames: hidden tabs can suspend them.
+      async advance(ms = 100) {
+        const target = now + ms;
+        await tick();
+        for (let count = 0; ; count++) {
+          const next = [...timers].filter(([, timer]) => timer.at <= target).sort((a, b) => a[1].at - b[1].at)[0];
+          if (!next) break;
+          assert.ok(count < 1_000, 'Espera de exportação não deve ocupar um loop contínuo');
+          const [key, timer] = next;
+          now = timer.at; timers.delete(key); timer.callback(); await tick();
+        }
+        now = target;
+      },
       unmount() { state.unmount(); report.isConnected = false; },
     };
+  }
+
+  for (const cancel of ['timeout', 'button', 'unmount', 'month']) {
+    let resolveChunk, settled = false;
+    const h = printHarness('', { deferredChunk: new Promise((resolve) => { resolveChunk = resolve; }) });
+    const pending = h.header().onPrint().then(() => { settled = true; });
+    await tick();
+    assert.ok(h.timers.size > 0, 'Prazo de preparação inclui o carregamento dos módulos');
+    if (cancel === 'timeout') await h.advance(30_000);
+    if (cancel === 'button') nodes(h.render(), (node) => node.type === 'button' && node.props.children === 'Cancelar exportação')[0].props.onClick();
+    if (cancel === 'unmount') h.unmount();
+    if (cancel === 'month') h.render({ currentMonth: '2026-09' });
+    await tick();
+    assert.equal(settled, true, `${cancel}: espera termina mesmo quando o módulo não responde`);
+    await pending;
+    assert.equal(h.timers.size + h.frames.size, 0);
+    if (cancel === 'timeout') assert.match(nodes(h.render(), (node) => node.props.role === 'alert')[0].props.children, /carregamento/i);
+    if (cancel !== 'unmount') {
+      h.retryChunks();
+      const retry = h.header().onPrint(); await tick();
+      resolveChunk(symbols); await tick();
+      assert.equal(h.header().preparingPrint, true, 'Resposta antiga não encerra a nova tentativa');
+      await h.advance(200); await retry;
+      assert.equal(h.prints, 1, 'Só a tentativa atual abre impressão');
+      h.window.emit('afterprint'); h.unmount();
+    } else { resolveChunk(symbols); await tick(); assert.equal(h.prints, 0); }
   }
 
   for (const search of ['', 'compare=1']) {
@@ -887,18 +925,22 @@ for (const navigationApi of [false, true]) {
     assert.equal(h.panels().length, 4, 'Modo comparativo também exporta todas as abas');
     assert.equal(nodes(h.render(), (node) => node.props.printMode === true).length, 2);
     h.report.pending = true;
-    await h.frame(); await h.frame();
+    await h.advance(200);
     assert.equal(h.prints, 0, 'Fallback de seção impede impressão parcial');
     h.report.pending = false; h.document.fonts.status = 'loading';
-    await h.frame(); assert.equal(h.prints, 0);
+    await h.advance(); assert.equal(h.prints, 0);
     h.document.fonts.status = 'loaded'; h.report.chartWidth = 0;
-    await h.frame(); assert.equal(h.prints, 0, 'Gráfico sem dimensões ainda não está pronto');
-    h.report.chartWidth = 100;
-    await h.frame(); await h.frame(); await pending;
+    await h.advance(); assert.equal(h.prints, 0, 'Gráfico sem largura ainda não está pronto');
+    h.report.chartWidth = 100; h.report.chartHeight = 0;
+    await h.advance(); assert.equal(h.prints, 0, 'Gráfico sem altura ainda não está pronto');
+    h.report.chartHeight = 100;
+    await h.advance(); assert.equal(h.prints, 0, 'Exige duas verificações prontas consecutivas');
+    await h.advance(); await pending;
     assert.equal(h.prints, 1);
     assert.equal(h.header().preparingPrint, true, 'Retorno não bloqueante de print mantém relatório montado');
     assert.ok(h.panels().every((panel) => !panel.props.className.startsWith('hidden')));
     assert.equal(h.details[0].open, true);
+    assert.equal(h.timers.size + h.frames.size, 0, 'Prazo não permanece ativo durante o diálogo de impressão');
     h.window.emit('afterprint');
     assert.equal(h.header().preparingPrint, false);
     assert.deepEqual(h.details.map((detail) => detail.open), [false, true], 'Restaura somente os detalhes abertos pela impressão');
@@ -912,15 +954,33 @@ for (const navigationApi of [false, true]) {
   assert.equal(failed.header().preparingPrint, false);
   failed.retryChunks();
   const retry = failed.header().onPrint(); await tick();
-  await failed.frame(); await failed.frame(); await retry;
+  await failed.advance(200); await retry;
   assert.equal(failed.prints, 1, 'Falha de chunk libera uma nova tentativa');
   failed.window.emit('afterprint'); failed.unmount();
+
+  for (const stage of ['sections', 'fonts', 'charts']) {
+    let resolveChunk;
+    const h = printHarness('', { deferredChunk: new Promise((resolve) => { resolveChunk = resolve; }) });
+    h.report.pending = stage === 'sections';
+    h.document.fonts.status = stage === 'fonts' ? 'loading' : 'loaded';
+    h.report.chartWidth = stage === 'charts' ? 0 : 100;
+    const pending = h.header().onPrint();
+    await h.advance(29_900);
+    assert.equal(h.header().preparingPrint, true);
+    resolveChunk(symbols); await tick();
+    await h.advance(100); await pending;
+    assert.equal(h.header().preparingPrint, false, 'Montar seções não reinicia o prazo total de preparação');
+    assert.match(nodes(h.render(), (node) => node.props.role === 'alert')[0].props.children, { sections: /seções/, fonts: /formatação/, charts: /gráficos/ }[stage]);
+    assert.equal(h.prints, 0, 'Prazo excedido não imprime relatório incompleto');
+    assert.equal(h.timers.size + h.frames.size, 0);
+    h.unmount();
+  }
 
   for (const cancel of ['timeout', 'button', 'unmount', 'month']) {
     const h = printHarness();
     h.report.pending = true;
-    const pending = h.header().onPrint(); await tick(); await h.frame();
-    if (cancel === 'timeout') for (const callback of [...h.timers.values()]) callback();
+    const pending = h.header().onPrint(); await tick(); await h.advance();
+    if (cancel === 'timeout') await h.advance(30_000);
     if (cancel === 'button') nodes(h.render(), (node) => node.type === 'button' && node.props.children === 'Cancelar exportação')[0].props.onClick();
     if (cancel === 'unmount') h.unmount();
     if (cancel === 'month') h.render({ currentMonth: '2026-09' });
@@ -938,7 +998,7 @@ for (const navigationApi of [false, true]) {
     const shortcut = printHarness('', { blockingPrint: true });
     const event = shortcut.window.emit('keydown', { key: 'p', [modifier]: true });
     assert.ok(event.defaultPrevented);
-    await tick(); await shortcut.frame(); await shortcut.frame();
+    await tick(); await shortcut.advance(200);
     assert.equal(shortcut.prints, 1);
     assert.equal(shortcut.header().preparingPrint, false, 'afterprint síncrono também conclui exportação');
     shortcut.unmount();
@@ -963,23 +1023,27 @@ for (const navigationApi of [false, true]) {
   }, { window: { localStorage: { getItem: (key) => saved.get(key), setItem: (key, value) => saved.set(key, value) } } }).DataTable;
   const renderTable = (printMode = false) => {
     state.begin();
-    const tree = component({ data, columns, printMode, storageKey: 'test-report' });
+    const tree = component({ data, columns, printMode, storageKey: 'test-report', mobileCard: (row) => ({ type: 'MobileCard', props: { children: row.name } }) });
     state.commit(); return tree;
   };
   const bodyRows = (tree) => nodes(tree, (node) => node.type === 'TableBody')[0].props.children;
   assert.equal(bodyRows(renderTable()).length, 15);
+  assert.equal(nodes(renderTable(), (node) => node.type === 'MobileCard').length, 15);
   table.setGlobalFilter('Artigo 22');
   table.setColumnVisibility({ count: false });
   table.setColumnSizing({ name: 500 });
   table.setColumnOrder(['count', 'name']);
   assert.equal(bodyRows(renderTable()).length, 1);
   const savedBefore = JSON.stringify([...saved]);
-  const exported = bodyRows(renderTable(true));
+  const printTree = renderTable(true);
+  const exported = bodyRows(printTree);
+  assert.equal(nodes(printTree, (node) => node.type === 'MobileCard').length, 0, 'Não monta cartões invisíveis que duplicam o relatório');
   assert.equal(exported.length, 23, 'Exporta todas as linhas coletadas, inclusive depois do corte de 15');
   assert.equal(exported[0].props.children.length, 2, 'Colunas ocultas na tela são incluídas na exportação');
   assert.equal(JSON.stringify([...saved]), savedBefore, 'Exportação não grava preferências temporárias');
   const restored = bodyRows(renderTable());
   assert.equal(restored.length, 1);
+  assert.equal(nodes(renderTable(), (node) => node.type === 'MobileCard').length, 1);
   assert.equal(restored[0].props.children.length, 1);
   assert.equal(table.getState().columnSizing.name, 500);
   assert.equal(table.getState().columnOrder[0], 'count');

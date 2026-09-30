@@ -292,7 +292,7 @@ export function DataTable<TData>({
           </div>
 
           {/* Mobile < md */}
-          {mobileCard && (
+          {mobileCard && !printMode && (
             <div className="md:hidden divide-y divide-neutral-100 px-4 pb-4 print:hidden">
               {visibleRows.map((row) => (
                 <div key={row.id} className="py-4">

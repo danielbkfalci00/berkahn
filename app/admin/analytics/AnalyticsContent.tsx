@@ -56,31 +56,64 @@ interface AnalyticsContentProps {
   funilLeads: AdminDataResult<FunilLeads> | null;
 }
 
-function waitForReport(root: HTMLElement, signal: AbortSignal, openDetails: () => void): Promise<void> {
+class ReportPreparationError extends Error {}
+
+function waitForReport(
+  signal: AbortSignal,
+  load: () => Promise<unknown>,
+  mount: () => HTMLElement | null,
+  openDetails: () => void,
+): Promise<void> {
   return new Promise((resolve, reject) => {
-    let frame = 0;
-    let readyFrames = 0;
-    const finish = (error?: Error) => {
+    let poll = 0;
+    let readyChecks = 0;
+    let settled = false;
+    let root: HTMLElement | null = null;
+    let timeoutMessage = "O carregamento do relatório demorou demais. Verifique sua conexão e tente novamente.";
+    const finish = (error?: unknown) => {
+      if (settled) return;
+      settled = true;
       window.clearTimeout(timeout);
-      cancelAnimationFrame(frame);
+      window.clearTimeout(poll);
       signal.removeEventListener("abort", abort);
       if (error) reject(error); else resolve();
     };
     const abort = () => finish(new Error("Exportação cancelada"));
-    const timeout = window.setTimeout(() => finish(new Error("Relatório ainda carregando")), 15_000);
+    // Bound the entire preparation, including imports that never settle.
+    const timeout = window.setTimeout(() => finish(new ReportPreparationError(timeoutMessage)), 30_000);
     const check = () => {
-      if (!root.isConnected) return abort();
-      openDetails();
-      const chartPending = Array.from(root.querySelectorAll(".recharts-responsive-container")).some((chart) => {
-        const svg = chart.querySelector("svg");
-        return !svg || svg.getBoundingClientRect().width <= 0;
-      });
-      const pending = root.querySelector("[data-report-loading]") || document.fonts?.status === "loading" || chartPending;
-      readyFrames = pending ? 0 : readyFrames + 1;
-      if (readyFrames >= 2) finish(); else frame = requestAnimationFrame(check);
+      if (settled) return;
+      try {
+        if (!root?.isConnected) return abort();
+        openDetails();
+        const sectionPending = !!root.querySelector("[data-report-loading]");
+        const fontsPending = document.fonts?.status === "loading";
+        const chartPending = Array.from(root.querySelectorAll(".recharts-responsive-container")).some((chart) => {
+          const bounds = chart.querySelector("svg")?.getBoundingClientRect();
+          return !bounds || bounds.width <= 0 || bounds.height <= 0;
+        });
+        timeoutMessage = sectionPending
+          ? "Algumas seções do relatório não terminaram de carregar. Tente exportar novamente."
+          : fontsPending
+            ? "A formatação do relatório não terminou de carregar. Tente exportar novamente."
+            : "Os gráficos não ficaram prontos. Mantenha esta aba aberta e tente exportar novamente.";
+        readyChecks = sectionPending || fontsPending || chartPending ? 0 : readyChecks + 1;
+        // Animation frames may stop in hidden tabs. Poll sparingly and still
+        // require two ready checks rather than printing after a fixed delay.
+        if (readyChecks >= 2) finish(); else poll = window.setTimeout(check, 100);
+      } catch (error) {
+        finish(error);
+      }
     };
     signal.addEventListener("abort", abort, { once: true });
-    if (signal.aborted) abort(); else frame = requestAnimationFrame(check);
+    if (signal.aborted) { abort(); return; }
+    void Promise.resolve().then(() => { if (!settled) return load(); }).then(() => {
+      // Imports cannot be aborted; ignore their completion after cancellation
+      // or timeout so an old attempt cannot mount over a newer one.
+      if (settled) return;
+      root = mount();
+      check();
+    }, () => finish(new ReportPreparationError("Não foi possível carregar o relatório. Verifique sua conexão e tente novamente."))).catch(finish);
   });
 }
 
@@ -273,16 +306,17 @@ export function AnalyticsContent({
     setPreparingPrint(true);
     setPrintError(null);
     try {
-      await Promise.all([loadAct2Origin(), loadAct3Posts(), loadAct4Action(), loadGrowthChart(), loadMatrizArtigoMes(), loadComparisonView()]);
-      if (job.signal.aborted || !reportRef.current) return;
-      flushSync(() => setPrintAll(true));
-      await waitForReport(reportRef.current, job.signal, openDetails);
+      await waitForReport(job.signal,
+        () => Promise.all([loadAct2Origin(), loadAct3Posts(), loadAct4Action(), loadGrowthChart(), loadMatrizArtigoMes(), loadComparisonView()]),
+        () => { flushSync(() => setPrintAll(true)); return reportRef.current; },
+        openDetails,
+      );
       if (job.signal.aborted) return;
       window.print();
-    } catch {
+    } catch (error) {
       if (!job.signal.aborted) {
         finishPrint();
-        setPrintError("Não foi possível preparar o relatório completo. Tente exportar novamente.");
+        setPrintError(error instanceof ReportPreparationError ? error.message : "Não foi possível preparar o relatório completo. Tente exportar novamente.");
       }
     }
     // Some browsers return from print() before the preview closes. Keep the
