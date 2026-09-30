@@ -35,7 +35,7 @@ export function narrativeAct0Status(
   const parts = [`${monthName} ${statusWord}`];
   if (win) parts.push(`maior ganho: ${win}`);
   if (redFlag) parts.push(`maior risco: ${redFlag}`);
-  return parts.join(". ") + ".";
+  return parts.map((part) => part.replace(/\.+$/, "")).join(". ") + ".";
 }
 
 export function narrativeAct1Growth(ctx: SnapshotContext): string {

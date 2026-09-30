@@ -250,6 +250,11 @@ const narrative = loadCommonModule(readFileSync('lib/analytics/narrative.ts', 'u
   './ai-sources': { buildAiBreakdown: () => ({}) },
   './comparability': { comparisonAvailability: comparison.comparisonAvailability },
 });
+const summaryWithRisk = narrative.narrativeAct0Status(
+  { monthLabel: 'Setembro/2026', partial: true }, { status: 'good' }, null,
+  '1 artigo antes indexado agora sem indexação confirmada: Reforma tributária.',
+);
+ok('resumo com risco pontuado tem um unico ponto final', summaryWithRisk.endsWith('Reforma tributária.') && !summaryWithRisk.endsWith('Reforma tributária..'));
 ok('narrativa nao inventa ganho de query sem baseline', !narrative.narrativeAct2Origin(noGscBaseline.context).includes('ganhou'));
 const lowCoverage = {
   ...baseContext, indexedCount: 4,

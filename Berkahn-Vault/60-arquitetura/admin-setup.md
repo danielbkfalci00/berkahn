@@ -6,7 +6,7 @@ tags:
   - ai/context
   - project/site
   - domain/admin
-ai_summary: Sistema Admin Berkahn com quatro papéis, CRM e PWA/Web Push. Sprints até PR130 publicados. Exportação tem prazo total, cancelamento e validação dos gráficos reais; preparação desktop passou no smoke. O sprint atual remove afirmações sem baseline nos KPIs e nas recomendações de SEO. PDF final e matriz manual de perfis permanecem pendentes.
+ai_summary: Sistema Admin Berkahn com quatro papéis, CRM e PWA/Web Push. Sprints até PR131 publicados. Exportação prepara todas as abas; KPIs, tendências de consultas e recomendações SEO explicitam os limites das evidências. PDF final e matriz manual de perfis permanecem pendentes.
 status: active
 projeto: site
 escopo: berkahn
@@ -151,6 +151,10 @@ O [PR130](https://github.com/danielbkfalci00/berkahn/pull/130) foi integrado em 
 `lib/analytics/narrative.ts` descreve indexação abaixo de 50% como cobertura atual baixa, sem fabricar “queda de 50%” sem baseline. `WinCard` distingue falta de comparação de ausência de ganho acima de 10%; `RedFlagCard` limita a conclusão aos riscos monitorados nos dados disponíveis. `lib/analytics/red-flags.ts` orienta identificar no Search Console a página e intenção de uma consulta antes de sugerir edição de título/descrição.
 
 `lib/analytics/comparability.ts` também omite listas de consultas em alta e em queda quando o baseline GSC é inválido. Consulta e página absolutas continuam disponíveis; o snapshot armazenado não é regravado. A regressão em `scripts/analytics/testar-integridade.mjs` reproduziu cinco afirmações frágeis e duas tendências sem baseline antes dos ajustes. Próxima verificação: CI completo, deploy e leitura do Analytics nos estados sem comparação. A confirmação nativa do PDF e os demais smokes manuais seguem pendentes.
+
+O [PR131](https://github.com/danielbkfalci00/berkahn/pull/131) foi integrado em `7d619d6`; [CI do PR](https://github.com/danielbkfalci00/berkahn/actions/runs/36664495499), [CI da main](https://github.com/danielbkfalci00/berkahn/actions/runs/36664753839) e deploys do site/ADMIN passaram. Localmente, 74 asserções de integridade, TypeScript, lint dos arquivos alterados, diff e gitleaks passaram. O smoke owner de setembro mostrou “Nenhum ganho acima de 10% nas métricas com comparação válida”, sem alertas ou erros de console. O estado com baseline GSC totalmente ausente foi verificado por regressão, não por uma alteração de dados em produção.
+
+O mesmo smoke revelou dois pontos finais quando o risco já chegava pontuado. `narrativeAct0Status` passa a retirar o ponto terminal de cada trecho antes de montar a frase. A regressão falhou com o texto de produção e passou com o ajuste (75 asserções). Próxima verificação: CI, deploy e resumo de setembro com pontuação correta. A janela nativa/PDF final, a exportação mobile e os demais smokes manuais seguem pendentes.
 
 > [!info] Migração para vault
 > Este arquivo era duplicado em `Docs/ADMIN_SETUP.md` e `Docs/site/ADMIN_SETUP.md`. Consolidado aqui como fonte única. Referenciado por [[stack-nextjs-supabase]].
