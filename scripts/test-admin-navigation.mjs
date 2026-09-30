@@ -985,6 +985,108 @@ for (const navigationApi of [false, true]) {
   assert.equal(table.getState().columnOrder[0], 'count');
   state.unmount();
 
+  // Exercise URL -> toolbar -> real table, including Next's internal-state bypass.
+  for (const kind of ['posts', 'queries']) {
+    const wrapperState = hooks(), tableState = hooks(), toolbarState = hooks();
+    const keys = kind === 'posts' ? ['posts_q', 'posts_status', 'posts_cat'] : ['queries_q', 'queries_pos', 'queries_opp'];
+    const location = new URL(`${origin}/admin/analytics?month=2026-08&tab=${kind === 'posts' ? 'conteudo' : 'aquisicao'}&${keys[0]}=financiar`);
+    let searchParams = new URLSearchParams(location.search), actualTable, toolbarTree, filterApi;
+    const history = {
+      state: nextState('/admin/analytics'),
+      replaceState(data, _unused, url) {
+        location.href = new URL(url, location).href;
+        // This is the installed App Router contract: internal writes skip hook updates.
+        if (!data?.__NA && !data?._N) searchParams = new URLSearchParams(location.search);
+        this.state = { ...data, __NA: true, __PRIVATE_NEXTJS_INTERNALS_TREE: this.state.__PRIVATE_NEXTJS_INTERNALS_TREE };
+      },
+    };
+    const window = { location, history, localStorage: { getItem: () => null, setItem() {} } };
+    const { useUrlFilters } = load('lib/analytics/use-url-filters.ts', (name) => {
+      if (name === 'react') return wrapperState.react;
+      if (name === 'next/navigation') return { usePathname: () => location.pathname, useSearchParams: () => searchParams };
+      throw new Error(`Unexpected URL hook import: ${name}`);
+    }, { window });
+    const columnModule = load(`lib/analytics/${kind === 'posts' ? 'post' : 'query'}-columns.tsx`, () => symbols);
+    // TanStack uses instanceof Function; bridge VM callbacks to its Node realm.
+    const globalName = kind === 'posts' ? 'postsGlobalFilterFn' : 'queriesGlobalFilterFn';
+    const globalFilter = columnModule[globalName];
+    columnModule[globalName] = (...args) => globalFilter(...args);
+    for (const column of columnModule[kind === 'posts' ? 'postColumns' : 'queryColumns']) {
+      for (const key of ['filterFn', 'sortingFn']) {
+        if (typeof column[key] === 'function') {
+          const callback = column[key]; column[key] = (...args) => callback(...args);
+        }
+      }
+    }
+    const Wrapper = load(`components/admin/analytics/${kind === 'posts' ? 'PostPerformanceTable' : 'TopQueriesTable'}.tsx`, (name) => {
+      if (name === 'react') return { ...wrapperState.react, useEffect: toolbarState.react.useEffect };
+      if (name === '@/lib/analytics/use-url-filters') return { useUrlFilters(...args) { filterApi = useUrlFilters(...args); return filterApi; } };
+      if (name.endsWith('-columns')) return columnModule;
+      if (name === '@/lib/utils') return { cn: (...classes) => classes.filter(Boolean).join(' ') };
+      return symbols;
+    })[kind === 'posts' ? 'PostPerformanceTable' : 'TopQueriesTable'];
+    const Table = load('components/admin/analytics/DataTable.tsx', (name) => {
+      if (name === 'react') return tableState.react;
+      if (name === '@tanstack/react-table') return { ...engine, useReactTable(options) {
+        actualTable ??= engine.createTable(options);
+        actualTable.setOptions((previous) => ({ ...previous, ...options, state: { ...actualTable.initialState, ...options.state } }));
+        return actualTable;
+      } };
+      if (name === '@dnd-kit/core') return { ...symbols, useSensor() {}, useSensors() {} };
+      if (name === '@/lib/utils') return { cn: (...classes) => classes.filter(Boolean).join(' ') };
+      return symbols;
+    }, { window }).DataTable;
+    const records = kind === 'posts' ? [
+      { title: 'Como financiar a construção', category: 'Guias', status: 'neutral', pageviews: 20 },
+      { title: 'Construção em aço', category: 'Tecnologia', status: 'rising', pageviews: 10 },
+      { title: 'Drywall', category: 'Guias', status: 'neutral', pageviews: 5 },
+    ] : [
+      { query: 'como financiar construção', clicks: 20, impressions: 300, ctr: 1, position: 5 },
+      { query: 'construção em aço', clicks: 10, impressions: 100, ctr: 10, position: 2 },
+      { query: 'drywall', clicks: 5, impressions: 400, ctr: 1, position: 15 },
+    ];
+    function renderFiltered(printMode = false) {
+      wrapperState.begin();
+      const wrapper = Wrapper({ [kind]: records, printMode });
+      const props = nodes(wrapper, (node) => node.type === 'DataTable')[0].props;
+      tableState.begin(); Table(props);
+      const toolbar = props.toolbar(actualTable);
+      toolbarState.begin(); toolbarTree = toolbar.type(toolbar.props);
+      toolbarState.commit(); tableState.commit(); wrapperState.commit();
+      // React renders again after toolbar effects update the controlled table state.
+      tableState.begin(); Table(props); tableState.commit();
+      toolbarState.begin(); toolbarTree = toolbar.type(toolbar.props); toolbarState.commit();
+      return actualTable.getRowModel().rows.map((row) => row.original);
+    }
+    assert.equal(renderFiltered().length, 1, `${kind}: link filtrado aplica busca na montagem`);
+    nodes(toolbarTree, (node) => node.type === 'Input')[0].props.onChange({ target: { value: 'aco' } });
+    assert.equal(renderFiltered()[0], records[1], `${kind}: digitação atualiza useSearchParams e linhas, ignorando acentos`);
+    assert.equal(history.state.__NA, true, 'App Router mantém seu próprio estado de navegação');
+    assert.equal(location.searchParams.get('month'), '2026-08');
+    assert.ok(location.searchParams.has('tab'));
+    const clear = () => nodes(toolbarTree, (node) => node.props['aria-label'] === 'Limpar todos os filtros')[0].props.onClick();
+    clear(); assert.equal(renderFiltered().length, 3, `${kind}: limpeza remove busca`);
+    // Two updates before React commits must compose with the latest URL.
+    filterApi.setValue(keys[0], 'construcao');
+    filterApi.setValue(keys[1], kind === 'posts' ? 'neutral' : 'top10');
+    assert.equal(renderFiltered().length, 1, `${kind}: filtros rápidos se acumulam`);
+    assert.equal(location.searchParams.get(keys[0]), 'construcao');
+    filterApi.setValue(keys[2], kind === 'posts' ? 'Tecnologia' : '1');
+    assert.equal(renderFiltered().length, kind === 'posts' ? 0 : 1);
+    filterApi.clearValues([keys[1], keys[2]]);
+    assert.equal(renderFiltered().length, 2, `${kind}: limpar subconjunto preserva busca`);
+    const urlBeforePrint = location.href;
+    assert.equal(renderFiltered(true).length, 3, `${kind}: impressão inclui linhas fora do filtro`);
+    assert.equal(renderFiltered().length, 2, `${kind}: fim da impressão restaura o filtro`);
+    assert.equal(location.href, urlBeforePrint);
+    clear(); assert.equal(renderFiltered().length, 3);
+    assert.ok(keys.every((key) => !location.searchParams.has(key)));
+    // A history traversal supplies a fresh useSearchParams snapshot.
+    location.searchParams.set(keys[0], 'drywall'); searchParams = new URLSearchParams(location.search);
+    assert.equal(renderFiltered()[0], records[2], `${kind}: voltar/avançar atualiza a tabela`);
+    wrapperState.unmount(); tableState.unmount(); toolbarState.unmount();
+  }
+
   let leafState;
   const leafImports = (name) => {
     if (name === 'react') return leafState.react;

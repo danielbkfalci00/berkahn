@@ -9,7 +9,9 @@ const EMPTY_DEFAULTS = Object.freeze({});
 // página force-dynamic inteira no servidor a cada tecla; history.replaceState
 // é sincronizado com useSearchParams pelo App Router sem novo request.
 function replaceUrl(pathname: string, qs: string) {
-  window.history.replaceState(window.history.state, "", qs ? `${pathname}?${qs}` : pathname);
+  // O Next preserva o próprio estado. Repassar __NA/_N faria o roteador
+  // tratar esta escrita como interna e não atualizar useSearchParams.
+  window.history.replaceState(null, "", qs ? `${pathname}?${qs}` : pathname);
 }
 
 interface UseUrlFiltersOptions<TKey extends string> {
@@ -57,7 +59,8 @@ export function useUrlFilters<TKey extends string>(
 
   const setValue = useCallback(
     (key: TKey, value: string) => {
-      const params = new URLSearchParams(searchParams.toString());
+      // A URL já inclui outras mudanças feitas antes do próximo render.
+      const params = new URLSearchParams(window.location.search);
       const def = defaults[key] ?? "";
       if (value === "" || value === def) {
         params.delete(key);
@@ -67,26 +70,26 @@ export function useUrlFilters<TKey extends string>(
       const qs = params.toString();
       replaceUrl(pathname, qs);
     },
-    [searchParams, pathname, defaults]
+    [pathname, defaults]
   );
 
   const clearValues = useCallback((targetKeys: readonly TKey[]) => {
-    const params = new URLSearchParams(searchParams.toString());
+    const params = new URLSearchParams(window.location.search);
     for (const key of targetKeys) {
       params.delete(key);
     }
     const qs = params.toString();
     replaceUrl(pathname, qs);
-  }, [searchParams, pathname]);
+  }, [pathname]);
 
   const clearAll = useCallback(() => {
-    const params = new URLSearchParams(searchParams.toString());
+    const params = new URLSearchParams(window.location.search);
     for (const key of keys) {
       params.delete(key);
     }
     const qs = params.toString();
     replaceUrl(pathname, qs);
-  }, [keys, searchParams, pathname]);
+  }, [keys, pathname]);
 
   const hasActive = useMemo(() => {
     return keys.some((k) => {
