@@ -67,6 +67,8 @@ interface DataTableProps<TData> {
   emptyFilteredText?: string;
   emptyDataText?: string;
   initialLimit?: number;
+  /** Exporta todas as linhas/colunas coletadas sem alterar as preferências da tela. */
+  printMode?: boolean;
   /** Base de localStorage. Deriva `{key}-visibility`, `{key}-sizing`, `{key}-order`. */
   storageKey?: string;
   initialSorting?: SortingState;
@@ -86,6 +88,7 @@ export function DataTable<TData>({
   emptyFilteredText = "Sem resultados. Ajuste os filtros.",
   emptyDataText = "Sem dados neste período.",
   initialLimit = 15,
+  printMode = false,
   storageKey,
   initialSorting = [],
   className,
@@ -161,12 +164,12 @@ export function DataTable<TData>({
     data,
     columns,
     state: {
-      sorting,
-      columnFilters,
-      globalFilter,
-      columnVisibility,
-      columnSizing,
-      columnOrder,
+      sorting: printMode ? initialSorting : sorting,
+      columnFilters: printMode ? [] : columnFilters,
+      globalFilter: printMode ? "" : globalFilter,
+      columnVisibility: printMode ? {} : columnVisibility,
+      columnSizing: printMode ? {} : columnSizing,
+      columnOrder: printMode ? [] : columnOrder,
     },
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -180,7 +183,7 @@ export function DataTable<TData>({
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
     columnResizeMode: "onChange",
-    enableColumnResizing: true,
+    enableColumnResizing: !printMode,
     defaultColumn: { minSize: 60 },
     sortDescFirst: false,
     enableSortingRemoval: false,
@@ -207,12 +210,12 @@ export function DataTable<TData>({
   }
 
   const rows = table.getRowModel().rows;
-  const visibleRows = initialLimit > 0 && !showAll ? rows.slice(0, initialLimit) : rows;
+  const visibleRows = !printMode && initialLimit > 0 && !showAll ? rows.slice(0, initialLimit) : rows;
   const isFiltered = columnFilters.length > 0 || globalFilter !== "";
 
   return (
     <div className={cn("w-full", className)}>
-      {toolbar && <div className="px-4 md:px-6 pt-6">{toolbar(table)}</div>}
+      {toolbar && <div className="px-4 md:px-6 pt-6 print:hidden">{toolbar(table)}</div>}
 
       {data.length === 0 ? (
         <div className="px-4 md:px-6 py-8">
@@ -225,7 +228,7 @@ export function DataTable<TData>({
       ) : (
         <>
           {/* Desktop ≥ md */}
-          <div className="hidden md:block">
+          <div className="hidden md:block print:block">
             <Table style={{ tableLayout: "fixed", width: table.getTotalSize() }}>
               <TableHeader>
                 {table.getHeaderGroups().map((headerGroup) => {
@@ -290,7 +293,7 @@ export function DataTable<TData>({
 
           {/* Mobile < md */}
           {mobileCard && (
-            <div className="md:hidden divide-y divide-neutral-100 px-4 pb-4">
+            <div className="md:hidden divide-y divide-neutral-100 px-4 pb-4 print:hidden">
               {visibleRows.map((row) => (
                 <div key={row.id} className="py-4">
                   {mobileCard(row.original)}
@@ -302,7 +305,7 @@ export function DataTable<TData>({
       )}
 
       {initialLimit > 0 && rows.length > initialLimit && (
-        <div className="px-4 md:px-6 py-3 border-t border-neutral-100">
+        <div className="px-4 md:px-6 py-3 border-t border-neutral-100 print:hidden">
           <button
             type="button"
             onClick={() => setShowAll((v) => !v)}

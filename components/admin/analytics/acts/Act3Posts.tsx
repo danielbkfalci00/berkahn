@@ -16,6 +16,7 @@ interface Act3PostsProps {
   context: SnapshotContext;
   posts: PostPerformance[];
   mapaLeitura: MapaLeitura;
+  printMode?: boolean;
 }
 
 /**
@@ -23,7 +24,7 @@ interface Act3PostsProps {
  * Hero cards (melhor + oportunidade) + tabela filtrável.
  * Foco: time entende qual conteúdo performou, qual abandonou.
  */
-export function Act3Posts({ context, posts, mapaLeitura }: Act3PostsProps) {
+export function Act3Posts({ context, posts, mapaLeitura, printMode }: Act3PostsProps) {
   const best = findBestPost(posts);
   const opportunity = findOpportunityPost(posts);
   const counts = countByStatus(posts);
@@ -52,7 +53,7 @@ export function Act3Posts({ context, posts, mapaLeitura }: Act3PostsProps) {
       </div>
 
       <PostHeroCards best={best} opportunity={opportunity} />
-      <PostPerformanceTable posts={posts} />
+      <PostPerformanceTable posts={posts} printMode={printMode} />
       <MapaCalorLeitura mapa={mapaLeitura} />
     </section>
   );

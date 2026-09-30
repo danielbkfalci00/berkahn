@@ -55,7 +55,7 @@ export function MatrizArtigoMes({ matriz }: MatrizArtigoMesProps) {
         visível sem achatar o topo.
       </p>
 
-      <div className="mt-4 space-y-3 md:hidden">
+      <div className="mt-4 space-y-3 md:hidden print:hidden">
         {matriz.linhas.slice(0, 5).map((linha) => (
           <div key={linha.slug} className="flex items-center justify-between gap-3 border-b border-neutral-100 pb-3 text-sm last:border-0">
             <span className="min-w-0 truncate text-neutral-700">{linha.title}</span>

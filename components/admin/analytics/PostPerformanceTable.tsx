@@ -42,11 +42,13 @@ const URL_KEYS = ["posts_q", "posts_status", "posts_cat"] as const;
 interface PostPerformanceTableProps {
   posts: PostPerformance[];
   initialLimit?: number;
+  printMode?: boolean;
 }
 
 export function PostPerformanceTable({
   posts,
   initialLimit = 15,
+  printMode,
 }: PostPerformanceTableProps) {
   const filters = useUrlFilters(URL_KEYS);
 
@@ -57,7 +59,9 @@ export function PostPerformanceTable({
 
   return (
     <Card className="bg-white border-neutral-200">
+      <h3 className="hidden px-4 pt-4 text-sm font-semibold print:block">Performance dos posts</h3>
       <DataTable
+        printMode={printMode}
         columns={postColumns}
         data={posts}
         initialLimit={initialLimit}

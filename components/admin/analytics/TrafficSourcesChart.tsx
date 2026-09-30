@@ -17,6 +17,7 @@ import type { Ga4Source } from "@/types/analytics";
 
 interface TrafficSourcesChartProps {
   data: Ga4Source[];
+  printMode?: boolean;
 }
 
 const AI_COLOR = "#7C3AED";
@@ -28,7 +29,7 @@ const DEFAULT_COLOR = "#0A0A0A";
  * das plataformas detectadas no tooltip. Demais fontes (Google, LinkedIn,
  * direct, etc) ficam separadas como sempre.
  */
-export function TrafficSourcesChart({ data }: TrafficSourcesChartProps) {
+export function TrafficSourcesChart({ data, printMode = false }: TrafficSourcesChartProps) {
   // Separa IAs vs não-IAs
   const aiSources = data.filter((s) => classifyAiSource(s.label).isAi);
   const nonAi = data.filter((s) => !classifyAiSource(s.label).isAi);
@@ -95,7 +96,7 @@ export function TrafficSourcesChart({ data }: TrafficSourcesChartProps) {
           }
         />
       </div>
-      <div className="space-y-3 md:hidden" role="list" aria-label="Cinco principais fontes de tráfego">
+      <div className={printMode ? "hidden" : "space-y-3 md:hidden print:hidden"} role="list" aria-label="Cinco principais fontes de tráfego">
         {chartData.slice(0, 5).map((source) => (
           <div key={source.name} role="listitem">
             <div className="mb-1 flex items-baseline justify-between gap-3 text-sm">
@@ -109,7 +110,7 @@ export function TrafficSourcesChart({ data }: TrafficSourcesChartProps) {
         ))}
       </div>
       <div
-        className="hidden h-64 md:block lg:h-72"
+        className={printMode ? "h-64 lg:h-72" : "hidden h-64 md:block lg:h-72 print:block"}
         role="img"
         aria-label="Top fontes de tráfego com IAs consolidadas"
       >

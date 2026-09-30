@@ -636,12 +636,41 @@
   }
 
   /* Remove o padding-left do main content quando admin sidebar some */
-  .admin-shell .lg\:pl-64 {
+  .admin-shell .lg\:pl-64,
+  .admin-shell .lg\:pl-16 {
     padding-left: 0 !important;
   }
 
   .admin-shell main {
     padding: 1.5cm !important;
+  }
+
+  [data-analytics-report] table {
+    width: 100% !important;
+    table-layout: auto !important;
+    font-size: 9pt;
+  }
+
+  [data-analytics-report] th,
+  [data-analytics-report] td {
+    width: auto !important;
+    padding: 4pt !important;
+    white-space: normal !important;
+    overflow-wrap: anywhere;
+  }
+
+  [data-analytics-report] .overflow-auto,
+  [data-analytics-report] .overflow-x-auto,
+  [data-analytics-report] .truncate,
+  [data-analytics-report] .line-clamp-2 {
+    overflow: visible !important;
+    white-space: normal !important;
+    -webkit-line-clamp: unset !important;
+  }
+
+  [data-analytics-report] tr,
+  [data-analytics-report] .recharts-responsive-container {
+    break-inside: avoid;
   }
 }
 

@@ -13,9 +13,10 @@ interface Act2OriginProps {
   context: SnapshotContext;
   topQueries: TopQueryWithTrend[];
   oportunidade: MapaOportunidade;
+  printMode?: boolean;
 }
 
-export function Act2Origin({ context, topQueries, oportunidade }: Act2OriginProps) {
+export function Act2Origin({ context, topQueries, oportunidade, printMode }: Act2OriginProps) {
   return (
     <section className="space-y-6" aria-labelledby="act-2-title">
       <div>
@@ -24,12 +25,12 @@ export function Act2Origin({ context, topQueries, oportunidade }: Act2OriginProp
         </h2>
         <p className="mt-1 text-sm text-neutral-600 sm:text-base">{narrativeAct2Origin(context)}</p>
       </div>
-      <TrafficSourcesChart data={context.ga4.topSources} />
+      <TrafficSourcesChart data={context.ga4.topSources} printMode={printMode} />
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <AreaDistributionChart data={context.ga4.byArea} />
         <DevicesMiniChart data={context.ga4.byDevice} />
       </div>
-      <TopQueriesTable queries={topQueries} />
+      <TopQueriesTable queries={topQueries} printMode={printMode} />
       <QuadranteOportunidade mapa={oportunidade} />
     </section>
   );
