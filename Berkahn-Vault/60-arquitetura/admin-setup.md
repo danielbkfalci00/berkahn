@@ -6,7 +6,7 @@ tags:
   - ai/context
   - project/site
   - domain/admin
-ai_summary: Sistema Admin Berkahn com quatro papéis, CRM e PWA/Web Push. Sprints até PR131 publicados. Exportação prepara todas as abas; KPIs, tendências de consultas e recomendações SEO explicitam os limites das evidências. PDF final e matriz manual de perfis permanecem pendentes.
+ai_summary: Sistema Admin Berkahn com quatro papéis, CRM e PWA/Web Push. Sprints até PR132 publicados. Exportação prepara todas as abas; KPIs, tendências de consultas e recomendações SEO explicitam os limites das evidências. PDF final e matriz manual de perfis permanecem pendentes.
 status: active
 projeto: site
 escopo: berkahn
@@ -155,6 +155,12 @@ O [PR130](https://github.com/danielbkfalci00/berkahn/pull/130) foi integrado em 
 O [PR131](https://github.com/danielbkfalci00/berkahn/pull/131) foi integrado em `7d619d6`; [CI do PR](https://github.com/danielbkfalci00/berkahn/actions/runs/36664495499), [CI da main](https://github.com/danielbkfalci00/berkahn/actions/runs/36664753839) e deploys do site/ADMIN passaram. Localmente, 74 asserções de integridade, TypeScript, lint dos arquivos alterados, diff e gitleaks passaram. O smoke owner de setembro mostrou “Nenhum ganho acima de 10% nas métricas com comparação válida”, sem alertas ou erros de console. O estado com baseline GSC totalmente ausente foi verificado por regressão, não por uma alteração de dados em produção.
 
 O mesmo smoke revelou dois pontos finais quando o risco já chegava pontuado, além de “maior risco” em minúscula após um ponto. `narrativeAct0Status` passa a retirar o ponto terminal de cada trecho e capitaliza os rótulos antes de montar a frase. A regressão falhou com o texto de produção e passou com o ajuste (75 asserções). Próxima verificação: CI, deploy e resumo de setembro com pontuação correta. A janela nativa/PDF final, a exportação mobile e os demais smokes manuais seguem pendentes.
+
+O [PR132](https://github.com/danielbkfalci00/berkahn/pull/132) foi integrado em `3914183`; CI da main e os dois deploys passaram. O smoke owner confirmou a narrativa com “Maior risco” capitalizado e um único ponto final, sem alertas ou erros de console. Um download de PDF do acervo foi acionado na lista de orçamentos sem alerta, mas o navegador integrado não informou evento de download; isso não confirma arquivo nem layout final.
+
+### Continuação: linguagem e disponibilidade do Health Score
+
+`narrativeAct0Status` passa a qualificar “Bom” e as demais faixas como leitura do Health Score com os componentes disponíveis, sem julgar o mês inteiro. `HeroMetric` usa o mesmo estado calculado para mostrar “comparação indisponível” ao lado de Cliques quando falta baseline GSC. A regressão renderiza o componente real nos dois estados; o PDF nativo e a matriz manual de perfis continuam pendentes.
 
 > [!info] Migração para vault
 > Este arquivo era duplicado em `Docs/ADMIN_SETUP.md` e `Docs/site/ADMIN_SETUP.md`. Consolidado aqui como fonte única. Referenciado por [[stack-nextjs-supabase]].

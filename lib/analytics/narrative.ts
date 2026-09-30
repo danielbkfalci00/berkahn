@@ -26,13 +26,13 @@ export function narrativeAct0Status(
   redFlag: string | null
 ): string {
   const statusWord = {
-    excellent: "está excelente",
-    good: "está bom",
-    warning: "pede atenção",
-    critical: "está em alerta",
+    excellent: "Excelente",
+    good: "Bom",
+    warning: "Atenção",
+    critical: "Crítico",
   }[health.status];
   const monthName = ctx.partial ? `${ctx.monthLabel} (parcial)` : ctx.monthLabel;
-  const parts = [`${monthName} ${statusWord}`];
+  const parts = [`O Health Score de ${monthName} está na faixa ${statusWord}, considerando os componentes disponíveis`];
   if (win) parts.push(`Maior ganho: ${win}`);
   if (redFlag) parts.push(`Maior risco: ${redFlag}`);
   return parts.map((part) => part.replace(/\.+$/, "")).join(". ") + ".";

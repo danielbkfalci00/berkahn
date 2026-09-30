@@ -93,9 +93,7 @@ export function HeroMetric({ context, trendPoints }: HeroMetricProps) {
               Users <strong className="text-neutral-900">{health.components.usersGrowth.raw}</strong>
             </span>
             <span>
-              Cliques {context.gsc.clicksMoMText && (
-                <strong className="text-neutral-900">{context.gsc.clicksMoMText}</strong>
-              )}
+              Cliques <strong className="text-neutral-900">{health.components.clicksGrowth.raw}</strong>
             </span>
             <span>
               Engagement{" "}
