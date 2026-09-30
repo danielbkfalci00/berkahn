@@ -6,7 +6,7 @@ tags:
   - ai/context
   - project/site
   - domain/admin
-ai_summary: Sistema Admin Berkahn com contas individuais, quatro papéis, CRM e PWA/Web Push. Sprints publicados até PR125 corrigem dados, navegação comercial/editorial e horários. Continuação protege geração de PDF contra imagens ausentes, respostas perdidas e cliques duplicados, com regressões de permissões e concorrência.
+ai_summary: Sistema Admin Berkahn com quatro papéis, CRM e PWA/Web Push. Sprints publicados até PR126 corrigem dados, navegação e geração de PDF. Continuação fecha exportação completa do Analytics, sem corte de 15 linhas nem perda dos filtros da tela; smokes manuais restantes são registrados separadamente.
 status: active
 projeto: site
 escopo: berkahn
@@ -112,7 +112,15 @@ O [PR125](https://github.com/danielbkfalci00/berkahn/pull/125) foi integrado em 
 - A gravação do PDF consulta o registro novamente quando a resposta do banco é ambígua. Arquivo confirmado permanece acessível; confirmação indisponível devolve 503 e preserva o upload possivelmente referenciado. Falhas de limpeza ficam registradas sem transformar gravação bem-sucedida em erro nem mascarar conflito 409. Não há fila nova de limpeza: resíduos após indisponibilidade continuam sendo uma limitação operacional.
 - `GerarPdfButton` e `BaixarPdfButton` bloqueiam chamadas duplicadas antes da atualização visual do React e liberam nova tentativa ao terminar. Conflitos e respostas ambíguas oferecem “Atualizar orçamento”. `lib/supabase/sessao.ts:38` distingue sessão ausente (401) de papel ativo sem permissão (403).
 
-`scripts/test-lead-flow.mjs` executa handlers, sessão, renderer e botões reais com banco, navegador e Storage simulados. Cobre quatro papéis, usuário inativo/sem sessão, edição durante a geração, capa alterada, renovação de URL, imagem quebrada, resposta perdida após commit, falha na confirmação/limpeza, cliques duplicados e recuperação. A primeira execução local das regressões de servidor passou; a ampliação dos testes de botões/renderer segue para o CI porque outro projeto iniciou testes locais. Este lote não exige migration. Essa cobertura não equivale a impressão visual do PDF nem à matriz manual dos quatro perfis em produção; essas verificações permanecem pendentes.
+`scripts/test-lead-flow.mjs` executa handlers, sessão, renderer e botões reais com banco, navegador e Storage simulados. Cobre quatro papéis, usuário inativo/sem sessão, edição durante a geração, capa alterada, renovação de URL, imagem quebrada, resposta perdida após commit, falha na confirmação/limpeza, cliques duplicados e recuperação. O [PR126](https://github.com/danielbkfalci00/berkahn/pull/126) foi integrado em `e8fd190`, com [CI da main](https://github.com/danielbkfalci00/berkahn/actions/runs/36642307635) e ambos os deploys Vercel aprovados. Smoke owner confirmou ficha e console sem erros, site/login 200, API sem sessão 401 e harness 404; o evento de download não foi confirmado pela ferramenta. Não houve alteração de registros comerciais nem migration. Impressão visual do PDF e matriz manual de perfis continuam pendentes.
+
+### Continuação: exportação completa do Analytics
+
+`app/admin/analytics/AnalyticsContent.tsx` inclui as quatro abas mesmo ao exportar do comparativo, espera os módulos/fontes/gráficos, abre os detalhes antes de medir e mantém o relatório até `afterprint`. Uma trava síncrona impede duas exportações; cancelamento, troca de período e desmontagem invalidam a preparação, com limpeza de timers/listeners. Carregamento visual excedendo 15 segundos devolve erro recuperável. O menu nativo continua limitado às seções abertas, com aviso no rodapé; Exportar PDF e Ctrl/Cmd+P preparam o conjunto completo.
+
+`components/admin/analytics/DataTable.tsx` reaproveita os modelos de linha e componentes existentes para imprimir todas as linhas/colunas **disponíveis na coleta**, sem o limite visual de 15 ou filtros locais. Não amplia os limites de captura GA4/GSC. Ordenação, filtros e preferências de colunas da tela permanecem guardados. O relatório explica seu escopo no rodapé. CSS de impressão escopado evita corte horizontal, títulos truncados e espaço da sidebar recolhida; a matriz mobile deixa de duplicar a tabela na impressão.
+
+Regressões incorporadas a `scripts/test-admin-navigation.mjs`: relatório normal/comparativo, clique duplo, Ctrl/Cmd+P, fontes/seções/gráficos atrasados, erro de chunk e retry, timeout/cancelamento/troca de mês/saída, detalhes previamente abertos e navegador com `print()` não bloqueante. Os modelos reais do TanStack confirmam 23 linhas na exportação e restauração dos filtros/colunas depois. A suíte local passou. Não há nova migration ou dependência. A impressão visual completa nas famílias de navegador e os demais smokes manuais da lista inicial não são substituídos pelos testes simulados; próxima ação é conferir a publicação e registrar os limites observados no PR.
 
 > [!info] Migração para vault
 > Este arquivo era duplicado em `Docs/ADMIN_SETUP.md` e `Docs/site/ADMIN_SETUP.md`. Consolidado aqui como fonte única. Referenciado por [[stack-nextjs-supabase]].

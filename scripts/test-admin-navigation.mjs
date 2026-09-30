@@ -760,4 +760,256 @@ for (const navigationApi of [false, true]) {
   assert.equal(component(duplicated, 'OrcamentosTable').props.returnTo, '/admin/orcamentos?status=ativos&q=&page=1');
 }
 
-console.log('Admin navigation: confirmations, history rollback, Next state, cleanup, editorial/commercial journeys, pagination recovery, CRM request ordering and production harness isolation passed.');
+// Export the real Analytics component, including deferred modules and print lifecycle.
+{
+  const element = (type, props) => ({ type, props });
+  const symbols = new Proxy({}, { get: (_, name) => String(name) });
+  function nodes(tree, predicate) {
+    if (Array.isArray(tree)) return tree.flatMap((child) => nodes(child, predicate));
+    if (!tree?.props) return [];
+    return [...(predicate(tree) ? [tree] : []), ...nodes(tree.props.children, predicate)];
+  }
+  function hooks() {
+    const slots = [], effects = [];
+    let cursor = 0;
+    const changed = (previous, deps) => !previous || deps.some((value, index) => !Object.is(value, previous.deps[index]));
+    return {
+      begin() { cursor = 0; },
+      commit() { for (const effect of effects.splice(0)) effect(); },
+      unmount() { for (const slot of slots) slot?.cleanup?.(); },
+      react: {
+        useState(initial) {
+          const index = cursor++;
+          slots[index] ??= { value: typeof initial === 'function' ? initial() : initial };
+          return [slots[index].value, (next) => { slots[index].value = typeof next === 'function' ? next(slots[index].value) : next; }];
+        },
+        useRef(initial) { const index = cursor++; slots[index] ??= { current: initial }; return slots[index]; },
+        useCallback(callback, deps) {
+          const index = cursor++;
+          if (changed(slots[index], deps)) slots[index] = { deps, value: callback };
+          return slots[index].value;
+        },
+        useMemo(compute, deps) {
+          const index = cursor++;
+          if (changed(slots[index], deps)) slots[index] = { deps, value: compute() };
+          return slots[index].value;
+        },
+        useEffect(effect, deps) {
+          const index = cursor++, previous = slots[index];
+          if (changed(previous, deps)) {
+            slots[index] = { deps };
+            effects.push(() => { previous?.cleanup?.(); slots[index].cleanup = effect(); });
+          }
+        },
+      },
+    };
+  }
+  function load(path, imports, globals = {}) {
+    const api = {};
+    vm.runInNewContext(ts.transpileModule(readFileSync(new URL(`../${path}`, import.meta.url), 'utf8'), {
+      compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022, jsx: ts.JsxEmit.ReactJSX },
+    }).outputText, {
+      exports: api, console, URLSearchParams, AbortController,
+      require(name) {
+        if (name === 'react/jsx-runtime') return { jsx: element, jsxs: element, Fragment: 'Fragment' };
+        return imports(name);
+      }, ...globals,
+    });
+    return api;
+  }
+  const tick = () => new Promise((resolve) => setImmediate(resolve));
+  function printHarness(search = '', { failChunk = false, deferredChunk = null, blockingPrint = false } = {}) {
+    const state = hooks(), window = new Hub(), frames = new Map(), timers = new Map();
+    let id = 0, prints = 0, loads = 0, tree;
+    const details = [{ open: false }, { open: true }];
+    const report = {
+      isConnected: true, pending: false, chartWidth: 100,
+      querySelector: () => report.pending ? {} : null,
+      querySelectorAll(selector) {
+        if (selector === 'details:not([open])') return details.filter((detail) => !detail.open);
+        assert.equal(selector, '.recharts-responsive-container');
+        return [{ querySelector: () => ({ getBoundingClientRect: () => ({ width: report.chartWidth }) }) }];
+      },
+    };
+    const document = { fonts: { status: 'loaded' } };
+    Object.assign(window, {
+      setTimeout(callback) { const key = ++id; timers.set(key, callback); return key; },
+      clearTimeout(key) { timers.delete(key); },
+      print() { prints++; window.emit('beforeprint'); if (blockingPrint) window.emit('afterprint'); },
+    });
+    const props = {
+      snapshot: { context: { ga4: { users: 1, sessions: 2, pageviews: 3 }, gsc: { clicks: 4, impressions: 5, topQueries: [] }, insights: [], actionsP0: [], actionsP1: [], actionsP2: [] } },
+      previousSnapshot: { context: {} }, sectionErrors: {}, currentMonth: '2026-08', trendPoints: [],
+    };
+    const component = load('app/admin/analytics/AnalyticsContent.tsx', (name) => {
+      if (name === 'react') return state.react;
+      if (name === 'react-dom') return { flushSync(callback) { callback(); render(); } };
+      if (name === 'next/navigation') return { usePathname: () => '/admin/analytics', useSearchParams: () => new URLSearchParams(search) };
+      if (name === 'next/dynamic') return { default: () => 'LazySection' };
+      if (name === '@/lib/analytics/goals') return { computeMonthlyGoals: () => ({}), computeGoalProgress: () => ({}), formatGoalLabel: () => '', formulaLabel: () => '', goalStatusColor: () => '' };
+      if (name === '@/lib/analytics/red-flags') return { detectRedFlags: () => [] };
+      if (name === '@/lib/analytics/comparability') return { comparisonAvailability: () => ({ ga4MoM: true, gscMoM: true }) };
+      if (name.endsWith('AnalyticsHeader') || name.endsWith('Act0Status') || name.endsWith('ConversionEvents') || name.endsWith('KpiCardGrid')) return symbols;
+      if (name.startsWith('@/components/admin/analytics/')) {
+        loads++;
+        if (failChunk) throw new Error('Chunk indisponível');
+        return deferredChunk ?? symbols;
+      }
+      throw new Error(`Unexpected report import: ${name}`);
+    }, { window, document, requestAnimationFrame(callback) { const key = ++id; frames.set(key, callback); return key; }, cancelAnimationFrame(key) { frames.delete(key); } }).AnalyticsContent;
+    function render(next = {}) {
+      Object.assign(props, next);
+      state.begin(); tree = component(props);
+      tree.props.ref.current = report;
+      state.commit();
+      return tree;
+    }
+    render();
+    return {
+      render, window, document, report, details, timers, frames,
+      header: () => nodes(render(), (node) => node.type === 'AnalyticsHeader')[0].props,
+      panels: () => nodes(render(), (node) => node.props.role === 'tabpanel'),
+      get prints() { return prints; }, get loads() { return loads; },
+      retryChunks() { failChunk = false; },
+      async frame() { const callbacks = [...frames.values()]; frames.clear(); for (const callback of callbacks) callback(); await tick(); },
+      unmount() { state.unmount(); report.isConnected = false; },
+    };
+  }
+
+  for (const search of ['', 'compare=1']) {
+    const h = printHarness(search);
+    assert.equal(h.panels().length, search ? 0 : 4);
+    const print = h.header().onPrint;
+    const pending = print();
+    await print();
+    await tick();
+    assert.equal(h.loads, 6, 'Duplo clique não prepara duas exportações');
+    assert.equal(h.panels().length, 4, 'Modo comparativo também exporta todas as abas');
+    assert.equal(nodes(h.render(), (node) => node.props.printMode === true).length, 2);
+    h.report.pending = true;
+    await h.frame(); await h.frame();
+    assert.equal(h.prints, 0, 'Fallback de seção impede impressão parcial');
+    h.report.pending = false; h.document.fonts.status = 'loading';
+    await h.frame(); assert.equal(h.prints, 0);
+    h.document.fonts.status = 'loaded'; h.report.chartWidth = 0;
+    await h.frame(); assert.equal(h.prints, 0, 'Gráfico sem dimensões ainda não está pronto');
+    h.report.chartWidth = 100;
+    await h.frame(); await h.frame(); await pending;
+    assert.equal(h.prints, 1);
+    assert.equal(h.header().preparingPrint, true, 'Retorno não bloqueante de print mantém relatório montado');
+    assert.ok(h.panels().every((panel) => !panel.props.className.startsWith('hidden')));
+    assert.equal(h.details[0].open, true);
+    h.window.emit('afterprint');
+    assert.equal(h.header().preparingPrint, false);
+    assert.deepEqual(h.details.map((detail) => detail.open), [false, true], 'Restaura somente os detalhes abertos pela impressão');
+    assert.equal(h.timers.size + h.frames.size, 0);
+    h.unmount();
+    assert.equal(h.window.count('keydown') + h.window.count('afterprint') + h.window.count('beforeprint'), 0);
+  }
+  const failed = printHarness('', { failChunk: true });
+  await failed.header().onPrint();
+  assert.equal(nodes(failed.render(), (node) => node.props.role === 'alert').length, 1);
+  assert.equal(failed.header().preparingPrint, false);
+  failed.retryChunks();
+  const retry = failed.header().onPrint(); await tick();
+  await failed.frame(); await failed.frame(); await retry;
+  assert.equal(failed.prints, 1, 'Falha de chunk libera uma nova tentativa');
+  failed.window.emit('afterprint'); failed.unmount();
+
+  for (const cancel of ['timeout', 'button', 'unmount', 'month']) {
+    const h = printHarness();
+    h.report.pending = true;
+    const pending = h.header().onPrint(); await tick(); await h.frame();
+    if (cancel === 'timeout') for (const callback of [...h.timers.values()]) callback();
+    if (cancel === 'button') nodes(h.render(), (node) => node.type === 'button' && node.props.children === 'Cancelar exportação')[0].props.onClick();
+    if (cancel === 'unmount') h.unmount();
+    if (cancel === 'month') h.render({ currentMonth: '2026-09' });
+    await pending;
+    assert.equal(h.prints, 0);
+    assert.equal(h.timers.size + h.frames.size, 0, `${cancel}: não deixa espera ativa`);
+    assert.deepEqual(h.details.map((detail) => detail.open), [false, true]);
+    if (cancel !== 'unmount') { assert.equal(h.header().preparingPrint, false); h.unmount(); }
+  }
+  let resolveChunk;
+  const h = printHarness('', { deferredChunk: new Promise((resolve) => { resolveChunk = resolve; }) });
+  const stale = h.header().onPrint(); await tick(); h.unmount(); resolveChunk(symbols); await stale;
+  assert.equal(h.prints, 0, 'Importação tardia não abre impressão depois de sair da página');
+  for (const modifier of ['ctrlKey', 'metaKey']) {
+    const shortcut = printHarness('', { blockingPrint: true });
+    const event = shortcut.window.emit('keydown', { key: 'p', [modifier]: true });
+    assert.ok(event.defaultPrevented);
+    await tick(); await shortcut.frame(); await shortcut.frame();
+    assert.equal(shortcut.prints, 1);
+    assert.equal(shortcut.header().preparingPrint, false, 'afterprint síncrono também conclui exportação');
+    shortcut.unmount();
+  }
+
+  // Use the real TanStack row models to verify export scope and restored preferences.
+  const engine = await import('@tanstack/react-table');
+  const state = hooks(), saved = new Map();
+  let table;
+  const data = Array.from({ length: 23 }, (_, index) => ({ name: `Artigo ${index}`, count: index }));
+  const columns = [{ id: 'name', accessorKey: 'name' }, { id: 'count', accessorKey: 'count' }];
+  const component = load('components/admin/analytics/DataTable.tsx', (name) => {
+    if (name === 'react') return state.react;
+    if (name === '@tanstack/react-table') return { ...engine, useReactTable(options) {
+      table ??= engine.createTable(options);
+      table.setOptions({ ...options, state: { ...table.initialState, ...options.state } });
+      return table;
+    } };
+    if (name === '@dnd-kit/core') return { ...symbols, useSensor() {}, useSensors() {} };
+    if (name === '@/lib/utils') return { cn: (...classes) => classes.filter(Boolean).join(' ') };
+    return symbols;
+  }, { window: { localStorage: { getItem: (key) => saved.get(key), setItem: (key, value) => saved.set(key, value) } } }).DataTable;
+  const renderTable = (printMode = false) => {
+    state.begin();
+    const tree = component({ data, columns, printMode, storageKey: 'test-report' });
+    state.commit(); return tree;
+  };
+  const bodyRows = (tree) => nodes(tree, (node) => node.type === 'TableBody')[0].props.children;
+  assert.equal(bodyRows(renderTable()).length, 15);
+  table.setGlobalFilter('Artigo 22');
+  table.setColumnVisibility({ count: false });
+  table.setColumnSizing({ name: 500 });
+  table.setColumnOrder(['count', 'name']);
+  assert.equal(bodyRows(renderTable()).length, 1);
+  const savedBefore = JSON.stringify([...saved]);
+  const exported = bodyRows(renderTable(true));
+  assert.equal(exported.length, 23, 'Exporta todas as linhas coletadas, inclusive depois do corte de 15');
+  assert.equal(exported[0].props.children.length, 2, 'Colunas ocultas na tela são incluídas na exportação');
+  assert.equal(JSON.stringify([...saved]), savedBefore, 'Exportação não grava preferências temporárias');
+  const restored = bodyRows(renderTable());
+  assert.equal(restored.length, 1);
+  assert.equal(restored[0].props.children.length, 1);
+  assert.equal(table.getState().columnSizing.name, 500);
+  assert.equal(table.getState().columnOrder[0], 'count');
+  state.unmount();
+
+  let leafState;
+  const leafImports = (name) => {
+    if (name === 'react') return leafState.react;
+    if (name === '@/lib/analytics/use-url-filters') return { useUrlFilters: () => ({}) };
+    if (name === '@/lib/analytics/narrative') return { narrativeAct2Origin: () => '', narrativeAct3Posts: () => '' };
+    if (name === '@/lib/analytics/post-performance') return { findBestPost: () => null, findOpportunityPost: () => null, countByStatus: () => ({}) };
+    if (name === '@/lib/analytics/ai-sources') return { classifyAiSource: () => ({ isAi: false }), buildAiBreakdown: () => ({ byAi: [] }) };
+    return symbols;
+  };
+  for (const [file, child, props] of [
+    ['acts/Act2Origin', 'TopQueriesTable', { context: { ga4: {} }, topQueries: [] }],
+    ['acts/Act2Origin', 'TrafficSourcesChart', { context: { ga4: {} }, topQueries: [] }],
+    ['acts/Act3Posts', 'PostPerformanceTable', { context: {}, posts: [] }],
+    ['PostPerformanceTable', 'DataTable', { posts: [] }],
+    ['TopQueriesTable', 'DataTable', { queries: [] }],
+  ]) {
+    leafState = hooks();
+    const render = load(`components/admin/analytics/${file}.tsx`, leafImports)[file.split('/').at(-1)];
+    leafState.begin();
+    assert.equal(nodes(render({ ...props, printMode: true }), (node) => node.type === child)[0].props.printMode, true, `${file} mantém o modo de exportação até a tabela`);
+  }
+  const traffic = load('components/admin/analytics/TrafficSourcesChart.tsx', leafImports).TrafficSourcesChart;
+  const trafficTree = traffic({ data: [{ label: 'Direct', users: 1, sessions: 1, pctOfTotal: 100 }], printMode: true });
+  assert.equal(nodes(trafficTree, (node) => node.props.role === 'img')[0].props.className.includes('hidden'), false, 'Exportação mede o gráfico também em viewport mobile');
+  assert.equal(nodes(trafficTree, (node) => node.props.role === 'list')[0].props.className, 'hidden', 'Resumo mobile não duplica as mesmas fontes');
+}
+
+console.log('Admin navigation: confirmations, history rollback, Next state, cleanup, commercial/editorial journeys, CRM request ordering, report print lifecycle and complete tables passed.');

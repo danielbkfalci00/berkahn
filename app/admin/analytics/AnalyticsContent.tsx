@@ -6,20 +6,21 @@ import dynamic from "next/dynamic";
 import { flushSync } from "react-dom";
 import { AnalyticsHeader } from "@/components/admin/analytics/AnalyticsHeader";
 import { Act0Status } from "@/components/admin/analytics/acts/Act0Status";
+const reportLoading = () => <p data-report-loading role="status" className="py-6 text-sm text-neutral-500">Carregando análise…</p>;
 const loadAct2Origin = () => import("@/components/admin/analytics/acts/Act2Origin");
-const Act2Origin = dynamic(() => loadAct2Origin().then((module) => module.Act2Origin), { loading: () => <p role="status" className="py-6 text-sm text-neutral-500">Carregando análise…</p> });
+const Act2Origin = dynamic(() => loadAct2Origin().then((module) => module.Act2Origin), { loading: reportLoading });
 const loadAct3Posts = () => import("@/components/admin/analytics/acts/Act3Posts");
-const Act3Posts = dynamic(() => loadAct3Posts().then((module) => module.Act3Posts), { loading: () => <p role="status" className="py-6 text-sm text-neutral-500">Carregando análise…</p> });
+const Act3Posts = dynamic(() => loadAct3Posts().then((module) => module.Act3Posts), { loading: reportLoading });
 const loadAct4Action = () => import("@/components/admin/analytics/acts/Act4Action");
-const Act4Action = dynamic(() => loadAct4Action().then((module) => module.Act4Action), { loading: () => <p role="status" className="py-6 text-sm text-neutral-500">Carregando análise…</p> });
+const Act4Action = dynamic(() => loadAct4Action().then((module) => module.Act4Action), { loading: reportLoading });
 import { ConversionEvents } from "@/components/admin/analytics/ConversionEvents";
 import { KpiCardGrid } from "@/components/admin/analytics/KpiCardGrid";
 const loadGrowthChart = () => import("@/components/admin/analytics/GrowthChart");
-const GrowthChart = dynamic(() => loadGrowthChart().then((module) => module.GrowthChart), { loading: () => <p role="status" className="py-6 text-sm text-neutral-500">Carregando análise…</p> });
+const GrowthChart = dynamic(() => loadGrowthChart().then((module) => module.GrowthChart), { loading: reportLoading });
 const loadMatrizArtigoMes = () => import("@/components/admin/analytics/MatrizArtigoMes");
-const MatrizArtigoMes = dynamic(() => loadMatrizArtigoMes().then((module) => module.MatrizArtigoMes), { loading: () => <p role="status" className="py-6 text-sm text-neutral-500">Carregando análise…</p> });
+const MatrizArtigoMes = dynamic(() => loadMatrizArtigoMes().then((module) => module.MatrizArtigoMes), { loading: reportLoading });
 const loadComparisonView = () => import("@/components/admin/analytics/ComparisonView");
-const ComparisonView = dynamic(() => loadComparisonView().then((module) => module.ComparisonView), { loading: () => <p role="status" className="py-6 text-sm text-neutral-500">Carregando análise…</p> });
+const ComparisonView = dynamic(() => loadComparisonView().then((module) => module.ComparisonView), { loading: reportLoading });
 import { computeMonthlyGoals, computeGoalProgress, formatGoalLabel, formulaLabel, goalStatusColor } from "@/lib/analytics/goals";
 import { detectRedFlags } from "@/lib/analytics/red-flags";
 import { comparisonAvailability } from "@/lib/analytics/comparability";
@@ -53,6 +54,34 @@ interface AnalyticsContentProps {
   mapaLeitura: MapaLeitura;
   oportunidade: MapaOportunidade;
   funilLeads: AdminDataResult<FunilLeads> | null;
+}
+
+function waitForReport(root: HTMLElement, signal: AbortSignal, openDetails: () => void): Promise<void> {
+  return new Promise((resolve, reject) => {
+    let frame = 0;
+    let readyFrames = 0;
+    const finish = (error?: Error) => {
+      window.clearTimeout(timeout);
+      cancelAnimationFrame(frame);
+      signal.removeEventListener("abort", abort);
+      if (error) reject(error); else resolve();
+    };
+    const abort = () => finish(new Error("Exportação cancelada"));
+    const timeout = window.setTimeout(() => finish(new Error("Relatório ainda carregando")), 15_000);
+    const check = () => {
+      if (!root.isConnected) return abort();
+      openDetails();
+      const chartPending = Array.from(root.querySelectorAll(".recharts-responsive-container")).some((chart) => {
+        const svg = chart.querySelector("svg");
+        return !svg || svg.getBoundingClientRect().width <= 0;
+      });
+      const pending = root.querySelector("[data-report-loading]") || document.fonts?.status === "loading" || chartPending;
+      readyFrames = pending ? 0 : readyFrames + 1;
+      if (readyFrames >= 2) finish(); else frame = requestAnimationFrame(check);
+    };
+    signal.addEventListener("abort", abort, { once: true });
+    if (signal.aborted) abort(); else frame = requestAnimationFrame(check);
+  });
 }
 
 function deltaDirection(deltaPct?: number): "up" | "down" | "flat" {
@@ -184,6 +213,8 @@ export function AnalyticsContent({
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const reportRef = useRef<HTMLDivElement>(null);
+  const printJob = useRef<AbortController | null>(null);
+  const openedByPrint = useRef<HTMLDetailsElement[]>([]);
   const [printAll, setPrintAll] = useState(false);
   const [preparingPrint, setPreparingPrint] = useState(false);
   const [printError, setPrintError] = useState<string | null>(null);
@@ -218,22 +249,50 @@ export function AnalyticsContent({
   const comparisonDisabled = previousSnapshot === null || isPartial || previousSnapshot.context.partial === true || !comparability.ga4MoM || !comparability.gscMoM;
   const comparisonMode = requestedComparisonMode && !comparisonDisabled;
 
+  const openDetails = useCallback(() => {
+    reportRef.current?.querySelectorAll<HTMLDetailsElement>("details:not([open])").forEach((details) => {
+      details.open = true;
+      openedByPrint.current.push(details);
+    });
+  }, []);
+  const cancelPrint = useCallback(() => {
+    printJob.current?.abort();
+    printJob.current = null;
+    openedByPrint.current.splice(0).forEach((details) => { details.open = false; });
+  }, []);
+  const finishPrint = useCallback(() => {
+    cancelPrint();
+    setPrintAll(false);
+    setPreparingPrint(false);
+  }, [cancelPrint]);
+
   const exportReport = useCallback(async () => {
-    if (preparingPrint) return;
+    if (printJob.current) return;
+    const job = new AbortController();
+    printJob.current = job;
     setPreparingPrint(true);
     setPrintError(null);
     try {
       await Promise.all([loadAct2Origin(), loadAct3Posts(), loadAct4Action(), loadGrowthChart(), loadMatrizArtigoMes(), loadComparisonView()]);
+      if (job.signal.aborted || !reportRef.current) return;
       flushSync(() => setPrintAll(true));
-      await new Promise<void>((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve())));
+      await waitForReport(reportRef.current, job.signal, openDetails);
+      if (job.signal.aborted) return;
       window.print();
     } catch {
-      setPrintError("Não foi possível preparar o relatório completo. Tente exportar novamente.");
-    } finally {
-      setPrintAll(false);
-      setPreparingPrint(false);
+      if (!job.signal.aborted) {
+        finishPrint();
+        setPrintError("Não foi possível preparar o relatório completo. Tente exportar novamente.");
+      }
     }
-  }, [preparingPrint]);
+    // Some browsers return from print() before the preview closes. Keep the
+    // complete report mounted until afterprint or explicit cancellation.
+  }, [finishPrint, openDetails]);
+
+  useEffect(() => {
+    finishPrint();
+    return cancelPrint;
+  }, [currentMonth, snapshot, finishPrint, cancelPrint]);
 
   useEffect(() => {
     const printShortcut = (event: KeyboardEvent) => {
@@ -256,24 +315,14 @@ export function AnalyticsContent({
   }
 
   useEffect(() => {
-    const openedByPrint: HTMLDetailsElement[] = [];
-    const openDetails = () => {
-      reportRef.current?.querySelectorAll<HTMLDetailsElement>("details:not([open])").forEach((details) => {
-        details.open = true;
-        openedByPrint.push(details);
-      });
-    };
-    const restoreDetails = () => {
-      openedByPrint.splice(0).forEach((details) => { details.open = false; });
-    };
     window.addEventListener("beforeprint", openDetails);
-    window.addEventListener("afterprint", restoreDetails);
+    window.addEventListener("afterprint", finishPrint);
     return () => {
       window.removeEventListener("beforeprint", openDetails);
-      window.removeEventListener("afterprint", restoreDetails);
-      restoreDetails();
+      window.removeEventListener("afterprint", finishPrint);
+      cancelPrint();
     };
-  }, []);
+  }, [openDetails, finishPrint, cancelPrint]);
 
   function handleTabKey(event: React.KeyboardEvent<HTMLButtonElement>, currentIndex: number) {
     if (event.key !== "ArrowLeft" && event.key !== "ArrowRight" && event.key !== "Home" && event.key !== "End") return;
@@ -300,7 +349,7 @@ export function AnalyticsContent({
   const summaryKpis = [kpis[0], kpis[1], kpis[3], ...(leadsKpi ? [leadsKpi] : [])];
 
   return (
-    <div ref={reportRef} className="mx-auto max-w-[1400px] space-y-7">
+    <div ref={reportRef} data-analytics-report className="mx-auto max-w-[1400px] space-y-7">
       <AnalyticsHeader
         onPrint={exportReport}
         preparingPrint={preparingPrint}
@@ -327,10 +376,12 @@ export function AnalyticsContent({
       />
 
       {printError && <p role="alert" className="text-sm text-amber-800">{printError}</p>}
+      {preparingPrint && <div role="status" className="flex items-center gap-3 text-sm text-neutral-600 print:hidden">Exportação em andamento. <button type="button" onClick={finishPrint} className="min-h-11 underline">Cancelar exportação</button></div>}
       {Object.values(sectionErrors).some(Boolean) && <p role="status" className="rounded-md border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">Parte dos dados está indisponível. As seções afetadas estão identificadas abaixo. <button type="button" onClick={() => window.location.reload()} className="underline">Tentar novamente</button></p>}
-      {comparisonMode && previousSnapshot && !comparisonDisabled ? (
+      {comparisonMode && previousSnapshot && !comparisonDisabled && (
         <ComparisonView current={snapshot} previous={previousSnapshot} />
-      ) : (
+      )}
+      {(!comparisonMode || printAll) && (
         <>
           <div role="tablist" aria-label="Seções de analytics" className="-mx-4 flex gap-1 overflow-x-auto border-b border-neutral-200 px-4 sm:mx-0 sm:px-0 print:hidden">
             {tabs.map((tab, index) => (
@@ -360,13 +411,13 @@ export function AnalyticsContent({
           <section id="analytics-panel-aquisicao" aria-labelledby="analytics-tab-aquisicao" role="tabpanel" className={activeTab === "aquisicao" || printAll ? "space-y-8" : "hidden print:block print:space-y-8"}>
             {(activeTab === "aquisicao" || printAll) && <>
             {sectionErrors.trend ? <p role="status" className="text-sm text-amber-800">Histórico de aquisição indisponível.</p> : <GrowthChart data={trendPoints} events={timelineEvents} />}
-            <Act2Origin context={ctx} topQueries={topQueries} oportunidade={oportunidade} />
+            <Act2Origin context={ctx} topQueries={topQueries} oportunidade={oportunidade} printMode={printAll} />
             </>}
           </section>
 
           <section id="analytics-panel-conteudo" aria-labelledby="analytics-tab-conteudo" role="tabpanel" className={activeTab === "conteudo" || printAll ? "space-y-8" : "hidden print:block print:space-y-8"}>
             {(activeTab === "conteudo" || printAll) && <>
-            {sectionErrors.posts ? <p role="status" className="text-sm text-amber-800">Metadados dos artigos indisponíveis.</p> : <Act3Posts context={ctx} posts={postPerformance} mapaLeitura={mapaLeitura} />}
+            {sectionErrors.posts ? <p role="status" className="text-sm text-amber-800">Metadados dos artigos indisponíveis.</p> : <Act3Posts context={ctx} posts={postPerformance} mapaLeitura={mapaLeitura} printMode={printAll} />}
             {sectionErrors.history || sectionErrors.posts ? <p role="status" className="text-sm text-amber-800">Matriz histórica indisponível.</p> : <MatrizArtigoMes matriz={matrizAcervo} />}
             </>}
           </section>
@@ -384,6 +435,7 @@ export function AnalyticsContent({
       )}
       <footer className="text-xs text-neutral-400 pt-8 border-t border-neutral-100 print:pt-3">
         Atualizado em {ctx.generatedAt}
+        {printAll && <p>Tabelas com todos os registros disponíveis na coleta deste período, sem os filtros da tela. Os limites e as indisponibilidades de cada seção permanecem indicados.</p>}
         {!printAll && <p className="hidden print:block">Impressão das seções abertas. Use Exportar PDF para incluir todas as seções do relatório.</p>}
         <span className="hidden print:inline">
           {" "}· GA4 property {ctx.ga4PropertyId} · GSC {ctx.gscSiteUrl}

@@ -39,14 +39,17 @@ const URL_KEYS = ["queries_q", "queries_pos", "queries_opp"] as const;
 interface TopQueriesTableProps {
   queries: TopQueryWithTrend[];
   maxRows?: number;
+  printMode?: boolean;
 }
 
-export function TopQueriesTable({ queries, maxRows = 15 }: TopQueriesTableProps) {
+export function TopQueriesTable({ queries, maxRows = 15, printMode }: TopQueriesTableProps) {
   const filters = useUrlFilters(URL_KEYS);
 
   return (
     <Card className="bg-white border-neutral-200">
+      <h3 className="hidden px-4 pt-4 text-sm font-semibold print:block">Consultas no Google Search</h3>
       <DataTable
+        printMode={printMode}
         columns={queryColumns}
         data={queries}
         initialLimit={maxRows}
