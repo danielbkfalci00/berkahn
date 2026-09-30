@@ -5,7 +5,7 @@ import Link from "next/link"
 import { BaixarPdfButton } from "./BaixarPdfButton"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { FileText, FileSpreadsheet } from "lucide-react"
+import { FileText, FileSpreadsheet, RefreshCw } from "lucide-react"
 import type { OrcamentoListItem } from "@/types/orcamento-estimativa"
 
 interface Props {
@@ -43,6 +43,14 @@ const STATUS_VARIANT: Record<OrcamentoListItem["status"], "default" | "secondary
 }
 
 export function OrcamentosTable({ orcamentos, returnTo = "/admin/orcamentos" }: Props) {
+  const pdfAction = (o: OrcamentoListItem) => o.pdf_state === "stale" ? (
+    <Link href={commercialHref(`/admin/orcamentos/${o.id}`, returnTo)} className="inline-flex min-h-11 items-center gap-1 rounded px-2 text-xs font-medium text-amber-800 hover:text-amber-950 focus-visible:outline focus-visible:outline-2 focus-visible:outline-neutral-900">
+      <RefreshCw className="h-3.5 w-3.5" /> PDF desatualizado
+    </Link>
+  ) : o.pdf_state === "current" || o.pdf_state === "legacy" ? (
+    <BaixarPdfButton orcamentoId={o.id} label={o.pdf_state === "legacy" ? "PDF do acervo" : "Baixar PDF"} filename={`Orcamento-${o.numero}.pdf`} />
+  ) : null
+
   if (orcamentos.length === 0) {
     return (
       <Card className="p-12">
@@ -82,7 +90,7 @@ export function OrcamentosTable({ orcamentos, returnTo = "/admin/orcamentos" }: 
               <Link href={commercialHref(`/admin/orcamentos/${o.id}`, returnTo)} className="inline-flex min-h-11 items-center gap-2 rounded-lg border border-neutral-200 px-4 text-sm font-medium text-neutral-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900">
                 <FileText className="h-4 w-4" /> Abrir
               </Link>
-              {o.pdf_storage_path && <BaixarPdfButton orcamentoId={o.id} label={o.pdf_generated_at ? "Baixar PDF" : "PDF do acervo"} filename={`Orcamento-${o.numero}.pdf`} />}
+              {pdfAction(o)}
             </div>
           </article>
         ))}
@@ -124,7 +132,7 @@ export function OrcamentosTable({ orcamentos, returnTo = "/admin/orcamentos" }: 
                       <FileText className="h-3.5 w-3.5" />
                       Abrir
                     </Link>
-                    {o.pdf_storage_path && <BaixarPdfButton orcamentoId={o.id} label={o.pdf_generated_at ? "Baixar PDF" : "PDF do acervo"} filename={`Orcamento-${o.numero}.pdf`} />}
+                    {pdfAction(o)}
                   </div>
                 </td>
               </tr>

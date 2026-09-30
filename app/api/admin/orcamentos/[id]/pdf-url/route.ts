@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server"
 import { createServiceClient } from "@/lib/supabase/admin"
 import { exigirSessao } from "@/lib/supabase/sessao"
-import { gerarSignedUrlPdf, isOrcamentoPdfCurrent } from "@/lib/orcamento-pdf-storage"
+import { gerarSignedUrlPdf, getOrcamentoPdfState } from "@/lib/orcamento-pdf-storage"
 import type { Orcamento } from "@/types/orcamento-estimativa"
 
 interface RouteContext {
@@ -31,14 +31,14 @@ export async function GET(_: Request, ctx: RouteContext) {
     )
   }
   const budget = data as unknown as Orcamento
-  const legacy = !budget.pdf_revision_hash && !budget.pdf_generated_at;
-  if (!legacy && !isOrcamentoPdfCurrent(budget)) {
+  const pdfState = getOrcamentoPdfState(budget)
+  if (pdfState === "stale") {
     return NextResponse.json({ error: "Este PDF é de uma versão anterior. Abra o orçamento e gere o PDF atualizado." }, { status: 409 })
   }
 
   try {
     const signedUrl = await gerarSignedUrlPdf(storagePath)
-    return NextResponse.json({ pdf_url: signedUrl, verified: !legacy }, { headers: { "Cache-Control": "private, no-store" } })
+    return NextResponse.json({ pdf_url: signedUrl, verified: pdfState === "current" }, { headers: { "Cache-Control": "private, no-store" } })
   } catch (err) {
     return NextResponse.json(
       {

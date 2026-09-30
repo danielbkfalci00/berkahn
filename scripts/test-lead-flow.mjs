@@ -36,10 +36,10 @@ assert.equal(oldResponse.dados.cliente_nome, 'Cliente de teste B');
 assert.equal(reducer(oldResponse, { type: 'MARK_SAVED', snapshot: oldResponse.dados }).hasUnsavedChanges, false);
 
 const pdfSource = readFileSync(new URL('../lib/orcamento-pdf-storage.ts', import.meta.url), 'utf8');
-const hashStart = pdfSource.indexOf('const DOCUMENT_FIELDS =');
+const hashStart = pdfSource.indexOf('export const DOCUMENT_FIELDS =');
 const hashEnd = pdfSource.indexOf('const BUCKET_PDFS =', hashStart);
 assert.ok(hashStart >= 0 && hashEnd > hashStart, 'Hash real não encontrado.');
-const { getOrcamentoPdfRevision, isOrcamentoPdfCurrent } = await loadTypeScript(
+const { getOrcamentoPdfRevision, isOrcamentoPdfCurrent, getOrcamentoPdfState } = await loadTypeScript(
   `import { createHash } from 'node:crypto';\n${pdfSource.slice(hashStart, hashEnd)}`
 );
 const budget = { numero: 'TEST-001', cliente_nome: 'Cliente sintético', valor_min: 100, hero_image_url: 'test/hero.webp' };
@@ -49,6 +49,11 @@ assert.notEqual(getOrcamentoPdfRevision({ ...budget, valor_min: 101 }), revision
 assert.notEqual(getOrcamentoPdfRevision({ ...budget, hero_image_url: 'test/new-hero.webp' }), revision);
 assert.equal(isOrcamentoPdfCurrent({ ...budget, pdf_revision_hash: revision, pdf_storage_path: 'test/document.pdf' }), true);
 assert.equal(isOrcamentoPdfCurrent({ ...budget, valor_min: 101, pdf_revision_hash: revision, pdf_storage_path: 'test/document.pdf' }), false);
+assert.equal(getOrcamentoPdfState({ ...budget, pdf_revision_hash: revision, pdf_storage_path: 'test/document.pdf' }), 'current');
+assert.equal(getOrcamentoPdfState({ ...budget, valor_min: 101, pdf_revision_hash: revision, pdf_storage_path: 'test/document.pdf' }), 'stale');
+assert.equal(getOrcamentoPdfState({ ...budget, pdf_storage_path: 'test/legacy.pdf' }), 'legacy');
+assert.equal(getOrcamentoPdfState({ ...budget, pdf_generated_at: '2026-09-29', pdf_storage_path: 'test/incomplete.pdf' }), 'stale');
+assert.equal(getOrcamentoPdfState(budget), 'missing');
 
 // Executa as actions e a rota reais, substituindo apenas banco, storage e Next.
 function loadCommonModule(source, imports, globals = {}) {
@@ -61,6 +66,31 @@ function loadCommonModule(source, imports, globals = {}) {
   return testModule.exports;
 }
 const budgetTypes = loadCommonModule(readFileSync(new URL('../types/orcamento-estimativa.ts', import.meta.url), 'utf8'), {});
+{
+  const element = (type, props) => ({ type, props });
+  const symbols = new Proxy({}, { get: (_, name) => String(name) });
+  const table = loadCommonModule(readFileSync(new URL('../components/admin/orcamentos/OrcamentosTable.tsx', import.meta.url), 'utf8'), {
+    'react/jsx-runtime': { jsx: element, jsxs: element },
+    '@/lib/admin/return-to': { commercialHref: (href) => href },
+    'next/link': { __esModule: true, default: 'Link' },
+    './BaixarPdfButton': { BaixarPdfButton: 'BaixarPdfButton' },
+    '@/components/ui/card': { Card: 'Card' },
+    '@/components/ui/badge': { Badge: 'Badge' },
+    'lucide-react': symbols,
+  }).OrcamentosTable;
+  const nodes = (tree) => Array.isArray(tree) ? tree.flatMap(nodes) : tree?.props ? [tree, ...nodes(tree.props.children)] : [];
+  const row = { id: 'budget-test', numero: 'TEST-001', status: 'finalizado', cliente_nome: 'Cliente sintético', obra_cidade: 'Cidade', projeto_area_m2: 100, valor_min: 100, valor_max: 200, data_elaboracao: '2026-09-29', pdf_storage_path: 'test/document.pdf', pdf_generated_at: '2026-09-29', criado_em: '2026-09-29' };
+  const stale = nodes(table({ orcamentos: [{ ...row, pdf_state: 'stale' }] }));
+  assert.equal(stale.filter((node) => node.type === 'BaixarPdfButton').length, 0, 'PDF desatualizado não pode parecer baixável na lista.');
+  assert.equal(stale.filter((node) => node.type === 'Link' && JSON.stringify(node.props.children).includes('PDF desatualizado')).length, 2, 'Lista mobile e desktop levam ao orçamento para regenerar.');
+  const current = nodes(table({ orcamentos: [{ ...row, pdf_state: 'current' }] }));
+  assert.equal(current.filter((node) => node.type === 'BaixarPdfButton').length, 2);
+  const legacy = nodes(table({ orcamentos: [{ ...row, pdf_state: 'legacy' }] }));
+  assert.equal(legacy.filter((node) => node.type === 'BaixarPdfButton').length, 2);
+  assert.ok(legacy.filter((node) => node.type === 'BaixarPdfButton').every((node) => node.props.label === 'PDF do acervo'));
+  const missing = nodes(table({ orcamentos: [{ ...row, pdf_state: 'missing' }] }));
+  assert.equal(missing.filter((node) => node.type === 'BaixarPdfButton').length, 0);
+}
 const wizardModule = loadCommonModule(wizardSource, { '@/types/orcamento-estimativa': budgetTypes });
 const planilhaModule = loadCommonModule(readFileSync(new URL('../lib/orcamento-planilha.ts', import.meta.url), 'utf8'), { papaparse: Papa, '@/types/orcamento-estimativa': budgetTypes, '@/components/admin/orcamentos/wizard-state': wizardModule });
 const actionsSource = readFileSync(new URL('../app/admin/orcamentos/actions.ts', import.meta.url), 'utf8');
@@ -266,7 +296,7 @@ function createBudgetHarness({ onUpdate, signingFails = false, loseFirstCreateRe
   const actions = loadCommonModule(actionsSource, { 'next/cache': cache, 'node:util': { isDeepStrictEqual }, '@/lib/supabase/sessao': session, '@/components/admin/orcamentos/wizard-state': wizardModule, '@/lib/orcamento-planilha': planilhaModule });
   const sharp = () => { const image = { resize() { return image; }, webp() { return image; }, async toBuffer() { return Buffer.from('synthetic-image'); } }; return image; };
   const hero = loadCommonModule(heroSource, { 'next/cache': cache, 'next/server': { NextResponse: Response }, sharp, 'node:crypto': { randomUUID: () => 'new-upload' }, '@/lib/supabase/admin': service, '@/lib/supabase/sessao': session });
-  const pdfUrl = loadCommonModule(pdfUrlSource, { 'next/server': { NextResponse: Response }, '@/lib/supabase/admin': service, '@/lib/supabase/sessao': session, '@/lib/orcamento-pdf-storage': { isOrcamentoPdfCurrent, async gerarSignedUrlPdf() { calls.signedPdfs++; return `https://example.invalid/current.pdf?token=${calls.signedPdfs}`; } } });
+  const pdfUrl = loadCommonModule(pdfUrlSource, { 'next/server': { NextResponse: Response }, '@/lib/supabase/admin': service, '@/lib/supabase/sessao': session, '@/lib/orcamento-pdf-storage': { getOrcamentoPdfState, async gerarSignedUrlPdf() { calls.signedPdfs++; return `https://example.invalid/current.pdf?token=${calls.signedPdfs}`; } } });
   const page = {
     async setViewport() {}, async evaluateOnNewDocument() {}, async setExtraHTTPHeaders() {},
     async goto() { return { ok: () => !pdf.rendererFails, status: () => pdf.rendererFails ? 500 : 200 }; },

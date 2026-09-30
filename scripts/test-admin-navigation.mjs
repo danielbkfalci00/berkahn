@@ -697,7 +697,7 @@ for (const navigationApi of [false, true]) {
         if (name === '@/lib/admin/return-to') return returnHelpers;
         if (name === '@/lib/supabase/server') return { createClient: async () => supabase };
         if (name === '@/lib/orcamento-estimativa-data') return { PADROES_ACABAMENTO: [], REGIMES_COMERCIAIS: [] };
-        if (name === '@/lib/orcamento-pdf-storage') return { isOrcamentoPdfCurrent: () => false };
+        if (name === '@/lib/orcamento-pdf-storage') return { DOCUMENT_FIELDS: [], getOrcamentoPdfState: () => 'legacy' };
         if (name === 'lucide-react' || name.startsWith('@/components/') || name === './BaixarPdfButton') return symbols;
         throw new Error(`Unexpected commercial import: ${name}`);
       },
