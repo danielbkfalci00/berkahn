@@ -138,7 +138,7 @@ export function detectRedFlags(
       severity: "warning",
       metric: "Oportunidade SEO",
       text: `"${opportunity.query}" tem ${fmtInt(opportunity.impressions)} impressões mas só ${opportunity.ctr.toFixed(1)}% de CTR.`,
-      action: "Reescrever meta title/description do post que rankeia pra essa query.",
+      action: "Conferir no Search Console qual página recebe essa consulta e sua intenção antes de revisar título e descrição.",
     });
   }
 

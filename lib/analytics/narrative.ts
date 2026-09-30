@@ -231,7 +231,7 @@ export function detectRedFlag(ctx: SnapshotContext): string | null {
     });
   }
 
-  // Indexação caindo (proxy: se indexed < total e era 100% antes — fase 2 com snapshot anterior)
+  // Cobertura baixa é um fato atual; sem baseline não há queda medida.
   if (ctx.totalArticles > 0 && ctx.indexedCount / ctx.totalArticles < 0.5) {
     candidates.push({
       label: "indexação",
@@ -244,5 +244,6 @@ export function detectRedFlag(ctx: SnapshotContext): string | null {
 
   candidates.sort((a, b) => a.pct - b.pct);
   const worst = candidates[0];
+  if (worst.label === "indexação") return `Indexação baixa: apenas ${worst.absolute} indexados nesta coleta`;
   return `${worst.label} caiu ${absPctFmt(worst.pct)} (${worst.absolute})`;
 }

@@ -5,9 +5,10 @@ import { Trophy } from "lucide-react";
 
 interface WinCardProps {
   win: string | null;
+  hasComparableDeltas: boolean;
 }
 
-export function WinCard({ win }: WinCardProps) {
+export function WinCard({ win, hasComparableDeltas }: WinCardProps) {
   if (!win) {
     return (
       <Card className="p-5 bg-white border-neutral-200 border-l-4 border-l-neutral-200">
@@ -16,7 +17,9 @@ export function WinCard({ win }: WinCardProps) {
           <span>Maior ganho</span>
         </div>
         <p className="text-sm text-neutral-400">
-          Sem ganhos significativos vs mês anterior.
+          {hasComparableDeltas
+            ? "Nenhum ganho acima de 10% nas métricas com comparação válida."
+            : "Comparação mensal indisponível para identificar ganhos."}
         </p>
       </Card>
     );

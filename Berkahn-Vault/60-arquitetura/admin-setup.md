@@ -1,12 +1,12 @@
 ---
 tipo: context
 criado: 2025-12-01
-atualizado: 2026-09-29
+atualizado: 2026-09-30
 tags:
   - ai/context
   - project/site
   - domain/admin
-ai_summary: Sistema Admin Berkahn com quatro papéis, CRM e PWA/Web Push. Sprints publicados até PR129 incluem exportação com prazo total, cancelamento e menos montagem duplicada. Smoke confirmou preparação das quatro abas; complemento mede o gráfico principal em vez da legenda e distingue relatório pronto de carregamento. PDF final e matriz manual de perfis permanecem pendentes.
+ai_summary: Sistema Admin Berkahn com quatro papéis, CRM e PWA/Web Push. Sprints até PR130 publicados. Exportação tem prazo total, cancelamento e validação dos gráficos reais; preparação desktop passou no smoke. O sprint atual remove afirmações sem baseline nos KPIs e nas recomendações de SEO. PDF final e matriz manual de perfis permanecem pendentes.
 status: active
 projeto: site
 escopo: berkahn
@@ -143,6 +143,14 @@ Após duas falhas de conexão pela abertura direta, `browser.tabs.new()` seguido
 O DOM de produção mostrou SVGs de legenda com 8×8 pixels antes do SVG principal em três gráficos. `waitForReport` em `app/admin/analytics/AnalyticsContent.tsx` passa a medir `.recharts-wrapper > svg.recharts-surface`: uma legenda pronta não libera exportação com o gráfico ausente ou sem dimensões. A regressão reproduziu a impressão prematura antes do ajuste e passou após a correção, incluindo ausência, largura e altura zero do gráfico com a legenda presente.
 
 O estado existente foi refinado em preparação, impressão e repouso. `AnalyticsHeader.tsx` distingue “Preparando…” de “Aguardando impressão”; o status informa que o relatório está pronto e oferece concluir no navegador ou cancelar. Isso evita indicar carregamento indefinido quando `print()` retorna sem emitir `afterprint`. O bloqueio de duplicatas e a restauração por cancelamento/`afterprint` permanecem, com regressões para ambos os comportamentos do navegador. Próxima ação: confirmar visualmente o PDF final, incluindo layout mobile; os demais smokes manuais da lista inicial continuam pendentes.
+
+O [PR130](https://github.com/danielbkfalci00/berkahn/pull/130) foi integrado em `804191b`; [CI da main](https://github.com/danielbkfalci00/berkahn/actions/runs/36662095964) e deploys de site/ADMIN passaram. No smoke desktop, as quatro abas, 28 artigos e cinco superfícies de gráfico tinham dimensões positivas e a interface indicou “Aguardando impressão” sem alerta. Em 320 px, a busca por “Financiar” retornou um artigo sem overflow; a ferramenta perdeu resposta ao acionar a exportação. A janela nativa, o PDF final e a exportação mobile continuam sem confirmação. As tentativas de limpar a aba temporária expiraram; ela não foi marcada para persistir na sessão seguinte.
+
+### Continuação: evidência e linguagem dos indicadores
+
+`lib/analytics/narrative.ts` descreve indexação abaixo de 50% como cobertura atual baixa, sem fabricar “queda de 50%” sem baseline. `WinCard` distingue falta de comparação de ausência de ganho acima de 10%; `RedFlagCard` limita a conclusão aos riscos monitorados nos dados disponíveis. `lib/analytics/red-flags.ts` orienta identificar no Search Console a página e intenção de uma consulta antes de sugerir edição de título/descrição.
+
+`lib/analytics/comparability.ts` também omite listas de consultas em alta e em queda quando o baseline GSC é inválido. Consulta e página absolutas continuam disponíveis; o snapshot armazenado não é regravado. A regressão em `scripts/analytics/testar-integridade.mjs` reproduziu cinco afirmações frágeis e duas tendências sem baseline antes dos ajustes. Próxima verificação: CI completo, deploy e leitura do Analytics nos estados sem comparação. A confirmação nativa do PDF e os demais smokes manuais seguem pendentes.
 
 > [!info] Migração para vault
 > Este arquivo era duplicado em `Docs/ADMIN_SETUP.md` e `Docs/site/ADMIN_SETUP.md`. Consolidado aqui como fonte única. Referenciado por [[stack-nextjs-supabase]].

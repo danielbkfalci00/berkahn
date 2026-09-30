@@ -5,6 +5,7 @@ import { WinCard } from "../WinCard";
 import { RedFlagCard } from "../RedFlagCard";
 import { computeHealthScore } from "@/lib/analytics/health-score";
 import { detectWin, detectRedFlag, narrativeAct0Status } from "@/lib/analytics/narrative";
+import { comparisonAvailability } from "@/lib/analytics/comparability";
 import type { RedFlag } from "@/lib/analytics/red-flags";
 import type { SnapshotContext, TrendPoint } from "@/types/analytics";
 
@@ -22,6 +23,10 @@ interface Act0StatusProps {
 export function Act0Status({ context, trendPoints, redFlags = [] }: Act0StatusProps) {
   const health = computeHealthScore(context);
   const win = detectWin(context);
+  const comparability = comparisonAvailability(context);
+  const hasComparableDeltas =
+    (comparability.ga4MoM && [context.ga4.usersMoMPct, context.ga4.pageviewsMoMPct].some(Number.isFinite)) ||
+    (comparability.gscMoM && [context.gsc.clicksMoMPct, context.gsc.impressionsMoMPct].some(Number.isFinite));
   const fallbackRedFlag = detectRedFlag(context);
   const primaryFlagText = redFlags.length > 0 ? redFlags[0].text : fallbackRedFlag;
   const narrative = narrativeAct0Status(context, health, win, primaryFlagText);
@@ -38,7 +43,7 @@ export function Act0Status({ context, trendPoints, redFlags = [] }: Act0StatusPr
       <HeroMetric context={context} trendPoints={trendPoints} />
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <WinCard win={win} />
+        <WinCard win={win} hasComparableDeltas={hasComparableDeltas} />
         <RedFlagCard flags={redFlags} fallback={redFlags.length === 0 ? fallbackRedFlag : null} />
       </div>
     </section>
