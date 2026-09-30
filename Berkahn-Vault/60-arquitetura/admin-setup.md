@@ -6,7 +6,7 @@ tags:
   - ai/context
   - project/site
   - domain/admin
-ai_summary: Sistema Admin Berkahn com quatro papéis, CRM e PWA/Web Push. Sprints até PR133 publicados. Exportação prepara todas as abas; KPIs e participação das fontes de tráfego explicitam denominadores e limites. PDF final e matriz manual de perfis permanecem pendentes.
+ai_summary: Sistema Admin Berkahn com quatro papéis, CRM e PWA/Web Push. Sprints até PR134 publicados. Exportação prepara todas as abas; KPIs e fontes explicitam denominadores e limites. Lista de orçamentos sinaliza PDF desatualizado; PDF final e matriz manual de perfis permanecem pendentes.
 status: active
 projeto: site
 escopo: berkahn
@@ -167,6 +167,12 @@ O [PR133](https://github.com/danielbkfalci00/berkahn/pull/133) foi integrado em 
 ### Continuação: denominador de fontes e linguagem de aquisição
 
 `fetch-ga4.mjs` passa a persistir `topSources.pctOfTotal` sobre todas as sessões do GA4, não só sobre as até 50 fontes capturadas. O ADMIN recalcula a participação a partir das sessões absolutas nos snapshots antigos, inclusive no comparativo, sem regravar dados. A narrativa usa sessões observadas de fontes classificadas como IA e declara o limite da captura, em vez de somar usuários por origem e sugerir causalidade. Ganhos e quedas passam a concordar com o sujeito em português. Regressões cobrem denominador e linguagem; PDF nativo e matriz manual seguem pendentes.
+
+O [PR134](https://github.com/danielbkfalci00/berkahn/pull/134) foi integrado em `c919667`; CI da main [36674500326](https://github.com/danielbkfalci00/berkahn/actions/runs/36674500326) e ambos os deploys passaram. O smoke owner de fevereiro confirmou participação sobre todas as sessões e concordância da narrativa, sem erro de console.
+
+### Continuação: estado do PDF na lista de orçamentos
+
+`app/admin/orcamentos/page.tsx` consulta os campos usados pela revisão do PDF para até 25 orçamentos por página, calcula o estado no servidor e envia à tabela apenas os campos de exibição. `OrcamentosTable` troca o download de arquivo vencido por um link ao detalhe, onde o usuário pode conferir ou regenerar; documentos atuais e legados preservam seus fluxos. `lib/orcamento-pdf-storage.ts` concentra o mesmo estado usado pelo detalhe e pela rota de download. As regressões cobrem os quatro estados e as duas apresentações da lista. A validação nativa de download e layout final continua pendente.
 
 > [!info] Migração para vault
 > Este arquivo era duplicado em `Docs/ADMIN_SETUP.md` e `Docs/site/ADMIN_SETUP.md`. Consolidado aqui como fonte única. Referenciado por [[stack-nextjs-supabase]].
