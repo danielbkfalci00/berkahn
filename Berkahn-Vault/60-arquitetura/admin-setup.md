@@ -6,7 +6,7 @@ tags:
   - ai/context
   - project/site
   - domain/admin
-ai_summary: Sistema Admin Berkahn com quatro papéis, CRM e PWA/Web Push. Sprints publicados até PR128 corrigem dados, navegação, PDF e filtros do Analytics. Continuação limita toda a preparação da exportação, remove dependência de quadros de animação e evita cartões duplicados; confirmação visual do PDF e matriz manual de perfis permanecem pendentes.
+ai_summary: Sistema Admin Berkahn com quatro papéis, CRM e PWA/Web Push. Sprints publicados até PR129 incluem exportação com prazo total, cancelamento e menos montagem duplicada. Smoke confirmou preparação das quatro abas; complemento mede o gráfico principal em vez da legenda e distingue relatório pronto de carregamento. PDF final e matriz manual de perfis permanecem pendentes.
 status: active
 projeto: site
 escopo: berkahn
@@ -134,7 +134,15 @@ O smoke em produção encontrou busca na URL sem atualização do campo/tabela. 
 
 `components/admin/analytics/DataTable.tsx` deixa de montar os cartões mobile durante a exportação; a tabela completa já representa os mesmos dados. As preferências e filtros continuam preservados. Nenhum arquivo, serviço, dependência ou migration foi criado.
 
-A regressão local falhou antes da correção porque não existia prazo para módulos pendentes e passou após o ajuste. A suíte também verifica carregamento sem resposta, cancelamento imediato, tentativa antiga seguida de retry, prazo único mesmo com importação lenta, suspensão de quadros de animação, altura zero, mensagens por etapa e ausência dos cartões duplicados. O typecheck local foi interrompido ao detectar testes de outro projeto; validações restantes seguem pelo CI. Nesta sessão, duas tentativas de abrir o ADMIN falharam antes da conexão da ferramenta ao navegador. Próxima ação: confirmar visualmente a exportação e seu layout em navegador disponível, incluindo mobile; os demais smokes manuais da lista inicial continuam pendentes.
+A regressão local falhou antes da correção porque não existia prazo para módulos pendentes e passou após o ajuste. A suíte também verifica carregamento sem resposta, cancelamento imediato, tentativa antiga seguida de retry, prazo único mesmo com importação lenta, suspensão de quadros de animação, altura zero, mensagens por etapa e ausência dos cartões duplicados. O typecheck local foi interrompido ao detectar testes de outro projeto; o [CI do PR129](https://github.com/danielbkfalci00/berkahn/actions/runs/36660884346) aprovou lint, TypeScript, suítes e build. O [PR129](https://github.com/danielbkfalci00/berkahn/pull/129) foi integrado em `6e03d28`; [CI da main](https://github.com/danielbkfalci00/berkahn/actions/runs/36661141513) e deploys do site/ADMIN passaram.
+
+Após duas falhas de conexão pela abertura direta, `browser.tabs.new()` seguido de navegação recuperou o smoke owner. A exportação montou as quatro abas, os 28 artigos e cinco gráficos com dimensões positivas; não houve alerta de erro nem exceção de console. O cancelamento restaurou somente a aba Resumo e habilitou nova exportação. Houve avisos transitórios de dimensões iniciais do Recharts, antes da medição dos gráficos. A ferramenta não confirmou a janela nativa nem um PDF final, portanto essa cobertura continua pendente.
+
+### Continuação: gráfico efetivo e estado de impressão
+
+O DOM de produção mostrou SVGs de legenda com 8×8 pixels antes do SVG principal em três gráficos. `waitForReport` em `app/admin/analytics/AnalyticsContent.tsx` passa a medir `.recharts-wrapper > svg.recharts-surface`: uma legenda pronta não libera exportação com o gráfico ausente ou sem dimensões. A regressão reproduziu a impressão prematura antes do ajuste e passou após a correção, incluindo ausência, largura e altura zero do gráfico com a legenda presente.
+
+O estado existente foi refinado em preparação, impressão e repouso. `AnalyticsHeader.tsx` distingue “Preparando…” de “Aguardando impressão”; o status informa que o relatório está pronto e oferece concluir no navegador ou cancelar. Isso evita indicar carregamento indefinido quando `print()` retorna sem emitir `afterprint`. O bloqueio de duplicatas e a restauração por cancelamento/`afterprint` permanecem, com regressões para ambos os comportamentos do navegador. Próxima ação: confirmar visualmente o PDF final, incluindo layout mobile; os demais smokes manuais da lista inicial continuam pendentes.
 
 > [!info] Migração para vault
 > Este arquivo era duplicado em `Docs/ADMIN_SETUP.md` e `Docs/site/ADMIN_SETUP.md`. Consolidado aqui como fonte única. Referenciado por [[stack-nextjs-supabase]].

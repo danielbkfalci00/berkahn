@@ -89,7 +89,8 @@ function waitForReport(
         const sectionPending = !!root.querySelector("[data-report-loading]");
         const fontsPending = document.fonts?.status === "loading";
         const chartPending = Array.from(root.querySelectorAll(".recharts-responsive-container")).some((chart) => {
-          const bounds = chart.querySelector("svg")?.getBoundingClientRect();
+          // Legends have their own SVGs; only the chart surface proves readiness.
+          const bounds = chart.querySelector(".recharts-wrapper > svg.recharts-surface")?.getBoundingClientRect();
           return !bounds || bounds.width <= 0 || bounds.height <= 0;
         });
         timeoutMessage = sectionPending
@@ -249,7 +250,8 @@ export function AnalyticsContent({
   const printJob = useRef<AbortController | null>(null);
   const openedByPrint = useRef<HTMLDetailsElement[]>([]);
   const [printAll, setPrintAll] = useState(false);
-  const [preparingPrint, setPreparingPrint] = useState(false);
+  const [printPhase, setPrintPhase] = useState<"idle" | "preparing" | "printing">("idle");
+  const preparingPrint = printPhase !== "idle";
   const [printError, setPrintError] = useState<string | null>(null);
   const requestedComparisonMode = searchParams.get("compare") === "1";
   const requestedTab = searchParams.get("tab");
@@ -296,14 +298,14 @@ export function AnalyticsContent({
   const finishPrint = useCallback(() => {
     cancelPrint();
     setPrintAll(false);
-    setPreparingPrint(false);
+    setPrintPhase("idle");
   }, [cancelPrint]);
 
   const exportReport = useCallback(async () => {
     if (printJob.current) return;
     const job = new AbortController();
     printJob.current = job;
-    setPreparingPrint(true);
+    setPrintPhase("preparing");
     setPrintError(null);
     try {
       await waitForReport(job.signal,
@@ -312,6 +314,7 @@ export function AnalyticsContent({
         openDetails,
       );
       if (job.signal.aborted) return;
+      setPrintPhase("printing");
       window.print();
     } catch (error) {
       if (!job.signal.aborted) {
@@ -387,6 +390,7 @@ export function AnalyticsContent({
       <AnalyticsHeader
         onPrint={exportReport}
         preparingPrint={preparingPrint}
+        awaitingPrint={printPhase === "printing"}
         monthLabel={ctx.monthLabel}
         periodStart={ctx.periodStart}
         periodEnd={ctx.periodEnd}
@@ -410,7 +414,7 @@ export function AnalyticsContent({
       />
 
       {printError && <p role="alert" className="text-sm text-amber-800">{printError}</p>}
-      {preparingPrint && <div role="status" className="flex items-center gap-3 text-sm text-neutral-600 print:hidden">Exportação em andamento. <button type="button" onClick={finishPrint} className="min-h-11 underline">Cancelar exportação</button></div>}
+      {preparingPrint && <div role="status" className="flex flex-wrap items-center gap-3 text-sm text-neutral-600 print:hidden">{printPhase === "printing" ? "Relatório pronto. Conclua a impressão no navegador ou cancele para voltar." : "Preparando relatório completo."} <button type="button" onClick={finishPrint} className="min-h-11 underline">Cancelar exportação</button></div>}
       {Object.values(sectionErrors).some(Boolean) && <p role="status" className="rounded-md border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">Parte dos dados está indisponível. As seções afetadas estão identificadas abaixo. <button type="button" onClick={() => window.location.reload()} className="underline">Tentar novamente</button></p>}
       {comparisonMode && previousSnapshot && !comparisonDisabled && (
         <ComparisonView current={snapshot} previous={previousSnapshot} />
