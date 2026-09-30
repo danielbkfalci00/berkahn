@@ -1,7 +1,7 @@
 ---
 tipo: memory
 criado: 2026-05-28
-atualizado: 2026-09-10
+atualizado: 2026-09-30
 tags:
   - ai/memory
   - status/active
@@ -180,14 +180,25 @@ Implementado em [`lib/analytics/red-flags.ts`](../../../../lib/analytics/red-fla
 |------|----------|----------|
 | **users-drop** | critical (≤-20%) / warning (≤-10%) | `usersMoMPct` abaixo do threshold |
 | **clicks-drop** | critical (≤-20%) / warning (≤-10%) | `clicksMoMPct` abaixo do threshold |
-| **indexation-drop** | critical | `indexedCount < previous.indexedCount` |
+| **indexation-drop** | critical | mesmo slug com inspeção válida: antes indexado, agora sem indexação confirmada |
 | **engagement-drop** | warning | `engagementRateMoMPct <= -15` |
 | **no-posts** | warning | nenhum post publicado no mês (em mês parcial, "nos primeiros N dias") |
 | **opportunity-queries** | warning | query com `impressions ≥ 500` E `ctr < 2%` |
 
 Cada flag inclui `action` sugerida quando aplicável.
 
-**Quando não há nenhuma flag**: card verde "Tudo dentro da faixa esperada".
+**Quando não há nenhuma flag**: o card diz apenas que nenhum dos riscos
+monitorados apareceu nos dados disponíveis. Ausência de flag não prova que
+todo o desempenho está dentro de uma faixa esperada.
+
+A perda de indexação compara URLs com inspeção válida nos dois snapshots.
+Separadamente, cobertura atual abaixo de 50% pode aparecer como risco no
+resumo, mas nunca como queda percentual sem o valor anterior. Consultas GSC
+com muitas impressões e CTR baixo pedem conferir primeiro qual página recebe
+a consulta e qual é sua intenção; o alerta não identifica sozinho um post a
+editar. Quando a comparação GSC não tem baseline, as listas de consultas em
+alta/queda do contexto são omitidas na leitura do snapshot, preservando as
+consultas e páginas absolutas da coleta.
 
 ## Timeline de Posts no GrowthChart (Ato 1)
 

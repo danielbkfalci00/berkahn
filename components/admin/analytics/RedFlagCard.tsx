@@ -35,7 +35,7 @@ export function RedFlagCard({ flags, fallback, initialLimit = 3 }: RedFlagCardPr
           <span>Riscos do mês</span>
         </div>
         <p className="text-sm text-neutral-600">
-          Nada anormal detectado. Tudo dentro da faixa esperada.
+          Nenhum dos riscos monitorados apareceu nos dados disponíveis.
         </p>
       </Card>
     );

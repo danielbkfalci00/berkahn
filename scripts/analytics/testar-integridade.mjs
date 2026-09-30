@@ -103,6 +103,17 @@ ok('snapshot legado perde delta GA4', legacy.context.ga4.usersMoMPct === undefin
 ok('resumo legado perde claim MoM', !legacy.context.summary[0].text.includes('MoM'));
 ok('snapshot legado normaliza universo de indexacao', legacy.context.totalArticles === 1 && legacy.context.indexedCount === 1);
 ok('snapshot legado remove acao de redirect', legacy.context.actionsP0.length === 0);
+const noGscBaseline = comparison.applySnapshotComparisonPolicy({ context: {
+  ...baseContext, comparability: { ga4MoM: false, gscMoM: false, reason: 'baseline ausente' },
+  ga4: { ...baseContext.ga4, topSources: [] },
+  gsc: {
+    ...baseContext.gsc,
+    risingQueries: [{ query: 'steel frame', clicksCurrent: 12, clicksPrevious: 2, clicksDelta: 10 }],
+    fallingQueries: [{ query: 'construção', clicksCurrent: 1, clicksPrevious: 9, clicksDelta: -8 }],
+    topQueries: [],
+  },
+} });
+ok('baseline GSC ausente remove tendencias antigas de query', noGscBaseline.context.gsc.risingQueries.length === 0 && noGscBaseline.context.gsc.fallingQueries.length === 0);
 
 // Context enriched preserva a escala original: CTR em %, tempo em segundos.
 // Os textos antigos são descartados; números, deltas válidos e datas não mudam.
@@ -235,6 +246,66 @@ function loadCommonModule(source, imports) {
   }, testModule, testModule.exports);
   return testModule.exports;
 }
+const narrative = loadCommonModule(readFileSync('lib/analytics/narrative.ts', 'utf8'), {
+  './ai-sources': { buildAiBreakdown: () => ({}) },
+  './comparability': { comparisonAvailability: comparison.comparisonAvailability },
+});
+ok('narrativa nao inventa ganho de query sem baseline', !narrative.narrativeAct2Origin(noGscBaseline.context).includes('ganhou'));
+const lowCoverage = {
+  ...baseContext, indexedCount: 4,
+  ga4: { ...baseContext.ga4, usersMoMPct: undefined },
+  gsc: { ...baseContext.gsc, clicksMoMPct: undefined },
+};
+const coverageRisk = narrative.detectRedFlag(lowCoverage);
+ok('cobertura baixa nao inventa queda sem baseline', coverageRisk?.includes('4 de 10 artigos') && !coverageRisk.includes('caiu'));
+ok('queda medida continua explicita', narrative.detectRedFlag({
+  ...baseContext, indexedCount: 8, ga4: { ...baseContext.ga4, usersMoMPct: -25, users: 40 },
+})?.includes('usuários caiu 25%'));
+
+const { detectRedFlags } = loadCommonModule(readFileSync('lib/analytics/red-flags.ts', 'utf8'), {
+  './comparability': { isKnownIndexation: () => true, isIndexedCoverage: () => true, comparisonAvailability: comparison.comparisonAvailability },
+});
+const opportunityFlags = detectRedFlags({
+  ...baseContext, indexedCount: 8,
+  ga4: { engagementRate: 50 },
+  gsc: { topQueries: [{ query: 'construção', impressions: 600, ctr: 1, clicks: 6 }] },
+}, null);
+ok('acao SEO pede identificar a pagina antes de editar', opportunityFlags.find((flag) => flag.id === 'opportunity-queries')?.action?.includes('qual página'));
+
+const Card = ({ children }) => jsxRuntime.jsx('div', { children });
+const Icon = () => null;
+const { WinCard } = loadCommonModule(readFileSync('components/admin/analytics/WinCard.tsx', 'utf8'), {
+  'react/jsx-runtime': jsxRuntime,
+  '@/components/ui/card': { Card },
+  'lucide-react': { Trophy: Icon },
+});
+const { RedFlagCard } = loadCommonModule(readFileSync('components/admin/analytics/RedFlagCard.tsx', 'utf8'), {
+  'react/jsx-runtime': jsxRuntime,
+  'react': { useState: () => [false, () => {}] },
+  '@/components/ui/card': { Card },
+  '@/components/ui/accordion': {},
+  'lucide-react': { AlertTriangle: Icon, ShieldCheck: Icon, Circle: Icon },
+  '@/lib/utils': { cn: (...classes) => classes.filter(Boolean).join(' ') },
+});
+const noComparison = renderToStaticMarkup(jsxRuntime.jsx(WinCard, { win: null, hasComparableDeltas: false }));
+const noWin = renderToStaticMarkup(jsxRuntime.jsx(WinCard, { win: null, hasComparableDeltas: true }));
+ok('sem baseline nao afirma ausencia de ganhos', noComparison.includes('Comparação mensal indisponível') && !noComparison.includes('Sem ganhos'));
+ok('sem ganho com baseline mostra criterio', noWin.includes('10%'));
+const noFlags = renderToStaticMarkup(jsxRuntime.jsx(RedFlagCard, { flags: [] }));
+ok('sem flags nao afirma que tudo esta normal', noFlags.includes('riscos monitorados') && !noFlags.includes('Tudo dentro'));
+const { Act0Status } = loadCommonModule(readFileSync('components/admin/analytics/acts/Act0Status.tsx', 'utf8'), {
+  'react/jsx-runtime': jsxRuntime,
+  '../HeroMetric': { HeroMetric: () => null },
+  '../WinCard': { WinCard },
+  '../RedFlagCard': { RedFlagCard },
+  '@/lib/analytics/health-score': { computeHealthScore: () => ({ status: 'good' }) },
+  '@/lib/analytics/narrative': narrative,
+  '@/lib/analytics/comparability': { comparisonAvailability: comparison.comparisonAvailability },
+});
+const statusMarkup = (context) => renderToStaticMarkup(jsxRuntime.jsx(Act0Status, { context, trendPoints: [], redFlags: [] }));
+ok('ato 0 usa indisponibilidade real do periodo', statusMarkup(noGscBaseline.context).includes('Comparação mensal indisponível'));
+ok('ato 0 mantem ausencia de ganho quando GSC e comparavel', statusMarkup({ ...baseContext, monthLabel: 'Agosto/2026', ga4: { ...baseContext.ga4, users: 100 } }).includes('Nenhum ganho acima de 10%'));
+
 const access = loadCommonModule(readFileSync('lib/admin/access.ts', 'utf8'), {});
 const funnel = loadCommonModule(readFileSync('lib/analytics/leads-funnel.ts', 'utf8'), {});
 const cohortRows = [

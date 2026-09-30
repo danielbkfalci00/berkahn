@@ -41,6 +41,10 @@ function withoutGscDeltas(context: SnapshotContext): SnapshotContext {
   delete gsc.ctrMoMPct;
   delete gsc.positionMoMText;
   delete gsc.positionMoMPct;
+  // Estas listas também dependem da comparação mensal. Preservar apenas
+  // topQueries/topPages absolutos quando o baseline falhou.
+  gsc.risingQueries = [];
+  gsc.fallingQueries = [];
   return { ...context, gsc };
 }
 
