@@ -255,6 +255,7 @@ const summaryWithRisk = narrative.narrativeAct0Status(
   '1 artigo antes indexado agora sem indexação confirmada: Reforma tributária.',
 );
 ok('resumo com risco pontuado tem frase legivel', summaryWithRisk.includes('. Maior risco: ') && summaryWithRisk.endsWith('Reforma tributária.') && !summaryWithRisk.endsWith('Reforma tributária..'));
+ok('resumo qualifica a faixa como indice dos componentes disponiveis', summaryWithRisk.includes('Health Score de Setembro/2026 (parcial)') && summaryWithRisk.includes('componentes disponíveis') && !summaryWithRisk.includes('está bom'));
 ok('narrativa nao inventa ganho de query sem baseline', !narrative.narrativeAct2Origin(noGscBaseline.context).includes('ganhou'));
 const lowCoverage = {
   ...baseContext, indexedCount: 4,
@@ -279,6 +280,19 @@ ok('acao SEO pede identificar a pagina antes de editar', opportunityFlags.find((
 
 const Card = ({ children }) => jsxRuntime.jsx('div', { children });
 const Icon = () => null;
+const { HeroMetric } = loadCommonModule(readFileSync('components/admin/analytics/HeroMetric.tsx', 'utf8'), {
+  'react/jsx-runtime': jsxRuntime,
+  '@/components/ui/card': { Card },
+  'lucide-react': { Activity: Icon, TrendingUp: Icon, TrendingDown: Icon, Minus: Icon },
+  './MetricTooltip': { MetricTooltip: () => null },
+  './SparklineMini': { SparklineMini: () => null },
+  '@/lib/utils': { cn: (...classes) => classes.filter(Boolean).join(' ') },
+  '@/lib/analytics/health-score': health,
+  '@/lib/analytics/comparability': comparison,
+  '@/lib/analytics/period': period,
+});
+const noGscMarkup = renderToStaticMarkup(jsxRuntime.jsx(HeroMetric, { context: { ...noGscBaseline.context, monthLabel: 'Agosto/2026' }, trendPoints: [] }));
+ok('hero explica cliques sem baseline em vez de deixar valor vazio', /Cliques\s*<strong[^>]*>comparação indisponível<\/strong>/.test(noGscMarkup));
 const { WinCard } = loadCommonModule(readFileSync('components/admin/analytics/WinCard.tsx', 'utf8'), {
   'react/jsx-runtime': jsxRuntime,
   '@/components/ui/card': { Card },

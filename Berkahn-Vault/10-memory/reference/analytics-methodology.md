@@ -50,6 +50,8 @@ Implementado em [`lib/analytics/health-score.ts`](../../scripts/../../lib/analyt
 
 **Status por faixa**: ≥80 excelente · 60-80 bom · 40-60 atenção · <40 crítico.
 
+Na interface, a faixa descreve somente este índice composto com os componentes disponíveis; não é um julgamento do mês inteiro nem mede resultado comercial. Sem comparação GSC válida, o card mostra “comparação indisponível” em Cliques em vez de deixar a métrica vazia.
+
 **Por que sigmoide para MoM?** Crescimento de +200% não vale 200, vale ~95. Mapeia retornos decrescentes — não permite que um KPI explosivo encubra problemas em outros.
 
 **Pesos atuais (30/30/20/20)**: dão prioridade equivalente para "estamos chegando ao público" (indexação) e "estamos crescendo" (users MoM). Cliques GSC e engagement entram com peso menor porque já são parcialmente correlacionados a users.
