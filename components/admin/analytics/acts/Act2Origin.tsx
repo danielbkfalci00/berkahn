@@ -25,7 +25,7 @@ export function Act2Origin({ context, topQueries, oportunidade, printMode }: Act
         </h2>
         <p className="mt-1 text-sm text-neutral-600 sm:text-base">{narrativeAct2Origin(context)}</p>
       </div>
-      <TrafficSourcesChart data={context.ga4.topSources} printMode={printMode} />
+      <TrafficSourcesChart data={context.ga4.topSources} totalSessions={context.ga4.sessions} printMode={printMode} />
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <AreaDistributionChart data={context.ga4.byArea} />
         <DevicesMiniChart data={context.ga4.byDevice} />

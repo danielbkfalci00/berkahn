@@ -4,6 +4,7 @@ import { Card } from "@/components/ui/card";
 import { ArrowUp, ArrowDown, Minus, SplitSquareHorizontal } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { MetricTooltip } from "./MetricTooltip";
+import { sessionShare } from "@/lib/analytics/ai-sources";
 import type { AnalyticsSnapshot, KpiCardData } from "@/types/analytics";
 
 interface ComparisonViewProps {
@@ -142,8 +143,8 @@ export function ComparisonView({ current, previous }: ComparisonViewProps) {
 
       {/* Top fontes side-by-side compacto */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <SourcesPanel label="Top 5 fontes" sources={prev.ga4.topSources.slice(0, 5)} variant="prev" />
-        <SourcesPanel label="Top 5 fontes" sources={cur.ga4.topSources.slice(0, 5)} variant="current" />
+        <SourcesPanel label="Top 5 fontes" sources={prev.ga4.topSources.slice(0, 5)} totalSessions={prev.ga4.sessions} variant="prev" />
+        <SourcesPanel label="Top 5 fontes" sources={cur.ga4.topSources.slice(0, 5)} totalSessions={cur.ga4.sessions} variant="current" />
       </div>
     </section>
   );
@@ -151,11 +152,12 @@ export function ComparisonView({ current, previous }: ComparisonViewProps) {
 
 interface SourcesPanelProps {
   label: string;
-  sources: Array<{ label: string; sessions: number; pctOfTotal: number }>;
+  sources: Array<{ label: string; sessions: number }>;
+  totalSessions: number;
   variant: "prev" | "current";
 }
 
-function SourcesPanel({ label, sources, variant }: SourcesPanelProps) {
+function SourcesPanel({ label, sources, totalSessions, variant }: SourcesPanelProps) {
   const isCurrent = variant === "current";
   return (
     <Card
@@ -172,7 +174,7 @@ function SourcesPanel({ label, sources, variant }: SourcesPanelProps) {
           <li key={i} className="flex items-center justify-between gap-3 text-sm">
             <span className="text-neutral-700 truncate">{s.label}</span>
             <span className="tabular-nums font-medium text-neutral-900">
-              {s.sessions} ({s.pctOfTotal}%)
+              {s.sessions} ({sessionShare(s.sessions, totalSessions)}%)
             </span>
           </li>
         ))}

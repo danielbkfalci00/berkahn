@@ -4,12 +4,7 @@
 
 import type { SnapshotContext } from "@/types/analytics";
 import type { HealthScoreBreakdown } from "./health-score";
-import { buildAiBreakdown } from "./ai-sources";
-
-function pctFmt(n: number | undefined): string {
-  if (n === undefined || n === null || Number.isNaN(n)) return "0%";
-  return `${n >= 0 ? "+" : ""}${n.toFixed(0)}%`;
-}
+import { buildAiBreakdown, sessionShare } from "./ai-sources";
 
 function absPctFmt(n: number): string {
   return `${Math.abs(n).toFixed(0)}%`;
@@ -62,18 +57,16 @@ export function narrativeAct1Growth(ctx: SnapshotContext): string {
 }
 
 export function narrativeAct2Origin(ctx: SnapshotContext): string {
-  const totalSessions = ctx.ga4.topSources.reduce((s, src) => s + src.sessions, 0);
-  const totalUsers = ctx.ga4.topSources.reduce((s, src) => s + src.users, 0);
-  const ai = buildAiBreakdown(ctx.ga4.topSources, totalUsers, totalSessions);
+  const ai = buildAiBreakdown(ctx.ga4.topSources, ctx.ga4.sessions);
   const topSource = ctx.ga4.topSources[0];
   const risingQuery = ctx.gsc.risingQueries[0];
 
   const parts: string[] = [];
   if (topSource) {
-    parts.push(`${topSource.label} responde por ${topSource.pctOfTotal}% das sessões`);
+    parts.push(`${topSource.label} representa ${sessionShare(topSource.sessions, ctx.ga4.sessions)}% das sessões no GA4`);
   }
-  if (ai.totalUsers > 0) {
-    parts.push(`IAs trouxeram ${ai.totalUsers} usuários (${ai.pctOfTotal}%)`);
+  if (ai.totalSessions > 0) {
+    parts.push(`Entre as fontes capturadas, as identificadas como IA registraram ${intFmt(ai.totalSessions)} sessões (${ai.pctOfTotal}% de todas as sessões no GA4)`);
   }
   if (risingQuery && risingQuery.clicksDelta > 0) {
     parts.push(`"${risingQuery.query}" ganhou ${risingQuery.clicksDelta} cliques`);
@@ -168,7 +161,7 @@ export function detectWin(ctx: SnapshotContext): string | null {
     candidates.push({
       label: "usuários",
       pct: ga4.usersMoMPct,
-      absolute: `${intFmt(ga4.users)} users`,
+      absolute: `${intFmt(ga4.users)} usuários`,
     });
   }
   if (gsc.clicksMoMPct !== undefined && gsc.clicksMoMPct > 10) {
@@ -197,7 +190,7 @@ export function detectWin(ctx: SnapshotContext): string | null {
 
   candidates.sort((a, b) => b.pct - a.pct);
   const top = candidates[0];
-  return `${top.label} subiu ${pctFmt(top.pct)} (${top.absolute})`;
+  return `${top.label} cresceram ${absPctFmt(top.pct)} (${top.absolute})`;
 }
 
 /**
@@ -213,7 +206,7 @@ export function detectRedFlag(ctx: SnapshotContext): string | null {
     candidates.push({
       label: "usuários",
       pct: ga4.usersMoMPct,
-      absolute: `${intFmt(ga4.users)} users`,
+      absolute: `${intFmt(ga4.users)} usuários`,
     });
   }
   if (gsc.clicksMoMPct !== undefined && gsc.clicksMoMPct < -15) {
@@ -225,7 +218,7 @@ export function detectRedFlag(ctx: SnapshotContext): string | null {
   }
   if (ga4.engagementRateMoMPct !== undefined && ga4.engagementRateMoMPct < -10) {
     candidates.push({
-      label: "engagement rate",
+      label: "taxa de engajamento",
       pct: ga4.engagementRateMoMPct,
       absolute: `${ga4.engagementRate}%`,
     });
@@ -245,5 +238,5 @@ export function detectRedFlag(ctx: SnapshotContext): string | null {
   candidates.sort((a, b) => a.pct - b.pct);
   const worst = candidates[0];
   if (worst.label === "indexação") return `Indexação baixa: apenas ${worst.absolute} indexados nesta coleta`;
-  return `${worst.label} caiu ${absPctFmt(worst.pct)} (${worst.absolute})`;
+  return `${worst.label} ${worst.label === "taxa de engajamento" ? "caiu" : "caíram"} ${absPctFmt(worst.pct)} (${worst.absolute})`;
 }

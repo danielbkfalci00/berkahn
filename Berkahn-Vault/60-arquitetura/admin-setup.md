@@ -6,7 +6,7 @@ tags:
   - ai/context
   - project/site
   - domain/admin
-ai_summary: Sistema Admin Berkahn com quatro papéis, CRM e PWA/Web Push. Sprints até PR132 publicados. Exportação prepara todas as abas; KPIs, tendências de consultas e recomendações SEO explicitam os limites das evidências. PDF final e matriz manual de perfis permanecem pendentes.
+ai_summary: Sistema Admin Berkahn com quatro papéis, CRM e PWA/Web Push. Sprints até PR133 publicados. Exportação prepara todas as abas; KPIs e participação das fontes de tráfego explicitam denominadores e limites. PDF final e matriz manual de perfis permanecem pendentes.
 status: active
 projeto: site
 escopo: berkahn
@@ -161,6 +161,12 @@ O [PR132](https://github.com/danielbkfalci00/berkahn/pull/132) foi integrado em 
 ### Continuação: linguagem e disponibilidade do Health Score
 
 `narrativeAct0Status` passa a qualificar “Bom” e as demais faixas como leitura do Health Score com os componentes disponíveis, sem julgar o mês inteiro. `HeroMetric` usa o mesmo estado calculado para mostrar “comparação indisponível” ao lado de Cliques quando falta baseline GSC. A regressão renderiza o componente real nos dois estados; o PDF nativo e a matriz manual de perfis continuam pendentes.
+
+O [PR133](https://github.com/danielbkfalci00/berkahn/pull/133) foi integrado em `9f9c3fa`; CI da main e ambos os deploys passaram. O smoke owner confirmou a nova narrativa em setembro e fevereiro sem erro de console. O caso Cliques sem baseline GSC foi verificado pela regressão; os snapshots abertos em produção tinham comparação GSC válida.
+
+### Continuação: denominador de fontes e linguagem de aquisição
+
+`fetch-ga4.mjs` passa a persistir `topSources.pctOfTotal` sobre todas as sessões do GA4, não só sobre as até 50 fontes capturadas. O ADMIN recalcula a participação a partir das sessões absolutas nos snapshots antigos, inclusive no comparativo, sem regravar dados. A narrativa usa sessões observadas de fontes classificadas como IA e declara o limite da captura, em vez de somar usuários por origem e sugerir causalidade. Ganhos e quedas passam a concordar com o sujeito em português. Regressões cobrem denominador e linguagem; PDF nativo e matriz manual seguem pendentes.
 
 > [!info] Migração para vault
 > Este arquivo era duplicado em `Docs/ADMIN_SETUP.md` e `Docs/site/ADMIN_SETUP.md`. Consolidado aqui como fonte única. Referenciado por [[stack-nextjs-supabase]].

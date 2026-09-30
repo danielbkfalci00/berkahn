@@ -4,7 +4,7 @@ import { cpSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:f
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { fetchTopPages, fetchEvents } from './fetch-ga4.mjs';
+import { fetchTopPages, fetchEvents, withTotalSessionShares } from './fetch-ga4.mjs';
 import { computeDelta } from './fetch-gsc.mjs';
 import { buildActions, buildInsights, isKnownInspection } from './lib/insights.mjs';
 import { comparisonPolicyFor } from '../../lib/analytics/comparison-policy.mjs';
@@ -246,8 +246,9 @@ function loadCommonModule(source, imports) {
   }, testModule, testModule.exports);
   return testModule.exports;
 }
+const aiSources = loadCommonModule(readFileSync('lib/analytics/ai-sources.ts', 'utf8'), {});
 const narrative = loadCommonModule(readFileSync('lib/analytics/narrative.ts', 'utf8'), {
-  './ai-sources': { buildAiBreakdown: () => ({}) },
+  './ai-sources': aiSources,
   './comparability': { comparisonAvailability: comparison.comparisonAvailability },
 });
 const summaryWithRisk = narrative.narrativeAct0Status(
@@ -264,9 +265,24 @@ const lowCoverage = {
 };
 const coverageRisk = narrative.detectRedFlag(lowCoverage);
 ok('cobertura baixa nao inventa queda sem baseline', coverageRisk?.includes('4 de 10 artigos') && !coverageRisk.includes('caiu'));
-ok('queda medida continua explicita', narrative.detectRedFlag({
+ok('queda medida continua explicita e concorda com o sujeito', narrative.detectRedFlag({
   ...baseContext, indexedCount: 8, ga4: { ...baseContext.ga4, usersMoMPct: -25, users: 40 },
-})?.includes('usuários caiu 25%'));
+})?.includes('usuários caíram 25%'));
+ok('ganho medido concorda com cliques', narrative.detectWin({
+  ...baseContext, ga4: { ...baseContext.ga4, usersMoMPct: undefined },
+  gsc: { ...baseContext.gsc, clicksMoMPct: 25, clicks: 25 },
+}) === 'cliques no Google cresceram 25% (25 cliques)');
+const capturedSources = withTotalSessionShares([
+  { label: 'chatgpt.com / referral', sessions: 30, users: 20 },
+  { label: 'google / organic', sessions: 20, users: 18 },
+], 100);
+ok('coletor usa todas as sessoes GA4 como denominador, sem inflar top fontes', capturedSources[0].pctOfTotal === 30 && capturedSources[1].pctOfTotal === 20);
+const sourceNarrative = narrative.narrativeAct2Origin({
+  ...baseContext,
+  ga4: { ...baseContext.ga4, sessions: 100, topSources: capturedSources },
+  gsc: { ...baseContext.gsc, risingQueries: [] },
+});
+ok('narrativa distingue sessoes de usuarios e evita atribuicao causal a IA', sourceNarrative.includes('representa 30% das sessões no GA4') && sourceNarrative.includes('fontes capturadas') && sourceNarrative.includes('30 sessões (30% de todas as sessões no GA4)') && !sourceNarrative.includes('IAs trouxeram'));
 
 const { detectRedFlags } = loadCommonModule(readFileSync('lib/analytics/red-flags.ts', 'utf8'), {
   './comparability': { isKnownIndexation: () => true, isIndexedCoverage: () => true, comparisonAvailability: comparison.comparisonAvailability },

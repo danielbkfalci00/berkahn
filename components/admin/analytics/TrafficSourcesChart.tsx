@@ -12,11 +12,12 @@ import {
 } from "recharts";
 import { Card } from "@/components/ui/card";
 import { MetricTooltip } from "./MetricTooltip";
-import { classifyAiSource, buildAiBreakdown } from "@/lib/analytics/ai-sources";
+import { classifyAiSource, buildAiBreakdown, sessionShare } from "@/lib/analytics/ai-sources";
 import type { Ga4Source } from "@/types/analytics";
 
 interface TrafficSourcesChartProps {
   data: Ga4Source[];
+  totalSessions: number;
   printMode?: boolean;
 }
 
@@ -29,14 +30,12 @@ const DEFAULT_COLOR = "#0A0A0A";
  * das plataformas detectadas no tooltip. Demais fontes (Google, LinkedIn,
  * direct, etc) ficam separadas como sempre.
  */
-export function TrafficSourcesChart({ data, printMode = false }: TrafficSourcesChartProps) {
+export function TrafficSourcesChart({ data, totalSessions, printMode = false }: TrafficSourcesChartProps) {
   // Separa IAs vs não-IAs
   const aiSources = data.filter((s) => classifyAiSource(s.label).isAi);
   const nonAi = data.filter((s) => !classifyAiSource(s.label).isAi);
 
-  const totalSessions = data.reduce((s, src) => s + src.sessions, 0);
-  const totalUsers = data.reduce((s, src) => s + src.users, 0);
-  const aiBreakdown = buildAiBreakdown(data, totalUsers, totalSessions);
+  const aiBreakdown = buildAiBreakdown(data, totalSessions);
 
   // Monta dataset consolidado
   const consolidated: Array<{
@@ -49,7 +48,7 @@ export function TrafficSourcesChart({ data, printMode = false }: TrafficSourcesC
   }> = [];
 
   if (aiSources.length > 0) {
-    const aiList = aiBreakdown.byAi.map((a) => `${a.name} (${a.users})`).join(" · ");
+    const aiList = aiBreakdown.byAi.map((a) => `${a.name} (${a.sessions} sessões)`).join(" · ");
     consolidated.push({
       name: `IAs (${aiBreakdown.byAi.length})`,
       sessions: aiBreakdown.totalSessions,
@@ -65,7 +64,7 @@ export function TrafficSourcesChart({ data, printMode = false }: TrafficSourcesC
       name: src.label.length > 32 ? src.label.slice(0, 30) + "…" : src.label,
       sessions: src.sessions,
       users: src.users,
-      pct: src.pctOfTotal,
+      pct: sessionShare(src.sessions, totalSessions),
       isAi: false,
     });
   }
@@ -92,6 +91,7 @@ export function TrafficSourcesChart({ data, printMode = false }: TrafficSourcesC
                 Tráfego &quot;direct&quot; pode incluir clicks de apps mobile (LinkedIn, Instagram)
                 que não passam referrer. Use UTM nos links pra capturar com precisão.
               </p>
+              <p className="text-neutral-600">Percentuais sobre todas as sessões do GA4; a coleta lista até 50 fontes.</p>
             </div>
           }
         />
@@ -170,7 +170,7 @@ export function TrafficSourcesChart({ data, printMode = false }: TrafficSourcesC
       </div>
       {aiSources.length > 0 && (
         <p className="mt-4 text-xs text-neutral-500">
-          IAs consolidadas: {aiBreakdown.byAi.map((a) => `${a.name} ${a.users}`).join(" · ")}
+          IAs consolidadas: {aiBreakdown.byAi.map((a) => `${a.name} ${a.sessions} sessões`).join(" · ")}
         </p>
       )}
     </Card>
