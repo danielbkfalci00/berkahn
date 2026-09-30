@@ -157,16 +157,21 @@ async function fetchTopSources(data, propertyId, startDate, endDate, limit) {
     orderBys: [{ metric: { metricName: 'sessions' }, desc: true }],
     limit,
   });
-  const totalSessions = (res.rows || []).reduce((s, r) => s + parseInt(r.metricValues[0].value), 0);
   return (res.rows || []).map((r) => {
     const sessions = parseInt(r.metricValues[0].value);
     return {
       label: r.dimensionValues[0].value,
       sessions,
       users: parseInt(r.metricValues[1].value),
-      pctOfTotal: totalSessions > 0 ? parseFloat(((sessions / totalSessions) * 100).toFixed(1)) : 0,
     };
   });
+}
+
+export function withTotalSessionShares(sources, totalSessions) {
+  return sources.map((source) => ({
+    ...source,
+    pctOfTotal: totalSessions > 0 ? Number(((source.sessions / totalSessions) * 100).toFixed(1)) : 0,
+  }));
 }
 
 async function fetchByDevice(data, propertyId, startDate, endDate) {
@@ -334,7 +339,7 @@ export async function fetchGa4(startDate, endDate) {
   return {
     ...overall,
     topPages,
-    topSources,
+    topSources: withTotalSessionShares(topSources, overall.sessions),
     byDevice,
     byArea,
     events: eventsResult.rows,

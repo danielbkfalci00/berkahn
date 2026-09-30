@@ -35,6 +35,12 @@ O run mensal executa esse ciclo com janela móvel de 28 dias e lag de 3 dias. A
 falha do aprendizado não invalida o relatório mensal: fica explícita no log e
 pode ser repetida com `npm run analytics:learning`.
 
+## Participação das fontes de tráfego
+
+O GA4 fornece o total de sessões do período e a coleta lista até 50 fontes por `sessionSourceMedium`. A participação de cada fonte e das fontes classificadas como IA usa **todas as sessões do GA4** como denominador. O número de sessões de IA é a soma observada entre as fontes capturadas; se o limite de 50 for atingido, a cauda pode conter outras fontes de IA. Não somamos `totalUsers` por fonte como se fossem pessoas únicas nem atribuímos causalidade ou conversão a um referrer.
+
+Snapshots antigos podem guardar `topSources.pctOfTotal` calculado apenas entre as fontes capturadas. O ADMIN recalcula esse percentual em leitura com `source.sessions / ga4.sessions`, sem regravar a coleta histórica; novas coletas já persistem o denominador correto.
+
 ## Health Score (0-100)
 
 Implementado em [`lib/analytics/health-score.ts`](../../scripts/../../lib/analytics/health-score.ts). Aplicado no Hero do Ato 0.

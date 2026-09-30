@@ -1175,7 +1175,11 @@ for (const navigationApi of [false, true]) {
     if (name === '@/lib/analytics/use-url-filters') return { useUrlFilters: () => ({}) };
     if (name === '@/lib/analytics/narrative') return { narrativeAct2Origin: () => '', narrativeAct3Posts: () => '' };
     if (name === '@/lib/analytics/post-performance') return { findBestPost: () => null, findOpportunityPost: () => null, countByStatus: () => ({}) };
-    if (name === '@/lib/analytics/ai-sources') return { classifyAiSource: () => ({ isAi: false }), buildAiBreakdown: () => ({ byAi: [] }) };
+    if (name === '@/lib/analytics/ai-sources') return {
+      classifyAiSource: () => ({ isAi: false }),
+      buildAiBreakdown: () => ({ byAi: [] }),
+      sessionShare: (sessions, totalSessions) => totalSessions > 0 ? Number((sessions / totalSessions * 100).toFixed(1)) : 0,
+    };
     return symbols;
   };
   for (const [file, child, props] of [
@@ -1191,7 +1195,7 @@ for (const navigationApi of [false, true]) {
     assert.equal(nodes(render({ ...props, printMode: true }), (node) => node.type === child)[0].props.printMode, true, `${file} mantém o modo de exportação até a tabela`);
   }
   const traffic = load('components/admin/analytics/TrafficSourcesChart.tsx', leafImports).TrafficSourcesChart;
-  const trafficTree = traffic({ data: [{ label: 'Direct', users: 1, sessions: 1, pctOfTotal: 100 }], printMode: true });
+  const trafficTree = traffic({ data: [{ label: 'Direct', users: 1, sessions: 1, pctOfTotal: 100 }], totalSessions: 1, printMode: true });
   assert.equal(nodes(trafficTree, (node) => node.props.role === 'img')[0].props.className.includes('hidden'), false, 'Exportação mede o gráfico também em viewport mobile');
   assert.equal(nodes(trafficTree, (node) => node.props.role === 'list')[0].props.className, 'hidden', 'Resumo mobile não duplica as mesmas fontes');
 }

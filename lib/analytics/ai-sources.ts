@@ -66,12 +66,16 @@ export interface AiSourceBreakdown {
   rawSources: Ga4Source[];
 }
 
+/** Participação sobre todas as sessões do GA4, não apenas as fontes capturadas. */
+export function sessionShare(sessions: number, totalSessions: number): number {
+  return totalSessions > 0 ? Number(((sessions / totalSessions) * 100).toFixed(1)) : 0;
+}
+
 /**
  * Agrega fontes de IA num breakdown único.
  */
 export function buildAiBreakdown(
   topSources: Ga4Source[],
-  allSourcesTotalUsers: number,
   allSourcesTotalSessions: number
 ): AiSourceBreakdown {
   const aiSources = topSources.filter((s) => classifyAiSource(s.label).isAi);
@@ -94,20 +98,14 @@ export function buildAiBreakdown(
       name,
       users,
       sessions,
-      pctOfTotal:
-        allSourcesTotalSessions > 0
-          ? parseFloat(((sessions / allSourcesTotalSessions) * 100).toFixed(1))
-          : 0,
+      pctOfTotal: sessionShare(sessions, allSourcesTotalSessions),
     }))
-    .sort((a, b) => b.users - a.users);
+    .sort((a, b) => b.sessions - a.sessions);
 
   return {
     totalUsers,
     totalSessions,
-    pctOfTotal:
-      allSourcesTotalSessions > 0
-        ? parseFloat(((totalSessions / allSourcesTotalSessions) * 100).toFixed(1))
-        : 0,
+    pctOfTotal: sessionShare(totalSessions, allSourcesTotalSessions),
     byAi,
     rawSources: aiSources,
   };
