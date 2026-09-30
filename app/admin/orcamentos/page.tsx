@@ -10,6 +10,8 @@ import {
 import { Button } from "@/components/ui/button"
 import { Plus } from "lucide-react"
 import type { OrcamentoListItem } from "@/types/orcamento-estimativa"
+import type { Orcamento } from "@/types/orcamento-estimativa"
+import { DOCUMENT_FIELDS, getOrcamentoPdfState } from "@/lib/orcamento-pdf-storage"
 
 export const dynamic = "force-dynamic"
 
@@ -32,8 +34,13 @@ function normalizarStatus(s: unknown): StatusFiltro {
   return "ativos"
 }
 
-const SELECT_LIST =
-  "id, numero, status, cliente_nome, obra_cidade, projeto_area_m2, valor_min, valor_max, data_elaboracao, pdf_url, pdf_storage_path, pdf_generated_at, criado_em"
+const SELECT_LIST = [
+  ...new Set([
+    "id", "numero", "status", "cliente_nome", "obra_cidade", "projeto_area_m2",
+    "valor_min", "valor_max", "data_elaboracao", "pdf_url", "pdf_storage_path",
+    "pdf_generated_at", "pdf_revision_hash", "criado_em", ...DOCUMENT_FIELDS,
+  ]),
+].join(", ")
 
 export default async function OrcamentosPage({ searchParams }: PageProps) {
   const { status: statusParam, q: qParam, page: pageParam } = await searchParams
@@ -97,7 +104,22 @@ export default async function OrcamentosPage({ searchParams }: PageProps) {
     if (failed?.error) throw failed.error
     if (listResult.error && listResult.error.code !== "PGRST103") throw listResult.error
 
-    orcamentos = (listResult.data ?? []) as OrcamentoListItem[]
+    orcamentos = ((listResult.data ?? []) as unknown as Orcamento[]).map((o) => ({
+      id: o.id,
+      numero: o.numero,
+      status: o.status,
+      cliente_nome: o.cliente_nome,
+      obra_cidade: o.obra_cidade,
+      projeto_area_m2: o.projeto_area_m2,
+      valor_min: o.valor_min,
+      valor_max: o.valor_max,
+      data_elaboracao: o.data_elaboracao,
+      pdf_url: o.pdf_url,
+      pdf_storage_path: o.pdf_storage_path,
+      pdf_generated_at: o.pdf_generated_at,
+      pdf_state: getOrcamentoPdfState(o),
+      criado_em: o.criado_em,
+    }))
     contagens.rascunho = countRascunhoResult.count ?? 0
     contagens.finalizado = countFinalizadoResult.count ?? 0
     contagens.arquivado = countArquivadoResult.count ?? 0

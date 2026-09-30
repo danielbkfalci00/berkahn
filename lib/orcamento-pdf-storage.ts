@@ -4,7 +4,7 @@ import { createServiceClient } from '@/lib/supabase/admin'
 import type { Orcamento } from '@/types/orcamento-estimativa'
 
 // Ordem estável, somente campos usados no documento; renovar uma URL não muda a revisão.
-const DOCUMENT_FIELDS = [
+export const DOCUMENT_FIELDS = [
   'numero', 'cliente_nome', 'cliente_email', 'cliente_telefone', 'obra_endereco',
   'obra_cidade', 'obra_referencia', 'projeto_area_m2', 'projeto_pavimentos',
   'projeto_piscina', 'projeto_padrao', 'valor_min', 'valor_max', 'valor_m2_min',
@@ -19,6 +19,12 @@ export function getOrcamentoPdfRevision(orcamento: Orcamento): string {
 
 export function isOrcamentoPdfCurrent(orcamento: Orcamento): boolean {
   return Boolean(orcamento.pdf_storage_path && orcamento.pdf_revision_hash === getOrcamentoPdfRevision(orcamento))
+}
+
+export function getOrcamentoPdfState(orcamento: Orcamento): 'missing' | 'current' | 'legacy' | 'stale' {
+  if (!orcamento.pdf_storage_path) return 'missing'
+  if (!orcamento.pdf_revision_hash && !orcamento.pdf_generated_at) return 'legacy'
+  return isOrcamentoPdfCurrent(orcamento) ? 'current' : 'stale'
 }
 
 const BUCKET_PDFS = 'orcamento-pdfs'

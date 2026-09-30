@@ -102,6 +102,7 @@ export interface OrcamentoListItem {
   pdf_url: string | null;
   pdf_storage_path?: string | null;
   pdf_generated_at?: string | null;
+  pdf_state: "missing" | "current" | "legacy" | "stale";
   criado_em: string;
 }
 

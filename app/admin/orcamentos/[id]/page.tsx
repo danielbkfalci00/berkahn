@@ -11,7 +11,7 @@ import { ArquivarButton } from "@/components/admin/orcamentos/ArquivarButton"
 import { BaixarPdfButton } from "@/components/admin/orcamentos/BaixarPdfButton"
 import { PADROES_ACABAMENTO, REGIMES_COMERCIAIS } from "@/lib/orcamento-estimativa-data"
 import type { Orcamento } from "@/types/orcamento-estimativa"
-import { isOrcamentoPdfCurrent } from "@/lib/orcamento-pdf-storage"
+import { getOrcamentoPdfState } from "@/lib/orcamento-pdf-storage"
 import { commercialHref, commercialReturnTo, leadHref } from "@/lib/admin/return-to"
 
 export const dynamic = "force-dynamic"
@@ -50,8 +50,9 @@ export default async function OrcamentoDetalhePage({ params, searchParams }: Pag
     notFound()
   }
   const o = data as Orcamento
-  const pdfCurrent = isOrcamentoPdfCurrent(o)
-  const pdfLegacy = !o.pdf_revision_hash && !o.pdf_generated_at
+  const pdfState = getOrcamentoPdfState(o)
+  const pdfCurrent = pdfState === "current"
+  const pdfLegacy = pdfState === "legacy"
   const linkedLead = o.lead_id ? leadHref(o.lead_id, returnTo) : null
 
   // Gera signed URL da hero (bucket privado) pra preview persistir entre reloads
