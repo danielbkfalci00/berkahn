@@ -823,12 +823,17 @@ for (const navigationApi of [false, true]) {
     let id = 0, prints = 0, loads = 0, now = 0, tree;
     const details = [{ open: false }, { open: true }];
     const report = {
-      isConnected: true, pending: false, chartWidth: 100, chartHeight: 100,
+      isConnected: true, pending: false, chartWidth: 100, chartHeight: 100, chartPresent: true,
       querySelector: () => report.pending ? {} : null,
       querySelectorAll(selector) {
         if (selector === 'details:not([open])') return details.filter((detail) => !detail.open);
         assert.equal(selector, '.recharts-responsive-container');
-        return [{ querySelector: () => ({ getBoundingClientRect: () => ({ width: report.chartWidth, height: report.chartHeight }) }) }];
+        return [{ querySelector(selector) {
+          // Recharts legends precede the plot and also contain positive-size SVGs.
+          if (selector === 'svg') return { getBoundingClientRect: () => ({ width: 8, height: 8 }) };
+          assert.equal(selector, '.recharts-wrapper > svg.recharts-surface');
+          return report.chartPresent ? { getBoundingClientRect: () => ({ width: report.chartWidth, height: report.chartHeight }) } : null;
+        } }];
       },
     };
     const document = { fonts: { status: 'loaded' } };
@@ -888,6 +893,13 @@ for (const navigationApi of [false, true]) {
     };
   }
 
+  const legend = printHarness();
+  legend.report.chartWidth = 0;
+  const legendPending = legend.header().onPrint();
+  await legend.advance(300);
+  assert.equal(legend.prints, 0, 'Legenda com SVG 8×8 não torna pronto um gráfico sem dimensões');
+  legend.unmount(); await legendPending;
+
   for (const cancel of ['timeout', 'button', 'unmount', 'month']) {
     let resolveChunk, settled = false;
     const h = printHarness('', { deferredChunk: new Promise((resolve) => { resolveChunk = resolve; }) });
@@ -919,6 +931,7 @@ for (const navigationApi of [false, true]) {
     assert.equal(h.panels().length, search ? 0 : 4);
     const print = h.header().onPrint;
     const pending = print();
+    assert.equal(h.header().awaitingPrint, false, 'Carregamento é distinto de aguardar impressão');
     await print();
     await tick();
     assert.equal(h.loads, 6, 'Duplo clique não prepara duas exportações');
@@ -934,15 +947,20 @@ for (const navigationApi of [false, true]) {
     h.report.chartWidth = 100; h.report.chartHeight = 0;
     await h.advance(); assert.equal(h.prints, 0, 'Gráfico sem altura ainda não está pronto');
     h.report.chartHeight = 100;
+    h.report.chartPresent = false;
+    await h.advance(200); assert.equal(h.prints, 0, 'Ícones de legenda não substituem o gráfico ausente');
+    h.report.chartPresent = true;
     await h.advance(); assert.equal(h.prints, 0, 'Exige duas verificações prontas consecutivas');
     await h.advance(); await pending;
     assert.equal(h.prints, 1);
     assert.equal(h.header().preparingPrint, true, 'Retorno não bloqueante de print mantém relatório montado');
+    assert.equal(h.header().awaitingPrint, true, 'Relatório pronto orienta concluir ou cancelar a impressão');
     assert.ok(h.panels().every((panel) => !panel.props.className.startsWith('hidden')));
     assert.equal(h.details[0].open, true);
     assert.equal(h.timers.size + h.frames.size, 0, 'Prazo não permanece ativo durante o diálogo de impressão');
     h.window.emit('afterprint');
     assert.equal(h.header().preparingPrint, false);
+    assert.equal(h.header().awaitingPrint, false);
     assert.deepEqual(h.details.map((detail) => detail.open), [false, true], 'Restaura somente os detalhes abertos pela impressão');
     assert.equal(h.timers.size + h.frames.size, 0);
     h.unmount();

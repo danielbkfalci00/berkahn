@@ -12,6 +12,7 @@ interface AnalyticsHeaderProps {
   monthLabel: string;
   onPrint?: () => void;
   preparingPrint?: boolean;
+  awaitingPrint?: boolean;
   periodStart: string;
   periodEnd: string;
   availableMonths: string[];
@@ -39,6 +40,7 @@ export function AnalyticsHeader({
   monthLabel,
   onPrint,
   preparingPrint,
+  awaitingPrint,
   periodStart,
   periodEnd,
   availableMonths,
@@ -121,9 +123,9 @@ export function AnalyticsHeader({
             </>
           )}
         </Button>
-        <Button variant="outline" size="default" onClick={onPrint ?? (() => window.print())} disabled={preparingPrint} aria-label={preparingPrint ? "Preparando relatório completo" : "Exportar relatório completo em PDF"} className="bg-white">
+        <Button variant="outline" size="default" onClick={onPrint ?? (() => window.print())} disabled={preparingPrint || awaitingPrint} aria-label={awaitingPrint ? "Aguardando impressão" : preparingPrint ? "Preparando relatório completo" : "Exportar relatório completo em PDF"} className="bg-white">
           <Printer className="h-4 w-4 sm:mr-2" />
-          <span className="hidden sm:inline">{preparingPrint ? "Preparando…" : "Exportar PDF"}</span>
+          <span className="hidden sm:inline">{awaitingPrint ? "Aguardando impressão" : preparingPrint ? "Preparando…" : "Exportar PDF"}</span>
         </Button>
         </div>
       </div>
