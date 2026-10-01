@@ -27,10 +27,12 @@ export async function GET(request: Request) {
     })
 
     const baseUrl = getBaseUrl(request.url)
-    await page.goto(`${baseUrl}/institucional/pdf`, {
+    const response = await page.goto(`${baseUrl}/institucional/pdf`, {
       waitUntil: "networkidle0",
       timeout: 30000,
     })
+    if (!response?.ok()) throw new Error(`Renderer institucional indisponível (${response?.status() ?? "sem resposta"}).`)
+    await page.waitForSelector("[data-institucional-pdf]", { timeout: 10_000 })
     await page.evaluateHandle("document.fonts.ready")
 
     // Esconde o indicador do Next dev (badge "N") — não existe em produção,

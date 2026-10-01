@@ -32,6 +32,7 @@ export default function InstitucionalPDFPage() {
   return (
     <div
       className="relative"
+      data-institucional-pdf
       style={{ fontFamily: "var(--font-manrope), sans-serif", background: "#1A1A1A" }}
     >
       {PAGINAS.map((Pagina, index) => (

@@ -86,6 +86,14 @@
     page-break-inside: avoid;
   }
 
+  /* O bloco visual ocupa sua própria página; o padding preserva o cabeçalho
+     da página quando a seção anterior é fragmentada pelo Chromium. */
+  .root :global(.est-referencias-visuais) {
+    break-before: page;
+    page-break-before: always;
+    padding-top: 36px;
+  }
+
   /* Figures e wrappers de imagem nunca quebram entre páginas */
   .root :global(figure),
   .root :global(.est-imagem-wrap) {
