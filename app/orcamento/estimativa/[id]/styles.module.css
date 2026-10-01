@@ -78,6 +78,14 @@
 /* Guard-rails de paginação: ativados durante geração de PDF (puppeteer)
    e em impressão direta. Evitam reflow caótico com briefing variável. */
 @media print {
+  /* Mantém a abertura da seção e seu primeiro bloco visual na mesma página.
+     break-after no cabeçalho isolado não é respeitado em todos os fluxos do Chromium. */
+  .root :global(.est-secao-intro),
+  .root :global(.est-referencias-visuais) {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
   /* Figures e wrappers de imagem nunca quebram entre páginas */
   .root :global(figure),
   .root :global(.est-imagem-wrap) {

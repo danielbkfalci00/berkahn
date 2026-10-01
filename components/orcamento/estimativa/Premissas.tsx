@@ -64,7 +64,7 @@ export function Premissas({
   }
 
   return (
-    <section className="est-secao est-secao-fundo-off">
+    <section className="est-secao est-secao-fundo-off est-secao-quebra-antes">
       <div className="est-secao-header">
         <div className="est-numero-secao">06</div>
         <h2
