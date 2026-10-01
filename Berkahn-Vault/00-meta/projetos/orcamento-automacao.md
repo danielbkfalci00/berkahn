@@ -1,20 +1,20 @@
 ---
 tipo: projeto
 criado: 2026-06-23
-atualizado: 2026-06-30
+atualizado: 2026-10-01
 tags:
   - project/orcamento-automacao
   - status/published
-ai_summary: Hub do Gerador de Estimativa Preliminar Premium — automação de PDFs de orçamento via admin Berkahn (form ou planilha-modelo). Sprints 1-7 entregues — Sprint 7 paginação resiliente (PDF 150→~22 páginas via page-break diferenciado, fullbleed 270mm, guard-rails @media print). MVP completo em produção. Plano em ~/.claude/plans/sprint-4-do-projeto-stateless-pebble.md.
+ai_summary: "Gerador de estimativas preliminares via admin. Sprints 1–9 entregues; PRs #136 e #137 corrigiram a paginação e a incorporação pesada de fotos no PDF. Falta medir um PDF novo gerado em produção com orçamento de teste autorizado; PDFs antigos não são alterados."
 status: active
 projeto: orcamento-automacao
-kpi_sprints_total: 7
-kpi_sprints_completos: 7
+kpi_sprints_total: 9
+kpi_sprints_completos: 9
 kpi_orcamentos_gerados_mes: 0
 kpi_tempo_medio_geracao_segundos: 0
 kpi_componentes_pdf_criados: 12
 kpi_componentes_pdf_meta: 12
-kpi_atualizado_em: 2026-06-30
+kpi_atualizado_em: 2026-10-01
 contextos_aplicados:
   - stack-nextjs-supabase
   - berkahn-brand
@@ -51,7 +51,7 @@ code_paths:
 
 ## Status atual
 
-**MVP completo** (Sprints 1-5 entregues, 2026-06-23 a 2026-06-24): infra de geração de PDF + form wizard + upload de planilha + filtros lista + soft delete + hints XLSX. Pendência única: Bruno autorizar `npx supabase login` pra rodar `supabase gen types` e remover 6 `@ts-expect-error`.
+**Sprints 1–9 entregues**: gerador, wizard, planilha, lista e refinamentos do PDF estão em produção. A [PR #136](https://github.com/danielbkfalci00/berkahn/pull/136) mantém os títulos com seu conteúdo e os nove cards juntos; a amostra local A4 ficou com 13 páginas, sem título órfão ou página vazia. A [PR #137](https://github.com/danielbkfalci00/berkahn/pull/137) embute fotos WebP locais como JPEG durante a geração: uma imagem caiu de 3,9 MB para 405 KB no teste de Chromium. O peso de um **PDF novo em produção ainda não foi medido**; arquivos antigos do acervo preservam seu layout e tamanho. Próxima ação: gerar um PDF com orçamento descartável ou previamente indicado pelo dono e verificar contagem, peso e visual.
 
 **Sprint 3 destaques**: wizard de 5 passos (`OrcamentoWizard.tsx`) com navegação livre + indicador visual de validação por step (verde/amarelo/vazio). Sem Zod/zustand/react-hook-form (segue padrão `useState/useReducer` do PostEditor). Server actions em `app/admin/orcamentos/actions.ts`. Helpers de input próprios em `form-fields.tsx` (CurrencyField BRL, IntegerField, RadioPills, ChipsInput, TextField). Modo edição reusa o wizard via prop `orcamentoInicial`. Botão Editar no detalhe redireciona para `/admin/orcamentos/[id]/edit`. Finalizar valida tudo e redireciona pra detalhe (reusa GerarPdfButton/HeroUpload do Sprint 2).
 
@@ -82,13 +82,15 @@ Reusa ~70% da infra de PDF existente — `puppeteer-core` + `@sparticuz/chromium
 - [x] Sprint 5 — polish (filtros lista + soft delete UI + hints XLSX + cookie LSF; frente D deferred)
 - [x] Sprint 6 — polish PDF profissional (cookie bypass, viewport A4-native, header/footer, imagens, tipografia)
 - [x] Sprint 7 — paginação resiliente PDF (page-break diferenciado + fullbleed 270mm + @media print guard-rails)
-- [ ] **Bruno**: smoke prod — gerar PDF do BRK-2026-0001 novamente, conferir contagem (alvo 20-25 pgs, máx 30) e peso (alvo <5MB)
+- [x] Sprint 8 — corrigir títulos órfãos, seções partidas e cards de entrega no PDF (PR #136; amostra local de 13 páginas)
+- [x] Sprint 9 — reduzir o peso das fotos embutidas no PDF sem duplicar assets (PR #137; conversão local validada)
+- [ ] **Bruno**: indicar orçamento descartável para smoke de geração em produção; conferir contagem (máx 30 páginas), peso (alvo <5 MB) e visual do novo PDF, sem substituir PDF de cliente por suposição
 
 ## KPIs (snapshot)
 
 | Métrica | Atual | Meta | Δ |
 |---------|-------|------|---|
-| Sprints completos | 7 | 7 | ✅ |
+| Sprints completos | 9 | 9 | ✅ |
 | Componentes PDF criados | 12 | 12 | ✅ |
 | Wizard steps criados | 5 | 5 | ✅ |
 | Orçamentos gerados/mês | 0 | TBD | aguarda 1º teste E2E |
