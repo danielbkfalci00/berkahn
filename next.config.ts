@@ -12,6 +12,12 @@ const nextConfig: NextConfig = {
   serverExternalPackages: ["xlsx-js-style"],
   // Evita o tracing subir ate C:\Users quando ha outros lockfiles na maquina.
   outputFileTracingRoot: process.cwd(),
+  // O Chromium descompacta estes arquivos em runtime; o tracer não detecta
+  // automaticamente os .br usados pelas duas rotas de PDF na Vercel.
+  outputFileTracingIncludes: {
+    "/api/admin/orcamentos/*/pdf": ["./node_modules/@sparticuz/chromium/bin/**/*"],
+    "/api/institucional/pdf": ["./node_modules/@sparticuz/chromium/bin/**/*"],
+  },
 
   images: {
     qualities: [65, 70, 75, 78, 80, 85, 90],
