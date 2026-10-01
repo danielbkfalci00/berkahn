@@ -117,6 +117,32 @@ export async function POST(request: Request, ctx: RouteContext) {
     const imagesReady = await page.$eval("main", (element) => Array.from(element.querySelectorAll<HTMLImageElement>("img")).every((image) => image.naturalWidth > 0))
     if (!imagesReady) throw new Error("Uma imagem do orçamento não carregou. Tente gerar novamente.")
 
+    // O Chromium embute WebP como PNG no PDF. As fotos locais ficam até 10x
+    // maiores; JPEG preserva a nitidez impressa sem duplicar assets no repo.
+    await page.evaluate(async () => {
+      for (const image of document.querySelectorAll<HTMLImageElement>("main img")) {
+        const originalSrc = image.currentSrc || image.src
+        const source = new URL(originalSrc, location.href)
+        if (source.origin !== location.origin || !source.pathname.toLowerCase().endsWith(".webp")) continue
+
+        const scale = Math.min(1, 1600 / Math.max(image.naturalWidth, image.naturalHeight))
+        const canvas = document.createElement("canvas")
+        canvas.width = Math.round(image.naturalWidth * scale)
+        canvas.height = Math.round(image.naturalHeight * scale)
+        const context = canvas.getContext("2d")
+        if (!context) continue
+
+        try {
+          context.drawImage(image, 0, 0, canvas.width, canvas.height)
+          image.src = canvas.toDataURL("image/jpeg", 0.8)
+          await image.decode()
+        } catch {
+          image.src = originalSrc
+          await image.decode().catch(() => {})
+        }
+      }
+    })
+
     const cliente = escapeHtml(orcamento.cliente_nome)
     const numero = escapeHtml(orcamento.numero)
     const headerTemplate = `<div style="width:100%;padding:0 15mm;display:flex;justify-content:space-between;align-items:center;font-size:8pt;color:#666;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif"><img src="${LOGO_DATA_URI}" style="height:14px"/><span style="letter-spacing:0.05em">${cliente} · ${numero}</span></div>`

@@ -248,7 +248,7 @@ function createBudgetHarness({ onUpdate, signingFails = false, loseFirstCreateRe
   let pdfResponseLost = false;
   const member = { user_id: 'synthetic-user', role, ativo: active };
   const row = { ...wizardModule.initialState().dados, id: 'budget-test', numero: 'TEST-001', atualizado_em: initialRevision, cliente_nome: 'Cliente sintético', obra_endereco: 'Endereço sintético', obra_cidade: 'Cidade', projeto_area_m2: 100, valor_min: 100, valor_max: 200, valor_m2_min: 1, valor_m2_max: 2, hero_image_url: 'budget-test/old.webp' };
-  const calls = { writes: 0, logs: 0, signedPdfs: 0, uploaded: [], removed: [], privileged: 0, launched: 0, closed: 0, pdfs: 0, pdfUploads: 0, diagnostics: [] };
+  const calls = { writes: 0, logs: 0, signedPdfs: 0, uploaded: [], removed: [], privileged: 0, launched: 0, closed: 0, pdfs: 0, pdfUploads: 0, imageOptimizations: 0, diagnostics: [] };
   const nextRevision = () => `2026-09-29T16:00:00.${String(++version).padStart(6, '0')}+00:00`;
   const supabase = {
     auth: { async getUser() { return { data: { user: authenticated ? { id: 'synthetic-user', email: 'test@example.invalid' } : null } }; } },
@@ -300,7 +300,7 @@ function createBudgetHarness({ onUpdate, signingFails = false, loseFirstCreateRe
   const page = {
     async setViewport() {}, async evaluateOnNewDocument() {}, async setExtraHTTPHeaders() {},
     async goto() { return { ok: () => !pdf.rendererFails, status: () => pdf.rendererFails ? 500 : 200 }; },
-    async waitForSelector() {}, async evaluateHandle() {},
+    async waitForSelector() {}, async evaluateHandle() {}, async evaluate() { calls.imageOptimizations++; },
     async waitForFunction() { if (pdf.imageTimeout) throw new Error('Timeout de imagem'); },
     async $eval(selector, fn) {
       return fn({ getAttribute: () => pdf.wrongId ? 'another-budget' : row.id, querySelectorAll: () => [{ naturalWidth: pdf.brokenImage ? 0 : 100 }] });
@@ -518,6 +518,7 @@ assert.equal(successfulPdf.row.status, 'finalizado');
 assert.equal(successfulPdf.calls.closed, 1);
 assert.deepEqual(successfulPdf.calls.removed, ['test/previous.pdf']);
 assert.ok(successfulPdf.calls.pdfOptions.headerTemplate.includes('&lt;Teste &amp; revisão&gt;'));
+assert.equal(successfulPdf.calls.imageOptimizations, 1, 'Fotos WebP são otimizadas antes da captura do PDF');
 const signedOnce = await (await successfulPdf.pdfUrl.GET({}, heroContext)).json();
 const signedAgain = await (await successfulPdf.pdfUrl.GET({}, heroContext)).json();
 assert.notEqual(signedOnce.pdf_url, signedAgain.pdf_url, 'Cada download renova a URL em vez de reutilizar token expirado');
