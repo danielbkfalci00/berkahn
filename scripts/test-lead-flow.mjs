@@ -65,6 +65,46 @@ function loadCommonModule(source, imports, globals = {}) {
   }, testModule, testModule.exports, ...Object.values(globals));
   return testModule.exports;
 }
+{
+  const { getBaseUrl } = loadCommonModule(readFileSync(new URL('../lib/puppeteer-launch.ts', import.meta.url), 'utf8'), {
+    'puppeteer-core': {}, '@sparticuz/chromium': {},
+  });
+  const previousNodeEnv = process.env.NODE_ENV;
+  const previousVercelUrl = process.env.VERCEL_URL;
+  try {
+    process.env.NODE_ENV = 'production';
+    process.env.VERCEL_URL = 'protected-deployment.vercel.app';
+    assert.equal(getBaseUrl('https://www.berkahn.com.br/api/institucional/pdf'), 'https://www.berkahn.com.br');
+    assert.equal(getBaseUrl('https://admin.berkahn.com.br/api/admin/orcamentos/id/pdf'), 'https://admin.berkahn.com.br');
+    assert.throws(() => getBaseUrl('https://example.invalid/api/institucional/pdf'), /Domínio não autorizado/);
+    assert.throws(() => getBaseUrl('http://www.berkahn.com.br/api/institucional/pdf'), /Domínio não autorizado/);
+    process.env.NODE_ENV = 'development';
+    assert.equal(getBaseUrl('http://localhost:3000/api/institucional/pdf'), 'http://localhost:3000');
+  } finally {
+    if (previousNodeEnv === undefined) delete process.env.NODE_ENV;
+    else process.env.NODE_ENV = previousNodeEnv;
+    if (previousVercelUrl === undefined) delete process.env.VERCEL_URL;
+    else process.env.VERCEL_URL = previousVercelUrl;
+  }
+}
+{
+  let printed = 0, closed = 0;
+  const fakePage = {
+    async setViewport() {},
+    async evaluateOnNewDocument() {},
+    async goto() { return { ok: () => true }; },
+    async waitForSelector() { throw new Error('Página de login, sem documento institucional'); },
+    async pdf() { printed++; return new Uint8Array(); },
+  };
+  const { GET } = loadCommonModule(readFileSync(new URL('../app/api/institucional/pdf/route.ts', import.meta.url), 'utf8'), {
+    'next/server': { NextResponse: { json: Response.json } },
+    '@/lib/puppeteer-launch': { getBaseUrl: () => 'https://www.berkahn.com.br', launchBrowser: async () => ({ newPage: async () => fakePage, close: async () => { closed++; } }) },
+  }, { console: { error() {} } });
+  const response = await GET(new Request('https://www.berkahn.com.br/api/institucional/pdf'));
+  assert.equal(response.status, 500, 'Não publicar login Vercel como PDF institucional.');
+  assert.equal(printed, 0);
+  assert.equal(closed, 1);
+}
 const budgetTypes = loadCommonModule(readFileSync(new URL('../types/orcamento-estimativa.ts', import.meta.url), 'utf8'), {});
 {
   const element = (type, props) => ({ type, props });
