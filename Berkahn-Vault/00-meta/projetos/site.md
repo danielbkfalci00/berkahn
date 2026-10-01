@@ -5,7 +5,7 @@ atualizado: 2026-10-01
 tags:
   - project/site
   - status/active
-ai_summary: "Hub do Site. Admin e PDFs de orçamento/institucional em produção; o PDF institucional foi validado com conteúdo real em 01/10/2026. Pendentes: matriz manual de papéis, Secure password change na conta hospedada, briefing institucional v4 e decisões de conteúdo. /sustentabilidade segue no PR #80."
+ai_summary: "Hub do Site. Admin e PDFs de orçamento/institucional em produção; o PDF institucional foi validado com conteúdo real em 01/10/2026. Pendentes: matriz manual de papéis, Secure password change na conta hospedada, briefing institucional v4 e decisões de conteúdo. PR #80 de /sustentabilidade foi fechada sem merge."
 status: active
 projeto: site
 kpi_paginas_indexadas: 34
@@ -45,7 +45,7 @@ code_paths:
 
 ## Status atual
 
-> **Página /sustentabilidade**: novo arco concluído e validado em 2026-09-10. São seis cenas mais CTA, com cor entrando na parede Light Steel Frame e seguindo pelo canteiro, ciclo e práticas. PR [#80](https://github.com/danielbkfalci00/berkahn/pull/80) permanece aberto, **sem merge e sem deploy**. Evidências e comandos em [[retomada-sustentabilidade]].
+> **Página /sustentabilidade**: novo arco concluído e validado na branch em 2026-09-10. São seis cenas mais CTA, com cor entrando na parede Light Steel Frame e seguindo pelo canteiro, ciclo e práticas. A PR [#80](https://github.com/danielbkfalci00/berkahn/pull/80) foi **fechada sem merge em 2026-09-23 UTC**; esse arco não foi publicado. Evidências e comandos em [[retomada-sustentabilidade]].
 
 Site em produção (Next.js 16 App Router + Supabase + Vercel + Tailwind + shadcn/ui). O CRM leve em `/admin/leads` foi mergeado pela PR #53 no commit `5121941` e está deployado nos projetos `berkahn` e `berkahn-admin`; arquitetura e runbook vivem em [[admin-setup]]. Supabase é a única fonte operacional; Google Sheets e Apps Script são legado desativado em [[google-sheets]].
 
@@ -185,7 +185,7 @@ Site em produção (Next.js 16 App Router + Supabase + Vercel + Tailwind + shadc
 
 - 2026-09-22: admin fechado em produção. Auditoria de 74 achados (#94), LGPD e busca (032/033), mural de feedback com CLI (#96, migration 034) e PWA abrindo em `/admin`. Tudo conferido em produção e no banco. Ver [[admin-setup]] e [[admin-feedback]].
 
-- 2026-09-10: `/sustentabilidade` concluída na branch `feat/sustentabilidade`: seis cenas mais CTA, 192px de respiro, fotografia híbrida, parede 3D como gesto central e cor como virada narrativa. Permaneceram somente três figuras com fonte e a ressalva do ACV brasileiro. Todas as cenas passaram por captura e medição em quatro viewports, inclusive movimento reduzido e JavaScript desligado; lint, typecheck e build verdes. PR #80 segue aberto, sem merge ou deploy. Ver [[retomada-sustentabilidade]].
+- 2026-09-10: `/sustentabilidade` concluída na branch `feat/sustentabilidade`: seis cenas mais CTA, 192px de respiro, fotografia híbrida, parede 3D como gesto central e cor como virada narrativa. Permaneceram somente três figuras com fonte e a ressalva do ACV brasileiro. Todas as cenas passaram por captura e medição em quatro viewports, inclusive movimento reduzido e JavaScript desligado; lint, typecheck e build verdes. A PR #80 foi fechada sem merge em 2026-09-23 UTC; o trabalho não está em produção. Ver [[retomada-sustentabilidade]].
 
 - 2026-08-07: sprint integrado de performance/UX/SEO/AEO — fontes escopadas por rota, shell sem Motion, formulário lazy, charts sob demanda, sizes corrigidos, tracking de WhatsApp padronizado e axe sério/crítico zerado em 28 cenários. Ver [[2026-08-diagnostico-integrado-site]]
 
