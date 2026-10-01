@@ -35,7 +35,7 @@ export function OQueEntregamos({ categoriasAtivas }: Props) {
   )
 
   return (
-    <section className="est-secao">
+    <section className="est-secao est-secao-quebra-antes">
       <div className="est-secao-header">
         <div className="est-numero-secao">03</div>
         <h2
@@ -78,17 +78,17 @@ export function OQueEntregamos({ categoriasAtivas }: Props) {
               className="est-card"
               style={{
                 background: "var(--c-off-white)",
-                padding: "16px 14px",
+                padding: "12px",
                 borderRadius: 2,
                 borderTop: "2px solid var(--c-champagne)",
                 display: "flex",
                 flexDirection: "column",
-                gap: 8,
-                minHeight: 160,
+                gap: 6,
+                minHeight: 140,
               }}
             >
               <Icon
-                size={28}
+                size={24}
                 strokeWidth={1.5}
                 color="var(--c-charcoal)"
               />
@@ -105,8 +105,8 @@ export function OQueEntregamos({ categoriasAtivas }: Props) {
               </h3>
               <p
                 style={{
-                  fontSize: "9.5pt",
-                  lineHeight: 1.55,
+                  fontSize: "9pt",
+                  lineHeight: 1.4,
                   margin: 0,
                   color: "var(--c-soft-gray)",
                 }}

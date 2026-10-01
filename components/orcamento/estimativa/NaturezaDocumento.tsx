@@ -3,23 +3,25 @@ import { NATUREZA_DOCUMENTO } from "@/lib/orcamento-estimativa-data"
 export function NaturezaDocumento() {
   return (
     <section className="est-secao">
-      <div className="est-secao-header">
-        <div className="est-numero-secao">01</div>
-        <h2
-          className="est-display"
-          style={{ fontSize: "36pt", margin: "12px 0 0", lineHeight: 1.1 }}
-        >
-          Natureza deste documento
-        </h2>
-        <div className="est-divisor-champagne" />
-      </div>
+      <div className="est-secao-intro">
+        <div className="est-secao-header">
+          <div className="est-numero-secao">01</div>
+          <h2
+            className="est-display"
+            style={{ fontSize: "36pt", margin: "12px 0 0", lineHeight: 1.1 }}
+          >
+            Natureza deste documento
+          </h2>
+          <div className="est-divisor-champagne" />
+        </div>
 
-      <div style={{ display: "flex", flexDirection: "column", gap: 18, maxWidth: 620, marginTop: 32 }}>
-        {NATUREZA_DOCUMENTO.intro.map((p, i) => (
-          <p key={i} style={{ fontSize: "11pt", lineHeight: 1.7, margin: 0 }}>
-            {p}
-          </p>
-        ))}
+        <div style={{ display: "flex", flexDirection: "column", gap: 18, maxWidth: 620, marginTop: 32 }}>
+          {NATUREZA_DOCUMENTO.intro.map((p, i) => (
+            <p key={i} style={{ fontSize: "11pt", lineHeight: 1.7, margin: 0 }}>
+              {p}
+            </p>
+          ))}
+        </div>
       </div>
 
       <div style={{ marginTop: 40 }}>

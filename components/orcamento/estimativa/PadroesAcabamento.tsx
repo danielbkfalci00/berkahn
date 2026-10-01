@@ -110,7 +110,7 @@ export function PadroesAcabamento({ padraoEscolhido }: Props) {
         })}
       </div>
 
-      <div style={{ marginTop: 32 }}>
+      <div className="est-referencias-visuais" style={{ marginTop: 32 }}>
         <p
           className="est-eyebrow"
           style={{ marginBottom: 16 }}

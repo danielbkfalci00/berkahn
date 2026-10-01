@@ -3,7 +3,7 @@ import { PROXIMOS_PASSOS_DEFAULT } from "@/lib/orcamento-estimativa-data"
 
 export function ProximosPassos() {
   return (
-    <section className="est-secao">
+    <section className="est-secao est-secao-quebra-antes">
       <div className="est-secao-header">
         <div className="est-numero-secao">09</div>
         <h2

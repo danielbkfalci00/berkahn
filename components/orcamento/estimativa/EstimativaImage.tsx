@@ -6,12 +6,14 @@ interface Props {
   src: string
   alt: string
   caption?: string
-  aspect?: "16:9" | "4:3" | "1:1" | "3:2"
+  aspect?: "3:1" | "16:9" | "4:3" | "1:1" | "3:2"
+  objectPosition?: string
   rounded?: boolean
   className?: string
 }
 
 const ASPECT_MAP: Record<NonNullable<Props["aspect"]>, string> = {
+  "3:1": "33.33%",
   "16:9": "56.25%",
   "4:3": "75%",
   "3:2": "66.67%",
@@ -23,6 +25,7 @@ export function EstimativaImage({
   alt,
   caption,
   aspect = "3:2",
+  objectPosition = "center",
   rounded = true,
   className,
 }: Props) {
@@ -59,7 +62,7 @@ export function EstimativaImage({
             width: "100%",
             height: "100%",
             objectFit: "cover",
-            objectPosition: "center",
+            objectPosition,
             display: "block",
           }}
         />

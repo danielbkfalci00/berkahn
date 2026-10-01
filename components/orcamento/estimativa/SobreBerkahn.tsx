@@ -3,24 +3,27 @@ import { EstimativaImage } from "./EstimativaImage"
 
 export function SobreBerkahn() {
   return (
-    <section className="est-secao est-secao-fundo-off">
-      <div className="est-secao-header">
-        <div className="est-numero-secao">02</div>
-        <h2
-          className="est-display"
-          style={{ fontSize: "36pt", margin: "12px 0 0", lineHeight: 1.1 }}
-        >
-          A Construtora
-        </h2>
-        <div className="est-divisor-champagne" />
-      </div>
+    <section className="est-secao est-secao-fundo-off est-secao-quebra-antes">
+      <div className="est-secao-intro">
+        <div className="est-secao-header">
+          <div className="est-numero-secao">02</div>
+          <h2
+            className="est-display"
+            style={{ fontSize: "36pt", margin: "12px 0 0", lineHeight: 1.1 }}
+          >
+            A Construtora
+          </h2>
+          <div className="est-divisor-champagne" />
+        </div>
 
-      <div style={{ margin: "0 0 32px" }}>
-        <EstimativaImage
-          src="/images/empresa/primeira-imagem.webp"
-          alt="Equipe e canteiro Berkahn"
-          aspect="16:9"
-        />
+        <div style={{ margin: "0 0 32px" }}>
+          <EstimativaImage
+            src="/images/empresa/primeira-imagem.webp"
+            alt="Equipe e canteiro Berkahn"
+            aspect="3:1"
+            objectPosition="center bottom"
+          />
+        </div>
       </div>
 
       <div
