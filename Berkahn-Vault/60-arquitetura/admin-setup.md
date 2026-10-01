@@ -1,12 +1,12 @@
 ---
 tipo: context
 criado: 2025-12-01
-atualizado: 2026-09-30
+atualizado: 2026-10-01
 tags:
   - ai/context
   - project/site
   - domain/admin
-ai_summary: Sistema Admin Berkahn com quatro papéis, CRM e PWA/Web Push. Sprints até PR134 publicados. Exportação prepara todas as abas; KPIs e fontes explicitam denominadores e limites. Lista de orçamentos sinaliza PDF desatualizado; PDF final e matriz manual de perfis permanecem pendentes.
+ai_summary: Sistema Admin Berkahn com quatro papéis, CRM e PWA/Web Push. Sprints de confiabilidade e PDF publicados até 01/10/2026. PDF real de orçamento validado em produção com 13 páginas e 2,76 MB; PDF institucional validado com 9 páginas. Permanecem a matriz manual dos perfis, exportação nativa de analytics e configuração de senha segura na conta Supabase hospedada.
 status: active
 projeto: site
 escopo: berkahn
@@ -173,6 +173,12 @@ O [PR134](https://github.com/danielbkfalci00/berkahn/pull/134) foi integrado em 
 ### Continuação: estado do PDF na lista de orçamentos
 
 `app/admin/orcamentos/page.tsx` consulta os campos usados pela revisão do PDF para até 25 orçamentos por página, calcula o estado no servidor e envia à tabela apenas os campos de exibição. `OrcamentosTable` troca o download de arquivo vencido por um link ao detalhe, onde o usuário pode conferir ou regenerar; documentos atuais e legados preservam seus fluxos. `lib/orcamento-pdf-storage.ts` concentra o mesmo estado usado pelo detalhe e pela rota de download. As regressões cobrem os quatro estados e as duas apresentações da lista. A validação nativa de download e layout final continua pendente.
+
+### Continuação: geração e revisão dos PDFs em produção (01/10/2026)
+
+As [PRs #136](https://github.com/danielbkfalci00/berkahn/pull/136) e [#137](https://github.com/danielbkfalci00/berkahn/pull/137) corrigiram quebras de página e peso das fotos do orçamento. O smoke real revelou ausência dos binários Brotli do Chromium na função Vercel; as [PRs #139](https://github.com/danielbkfalci00/berkahn/pull/139) e [#140](https://github.com/danielbkfalci00/berkahn/pull/140) expuseram o diagnóstico e incluíram os binários. A [PR #141](https://github.com/danielbkfalci00/berkahn/pull/141) usa a origem HTTPS solicitada, restringida aos hosts Berkahn, e recusa PDF institucional quando a resposta não contém a página esperada. Isso eliminou um falso PDF de login da proteção Vercel. O cabeçalho da seção “Referências Visuais” também passou a ficar inteiro dentro da página.
+
+Em produção, o orçamento sintético **BRK-2026-0004**, sem lead, email ou telefone, gerou PDF de **13 páginas, 2.756.786 bytes e 22 imagens**. Download e revisão visual das 13 páginas passaram; o registro foi arquivado após o teste. O endpoint `/api/institucional/pdf` gerou **9 páginas, 6.473.264 bytes e 16 imagens** com conteúdo real; a revisão visual encontrou o diagrama da página 4 cortado, corrigido no componente existente `SistemasConstrutivosPDF`. A validação do PDF final de Analytics no diálogo nativo, a matriz de quatro papéis, upload de nova capa e cenários multi-dispositivo continuam pendentes. Nenhum PDF comercial antigo foi regenerado.
 
 > [!info] Migração para vault
 > Este arquivo era duplicado em `Docs/ADMIN_SETUP.md` e `Docs/site/ADMIN_SETUP.md`. Consolidado aqui como fonte única. Referenciado por [[stack-nextjs-supabase]].

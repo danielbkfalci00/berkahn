@@ -30,7 +30,7 @@ export function SistemasConstrutivosPDF() {
           {s.intro}
         </p>
 
-        <div style={{ display: "grid", gridTemplateColumns: "1.05fr 0.95fr", gap: 36, alignItems: "center" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "0.95fr 1.05fr", gap: 24, alignItems: "center" }}>
           <div style={{ display: "flex", flexDirection: "column", borderTop: "1px solid #3a3a3a" }}>
             {s.blocos.map((b, i) => (
               <div key={b.title} style={{ padding: "20px 0", borderBottom: "1px solid #3a3a3a" }}>
@@ -61,12 +61,12 @@ export function SistemasConstrutivosPDF() {
             ))}
           </div>
 
-          <figure style={{ margin: 0, aspectRatio: "3 / 4", background: PHOTO_BG, position: "relative", overflow: "hidden" }}>
+          <figure style={{ margin: 0, aspectRatio: "4 / 3", background: PHOTO_BG, position: "relative", overflow: "hidden" }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={optImg(s.image, 640)}
               alt={s.imageAlt}
-              style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}
+              style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "contain" }}
             />
           </figure>
         </div>

@@ -1,11 +1,11 @@
 ---
 tipo: projeto
 criado: 2026-05-22
-atualizado: 2026-09-23
+atualizado: 2026-10-01
 tags:
   - project/site
   - status/active
-ai_summary: "Hub do Site. Admin em produção em 2026-09-22 com auditoria de 74 achados aplicada (PR #94), migrations 032 (LGPD), 033 (busca) e 034 (mural de feedback com CLI, PR #96) aplicadas e verificadas, PWA abrindo em /admin. Pendentes do admin: Secure password change no Supabase e reinstalar o atalho no celular. /sustentabilidade segue no PR #80."
+ai_summary: "Hub do Site. Admin e PDFs de orçamento/institucional em produção; o PDF institucional foi validado com conteúdo real em 01/10/2026. Pendentes: matriz manual de papéis, Secure password change na conta hospedada, briefing institucional v4 e decisões de conteúdo. /sustentabilidade segue no PR #80."
 status: active
 projeto: site
 kpi_paginas_indexadas: 34
@@ -53,7 +53,7 @@ Site em produção (Next.js 16 App Router + Supabase + Vercel + Tailwind + shadc
 
 ## Bloqueios ativos
 
-- [x] ~~**PR #17 (institucional v3) pendente merge**~~ — mergeado em 2026-07-30, junto com #15 e #16. **O que sobrou**: validar `/institucional/pdf` em produção, atualizar o briefing para v4 e distribuir o PDF (ver "Próximos 7 dias")
+- [x] ~~**PR #17 (institucional v3) pendente merge**~~ — mergeado em 2026-07-30, junto com #15 e #16. `/institucional/pdf` foi validado em produção em 01/10/2026; restam atualizar o briefing para v4 e decidir a distribuição (ver "Próximos 7 dias")
 - [x] **Indexação Google** (delegado a [[seo-aeo]]): resolvido em 2026-07-29 — 34/38 artigos (89%), contra 6/44 em abril
 - [x] ~~**Bug SearchAction**~~ — resolvido em 2026-07-30 **removendo** o bloco. Não era URL inválida: o `urlTemplate` apontava para `/perguntas-frequentes?q=`, e aquela página ignora o parâmetro (o componente não recebe props) e devolve a FAQ inteira. Como o sitelinks searchbox foi descontinuado pelo Google em nov/2024, declarar a busca não tinha contrapartida
 - [x] ~~**Quatro CTAs apontando para `/contato`, que respondia 404**~~ — resolvido em 2026-07-30. `app/portfolio/page.tsx:153`, `ProjectModels.tsx:180`, `ProjectSpecs.tsx:72` e `ProjectsGrid.tsx:41` linkavam para uma rota que **nunca existiu**: a captura de lead só existia como modal. O `ContactForm` foi extraído do `ContactFormDialog` e agora serve os dois — o modal e a página `/contato`, indexável e linkável. Fecha o item 7 do diagnóstico ("não existe caminho público para pedir orçamento")
@@ -75,7 +75,7 @@ Site em produção (Next.js 16 App Router + Supabase + Vercel + Tailwind + shadc
 - [x] ~~**Auditoria completa do admin (PWA, auth, leads, analytics)**~~ — PR [#94](https://github.com/danielbkfalci00/berkahn/pull/94) mergeado em 2026-09-22. 81 achados, 74 confirmados por três céticos cada (27 médios, 47 baixos, zero críticos). Entre eles: open redirect pós-login, cookies de sessão renovados descartados nos redirects, filtro de ação vencida contando lead convertido, KPI de qualificados contando desqualificados, WhatsApp sem DDI 55, MoM de mês parcial marcando o acervo como frio, `engagementRate` multiplicado por 100 duas vezes, erro transitório do URL Inspection virando "não indexada", aviso ao usuário bloqueado por papel
 - [x] ~~**LGPD em leads**~~ — migrations 032 e 033 aplicadas e verificadas em 2026-09-22 (funções, trigger de autoria, policy e 4 índices trigram conferidos no banco). Detalhe em [[admin-setup]]
 - [x] **Mural de feedback no admin** — PR [#96](https://github.com/danielbkfalci00/berkahn/pull/96) mergeado e migration 034 aplicada em 2026-09-22. Botão flutuante em todas as telas, `/admin/feedback` em formato de chat, status aberto/implementado só por owner ou CLI, push para owner, CLI `scripts/admin/feedback.mjs`. Ver [[admin-feedback]]
-- [ ] **Caminhos de contato no Admin** — PR [#116](https://github.com/danielbkfalci00/berkahn/pull/116), validado em 2026-09-23: resumo separa clique no WhatsApp (GA4), formulário confirmado e lead com origem WhatsApp (CRM); mensagem pré-preenchida identifica página/CTA e cadastro manual pode salvá-los. Testes analytics, lint, build, vault e previews passaram. Ainda faltam novo snapshot para o detalhamento GA4 por página/CTA e smoke autenticado em produção. O caso formulário + conversa WhatsApp na mesma pessoa ainda não é vínculo automático; ver [[analytics-methodology#Caminhos de contato no Admin]].
+- [x] **Caminhos de contato no Admin** — PR [#116](https://github.com/danielbkfalci00/berkahn/pull/116) integrada em 2026-09-23: resumo separa clique no WhatsApp (GA4), formulário confirmado e lead com origem WhatsApp (CRM); mensagem pré-preenchida identifica página/CTA e cadastro manual pode salvá-los. Testes analytics, lint, build, vault e deploys passaram. Ainda faltam novo snapshot para detalhamento GA4 por página/CTA e smoke dos perfis secundários. O caso formulário + conversa WhatsApp na mesma pessoa ainda não é vínculo automático; ver [[analytics-methodology#Caminhos de contato no Admin]].
 - **Core Web Vitals de campo**: otimizações estruturais entregues em [[2026-08-diagnostico-integrado-site]]; a tarefa de medição vive em “Próximos 7 dias”.
 
 ## Próximos 7 dias
@@ -105,7 +105,7 @@ Site em produção (Next.js 16 App Router + Supabase + Vercel + Tailwind + shadc
 - [x] **Upgrade breaking de dependências concluído em 12/08**: Next 16.3, Sharp 0.35.3, Puppeteer 25.6, ESLint flat e D3 corrigido; `npm audit` retorna zero. Fontes locais retiraram a dependência de Google Fonts no CI. Detalhe em [[stack-nextjs-supabase]]
 - [x] ~~**Próxima página do redesign: `/atualidades`**~~ — concluída em 2026-08-06: abertura fundida, bento, categorias canônicas, payload 141/26 KB e ISR 60 preservado
 - [ ] @bruno Importar Clube Quinta dos Lagos para o banco de imagens antes de reativar o rail de projetos #pendencia
-- [ ] @bruno Validar `/institucional/pdf` gerando PDF em produção após o merge da PR #17 #pendencia
+- [x] `/institucional/pdf` gerou PDF real em produção em 01/10/2026 após a PR #141: HTTP 200, 9 páginas, 6.473.264 bytes, texto e imagens reais; revisão visual identificou e corrigiu o enquadramento do diagrama da página 4
 - [ ] @bruno Atualizar o briefing do institucional para v4 antes de distribuir; o código está em v4 e a documentação em v3 #pendencia
 - [ ] @codex Mover Playfair e Caveat do layout raiz para a rota de orçamento, os únicos consumidores, e medir a redução no payload global #pendencia
 - [ ] @codex Avaliar lazy-load das seções GSAP abaixo da dobra da home, preservando Lenis, acessibilidade e a narrativa visual #pendencia
