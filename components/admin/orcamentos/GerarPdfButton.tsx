@@ -14,7 +14,7 @@ type State =
   | { status: "idle" }
   | { status: "loading" }
   | { status: "success"; atualizadoEm: string }
-  | { status: "error"; message: string; campos?: string[]; refreshable?: boolean }
+  | { status: "error"; message: string; detail?: string; campos?: string[]; refreshable?: boolean }
 
 export function GerarPdfButton({ orcamentoId, atualizadoEm }: Props) {
   const [state, setState] = useState<State>({ status: "idle" })
@@ -35,6 +35,7 @@ export function GerarPdfButton({ orcamentoId, atualizadoEm }: Props) {
         setState({
           status: "error",
           message: json.error ?? "Falha ao gerar PDF",
+          detail: res.status === 500 && typeof json.details === "string" ? json.details : undefined,
           campos: json.campos,
           refreshable: res.status === 409 || res.status === 503,
         })
@@ -83,6 +84,12 @@ export function GerarPdfButton({ orcamentoId, atualizadoEm }: Props) {
             <AlertCircle className="h-4 w-4 flex-shrink-0 mt-0.5" />
             <div>
               <div className="font-medium">{state.message}</div>
+              {state.detail && (
+                <details className="mt-1">
+                  <summary className="cursor-pointer underline">Ver diagnóstico</summary>
+                  <p className="mt-1 break-words">{state.detail}</p>
+                </details>
+              )}
               {state.refreshable && <button type="button" onClick={() => router.refresh()} className="mt-1 inline-flex min-h-11 items-center underline">Atualizar orçamento</button>}
               {state.campos && state.campos.length > 0 && (
                 <ul className="mt-1 text-xs list-disc pl-4">

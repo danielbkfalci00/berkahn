@@ -204,6 +204,12 @@ const initialRevision = '2026-09-29T16:00:00.000000+00:00';
     nodes(result, (node) => node.type === 'button' && node.props.children === 'Atualizar orçamento')[0].props.onClick();
     assert.equal(nodes(result, (node) => node.type === 'Button')[0].props.disabled, false, 'Falha libera nova tentativa');
   }
+  const failedPdf = nodes(renderGenerate(), (node) => node.type === 'Button')[0].props.onClick();
+  complete.resolve(Response.json({ error: 'Falha ao gerar PDF', details: 'Renderer indisponível (403).' }, { status: 500 }));
+  await failedPdf;
+  const diagnostic = renderGenerate();
+  assert.equal(nodes(diagnostic, (node) => node.type === 'summary' && node.props.children === 'Ver diagnóstico').length, 1);
+  assert.equal(nodes(diagnostic, (node) => node.type === 'p' && node.props.children === 'Renderer indisponível (403).').length, 1);
   const success = nodes(renderGenerate(), (node) => node.type === 'Button')[0].props.onClick();
   complete.resolve(Response.json({ atualizado_em: 'new-version' }));
   await success;
