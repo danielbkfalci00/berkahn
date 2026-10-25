@@ -50,7 +50,7 @@ permissão explícita do Bruno.
 ## 3. Passar no gate antes de gravar
 
 Escreva o texto num arquivo do scratchpad e rode o verificador. Ele lê as regras
-do prompt calibrado v1.2 e sai em 0 ou 1:
+do prompt calibrado v1.4 e sai em 0 ou 1:
 
 ```bash
 node scripts/conteudo/check-linkedin.mjs <arquivo.txt>
@@ -58,6 +58,8 @@ node scripts/conteudo/check-linkedin.mjs <arquivo.txt>
 
 Só grave na pauta com saída 0. Se ele reprovar, reescreva o texto inteiro; não
 remende só a frase apontada, porque o problema costuma ser o ritmo do parágrafo.
+A saída 0 não aprova continuidade: aplique também o teste da permutação entre os
+parágrafos centrais e o teste da ponte entre a última frase do corpo e o CTA.
 A URL com UTM fica em **linha própria entre o CTA e as hashtags**, e não conta
 na extensão. Cole a saída do gate no pacote de aprovação.
 

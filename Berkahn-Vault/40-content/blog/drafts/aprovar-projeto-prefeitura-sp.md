@@ -1,7 +1,7 @@
 ---
 tipo: draft-content
 criado: 2026-09-05
-atualizado: 2026-09-05
+atualizado: 2026-10-20
 tags:
   - project/blog
   - status/draft
@@ -23,7 +23,7 @@ palavras_chave:
   - alvará de aprovação e execução sp
   - licenciamento autodeclaratório são paulo
 category: Segurança e Normas
-read_time: 8 min
+read_time: 6 min
 author: Equipe Berkahn
 answer_summary: "Desde meados de junho de 2026, a prefeitura de São Paulo emite Alvará de Aprovação e Execução sem análise prévia do projeto, pelo regime declaratório da Lei 18.375/2025 regulamentado pelo Decreto 65.100/2026. O regime cobre edificação de até 1.500 m² em lote de até 20.000 m², nos usos listados no artigo 3º. A análise de titularidade permanece, em até 5 dias úteis, e a obra começa quando titularidade validada, emissão automática do alvará e recolhimento das taxas se cumprem juntos. Declaração falsa custa R$ 1.000,00 por metro quadrado de área aprovada, solidária entre proprietário e responsáveis técnicos, mais 12 meses de impedimento. O uso R1 consta da lei, mas não foi habilitado no Licencia Sampa em 15/06/2026."
 contextos_aplicados:
@@ -35,75 +35,63 @@ material_visual_slug: cover.webp
 
 Desde meados de junho de 2026, a prefeitura de São Paulo emite alvará de aprovação e de execução sem analisar o projeto antes. O documento sai do sistema a partir da declaração do interessado e dos responsáveis técnicos, e a obra pode começar assim que três condições se cumprem juntas. A regra vale para edificação de até 1.500 m² em lote de até 20.000 m², dentro de uma lista fechada de usos.
 
-O número que circulou junto com a notícia é o que mais confunde. Existem quatro prazos de 30 dias nessa mudança, e nenhum deles é prazo de aprovação. Separar os quatro é a primeira coisa a fazer antes de replanejar cronograma.
+O número que circulou junto com a notícia é o que mais confunde. Existem quatro prazos de 30 dias nessa mudança, e nenhum deles é prazo de aprovação. Separar os quatro é a primeira coisa a fazer antes de replanejar o cronograma.
 
 [STATS:licenciamento-sp-2026]
 
 ## O que a Lei 18.375 e o Decreto 65.100 fizeram
 
-A [Lei municipal 18.375, de 29 de dezembro de 2025](https://legislacao.prefeitura.sp.gov.br/leis/lei-18375-de-29-de-dezembro-de-2025), instituiu o regime de emissão declaratória eletrônica para dez documentos de controle da atividade edilícia. O Decreto 65.100, de 15 de abril de 2026, regulamentou o procedimento e entrou em vigor 60 dias depois da publicação, conforme o artigo 30. A plataforma que recebe os pedidos, o [Licencia Sampa](https://licenciasampa.prefeitura.sp.gov.br), entrou no ar em 15 de junho de 2026.
+A [Lei municipal 18.375, de 29 de dezembro de 2025](https://legislacao.prefeitura.sp.gov.br/leis/lei-18375-de-29-de-dezembro-de-2025), instituiu a emissão declaratória eletrônica para dez documentos de controle da atividade edilícia. O Decreto 65.100, de 15 de abril de 2026, regulamentou o procedimento, e a plataforma que recebe os pedidos, o [Licencia Sampa](https://licenciasampa.prefeitura.sp.gov.br), entrou no ar em 15 de junho de 2026.
 
-Para quem vai levantar uma casa, o documento que interessa é o primeiro da lista do artigo 3º, o Alvará de Aprovação somado ao Alvará de Execução, tanto para edificação nova quanto para reforma. O limite é de 1.500 m² de área total da edificação, em lote ou gleba de até 20.000 m². Reforma tem duas trancas cumulativas, e as duas precisam fechar. O acréscimo não pode passar de 50% da área construída existente, e o total final não pode passar de 1.500 m².
+Para quem vai levantar uma casa, interessa o Alvará de Aprovação somado ao de Execução, para edificação nova ou reforma. O limite é de 1.500 m² de área total em lote de até 20.000 m². Na reforma, as duas trancas valem juntas: o acréscimo não passa de 50% da área existente e o total final não passa de 1.500 m². No residencial entram os usos R1, R2h e R2v. Habitação de Interesse Social e de Mercado Popular ficam de fora porque a lista é taxativa.
 
-Os usos admitidos estão no parágrafo único do mesmo artigo, na classificação da Lei de Parcelamento, Uso e Ocupação do Solo 16.402/2016. No residencial entram R1, R2h e R2v. No não residencial, nR1, nR2 e nRa1 a nRa4. Na indústria de baixo impacto, Ind1a e Ind1b. Habitação de Interesse Social e Habitação de Mercado Popular não aparecem no texto da lei e ficam de fora porque a lista é taxativa, não porque exista um artigo excluindo as duas.
-
-O desenho do regime está no artigo 19. Validada a titularidade, emitido o alvará automaticamente pelo sistema e recolhidas as taxas, a obra pode começar de imediato. Some a espera pelo deferimento, some o Comunique-se e some a fila de análise técnica antes da emissão.
+Validada a titularidade, emitido o alvará automaticamente e recolhidas as taxas, a obra pode começar de imediato, conforme o artigo 19.
 
 [TIMELINE:regime-declaratorio-sp]
 
 ## Os quatro prazos de 30 dias
 
-O título que circulou fala em autodeclaração eletrônica em 30 dias. O número existe na lei, e é outra coisa. Os quatro prazos lado a lado deixam isso claro.
+O título que circulou fala em autodeclaração em 30 dias. O número existe na lei, e é outra coisa.
 
 [TABLE:prazos-30-dias]
 
-O primeiro é teto legal, não expectativa. Num regime cuja mecânica é emissão automática pelo sistema, anunciar 30 dias vende lentidão onde houve aceleração. O quarto nem pertence ao regime novo, porque é a regra do Código de Obras que sempre permitiu iniciar a obra 30 dias depois do protocolo do Alvará de Execução, se não houvesse indeferimento.
-
-Para dimensionar o que mudou, o número com validade permanente do rito anterior está no artigo 70, §1º do [Código de Obras e Edificações](https://legislacao.prefeitura.sp.gov.br/leis/lei-16642-de-09-de-maio-de-2017), que fixa em 90 dias o prazo máximo para decisão dos pedidos, inclusive em grau de recurso. O Aprova Rápido nasceu prometendo teto de 130 dias e informava tempo médio de 87 dias, números declarados pela prefeitura em outubro de 2021, e não atendia residência unifamiliar. O Aprova Digital processa 22 assuntos da Portaria SEL 038/2020 e também não inclui R1. Quem constrói casa isolada em lote nunca teve acesso a nenhum dos dois atalhos.
+O primeiro é teto legal, não expectativa. Num regime de emissão automática, anunciar 30 dias vende lentidão onde houve aceleração. O quarto nem pertence ao regime novo: é a regra do Código de Obras que já permitia iniciar a obra 30 dias depois do protocolo do Alvará de Execução. Para dimensionar a mudança, o rito anterior tinha prazo máximo de 90 dias para decisão, pelo artigo 70 do [Código de Obras](https://legislacao.prefeitura.sp.gov.br/leis/lei-16642-de-09-de-maio-de-2017). O Aprova Rápido e o Aprova Digital nunca atenderam casa isolada.
 
 ## O que não desapareceu
 
-A análise prévia do projeto acabou. A análise prévia de titularidade continua, em até 5 dias úteis, conforme o artigo 9º do decreto. A certidão de matrícula anexada precisa ter no máximo 30 dias de expedição, o imóvel precisa de número de contribuinte válido e ativo no Cadastro Imobiliário Fiscal, e as taxas de exame e verificação previstas no Código de Obras precisam estar recolhidas para que o direito de iniciar a obra exista.
+A análise prévia do projeto acabou. A análise de titularidade continua, em até 5 dias úteis, pelo artigo 9º do decreto. A certidão de matrícula precisa ter no máximo 30 dias, o imóvel precisa de contribuinte ativo no Cadastro Imobiliário Fiscal e as taxas precisam estar pagas.
 
-O projeto também não desapareceu. O que entra no sistema é um Projeto Simplificado em padrão fixado por portaria da SMUL, com aceite eletrônico que equivale à assinatura dos interessados e dos responsáveis técnicos para todos os efeitos, inclusive de responsabilidade técnica. Quem contava com economizar a etapa de projeto legal continua precisando dela, e [o que separa projeto legal de projeto executivo, com os percentuais de honorário](/atualidades/quanto-custa-projeto-casa), segue igual.
+O projeto também continua. Entra no sistema um Projeto Simplificado em padrão fixado pela SMUL, com aceite eletrônico equivalente à assinatura dos responsáveis técnicos, inclusive quanto à responsabilidade. Quem contava em economizar a etapa de projeto legal ainda precisa dela, e [o que separa projeto legal de executivo, com honorários](/atualidades/quanto-custa-projeto-casa), segue igual.
 
-O que tira um lote inteiro do rito são as treze vedações do artigo 10 da lei. A lista completa raramente aparece publicada, e é justamente ela que decide se o caminho curto existe para aquele terreno.
+O que tira um lote do rito são as treze vedações do artigo 10 da lei, lista que raramente aparece completa e que decide se o caminho curto existe para aquele terreno.
 
 [CHECKLIST:vedacoes-art-10]
 
-Um cuidado de leitura nos incisos IV, V e VI do artigo 3º evita interpretação larga. Muro de arrimo, demolição e movimento de terra entraram no regime declaratório quando desvinculados de obra de edificação. Na obra de uma casa, os três costumam vir dentro do alvará da própria edificação, então [a decisão de contenção em terreno inclinado](/atualidades/terreno-em-declive-quanto-encarece) continua sendo resolvida no mesmo documento.
-
 ## O preço de declarar errado
 
-Autodeclarar não significa declarar de qualquer jeito. Significa transferir a conferência para depois, com o ônus inteiro no declarante.
+Autodeclarar transfere a conferência para depois, com o ônus inteiro no declarante. Pelo artigo 15, diante de irregularidade, informação falsa ou má-fé, o documento pode ser suspenso, com 5 dias úteis para defesa. Confirmada a irregularidade, proprietário e responsáveis técnicos respondem solidariamente e ficam 12 meses sem poder protocolar novos pedidos.
 
-O artigo 15 da lei prevê suspensão de ofício dos efeitos do documento diante de suspeita de irregularidade, informação inverídica, documento falso ou má-fé, com 5 dias úteis para defesa. Confirmada a irregularidade, proprietário, possuidor e os responsáveis técnicos pelo projeto e pela obra respondem solidariamente e ficam 12 meses impedidos de protocolar novos pedidos.
-
-A multa está no artigo 16 da lei, e não no decreto. A distinção importa porque parte da imprensa atribuiu os valores ao Decreto 65.100, que não traz valor em reais em nenhum dispositivo. São R$ 1.000,00 por metro quadrado de área aprovada, valor do texto legal, corrigido todo 1º de fevereiro pelo IPCA. Numa casa de 200 m², a conta chega a R$ 200 mil, solidários entre os quatro responsáveis e cumulativos com as multas do próprio Código de Obras, por fatos geradores distintos.
+A multa está no artigo 16 da lei, e não no decreto, que não traz valor em reais. São R$ 1.000,00 por metro quadrado de área aprovada, corrigidos todo 1º de fevereiro pelo IPCA. Numa casa de 300 m², a conta parte de R$ 300 mil, solidários entre os responsáveis e cumulativos com as multas do Código de Obras.
 
 ## A porta que ainda não abriu para casa isolada
 
-Aqui está a informação que muda o planejamento de quem lê isso pensando na própria casa. A lei inclui o uso R1, que é uma unidade habitacional por lote. A plataforma, no lançamento, não incluiu.
+A lei inclui o uso R1, uma unidade habitacional por lote. A plataforma, no lançamento, não incluiu.
 
 [TABLE:escopo-licencia-sampa]
 
-O Licencia Sampa abriu em 15 de junho de 2026 com Alvará de Aprovação e Execução de Edificação Nova para R2h-1, R2h-2, nR1 e nR2, mais o Alvará de Autorização de tapume. Casa geminada e casa sobreposta entraram no primeiro dia. Casa isolada em lote, não. Quem está nesse caso continua protocolando pelo SLCe, no rito ordinário, enquanto a SMUL declara que novos documentos serão disponibilizados gradualmente, sem prazo publicado.
-
-Isso não anula a mudança, e sim adia a data em que ela chega para uma parte do público. Como a expansão do escopo é anunciada por ato administrativo, e não por nova lei, confirmar quais usos estão habilitados na semana do protocolo passou a fazer parte do preparo.
+O Licencia Sampa abriu em 15 de junho de 2026 com Alvará de Aprovação e Execução de Edificação Nova para R2h-1, R2h-2, nR1 e nR2. Casa geminada e sobreposta entraram no primeiro dia. Casa isolada em lote, não, e quem está nesse caso segue pelo rito ordinário no SLCe enquanto a SMUL libera novos documentos gradualmente, sem prazo publicado. Como a expansão vem por ato administrativo, e não por nova lei, vale confirmar quais usos estão habilitados na semana do protocolo.
 
 ## O que muda quando a casa é em Light Steel Frame
 
-O Light Steel Frame é o sistema construtivo que usa perfis leves de aço galvanizado formados a frio como estrutura, com fechamento em placas. A afirmação segura sobre ele neste assunto é uma negativa, e ela vale bastante. O regime declaratório não classifica pedido por sistema construtivo, e a Lei 18.375/2025 não menciona sistema construtivo em nenhum artigo. Não existe documento adicional a apresentar por ser LSF.
+O Light Steel Frame é o sistema construtivo de perfis leves de aço galvanizado formados a frio, com fechamento em placas. A afirmação segura aqui é uma negativa: o regime não classifica pedido por sistema construtivo, e a Lei 18.375 não o menciona. Não existe documento adicional por ser LSF. Isso só é notícia porque nem sempre foi assim, e a NBR 16970, de 2022, encerrou o enquadramento como tecnologia inovadora, como mostram [as normas do sistema no Brasil](/atualidades/normas-light-steel-frame-brasil).
 
-Isso só é notícia porque nem sempre foi assim. Enquanto o sistema era tratado como tecnologia inovadora, cada obra carregava o ônus de comprovar desempenho antes de ser aceita. A NBR 16970, publicada em 2022, é a primeira norma brasileira exclusiva de Light Steel Frame e encerrou esse enquadramento, assunto detalhado [nas normas que regem o sistema no Brasil](/atualidades/normas-light-steel-frame-brasil).
-
-O efeito prático aparece no cronograma. A vantagem competitiva do LSF é a duração curta do canteiro, e [as etapas de uma obra em Steel Frame](/atualidades/passo-passo-construcao-steel-frame) só começam a contar com o projeto aprovado. O trecho anterior a elas, entre o projeto assinado e a primeira máquina no terreno, era medido em meses por desenho legal. Quando esse trecho encolhe, o ganho da obra industrializada para de ser devolvido na fila do licenciamento. O alvará também é a condição que destrava a primeira medição de [crédito de construção](/atualidades/financiar-construcao-light-steel-frame).
+O efeito aparece no cronograma. A vantagem do LSF é o canteiro curto, e [as etapas da obra](/atualidades/passo-passo-construcao-steel-frame) só contam depois do projeto aprovado. Quando o trecho entre o projeto assinado e a primeira máquina no terreno encolhe, o ganho da obra industrializada deixa de ser devolvido na fila do licenciamento. O alvará também destrava a primeira medição do [crédito de construção](/atualidades/financiar-construcao-light-steel-frame).
 
 ## Perguntas frequentes
 
 [FAQ:aprovar-projeto-sp]
 
-O regime declaratório não simplificou o projeto, simplificou o protocolo. Continua sendo necessário profissional habilitado, projeto legal, lote elegível e declaração correta. A diferença de peso está em quando a prefeitura confere, porque a conferência passou a acontecer depois da emissão, e o erro passou a custar mil reais por metro quadrado. Para quem já tem lote e programa definidos, o intervalo entre decidir construir e abrir o canteiro deixou de ser o trecho mais imprevisível do cronograma.
+O regime declaratório simplificou o protocolo, não o projeto. Continuam necessários profissional habilitado, projeto legal, lote elegível e declaração correta. A conferência passou a acontecer depois da emissão, e o erro passou a custar mil reais por metro quadrado.
 
 [CTA:aprovar-projeto-sp]
 
@@ -156,3 +144,5 @@ Separação de confiabilidade mantida no texto: todo prazo, área, uso, vedaçã
 Reconferência obrigatória antes de publicar: o escopo de usos habilitados no Licencia Sampa. A SMUL declarou expansão gradual sem prazo, então a seção "A porta que ainda não abriu para casa isolada" e a tabela `escopo-licencia-sampa` precisam ser conferidas na semana da publicação. Se o R1 tiver sido habilitado, a seção muda de "ainda não abriu" para "abriu em tal data" e o ângulo do artigo se desloca sem perder validade.
 
 Fronteiras respeitadas: nenhum checklist de custos em reais para começar a obra, nenhuma menção a entrada, LTV, reserva de caixa, ITBI, registro ou emolumentos, que pertencem a `entrada-financiamento-construcao`; o financiamento entra em uma frase e sai por link. Nenhuma discussão de norma técnica de desempenho ou zoneamento bioclimático, que pertence à pauta da NBR 15220-3; o LSF entra apenas pela negativa de que o rito não pede documento extra. As exclusões do art. 10 aparecem como regra de licenciamento em lista, sem digressão ambiental, para não invadir a pauta do litoral.
+
+**Revisão de 20/10/2026 (blog-criacao v1.1):** corpo reduzido de 1477 para 948 palavras, resposta nos dois primeiros parágrafos, parágrafos curtos. Exemplo da multa trocado de 200 m² para 300 m² (R$ 300 mil). Tentei reconferir o escopo do Licencia Sampa para casa isolada (R1) em 20/10/2026 e não achei fonte oficial atualizada, então a seção A porta que ainda não abriu continua exigindo reconferência na semana de publicar.

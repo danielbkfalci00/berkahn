@@ -1,7 +1,7 @@
 ---
 tipo: context
 criado: 2026-08-05
-atualizado: 2026-08-12
+atualizado: 2026-09-16
 tags:
   - project/site
   - project/blog
@@ -36,8 +36,9 @@ O quadro registra a intenção operacional; ele não publica e não altera
 `posts.status`. Os gaps permanecem visíveis como avisos e próxima ação.
 
 Aprovação editorial continua manual. A publicação real do Blog existe somente
-quando `posts.status = published`; no LinkedIn, somente quando URL e data estão
-registradas. A visão Geral usa `estadoDoQuadro`: duas trilhas em `publicado` sem
+quando `posts.status = published`; no LinkedIn, quando a data real está
+registrada. A URL individual é opcional porque nem sempre fica disponível no
+fluxo de publicação. A visão Geral usa `estadoDoQuadro`: duas trilhas em `publicado` sem
 esses artefatos ficam em **Pronta para publicar**, nunca em Concluída.
 
 `/artigo publicar` é a única operação que publica post+pauta. Registrar a

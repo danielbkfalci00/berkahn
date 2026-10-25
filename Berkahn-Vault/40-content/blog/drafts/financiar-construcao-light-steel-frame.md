@@ -39,7 +39,7 @@ material_visual_slug: cover.webp
 
 Duas linhas de crédito para a mesma obra de R$ 400.000 podem exibir taxas parecidas no papel e cobrar valores bem diferentes durante a construção. Numa obra de seis meses, sob premissas declaradas mais adiante, o home equity produz cerca de R$ 31.200 de juros na fase de obra e o crédito de construção produz R$ 12.144. A diferença não está toda na taxa, e sim em quanto do dinheiro emprestado está rendendo juros a cada mês.
 
-No home equity o valor cai integral na conta no primeiro dia, e a partir dali o tomador paga juros sobre 100% do saldo até o fim da obra. No crédito de construção o desembolso acompanha as medições, então os juros incidem apenas sobre o que já foi liberado. Esse é o saldo devedor médio, a variável que a comparação de mercado costuma deixar de fora e que pesa antes mesmo de a taxa entrar. Na Berkahn essa escolha aparece em praticamente todo projeto residencial, e ela muda de resposta conforme a obra dure quatro meses ou dois anos, que é a distância entre construir em Light Steel Frame, sistema estruturado em perfis leves de aço galvanizado formados a frio, e construir em alvenaria.
+No home equity o valor cai integral na conta no primeiro dia, e a partir dali o tomador paga juros sobre 100% do saldo até o fim da obra. No crédito de construção o desembolso acompanha as medições, então os juros incidem apenas sobre o que já foi liberado. Esse é o saldo devedor médio, a variável que a comparação de mercado costuma deixar de fora e que pesa antes mesmo de a taxa entrar. Essa escolha aparece em praticamente todo projeto residencial, e ela muda de resposta conforme a obra dure quatro meses ou dois anos, que é a distância entre construir em Light Steel Frame, sistema estruturado em perfis leves de aço galvanizado formados a frio, e construir em alvenaria.
 
 [STATS:credito-obra-2026]
 
@@ -103,7 +103,7 @@ Uma condição de enquadramento precisa ficar clara. A cartilha classifica o Lig
 
 Nenhuma modalidade é universalmente melhor, e este artigo não é aconselhamento financeiro. O que existe é uma ordem de perguntas que funciona. Primeiro, quanto tempo a obra vai durar, porque isso define o tamanho do prêmio em disputa. Segundo, qual o saldo devedor médio de cada proposta, porque é ele que multiplica a taxa. Terceiro, o que diz o demonstrativo de CET e qual indexador cada lado carrega. Quem responde as três chega na agência sabendo o que está comprando.
 
-Na Berkahn trabalhamos com construção industrializada na Grande São Paulo e dimensionamos o projeto junto com o cronograma físico-financeiro, que é o documento que o banco lê. Se você está avaliando qual crédito faz sentido para a sua obra, fale com a nossa equipe antes de fechar a proposta.
+A Berkahn é uma construtora de Light Steel Frame na Grande São Paulo, e o projeto precisa ser dimensionado junto com o cronograma físico-financeiro, que é o documento que o banco lê. Se você está avaliando qual crédito faz sentido para a sua obra, fale com a nossa equipe antes de fechar a proposta.
 
 [CTA:financiar-construcao]
 

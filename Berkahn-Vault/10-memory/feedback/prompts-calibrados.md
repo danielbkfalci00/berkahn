@@ -1,14 +1,14 @@
 ---
 tipo: memory
 criado: 2026-04-13
-atualizado: 2026-08-27
+atualizado: 2026-09-16
 tags:
   - ai/memory
   - ai/locked
   - status/active
   - project/blog
   - project/linkedin
-ai_summary: Prompts de conteúdo (LinkedIn, brainstorm, pesquisa, criação) foram calibrados por iteração e NÃO devem ser alterados sem permissão. Os de Bruno são intocáveis; os criados por Claude podem ser ajustados.
+ai_summary: Prompts de conteúdo foram calibrados por iteração e não mudam sem permissão. O LinkedIn está na v1.4, com continuidade causal entre parágrafos, CTA como consequência do corpo e bloqueio de novos jargões de IA.
 status: active
 subtipo: feedback
 why: "Os prompts passaram por múltiplas rodadas de refinamento. Especialmente o de LinkedIn, com regras sobre vícios de linguagem, terminologia LSF vs Steel Frame, tom 'engenheiro experiente', extensão 100-180 palavras. Alterar sem entender o histórico degrada qualidade."
@@ -35,6 +35,45 @@ Podem ser ajustados com mais liberdade:
 - [[seo-page-audit]]
 
 ## Histórico de recalibragem
+
+### [[blog-criacao]] v1.0 → v1.1 (2026-10-20)
+
+Permissão do Bruno, dada no chat em 20/10/2026, depois do diagnóstico de queda de
+tráfego ([[2026-10-diagnostico-queda-trafego]]). Motivo: o artigo campeão (1.842
+palavras) levou 14% dos leitores até 90% da página, contra 29% do artigo de 100 m²
+(1.060 palavras). Amostra pequena, tratada como indício.
+
+- **Extensão por tipo:** preço e resposta 900 a 1.300 palavras, técnico até 1.800,
+  pilar até 2.500. Antes era um teto único de 2.500.
+- **Resposta no início:** 40 a 60 palavras nos dois primeiros parágrafos.
+- **Leitura leve:** parágrafos de até 4 linhas, um H2 a cada 150 a 250 palavras,
+  uma tabela ou box por artigo quando houver dado comparável.
+- **Tabelas e lista curta** liberadas no corpo. Bullets longos continuam proibidos.
+- **Público:** médio a grande porte, ticket R$ 500 mil a R$ 2 milhões. Casa de 70 ou
+  100 m² e casa popular saem de tema e de exemplo. Decisão do Bruno em 20/10.
+
+### [[linkedin-post]] v1.3 → v1.4 (2026-09-16)
+
+Autorizada pelo Bruno depois de três versões da pauta `0197a729`. As duas
+primeiras estavam corretas frase a frase e passavam como copy, mas foram
+reprovadas por parecerem “um monte de frase solta”. O defeito não era tamanho:
+cada parágrafo reiniciava a explicação, e o CTA “Está comparando propostas?”
+abandonava a dúvida sobre o custo da casa para abrir uma nova situação no fim.
+
+A versão aprovada organizou uma única cadeia: dúvida real → origem dos números →
+diferença de escopo → consequência para o preço por metro quadrado → utilidade
+do artigo antes de definir o orçamento da casa. A calibragem incorpora dois
+testes humanos que o gate sintático não substitui:
+
+- **teste da permutação**: se os parágrafos centrais podem trocar de lugar, o
+  texto ainda é uma coleção de blocos, não uma narrativa;
+- **teste da ponte**: a última frase do corpo e o CTA precisam continuar a mesma
+  decisão. O CTA não pode inventar um novo público ou cenário.
+
+Também entram como vícios explícitos as fórmulas “não veio apenas de...” e “há
+um detalhe que muda...”, identificadas pelo Bruno como jargão de IA. O
+`check-linkedin.mjs` passou a bloquear essas formas, enquanto continuidade e
+ponte permanecem revisão semântica obrigatória.
 
 ### [[linkedin-post]] v1.1 → v1.2 (2026-08-27)
 

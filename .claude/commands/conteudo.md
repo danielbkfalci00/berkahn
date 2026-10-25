@@ -98,8 +98,10 @@ e “Aprovo”. Nunca trate silêncio, elogio ou pedido de ajuste como aprovaç�
      com `pauta.mjs capa --canal=linkedin`. Se a ferramenta não estiver disponível,
      preserve prompt+briefing e exponha o gap; não simule arquivo criado.
      Antes de gravar, execute o filtro de humanização do prompt: hook em situação
-     concreta do público, alvo de 110–140 palavras, leitura em voz alta, redução
-     final de 20%–30% quando estiver explicativo e CTA que nomeie a ajuda prática.
+     concreta do público, 110–140 palavras em tema leve ou 150–180 em tema
+     técnico, leitura em voz alta e CTA que continue a mesma decisão do corpo.
+     Faça os testes da permutação e da ponte descritos em [[linkedin-post]]; o
+     gate sintático não mede continuidade narrativa.
    - `revisar`: valide SEO/AEO, fontes, consistência técnica, links, artefatos e
      publicação real. Não aprove. Pare e entregue o pacote abaixo.
    - `preparar-publicacao`: não publique no LinkedIn; entregue copy, capa e URL UTM.

@@ -1,0 +1,17 @@
+{
+ "slug": "certificacoes-steel-frame",
+ "content": "# Certificações e Normas\n\nGuia completo sobre as certificações e normas.\n\n[CTA:cta-certificacoes-seguranca]\n\n[SERVICELINK:lsf]\n\n---\n\n### Leia também\n\n- [Steel Frame e Fogo: O Que Acontece em um Incêndio](/atualidades/steel-frame-fogo-incendio)\n- [Steel Frame Resiste a Terremoto? O Teste CFS10](/atualidades/steel-frame-terremoto-teste-cfs10)\n- [Proteção contra Quedas na Construção Civil](/atualidades/protecao-contra-quedas-construcao-civil)\n- [Sustentabilidade na Construção Civil e Economia Circular](/atualidades/sustentabilidade-construcao-civil-economia-circular)",
+ "components": {
+  "ctas": [
+   {
+    "id": "cta-certificacoes-seguranca",
+    "label": "SEGURANÇA CERTIFICADA",
+    "title": "Construa com total conformidade técnica",
+    "actionText": "Solicitar Orçamento",
+    "actionType": "dialog",
+    "description": "A Berkahn projeta conforme as normas ABNT e as certificações exigidas. Garanta uma obra segura e em conformidade.",
+    "defaultSegment": "residencial"
+   }
+  ]
+ }
+}

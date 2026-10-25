@@ -1,14 +1,14 @@
 ---
 tipo: draft-content
 criado: 2026-09-06
-atualizado: 2026-09-06
+atualizado: 2026-10-20
 tags:
   - project/blog
   - status/draft
   - domain/lsf
   - domain/normas
-ai_summary: "Pauta do lote 10, funil pós-venda. O calendário de manutenção de uma casa em Light Steel Frame, marco a marco, ancorado no tripé normativo de fase de uso que a SERP inteira ignora: ABNT NBR 5674:2024 (gestão da manutenção e periodicidade), ABNT NBR 14037 (manual que a construtora deve entregar) e ABNT NBR 17170:2022 (prazos de garantia). A tese é que prazo de garantia não é intervalo de manutenção, e que o registro do que foi feito é documento, não zelo."
-status: draft
+ai_summary: "MESCLADO em [[vida-util-casa-steel-frame]] em 20/10/2026, sem publicação própria. Pauta do lote 10, funil pós-venda. O calendário de manutenção de uma casa em Light Steel Frame, marco a marco, ancorado no tripé normativo de fase de uso que a SERP inteira ignora: ABNT NBR 5674:2024 (gestão da manutenção e periodicidade), ABNT NBR 14037 (manual que a construtora deve entregar) e ABNT NBR 17170:2022 (prazos de garantia). A tese é que prazo de garantia não é intervalo de manutenção, e que o registro do que foi feito é documento, não zelo."
+status: archived
 projeto: blog
 slug: manutencao-casa-steel-frame
 title: "Manutenção de casa em steel frame: o que fazer em cada ano"

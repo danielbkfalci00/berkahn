@@ -1,0 +1,254 @@
+{
+ "slug": "construir-hospital-em-operacao",
+ "content": "Em dezembro de 2023, a Clark Construction entregou o Verstandig Pavilion no MedStar Georgetown University Hospital, em Washington, DC. São 477 mil pés quadrados de pavilhão médico-cirúrgico, três níveis de estacionamento subterrâneo, 31 salas de cirurgia, 156 quartos privativos e um pronto-socorro que quase dobrou de tamanho. O custo foi de US$ 519 milhões em construção e quase seis anos de obra. Durante todo esse período, o hospital ao lado continuou funcionando normalmente. Nenhum paciente foi transferido, nenhuma cirurgia foi cancelada por causa da construção. Esse é o tipo de desafio que revela o que a engenharia moderna consegue fazer quando precisa resolver problemas onde o erro tem consequências reais.\n\nNa Berkahn, acompanhamos projetos como esse porque eles validam com dados concretos aquilo que a construção industrializada defende. A construção industrializada, os processos a seco e a prefabricação entregam ganhos claros de eficiência e, em ambientes sensíveis, reduzem riscos que a construção convencional simplesmente não consegue controlar. O caso do MedStar Georgetown é um dos mais bem documentados do mundo nessa categoria, e merece uma análise detalhada.\n\n[STATS:stats-medstar-georgetown]\n\n## O que foi construído e por que era tão difícil\n\n[IMAGE:verstandig-exterior]\n\nO Verstandig Pavilion substituiu instalações de mais de 50 anos no campus da Georgetown University. O projeto, conduzido pela Clark Construction como CMAR (Construction Manager at Risk), com arquitetura da HKS/Shalom Baranes Associates e engenharia MEP da BR+A Consulting Engineers, incluiu um edifício de seis pavimentos com UTIs universais em três andares, dois suítes de ressonância magnética intraoperatória (uma novidade na região de Washington), 18 elevadores, heliponto com acesso direto ao PS e às salas de cirurgia, e três geradores de emergência de 2 MW cada.\n\nO terreno, porém, era o oposto de um canteiro ideal. A obra ficava cercada pela Reservoir Road (uma via principal da cidade), um prédio de assuntos estudantis, um estacionamento, três edifícios acadêmicos e o próprio hospital em funcionamento. Todo o acesso de pedestres, ambulâncias e veículos precisava ser mantido durante os quase seis anos de construção. O subsolo revelou quase 300 obstruções não documentadas, incluindo uma tubulação de esgoto de mais de 2,4 metros de diâmetro que cruzava o centro do terreno e não podia suportar peso, segundo reportagem da Engineering News-Record sobre o projeto.\n\n## As estratégias que mantiveram o hospital funcionando\n\nA primeira providência da Clark foi resolver a questão das utilidades. Mais de 5 quilômetros de tubulações de vapor, água gelada e linhas elétricas passavam diretamente pelo terreno da obra, muitas delas sem documentação. A equipe projetou e construiu uma ponte temporária de utilidades com 76 metros de extensão, usando racks pré-fabricados suspensos em vigas de aço de 17 a 18 metros. Toda essa infraestrutura foi relocada sem uma única interrupção no fornecimento ao hospital.\n\nPara manter o acesso ao campus, a Clark construiu três pontes para pedestres e veículos sobre a escavação, com redes de proteção contra queda de detritos. Uma nova via conectando a Entrada Quatro ao Lombardi Circle foi construída logo no início para reorganizar o fluxo de tráfego, junto com um terminal de ônibus no norte do campus. Segundo a Clark Construction, todo o trânsito de pedestres e veículos foi centralizado em pontos de acesso controlados durante a obra.\n\nNo subsolo, mais de mil estacas foram instaladas para o sistema de contenção da escavação. Os dados de instalação de cada estaca eram alimentados em tempo real no modelo BIM (construído em Revit), permitindo revisões contínuas no plano de escavação. A Clark usou escaneamento 3D a laser com estação total Leica MS50 para verificação dimensional de bordas de laje, concreto pré-moldado, juntas e nivelamento de piso, conforme documentado pela Construction Dive. Os dados eram processados pelo software Leica Infinity e integrados ao AutoCAD Civil 3D para documentação as-built.\n\n## Prefabricação: a decisão que mudou tudo\n\nO elemento mais transformador do projeto foi a prefabricação. Mais de 700 elementos construtivos foram produzidos fora do canteiro, segundo a Clark Construction. Banheiros inteiros chegavam como módulos prontos, içados por guindaste. Os tetos das salas de cirurgia foram pré-fabricados com estrutura de aço dimensionada para suportar a carga máxima de equipamentos futuros, o que significa que quando novas tecnologias precisarem ser instaladas, a sala precisa ficar offline por apenas alguns dias, em vez de semanas.\n\nA Clark também instalou uma usina de concreto dentro do canteiro, operada pela Aggregate Industries (LafargeHolcim), que produziu mais de 26 mil metros cúbicos de concreto e eliminou aproximadamente 3.500 entregas de caminhão-betoneira. Essa decisão sozinha reduziu congestionamento, ruído, vibração e poeira no campus de forma significativa.\n\nOs mockups de ambientes foram produzidos durante a fase de escavação, muito antes do que o cronograma convencional permitiria. Isso antecipou a aprovação do cliente e economizou seis semanas no cronograma do projeto, de acordo com a Clark Construction. A fabricação em ambiente controlado garantiu padrões rigorosos de qualidade, reduziu o desperdício no canteiro e diminuiu a quantidade de trabalhadores no local, o que por sua vez melhorou a segurança e reduziu a perturbação para pacientes e estudantes.\n\n## ICRA: o protocolo invisível que protege pacientes durante obras\n\nExiste um framework técnico que governa toda construção em ambiente hospitalar ativo, e que a maioria das construtoras brasileiras nunca ouviu falar: o ICRA, ou Infection Control Risk Assessment. Introduzido nas diretrizes do FGI (Facility Guidelines Institute) em 1996 e tornado obrigatório na edição de 2001, o ICRA usa uma matriz que cruza o tipo de atividade construtiva (Classes A a D) com o grupo de risco dos pacientes próximos (de baixo a altíssimo risco) para determinar o nível de precaução exigido (Classes I a IV).\n\nA razão para essa rigidez é concreta. Uma revisão sistemática publicada por Vonberg e Gastmeier (2006) documentou 53 surtos de infecção relacionados a obras de construção ou demolição em hospitais, afetando 458 pacientes. A taxa de mortalidade entre pacientes severamente imunocomprometidos chegou a 57,6%. Kanamori et al. (2015), em revisão publicada na Clinical Infectious Diseases, confirmaram mortalidade de aproximadamente 50% em infecções fúngicas associadas a obras hospitalares ao longo de quatro décadas de dados. Concentrações abaixo de 1 UFC/m³ de Aspergillus já foram suficientes para causar infecção em pacientes de alto risco.\n\nAs precauções de Classe IV, exigidas para demolições importantes próximas a UTIs, centros oncológicos e salas de cirurgia, demandam barreiras rígidas com antecâmaras, isolamento completo do sistema de climatização na zona de trabalho, pressão negativa mantida no mínimo a 2,5 Pa com exaustão HEPA direcionada para fora do edifício e monitoramento contínuo 24 horas com alarme automático em caso de perda de pressão. Filtros HEPA precisam capturar 99,97% das partículas de 0,3 mícrons. A Joint Commission atualizou seus padrões consolidados de controle de infecção em julho de 2024, e a ASHRAE Standard 170-2021 (adotada por mais de 40 estados americanos) estabelece as especificações de ventilação.\n\nQuando implementadas corretamente, essas medidas funcionam. Um estudo brasileiro citado na literatura mostrou que, enquanto taxas de infecção chegavam a 50% em enfermarias com apenas ventilação natural durante obras, zero casos de aspergilose pulmonar invasiva foram registrados ao longo de três anos em alas equipadas com filtração HEPA.\n\nNo Brasil, a construção hospitalar é regulada pela ANVISA RDC 50/2002 (infraestrutura física de estabelecimentos de saúde), RDC 222/2018 (resíduos) e ABNT NBR 7256 (tratamento de ar). Porém, o país não possui um equivalente específico do ICRA para atividades construtivas. O framework da CCIH (Comissão de Controle de Infecção Hospitalar) aborda o controle clínico de infecções, mas não oferece a classificação granular de atividades construtivas, com especificações de barreiras, pressão negativa e filtração HEPA que o ICRA americano entrega.\n\n[NORMS:normas-construcao-hospitalar]\n\n[MYTHS:mitos-obra-hospitalar]\n\n## Por que construção a seco e Steel Frame fazem mais sentido em hospitais\n\nO Light Steel Frame (LSF) é um sistema construtivo industrializado que utiliza perfis de aço galvanizado como estrutura, fechados externamente com placas cimentícias e internamente com gesso acartonado. É uma construção a seco por natureza, sem argamassa, sem concreto úmido, sem as etapas que mais geram poeira, vibração e ruído em canteiros convencionais.\n\nPara ambientes hospitalares, essas características se tornam vantagens decisivas. A construção em Steel Frame elimina os processos de mistura, corte e vibração de concreto que produzem material particulado perigoso nas proximidades de áreas de atendimento. Não há compostos orgânicos voláteis (VOCs) liberados pelas paredes em LSF, o que melhora a qualidade do ar interno. A prefabricação em ambiente de fábrica pode transferir até 80% da atividade construtiva para fora do canteiro, segundo dados compilados pela McKinsey, reduzindo drasticamente a exposição de pacientes a riscos de contaminação.\n\n[TABLE:seco-vs-umido-hospital]\n\nO ganho em velocidade também é significativo. Construção em Steel Frame reduz prazos em 30% a 40% comparado a métodos tradicionais, e projetos de prefabricação hospitalar demonstraram redução de até 58% no cronograma para módulos de banheiro (de 45 para 19 dias em relação à construção no local), segundo dados da Dodge Data & Analytics. No caso do MedStar Georgetown, a prefabricação (fortemente baseada em aço) economizou seis semanas apenas no caminho crítico.\n\nHá também a questão da adaptabilidade. Hospitais precisam se reconfigurar constantemente à medida que tecnologias médicas evoluem e protocolos de atendimento mudam. Paredes internas em LSF podem ser desmontadas e relocadas sem afetar a estrutura do edifício, a uma fração do custo e da perturbação de reformar alvenaria ou concreto. A capacidade de vãos longos do aço (vigas alveolares atingem até 18 metros) cria espaços livres de pilares que permitem layouts flexíveis. O próprio MedStar Georgetown demonstrou esse princípio: os tetos pré-fabricados das salas de cirurgia foram projetados com infraestrutura de aço para carga máxima futura, permitindo upgrades tecnológicos em dias ao invés de semanas.\n\nDados da ArcelorMittal/Canam indicam que a construção em aço pode ser 5% a 9,6% mais barata que concreto quando todos os fatores são considerados, com economias relacionadas ao tempo representando 3% a 5% do valor total do projeto em obras hospitalares.\n\n## O mercado hospitalar: onde está a oportunidade\n\nO mercado global de construção hospitalar alcançou US$ 284,6 bilhões em 2024 e projeta crescimento para US$ 442 bilhões até 2034, segundo dados de mercado publicados pelo Medical Buyer. No Brasil, o cenário é de expansão acelerada. O país possui mais de 7.300 hospitais, gasta cerca de 9,7% do PIB em saúde e está investindo pesado em infraestrutura. O Novo PAC comprometeu R$ 1,75 bilhão para a rede de hospitais universitários da Ebserh, e o governo federal anunciou investimento de R$ 1 bilhão em um novo hospital inteligente no Rio Grande do Sul com 531 leitos e 44 salas cirúrgicas.\n\n[COMPARISON3D:sistemas-hospitalar]\n\nA adoção de prefabricação no setor de saúde está crescendo rapidamente. Segundo a Dodge Data & Analytics, 82% das instituições de saúde já se declararam dispostas a utilizar alta frequência de prefabricação e construção modular. O setor hospitalar é o quarto tipo de edificação que mais utiliza prefabricação nos Estados Unidos. No Brasil, durante a pandemia de COVID-19, a Tecverde construiu um hospital permanente de 1.600 m² em São José dos Campos em 35 dias usando construção industrializada, e o Centro Hospitalar da Fiocruz em Manguinhos foi erguido em 60 dias usando Steel Frame.\n\n[FAQ:faq-construcao-hospital]\n\n## Considerações finais\n\nO Verstandig Pavilion é uma demonstração prática de que as tecnologias e processos certos permitem executar obras de alta complexidade ao lado de operações hospitalares que não podem parar. Prefabricação, modelagem BIM, construção a seco e protocolos rigorosos de controle de infecção funcionam como requisitos técnicos nesse tipo de ambiente, e não como diferenciais opcionais de quem quer inovar.\n\nPara quem está planejando uma construção, reforma ou ampliação de instalações onde a operação contínua é crítica, vale conhecer como o Light Steel Frame e a construção industrializada resolvem exatamente os problemas que tornam esses projetos tão desafiadores. A Berkahn pode ajudar a dimensionar a melhor solução técnica para o seu projeto.\n\n[CTA:cta-construcao-hospital]\n\n[SERVICELINK:comercial-industrial]",
+ "components": {
+  "ctas": [
+   {
+    "id": "cta-construcao-hospital",
+    "label": "PROJETO COMERCIAL OU INSTITUCIONAL",
+    "title": "Obras onde a operação não pode parar exigem construção industrializada",
+    "actionText": "Falar com a equipe",
+    "actionType": "dialog",
+    "description": "A Berkahn domina os processos de Light Steel Frame, prefabricação e construção a seco aplicáveis a obras complexas em ambientes sensíveis. Fale com a nossa equipe para entender como dimensionar a melhor solução técnica para o seu projeto.",
+    "defaultSegment": "comercial"
+   }
+  ],
+  "faqs": [
+   {
+    "id": "faq-construcao-hospital",
+    "title": "Perguntas Frequentes",
+    "questions": [
+     {
+      "answer": "Sim. Projetos como o MedStar Georgetown (6 anos de obra ao lado de hospital ativo) e o VCU Health em Richmond (22 fases em 50 meses mantendo 14 salas de cirurgia funcionais) demonstram que é viável com planejamento adequado, prefabricação, controle de infecção rigoroso e gestão de fases.",
+      "question": "É possível reformar um hospital sem interromper as operações?"
+     },
+     {
+      "answer": "ICRA (Infection Control Risk Assessment) é o framework que classifica atividades de construção e grupos de risco de pacientes para determinar o nível de proteção necessário durante obras em ambientes de saúde. Vai da Classe I (precauções mínimas) à Classe IV (barreiras rígidas, pressão negativa, filtração HEPA).",
+      "question": "O que é ICRA na construção hospitalar?"
+     },
+     {
+      "answer": "Estudos documentaram 53 surtos de infecção relacionados a obras hospitalares (Vonberg e Gastmeier, 2006), com mortalidade de até 57,6% em pacientes imunocomprometidos. Poeira de construção pode carregar esporos de Aspergillus e outros fungos que são letais para pacientes vulneráveis.",
+      "question": "Quais os riscos de fazer obras em hospitais sem protocolo adequado?"
+     },
+     {
+      "answer": "Sim. O LSF oferece vantagens específicas para ambientes hospitalares: é uma construção a seco que reduz poeira e material particulado, permite prefabricação extensiva (reduzindo atividade no canteiro), possibilita layouts flexíveis para futuras reconfigurações e reduz prazos em 30% a 40% comparado à alvenaria convencional.",
+      "question": "Steel Frame pode ser usado em construção hospitalar?"
+     },
+     {
+      "answer": "A ANVISA RDC 50/2002 regula a infraestrutura física de estabelecimentos de saúde, e a ABNT NBR 7256 estabelece parâmetros para tratamento de ar. No entanto, o Brasil ainda não possui um equivalente direto do ICRA americano com classificação específica de atividades construtivas e seus respectivos níveis de proteção.",
+      "question": "O Brasil tem regulamentação para obras em hospitais em funcionamento?"
+     },
+     {
+      "answer": "Os valores variam amplamente conforme complexidade, localização e especificações. Para referência, o Hospital Inteligente do RS foi orçado em R$ 1 bilhão para 531 leitos. Nos EUA, o custo médio de construção hospitalar gira em torno de US$ 700-730 por pé quadrado (dados da HFM Magazine), tendo aumentado mais de 20% entre 2020 e 2024.",
+      "question": "Quanto custa construir um hospital no Brasil?"
+     }
+    ]
+   }
+  ],
+  "myths": [
+   {
+    "myth": "Obras em hospital só acontecem com parte do atendimento interditado.",
+    "truth": "O Verstandig Pavilion do MedStar Georgetown foi construído em quase 6 anos sem uma única cirurgia cancelada ou paciente transferido por causa da obra."
+   },
+   {
+    "myth": "Poeira de construção em hospital é questão de conforto, não risco clínico.",
+    "truth": "Vonberg e Gastmeier (2006) documentaram 53 surtos de infecção em obras hospitalares, com mortalidade de até 57,6% em pacientes imunocomprometidos expostos a esporos como Aspergillus."
+   },
+   {
+    "myth": "Steel Frame serve apenas para casas e construções de pequeno porte.",
+    "truth": "No MedStar, mais de 700 elementos foram pré-fabricados, incluindo tetos em estrutura de aço das 31 salas de cirurgia, dimensionados para suportar a carga máxima de equipamentos futuros."
+   }
+  ],
+  "norms": [
+   {
+    "code": "ANVISA RDC 50",
+    "year": "2002",
+    "title": "Infraestrutura física de estabelecimentos de saúde",
+    "description": "Regulamento brasileiro que define requisitos mínimos para planejamento, programação, elaboração e avaliação de projetos físicos de estabelecimentos assistenciais de saúde. Base legal para qualquer obra hospitalar no país."
+   },
+   {
+    "code": "ABNT NBR 7256",
+    "year": "2021",
+    "title": "Tratamento de ar em estabelecimentos assistenciais de saúde",
+    "description": "Estabelece requisitos para sistemas de tratamento de ar em hospitais, incluindo classes de pureza do ar e parâmetros de ventilação. Complementa a RDC 50 no aspecto de qualidade do ar interno."
+   },
+   {
+    "code": "ANVISA RDC 222",
+    "year": "2018",
+    "title": "Gerenciamento de resíduos de serviços de saúde",
+    "description": "Regulamenta as boas práticas de gerenciamento dos resíduos gerados em serviços de saúde. Aplicável a todas as obras e reformas em ambiente hospitalar."
+   },
+   {
+    "code": "ASHRAE 170",
+    "year": "2021",
+    "title": "Ventilation of Health Care Facilities",
+    "description": "Norma americana adotada por mais de 40 estados e referência internacional para ventilação em ambientes hospitalares. Define especificações de filtragem HEPA, pressurização e renovação de ar em áreas críticas."
+   },
+   {
+    "code": "ICRA (FGI Guidelines)",
+    "year": "2001",
+    "title": "Infection Control Risk Assessment",
+    "description": "Framework técnico do Facility Guidelines Institute que classifica atividades construtivas (A–D) e grupos de risco de pacientes para determinar precauções (Classes I–IV). Ainda sem equivalente direto no Brasil."
+   }
+  ],
+  "stats": [
+   {
+    "id": "stats-medstar-georgetown",
+    "stats": [
+     {
+      "icon": "Building2",
+      "label": "Área construída",
+      "value": "477k ft²",
+      "description": "Aproximadamente 44.300 m² de pavilhão médico-cirúrgico"
+     },
+     {
+      "icon": "DollarSign",
+      "label": "Custo total da obra",
+      "value": "US$ 519M",
+      "description": "Projeto conduzido pela Clark Construction como CMAR"
+     },
+     {
+      "icon": "Scissors",
+      "label": "Salas de cirurgia",
+      "value": "31",
+      "description": "Incluindo duas suítes de ressonância magnética intraoperatória"
+     },
+     {
+      "icon": "BedDouble",
+      "label": "Quartos privativos",
+      "value": "156",
+      "description": "Mais UTIs universais distribuídas em três andares"
+     },
+     {
+      "icon": "Clock",
+      "label": "Prazo total de obra",
+      "value": "~6 anos",
+      "description": "Com hospital vizinho em operação contínua durante todo o período"
+     },
+     {
+      "icon": "ShieldCheck",
+      "label": "Cirurgias canceladas pela obra",
+      "value": "0",
+      "description": "Nenhum paciente transferido por causa da construção"
+     }
+    ],
+    "title": "MedStar Georgetown em Números"
+   }
+  ],
+  "charts": [],
+  "images": [
+   {
+    "id": "verstandig-exterior",
+    "alt": "Verstandig Pavilion no MedStar Georgetown University Hospital ao entardecer, com fachada em terracota NBK e cantos envidraçados",
+    "src": "/images/blog/construir-hospital-em-operacao/verstandig-pavilion.webp",
+    "credit": "Clark Construction",
+    "layout": "wide",
+    "caption": "O Verstandig Pavilion concluído, entregue em dezembro de 2023.",
+    "aspectRatio": "3:2",
+    "enableLightbox": true
+   }
+  ],
+  "tables": [
+   {
+    "id": "seco-vs-umido-hospital",
+    "rows": [
+     [
+      "Material particulado e poeira",
+      "Geração alta (mistura, corte, vibração)",
+      "Mínima — processos sem argamassa"
+     ],
+     [
+      "VOCs liberados nas paredes",
+      "Presentes em argamassas e selantes",
+      "Ausentes em placas cimentícias e drywall"
+     ],
+     [
+      "Ruído e vibração no canteiro",
+      "Altos, especialmente em demolição e concretagem",
+      "Reduzidos — montagem mecânica"
+     ],
+     [
+      "Trabalhadores simultâneos no local",
+      "Alto número, exposição contínua",
+      "Até 80% da atividade pode migrar para fábrica"
+     ],
+     [
+      "Prazo de execução",
+      "Referência do mercado",
+      "30% a 40% menor que métodos tradicionais"
+     ],
+     [
+      "Reconfiguração futura de layouts",
+      "Custosa, gera poeira e resíduo úmido",
+      "Paredes internas desmontáveis sem afetar estrutura"
+     ]
+    ],
+    "caption": "Construção úmida vs. construção a seco em ambiente hospitalar",
+    "headers": [
+     "Aspecto",
+     "Construção úmida (alvenaria/concreto)",
+     "Construção a seco (LSF)"
+    ],
+    "highlightColumn": 2
+   }
+  ],
+  "comparison3D": [
+   {
+    "id": "sistemas-hospitalar",
+    "title": "Sistemas construtivos em obra hospitalar — comparação multidimensional",
+    "options": [
+     {
+      "name": "Alvenaria convencional",
+      "color": "#94A3B8",
+      "scores": [
+       4,
+       3,
+       3,
+       4,
+       3,
+       3
+      ],
+      "description": "Processos úmidos e demolição úmida geram grande volume de particulado e ruído; reconfigurações futuras custosas."
+     },
+     {
+      "name": "Concreto armado",
+      "color": "#64748B",
+      "scores": [
+       4,
+       3,
+       2,
+       5,
+       3,
+       3
+      ],
+      "description": "Vibração e ruído de concretagem elevados; estrutura pesada e de difícil alteração após entrega."
+     },
+     {
+      "name": "Light Steel Frame",
+      "color": "#16A34A",
+      "scores": [
+       9,
+       9,
+       8,
+       9,
+       9,
+       9
+      ],
+      "description": "Construção a seco com prefabricação extensiva, redução de 30–40% no prazo, paredes internas reconfiguráveis sem afetar estrutura."
+     }
+    ],
+    "maxScore": 10,
+    "dimensions": [
+     "Velocidade",
+     "Poeira",
+     "Ruído",
+     "VOCs",
+     "Flexibilidade",
+     "Hospital ativo"
+    ],
+    "showLegend": true,
+    "description": "Escala 0–10 por critério. Scores derivados da literatura citada (Dodge Data & Analytics, McKinsey, ArcelorMittal, FGI/ICRA) e da prática documentada em projetos como o MedStar Georgetown."
+   }
+  ]
+ }
+}

@@ -1,7 +1,7 @@
 ---
 tipo: draft-content
 criado: 2026-09-05
-atualizado: 2026-09-05
+atualizado: 2026-10-20
 tags:
   - project/blog
   - status/draft
@@ -12,7 +12,7 @@ status: draft
 projeto: blog
 slug: steel-frame-litoral-maresia
 data_publicacao: ""
-title: "Steel frame no litoral: o que a maresia realmente faz com o aço"
+title: "Steel frame no litoral: o que a maresia faz com o aço, do Litoral Norte à Baixada"
 seo_title: "Steel Frame no Litoral: Maresia, Z350 e Corrosão"
 description: "O que a maresia faz com o aço do Light Steel Frame, em micrômetros por ano. Z275, Z350 e a categoria de corrosividade que decide a vida útil no litoral."
 seo_description: "Z275 tem 19,3 µm de zinco por face e dura de 5 a 9 anos exposto a 1 km do mar. Veja a conta da ISO 9223 e o que muda na especificação do steel frame no litoral."
@@ -24,7 +24,7 @@ palavras_chave:
   - categoria de corrosividade iso 9223
   - steel frame enferruja perto do mar
 category: Segurança e Normas
-read_time: 9 min
+read_time: 8 min
 author: Equipe Berkahn
 answer_summary: "No litoral, quem decide a durabilidade do Light Steel Frame é a corrosividade de dentro da parede, não a da orla. Um perfil Z275 tem 19,3 µm de zinco por face, porque a massa de 275 g/m² é somada nas duas faces. Exposto a menos de 1 km do mar, categoria C4 da ISO 9223, esse zinco perde de 2,1 a 4,2 µm por ano e dura de 5 a 9 anos. Na cavidade seca e ventilada da parede, categoria C2, o mesmo Z275 dura de 28 a 193 anos. A exigência de Z350 até 2.000 m da orla vem da Diretriz SINAT nº 003, não da NBR 15253."
 supabase_id: ""
@@ -37,85 +37,65 @@ contextos_aplicados:
 material_visual_slug: cover.webp
 ---
 
-Um perfil galvanizado Z275, o mínimo que a ABNT NBR 15253 exige para uso estrutural, carrega 19,3 micrômetros de zinco em cada face. Numa atmosfera a menos de um quilômetro do mar, a ISO 9223 fixa a perda do zinco entre 2,1 e 4,2 micrômetros por ano. A divisão dá de cinco a nove anos. A mesma casa precisa entregar cinquenta anos de vida útil de projeto para a estrutura, pela ABNT NBR 15575-1.
+No litoral, quem decide a durabilidade do Light Steel Frame é a corrosividade de dentro da parede, não a da orla. Um perfil Z275 tem 19,3 µm de zinco por face, e exposto a menos de 1 km do mar, categoria C4 da ISO 9223, perde de 2,1 a 4,2 µm por ano e dura de 5 a 9 anos. Na cavidade seca e ventilada da parede, categoria C2, o mesmo perfil dura de 28 a 193 anos. A casa de praia precisa entregar 50 anos de vida útil de projeto da estrutura pela NBR 15575-1, e o que falha antes é o que fica do lado de fora da cavidade.
 
-A conta está correta e mesmo assim não condena o sistema, porque ela vale para o perfil exposto. O Light Steel Frame é o sistema construtivo que usa perfis leves de aço galvanizado formados a frio como estrutura, com fechamento em placas, e a atmosfera que o montante respira dentro da parede não é a da orla. É essa diferença de categoria, e não a distância até a praia, que decide se a estrutura chega aos cinquenta anos.
+A conta de 5 a 9 anos está correta e não condena o sistema, porque vale para o perfil exposto. O Light Steel Frame é o sistema construtivo de perfis leves de aço galvanizado formados a frio, com fechamento em placas, e a atmosfera que o montante respira dentro da parede não é a da orla. Essa diferença de categoria, e não a distância até a praia, decide se a estrutura chega aos cinquenta anos. Vale para casa de praia no Litoral Norte paulista e na Baixada Santista.
 
 [STATS:corrosao-litoral-numeros]
 
 ## De onde vem a regra dos 2.000 metros da orla
 
-Praticamente todo material publicado sobre construção a seco no litoral repete que a NBR 15253 manda usar Z350 em atmosfera marinha até 2.000 metros da orla. O Quadro 1 dessa norma, que trata do revestimento mínimo do aço, tem duas linhas apenas. Zincado 275 g/m² conforme a NBR 7008-1, e alumínio-zinco 150 g/m² conforme a NBR 15578. Não há Z350 e não há distância nenhuma da orla.
+Quase todo material sobre construção a seco no litoral repete que a NBR 15253 manda usar Z350 em atmosfera marinha até 2.000 metros da orla. O Quadro 1 da norma tem duas linhas: zincado 275 g/m² e alumínio-zinco 150 g/m². Não há Z350 nem distância da orla. A regra está na Diretriz SINAT nº 003, revisão 01, do PBQP-H, aplicada nos DATec nº 14 e nº 15, avaliados pelo IPT. O DATec 15 registra Z275 para atmosferas rurais e urbanas e Z350 para marinhas, e o 14 teve a validade encerrada em março de 2015, servindo só como registro histórico.
 
-A regra existe, só que em outro documento. Ela está na Diretriz SINAT nº 003 revisão 01, do PBQP-H, e aparece aplicada nos DATec nº 14 e nº 15, ambos avaliados pelo IPT. O DATec 15 registra com todas as letras Z275 para atmosferas rurais e urbanas e Z350 para atmosferas marinhas, atendendo aos critérios da Diretriz SINAT 003 revisão 01. O DATec 14 teve a validade encerrada em março de 2015, então serve como registro histórico da prática, não como documento vigente.
-
-Errar essa atribuição tem consequência prática. Quem procura a exigência de Z350 dentro da NBR 15253 não encontra, conclui que é invenção de fabricante e especifica o mínimo. Há ainda uma troca de norma recente que a maior parte da literatura brasileira sobre maresia ignora. A ABNT NBR 14643, que classificava a corrosividade de atmosferas, foi cancelada em setembro de 2024 e substituída pela ABNT NBR ISO 9223. A norma brasileira de corrosividade hoje é a própria ISO 9223 adotada, e citar a 14643 como vigente é citar norma cancelada. O [mapa completo das normas que regem o LSF no Brasil](/atualidades/normas-light-steel-frame-brasil) ajuda a situar cada uma delas.
+Errar a atribuição tem consequência: quem procura Z350 na NBR 15253 não encontra, conclui que é invenção de fabricante e especifica o mínimo. Há ainda uma troca recente que a literatura ignora: a NBR 14643 foi cancelada em setembro de 2024 e substituída pela ABNT NBR ISO 9223. O [mapa das normas do LSF](/atualidades/normas-light-steel-frame-brasil) situa cada uma.
 
 [NORMS:normas-corrosao-lsf]
 
-## Quanto zinco existe de verdade em um perfil Z275
+## Quanto zinco existe de verdade num perfil Z275
 
-A designação engana quem lê rápido. Z275 não são 275 gramas de zinco por metro quadrado de cada face. A nota de rodapé do próprio Quadro 1 da NBR 15253 é explícita ao dizer que a massa mínima se refere ao total nas duas faces, medido pela média do ensaio triplo.
-
-Com a massa dividida por duas faces e pela densidade do zinco de 7,14 g/cm³, a conversão sai direta. Z275 dá 19,3 µm por face e Z350 dá 24,5 µm. O AZ150, revestimento de alumínio-zinco, dá cerca de 20,0 µm por face adotando densidade de 3,75 g/cm³ para a liga com 55% de alumínio. É cálculo derivado com premissa declarada, não número de catálogo.
+Z275 não são 275 gramas por face. A nota do Quadro 1 diz que a massa mínima é o total nas duas faces. Dividindo por duas faces e pela densidade do zinco de 7,14 g/cm³, Z275 dá 19,3 µm por face e Z350 dá 24,5 µm. O AZ150, de alumínio-zinco, dá cerca de 20,0 µm por face, adotando 3,75 g/cm³ para a liga com 55% de alumínio. É cálculo derivado com premissa declarada, não número de catálogo.
 
 [TABLE:classes-revestimento]
 
-A diferença entre Z275 e Z350 é de pouco mais de cinco micrômetros por face. Vale guardar esse número, porque ele é tudo que separa as duas especificações que a indústria trata como decisão grande.
+A diferença entre Z275 e Z350 é de pouco mais de cinco micrômetros por face, e é tudo o que separa as duas especificações que a indústria trata como decisão grande.
 
 ## A categoria de corrosividade transforma micrômetro em ano
 
-A ISO 9223 classifica a atmosfera em categorias de C1 a CX e publica, para cada uma, a taxa de perda do zinco no primeiro ano de exposição. Antes do número, um aviso que vale mais que o número. Circula na web a tabela do aço-carbono no lugar da tabela do zinco. Se aparecer C3 com 25 a 50 µm/ano, é aço-carbono. Os valores do zinco são uma ordem de grandeza menores, e estão publicados de forma idêntica pela American Galvanizers Association e pela Zinkinfo Benelux, que consultamos separadamente para conferir.
-
-Dividir espessura por taxa dá o prazo, e a premissa precisa ser dita. A taxa da ISO 9223 é a do primeiro ano de exposição, e a perda tende a desacelerar conforme se formam produtos de corrosão que protegem a superfície. A estimativa abaixo é conservadora e serve como ordem de grandeza, nunca como garantia normativa.
+A ISO 9223 classifica a atmosfera de C1 a CX e publica a taxa de perda do zinco no primeiro ano de exposição. Circula na web a tabela do aço-carbono no lugar da do zinco: se aparecer C3 com 25 a 50 µm/ano, é aço-carbono, e os valores do zinco são uma ordem de grandeza menores, idênticos na American Galvanizers Association e na Zinkinfo Benelux. Dividir espessura por taxa dá o prazo. A taxa é a do primeiro ano e a perda tende a desacelerar, então a estimativa é conservadora e serve como ordem de grandeza, não como garantia normativa.
 
 [TABLE:vida-util-zinco-exposto]
 
-A leitura dessa tabela é desconfortável e é justamente o ponto. Contra os cinquenta anos de vida útil de projeto que a NBR 15575-1 exige da estrutura, nenhuma classe de revestimento exposta chega perto em C4 ou C5. Nem Z350, nem AZ150.
+Contra os 50 anos da NBR 15575-1, nenhuma classe de revestimento exposta chega perto em C4 ou C5, nem Z350, nem AZ150. Pela ISO 9223, C4 vai até 1 km da orla e C3 cobre de 1 a 30 km, então os 2.000 metros da diretriz brasileira são mais conservadores que a classificação internacional.
 
-Repare também no que os 2.000 metros da Diretriz SINAT significam dentro desse quadro. Pela ISO 9223, C4 vai até 1 km da orla e C3 cobre de 1 a 30 km. Os 2.000 metros da diretriz brasileira são portanto mais conservadores que a classificação internacional, porque estendem a exigência de Z350 por uma faixa que a ISO já trataria como C3. É rigor a mais, não número redondo de fabricante.
+## A parede tem categoria própria
 
-## A parede tem categoria própria, e não é a da praia
+Se nenhuma classe exposta entrega cinquenta anos em C4, e casas em LSF no litoral seguem de pé, a premissa errada é a palavra exposto. O montante vive numa cavidade fechada por barreira hidrófuga fora e placa dentro, ventilada, sem deposição de cloreto e sem tempo de superfície úmida relevante: C1 ou C2, com perda de até 0,1 µm/ano em C1 e de 0,1 a 0,7 em C2. Um Z275 em C2 dura de 28 a 193 anos, e em C1 passa de 190. O endereço deixa de importar.
 
-Se nenhuma classe exposta entrega cinquenta anos em C4, e casas em Light Steel Frame no litoral seguem de pé, alguma premissa da conta está errada. A premissa errada é a palavra exposto.
+É por isso que ["steel frame enferruja" funciona como mito](/atualidades/mitos-verdades-steel-frame) mesmo em casa de praia, desde que o projeto da cavidade seca seja levado a sério. Ela é condição de projeto e de execução, não propriedade do material, e as camadas que a mantêm estão na [anatomia da parede](/atualidades/anatomia-parede-steel-frame).
 
-O montante de uma parede de LSF não vive na atmosfera da orla. Ele vive dentro de uma cavidade fechada por barreira hidrófuga do lado externo e por placa do lado interno, ventilada, sem deposição de cloreto e sem tempo de superfície úmida relevante. Isso é C1 ou C2 na ISO 9223, com perda de zinco de até 0,1 µm/ano em C1 e de 0,1 a 0,7 µm/ano em C2. Aplicando a mesma divisão, um Z275 em C2 dura de 28 a 193 anos, e em C1 passa dos 190. O endereço deixa de importar.
+## O que corrói primeiro não é o perfil
 
-É por isso que ["steel frame enferruja" funciona como mito](/atualidades/mitos-verdades-steel-frame) mesmo em casa de praia, desde que o projeto da cavidade seca seja levado a sério. A cavidade seca é uma condição de projeto e de execução, não uma propriedade do material que vem de fábrica. [Como as camadas da parede se organizam para manter essa cavidade seca](/atualidades/anatomia-parede-steel-frame) está detalhado em outro artigo, e é a peça que sustenta tudo o que vem daqui em diante.
+A especificação litorânea se decide no que fica fora da cavidade, e é aí que a maioria dos memoriais silencia.
 
-## O que corrói primeiro no litoral não é o perfil
-
-Se a cavidade protege o montante, sobra tudo aquilo que fica do lado de fora dela. É aí que a especificação litorânea se decide, e é aí que a maioria dos memoriais descritivos silencia.
-
-O primeiro item é o parafuso. Os DATec do IPT escalonam o fixador com o mesmo cuidado com que escalonam o perfil, usando horas de névoa salina em ensaio ASTM B117 como critério, e o salto que eles pedem para ambiente marinho é maior do que o salto de Z275 para Z350.
+O primeiro item é o parafuso. Os DATec do IPT escalonam o fixador com o mesmo cuidado do perfil, por horas de névoa salina no ensaio ASTM B117, e o salto pedido para ambiente marinho é maior que o de Z275 para Z350.
 
 [TABLE:fixadores-nevoa-salina]
 
-O segundo item é o par galvânico. O DATec 14 especifica marco de porta em aço inoxidável fixado em montante zincado, e o Manual de Arquitetura do CBCA alerta para isolar o contato entre metais diferentes, inclusive na passagem de tubulação metálica pelos furos dos perfis. Inox não significa melhor quando ele encosta em zincado sem isolamento, porque o zinco passa a se sacrificar mais rápido do que sacrificaria sozinho.
+O segundo é o par galvânico. O DATec 14 especifica marco de porta em inox fixado em montante zincado, e o manual do CBCA alerta para isolar o contato entre metais diferentes: inox encostado em zincado sem isolamento faz o zinco se sacrificar mais rápido. O terceiro é a ancoragem da base, na faixa que mais recebe respingo e sal, onde a estrutura descarrega na fundação, com 240 horas de névoa salina em ambiente comum e 720 em marinho. O quarto é a água que escorre: calha, rufo e flashing ficam permanentemente expostos e precisam estar na categoria do endereço, e trocar a calha em quinze anos é manutenção, em cinco é falha de projeto. As falhas aparecem no [catálogo de patologias](/atualidades/patologias-steel-frame).
 
-O terceiro item é a ancoragem na base. O chumbador que prende a guia ao radier fica na faixa que mais recebe respingo de chuva, acúmulo de água e sal trazido pelo vento, e ele é o ponto em que a estrutura descarrega na fundação. O DATec 14 pede no mínimo 240 horas de névoa salina nessa ancoragem em ambiente comum, e a mesma regra das 720 horas de ambiente marinho se aplica a ela. Quando esse conjunto falha, o resultado aparece no [catálogo de patologias que surgem depois da obra pronta](/atualidades/patologias-steel-frame).
-
-O quarto item é a água que escorre. Calha, rufo e flashing ficam permanentemente expostos à atmosfera da orla, sem cavidade nenhuma para protegê-los, e precisam ser especificados na categoria do endereço e em material compatível com aquilo que tocam. Trocar a calha em quinze anos é manutenção prevista. Trocar a calha em cinco porque o par galvânico com a fixação comeu a aba é falha de projeto.
-
-O quinto item é a fase de obra, e ele é o mais esquecido de todos. Entre a montagem dos painéis e o fechamento das barreiras passam semanas em que o perfil respira a atmosfera C4 ou C5 do canteiro, molhado de chuva e de sal, exatamente na condição de exposto que a tabela descreve. Em obra litorânea, o prazo entre erguer a estrutura e fechar o envelope deixa de ser questão de cronograma e passa a ser questão de durabilidade.
+O quinto é a fase de obra, o mais esquecido. Entre montar os painéis e fechar as barreiras passam semanas em que o perfil respira a atmosfera C4 ou C5 do canteiro, na condição de exposto. Em obra litorânea, o prazo entre erguer a estrutura e fechar o envelope é questão de durabilidade, não só de cronograma.
 
 ## Litoral Norte e Baixada Santista sobem de categoria por caminhos diferentes
 
-No Litoral Norte paulista, região de Ubatuba, São Sebastião, Ilhabela e Caraguatatuba, o que pesa é o tempo de superfície úmida. Chuva frequente, serra encostada no mar e umidade alta mantêm o metal molhado por uma fração maior do ano, e tempo molhado é um dos três parâmetros que a ISO 9223 usa para classificar a atmosfera, ao lado da deposição de cloretos e do teor de enxofre.
+No Litoral Norte, de Ubatuba a Caraguatatuba, pesa o tempo de superfície úmida, um dos três parâmetros da ISO 9223, junto com cloretos e enxofre. Em corpos de prova de dois sítios de São Luís, publicados por Sica e colegas em 2007, o sítio costeiro tinha 290 mg/m² por dia de cloreto e 34% de tempo úmido, e o interior, com menos poluente, chegava a 49% e corroeu mais. Umidade persistente sozinha eleva a corrosividade.
 
-O efeito é medido. Sica e colegas expuseram corpos de prova em dois sítios de São Luís e publicaram no Journal of the Brazilian Chemical Society em 2007. O sítio costeiro tinha deposição de cloretos de 290 mg/m² por dia e 34% de tempo de superfície úmida. O sítio interior, com menos poluente e mais altitude, chegava a 49% de tempo úmido, e foi ele que corroeu mais. Umidade persistente sozinha eleva a corrosividade, mesmo com menos sal no ar.
+Na Baixada Santista, o dado atual não sustenta a ideia de poluição industrial de Cubatão: o dióxido de enxofre médio caiu de 14 µg/m³ em 2001 para 3 em 2022, e a CETESB classificou o ar de Cubatão como bom em 2024. Hoje o que eleva a corrosividade é cloreto e umidade. A ressalva industrial sobrevive por motivo normativo: os DATec 14 e 15 excluem ambientes de elevada agressividade, como atmosferas industriais e marinhas e industriais ao mesmo tempo. Construir junto a um polo industrial na orla transfere a especificação ao projetista, que passa a precisar de ensaio local em vez de tabela.
 
-Na Baixada Santista, o reflexo é cruzar sal com poluição industrial de Cubatão. O dado atual não sustenta essa parte do argumento. A média anual de dióxido de enxofre na região metropolitana de São Paulo caiu de 14 µg/m³ em 2001 para 3 µg/m³ em 2022, e a CETESB classificou a qualidade do ar de Cubatão como boa em 2024. Nos parâmetros da ISO 9223, isso é contribuição desprezível do enxofre. O que eleva a corrosividade da Baixada hoje é cloreto e umidade, como no resto do litoral, e não a memória industrial dos anos 1980.
+A classificação por parâmetros também pode subestimar a beira da praia. Vera e colegas, em 2013, expuseram galvanizado a 170 metros da costa em Valparaíso, no Chile, e o sítio saiu como C3, mas a perda foi de 8,5 µm por ano, valor de C5 ou CX.
 
-A ressalva industrial sobrevive por outro motivo, que é normativo. Tanto o DATec 14 quanto o 15 excluem do escopo avaliado os ambientes de elevada agressividade ambiental, como atmosferas industriais e atmosferas ao mesmo tempo marinhas e industriais. Construir junto a um polo industrial na orla é construir fora do envelope dos documentos de avaliação técnica que a própria indústria usa como credencial. Isso não proíbe nada, e transfere a responsabilidade inteira pela especificação para o projetista, que passa a precisar de ensaio local em vez de tabela.
+## O que muda no memorial e quanto pesa no orçamento
 
-Vale uma última cautela contra confiar apenas na classificação. Vera e colegas expuseram aço galvanizado a 170 metros da costa em Valparaíso, no Chile, e publicaram o resultado no mesmo periódico brasileiro em 2013. Pelos parâmetros medidos de cloreto, enxofre e tempo úmido, o sítio foi classificado como C3. O galvanizado perdeu 8,5 µm por ano, que é valor de C5 ou CX. A classificação por parâmetros subestimou a realidade na beira da praia. O dado é chileno e não brasileiro, mas a lição atravessa a fronteira sem perder nada.
-
-## O que muda no memorial, e quanto isso pesa no orçamento
-
-Sobre a faixa de preço por metro quadrado do sistema, [já detalhada para 2026 em outro artigo](/atualidades/custo-steel-frame-m2-2026), o pacote litoral acrescenta quatro linhas. A diferença entre Z275 e Z350 no perfil, o fixador com revestimento reforçado, calha e rufo em material compatível, e a lavagem periódica com água doce, que a alvenaria da praia também paga e ninguém contabiliza. São itens de baixa participação no orçamento total, então o acréscimo percentual é pequeno, e ele compra a diferença entre revisão em quinze anos e reparo em cinco.
-
-O que não é pequeno é a diferença entre um memorial que escreve tudo isso e um que escreve construção em steel frame com revestimento anticorrosivo. Sem designação de classe, sem hora de névoa salina e sem tratamento de par galvânico, o fornecedor entrega o mínimo, o mínimo é Z275, e o Z275 exposto no litoral tem prazo curto.
+Sobre a faixa por m² [já detalhada em outro artigo](/atualidades/custo-steel-frame-m2-2026), o pacote litoral acrescenta quatro linhas: a diferença de Z275 para Z350, o fixador reforçado, calha e rufo em material compatível e a lavagem periódica com água doce. São itens de baixa participação, e o acréscimo compra a diferença entre revisão em quinze anos e reparo em cinco. O que pesa é o memorial que só escreve "revestimento anticorrosivo": sem designação de classe, sem horas de névoa salina e sem tratamento de par galvânico, o fornecedor entrega o mínimo, o Z275, e exposto no litoral ele tem prazo curto.
 
 [CHECKLIST:especificar-litoral]
 
@@ -123,7 +103,7 @@ O que não é pequeno é a diferença entre um memorial que escreve tudo isso e 
 
 [FAQ:steel-frame-litoral]
 
-Construir em Light Steel Frame no litoral funciona, e funciona por um motivo que não é o que se costuma dizer. Não é o zinco a mais do Z350 que entrega os cinquenta anos, é a cavidade seca que mantém o perfil em C1 ou C2 enquanto o endereço inteiro está em C4. O Z350, o fixador de 720 horas e o rufo compatível cuidam da minoria dos componentes que ficam do lado errado da barreira. Especificar isso custa uma linha de memorial. Descobrir depois custa uma reforma.
+Construir em Light Steel Frame no litoral funciona, e não pelo zinco a mais do Z350, mas pela cavidade seca que mantém o perfil em C1 ou C2 enquanto o endereço está em C4. Z350, fixador de 720 horas e rufo compatível cuidam da minoria dos componentes do lado errado da barreira. Especificar isso custa uma linha de memorial. Descobrir depois custa uma reforma.
 
 [CTA:litoral-especificacao]
 
@@ -186,3 +166,5 @@ Fronteiras respeitadas com as outras pautas do lote 10: nenhuma menção a área
 **Pendência de publicação (ação extra do árbitro):**
 
 - [ ] @bruno inserir link interno de `patologias-steel-frame` para `/atualidades/steel-frame-litoral-maresia` na frase solta sobre litoral, Z350 e AZ150, para que a frase deixe de competir com a página nova #pendencia
+
+**Revisão de 20/10/2026 (blog-criacao v1.1):** corpo reduzido de 2156 para 1456 palavras, resposta nos dois primeiros parágrafos, parágrafos curtos. Mescla com a pauta Steel frame no litoral norte de SP: o rascunho já tinha a seção de Litoral Norte e Baixada Santista, e a outra pauta não tinha pesquisa, então foi absorvida. Público declarado: casa de praia de alto padrão. Mantidos todos os números e as cinco linhas do memorial.

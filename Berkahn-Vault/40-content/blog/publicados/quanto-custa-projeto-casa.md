@@ -1,13 +1,14 @@
 ---
+
 tipo: draft-content
 criado: 2026-08-25
-atualizado: 2026-08-25
+atualizado: 2026-10-20
 tags:
   - project/blog
   - status/draft
   - domain/lsf
   - domain/financiamento
-ai_summary: "Pauta S2 de agosto. Quanto custa o pacote de projetos de uma casa, separando o que é parâmetro oficial do CAU do que é faixa de mercado. Ancorado no CUB paulista de junho de 2026, a faixa de 5% a 15% dá de R$ 11.100 a R$ 33.300 para uma casa de 100 m². O argumento é que o projeto é a única linha do orçamento que derruba outras linhas, e que em Light Steel Frame ele deixa de ser opcional."
+ai_summary: "Pauta S2 de agosto. Quanto custa o pacote de projetos de uma casa, separando o que é parâmetro oficial do CAU do que é faixa de mercado. Ancorado no CUB paulista de junho de 2026, a faixa de 5% a 15% dá de R$ 27.900 a R$ 83.800 para uma casa de 100 m². O argumento é que o projeto é a única linha do orçamento que derruba outras linhas, e que em Light Steel Frame ele deixa de ser opcional."
 status: published
 projeto: blog
 slug: quanto-custa-projeto-casa
@@ -16,7 +17,7 @@ data_publicacao: 2026-08-25
 title: "Quanto custa o projeto de uma casa em 2026"
 seo_title: "Quanto Custa o Projeto de uma Casa em 2026"
 description: "Quanto custa o projeto de uma casa em 2026, do arquitetônico aos complementares. O que é parâmetro oficial do CAU, o que é faixa de mercado e o que move o preço."
-seo_description: "Quanto custa o projeto de uma casa em 2026: de 5% a 15% do custo da obra, o que dá R$ 11.100 a R$ 33.300 numa casa de 100 m². Veja o que move dentro da faixa."
+seo_description: "Quanto custa o projeto de uma casa em 2026: de 5% a 15% do custo da obra, o que dá R$ 27.900 a R$ 83.800 numa casa de 250 m². Veja o que move dentro da faixa."
 palavras_chave:
   - quanto custa projeto casa
   - preço projeto arquitetônico
@@ -27,7 +28,7 @@ palavras_chave:
 category: Mercado e Custos
 read_time: 9 min
 author: Equipe Berkahn
-answer_summary: "O pacote de projetos de uma casa é cobrado como percentual do custo estimado da obra, tipicamente entre 5% e 15% conforme porte e complexidade. Aplicando essa faixa ao CUB paulista R8-N de junho de 2026, de R$ 2.221,44 por metro quadrado, uma casa de 100 m² tem referência de obra de R$ 222.144 e pacote completo de projetos entre R$ 11.100 e R$ 33.300. A referência profissional é a Tabela de Honorários aprovada pela Resolução nº 64 do CAU/BR, de 8 de novembro de 2013, que estabelece parâmetros de remuneração. O que move dentro da faixa é escopo entregue, não a cidade do escritório."
+answer_summary: "O pacote de projetos de uma casa é cobrado como percentual do custo estimado da obra, tipicamente entre 5% e 15% conforme porte e complexidade. Aplicando essa faixa ao CUB paulista R8-N de agosto de 2026, de R$ 2.235,58 por metro quadrado, uma casa de 250 m² tem referência de obra de R$ 558.895 e pacote completo de projetos entre R$ 27.900 e R$ 83.800. A referência profissional é a Tabela de Honorários aprovada pela Resolução nº 64 do CAU/BR, de 8 de novembro de 2013, que estabelece parâmetros de remuneração. O que move dentro da faixa é escopo entregue, não a cidade do escritório."
 supabase_id: b562489f-4b8d-416a-8bfe-6fe36334d4fa
 url_final: "https://www.berkahn.com.br/atualidades/quanto-custa-projeto-casa"
 contextos_aplicados:
@@ -36,7 +37,7 @@ contextos_aplicados:
   - steel-frame-domain
 ---
 
-Quem pede orçamento de projeto recebe números que não conversam. Um escritório cobra R$ 8 mil pela casa inteira, outro cobra R$ 30 mil, e a descrição do serviço nos dois cabe em três linhas. A diferença raramente é ganância de um ou generosidade do outro. É escopo.
+Quem pede orçamento de projeto recebe números que não conversam. Um escritório cobra R$ 25 mil pela casa inteira, outro cobra R$ 80 mil, e a descrição do serviço nos dois cabe em três linhas. A diferença raramente é ganância de um ou generosidade do outro. É escopo.
 
 Vale começar pela referência que existe. A Tabela de Honorários de Serviços em Arquitetura e Urbanismo foi aprovada pela Resolução nº 64 do CAU/BR, de 8 de novembro de 2013, e publicada em 2014. O próprio conselho a descreve como instrumento de precificação que estabelece parâmetros de remuneração, com calculadora pública no site dele. Ela orienta, e nenhum profissional fica obrigado a segui-la. O método é percentual sobre o custo estimado da obra, e é aí que a conta começa a fazer sentido.
 
@@ -44,9 +45,9 @@ Vale começar pela referência que existe. A Tabela de Honorários de Serviços 
 
 ## Transformando percentual em número
 
-O percentual sozinho não ajuda porque falta a base. Sem saber qual custo de obra aplicar, 5% e 15% são apenas dois números soltos. O CUB resolve isso. O CUB paulista R8-N, calculado pelo Sinduscon-SP, fechou junho de 2026 em R$ 2.221,44 por metro quadrado. Para uma casa de 100 m², a referência de obra fica em R$ 222.144.
+O percentual sozinho não ajuda porque falta a base. Sem saber qual custo de obra aplicar, 5% e 15% são apenas dois números soltos. O CUB resolve isso. O CUB paulista R8-N, calculado pelo Sinduscon-SP, fechou agosto de 2026 em R$ 2.235,58 por metro quadrado. Para uma casa de 250 m², a referência de obra fica em R$ 558.895.
 
-Aplicando a faixa de mercado de 5% a 15% sobre essa referência, o pacote completo de projetos fica entre R$ 11.100 e R$ 33.300. Isso é conta, não tabela. Serve como ordem de grandeza para saber se uma proposta está dentro do razoável, e não como valor a exigir de ninguém.
+Aplicando a faixa de mercado de 5% a 15% sobre essa referência, o pacote completo de projetos fica entre R$ 27.900 e R$ 83.800. Isso é conta, não tabela. Serve como ordem de grandeza para saber se uma proposta está dentro do razoável, e não como valor a exigir de ninguém.
 
 A faixa é larga de propósito, e a largura dela não é aleatória.
 
@@ -98,7 +99,7 @@ Vale conferir também se o escritório acompanha a aprovação na prefeitura e s
 
 O Light Steel Frame é um sistema construtivo em que a estrutura é feita de perfis de aço galvanizado leve, montados a seco conforme projeto, com fechamento em placas. Nele, o projeto executivo completo deixa de ser recomendação e vira pré-requisito.
 
-A razão é o método. Os componentes são dimensionados e cortados antes de chegar à obra, então a montagem segue o desenho. O sistema é sensível a falha de compatibilização, e qualquer inconsistência entre arquitetura, estrutura e instalações vira retrabalho caro. Não existe a saída de resolver no canteiro, que na alvenaria funciona como válvula de escape para projeto incompleto.
+A razão é o método. Os componentes são dimensionados e cortados antes de chegar à obra, então a montagem segue o desenho. O sistema é sensível a falha de compatibilização, e qualquer inconsistência entre arquitetura, estrutura e instalações vira retrabalho caro. Não existe a saída de resolver no canteiro, que na alvenaria funciona como válvula de escape para projeto incompleto. O que fecha em cada etapa do projeto, e quanto custa mudar tarde, está em [projeto integrado em Light Steel Frame](/atualidades/projeto-integrado-light-steel-frame).
 
 Isso soa como custo a mais, e no papel é. O que muda é o que vem depois. Com o projeto fechado, a lista de material é exata, o cronograma tem base real e o orçamento para de ser estimativa. A obra dura menos porque não para esperando decisão, e [o tempo de canteiro aberto é o custo que mais sobe em 2026](/atualidades/custos-ocultos-construcao-2026).
 
@@ -110,7 +111,7 @@ Economizar R$ 10 mil no pacote de projetos parece vitória até a obra começar.
 
 Há ainda o efeito sobre o orçamento da construtora. Diante de projeto incompleto, quem orça tem duas saídas, e as duas custam. Pode embutir margem de segurança para cobrir o que não está desenhado, e aí o preço sobe antes de a obra começar. Pode orçar pelo que está no papel e cobrar o restante por aditivo, e aí o preço sobe depois. Projeto completo é o que permite receber uma proposta fechada de verdade, com escopo que resiste à execução.
 
-Quem quer o número da obra antes dessa discussão encontra [o custo do Steel Frame por metro quadrado em 2026](/atualidades/custo-steel-frame-m2-2026) e a [simulação para uma casa de 100 m²](/atualidades/quanto-custa-construir-steel-frame-precos-m2-2026).
+Quem quer o número da obra antes dessa discussão encontra [o custo do Steel Frame por metro quadrado em 2026](/atualidades/custo-steel-frame-m2-2026) e a [simulação por padrão de acabamento](/atualidades/quanto-custa-construir-steel-frame-precos-m2-2026).
 
 ## O que exigir de uma proposta de projeto
 
@@ -126,7 +127,7 @@ Proposta que não responde a esses pontos não está barata. Está incompleta, e
 
 Comparar propostas de projeto pelo valor final repete o erro de comparar propostas de obra pelo valor final. Nos dois casos o número é consequência do escopo, e escopo mal descrito produz número baixo com facilidade.
 
-A pergunta útil não é quanto custa o projeto. É o que a obra passa a custar depois que ele existe. Nós fazemos essa leitura junto com quem está decidindo, antes de qualquer contratação.
+A pergunta útil não é quanto custa o projeto. É o que a obra passa a custar depois que ele existe. A equipe da Berkahn pode fazer essa leitura com quem está decidindo, antes de qualquer contratação.
 
 [CTA:projeto-casa]
 
@@ -153,7 +154,7 @@ A pergunta útil não é quanto custa o projeto. É o que a obra passa a custar 
 **Internal links sugeridos:**
 - tempo de canteiro aberto → `/atualidades/custos-ocultos-construcao-2026`
 - custo do Steel Frame por m² → `/atualidades/custo-steel-frame-m2-2026`
-- simulacao casa de 100 m² → `/atualidades/quanto-custa-construir-steel-frame-precos-m2-2026`
+- simulação por padrão de acabamento → `/atualidades/quanto-custa-construir-steel-frame-precos-m2-2026`
 
 **External links incluidos:**
 - CAU/BR, Tabela de Honorarios (Resolucao 64/2013): https://honorario.caubr.gov.br/
@@ -167,4 +168,4 @@ Capa 1200x800, sem texto embutido. Prompt gerado no passo 2 do /artigo.
 **Observacoes para implementacao:**
 Publico priorizado: residencial alto padrao decidindo como contratar projeto, com leitura secundaria para arquitetos e engenheiros na secao de compatibilizacao. **Sem preco de obra por m² proprio**: o CUB entra apenas como base de calculo do percentual, e o numero da obra fica linkado para `custo-steel-frame-m2-2026`. A fronteira com `custos-ocultos-construcao-2026` e deliberada: la se trata do que estoura durante a execucao, aqui do que se compra antes de comecar.
 
-Separacao de confiabilidade mantida no texto: a Resolucao 64/2013 do CAU e o CUB do Sinduscon-SP aparecem como fonte; a faixa de 5% a 15% e os R$ 15 a 40/m² por disciplina aparecem como faixa de mercado; e a conta de R$ 11.100 a R$ 33.300 aparece explicitamente como aritmetica sobre o CUB, nunca como valor de tabela. Descartados de proposito a tabela do DER-ES (referencial de obra publica rodoviaria) e a alegacao de que o CADE proibiu tabela minima (sem fonte primaria).
+Separacao de confiabilidade mantida no texto: a Resolucao 64/2013 do CAU e o CUB do Sinduscon-SP aparecem como fonte; a faixa de 5% a 15% e os R$ 15 a 40/m² por disciplina aparecem como faixa de mercado; e a conta de R$ 27.900 a R$ 83.800 aparece explicitamente como aritmetica sobre o CUB, nunca como valor de tabela. Descartados de proposito a tabela do DER-ES (referencial de obra publica rodoviaria) e a alegacao de que o CADE proibiu tabela minima (sem fonte primaria).

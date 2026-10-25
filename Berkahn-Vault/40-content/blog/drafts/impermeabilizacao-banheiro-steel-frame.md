@@ -1,7 +1,7 @@
 ---
 tipo: draft-content
 criado: 2026-09-05
-atualizado: 2026-09-05
+atualizado: 2026-10-20
 tags:
   - project/blog
   - status/draft
@@ -22,7 +22,7 @@ palavras_chave:
   - impermeabilização piso seco lsf
   - placa ru é impermeável
 category: Guias e Tutoriais
-read_time: 9 min
+read_time: 6 min
 author: Equipe Berkahn
 answer_summary: "Impermeabilizar banheiro em Light Steel Frame é tratar interfaces, não passar produto na parede. A ABNT NBR 16970-3:2022 exige faixa de no mínimo 200 mm subindo a parede a partir do piso acabado, caimento mínimo de 1% em direção ao ralo, manta ou membrana na interface entre piso e ralo e folga de 200 mm em torno de cubas e lavatórios. A regra muda com a base. Sobre concreto, impermeabiliza-se o piso do box e as paredes até 200 mm acima do ponto mais alto da hidráulica. Sobre piso em LSF, impermeabiliza-se todo o piso do ambiente. A placa RU admite até 5% de absorção de água e não substitui o sistema."
 contextos_aplicados:
@@ -33,79 +33,63 @@ contextos_aplicados:
 material_visual_slug: cover.webp
 ---
 
-A resposta que a internet dá para impermeabilizar banheiro foi escrita para alvenaria sobre laje de concreto. Ela manda passar duas demãos de argamassa polimérica com tela, subir 20 cm de rodapé e chegar a 1,50 m nas paredes do box. Nenhuma das páginas que repetem essa receita cita a norma brasileira que trata exatamente de área molhada em estrutura de aço leve, e é por isso que ela erra o alvo quando a casa é em Light Steel Frame, o sistema construtivo que usa perfis leves de aço galvanizado formados a frio como estrutura e placas como fechamento.
+Impermeabilizar banheiro em Light Steel Frame é tratar interfaces, não passar produto na parede. A ABNT NBR 16970-3:2022 exige faixa de no mínimo 200 mm subindo a parede a partir do piso acabado, caimento mínimo de 1% em direção ao ralo, manta ou membrana na interface entre piso e ralo e folga de 200 mm em torno de cubas e lavatórios. A regra muda com a base: sobre concreto, impermeabiliza-se o piso do box e as paredes até 200 mm acima do ponto mais alto da hidráulica, e sobre piso em LSF, todo o piso do ambiente. A placa RU admite até 5% de absorção de água e não substitui o sistema.
 
-Erra em dois pontos que mudam o serviço inteiro. O primeiro é que não existe uma altura só, porque o que a norma pede depende de o banheiro estar sobre base de concreto ou sobre piso seco de LSF, e a diferença entre os dois casos decide se uma falha fica contida no piso ou vira mancha no teto da sala. O segundo é que a chapa verde, aquela que todo mundo trata como à prova d'água, não impermeabiliza nada sozinha.
+A receita que circula na internet foi escrita para alvenaria sobre laje: duas demãos de argamassa polimérica com tela, 20 cm de rodapé e 1,50 m nas paredes do box. Ela erra o alvo quando a casa é em Light Steel Frame, o sistema construtivo de perfis leves de aço galvanizado formados a frio com fechamento em placas. O que a norma pede depende de o banheiro estar sobre base de concreto ou sobre piso seco, e a diferença decide se uma falha fica contida no piso ou vira mancha no teto da sala. Além disso, a chapa verde, que todo mundo trata como à prova d'água, não impermeabiliza nada sozinha.
 
 [STATS:numeros-impermeabilizacao-lsf]
 
 ## O que a norma pede depende do que está debaixo do piso
 
-A ABNT NBR 16970-3:2022, terceira parte da norma de Light Steel Framing, trata das interfaces entre sistemas e tem uma seção dedicada a impermeabilização de áreas molhadas e molháveis. É a referência brasileira que responde a esta pergunta com números para estrutura em aço leve, e ela separa dois casos.
+A NBR 16970-3:2022, parte da norma de Light Steel Framing sobre interfaces entre sistemas, tem uma seção de áreas molhadas e separa dois casos. No banheiro sobre base de concreto, como o térreo sobre radier ou um pavimento com laje em steel deck, a impermeabilização cobre todo o piso do box e sobe nas paredes do box até no mínimo 200 mm acima do ponto mais alto da hidráulica. Com o chuveiro saindo a 2,10 m do piso, são cerca de 2,30 m de parede, e não os 20 cm de rodapé que circulam por aí.
 
-No banheiro sobre base de concreto, situação do térreo sobre radier ou de um pavimento com laje em steel deck, a impermeabilização cobre todo o piso do box e sobe nas paredes do box até no mínimo 200 mm acima do ponto mais alto da hidráulica. Com um chuveiro cujo ponto sai a 2,10 m do piso, isso significa parede impermeabilizada até cerca de 2,30 m de altura, e não os 20 cm de rodapé que circulam por aí.
-
-No banheiro sobre piso em LSF, caso típico do pavimento superior de uma casa, a exigência muda de escopo e passa a valer para todo o piso do ambiente, não apenas para a área do box. A razão é física. Um piso seco não retém água. O que vaza atravessa o plano do piso e chega ao entrepiso, onde estão os perfis, o painel de OSB e o forro do ambiente de baixo. [O tipo de laje escolhido para cada pavimento](/atualidades/steel-frame-laje-de-concreto) é justamente o que define qual dos dois procedimentos se aplica.
+No banheiro sobre piso em LSF, caso típico do pavimento superior, a exigência vale para todo o piso do ambiente. A razão é física: piso seco não retém água, e o que vaza chega ao entrepiso, onde estão os perfis, o OSB e o forro de baixo. O [tipo de laje de cada pavimento](/atualidades/steel-frame-laje-de-concreto) define qual dos dois procedimentos se aplica.
 
 [TABLE:concreto-vs-piso-seco]
 
 ## Os três 200 mm que não são a mesma coisa
 
-A mesma norma usa 200 mm em três exigências diferentes, e trocar uma pela outra é o erro mais fácil de cometer. A primeira é a faixa que sobe a parede na interface com o piso, com 200 mm de altura a partir do piso acabado, válida para toda a área molhada. A segunda são os 200 mm medidos acima do ponto mais alto da hidráulica nas paredes do box sobre base de concreto, que na prática resultam em mais de dois metros de altura impermeabilizada. A terceira é a folga de 200 mm acima e nas laterais em torno de cubas, lavatórios e torneiras de parede, onde o respingo constante encontra junta de placa.
-
-Faltam dois números para fechar o conjunto. O piso que recebe o ralo precisa de caimento de no mínimo 1% em direção a ele, ou de um elemento de separação entre o piso acabado do banheiro e o piso acabado do box. Na interface entre o piso e o ralo, a norma pede manta ou membrana, porque é ali que o plano impermeável é atravessado de propósito.
+A norma usa 200 mm em três exigências, e trocá-las é o erro mais fácil. A primeira é a faixa na interface parede e piso, a partir do piso acabado, para toda a área molhada. A segunda são os 200 mm acima do ponto mais alto da hidráulica nas paredes do box sobre concreto, que resultam em mais de dois metros. A terceira é a folga de 200 mm acima e nas laterais de cubas, lavatórios e torneiras de parede, onde o respingo encontra junta de placa. Fecham o conjunto o caimento de no mínimo 1% até o ralo, ou um elemento de separação entre o piso do banheiro e o do box, e a manta ou membrana na interface com o ralo.
 
 ## Por onde a água entra de verdade
 
-O medo mais comum é a superfície da parede, a ideia de que o vapor do banho vai encharcar a placa, apodrecer o painel de madeira e enferrujar o perfil. Não é assim que acontece. A água entra por quatro pontos, e todos são interfaces.
+O medo comum é a superfície da parede encharcada pelo vapor. Não é assim que acontece: a água entra por quatro pontos, e todos são interfaces.
 
 [TABLE:onde-a-agua-entra]
 
-O manual Steel Framing Arquitetura, do Centro Brasileiro da Construção em Aço, diz o mesmo quando manda prever impermeabilização nas junções da parede com o piso para evitar infiltração para dentro do painel, e estende a exigência às paredes de box, pias de cozinha e tanques. A junta entre placas, que em ambiente seco é assunto de acabamento e movimentação, aqui vira caminho de água. O colarinho do ralo, que em laje de concreto tem toda uma massa para segurar o que escapa, em piso seco leva a água direto para o entrepiso.
+O manual Steel Framing Arquitetura, do CBCA, manda prever impermeabilização nas junções da parede com o piso para evitar infiltração para dentro do painel, estendendo a exigência a paredes de box, pias e tanques. A junta entre placas, assunto de acabamento em ambiente seco, aqui vira caminho de água. O colarinho do ralo, que em laje de concreto tem massa para segurar o que escapa, em piso seco leva a água direto ao entrepiso.
 
 ## A chapa resistente à umidade não é impermeável
 
-A placa verde tem nome técnico RU, de resistente à umidade, e a definição do próprio fabricante é explícita. O memorial descritivo da Trevo Drywall, que referencia a ABNT NBR 14715-1:2021, descreve a RU como chapa para ambientes sujeitos à ação da umidade por tempo limitado e de forma intermitente, e completa que as chapas "não são à prova d'água". A mesma norma admite até 5% de absorção de água para essa classe.
-
-A RU é uma camada do sistema, e o sistema é a base bem apoiada mais a impermeabilização sobre ela mais o revestimento por cima. A NBR 16970-3 pede chapa resistente à umidade conforme a NBR 14715-1, com tratamento impermeabilizante conforme a NBR 15758-1. A escolha entre [chapa ST, RU e RF por ambiente](/atualidades/drywall-st-ru-rf) continua valendo para o resto da casa. Já a placa cimentícia aparece no manual do CBCA como recomendação para área molhada, por resistir melhor à umidade, com uma ressalva que costuma ser esquecida, a de que ela exige base contínua de apoio por causa das solicitações à flexão. Recomendação de manual e requisito de norma não são a mesma coisa, e vale saber qual é qual na hora de discutir a especificação com o fornecedor.
+A placa RU, de resistente à umidade, é definida pelo próprio fabricante: o memorial da Trevo Drywall, referenciando a NBR 14715-1:2021, a descreve como chapa para umidade por tempo limitado e intermitente, e diz que ela "não é à prova d'água", com até 5% de absorção. A RU é uma camada do sistema, que é a base bem apoiada, mais a impermeabilização, mais o revestimento. A NBR 16970-3 pede chapa conforme a NBR 14715-1 com tratamento conforme a NBR 15758-1. A escolha entre [chapa ST, RU e RF](/atualidades/drywall-st-ru-rf) segue valendo no resto da casa. A placa cimentícia é recomendação do manual do CBCA para área molhada, mas exige base contínua por causa da flexão, e recomendação de manual não é requisito de norma.
 
 ## Demão não é unidade de espessura
 
-Todo orçamento de impermeabilização que circula é vendido por número de demãos, e a norma de desempenho cobra outra coisa, que é espessura de filme seco. O Guia de Aplicação da Norma de Desempenho para Impermeabilização, publicado pelo Instituto Brasileiro de Impermeabilização em 2024, tabela a vida útil de projeto de impermeabilização de área interna molhada em 13 anos no nível mínimo, 17 anos no intermediário e 20 anos no superior, seguindo a ABNT NBR 15575-1. Para chegar a esses prazos com argamassa polimérica conforme a NBR 11905, o guia pede 2,0 mm de filme seco para os 13 anos e 2,5 mm para os 17 e para os 20. Demão não mede espessura, então uma proposta escrita em demãos não diz por quantos anos o serviço foi projetado.
-
-Para ordem de grandeza com fonte pública, o SINAPI de São Paulo, na referência de julho de 2026, publica três composições que servem de balizamento.
+Orçamentos de impermeabilização vendem demãos, e o desempenho cobra espessura de filme seco. O Guia de Aplicação da Norma de Desempenho para Impermeabilização, do Instituto Brasileiro de Impermeabilização (2024), tabela a vida útil de projeto da área interna molhada em 13 anos no nível mínimo, 17 no intermediário e 20 no superior, e pede com argamassa polimérica da NBR 11905 2,0 mm de filme seco para os 13 anos e 2,5 mm para 17 e 20. Uma proposta em demãos não diz por quantos anos o serviço foi projetado.
 
 [TABLE:sinapi-impermeabilizacao-2026]
 
-Essas composições são definidas por número de demãos e o guia do IBI mede espessura, então uma coisa não certifica a outra. Elas servem para dizer quanto custa o serviço na referência oficial, não para atestar vida útil.
-
-A conta que mostra o tamanho da decisão cabe em um banheiro de 1,80 por 2,20 m, com box de 0,90 por 0,90 m e chuveiro a 2,10 m, dimensões declaradas de propósito porque isto é exemplo didático e não orçamento. Sobre base de concreto, somando o piso do box, a faixa de 200 mm no perímetro e as paredes do box, a área impermeabilizada fica em torno de 6,6 m². Sobre piso seco de LSF, com o piso inteiro do ambiente entrando na conta, ela sobe para cerca de 9,7 m². São 47% a mais de área, e pela composição 98556 a diferença fica na ordem de R$ 210. A distinção que a primeira página do Google inteira ignora custa pouco mais de duzentos reais e evita abrir o piso de um pavimento superior depois.
+As composições do SINAPI de São Paulo, de julho de 2026, são definidas por demãos e servem para dizer quanto custa o serviço na referência oficial, não para atestar vida útil. Num banheiro de 1,80 por 2,20 m, com box de 0,90 por 0,90 m e chuveiro a 2,10 m, dimensões de exemplo e não orçamento, a área impermeabilizada sobre concreto fica em cerca de 6,6 m², e sobre piso seco em cerca de 9,7 m², 47% a mais. Pela composição 98556, a diferença é da ordem de R$ 210, um valor pequeno diante de abrir o piso de um pavimento superior depois.
 
 ## O que muda na sequência de obra
 
-Em alvenaria, a impermeabilização é aplicada sobre o emboço e boa parte dos erros de plano se corrige com mais argamassa. Em Light Steel Frame a ordem é outra e não tem essa folga. A estrutura de perfis recebe o fechamento, o fechamento recebe o tratamento de junta, a junta tratada recebe a impermeabilização e só então entra o revestimento. Cada camada depende de a anterior estar íntegra, e [a lógica de montagem da parede em camadas](/atualidades/anatomia-parede-steel-frame) é a mesma do resto da casa, com uma inversão importante. Na fachada, a barreira existe por causa da água que vem de fora. No banheiro, ela existe por causa da água que vem de dentro, e por isso troca de lado e de altura.
-
-Duas notas de execução fecham o quadro. Louça suspensa, como vaso e cuba, exige reforço previsto em projeto dentro do painel, decidido antes do fechamento e não depois. O vapor gerado no banho, por sua vez, precisa de saída por janela ou por exaustão mecânica, porque umidade que não deixa o ambiente vai procurar o ponto mais frio para condensar.
+Em alvenaria, a impermeabilização vai sobre o emboço, e parte dos erros de plano se corrige com argamassa. Em LSF a ordem não tem essa folga: a estrutura recebe o fechamento, o fechamento recebe o tratamento de junta, a junta recebe a impermeabilização e só então entra o revestimento, como na [lógica de camadas da parede](/atualidades/anatomia-parede-steel-frame). Na fachada a barreira existe por causa da água de fora, e no banheiro por causa da água de dentro. Louça suspensa exige reforço previsto em projeto dentro do painel, e o vapor do banho precisa de saída por janela ou exaustão, porque umidade que não sai procura o ponto mais frio para condensar.
 
 ## A prova d'água de 72 horas
 
-Existe uma etapa que separa impermeabilização executada de impermeabilização prometida, e ela quase nunca aparece em proposta comercial. Depois de aplicada a impermeabilização e antes de assentar o revestimento, o piso recebe uma lâmina de água limpa e fica assim por no mínimo 72 horas, conforme a ABNT NBR 9574:2008. Havendo qualquer reparo, o ensaio recomeça do zero. A ABNT NBR 15575-3 usa critério equivalente para aceitar piso de área molhada, exigindo que a face inferior e os encontros com paredes e pisos vizinhos permaneçam secos sob lâmina de no mínimo 10 mm no ponto mais alto por 72 horas.
-
-O ensaio custa três dias de cronograma e nada mais. O que ele evita custa caro, porque [infiltração e corrosão só aparecem depois](/atualidades/patologias-steel-frame), quando o revestimento já está assentado e a correção envolve demolir acabamento pronto. Vale registrar também que o Artigo 618 do Código Civil fixa em cinco anos o prazo legal mínimo de garantia pela solidez e segurança da obra, o que alcança o sistema de impermeabilização.
+Depois da impermeabilização e antes do revestimento, o piso recebe lâmina de água limpa por no mínimo 72 horas, pela ABNT NBR 9574:2008, e qualquer reparo reinicia o ensaio. A NBR 15575-3 usa critério equivalente, exigindo que a face inferior e os encontros permaneçam secos sob lâmina de no mínimo 10 mm no ponto mais alto por 72 horas. O ensaio custa três dias de cronograma e evita a [infiltração e corrosão que só aparecem depois](/atualidades/patologias-steel-frame), com o revestimento já assentado. O artigo 618 do Código Civil fixa em cinco anos a garantia pela solidez e segurança da obra.
 
 ## O que exigir no orçamento
 
-Duas propostas para o mesmo banheiro costumam ser incomparáveis porque uma cotou a área do box e a outra cotou o ambiente inteiro, sem que nenhuma das duas diga isso em lugar nenhum. Seis itens escritos resolvem o problema.
+Duas propostas para o mesmo banheiro costumam ser incomparáveis porque uma cotou o box e a outra o ambiente inteiro, sem dizer. Seis itens escritos resolvem.
 
 [CHECKLIST:orcamento-impermeabilizacao]
-
-Com esses itens no papel, a conversa deixa de ser sobre marca de impermeabilizante e passa a ser sobre serviço executado e verificado.
 
 ## Perguntas frequentes
 
 [FAQ:faq-impermeabilizacao-banheiro]
 
-Banheiro em LSF é um detalhe de projeto com norma própria e números fechados desde 2022, e não uma aposta. O que decide o resultado não está na marca escolhida na loja, está no tratamento das quatro interfaces por onde a água realmente entra e na verificação de que elas ficaram estanques antes de o revestimento cobrir tudo. O [mapa das normas que regem o Light Steel Frame no Brasil](/atualidades/normas-light-steel-frame-brasil) mostra que a referência existe e continua fora do debate.
+Banheiro em LSF é um detalhe de projeto com norma própria e números fechados desde 2022. O resultado depende do tratamento das quatro interfaces por onde a água entra e da verificação de que ficaram estanques antes do revestimento. O [mapa das normas do Light Steel Frame](/atualidades/normas-light-steel-frame-brasil) mostra que a referência existe.
 
 [CTA:cta-impermeabilizacao-banheiro]
 
@@ -154,3 +138,5 @@ Travas de fonte respeitadas na redação. A NBR 16970-3 é citada pela norma e p
 Fronteiras de lote respeitadas. Nada de classe de agressividade, corrosividade ou galvanização, que pertencem à pauta de litoral e maresia. Nenhum número de carga admissível ou blocking sobre louça suspensa, que pertencem à pauta de fixação em parede de LSF, e por isso a menção é uma frase sem link, já que aquele artigo ainda não está publicado. Vapor entra apenas como umidade que precisa sair por ventilação, sem tratar condensação intersticial como tema térmico. Nenhum bloco genérico de tipos de impermeabilizante, que é exatamente o que a SERP já faz.
 
 Contagem de palavras do corpo publicável, sem frontmatter, sem rodapé do vault e sem esta seção: cerca de 1.700 palavras, dentro do limite de 2.500 e propositalmente denso.
+
+**Revisão de 20/10/2026 (blog-criacao v1.1):** corpo reduzido de 1816 para 1277 palavras, resposta nos dois primeiros parágrafos, parágrafos curtos. Mantido como artigo próprio, e não dobrado no publicado de instalações hidráulicas e elétricas, porque o ângulo é a impermeabilização por interfaces e há pouca disputa de SERP em LSF, embora com demanda de busca baixa (4 impressões em 90 dias). Prioridade baixa no calendário.

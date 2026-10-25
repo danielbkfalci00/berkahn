@@ -1,7 +1,7 @@
 ---
 tipo: draft-content
 criado: 2026-09-06
-atualizado: 2026-09-06
+atualizado: 2026-10-20
 tags:
   - project/blog
   - status/draft
@@ -23,7 +23,7 @@ palavras_chave:
   - regime específico bens imóveis lc 214
   - redutor de ajuste alienação
 category: Mercado e Custos
-read_time: 8 min
+read_time: 7 min
 author: Equipe Berkahn
 answer_summary: "Empreitada e incorporação estão no mesmo regime específico de bens imóveis da Lei Complementar 214/2025 e recebem a mesma redução de 50% das alíquotas de IBS e CBS, pelo artigo 261. A diferença está na base. O redutor de ajuste, que abate o terreno, e o redutor social de R$ 100 mil por imóvel residencial novo deduzem exclusivamente da base das operações de alienação, pelos artigos 257 e 259. Quem tem o lote e contrata empreitada não faz alienação e não alcança nenhum dos dois. Isso não torna a compra pronta mais barata, porque a base da alienação já inclui terreno, margem e valorização, que a empreitada nunca coloca em base tributável."
 contextos_aplicados:
@@ -35,77 +35,69 @@ contextos_aplicados:
 material_visual_slug: cover.webp
 ---
 
-Duas famílias compram a mesma casa de 100 m² no mesmo bairro. A primeira já tem o lote e contrata uma construtora por empreitada. A segunda compra a casa pronta de uma incorporadora. A partir de 1º de janeiro de 2027, quando PIS e Cofins deixam de existir por força do artigo 542 da Lei Complementar 214/2025, essas duas operações passam a carregar contas de imposto diferentes, e a diferença não está na alíquota.
+Empreitada e incorporação estão no mesmo regime específico de bens imóveis da Lei Complementar 214/2025 e recebem a mesma redução de 50% das alíquotas de IBS e CBS, pelo artigo 261. A diferença está na base: o redutor de ajuste, que abate o terreno, e o redutor social de R$ 100 mil por imóvel residencial novo deduzem exclusivamente da base das operações de alienação. Quem tem o lote e contrata empreitada não faz alienação e não alcança nenhum dos dois. Isso não torna a compra pronta mais barata, porque a base da alienação já inclui terreno, margem e valorização.
 
-A LC 214/2025 põe as duas dentro do mesmo regime específico de bens imóveis e dá às duas a mesma redução de 50% das alíquotas de IBS e CBS, pelo artigo 261. O que ela não dá às duas são os redutores que abatem valor da base antes de o imposto incidir. Esses ficam de um lado só, e a palavra que a lei escolhe para delimitar isso é "exclusivamente".
+Duas famílias compram a mesma casa no mesmo bairro. A primeira já tem o lote e contrata uma construtora por empreitada, e a segunda compra a casa pronta de uma incorporadora. A partir de 1º de janeiro de 2027, quando PIS e Cofins deixam de existir pelo artigo 542 da LC 214, as duas operações passam a carregar contas de imposto diferentes, e a diferença não está na alíquota.
 
 [STATS:empreitada-incorporacao-imposto]
 
 ## A mesma alíquota, redutores de base só de um lado
 
-O artigo 252 da [Lei Complementar 214, de 16 de janeiro de 2025](https://www.planalto.gov.br/ccivil_03/leis/lcp/Lcp214.htm), já com as alterações da LC 227/2026, lista as operações do regime específico de bens imóveis, e o inciso V é "serviços de construção civil". Empreitada, portanto, está dentro do mesmo capítulo que a alienação de imóvel e recebe a mesma redução de 50% do artigo 261. A Nota Técnica CTAT nº 1/2026, do grupo de trabalho de administrações tributárias municipais da Confederação Nacional dos Municípios, registra que essa redução é autoaplicável e não depende de regulamentação.
+O artigo 252 da [Lei Complementar 214, de 16 de janeiro de 2025](https://www.planalto.gov.br/ccivil_03/leis/lcp/Lcp214.htm), já com as alterações da LC 227/2026, lista as operações do regime específico, e o inciso V é "serviços de construção civil". Empreitada está no mesmo capítulo que a alienação e recebe a mesma redução do artigo 261, que a Nota Técnica CTAT nº 1/2026, da Confederação Nacional dos Municípios, registra como autoaplicável.
 
-A separação aparece poucos artigos antes. O artigo 257 institui o redutor de ajuste e o parágrafo 1º define o alcance dele sem margem de leitura. O redutor "será utilizado exclusivamente para reduzir a base de cálculo das operações de alienação do bem imóvel realizadas por contribuinte do regime regular do IBS e da CBS". O artigo 258 fixa o valor inicial desse redutor, que corresponde ao custo de aquisição do terreno, ao ITBI pago, às contrapartidas urbanísticas e à outorga onerosa.
+A separação aparece poucos artigos antes. O artigo 257 institui o redutor de ajuste e define, no parágrafo 1º, que ele "será utilizado exclusivamente para reduzir a base de cálculo das operações de alienação do bem imóvel". O artigo 258 fixa o valor inicial: custo de aquisição do terreno, ITBI pago, contrapartidas urbanísticas e outorga onerosa. O artigo 259 repete o movimento com o redutor social, de R$ 100 mil por imóvel residencial novo, em valores de janeiro de 2025, corrigidos pelo IPCA, válido uma vez por imóvel e só na alienação. A nota técnica diz que ele se limita à primeira alienação, "normalmente feita pela construtora ou incorporadora".
 
-O artigo 259 repete o movimento com o redutor social, de R$ 100 mil por imóvel residencial novo e R$ 30 mil por lote residencial, em valores de janeiro de 2025, corrigidos mensalmente pelo IPCA. Ele também é dedutível apenas na alienação, vale uma única vez por imóvel e se aplica depois do redutor de ajuste. A Nota Técnica CTAT diz a quem o benefício se destina em uma linha, ao registrar que ele se limita à primeira alienação, "normalmente feita pela construtora ou incorporadora".
-
-Quem tem o terreno e contrata empreitada não realiza alienação nenhuma. A base de cálculo dessa operação é o valor da operação nos serviços de construção civil, pelo artigo 255, inciso V, e nenhum dos dois redutores a alcança. Mesma casa, mesma alíquota, bases montadas de formas diferentes.
+Quem tem o terreno e contrata empreitada não realiza alienação. A base dessa operação é o valor dos serviços de construção civil, pelo artigo 255, inciso V, e nenhum redutor a alcança. Mesma casa, mesma alíquota, bases montadas de formas diferentes.
 
 ## A conta, com hipóteses declaradas
 
-O jeito honesto de comparar é segurar constante o que a família recebe, que é terreno mais casa, em vez do valor da nota fiscal. Segurar a nota engana, porque na empreitada ela cobre só a obra e na compra pronta ela cobre terreno, obra e margem.
+O jeito honesto de comparar é segurar constante o que a família recebe, terreno mais casa, e não o valor da nota. Na empreitada a nota cobre só a obra, e na compra pronta cobre terreno, obra e margem.
 
-Para deixar a conta concreta, a ancoragem da obra vem de dado já publicado. Uma casa de 100 m² de padrão médio no Sudeste custava em torno de R$ 454 mil pelo índice de abril de 2026, número que está no [levantamento de preço por metro quadrado do blog](/atualidades/quanto-custa-construir-steel-frame-precos-m2-2026). O exemplo abaixo arredonda a obra para R$ 450 mil, arbitra um terreno de R$ 200 mil e usa a alíquota efetiva do regime pleno. Terreno e preço de venda são hipóteses declaradas para tornar o mecanismo visível, não orçamento.
+O exemplo usa uma casa de 250 m². A R$ 3.600 por m², dentro da faixa de R$ 3.042 a R$ 6.200 no Sudeste do [levantamento de preço por metro quadrado](/atualidades/custo-steel-frame-m2-2026), a obra fica em R$ 900 mil. O terreno arbitrado é de R$ 400 mil, com ITBI de 3% (R$ 12 mil), e a alíquota efetiva é a do regime pleno, 13,25%. Terreno e preço de venda são hipóteses para tornar o mecanismo visível, não orçamento.
 
 [TABLE:rotas-empreitada-incorporacao]
 
-Na primeira comparação a compra pronta parece ganhar por R$ 14.045, e a decomposição desse número desmonta a impressão. R$ 13.250 dele são exatamente o redutor social convertido em imposto. O redutor de ajuste, que parece o maior dos dois, quase não cria vantagem, porque ele apenas impede que o terreno seja tributado, e quem já tem o terreno nunca o colocou em base tributável.
+Na primeira comparação, a incorporadora vende por R$ 1,3 milhão uma casa que lhe custou R$ 1,3 milhão. A base é R$ 1,3 milhão menos R$ 512 mil de redutores, ou R$ 788 mil, e o imposto é R$ 104.410, contra R$ 119.250 da empreitada. A compra pronta parece ganhar por R$ 14.840, e R$ 13.250 deles são o redutor social convertido em imposto. O redutor de ajuste quase não cria vantagem, porque só impede que o terreno seja tributado, e quem já tem o terreno nunca o colocou em base.
 
-A segunda comparação é a que descreve o mundo, porque a primeira obriga a incorporadora a vender por R$ 650 mil uma casa que lhe custou R$ 650 mil. Preço de mercado inclui margem, e o blog já publicou que [construir sob medida sai de 30% a 50% mais barato que comprar pronto na Grande São Paulo](/atualidades/construir-ou-comprar-pronto-numeros-grande-sp). Se a mesma casa pronta é vendida por R$ 900 mil, diferença próxima da ponta baixa dessa faixa, o imposto sobe para R$ 78.705 contra R$ 59.625 da empreitada.
+A segunda comparação descreve o mundo, porque preço de mercado inclui margem, e o blog já mostrou que [construir sob medida sai de 30% a 50% mais barato que comprar pronto na Grande São Paulo](/atualidades/construir-ou-comprar-pronto-numeros-grande-sp). Se a mesma casa pronta é vendida por R$ 1,8 milhão, a base sobe para R$ 1.288.000, e o imposto para R$ 170.660, contra os R$ 119.250 da empreitada.
 
 ## Os redutores não criam desconto, compensam base maior
 
-Na alienação entram na base o terreno, a margem da incorporadora e a valorização do terreno desde a compra. O redutor de ajuste devolve só parte disso, porque é congelado no custo de aquisição e corrigido apenas pelo IPCA, pelo parágrafo 3º do artigo 257 e pelo parágrafo 4º do artigo 258. Terreno que valorizou acima da inflação deixa a diferença dentro da base tributável, e é justamente esse tipo de terreno que costuma estar embaixo de uma casa pronta bem localizada.
+Na alienação entram na base o terreno, a margem e a valorização desde a compra. O redutor de ajuste devolve só parte disso, porque fica congelado no custo de aquisição e corrigido apenas pelo IPCA, pelo parágrafo 3º do artigo 257. Terreno que valorizou acima da inflação deixa a diferença dentro da base, e é esse tipo de terreno que costuma estar sob uma casa pronta bem localizada.
 
-O redutor social tem outro comportamento, porque é valor fixo. R$ 100 mil de redução de base valem R$ 13.250 de imposto a menos, e esse valor não cresce com o preço da casa. Numa unidade de R$ 300 mil ele pesa de verdade. Na faixa de R$ 500 mil a R$ 2 milhões, onde ficam as obras residenciais de alto padrão, ele vira ruído dentro da decisão.
-
-A empreitada em terreno próprio tem base estreita por construção. Só o serviço entra, e o que ficou de fora nunca foi tributado para depois ser parcialmente devolvido.
+O redutor social é valor fixo: R$ 100 mil de base valem R$ 13.250 de imposto, e isso não cresce com o preço da casa. Numa unidade de R$ 300 mil ele pesa, e na faixa de R$ 500 mil a R$ 2 milhões, onde ficam as obras de alto padrão, vira ruído. A empreitada em terreno próprio tem base estreita por construção: só o serviço entra.
 
 ## Por que 13,25% é número de 2033, e não de 2027
 
-A alíquota efetiva de 13,25% na construção [já foi publicada aqui](/atualidades/eficiencia-energetica-reforma-tributaria) e é o que a redução de 50% do artigo 261 faz com a alíquota de referência estimada de 26,5%. Ela segue sendo estimativa, porque o artigo 349 atribui ao Senado Federal fixar por resolução as alíquotas de referência de 2027 a 2033, com base na arrecadação apurada.
-
-O que a leitura do texto legal acrescenta é o momento em que esse número passa a valer, e não é 2027.
+A alíquota efetiva de 13,25% [já foi publicada aqui](/atualidades/eficiencia-energetica-reforma-tributaria) e é o que a redução de 50% faz com a alíquota de referência estimada de 26,5%. Segue sendo estimativa, porque o artigo 349 atribui ao Senado fixar por resolução as alíquotas de 2027 a 2033.
 
 [TIMELINE:cronograma-ibs-cbs-imovel]
 
-Isso importa para a decisão. Quem lê que a partir de 2027 vai pagar 13,25% e antecipa contrato por causa disso está antecipando com base em um número que ainda não estará em vigor. O cronograma completo da transição, insumo por insumo, está no [artigo que abre esse tema no blog](/atualidades/reforma-tributaria-construcao-industrializada), que é também onde ficam a não cumulatividade e o fim do efeito cascata.
+Quem antecipa contrato porque a partir de 2027 pagará 13,25% antecipa com base em número que ainda não estará em vigor. O cronograma insumo por insumo está no [artigo que abre o tema](/atualidades/reforma-tributaria-construcao-industrializada).
 
 ## Assinar em 2026 não protege a empreitada
 
-Existe uma assimetria de fato gerador entre as duas rotas, e ela é decisão pura. Na construção civil, o artigo 254, inciso V, fixa o fato gerador "no momento do fornecimento". A Nota Técnica CTAT detalha o que isso significa na prática, ao registrar que corresponde à entrega da obra ou de cada etapa contratada por medição, conforme o cronograma físico-financeiro. A data da assinatura não congela nada. O que cai no ano de teste de 2026 é apenas a etapa fisicamente entregue em 2026, o que amarra a conversa tributária ao cronograma de obra e ao [conjunto de custos que aparece quando o canteiro atrasa](/atualidades/custos-ocultos-construcao-2026).
+Na construção civil, o artigo 254, inciso V, fixa o fato gerador "no momento do fornecimento", que a nota técnica traduz como a entrega da obra ou de cada etapa por medição. A data da assinatura não congela nada, e o que cai em 2026 é só a etapa fisicamente entregue no ano, o que amarra a conversa ao cronograma e aos [custos que aparecem quando o canteiro atrasa](/atualidades/custos-ocultos-construcao-2026).
 
-Do lado da alienação a regra é outra. O parágrafo 1º do artigo 254 considera ocorrida a alienação já no instrumento de promessa ou na carta de reserva com princípio de pagamento, e a Nota Técnica CTAT ilustra com um comprador que assina promessa e paga 20% de sinal. Antes de concluir que basta assinar promessa em 2026 para congelar o imposto da compra, vale saber que o artigo 262 determina que o IBS e a CBS sejam devidos em cada pagamento. Existe tensão real entre ocorrência e exigibilidade que nem a lei nem a nota técnica fecham, então isso é pergunta a fazer à incorporadora por escrito, não garantia a assumir.
+Na alienação a regra é outra: o parágrafo 1º do artigo 254 considera ocorrida a alienação já na promessa ou na carta de reserva com princípio de pagamento. Mas o artigo 262 determina que IBS e CBS sejam devidos em cada pagamento, e a tensão entre ocorrência e exigibilidade não é fechada nem pela lei nem pela nota técnica. É pergunta a fazer à incorporadora por escrito, não garantia a assumir.
 
 ## O que muda quando a obra é em Light Steel Frame
 
-O Light Steel Frame é o sistema construtivo que usa perfis leves de aço galvanizado formados a frio como estrutura, com fechamento em placas. Ele é intensivo em material com nota fiscal, o que na lógica da não cumulatividade parece vantagem pura. Existe um teto escrito na lei que vale conhecer antes de assinar.
+O Light Steel Frame é o sistema construtivo de perfis leves de aço galvanizado formados a frio, com fechamento em placas. Ele é intensivo em material com nota fiscal, o que na não cumulatividade parece vantagem pura, mas há um teto na lei. Quando a construção civil é prestada a quem não é contribuinte, como uma família contratando a própria casa, o parágrafo 5º do artigo 255 limita o crédito dos materiais ao valor do débito do serviço. A nota técnica traz um exemplo em que R$ 11.200 de crédito se perdem.
 
-O parágrafo 5º do artigo 255 trata da construção civil prestada a quem não é contribuinte, que é exatamente o caso de uma família contratando a própria casa, com fornecimento de materiais pelo prestador. Nessa situação, o prestador só pode apropriar o crédito de IBS e CBS relativo aos materiais até o valor do débito da prestação do serviço. O que passar disso não se aproveita, e a Nota Técnica CTAT traz um exemplo em que R$ 11.200 de crédito se perdem por esse teto.
-
-O limiar é aritmético. Com o serviço tributado à alíquota reduzida e o material comprado à alíquota cheia, que é o dobro, o crédito iguala o débito quando o material equivale à metade do valor do contrato. Acima disso sobra crédito parado dentro da obra. Onde uma obra específica cai nessa conta depende da proporção entre material e mão de obra daquele contrato, que varia com o projeto e com o pacote contratado. É informação que dá para pedir e comparar entre propostas, em vez de supor.
+Com o serviço à alíquota reduzida e o material à cheia, que é o dobro, o crédito iguala o débito quando o material vale metade do contrato. Acima disso sobra crédito parado. Onde cada obra cai depende da proporção entre material e mão de obra do contrato, e é informação que dá para pedir e comparar entre propostas.
 
 ## Quatro perguntas para levar à mesa antes de assinar
 
 [CHECKLIST:perguntas-antes-de-assinar]
 
-Nenhuma dessas perguntas exige conhecimento tributário para ser feita. Todas exigem que alguém as faça antes da assinatura, porque depois delas o regime já está escolhido.
+Nenhuma exige conhecimento tributário, mas todas precisam ser feitas antes da assinatura, porque depois o regime já está escolhido.
 
 ## Perguntas frequentes
 
 [FAQ:empreitada-incorporacao-reforma]
 
-Em outubro de 2026, faltando pouco mais de dois meses para a CBS entrar no lugar de PIS e Cofins, a escolha entre construir em terreno próprio e comprar unidade pronta deixou de ser apenas comparação de preço e passou a ser também comparação de regime. A rota que perde os dois redutores é a mesma que nunca colocou terreno, margem e valorização dentro da base tributável, e o benefício que ela deixa de receber tem teto fixo de R$ 13.250 em imposto. Quem tem o lote continua com a conta a favor, agora por um motivo a mais.
+Em outubro de 2026, faltando pouco mais de dois meses para a CBS entrar no lugar de PIS e Cofins, a escolha entre construir em terreno próprio e comprar pronto deixou de ser só comparação de preço e passou a ser comparação de regime. A rota que perde os dois redutores é a que nunca colocou terreno, margem e valorização na base, e o benefício que ela deixa de receber tem teto fixo de R$ 13.250 em imposto. Quem tem o lote continua com a conta a favor, agora por um motivo a mais.
 
 [CTA:empreitada-incorporacao]
 
@@ -161,3 +153,5 @@ Fora de escopo por fronteira de lote, com a razão registrada: ganho de capital,
 A conta comparativa é exemplo didático com hipóteses declaradas no próprio texto. Apenas a obra de R$ 454 mil tem lastro publicado; terreno de R$ 200 mil e preços de venda de R$ 650 mil e R$ 900 mil são arbitrados para tornar o mecanismo visível.
 
 Aposta de janela regulatória, sem projeção de tráfego. As duas páginas tributárias publicadas somam 6 pageviews e zero clique no GSC de julho de 2026, e nenhuma query tributária aparece no top 20. O cluster tributário fecha em três páginas. O texto é datado explicitamente em outubro de 2026 e escrito na chave de decisão com prazo, porque a CBS cheia entra em 1º de janeiro de 2027.
+
+**Revisão de 20/10/2026 (blog-criacao v1.1):** corpo reduzido de 1700 para 1342 palavras, resposta nos dois primeiros parágrafos, parágrafos curtos. Mantido como artigo próprio (o ângulo é diferente do publicado reforma-tributaria-construcao-industrializada e fala direto com o ticket de R$ 500 mil a R$ 2 milhões). Exemplo refeito de casa de 100 m² para 250 m²: obra R$ 900 mil (R$ 3.600/m²), terreno R$ 400 mil, ITBI R$ 12 mil, alíquota efetiva 13,25%. Resultados: empreitada R$ 119.250, compra pronta a R$ 1,3 milhão R$ 104.410 (vantagem R$ 14.840, dos quais R$ 13.250 do redutor social) e a R$ 1,8 milhão R$ 170.660. Atualizar o componente rotas-empreitada-incorporacao com esses números. Pauta com janela de tempo: CBS cheia em 01/01/2027, então vale publicar antes do fim do ano.

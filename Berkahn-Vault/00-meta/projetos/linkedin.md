@@ -1,11 +1,11 @@
 ---
 tipo: projeto
 criado: 2026-05-22
-atualizado: 2026-09-10
+atualizado: 2026-09-30
 tags:
   - project/linkedin
   - status/active
-ai_summary: Hub do LinkedIn. A pauta semanal de home equity tem copy de 139 palavras reescrita para o cliente final, capa 4:5 e UTM prontas; aprovação editorial e publicação continuam humanas. Cadência segue abaixo da meta.
+ai_summary: Hub do LinkedIn. A pauta de projeto integrado foi reconciliada como publicada em 30/09/2026; a próxima peça na ordem do quadro é instalações internacionais para casas de alto padrão.
 status: active
 projeto: linkedin
 kpi_publicados: 4
@@ -33,7 +33,7 @@ subagents_uteis: []
 
 ## Status atual
 
-Pipeline centralizado no [[quadro-conteudo]]: 66 trilhas LinkedIn, sendo 44 das
+Pipeline centralizado no [[quadro-conteudo]]: 69 trilhas LinkedIn, sendo 47 das
 pautas editoriais e 22 do acervo. O texto e os insumos visuais não são mais
 copiados para Notion nem para novas pastas do vault. Bruno continua publicando
 manualmente no LinkedIn; o chip de status é livre, mas somente URL e data comprovam a publicação real.
@@ -51,14 +51,24 @@ Contagem verificada em 2026-07-29 contra `main` — o `kpi_publicados: 1` anteri
 
 ## Próximos 7 dias
 
-- [x] Pauta `72133a0d` preparada em 10/09: copy de 139 palavras voltada ao cliente final, capa 1080×1350 e UTM; aprovação do pacote tem owner único em [[blog#Próximos 7 dias]]
+- [ ] @bruno Confirmar se o post de `f4d25753` (instalações hidráulicas e elétricas) foi publicado em 30/09 como combinado; o card segue `produzido`, sem URL nem data #pendencia
+- [x] Conferidos em 25/10 os posts de `159d3128` (automação) e `0820e59d` (instalações internacionais): texto e capa já passam no `check-linkedin.mjs` e no `check-lote-linkedin.mjs`, sem precisar de nova calibragem
+- [ ] @bruno Publicar `159d3128` e `0820e59d` e registrar URL/data reais #pendencia
+
+- [x] Pauta `67715d77` (projeto integrado em Light Steel Frame) reconciliada no admin como publicada no LinkedIn em 30/09/2026, conforme confirmação do Bruno; URL individual não informada. O artigo vinculado já estava publicado com capa e introdução.
+- [ ] Revisar para publicação manual a próxima peça da sequência, pauta `0820e59d` (instalações internacionais para casas de alto padrão); artigo e capa já estão publicados no blog, e copy e capa 4:5 estão no card.
+
+- [x] Cinco solicitações dos sócios reconciliadas no quadro em 16/09: três cards novos e duas pautas existentes enriquecidas, todas com trilha LinkedIn e sem duplicação
+
+- [x] Pauta `72133a0d` publicada em 12/09 e reconciliada no quadro em 16/09: status `publicado` e data real registrados; URL individual não coletada, com evidência na página pública da Construtora Berkahn
+- [ ] @bruno Aprovar e publicar no LinkedIn a pauta `0197a729` sobre custo de Steel Frame versus alvenaria; copy, UTM e capa 1080×1350 estão no card #pendencia
 
 - [x] Texto, prompt e briefing da pauta de casa LSF de 100 m² gravados no card
 - [x] Imagem 4:5 gerada e validada em 1080×1350
 - [x] Imagem 1080×1350 enviada ao Storage e vinculada ao card
 - [x] Copy revisada em 12/08: 125 palavras, hook em situação real e CTA para checklist; aprendizado incorporado em [[linkedin-post]] v1.1
 - [x] Aprovação editorial registrada no card
-- [ ] @bruno Publicar manualmente no LinkedIn com a UTM entregue; depois registrar URL e data reais #pendencia
+- [x] ~~@bruno Publicar manualmente no LinkedIn com a UTM entregue; depois registrar URL e data reais~~ — publicado em 12/09/2026; data registrada no card `72133a0d`, sem URL individual
 - [x] Pauta `d29d7fee` (custos ocultos) aprovada em 18/08 com copy de 142 palavras e capa 1080×1350
 - [x] 20 posts escritos em 05 e 06/09 pelos lotes, todos com exit 0 no `check-linkedin.mjs` e o conjunto aprovado no `check-lote-linkedin.mjs`. Aguardam capa; ver [[2026-09-lote-20-fronteiras]]
 - [ ] @bruno Publicar o post de custos ocultos e registrar URL e data reais no card `d29d7fee` #pendencia
@@ -66,6 +76,7 @@ Contagem verificada em 2026-07-29 contra `main` — o `kpi_publicados: 1` anteri
 - [ ] @bruno Publicar o post de quanto custa o projeto e registrar URL e data reais no card `0fbdbc5d` #pendencia
 - [x] Pauta `9c51c605` (terreno em declive) aprovada em 27/08 com copy de 157 palavras e capa 1080×1350, a primeira escrita sob a v1.2
 - [x] Copy de `9c51c605` reescrita em 03/09 após revisão do segundo leitor e aprovada nos dois lados, com 166 palavras e abertura em pergunta. Aprendizado em [[linkedin-post]] v1.3
+- [x] Copy de `0197a729` aprovada em 16/09 após três versões; continuidade causal e CTA ligado à decisão do corpo viraram [[linkedin-post]] v1.4 e gate do fluxo
 - [x] ~~Publicar o post de terreno em declive~~ — publicado pelo Bruno em 02/09. Data registrada no card `9c51c605`; a URL do post ele optou por não coletar, e o CLI deixou de exigi-la
 
 - [ ] Começar o backlog de distribuição: 22 posts derivam de artigos **já publicados** e não exigem escrever artigo nenhum

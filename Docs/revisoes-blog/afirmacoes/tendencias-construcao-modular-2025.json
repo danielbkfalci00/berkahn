@@ -1,0 +1,17 @@
+{
+ "slug": "tendencias-construcao-modular-2025",
+ "content": "# Tendências 2025\n\nO setor de construção industrializada está em constante evolução.\n\n[CTA:cta-tendencias-contato]\n\n[SERVICELINK:comercial-industrial]",
+ "components": {
+  "ctas": [
+   {
+    "id": "cta-tendencias-contato",
+    "label": "SAIA NA FRENTE",
+    "title": "Construa com a tecnologia de 2025",
+    "actionText": "Falar com Especialista",
+    "actionType": "dialog",
+    "description": "As tendências da construção industrializada já são realidade no mercado. Fale com nossos especialistas e traga inovação para sua obra.",
+    "defaultSegment": ""
+   }
+  ]
+ }
+}
