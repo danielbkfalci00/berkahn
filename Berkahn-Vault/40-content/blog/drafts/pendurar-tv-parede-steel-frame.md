@@ -1,15 +1,15 @@
 ---
 tipo: draft-content
 criado: 2026-09-05
-atualizado: 2026-09-05
+atualizado: 2026-10-20
 tags:
   - project/blog
   - status/draft
   - domain/lsf
   - domain/drywall
   - domain/normas
-ai_summary: "Pauta do lote 10. Carga suspensa em parede de LSF, com a tese de que o limite não é a parede e sim o ponto de fixação, decidido antes do fechamento. Ancorado nos ensaios do IPT registrados nos DATec nº 14 e nº 15 (10 a 11,5 kgf por ponto sem reforço, 65 kgf por peça sobre OSB estrutural) e na regra de fixação de cargas da Abragesso (15, 10, 20 e 40 kgf por ponto). Traz o que a SERP inteira não tem, ou seja, a separação entre carga de ensaio da NBR 15575-4 e carga máxima de uso, a razão mecânica dos 40 cm entre pontos, a conta do braço articulado e o caminho de retrofit."
-status: draft
+ai_summary: "INCORPORADO como correção na revisão do artigo anatomia-parede-steel-frame em 20/10/2026 (sem publicação própria, a pergunta tem demanda de busca quase nula e o rascunho tinha 2.200 palavras). Mantido como fonte dos números. Pauta do lote 10. Carga suspensa em parede de LSF, com a tese de que o limite não é a parede e sim o ponto de fixação, decidido antes do fechamento. Ancorado nos ensaios do IPT registrados nos DATec nº 14 e nº 15 (10 a 11,5 kgf por ponto sem reforço, 65 kgf por peça sobre OSB estrutural) e na regra de fixação de cargas da Abragesso (15, 10, 20 e 40 kgf por ponto). Traz o que a SERP inteira não tem, ou seja, a separação entre carga de ensaio da NBR 15575-4 e carga máxima de uso, a razão mecânica dos 40 cm entre pontos, a conta do braço articulado e o caminho de retrofit."
+status: archived
 projeto: blog
 slug: pendurar-tv-parede-steel-frame
 title: "Pode pendurar TV na parede de steel frame? Quanto peso ela aguenta"

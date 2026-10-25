@@ -1,28 +1,28 @@
 ---
 tipo: projeto
 criado: 2026-05-22
-atualizado: 2026-09-10
+atualizado: 2026-10-20
 tags:
   - project/blog
   - status/active
-ai_summary: Hub do Blog — 40 posts e 44 trilhas. A pauta semanal de home equity foi staged como revisão da URL existente, com números recalculados e sem alterar o artigo publicado; aguarda aprovação humana.
+ai_summary: Hub do Blog — 43 posts publicados e 47 trilhas. Cinco solicitações editoriais dos sócios foram reconciliadas no quadro em 16/09: três pautas novas e duas incorporadas a cards existentes, sem duplicação.
 status: active
 projeto: blog
 kpi_publicados: 43
 kpi_drafts_aguardando_capa: 0
 kpi_meta_publicados_semanal: 1
-kpi_indexados_google: 34
+kpi_indexados_google: 33
 kpi_meta_indexacao_total: 40
 kpi_posts_carcaca: 0
 kpi_posts_sem_meta: 0
 kpi_posts_sem_answer_summary: 0
-kpi_ga4_users_mes: 1681
-kpi_ga4_sessions_mes: 2027
-kpi_ga4_pageviews_mes: 2444
-kpi_gsc_clicks_mes: 1370
-kpi_gsc_impressions_mes: 42011
-kpi_health_score_mes: 77
-kpi_atualizado_em: 2026-08-02
+kpi_ga4_users_mes: 511
+kpi_ga4_sessions_mes: 730
+kpi_ga4_pageviews_mes: 1141
+kpi_gsc_clicks_mes: 1261
+kpi_gsc_impressions_mes: 49248
+kpi_health_score_mes: 66
+kpi_atualizado_em: 2026-10-20
 contextos_aplicados:
   - berkahn-brand
   - seo-aeo-strategy
@@ -49,9 +49,9 @@ subagents_uteis:
 
 ## Status atual
 
-Dados de publicação verificados em 2026-08-06 contra Supabase; indexação permanece no snapshot GSC de 2026-07-30.
+Dados de publicação e pipeline verificados em 2026-09-16 contra Supabase; indexação permanece no snapshot GSC de 2026-07-30.
 
-**40 artigos publicados**, 34 indexados no último snapshot. O bloqueio P0 de indexação que dominava este hub desde abril **está encerrado** — o texto anterior dizia "1 de 35 indexados", número que já estava errado quando foi escrito.
+**43 artigos publicados**, 34 indexados no último snapshot. O bloqueio P0 de indexação que dominava este hub desde abril **está encerrado** — o texto anterior dizia "1 de 35 indexados", número que já estava errado quando foi escrito.
 
 Último post: `quanto-custa-projeto-casa`, publicado em 2026-08-25. Segundo artigo
 produzido inteiro dentro do `/conteudo`, depois de `custos-ocultos-construcao-2026`
@@ -105,11 +105,34 @@ Tráfego seguiu crescendo: 1.179 users em junho, 1.407 nos primeiros 26 dias de 
 >
 > Conferir com `node --env-file=.env.local scripts/analytics/adhoc-inspect-urls.mjs <slug>`.
 - [x] ~~**`quanto-custa-construir-steel-frame-precos-m2-2026` com `published_at` nulo**~~ — corrigido em 2026-07-30 para `created_at` (2026-01-26). Além da ordenação, o nulo tirava o artigo do RSS, deixava o schema Article sem `datePublished` e fazia o sitemap declarar `lastmod` = agora a cada crawl
-- [ ] @codex Rebasear separadamente a página-mãe de custo na série Arquitecasa de abril/2026, depois da publicação do draft de 11/08, para as duas páginas não voltarem a divergir #pendencia
+- [x] ~~@codex Rebasear separadamente a página-mãe de custo na série Arquitecasa de abril/2026~~ — publicada em 16/09/2026 na mesma URL, com o intervalo acadêmico de 18,1% a 49,5% sempre acompanhado do escopo
 
 ## Próximos 7 dias
 
-- [ ] @bruno Revisar e aprovar o pacote `72133a0d`: artigo staged em `financiar-construcao-light-steel-frame`, copy LinkedIn de 139 palavras e capas já vinculadas #pendencia
+- [x] As cinco solicitações dos sócios de 16/09 (fachada, hidráulica, projeto
+  integrado, automação, instalações internacionais) estão com blog e LinkedIn
+  produzidos; os cinco artigos estão publicados com capa real desde 23/09.
+  Reconciliado em 25/10
+- [x] Confirmado em 25/10: o fix de `meta_title`/`description` do artigo
+  campeão `custo-steel-frame-m2-2026`, preparado em 20/10 em resposta a
+  [[2026-10-diagnostico-queda-trafego]], já está em produção desde 20/10
+  (`posts.updated_at`). Falta medir o CTR de 7 dias contra a base de 3,0%
+- [x] Pauta nova criada em 25/10 a pedido dos sócios: `c7db4c6d` ("Capital
+  próprio, banco, fintech ou consórcio"), pilar de comparação que não duplica
+  o acervo de financiamento existente. Agendada para 14/12, S20, junto de
+  "Vale a pena começar a obra em 2027"
+- [x] Pauta de backlog `f52ed1a2` ("Parede sob medida", sugestão do Bertevas
+  em 22/09) agendada para 15/02/2027, S29, junto de "Tendências 2027"
+
+- [ ] @bruno Pedir reindexação no Search Console das 4 URLs publicadas em 20/10 (`telhado-steel-frame-tipos-custo-m2`, `casa-steel-frame-valoriza-revenda`, `anatomia-parede-steel-frame`, `quanto-custa-projeto-casa`) #pendencia
+- [ ] @codex Conferir as composições SINAPI do telhado contra a tabela oficial antes de divulgar o número no LinkedIn #pendencia
+- [ ] @bruno Enviar os orçamentos em anexo para a pauta "Orçamento de obra em steel frame"; sem eles ela não sai #pendencia
+- [ ] @codex Produzir os componentes e publicar o próximo da fila, o guia de normas (`normas-light-steel-frame-brasil`); triagem dos 17 rascunhos e calendário em [[2026-10-reedicao-rascunhos-e-calendario]] #pendencia
+- [ ] @codex Executar pesquisa e produção das cinco solicitações dos sócios já priorizadas no quadro: projeto integrado, instalações internacionais, hidráulica contemporânea, automação e fachadas a seco #pendencia
+
+- [ ] @bruno Publicar a revisão já aprovada de `financiar-construcao-light-steel-frame` da pauta `72133a0d`; o LinkedIn foi publicado em 12/09/2026 e reconciliado no quadro #pendencia
+
+- [x] Página-mãe `custo-steel-frame-m2-2026` revisada, aprovada e republicada em 16/09 pela pauta `0197a729`; slug e `published_at` original preservados
 
 - [x] Semana S1: artigo de ICMS publicado e reconciliado com a pauta
 - [x] Pesquisa e criação exercitadas na pauta de casa LSF de 100 m²

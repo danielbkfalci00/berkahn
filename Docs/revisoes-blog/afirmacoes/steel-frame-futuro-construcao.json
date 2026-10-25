@@ -1,0 +1,17 @@
+{
+ "slug": "steel-frame-futuro-construcao",
+ "content": "# Steel Frame: O Futuro\n\nO Light Steel Frame está transformando a forma como se constrói.\n\n[CTA:cta-futuro-inovacao]\n\n[SERVICELINK:lsf]",
+ "components": {
+  "ctas": [
+   {
+    "id": "cta-futuro-inovacao",
+    "label": "CONSTRUA O FUTURO",
+    "title": "Faça parte da revolução construtiva",
+    "actionHref": "/servicos",
+    "actionText": "Ver Serviços",
+    "actionType": "link",
+    "description": "O futuro da construção civil já chegou. Conheça os serviços da Berkahn em Steel Frame e veja como a inovação se aplica ao seu projeto."
+   }
+  ]
+ }
+}

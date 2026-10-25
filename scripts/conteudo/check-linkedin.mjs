@@ -60,6 +60,10 @@ L(!/Na Berkahn, a gente/.test(corpo), 'sem a muleta "Na Berkahn, a gente"');
 L(!/^\s*(E|Mas)\s/m.test(corpo), 'sem E ou Mas abrindo parágrafo');
 L(!/[Nn]ão é .{1,45}[,.] é |deixa de ser .{1,45} e vira |mais do que .{1,30}, é /.test(corpo),
   'sem o padrão "não é X, é Y"');
+L(!/não (?:veio|vem|vinha) (?:apenas|só) (?:de )?.{1,55}[,.;] (?:veio|vem|vinha) (?:também )?(?:de )?/i.test(corpo),
+  'sem contraste artificial "não veio apenas de X, veio de Y"');
+L(!/(?:há|tem) (?:ainda )?(?:um|o) detalhe que (?:muda|faz)|o detalhe que (?:quase sempre|muita gente) (?:não vê|deixa passar|ignora)/i.test(corpo),
+  'sem chamada vaga de revelação sobre "um detalhe"');
 L(!/Você sabia|Nos últimos anos|Vamos falar sobre|quase ninguém|genuinamente|honestamente/i.test(corpo),
   'sem clichê de IA');
 L(!/E você[,?]/i.test(corpo), 'sem convite vazio de opinião');
@@ -100,6 +104,10 @@ const url = (raw.match(/^https?:\/\/\S+$/m) || [''])[0];
 L(Boolean(url), url ? 'URL do artigo em linha própria' : 'URL do artigo ausente');
 L(url.includes('utm_source=linkedin') && url.includes('utm_medium=social')
   && url.includes('utm_campaign=post-organico'), 'UTM na convenção do vault');
+
+// Continuidade é semântica e não cabe num regex confiável. O gate deixa visível
+// o teste humano obrigatório para não transformar saída 0 em falsa aprovação.
+console.log('ℹ️  revisão semântica obrigatória: teste da permutação dos parágrafos + teste da ponte corpo→CTA');
 
 // --- informativo, não bloqueia ------------------------------------------
 const numeros = corpo.match(/R\$ [\d.]+|\d+(,\d+)?%|\d+ (m²|metros|mil)/g) || [];

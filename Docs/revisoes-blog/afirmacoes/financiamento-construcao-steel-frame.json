@@ -1,0 +1,17 @@
+{
+ "slug": "financiamento-construcao-steel-frame",
+ "content": "# Financiamento\n\nConheça as opções de financiamento para sua construção.\n\n[CTA:cta-financiamento-residencial]\n\n[SERVICELINK:residencial]\n\n---\n\n### Leia também\n\n- [Quanto custa construir em Steel Frame: tabela de preços 2026](/atualidades/quanto-custa-construir-steel-frame-precos-m2-2026)\n- [Custo do Steel Frame por m² em 2026](/atualidades/custo-steel-frame-m2-2026)\n- [Construir ou Comprar Pronto? Os Números na Grande SP](/atualidades/construir-ou-comprar-pronto-numeros-grande-sp)",
+ "components": {
+  "ctas": [
+   {
+    "id": "cta-financiamento-residencial",
+    "label": "INICIAR FINANCIAMENTO",
+    "title": "Comece a financiar sua casa em Steel Frame",
+    "actionText": "Consultar Financiamento",
+    "actionType": "dialog",
+    "description": "Receba orientação completa sobre opções de financiamento compatíveis com Steel Frame. A equipe da Berkahn pode orientar sobre os bancos e as linhas de crédito disponíveis.",
+    "defaultSegment": "residencial"
+   }
+  ]
+ }
+}

@@ -1,0 +1,143 @@
+{
+ "slug": "projeto-integrado-light-steel-frame",
+ "content": "Numa obra de alvenaria, a posição do ponto do chuveiro pode esperar a parede subir. O pedreiro rasga o bloco, assenta o tubo, reboca por cima, e a conta fica em meia diária e um saco de argamassa. O hábito é tão consolidado que o manual de arquitetura do Centro Brasileiro da Construção em Aço descreve o processo construtivo tradicional sem rodeio, ao registrar que as decisões de como construir são frequentemente tomadas no próprio canteiro.\n\nEm Light Steel Frame, sistema construtivo que usa perfis leves de aço galvanizado formados a frio como estrutura e placas como fechamento, essa mesma decisão já saiu da fábrica dentro do painel. O furo de passagem está estampado no montante, a janela está travada pela verga que a atravessa, e o perfil chegou ao terreno cortado no comprimento que o projeto mandou. Quem trata o LSF com o calendário de decisão da alvenaria costuma descobrir isso pelo aditivo.\n\n[STATS:projeto-integrado-numeros]\n\n## O painel deixa de ser desenho e vira ordem de fabricação\n\nO código de prática padrão do setor norte-americano de perfis formados a frio, o AISI S202-20, dá nome ao documento em que o desenho vira instrução de máquina e alterar uma linha passa a significar produzir outra peça. São os wall panel fabrication documents, elaborados painel a painel, e a lista do que cada um precisa conter mede exatamente o que já tem de estar decidido, da seção de cada perfil até a posição de cada ligação com o número de parafusos. Um desenho de arquitetura ainda tolera a anotação \"a definir\", e uma lista de corte não tolera nenhuma.\n\nOnde esse congelamento cai no calendário depende do método de montagem, assunto já resolvido em [sistema painelizado ou stick](/atualidades/sistema-painelizado-vs-stick-steel-frame). No painelizado o painel sai pronto da fábrica e o congelamento é mais cedo, enquanto no stick a montagem no terreno devolve alguma folga. Essa folga é de execução e não de projeto, porque o perfil chega dimensionado nos dois casos.\n\n## As três janelas em que o projeto fecha\n\nO manual Steel Framing: Arquitetura, publicado pelo Instituto Aço Brasil e pelo CBCA em 2012, organiza o projeto para LSF em três etapas, no item 10.5. Lidas como calendário de decisão, e não como lista de entregáveis, elas respondem até quando cada escolha ainda é reversível.\n\n[TIMELINE:congelamento-projeto-lsf]\n\nA primeira janela guarda a decisão mais contraintuitiva de todas. O manual recomenda que o arquiteto desenhe sobre uma malha de 1200 mm no estudo preliminar, e explica o motivo com todas as letras, porque nessa altura ele ainda não sabe se a modulação estrutural será de 400 ou de 600 mm, informação que só virá do projeto estrutural. Como 1200 é múltiplo dos dois, o traço nasce compatível com qualquer das respostas. É projetar de um jeito que sobrevive a uma decisão ainda não tomada, o oposto de decidir tudo no começo.\n\nA segunda janela guarda o erro mais caro, porque ele parece estético e é estrutural. O manual pede que o tipo de revestimento seja especificado no anteprojeto, para que o peso próprio dele entre no cálculo. Trocar uma placa cimentícia por um porcelanato de fachada depois disso significa carga nova num painel já dimensionado. Na mesma etapa entram as esquadrias, e a orientação é otimizar a dimensão e a localização das aberturas junto com a localização dos montantes, de modo que a janela deixa de ser um vão no desenho e passa a definir quais montantes existem e onde.\n\nA terceira janela tem ordem interna, e ela importa. O projeto executivo começa pela compatibilização do estrutural com o arquitetônico, e só depois esses dois encontram o de instalações. Inverter a ordem produz o retrabalho clássico, descobrir na terceira rodada que o duto previsto atravessa um contraventamento.\n\n## O relógio real, contado a partir da concretagem\n\nO congelamento tem data observável no cronograma. As [etapas da obra em Light Steel Frame](/atualidades/passo-passo-construcao-steel-frame) mostram que o radier leva de dois a três dias para executar e de 28 a 30 dias para curar, e que a fabricação dos perfis de uma casa de 100 m² acontece em 5 a 10 dias dentro dessa mesma janela de cura. As duas correm em paralelo de propósito, e é isso que encurta a obra.\n\nO arquivo de fabricação é liberado mais ou menos quando o caminhão-betoneira vai embora, então a última data confortável para mudar qualquer coisa que vire geometria de aço fica antes da concretagem, e não antes da montagem.\n\nHá um congelamento ainda mais antigo escondido aí. Os pontos de instalação que sobem pelo radier são concretados junto com ele, e o manual do CBCA registra que a locação precisa deles na fundação é o que permite instalar as paredes no lugar planejado. Depois da cura, mudar um ponto embutido no radier deixa de ser alteração de projeto e passa a ser demolição.\n\n[TABLE:alvenaria-lsf-quando-decide]\n\nA contrapartida honesta também está no manual, que observa que em lajes de LSF a tubulação passa pelos vazios depois da montagem. O sistema congela cedo a geometria do painel e mantém flexível o caminhamento horizontal.\n\n## Mudar tarde tem preço, e a regra que o calcula não é brasileira\n\nO argumento de que decidir cedo sai mais barato costuma ser vendido sem número. Dois aparecem no item 10.1 do manual do CBCA, citados de fontes anteriores. Segundo Cambiaghi, a fase de projeto representa de 5% a 6% do custo da obra, as decisões tomadas nela respondem por mais de 70% das despesas da construção, e, concluído o projeto, a execução só age sobre os 30% restantes. O manual estreita isso para a concepção arquitetônica, e o autor falava do pacote inteiro. Segundo Meseguer, em 1991, o projeto responde por 40% a 45% das falhas de serviço em edifícios. Nenhum dos dois foi medido em obra brasileira de LSF, e o texto de Cambiaghi é artigo de opinião da AsBEA, sem data verificável, então servem como grandeza e não como cálculo.\n\nO que existe de mais concreto está de novo no AISI S202-20, e é uma regra de precificação. A seção H8 determina que, ao calcular o reajuste de preço de uma alteração de escopo, o fabricante considere a quantidade de trabalho acrescida ou suprimida e o momento em que a alteração chega, em relação ao estágio da compra de material, do detalhamento, da fabricação e da instalação.\n\nO preço de uma mudança em construção industrializada é função do calendário, porque a mesma alteração de janela custa uma coisa na semana do anteprojeto e outra com o painel na carroceria. Só que o AISI S202-20 vale quando o contrato o adota, e o Brasil não tem equivalente para perfis formados a frio, então aqui essa proteção só existe se estiver escrita. O que o adiamento de decisão faz com o orçamento geral está em [custos ocultos da construção](/atualidades/custos-ocultos-construcao-2026), e o preço do pacote de projetos, em [quanto custa o projeto de uma casa](/atualidades/quanto-custa-projeto-casa).\n\n## BIM é obrigatório? Não para a sua casa\n\nA conversa sobre projeto integrado quase sempre descamba para BIM, e circula a ideia de que existe obrigação legal. Existe, mas não para quem está construindo uma residência. O Decreto 10.306, de 2 de abril de 2020, estabelece o uso do BIM em obras e serviços de engenharia da administração pública federal, e o artigo 2º vincula nominalmente só dois conjuntos delas, as do Ministério da Defesa em imóveis do Exército, da Marinha e da Força Aérea, e as do então Ministério da Infraestrutura, que a Lei 14.600, de 2023, repartiu entre Portos e Aeroportos, para aeroportos regionais, e Transportes, para reforço e reabilitação de pontes, viadutos e túneis pelo DNIT. Os demais órgãos federais podem aderir e não são obrigados. Obra privada não está no escopo.\n\nA exigência que de fato alcança uma casa é normativa. A ABNT NBR 16636, de dezembro de 2017, que cancelou e substituiu as antigas NBR 13531 e NBR 13532 de 1995, determina no item 7.2 da Parte 2 que os projetos executivos complementares sejam compatibilizados de forma integrada com o projeto arquitetônico, formando o conjunto que ela nomeia projeto completo da edificação, e a Parte 1 só o dá por pronto quando as especialidades estão totalmente compatibilizadas e aprovadas pelo cliente. O inventário das normas que regem o sistema, incluindo as três partes da NBR 16970 de 2022, está em [normas do Light Steel Frame no Brasil](/atualidades/normas-light-steel-frame-brasil).\n\nVale a ressalva de método. BIM é ferramenta de detecção, e o que foi detectado ainda precisa de alguém com autoridade para decidir, porque projeto integrado sem data de fechamento é apenas projeto com mais arquivos. A lógica de projetar pensando em como a peça será fabricada e montada tem nome, DfMA, contado em [a casa montada como um carro](/atualidades/construcao-industrializada-casa-montada-como-carro). Vale dizer que os ganhos de retrabalho atribuídos ao DfMA circulam sem medição, porque a principal revisão acadêmica do tema não menciona aço em nenhuma página e o guia britânico de referência sobre LSF residencial não usa a sigla uma única vez.\n\n## O que fica escrito antes de a fábrica cortar\n\nProjeto integrado em Light Steel Frame é menos questão de software e mais questão de calendário. As três janelas dizem o que fecha em cada etapa, e a seção H8 diz o que custa a pergunta feita fora de hora.\n\nA Berkahn propõe tratar esse fechamento como entrega do projeto executivo, com a lista de decisões nomeada por etapa e com a data em que cada uma deixa de ser reversível combinada antes de o primeiro perfil ser cortado. É a diferença entre a obra que cumpre o cronograma e a que descobre o cronograma no meio do caminho.\n\n[FAQ:projeto-integrado-lsf]\n\n[CTA:projeto-integrado-lsf]",
+ "components": {
+  "ctas": [
+   {
+    "id": "projeto-integrado-lsf",
+    "label": "PRÓXIMO PASSO",
+    "title": "Feche as decisões enquanto elas ainda são desenho",
+    "actionText": "Falar sobre o meu projeto",
+    "actionType": "dialog",
+    "description": "Na Berkahn, a proposta é que o projeto executivo saia com a lista de decisões por etapa e a data em que cada uma deixa de ser reversível. Conte em que fase está o seu projeto e a equipe pode montar esse calendário antes do primeiro perfil ser cortado.",
+    "defaultSegment": "residencial"
+   }
+  ],
+  "faqs": [
+   {
+    "id": "projeto-integrado-lsf",
+    "title": "Perguntas frequentes sobre projeto integrado em Light Steel Frame",
+    "questions": [
+     {
+      "answer": "Com conforto, até a liberação do arquivo de fabricação, que coincide com a concretagem e a cura do radier. A fabricação dos perfis acontece dentro dessa janela de 28 a 30 dias, então qualquer mudança que vire geometria de aço deve ser decidida antes da concretagem.",
+      "question": "Até quando dá para mudar o projeto de uma casa em Light Steel Frame?"
+     },
+     {
+      "answer": "Verga, ombreiras e montantes mudam junto, porque a abertura define quais montantes existem e onde. O painel é refeito, não ajustado, e o custo depende do estágio em que a mudança chega.",
+      "question": "O que acontece se a posição de uma janela mudar depois de os painéis serem fabricados?"
+     },
+     {
+      "answer": "Não. O Decreto 10.306/2020 alcança apenas a administração pública federal, e mesmo dentro dela o artigo 2º vincula só as obras da Defesa e as que eram do Ministério da Infraestrutura, hoje repartidas entre Portos e Aeroportos e Transportes pela Lei 14.600/2023. Obra privada não está no escopo.",
+      "question": "BIM é obrigatório para construir em Light Steel Frame no Brasil?"
+     },
+     {
+      "answer": "A ABNT NBR 16636-1:2017 determina, no item 4.2.12, que os ciclos de coordenação e compatibilização sejam mediados pelo coordenador geral do projeto, profissional habilitado que, pelo item 4.2.3, é designado pelo empreendedor.",
+      "question": "Quem é responsável por compatibilizar os projetos?"
+     },
+     {
+      "answer": "Não. O manual Steel Framing: Arquitetura, do CBCA, define o projeto para produção como conjunto elaborado simultaneamente ao detalhamento do executivo, descrevendo como produzir e não apenas o que produzir.",
+      "question": "Projeto para produção é a mesma coisa que projeto executivo?"
+     }
+    ]
+   }
+  ],
+  "stats": [
+   {
+    "id": "projeto-integrado-numeros",
+    "stats": [
+     {
+      "label": "Das despesas definidas na fase de projeto",
+      "value": 70,
+      "suffix": " %",
+      "description": "Segundo Cambiaghi, em texto da AsBEA, as decisões da fase de projeto respondem por mais de 70% das despesas da construção, e a execução só age sobre os 30% restantes."
+     },
+     {
+      "label": "Das falhas de serviço com origem no projeto",
+      "value": 45,
+      "suffix": " %",
+      "description": "Topo da faixa de 40% a 45% atribuída ao projeto por Meseguer, em 1991, citado pelo manual Steel Framing: Arquitetura do CBCA."
+     },
+     {
+      "label": "Malha de referência do estudo preliminar",
+      "value": 1200,
+      "suffix": " mm",
+      "description": "Adotada porque a modulação estrutural de 400 ou 600 mm ainda não está decidida; 1200 é múltiplo das duas."
+     },
+     {
+      "label": "Cura do radier, janela da fabricação",
+      "value": 30,
+      "suffix": " dias",
+      "description": "Topo da cura de 28 a 30 dias do radier, período em que a fábrica corta os perfis. Mudar geometria de aço depois disso é refazer peça."
+     }
+    ]
+   }
+  ],
+  "tables": [
+   {
+    "id": "alvenaria-lsf-quando-decide",
+    "rows": [
+     [
+      "Posição da janela",
+      "Até a marcação da alvenaria, com ajuste possível no canteiro",
+      "No anteprojeto, junto com a posição dos montantes e da verga"
+     ],
+     [
+      "Caminho da tubulação dentro da parede",
+      "Depois de a parede subir, rasgando o bloco",
+      "Antes da liberação do arquivo de fabricação, com o furo no montante"
+     ],
+     [
+      "Ponto de instalação que sobe pelo radier",
+      "Antes da concretagem da fundação",
+      "Antes da concretagem do radier, que também loca as paredes"
+     ],
+     [
+      "Tipo de revestimento externo",
+      "Até a fase de acabamento",
+      "No anteprojeto, para o peso próprio entrar no cálculo do painel"
+     ],
+     [
+      "Reforço embutido para peça suspensa",
+      "Na instalação da peça, com bucha na alvenaria",
+      "Antes da fabricação do painel, como peça prevista no projeto"
+     ]
+    ],
+    "caption": "Quando cada decisão fecha: alvenaria contra Light Steel Frame.",
+    "headers": [
+     "Decisão",
+     "Quando fecha em alvenaria",
+     "Quando fecha em Light Steel Frame"
+    ]
+   }
+  ],
+  "timelines": [
+   {
+    "id": "congelamento-projeto-lsf",
+    "title": "As três janelas em que o projeto em Light Steel Frame fecha",
+    "milestones": [
+     {
+      "title": "Estudo preliminar",
+      "number": 1,
+      "duration": "reversível",
+      "shortTitle": "Estudo",
+      "description": "O arquiteto desenha sobre malha de 1200 mm, compatível com modulação de 400 ou 600 mm. Planta e volumetria ainda mudam sem custo de fabricação."
+     },
+     {
+      "title": "Anteprojeto",
+      "number": 2,
+      "duration": "caro",
+      "shortTitle": "Anteprojeto",
+      "description": "Tipo de revestimento externo especificado para o peso entrar no cálculo, e esquadrias otimizadas junto com a posição dos montantes. Mudar aqui já mexe em estrutura."
+     },
+     {
+      "title": "Projeto executivo",
+      "number": 3,
+      "duration": "última janela",
+      "shortTitle": "Executivo",
+      "description": "Compatibilização do estrutural com o arquitetônico e, depois, com instalações. Ao fim sai o arquivo de fabricação, e cada linha vira peça cortada."
+     }
+    ]
+   }
+  ]
+ }
+}

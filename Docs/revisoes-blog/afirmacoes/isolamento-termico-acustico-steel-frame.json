@@ -1,0 +1,17 @@
+{
+ "slug": "isolamento-termico-acustico-steel-frame",
+ "content": "# Isolamento\n\nO Steel Frame oferece performance superior em isolamento.\n\n[CTA:cta-isolamento-consulta]\n\n[SERVICELINK:lsf]\n\n---\n\n### Leia também\n\n- [Steel Frame: O Guia Definitivo](/atualidades/guia-definitivo-steel-frame-brasil)\n- [Drywall ST, RU e RF: qual usar em cada ambiente](/atualidades/drywall-st-ru-rf)\n- [Fissuras no Steel Frame: Causas e Prevenção](/atualidades/fissuras-steel-frame)",
+ "components": {
+  "ctas": [
+   {
+    "id": "cta-isolamento-consulta",
+    "label": "CONFORTO GARANTIDO",
+    "title": "Garanta o máximo conforto na sua casa",
+    "actionText": "Consultar Especialista",
+    "actionType": "dialog",
+    "description": "Projete sua casa com isolamento térmico e acústico de alta performance. A equipe da Berkahn pode dimensionar a solução ideal para o seu projeto.",
+    "defaultSegment": "residencial"
+   }
+  ]
+ }
+}

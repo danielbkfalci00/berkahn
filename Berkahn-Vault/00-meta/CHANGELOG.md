@@ -1,7 +1,7 @@
 ---
 tipo: meta
 criado: 2026-05-21
-atualizado: 2026-08-27
+atualizado: 2026-09-16
 tags:
   - status/active
 ai_summary: Auditoria de mudanças estruturais do vault Berkahn. Append-only — toda decisão arquitetural significativa é registrada aqui.
@@ -11,6 +11,15 @@ status: active
 # Vault CHANGELOG
 
 Histórico de mudanças estruturais do vault. Append-only.
+
+## 2026-09-16 — Calibragem narrativa do LinkedIn v1.4
+
+- Feedback real da pauta `0197a729` virou regra no prompt locked, com autorização
+  explícita: uma linha causal por post, sem reiniciar o tema em cada parágrafo
+- CTA passou a continuar a decisão já construída no corpo; testes humanos de
+  permutação e ponte foram incorporados ao `/conteudo` e `/linkedin`
+- `check-linkedin.mjs` bloqueia as fórmulas “não veio apenas de...” e “há um
+  detalhe que muda...”, e declara que saída verde não valida continuidade
 
 ## 2026-08-27 — Gate documental fail-closed
 
@@ -62,3 +71,10 @@ Histórico de mudanças estruturais do vault. Append-only.
 
 **Bug fix cross-project**:
 - Removido `Brada/HubSpot` e `Brada/Meetings/atas` de `additionalDirectories` no `~/.claude/settings.json` global
+
+## 2026-10-21 — Sessão de conteúdo, calendário e Perfil no Google
+
+- Relatórios de agosto a outubro, diagnóstico da queda de tráfego e reedição de rascunhos (notas em `40-content/auditorias-seo/`).
+- Prompt `blog-criacao` v1.1 (público médio e grande porte, sem claims de obra entregue).
+- 4 artigos publicados e 33 revisados em linguagem de oferta; LinkedIn com a mesma data do blog.
+- Guia e estado do Perfil da Empresa no Google em [[google-perfil-empresa]].

@@ -1,0 +1,278 @@
+{
+ "slug": "isencao-icms-energia-solar-sp",
+ "content": "Duas datas concentram a atenção de quem pensa em energia solar em São Paulo neste semestre. Em 31 de dezembro de 2026 vence a isenção de ICMS sobre a energia compensada, e em 1º de janeiro de 2027 a cobrança do Fio B sobe de 60% para 75%. As duas são reais e estão nos textos legais.\n\nO que quase todo material disponível erra é a conclusão: nenhuma das duas trava nada. Instalar antes do prazo não preserva a isenção depois dele, e o percentual do Fio B nunca dependeu do ano em que o sistema foi conectado. São dois relógios diferentes, e ambos seguem correndo depois que o sistema está no telhado.\n\nPara uma casa de alto padrão na Grande São Paulo, a diferença entre homologar em outubro de 2026 e em abril de 2027 fica em torno de R$ 1.000 na vida inteira do equipamento, menos de um mês de payback. No mesmo sistema, deslocar consumo para o horário de geração vale cerca de R$ 1.900 por ano, todos os anos. A corrida contra o calendário é a menor das alavancas disponíveis.\n\n[TABLE:dois-relogios]\n\n## O que exatamente vence em 31 de dezembro de 2026\n\nO benefício é a isenção de ICMS sobre a energia fornecida pela distribuidora na quantidade correspondente à energia injetada somada aos créditos acumulados. Está no artigo 166 do Anexo I do Regulamento do ICMS de São Paulo, que internaliza o Convênio ICMS 16/2015 do CONFAZ. O parágrafo 4º tem uma linha só: \"Este benefício vigorará até 31 de dezembro de 2026\". A redação em vigor veio do Decreto 69.287, de 30 de dezembro de 2024, publicado no Diário Oficial do Estado em 1º de janeiro de 2025.\n\nVale um registro de precisão. Boa parte da imprensa setorial atribui essa prorrogação ao \"Decreto 69.827/2024\". O número correto, conforme a nota de alteração publicada pela Secretaria da Fazenda de São Paulo na página do artigo 166, é **69.287**, uma transposição de dígito que se espalhou por repetição.\n\nO que muda a decisão está no que o parágrafo 4º **não** diz. Ele não traz cláusula preservando sistemas já instalados. A isenção não se prende ao equipamento no momento da conexão: ela incide sobre o fato gerador de cada fatura, mês a mês. Se o benefício não for prorrogado, a energia compensada passa a ser tributada em janeiro de 2027 para todo mundo, inclusive para quem homologou em 2019, em 2023 ou em novembro de 2026.\n\nIsso derruba o argumento de venda mais comum do setor neste semestre. Não existe \"instalar antes para garantir a isenção\", porque não há nada a garantir. O que existe é aproveitar os meses em que ela ainda vigora. Sobre a renovação, não havia ato publicado até agosto de 2026: em 8 de maio o Decreto 70.589 prorrogou dezenas de benefícios do RICMS paulista, e o artigo 166 ficou de fora.\n\n## O Fio B sobe para 75%, e ele nunca travou no ano da instalação\n\nO Fio B é a parcela da tarifa que remunera a distribuidora pelo uso da infraestrutura de fios, cabos e transformadores. A Lei 14.300/2022, o Marco Legal da Micro e Minigeração Distribuída, criou uma cobrança progressiva dessa parcela sobre a energia compensada. O artigo 27 lista os percentuais com uma redação que resolve a dúvida sozinha: 15% \"a partir de 2023\", subindo de quinze em quinze pontos até 90% \"a partir de 2028\".\n\nO gatilho de cada faixa é o ano de faturamento, não o ano em que o sistema foi conectado. Quem homologa em agosto de 2026 paga 60% até dezembro, 75% durante todo o ano de 2027 e 90% em 2028, exatamente como quem homologou em 2024. Não existe safra protegida dentro do regime de transição.\n\nA confirmação vem por contraste, dentro do próprio artigo. O parágrafo 2º cria uma coorte específica, definida por data de protocolo, para quem solicitou acesso entre o décimo terceiro e o décimo oitavo mês após a publicação da lei. Quando o legislador quis diferenciar por data de solicitação, escreveu isso de forma expressa. No caput, não escreveu.\n\nO único direito adquirido real pertence a quem protocolou solicitação de acesso nos doze meses seguintes à publicação da lei, em 7 de janeiro de 2022: esse grupo mantém compensação integral, sem Fio B, até 2045. A porta fechou no início de 2023.\n\n[TIMELINE:escada-fio-b]\n\nA partir de 2029 o artigo 27 apenas remete ao artigo 17, cuja regra ainda não existe. Qualquer payback que projete condições estáveis além de 2028 está projetando uma regra que não foi escrita.\n\n## Quanto o crédito de energia perde em 1º de janeiro de 2027\n\nAs duas mudanças não têm o mesmo tamanho, e a diferença entre elas é de quase uma ordem de grandeza.\n\nA simulação usa uma casa de alto padrão na Grande São Paulo, com as premissas abertas: 2.000 kWh mensais de consumo, sistema de cerca de 20 kWp, ligação trifásica com custo de disponibilidade de 100 kWh e 30% da geração consumida no mesmo instante em que é produzida, o que deixa 15.600 kWh compensados por ano. O Fio B usado é o da CPFL Paulista, R$ 0,1239 por kWh, publicado pelo Canal Solar em janeiro de 2026, e a alíquota de ICMS é a de 18% que o RICMS paulista aplica acima de 200 kWh mensais.\n\nCom essas premissas, o degrau do Fio B de 60% para 75% custa cerca de **R$ 290 por ano**. O fim da isenção de ICMS custa de **R$ 2.500 a R$ 2.800 por ano**, conforme a tarifa aplicada. O ICMS pesa aproximadamente nove vezes mais que o Fio B.\n\n[CHART:o-que-pesa-2027]\n\nO efeito combinado aparece no valor do crédito: cada kWh compensado vale hoje cerca de 92% da tarifa cheia e passa a valer cerca de 72% em janeiro de 2027. Uma queda em torno de 21%, da qual aproximadamente 90% vem do ICMS e 10% vem do Fio B. A manchete que circula no setor trata os dois como equivalentes. Eles não são.\n\nPor isso o payback anunciado na maioria das propostas está otimista: calcular o retorno com as regras de 2026 subestima em 8 a 10 meses o retorno real de um sistema comprado agora, porque em janeiro a conta muda para todos. Isso não tem relação com correr contra o prazo, é o cenário base.\n\n## A conta de quem homologa em 2026 contra quem homologa em 2027\n\nCom os dois mitos fora do caminho, a comparação fica possível. Considere dois sistemas idênticos, um homologado em outubro de 2026 e outro em abril de 2027.\n\nA vantagem que sobrevive tem duas partes. A primeira são três meses de energia compensada ainda dentro da isenção de ICMS, que valem cerca de R$ 670. A segunda é o deslocamento de seis meses na escada do Fio B, que rende doze meses de operação com quinze pontos percentuais de vantagem antes que a escada termine, algo em torno de R$ 290. O total fica **próximo de R$ 1.000 ao longo de toda a vida do sistema**, contra um investimento de R$ 90.000 a R$ 105.000. Em payback, equivale a cerca de vinte dias.\n\n[TABLE:comparativo-2026-2027]\n\nExiste um custo maior em atrasar, mas ele não é regulatório: seis meses sem gerar custam por volta de R$ 9.000 na conta dessa casa. Esse é o valor de antecipar qualquer sistema em seis meses, em qualquer ano, e o sistema mais tardio recupera esses meses no fim da vida útil do equipamento.\n\nSe existe uma urgência real neste momento, ela está no preço, não na legislação. Os módulos subiram cerca de 35% entre dezembro de 2025 e março de 2026, puxados pela alta do imposto de importação de 9,6% para 25%, e num sistema de 20 kWp isso pesa mais do que toda a vantagem regulatória somada.\n\n## A alavanca que vale mais do que o prazo\n\nO Fio B e o ICMS incidem sobre a mesma base: a energia compensada, o excedente injetado na rede e recuperado depois. A energia consumida no mesmo instante em que é gerada não passa por nenhum dos dois, porque nunca vira crédito e nunca sai de casa.\n\nCada kWh deslocado da coluna \"injetado\" para a coluna \"consumido na hora\" passa a valer, a partir de 2027, cerca de R$ 0,26 a mais. No sistema da simulação, elevar o autoconsumo simultâneo de 30% para 60% desloca 7.200 kWh por ano e vale por volta de **R$ 1.900 em 2027 e R$ 2.030 em 2028**. O payback sai de uma faixa de 5,1 a 6,0 anos para 4,6 a 5,4 anos, uma diferença de seis a sete meses.\n\nCompare com o item anterior. Antecipar a homologação vale cerca de R$ 1.000 uma única vez. Deslocar consumo vale quase o dobro disso por ano, e a conta cresce quando o Fio B chega a 90% em 2028. Mesmo se a meta de 60% for otimista e o resultado real ficar em 45%, o ganho anual continua maior do que a vantagem inteira de correr contra o calendário.\n\nUm detalhe contraintuitivo: dos R$ 1.900 anuais, cerca de dois terços vêm do ICMS e um terço do Fio B. Depois de 31 de dezembro de 2026, o principal motivo econômico para consumir a energia no momento em que ela é gerada deixa de ser o Fio B e passa a ser o imposto.\n\n[CHECKLIST:cargas-diurnas]\n\nParte dessas cargas custa zero para deslocar, porque é ajuste de temporizador: filtragem de piscina, aquecimento de água, máquina de lavar louça. Outra parte exige decisão de equipamento ou automação, como bomba de calor para piscina e carregador de veículo elétrico com programação. Tratar as duas categorias como a mesma coisa é o que faz esse tipo de recomendação soar vaga.\n\n## Quem está em obra: cronograma reverso e decisões de prancheta\n\nHomologar um sistema não é comprar equipamento. É um rito com prazos encadeados: parecer de acesso em até 15 dias corridos sem obras na rede ou 30 dias com obras, 120 dias para instalar e pedir a vistoria, e vistoria com troca de medidor em até 5 dias úteis no Grupo B. Somando dossiê, parecer, instalação e vistoria, o intervalo entre protocolar e homologar fica entre 45 e 90 dias em condições normais. Na hipótese conservadora, com folga para uma reprovação de parecer e para a fila de dezembro, a última data defensável para protocolar e ainda homologar dentro de 2026 fica **em torno de 30 de setembro**.\n\n[TABLE:cronograma-reverso]\n\nPara quem está construindo existe uma restrição que nenhum conteúdo sobre o tema costuma mencionar. A solicitação de acesso de microgeração é vinculada a uma unidade consumidora: sem ligação definitiva energizada não há o que protocolar, e a ligação provisória de obra normalmente não serve. A cadeia fica mais longa, com instalação elétrica concluída, pedido de ligação nova, vistoria e energização antes do pedido de acesso da geração. Na prática, a ligação definitiva precisa estar feita por volta de meados de setembro, o que exige a obra eletricamente completa em agosto. Quem ainda estiver em obra agora quase certamente homologa em 2027, e isso custa cerca de R$ 1.000, não a fortuna que a urgência de mercado sugere.\n\nQuem constrói também não tem histórico de faturas para dimensionar o sistema. Sem doze meses de conta, o dimensionamento sai de um inventário de cargas projetadas, e esse mesmo inventário determina a fração de autoconsumo simultâneo. Aí está a conexão que fecha o raciocínio: quem já mora na casa apenas mede o autoconsumo, enquanto quem está projetando **define** esse número, e define de graça. Decidir na planta que a bomba de calor da piscina roda das 10h às 16h, que o carregador do carro tem programação e que o reservatório de água quente acumula calor durante o dia não custa nada a mais. Depois da obra, cada item vira reforma.\n\nEm [Light Steel Frame](/atualidades/guia-definitivo-steel-frame-brasil), sistema construtivo industrializado que usa perfis de aço galvanizado como estrutura, essa antecipação é a lógica padrão: a estrutura é modelada digitalmente antes da obra, então inclinação das tesouras, pontos de fixação dos módulos, rota dos eletrodutos e posição do inversor entram no mesmo modelo que define o resto da casa. O [isolamento termoacústico](/atualidades/isolamento-termico-acustico-steel-frame) reduz a carga de climatização e portanto a potência necessária, o que importa mais agora: com o crédito valendo 72% da tarifa em vez de 92%, o custo de sobredimensionar praticamente dobrou.\n\nO funcionamento e o payback do sistema estão no nosso [guia de energia solar residencial](/atualidades/energia-solar-residencial), o quadro tributário de quem constrói no artigo sobre [eficiência energética e reforma tributária](/atualidades/eficiencia-energetica-reforma-tributaria), e a base de custo por metro quadrado no [levantamento de custo do Steel Frame](/atualidades/custo-steel-frame-m2-2026).\n\n## O que ainda é incerto\n\nQuatro pontos deste artigo dependem de decisões que ainda não foram tomadas.\n\nA prorrogação da isenção é decisão do governo estadual. Se São Paulo renovar o benefício, como fizeram Minas Gerais, Rio de Janeiro e Espírito Santo até 2032, a maior parte da diferença calculada aqui desaparece e a vantagem de antecipar cai para cerca de R$ 290.\n\nA regra que vale a partir de 2029 não existe. A Tomada de Subsídios nº 23/2025 da ANEEL vai definir a valoração das componentes tarifárias, com vigência prevista para 2029, e ninguém tem base para afirmar se ela será mais dura ou mais branda que os 90% de 2028.\n\nA Tarifa Branca compulsória acima de 1.000 kWh mensais mexe na variável central deste texto. Sob tarifa horária a energia do meio do dia fica mais barata, o que reduz o valor de consumir naquele horário. A direção líquida é ambígua e aponta para armazenamento, assunto que merece análise própria.\n\nPor fim, os valores em reais dependem da tarifa e do Fio B da sua distribuidora, que variam por área de concessão. As proporções entre as alavancas, que são o ponto deste artigo, se mantêm em toda a faixa. Os valores absolutos, não.\n\n[FAQ:faq-icms-solar]\n\n## Em resumo\n\nA isenção de ICMS paulista vence em 31 de dezembro de 2026 e o Fio B sobe para 75% em 1º de janeiro de 2027. Nenhum dos dois se prende à data de instalação. O fim da isenção pesa cerca de nove vezes mais que o degrau do Fio B e atinge todos os sistemas em operação, não apenas os novos. Antecipar a homologação vale por volta de R$ 1.000 na vida do sistema, o equivalente a vinte dias de payback, enquanto deslocar consumo para o horário de geração vale quase o dobro disso por ano. Para quem está construindo, essa segunda alavanca é decisão de projeto e não custa nada, o que a torna a única das duas realmente sob controle.\n\nA Berkahn oferece projeto e obra em Light Steel Frame e em sistemas híbridos. Não vendemos nem instalamos sistemas fotovoltaicos, e é por isso que conseguimos olhar essa decisão sem equipamento para empurrar. A proposta da Berkahn é entregar uma casa dimensionada, orientada e preparada para o sistema que fizer sentido no seu caso. Se você quer rodar esses números com os dados do seu projeto, fale com a gente.\n\n[CTA:cta-icms-solar]",
+ "components": {
+  "ctas": [
+   {
+    "id": "cta-icms-solar",
+    "label": "PRÓXIMO PASSO",
+    "title": "Quer rodar esses números no projeto da sua casa?",
+    "actionText": "Falar com a Berkahn",
+    "actionType": "dialog",
+    "description": "A Berkahn oferece projeto e obra em Light Steel Frame e sistemas híbridos. Não vendemos nem instalamos sistemas fotovoltaicos, o que nos deixa livres para dimensionar a casa em vez de vender equipamento: telhado na inclinação certa, infraestrutura elétrica pronta e consumo já reduzido pela envoltória.",
+    "defaultSegment": "residencial"
+   }
+  ],
+  "faqs": [
+   {
+    "id": "faq-icms-solar",
+    "title": "Perguntas frequentes sobre o ICMS e o Fio B em São Paulo",
+    "questions": [
+     {
+      "answer": "A energia compensada passa a ser tributada normalmente. Para uma casa que compensa 15.600 kWh por ano na Grande São Paulo, isso significa de R$ 2.500 a R$ 2.800 a mais por ano na conta, com a alíquota de 18% aplicada a residências acima de 200 kWh mensais.",
+      "question": "O que acontece quando a isenção de ICMS acabar em 2026?"
+     },
+     {
+      "answer": "Não. O parágrafo 4º do artigo 166 do Anexo I do RICMS paulista diz apenas que o benefício vigora até 31 de dezembro de 2026, sem cláusula preservando sistemas já instalados. A isenção incide sobre cada fatura, não sobre o equipamento.",
+      "question": "Se eu instalar em 2026, continuo isento de ICMS depois?"
+     },
+     {
+      "answer": "Não. O artigo 27 da Lei 14.300 fixa os percentuais por ano de faturamento, com a redação \"a partir de 2026\", \"a partir de 2027\". Quem homologa em 2026 paga 60% até dezembro, 75% em 2027 e 90% em 2028.",
+      "question": "Instalar agora trava o Fio B em 60%?"
+     },
+     {
+      "answer": "Sim, se a isenção não for prorrogada. O benefício vence para todos os sistemas em operação no estado, inclusive os ligados em 2019 ou 2023. Não existe direito adquirido no texto do decreto.",
+      "question": "Quem já tem energia solar também vai pagar ICMS?"
+     },
+     {
+      "answer": "A vantagem regulatória de homologar em outubro de 2026 em vez de abril de 2027 fica perto de R$ 1.000 ao longo de toda a vida do sistema, o equivalente a cerca de 20 dias de payback. É real, mas é a menor das alavancas disponíveis.",
+      "question": "Vale a pena correr para homologar ainda em 2026?"
+     },
+     {
+      "answer": "Em torno de 30 de setembro de 2026. Somando preparo do dossiê, parecer de acesso, instalação e vistoria, o intervalo entre protocolar e homologar fica entre 45 e 90 dias, e a hipótese conservadora reserva folga para reprovação de parecer e para a fila de dezembro.",
+      "question": "Qual a última data para protocolar e homologar ainda em 2026?"
+     },
+     {
+      "answer": "Só se a obra estiver eletricamente completa em agosto. A solicitação de acesso de microgeração é vinculada a uma unidade consumidora, então é preciso ter a ligação definitiva energizada antes de protocolar, e a ligação provisória de obra normalmente não serve.",
+      "question": "Estou construindo. Consigo homologar antes do fim do ano?"
+     }
+    ]
+   }
+  ],
+  "charts": [
+   {
+    "id": "o-que-pesa-2027",
+    "data": [
+     {
+      "name": "Degrau do Fio B, de 60% para 75%",
+      "valor": 290
+     },
+     {
+      "name": "Fim da isenção de ICMS",
+      "valor": 2650
+     }
+    ],
+    "type": "bar",
+    "title": "Quanto cada mudança custa por ano, em uma casa de 2.000 kWh mensais",
+    "config": {
+     "colors": [
+      "#F59E0B"
+     ],
+     "dataKeys": [
+      "valor"
+     ],
+     "xAxisKey": "name"
+    }
+   }
+  ],
+  "tables": [
+   {
+    "id": "dois-relogios",
+    "rows": [
+     [
+      "O que é",
+      "Isenção sobre a energia compensada",
+      "Cobrança progressiva sobre a energia compensada"
+     ],
+     [
+      "Base legal",
+      "Art. 166 do Anexo I do RICMS de São Paulo, §4º (Decreto 69.287/2024)",
+      "Lei 14.300/2022, art. 27"
+     ],
+     [
+      "O que muda",
+      "Vence em 31 de dezembro de 2026",
+      "Sobe de 60% para 75% em 1º de janeiro de 2027"
+     ],
+     [
+      "Trava pela data de instalação?",
+      "Não. Vence para todos os sistemas",
+      "Não. Escalona por ano de faturamento"
+     ],
+     [
+      "Peso no cenário simulado",
+      "R$ 2.500 a R$ 2.800 por ano",
+      "Cerca de R$ 290 por ano"
+     ]
+    ],
+    "caption": "Os dois prazos costumam ser citados como se fossem um só. Simulação para casa de 2.000 kWh mensais na Grande São Paulo.",
+    "headers": [
+     "Critério",
+     "Isenção de ICMS em SP",
+     "Fio B (Lei 14.300)"
+    ],
+    "highlightColumn": 1
+   },
+   {
+    "id": "comparativo-2026-2027",
+    "rows": [
+     [
+      "Meses dentro da isenção de ICMS",
+      "3 meses, de outubro a dezembro",
+      "Nenhum",
+      "R$ 670"
+     ],
+     [
+      "Vantagem na escada do Fio B",
+      "12 meses a 15 pontos percentuais",
+      "Nenhuma",
+      "R$ 290"
+     ],
+     [
+      "Vantagem regulatória total",
+      "Cerca de R$ 960",
+      "Referência",
+      "Perto de R$ 1.000"
+     ],
+     [
+      "Equivalente em payback",
+      "Cerca de 20 dias",
+      "Referência",
+      "20 dias"
+     ],
+     [
+      "Investimento do sistema",
+      "R$ 90.000 a 105.000",
+      "R$ 90.000 a 105.000",
+      "Sem diferença"
+     ]
+    ],
+    "caption": "Dois sistemas idênticos de 20 kWp. A vantagem de antecipar é regulatória e equivale a cerca de 1% do investimento.",
+    "headers": [
+     "Item",
+     "Homologa em out/2026",
+     "Homologa em abr/2027",
+     "Diferença"
+    ],
+    "highlightColumn": 3
+   },
+   {
+    "id": "cronograma-reverso",
+    "rows": [
+     [
+      "Preparo do dossiê: projeto elétrico, ART e memorial",
+      "5 a 15 dias",
+      "Estimativa operacional"
+     ],
+     [
+      "Parecer de acesso da distribuidora",
+      "15 dias sem obras na rede, 30 dias com obras",
+      "REN ANEEL 1.000/2021"
+     ],
+     [
+      "Instalação e pedido de vistoria",
+      "Até 120 dias após o parecer",
+      "REN ANEEL 1.000/2021"
+     ],
+     [
+      "Vistoria e troca do medidor no Grupo B",
+      "Até 5 dias úteis",
+      "REN ANEEL 1.000/2021"
+     ],
+     [
+      "Última data defensável para protocolar",
+      "30 de setembro de 2026",
+      "Soma conservadora das etapas acima"
+     ]
+    ],
+    "caption": "A soma operacional é estimativa, não prazo regulatório. Quem está construindo precisa da ligação definitiva energizada antes de protocolar.",
+    "headers": [
+     "Etapa",
+     "Prazo",
+     "Origem do prazo"
+    ],
+    "highlightColumn": 1
+   }
+  ],
+  "checklist": {
+   "id": "cargas-diurnas",
+   "items": [
+    {
+     "label": "Bomba de filtragem da piscina",
+     "description": "Custo zero para deslocar. É ajuste de temporizador, e costuma ser a carga contínua mais fácil de mover para a janela do meio do dia."
+    },
+    {
+     "label": "Aquecimento de água",
+     "description": "Custo zero quando há reservatório com volume suficiente para acumular calor durante o dia e entregar à noite."
+    },
+    {
+     "label": "Máquina de lavar louça e lavadora",
+     "description": "Custo zero. Praticamente todos os modelos atuais têm partida programada."
+    },
+    {
+     "label": "Bomba de calor da piscina",
+     "description": "Exige decisão de equipamento. É a maior carga de uma casa de alto padrão com piscina aquecida e a que mais muda a fração de autoconsumo."
+    },
+    {
+     "label": "Carregador de veículo elétrico",
+     "description": "Exige decisão de projeto. O ganho depende de o carro estar em casa durante o dia ou de haver programação de carga."
+    },
+    {
+     "label": "Resfriamento antecipado da casa",
+     "description": "Exige automação e envoltória com boa inércia térmica. Resfriar no fim da tarde, dentro da geração, reduz o pico da noite."
+    }
+   ],
+   "title": "Cargas que podem migrar para o horário de geração"
+  },
+  "timelines": [
+   {
+    "id": "escada-fio-b",
+    "title": "A escada do Fio B (Lei 14.300, art. 27)",
+    "milestones": [
+     {
+      "title": "Início da transição, 15%",
+      "number": 1,
+      "shortTitle": "2023",
+      "description": "Quem protocolou solicitação de acesso até 12 meses após a publicação da lei ficou de fora e mantém compensação integral até 2045. Os demais entram na escada."
+     },
+     {
+      "title": "30% do Fio B",
+      "number": 2,
+      "shortTitle": "2024",
+      "description": "Segundo degrau. O percentual vale para todos que estão no regime de transição, independentemente do ano em que conectaram o sistema."
+     },
+     {
+      "title": "45% do Fio B",
+      "number": 3,
+      "shortTitle": "2025",
+      "description": "Terceiro degrau da cobrança sobre a energia compensada."
+     },
+     {
+      "title": "60% do Fio B, o ano atual",
+      "number": 4,
+      "shortTitle": "2026",
+      "description": "Quem homologa agora paga 60% até dezembro. Não fica travado nesse percentual: em janeiro sobe junto com todo mundo."
+     },
+     {
+      "title": "75% do Fio B",
+      "number": 5,
+      "shortTitle": "2027",
+      "description": "Penúltimo degrau definido em lei, vigente a partir de 1º de janeiro de 2027."
+     },
+     {
+      "title": "90% do Fio B",
+      "number": 6,
+      "shortTitle": "2028",
+      "description": "Último percentual fixado pela Lei 14.300."
+     },
+     {
+      "title": "Regra do art. 17, ainda não definida",
+      "number": 7,
+      "shortTitle": "2029",
+      "description": "A ANEEL abriu a Tomada de Subsídios nº 23/2025 para definir a valoração das componentes tarifárias, com vigência prevista para 2029. A regra ainda não existe."
+     }
+    ]
+   }
+  ]
+ }
+}

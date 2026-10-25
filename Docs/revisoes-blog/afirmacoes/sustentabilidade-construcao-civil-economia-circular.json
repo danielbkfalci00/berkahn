@@ -1,0 +1,263 @@
+{
+ "slug": "sustentabilidade-construcao-civil-economia-circular",
+ "content": "A indústria da construção civil responde por 34% das emissões globais de CO₂, consome 32% de toda a energia produzida no mundo e gera cerca de um terço dos resíduos sólidos do planeta. Os números são do Global Status Report 2024-2025 do UNEP (Programa das Nações Unidas para o Meio Ambiente), o relatório mais abrangente publicado sobre o tema. No centro dessa equação está o concreto: o material mais consumido pela humanidade depois da água, com uma produção anual de 30 bilhões de toneladas.\n\nSustentabilidade na construção civil não pode ser discurso de vitrine. É uma variável técnica que influencia a escolha do sistema construtivo, o cálculo de fundação, a logística de obra e o custo real de um projeto. Este artigo reúne os dados que sustentam essa visão e apresenta, com fontes verificáveis, por que a forma como se constrói precisa mudar.\n\n[STATS:peso-construcao-civil]\n\n## O problema começa no cimento\n\nA produção de cimento emite entre 7% e 8% de todo o CO₂ gerado pela atividade humana, segundo o World Economic Forum e a Agência Internacional de Energia (IEA). Para colocar esse número em perspectiva, se a indústria cimenteira fosse um país, seria o terceiro maior emissor do mundo, atrás apenas da China e dos Estados Unidos.\n\nA maior parte dessa emissão não vem da queima de combustíveis. Vem de uma reação química chamada calcinação, que acontece no forno de produção do clínquer e libera CO₂ como subproduto inevitável. São aproximadamente 900 kg de CO₂ por tonelada de cimento produzido na média global. O Brasil, por conta de uma matriz energética mais limpa, tem um fator mais baixo: entre 564 e 610 kg por tonelada, segundo o SNIC e a Votorantim Cimentos. Ainda assim, o volume absoluto é significativo. O país é o quinto maior produtor e o quarto maior consumidor de cimento do mundo.\n\nExiste um detalhe técnico que costuma passar despercebido nas discussões sobre descarbonização: o processo de clinquerização é irreversível. Diferente de materiais como o aço, que pode ser derretido e reformado infinitas vezes sem perda de propriedades, o cimento não pode ser \"descimentado\". Uma vez endurecido, o concreto perde a capacidade de retornar ao estado original. Isso tem consequências profundas para qualquer tentativa de aplicar economia circular a edificações de concreto armado.\n\n## O Brasil gera 48 milhões de toneladas de resíduos de construção por ano\n\nSegundo o Panorama ABRELPE 2022, o Brasil coletou 48 milhões de toneladas de resíduos de construção e demolição (RCD) em 2021, o equivalente a 227 kg por habitante por ano. Esse volume representa entre 40% e 70% de todos os resíduos sólidos urbanos coletados pelos municípios brasileiros, de acordo com dados do SINIR e da Secretaria de Meio Ambiente do Estado de São Paulo.\n\nA composição desses resíduos reforça o problema: cerca de 63% são argamassa e concreto (classificados como Classe A pela Resolução CONAMA 307/2002), materiais teoricamente recicláveis. Na prática, a taxa de reciclagem de RCD no Brasil gira em torno de 16%, segundo a ABRECON (Associação Brasileira para Reciclagem de Resíduos da Construção). A título de comparação, a União Europeia recicla 88-89% de seus resíduos de construção, o Japão chega a 97%, e a Holanda atinge impressionantes 99,7%.\n\n[CHART:reciclagem-rcd-paises]\n\nA distância entre o que a legislação brasileira prevê e o que acontece na prática é enorme. Existem cerca de 360 usinas de reciclagem de RCD no país, 54% delas concentradas em São Paulo. São predominantemente microempresas e muitas operam abaixo da capacidade. O mercado de agregado reciclado no Brasil ainda enfrenta barreiras estruturais: falta de fiscalização, alta carga tributária e resistência cultural dos profissionais do setor.\n\n## Os limites da reciclagem de concreto\n\nA reciclagem de concreto existe e funciona para aplicações de menor exigência: bases de pavimentação, aterros e contrapisos. O problema surge quando a expectativa é transformar concreto demolido em concreto estrutural novo. A atualização da norma brasileira NBR 15116, publicada pela ABNT em 2021, foi um avanço importante ao permitir pela primeira vez o uso de agregados reciclados em concreto estrutural. No entanto, as restrições são severas: apenas a classe ARCO (com pelo menos 90% de fragmentos de cimento e rocha), limitada a 20% de substituição do agregado virgem, resistência máxima de 20 MPa e uso restrito a edificações de até dois pavimentos em classes de agressividade ambiental I e II.\n\nEssas limitações existem por motivos técnicos legítimos. O agregado reciclado de concreto tem porosidade mais alta, absorção de água maior e propriedades mecânicas mais variáveis do que o agregado natural. A contaminação por resíduos misturados compromete a qualidade do material final. O resultado, na maior parte dos casos, é o que a engenharia chama de downcycling: o material é reciclado, mas para uma aplicação de valor inferior à original.\n\nPesquisadores do MIT capturaram essa contradição de forma contundente no projeto Pixelframe, um sistema construtivo modular de concreto pré-moldado projetado especificamente para economia circular, desenvolvido em parceria com a Holcim e a Prologis. A equipe da professora Caitlin Mueller documentou que, quando o concreto estrutural é \"reciclado\" hoje, ele geralmente é triturado para servir como agregado. O estudo mostra que, em alguns cenários, esse processo pode ser mais intensivo em energia do que a produção de concreto novo. O Pixelframe consegue redução de 61% em CO₂ incorporado justamente porque foi projetado para reutilização integral das peças, sem necessidade de trituração.\n\nO ponto central é que a economia circular pressupõe manter materiais em ciclos de alto valor pelo maior tempo possível. O concreto, por sua natureza química, resiste a essa lógica.\n\n## A crise da areia que poucos conhecem\n\nA areia é o segundo recurso natural mais explorado do planeta depois da água, segundo o UNEP. A humanidade extrai 50 bilhões de toneladas por ano, volume suficiente para construir um muro de 27 metros de largura por 27 metros de altura ao redor de toda a circunferência da Terra. A construção civil consome a maior parte: concreto, argamassa e vidro dependem de areia como matéria-prima fundamental.\n\n[STATS:crise-areia]\n\nA demanda triplicou nas últimas duas décadas e cresce cerca de 6% ao ano, uma taxa que o próprio UNEP classifica como insustentável. A areia do deserto, abundante, não serve para construção porque seus grãos são arredondados demais para aderir ao cimento. A areia que serve vem de rios, praias e leitos marinhos, e sua extração destrói ecossistemas fluviais, erode margens, rebaixa lençóis freáticos e altera cursos d'água. Segundo a revista Nature, nas taxas atuais de extração, a areia de construção adequada pode se tornar escassa até 2050.\n\nNo Brasil, são extraídas 255 milhões de toneladas de areia natural por ano, sendo 68% destinadas à construção civil. A pressão sobre os recursos hídricos, as restrições ambientais para licenciamento de dragas e o aumento de preço do material já afetam canteiros de obra, especialmente na região metropolitana de São Paulo. A construção que depende estruturalmente de areia e concreto enfrenta uma tendência de custos crescentes.\n\n## Como o Light Steel Frame muda essa equação\n\nO [Light Steel Frame (LSF)](/atualidades/guia-definitivo-steel-frame-brasil) é um sistema construtivo industrializado que utiliza perfis de aço galvanizado como estrutura, fechados externamente com placas cimentícias e internamente com gesso acartonado. É uma construção a seco: não usa argamassa, não precisa de cura, consome uma fração mínima de água e gera resíduos residuais.\n\nO contraste com a [construção convencional em alvenaria](/atualidades/steel-frame-vs-alvenaria) se sustenta em dados de análise de ciclo de vida (LCA). Um estudo publicado no Sustainability Journal por Abouhamad e Abu-Hamd (2020) comparou as emissões de CO₂ e a energia incorporada de edificações em Steel Frame versus concreto armado convencional. Os resultados são expressivos: o LSF emite 180,41 kg de CO₂ equivalente por metro quadrado construído, contra 600 a 850 kg para concreto armado. A energia incorporada segue a mesma proporção: 2,27 GJ/m² para o LSF contra 11,6 GJ/m² para o concreto, uma diferença de 75%.\n\n[CHART:co2-emissoes-m2]\n\nO consumo de água talvez seja o contraste mais radical. Segundo dados compilados pela Obra7, uma construção convencional em alvenaria consome aproximadamente 500 litros de água por metro quadrado. Uma edificação em Steel Frame consome cerca de 5 litros por metro quadrado, uma redução de aproximadamente 99%. Para projetos residenciais de 200 a 400 m², a economia total de água alcança centenas de milhares de litros por obra.\n\nO desperdício de material é outro ponto de divergência significativa. A construção convencional brasileira desperdiça entre 8% e 30% dos materiais comprados, podendo chegar a 40% quando se incluem retrabalhos, segundo pesquisa da Engenharia Compartilhada e dados do SINDUSCON. No LSF, o desperdício fica entre 2% e 5%, porque os perfis chegam ao canteiro cortados com precisão milimétrica conforme projeto. Os resíduos gerados são predominantemente sucata metálica, 100% reciclável. Uma casa de 185 m² em Steel Frame gera menos de um metro cúbico de resíduos metálicos.\n\nO peso da edificação também importa do ponto de vista ambiental. Uma construção em LSF pesa entre 65 e 250 kg por metro quadrado (incluindo acabamentos), contra 800 a 1.500 kg na construção convencional. Estruturas mais leves permitem fundações menores, o que significa menos escavação, menos concreto nas fundações e menos impacto no solo. Em muitos casos, um radier simples substitui sapatas profundas, com economia de até 30%. Esse impacto na fundação é apenas uma das [Steel Frame vs Alvenaria: o comparativo definitivo](/atualidades/steel-frame-vs-alvenaria) que se traduzem em redução real de custo e prazo.\n\n[TABLE:concreto-vs-lsf-sustentabilidade]\n\n## Economia circular por design\n\nA diferença mais profunda entre o LSF e a construção em concreto não está no canteiro de obras, mas no fim de vida da edificação. O concreto armado é unido por reações químicas irreversíveis. Demolir uma estrutura de concreto produz entulho, que na melhor hipótese será triturado e usado como base de pavimentação. O Steel Frame utiliza fixadores mecânicos: parafusos e conectores que permitem desmontar a estrutura sem destruí-la.\n\nEssa característica tem nome na engenharia de ciclo de vida: Design para Desmontagem, ou Design for Disassembly (DfD). Protótipos com princípios de DfD documentam que até 83% das paredes e tetos em Steel Frame podem ser desmontados e relocados, gerando menos de 1% da massa total da edificação como resíduo. A Light Steel Frame Association do Reino Unido registra que o aço estrutural de edificações atinge taxas de reciclagem e reutilização de até 99%.\n\nO aço é, de fato, o material que melhor se encaixa no conceito de economia circular na construção. A World Steel Association confirma que o aço pode ser reciclado repetidamente, indefinidamente, sem qualquer perda de suas propriedades intrínsecas. O Instituto Aço Brasil corrobora: o aço é 100% reciclável e pode ser reciclado infinitas vezes sem perder qualidade. Para cada tonelada de sucata reciclada, 1,5 tonelada de CO₂ é evitada. A Gerdau, maior recicladora de aço da América Latina, produz 73% do seu aço a partir de sucata metálica.\n\nGlobalmente, cerca de 630 milhões de toneladas de aço são recicladas por ano, prevenindo 950 milhões de toneladas de emissões de CO₂. No contexto das certificações verdes, o LSF contribui diretamente para obtenção de créditos em sistemas como LEED (conteúdo reciclado, gestão de resíduos, EPDs), AQUA-HQE, EDGE e o Selo Casa Azul da Caixa, que inclusive oferece desconto de 0,25% a 1% nas taxas de financiamento para edificações certificadas.\n\n## O mercado de carbono vai acelerar essa transição\n\nEm dezembro de 2024, o Brasil sancionou a Lei 15.042, que cria o Sistema Brasileiro de Comércio de Emissões (SBCE). Empresas com emissões superiores a 10.000 toneladas de CO₂ equivalente por ano passarão a ser obrigadas a reportar e, eventualmente, compensar suas emissões. A construção civil está entre os cinco setores mais emissores identificados pela regulamentação. As multas previstas chegam a 3% da receita bruta da empresa (4% para reincidentes), com implementação completa esperada entre 2026 e 2027.\n\n[NORMS:regulacao-carbono]\n\nNa Europa, o Carbon Border Adjustment Mechanism (CBAM) da União Europeia entrou em vigor em janeiro de 2026 e cobre diretamente cimento, ferro e aço. Importadores europeus agora pagam certificados CBAM vinculados ao preço das permissões do EU ETS, atualmente entre 70 e 100 euros por tonelada de CO₂. A indústria brasileira de cimento, que projeta neutralidade de carbono apenas para 2050, sentirá esses efeitos progressivamente à medida que a precificação de carbono se materializar também no mercado doméstico.\n\nPara quem planeja construir nos próximos anos, a implicação prática é direta: o [custo real da construção convencional em concreto](/atualidades/custo-steel-frame-m2-2026) tende a subir, porque o carbono incorporado nos materiais passará a ter preço. Sistemas construtivos com menor pegada de carbono, como a construção industrializada em Steel Frame, terão vantagem competitiva crescente. O arcabouço regulatório brasileiro, com a publicação da [NBR 16970 e demais normas técnicas do LSF](/atualidades/normas-light-steel-frame-brasil), está pronto para suportar essa transição.\n\n## Perguntas frequentes\n\n[FAQ:faq-sustentabilidade-construcao]\n\n## Construir com responsabilidade é uma decisão de projeto\n\nOs dados apresentados neste artigo não existem para demonizar o concreto. O concreto é e continuará sendo um material importante para a infraestrutura global. O ponto é diferente: existe uma distância relevante entre reconhecer os limites ambientais de um material e escolher ignorá-los por inércia. Quem está planejando construir hoje tem acesso a alternativas tecnicamente comprovadas, ambientalmente superiores e economicamente competitivas.\n\nA Berkahn tem o Light Steel Frame como sistema principal porque acredita que construção de alto padrão e responsabilidade ambiental são a mesma conversa. Se você está avaliando um projeto residencial, comercial ou industrial e quer entender como a construção industrializada se aplica ao seu caso, entre em contato com a nossa equipe de engenharia.\n\n[CTA:cta-sustentabilidade-orcamento]",
+ "components": {
+  "ctas": [
+   {
+    "id": "cta-sustentabilidade-orcamento",
+    "label": "PRÓXIMO PASSO",
+    "title": "Construa com responsabilidade ambiental comprovada",
+    "actionText": "Solicitar Orçamento",
+    "actionType": "dialog",
+    "description": "Light Steel Frame é construção de alto padrão com 75% menos CO₂, 99% menos consumo de água e materiais 100% recicláveis. Fale com nossa equipe de engenharia e entenda como o sistema se aplica ao seu projeto residencial ou comercial.",
+    "defaultSegment": "residencial"
+   }
+  ],
+  "faqs": [
+   {
+    "id": "faq-sustentabilidade-construcao",
+    "title": "Perguntas frequentes sobre sustentabilidade na construção civil",
+    "questions": [
+     {
+      "answer": "Sim. Segundo estudo de Abouhamad e Abu-Hamd (2020), edificações em Steel Frame emitem até 75% menos CO₂ por metro quadrado e consomem 99% menos água do que construções convencionais em alvenaria. O aço é 100% reciclável sem perda de propriedades, e a construção a seco gera 80% a 90% menos resíduos.",
+      "question": "O Steel Frame é sustentável?"
+     },
+     {
+      "answer": "A produção de cimento responde por 7% a 8% das emissões globais de CO₂. No Brasil, são emitidos 564 a 610 kg de CO₂ por tonelada de cimento. O setor de edificações como um todo contribui com 34% das emissões globais, segundo o UNEP Global Status Report 2024-2025.",
+      "question": "Qual o impacto ambiental do concreto?"
+     },
+     {
+      "answer": "Sim. Segundo a World Steel Association e o Instituto Aço Brasil, o aço pode ser reciclado repetidamente sem perda de propriedades mecânicas. Globalmente, cerca de 630 milhões de toneladas de aço são recicladas por ano, prevenindo 950 milhões de toneladas de emissões de CO₂.",
+      "question": "O aço pode ser reciclado infinitamente?"
+     },
+     {
+      "answer": "O Light Steel Frame gera entre 2% e 5% de desperdício, contra 8% a 30% (podendo chegar a 40%) na construção convencional. Uma casa de 185 m² em LSF produz menos de 1 metro cúbico de resíduo metálico, todo reciclável.",
+      "question": "Qual sistema construtivo gera menos resíduos?"
+     },
+     {
+      "answer": "É a aplicação dos princípios de reduzir, reutilizar e reciclar ao ciclo de vida de edificações. Significa projetar para que materiais e componentes mantenham valor ao longo de múltiplos ciclos de uso, em vez de serem descartados após uma única utilização. O Steel Frame, com conexões mecânicas e aço infinitamente reciclável, exemplifica esse conceito.",
+      "question": "O que é economia circular na construção civil?"
+     },
+     {
+      "answer": "Sim. O sistema contribui para créditos em LEED (conteúdo reciclado, gestão de resíduos C&D), AQUA-HQE (seleção integrada de produtos sustentáveis), EDGE e Selo Casa Azul da Caixa, que oferece descontos de 0,25% a 1% nas taxas de financiamento habitacional para edificações certificadas.",
+      "question": "O Steel Frame facilita certificações verdes?"
+     }
+    ]
+   }
+  ],
+  "norms": [
+   {
+    "code": "Lei 15.042/2024",
+    "year": "2024",
+    "title": "Sistema Brasileiro de Comércio de Emissões (SBCE)",
+    "description": "Sancionada em dezembro de 2024, cria o mercado regulado de carbono no Brasil. Empresas com emissões acima de 10.000 toneladas de CO₂-eq/ano passarão a reportar e compensar emissões. Multas chegam a 3% da receita bruta (4% para reincidentes). A construção civil está entre os cinco setores mais emissores identificados. Implementação completa entre 2026 e 2027."
+   },
+   {
+    "code": "CBAM (UE)",
+    "year": "2026",
+    "title": "Carbon Border Adjustment Mechanism — União Europeia",
+    "description": "Em vigor desde janeiro de 2026, taxa importações com base no carbono incorporado dos produtos. Cobre diretamente cimento, ferro e aço. Importadores europeus pagam certificados vinculados ao preço do EU ETS (70 a 100 euros por tonelada de CO₂). Afeta progressivamente a indústria brasileira de cimento, que projeta neutralidade de carbono apenas para 2050."
+   },
+   {
+    "code": "NBR 15116",
+    "year": "2021",
+    "title": "Agregados reciclados em concreto estrutural",
+    "description": "Atualização de 2021 permitiu pela primeira vez o uso de agregados reciclados em concreto estrutural no Brasil. Restrições: apenas classe ARCO (≥ 90% de fragmentos de cimento e rocha), até 20% de substituição do agregado virgem, resistência máxima de 20 MPa e uso em edificações de até 2 pavimentos. Reflete os limites técnicos da reciclagem de concreto."
+   },
+   {
+    "code": "ISO 14040 / 14044",
+    "title": "Análise de Ciclo de Vida (LCA)",
+    "description": "Padrões internacionais para avaliação do impacto ambiental de produtos e sistemas ao longo de todo o ciclo de vida — da extração de matérias-primas ao fim de vida. Base metodológica dos estudos comparativos entre Steel Frame e concreto armado citados neste artigo, e referência obrigatória para Declarações Ambientais de Produto (EPDs) usadas em certificações como LEED e AQUA-HQE."
+   }
+  ],
+  "stats": [
+   {
+    "id": "peso-construcao-civil",
+    "stats": [
+     {
+      "icon": "Factory",
+      "label": "Das emissões globais de CO₂",
+      "value": "34%",
+      "description": "Setor de edificações segundo UNEP Global Status Report 2024-2025"
+     },
+     {
+      "icon": "Zap",
+      "label": "Da energia produzida no mundo",
+      "value": "32%",
+      "description": "Consumida por construção e operação de edificações"
+     },
+     {
+      "icon": "Building2",
+      "label": "Toneladas de concreto/ano",
+      "value": "30 bi",
+      "description": "Material mais consumido pela humanidade depois da água"
+     },
+     {
+      "icon": "Mountain",
+      "label": "Toneladas de areia/ano",
+      "value": "50 bi",
+      "description": "Segundo recurso natural mais explorado do planeta (UNEP)"
+     }
+    ],
+    "title": "O peso da construção civil no planeta"
+   },
+   {
+    "id": "crise-areia",
+    "stats": [
+     {
+      "icon": "Globe2",
+      "label": "Muro ao redor da Terra",
+      "value": "27 m",
+      "description": "Volume anual de areia extraída daria para construir um muro de 27m × 27m em toda a circunferência terrestre"
+     },
+     {
+      "icon": "TrendingUp",
+      "label": "Crescimento da demanda ao ano",
+      "value": "6%",
+      "description": "Taxa que o próprio UNEP classifica como insustentável"
+     },
+     {
+      "icon": "Truck",
+      "label": "Toneladas/ano no Brasil",
+      "value": "255 mi",
+      "description": "Extração de areia natural, sendo 68% para a construção civil"
+     },
+     {
+      "icon": "AlertTriangle",
+      "label": "Escassez projetada",
+      "value": "2050",
+      "description": "Areia de construção adequada pode se tornar escassa nas taxas atuais (revista Nature)"
+     }
+    ],
+    "title": "A crise da areia em números"
+   }
+  ],
+  "charts": [
+   {
+    "id": "reciclagem-rcd-paises",
+    "data": [
+     {
+      "name": "Brasil",
+      "Reciclagem": 16
+     },
+     {
+      "name": "EUA",
+      "Reciclagem": 30
+     },
+     {
+      "name": "União Europeia",
+      "Reciclagem": 88
+     },
+     {
+      "name": "Japão",
+      "Reciclagem": 97
+     },
+     {
+      "name": "Holanda",
+      "Reciclagem": 99.7
+     }
+    ],
+    "type": "bar",
+    "title": "Taxa de reciclagem de resíduos de construção e demolição (%)",
+    "config": {
+     "colors": [
+      "#16A34A"
+     ],
+     "dataKeys": [
+      "Reciclagem"
+     ],
+     "xAxisKey": "name"
+    }
+   },
+   {
+    "id": "co2-emissoes-m2",
+    "data": [
+     {
+      "name": "Light Steel Frame",
+      "CO₂ por m²": 180
+     },
+     {
+      "name": "MIT Pixelframe (concreto modular)",
+      "CO₂ por m²": 234
+     },
+     {
+      "name": "Concreto armado (mínimo)",
+      "CO₂ por m²": 600
+     },
+     {
+      "name": "Concreto armado (máximo)",
+      "CO₂ por m²": 850
+     }
+    ],
+    "type": "bar",
+    "title": "Emissões de CO₂ por m² construído (kg CO₂-eq)",
+    "config": {
+     "colors": [
+      "#16A34A"
+     ],
+     "dataKeys": [
+      "CO₂ por m²"
+     ],
+     "xAxisKey": "name"
+    }
+   }
+  ],
+  "tables": [
+   {
+    "id": "concreto-vs-lsf-sustentabilidade",
+    "rows": [
+     [
+      "Emissões de CO₂ por m²",
+      "180 kg CO₂-eq",
+      "600 a 850 kg CO₂-eq",
+      "Abouhamad & Abu-Hamd, Sustainability Journal (2020)"
+     ],
+     [
+      "Energia incorporada por m²",
+      "2,27 GJ",
+      "11,6 GJ",
+      "Abouhamad & Abu-Hamd (2020)"
+     ],
+     [
+      "Consumo de água por m²",
+      "≈ 5 litros",
+      "≈ 500 litros",
+      "Compilação Obra7"
+     ],
+     [
+      "Desperdício de material",
+      "2% a 5%",
+      "8% a 30% (até 40% com retrabalho)",
+      "Engenharia Compartilhada / SINDUSCON"
+     ],
+     [
+      "Peso da edificação por m²",
+      "65 a 250 kg",
+      "800 a 1.500 kg",
+      "Análise de ciclo de vida (LCA)"
+     ],
+     [
+      "Reciclabilidade do material",
+      "Aço 100% reciclável infinitas vezes",
+      "Concreto: downcycling limitado",
+      "World Steel Association / Instituto Aço Brasil"
+     ],
+     [
+      "Fim de vida (desmontagem)",
+      "Até 83% reutilizável (DfD)",
+      "Demolição gera entulho",
+      "Light Steel Frame Association (UK)"
+     ]
+    ],
+    "caption": "Light Steel Frame vs. Concreto/Alvenaria — impacto ambiental",
+    "headers": [
+     "Métrica",
+     "Light Steel Frame",
+     "Concreto / Alvenaria",
+     "Fonte"
+    ],
+    "highlightColumn": 1
+   }
+  ]
+ }
+}

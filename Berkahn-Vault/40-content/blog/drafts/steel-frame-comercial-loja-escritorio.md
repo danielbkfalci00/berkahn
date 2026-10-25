@@ -1,7 +1,7 @@
 ---
 tipo: draft-content
 criado: 2026-09-06
-atualizado: 2026-09-06
+atualizado: 2026-10-20
 tags:
   - project/blog
   - status/draft
@@ -24,7 +24,7 @@ palavras_chave:
   - prazo de obra comercial
   - cub comercial 2026
 category: Mercado e Custos
-read_time: 9 min
+read_time: 7 min
 author: Equipe Berkahn
 answer_summary: "Em obra comercial de pequeno e médio porte, o preço por metro quadrado decide menos que o tempo de ocupação que a obra consome. No comparativo apresentado no CONTECC de 2021, o Light Steel Frame levou 58 dias contra 96 da alvenaria no mesmo projeto, com custo total 41,30% maior. Aplicando o preço médio pedido de locação comercial em São Paulo, R$ 61,74 por metro quadrado ao mês pelo FipeZAP de julho de 2026, os 38 dias economizados em um ponto de 150 m² valem cerca de R$ 11,8 mil, ou 17% da diferença de custo entre os dois sistemas. O que fecha a conta é o faturamento do ponto parado, não o aluguel evitado."
 contextos_aplicados:
@@ -34,83 +34,73 @@ contextos_aplicados:
 material_visual_slug: cover.webp
 ---
 
-Quem vai abrir uma loja, montar um escritório ou instalar uma clínica faz uma conta antes de escolher o sistema construtivo. Se a obra terminar mais cedo, quantos meses de aluguel deixam de ser pagos no ponto atual. A conta é razoável e o raciocínio está certo. O resultado dela quase nunca é o que se espera.
+Em obra comercial, o aluguel evitado pelo prazo mais curto não paga a diferença de custo entre sistemas. Num comparativo acadêmico que mediu prazo e custo no mesmo projeto, o Light Steel Frame terminou 38 dias antes da alvenaria e custou R$ 69,4 mil a mais. Ao preço médio pedido de locação comercial em São Paulo, R$ 61,74 por m² ao mês no FipeZAP de julho de 2026, esses 38 dias valem cerca de R$ 11,8 mil num ponto de 150 m², ou 17% da diferença. O que fecha a conta é o faturamento do ponto parado, não o aluguel.
 
-Nós fizemos essa conta com os únicos números públicos que existem para as duas pontas. Em um comparativo acadêmico que mediu prazo e custo no mesmo projeto, o Light Steel Frame, sistema construtivo que usa perfis leves de aço galvanizado formados a frio como estrutura e placas como fechamento, terminou 38 dias antes da alvenaria convencional. Ao preço médio pedido de locação comercial em São Paulo, esses 38 dias valem cerca de R$ 11,8 mil em um ponto de 150 m². A diferença de custo entre os dois sistemas, no mesmo caso, foi de R$ 69,4 mil. O aluguel evitado cobre por volta de 17% dela. Isso não derruba o argumento do prazo. Muda qual variável sustenta o argumento, e é essa troca que decide a obra.
+Quem vai abrir loja, escritório ou clínica costuma contar os meses de aluguel que deixa de pagar se a obra terminar mais cedo. O raciocínio está certo e o resultado quase nunca é o esperado. Isso não derruba o argumento do prazo, muda a variável que o sustenta.
 
 [STATS:obra-comercial-2026]
 
 ## Por que o preço por metro quadrado de casa não orça uma loja
 
-Existem dois motivos, e os dois são normativos.
+Primeiro, a ABNT NBR 15575 é de edificações habitacionais. Loja, escritório e clínica respondem a acessibilidade pela NBR 9050:2020 e a segurança contra incêndio pelo Decreto Estadual 69.118, de dezembro de 2024, que revogou o 63.911/2018 ainda citado como vigente. Já a NBR 16970, de maio de 2022, tem escopo declarado de edificações residenciais e não residenciais de até dois pavimentos, o que cobre loja de rua, showroom, escritório, clínica e sede administrativa, como mostra o guia de [certificações e normas](/atualidades/certificacoes-steel-frame).
 
-O primeiro é que a norma citada como referência de desempenho não responde por obra comercial. A ABNT NBR 15575 é de edificações habitacionais, e a versão vigente, a 15575-1:2024, equivale ao texto de 2021 com a Emenda 1 de janeiro de 2024. Uma loja, um escritório ou uma clínica respondem a outro conjunto. Acessibilidade pela NBR 9050:2020 na Versão Corrigida de 2021, e segurança contra incêndio pelo Decreto Estadual paulista 69.118, de 9 de dezembro de 2024, que revogou o antigo 63.911/2018 ainda citado como se estivesse em vigor por boa parte do material que circula. Há também uma norma de Light Steel Frame que trata o caso de forma direta. A NBR 16970, aprovada em maio de 2022 em três partes, tem escopo declarado de edificações residenciais e não residenciais de até dois pavimentos, o que cobre exatamente loja de rua, showroom, escritório, clínica e sede administrativa. É um dado de escopo que muda a conversa, e ele complementa o que já está no material sobre [certificações e normas do sistema](/atualidades/certificacoes-steel-frame).
-
-O segundo motivo é que o único baseline público de custo de obra comercial no Brasil mede outro objeto. O CUB, custo unitário básico publicado todo mês pelos Sinduscons, tem projetos-padrão comerciais definidos pela ABNT NBR 12721. O CSL-8, que é o mais citado, está descrito na norma como edifício comercial com lojas e salas, garagem, pavimento térreo e oito pavimentos-tipo, com 64 vagas cobertas e elevadores. Nada disso se parece com uma loja de rua de 150 m². E o próprio texto da NBR 12721 lista o que o CUB não inclui, onde aparecem fundações, elevadores, ar-condicionado, ventilação e exaustão, obras e serviços complementares, projetos e remuneração do construtor. São justamente os itens que dominam o orçamento de um ponto comercial.
+Segundo, o único baseline público de obra comercial mede outro objeto. O CUB tem projetos-padrão comerciais pela NBR 12721, e o CSL-8, o mais citado, é um edifício de oito pavimentos com garagem e elevadores. A própria norma lista o que o CUB não inclui: fundações, elevadores, ar-condicionado, exaustão, projetos e remuneração do construtor, justamente os itens que dominam um ponto comercial.
 
 [TABLE:cub-comercial-sp-2026]
 
-A leitura dessa tabela é contraintuitiva e vale dizer em voz alta. Na referência de agosto de 2026 do Sinduscon-SP, o CUB do prédio comercial de oito pavimentos sai a R$ 2.235,26 por metro quadrado e o da casa unifamiliar a R$ 2.686,65. Prédio comercial não é mais barato que casa. Os dois índices medem objetos diferentes e excluem itens diferentes, e transportar qualquer um deles para o orçamento de uma loja é erro de método. Conferimos a linha do R-8 no site do próprio Sinduscon-SP, que publica R$ 2.235,58 com variação de 0,19% no mês, e o valor bate centavo a centavo com a tabela reproduzida. Para o baseline residencial, que tem outra função, o levantamento de [preços por metro quadrado em 2026](/atualidades/quanto-custa-construir-steel-frame-precos-m2-2026) continua sendo a referência.
+Na referência de agosto de 2026 do Sinduscon-SP, o CUB do prédio comercial de oito pavimentos sai a R$ 2.235,26 por m² e o da casa unifamiliar a R$ 2.686,65. Prédio comercial não é mais barato que casa, e transportar qualquer índice para a loja é erro de método. Para o baseline residencial, o levantamento de [preços por metro quadrado](/atualidades/quanto-custa-construir-steel-frame-precos-m2-2026) continua sendo a referência.
 
 ## A conta do aluguel, com as variáveis abertas
 
-A fórmula cabe em uma linha e serve para qualquer sistema construtivo. Meses de obra economizados vezes custo mensal de ocupação precisa alcançar a diferença de custo entre os sistemas. Se o lado esquerdo não chega ao lado direito, o prazo não pagou a diferença.
+A fórmula vale para qualquer sistema: meses de obra economizados vezes custo mensal de ocupação precisa alcançar a diferença de custo entre os sistemas.
 
-O prazo vem do estudo comparativo apresentado no CONTECC de 2021 por pesquisadores do Centro Universitário Campo Real, que orçou e cronogramou o mesmo projeto nos dois sistemas. Foram 58 dias em Light Steel Frame contra 96 dias em alvenaria convencional, com custo total de R$ 236.713,36 contra R$ 167.270,95, uma diferença de 41,30%. Três ressalvas antes de qualquer uso desse número. É um caso único, é residencial, é do Paraná, e os preços são de abril de 2021 levantados no SINAPI-PR. Além disso, a escolha de cobertura do caso, telha metálica de um lado e fibrocimento com estrutura de madeira do outro, infla parte da diferença. O número serve como ordem de grandeza declarada, nunca como orçamento, e não deve ser multiplicado por metragem para virar preço.
+O prazo vem do estudo apresentado no CONTECC de 2021 pelo Centro Universitário Campo Real, que orçou e cronogramou o mesmo projeto nos dois sistemas: 58 dias em LSF contra 96 em alvenaria, com custo de R$ 236.713,36 contra R$ 167.270,95, diferença de 41,30%. Três ressalvas: é caso único, residencial e do Paraná, com preços de abril de 2021 do SINAPI-PR, e a cobertura (telha metálica de um lado, fibrocimento com madeira do outro) infla parte da diferença. Serve como ordem de grandeza, nunca como orçamento, e não deve ser multiplicado por metragem.
 
-O custo mensal de ocupação vem do Índice FipeZAP de Venda e Locação Comercial. Na referência de julho de 2026, o preço médio pedido de locação comercial foi de R$ 61,74 por metro quadrado ao mês em São Paulo e R$ 53,68 no Brasil. É preço pedido em anúncio, de imóveis comerciais de até 200 m², em dez cidades, com amostra dominada por sala e conjunto comercial. Não é contrato fechado e não é aluguel de loja de rua.
+O custo mensal vem do Índice FipeZAP de Venda e Locação Comercial: R$ 61,74 por m² ao mês em São Paulo e R$ 53,68 no Brasil, em julho de 2026. É preço pedido em anúncio, de imóveis de até 200 m², em dez cidades, com amostra de salas e conjuntos. Não é contrato fechado nem loja de rua.
 
 [TABLE:ponto-equilibrio-ocupacao]
 
-Com 38 dias economizados, ou cerca de 1,27 mês, o custo mensal de ocupação precisaria superar R$ 54 mil para que o prazo sozinho pagasse a diferença de custo daquele caso. Em um ponto de 150 m², isso equivale a R$ 364 por metro quadrado ao mês, quase seis vezes o preço pedido médio de São Paulo. Aluguel-base nenhum chega lá.
+Com 38 dias, ou cerca de 1,27 mês, o custo mensal precisaria superar R$ 54 mil para o prazo pagar sozinho a diferença do caso. Num ponto de 150 m² seriam R$ 364 por m² ao mês, quase seis vezes o preço pedido médio de São Paulo. Aluguel-base nenhum chega lá.
 
-Duas advertências de escopo, e as duas são o que separa conta honesta de conta bonita. A primeira é que aluguel-base não é custo de ocupação. Faltam condomínio, IPTU, fundo de promoção e, em shopping, o aluguel percentual sobre vendas. Não existe valor público confiável para essas parcelas, então elas ficam nomeadas e fora da conta em vez de estimadas. A segunda é a carência de obra. Não existe carência legal, porque o artigo 54 da Lei 8.245/1991 põe a relação entre lojista e empreendedor de shopping na livre pactuação, e as faixas de 30 a 60 ou de 60 a 90 dias que circulam vêm de material comercial sem citação de origem. Por isso a conta acima se sustenta apenas com o aluguel do ponto atual.
-
-A forma de raciocínio é a mesma que já aplicamos ao lado residencial em [construir ou comprar pronto na Grande São Paulo](/atualidades/construir-ou-comprar-pronto-numeros-grande-sp), com um denominador diferente. Lá a pergunta é quanto se economiza no imóvel. Aqui é quantos meses de operação a obra consome.
+Duas advertências separam conta honesta de conta bonita. Aluguel-base não é custo de ocupação: faltam condomínio, IPTU, fundo de promoção e, em shopping, o aluguel percentual, sem valor público confiável, então ficam nomeados e fora da conta. E não existe carência legal de obra, porque o artigo 54 da Lei 8.245/1991 deixa a relação entre lojista e shopping à livre pactuação. As faixas de 30 a 60 ou de 60 a 90 dias que circulam não citam origem.
 
 ## O que realmente paga o mês economizado
 
-Se o aluguel evitado cobre por volta de um sexto da diferença, alguma outra coisa cobre o resto, e essa coisa é o faturamento do ponto. Um mês a mais de obra em uma loja não é um mês de aluguel. É um mês de vendas que não aconteceram, e na maioria dos negócios de varejo e de serviço a receita mensal do ponto é bem maior que o aluguel dele. Quando o denominador deixa de ser o metro quadrado e passa a ser o mês de operação, a decisão muda de mão. Sai do orçamentista e vai para quem conhece o faturamento.
+Se o aluguel cobre cerca de um sexto da diferença, o resto é o faturamento do ponto. Um mês a mais de obra não é um mês de aluguel, é um mês de vendas que não aconteceram, e a receita mensal costuma ser bem maior que o aluguel. A decisão sai do orçamentista e vai para quem conhece o faturamento.
 
-Existe um detalhe jurídico que fecha esse argumento, porque ele elimina a saída de deixar o problema para depois. Em 2019 o Superior Tribunal de Justiça julgou o REsp 1.750.233, na 3ª Turma, sob relatoria da ministra Nancy Andrighi. O caso era de um lojista que contratou ponto em um shopping paulista que nunca foi inaugurado. O tribunal negou lucros cessantes justamente porque a atividade empresarial não tinha começado, rejeitando lucro hipotético, remoto ou presumido. A leitura prática é direta. O mês perdido de um negócio que ainda não abriu não vira indenização depois. Ele é custo afundado, decidido lá atrás, na escolha de projeto e de sistema construtivo. Vale registrar que a decisão descreve aquele caso e não vira regra geral sobre atraso de obra.
+O STJ fechou a saída de deixar o problema para depois. No REsp 1.750.233, de 2019, o lojista contratou ponto em shopping que nunca foi inaugurado, e a 3ª Turma, sob a ministra Nancy Andrighi, negou lucros cessantes porque a atividade não tinha começado, rejeitando lucro hipotético ou presumido. O mês perdido de um negócio que não abriu não vira indenização: é custo afundado, decidido na escolha de projeto e de sistema. A decisão descreve aquele caso e não é regra geral sobre atraso.
 
-Há ainda uma distinção que muda quem deveria fazer essa conta e quem não deveria. Reajuste contratual, inflação e preço de mercado são três números diferentes, e em 2026 eles estão bem afastados. Em doze meses até agosto, o IGP-M acumulou 2,16% pela FGV. O IPCA acumulou 4,44% em doze meses até julho pelo IBGE. O preço pedido de locação comercial subiu 11,26% no Brasil pelo FipeZAP no mesmo intervalo de doze meses até julho. Quem tem contrato antigo indexado ao IGP-M está pagando um custo de ocupação artificialmente baixo e tem menos motivo para trocar aluguel por obra própria. Quem vai assinar contrato agora entra no preço novo, e para esse a conta é outra. Aluguel e obra também recebem tratamentos fiscais distintos, assunto que fica para outro artigo.
+Há ainda a diferença entre reajuste, inflação e preço de mercado. Em doze meses, o IGP-M acumulou 2,16% até agosto, o IPCA 4,44% até julho e o preço pedido de locação comercial subiu 11,26% no Brasil. Quem tem contrato antigo indexado ao IGP-M paga custo de ocupação artificialmente baixo e tem menos motivo para trocar aluguel por obra própria.
 
 ## O que o sistema construtivo não comprime
 
-Nenhuma escolha de estrutura acelera o que acontece fora do canteiro, e essa parte costuma ser subestimada no cronograma comercial.
+Nenhuma estrutura acelera o que acontece fora do canteiro.
 
 [TABLE:o-que-nao-comprime]
 
-A primeira linha da tabela merece explicação, porque veio de uma fonte que raramente é aberta. Manuais técnicos do lojista são documentos contratuais reais, e um deles, do City Center Outlet Premium em Campo Largo, no Paraná, na versão de dezembro de 2022, foi publicado como anexo de um edital público. Ele fixa 15 dias para o projeto de arquitetura de interiores, 15 dias para os complementares, até 5 dias para a análise do comitê técnico com prorrogação possível e 7 dias para retificação quando exigida. Somando só o que o manual controla, com aprovação em primeira análise, são 35 dias antes de a obra poder começar, e 47 dias com uma rodada de exigência. O ponto que mais interessa é o que ele não faz. O manual não estipula prazo de obra, ele remete ao contrato de locação, exatamente como o artigo 54 da Lei do Inquilinato permite. É um manual específico, de um empreendimento específico, e o valor dele está em mostrar de onde o prazo de obra realmente vem.
+O Manual do Lojista do City Center Outlet Premium, em Campo Largo (PR), de dezembro de 2022, publicado como anexo de edital público, fixa 15 dias para o projeto de interiores, 15 para os complementares, até 5 para a análise do comitê técnico e 7 para retificação. São 35 dias antes de a obra começar, e 47 com uma rodada de exigência. O manual não estipula prazo de obra, remete ao contrato. É um caso específico, e mostra de onde o prazo realmente vem. Acessibilidade entra na mesma categoria: nenhum sistema dispensa o desenho correto.
 
-Acessibilidade entra na mesma categoria. Rampa, sanitário acessível, largura de circulação e sinalização pela NBR 9050 são exigência de projeto, e não há sistema construtivo que dispense o desenho correto. A sequência de execução da obra em si, quando ela finalmente começa, está descrita no [passo a passo da construção em Steel Frame](/atualidades/passo-passo-construcao-steel-frame).
+## Onde o Light Steel Frame muda a conta
 
-## Onde o Light Steel Frame muda a conta de uma obra comercial
+O ganho de prazo vem de quanto trabalho sai do canteiro. Com painéis prontos de fábrica, montagem e fechamento andam em paralelo, como na comparação entre [sistema painelizado e stick](/atualidades/sistema-painelizado-vs-stick-steel-frame). É o único trecho do calendário que a decisão de projeto controla, porque aprovação, bombeiros e ligação de concessionária correm no mesmo prazo em qualquer sistema. O sequenciamento da obra está no [passo a passo da construção](/atualidades/passo-passo-construcao-steel-frame).
 
-O ganho de prazo do sistema não vem do aço, vem de quanto trabalho sai do canteiro. Quando os painéis chegam prontos de fábrica, montagem e fechamento andam em paralelo e o tempo de canteiro encolhe. A diferença entre montar painéis prontos e montar perfil por perfil no local está tratada na comparação entre [sistema painelizado e stick](/atualidades/sistema-painelizado-vs-stick-steel-frame). Para uma obra comercial isso importa por um motivo específico. É o único trecho do calendário que a decisão de projeto realmente controla, já que aprovação, análise de bombeiro e ligação de concessionária correm no mesmo prazo em qualquer sistema.
+Vão livre grande, ponte rolante e carga suspensa mudam o problema estrutural, e acima de dois pavimentos o projeto sai do alcance direto da NBR 16970.
 
-Vale lembrar do escopo da NBR 16970 mais uma vez, porque é onde o Steel Frame comercial fica bem enquadrado. Loja de rua, showroom, escritório, clínica e sede administrativa de até dois pavimentos estão dentro do alcance direto da norma brasileira do sistema, o que resolve boa parte da insegurança de quem nunca especificou construção a seco fora de uma casa.
+## Como comparar duas propostas
 
-## Quando o steel frame não é a resposta
-
-Vão livre grande, ponte rolante e carga suspensa mudam o problema estrutural, e galpão industrial pede outra solução, com tratamento próprio em um artigo dedicado. Acima de dois pavimentos o projeto sai do alcance direto da NBR 16970 e passa a exigir verificações que mudam o custo da fase de projeto. Dentro do recorte de edificação fechada de pequeno e médio porte, que é onde a maior parte da demanda comercial está, o enquadramento é confortável.
-
-## Como comparar duas propostas de obra comercial
-
-Duas propostas para o mesmo ponto costumam ser incomparáveis porque partem de escopos diferentes sem declarar isso, e a diferença aparece como se fosse margem.
+Duas propostas para o mesmo ponto costumam partir de escopos diferentes sem declarar, e a diferença aparece como margem.
 
 [CHECKLIST:contrato-obra-comercial]
 
-Com esses itens escritos, a comparação para de ser entre dois preços por metro quadrado e passa a ser entre dois cenários de operação, que é o que efetivamente decide.
+Com esses itens escritos, a comparação deixa de ser entre dois preços por m² e passa a ser entre dois cenários de operação.
 
 ## Perguntas frequentes
 
 [FAQ:steel-frame-comercial-loja]
 
-A resposta curta para quem vai abrir um ponto é que a economia de aluguel não paga a diferença de custo entre sistemas, e que ela nunca foi o argumento certo. O argumento certo é o mês de operação, e ele só aparece na planilha de quem sabe quanto o ponto fatura. Quem faz essa conta antes do projeto decide com informação. Quem faz depois descobre o número quando ele já virou custo afundado.
+A economia de aluguel nunca foi o argumento certo. O argumento é o mês de operação, e ele só aparece na planilha de quem sabe quanto o ponto fatura. Quem faz a conta antes do projeto decide com informação, e quem faz depois descobre o número já como custo afundado.
 
-Se você está avaliando uma obra de loja, escritório ou clínica, nós montamos esse cenário junto com o cliente antes de qualquer orçamento, e é assim que trabalhamos em [projetos comerciais](/comercial-industrial).
+Se você avalia uma obra de loja, escritório ou clínica, a equipe da Berkahn pode montar esse cenário junto com você antes de qualquer orçamento, em [projetos comerciais](/comercial-industrial).
 
 [CTA:steel-frame-comercial-loja]
 
@@ -160,3 +150,5 @@ Fronteiras respeitadas, todas verificadas no corpo: a palavra galpão aparece um
 Separação de confiabilidade mantida no texto: o CONTECC 2021 aparece rotulado como caso único, residencial, do Paraná, com preços de abril de 2021, e com a ressalva de que a escolha de cobertura infla parte da diferença; o FipeZAP aparece rotulado como preço pedido em anúncio, de imóveis de até 200 m², em dez cidades; o CUB aparece sempre com o que ele mede e o que ele exclui; a carência de obra em shopping é declarada como lacuna sem fonte pública, com a razão jurídica (art. 54 da Lei 8.245/1991), em vez de estimada; as parcelas de custo de ocupação que faltam são nomeadas e deixadas fora da conta. A diferença de R$ 69.418,74 nunca é dividida por metragem para virar preço unitário, conforme exigência da pesquisa.
 
 Cortado de propósito: o comparativo painelizado contra stick, que duplicaria artigo já publicado, ficou reduzido a uma frase com link, e o espaço foi para o rito de projeto do Manual do Lojista, que é o material inédito. Também ficou de fora o CUB GI de galpão industrial, que está na mesma tabela do Sinduscon-SP e foi reservado para a pauta de galpão.
+
+**Revisão de 20/10/2026 (blog-criacao v1.1):** corpo reduzido de 2170 para 1233 palavras, resposta nos dois primeiros parágrafos, parágrafos curtos. Atenção de público: a base numérica é de ponto pequeno (FipeZAP cobre imóveis de até 200 m² e o caso do CONTECC é residencial pequeno), então o artigo fala de comercial de pequeno e médio porte, abaixo do foco atual da Berkahn. Mantido por ser o único artigo do cluster comercial, com prioridade baixa no calendário. Para virar peça de médio e grande porte, a conta precisaria de caso e preço de locação de pontos maiores, o que exige pesquisa nova.

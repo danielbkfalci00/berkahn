@@ -1,0 +1,159 @@
+{
+ "slug": "revestimento-externo-steel-frame",
+ "content": "Quem constrói em Light Steel Frame, sistema de perfis leves de aço galvanizado formados a frio fechados com placas delgadas, não compra uma parede pronta, compra camadas, e a externa pode ser escolhida face por face. A face que pega chuva de vento o dia inteiro pede caminho para a água sair, enquanto a protegida pela varanda não precisa pagar por essa proteção. Antes da cor, a pergunta é para onde a água vai quando entrar.\n\n[STATS:revestimento-externo-numeros]\n\n## Revestimento, substrato e sistema de fachada são três compras diferentes\n\nO mercado brasileiro vende as três com o mesmo nome, e a confusão tem consequência de orçamento. Revestimento é o que se vê: textura, porcelanato, régua de PVC, pintura. Substrato é a placa que recebe esse revestimento e transfere o esforço para a estrutura. Sistema de fachada é a regra de como água e vapor atravessam o conjunto, e é ela que decide se existe câmara de ar, se existe caminho de drenagem e onde ficam as juntas de movimentação.\n\nA ABNT NBR 15498, atualizada em maio de 2021, já faz essa separação ao dividir as chapas em três tipos, conforme a transcrição publicada pela ABCEM. O tipo A é chapa para uso externo sem acabamentos, o tipo B é chapa para uso externo com basecoat e acabamentos, e o tipo C é para uso interno. Quem compra uma chapa do tipo B levou substrato, e a norma diz isso na própria definição, porque o acabamento ainda precisa ser especificado, orçado e executado por cima.\n\n[TABLE:cinco-sistemas-fachada]\n\n## Água e vapor eliminam candidatos antes do gosto entrar na conversa\n\nSão Paulo recebe 1.658,3 mm de chuva por ano, pela Normal Climatológica 1991-2020 do INMET, na estação do Mirante de Santana. Em polegadas, a unidade da literatura de fachada, são 65. Joseph Lstiburek publicou pela Building Science Corporation, em março de 2004, um relatório cuja Figura 4 mapeia a chuva anual da América do Norte e amarra, na legenda, cada faixa a uma estratégia de fachada. Acima de 60 polegadas fica a faixa mais exigente de todas, a que pede tela ventilada com equalização de pressão, um degrau acima da fachada ventilada que o mercado brasileiro conhece. Vedação de face, o sistema aderido sem saída para a água, só aparece abaixo de 20 polegadas.\n\nO relatório de 2004 separa duas estratégias de controle de chuva. A de barreira conta com a massa da parede para armazenar a água que entrou até ela secar, e nasceu para pedra, tijolo e concreto. A de gestão de água aceita que parte da chuva atravessa o revestimento e devolve essa parte para fora por um plano de drenagem com câmara de ar e saída na base. Lstiburek nomeia explicitamente a estrutura de aço leve no segundo grupo, por serem paredes leves, com cavidade e sensíveis à umidade. E escreve a recomendação sem meio termo: fora das regiões de baixa exposição à chuva, sistemas de vedação de face ou de barreira usados com componentes sensíveis à umidade devem ser evitados.\n\nO EIFS, sigla de exterior insulation and finish system, é o revestimento externo com isolante térmico, formado por placa de EPS colada sobre o substrato, base coat com tela de fibra de vidro e acabamento. Ele existe em duas versões, aderida e drenante, e no Brasil a primeira é a que a pesquisa acadêmica encontrou instalada.\n\nEvania Sabará Leite Teixeira e Luciana Alves de Oliveira, do IPT, apresentaram em 2019 um levantamento cujo objeto declarado é o EIFS aderido com fixações mecânicas suplementares, sem barreiras permeáveis ao vapor, sobre substratos pesados. Entre os gargalos que as autoras listam estão o acúmulo de umidade por chuva dirigida pelo vento e a propagação de chama, descrita ali como vulnerabilidade do revestimento. Nada disso reprova o EIFS: um sistema desenhado para colar em alvenaria muda de categoria de risco quando vai para uma parede leve, e a correção conhecida é a versão drenante, com câmara de ar, que pede detalhe executivo e custa mais que a colada.\n\n## O fogo da sua fachada é decisão de projeto, porque o regulamento não decide por você\n\nA Instrução Técnica 10 do Corpo de Bombeiros de São Paulo, na versão de 2025 que substituiu a de 2019, traz uma tabela de utilização de materiais com coluna dedicada a fachada e classes de reação ao fogo que partem da Classe I, a incombustível pela ISO 1182. A linha que cobre habitação coletiva e condomínios residenciais pede Classe I a II-B na fachada, mas carrega uma nota que limita a exigência a edificações com mais de 12 metros de altura. A casa unifamiliar sequer aparece nessa tabela. E o Decreto estadual 69.118, de dezembro de 2024, que revogou o 63.911 de 2018, exclui do regulamento as edificações de uso residencial exclusivamente unifamiliares.\n\nO efeito prático é que a fachada de uma casa não tem classe de reação ao fogo exigida pelo regulamento estadual de incêndio em São Paulo. O miolo do EIFS é poliestireno expandido, e a ETAG 004, guia europeu de referência do sistema, admite para esse isolante reação ao fogo classe E, enquanto placa cimentícia, porcelanato e pedra natural estão entre os materiais que a mesma instrução técnica considera incombustíveis e dispensa de avaliação. A resistência ao fogo da estrutura de aço, que é outra grandeza, está em [steel frame e incêndio](/atualidades/steel-frame-fogo-incendio).\n\n## Impacto, junta e manutenção separam os sistemas mais do que a cor\n\nA NBR 15575 ensaia vedação vertical com dois tipos de impacto, e é o de corpo duro que separa os candidatos: esferas de aço maciças de 1 kg e de 0,5 kg soltas contra a parede, com reprovação por traspassamento, fissura, escamação e delaminação. O ensaio discrimina porque a pele externa de um EIFS são duas subcamadas de base coat de 2 a 5 mm cada sobre espuma, a de uma fachada em placa cimentícia são 6 a 10 mm de fibrocimento, e a de um siding vinílico é uma régua de PVC projetada para trabalhar solta.\n\nTrabalhar solta, aliás, é requisito de projeto. O catálogo técnico do LP Siding Vinílico manda deixar de 3 a 5 mm entre a cabeça do parafuso e a régua, para dilatação, fixar a cada 40 cm e fechar esse espaçamento para 20 cm em região de vento forte, e atribui à membrana sobre o OSB a estanqueidade e a ventilação das paredes, o que coloca o siding, por construção, do lado drenante do mapa de exposição à chuva. Junta mal resolvida vira manifestação patológica, e o mecanismo está em [fissuras em steel frame](/atualidades/fissuras-steel-frame).\n\n## Fachada ventilada existe no Brasil, quase sempre em prédio que não é casa\n\nCarina Maccari Blazius, Ana Lígia Papst de Abreu e Andrea Murillo Betioli publicaram na revista Vértices, em 2020, o levantamento mais concreto da prática brasileira. São 36 empreendimentos executados por cinco empresas especializadas, em 17 cidades e 9 estados. Em 63% deles o revestimento é cerâmico ou porcelanato, e 78% do conjunto é não residencial. A conclusão das autoras é que a ausência de normas prescritivas de materiais e de execução de fachadas ventiladas opacas limita o crescimento da adoção dessa tecnologia no Brasil.\n\n## O preço por m² de fachada, e os quatro sistemas que o SINAPI não precifica\n\nO SINAPI precifica a fachada molhada convencional, executada sobre alvenaria ou concreto, e não precifica nenhum dos cinco sistemas secos. Na referência de julho de 2026, em custo não desonerado e média nacional: chapisco em pano sem vãos, composição 87893, R$ 9,52 por m²; emboço de 25 mm em pano com vãos e acesso por andaime, composição 104218, R$ 69,73; pintura acrílica externa em duas demãos, composição 95626, R$ 19,27. As três somam R$ 98,52 por m² de fachada, e como cada uma pressupõe um canteiro diferente, a soma é conta própria e ordem de grandeza, não composição do SINAPI nem orçamento.\n\nDo lado seco existe o insumo e não existe o serviço. A placa cimentícia lisa de 10 mm, insumo 11062, está em R$ 48,13 por m² na referência de agosto de 2026 para São Paulo, e a de 6 mm, insumo 11063, em R$ 29,57 na média nacional de julho de 2026. Nenhuma composição do SINAPI consome esses insumos numa parede, e a varredura das classes de parede e de revestimento e dos 172 cadernos técnicos não encontrou composição de EIFS, de siding nem de painel metálico ou ACM. O caderno de fachada com placas cerâmicas insertadas existe, com seis composições, mas todas estão publicadas sem custo, porque um dos insumos delas não tem preço. O placar: zero composição de serviço para quatro dos cinco sistemas, caderno sem custo para o quinto.\n\nTodos esses valores são por m² de fachada, não por m² de área construída. A conta da casa inteira está em [quanto custa construir em steel frame por m²](/atualidades/custo-steel-frame-m2-2026).\n\n## Nenhum sistema ganha fora do clima e do detalhe executivo\n\nA pergunta útil não é qual revestimento é o melhor. É quanto chove no terreno, se a parede pode secar para fora, quem executa a junta e quem vai lavar aquela fachada daqui a oito anos. Geovâni Luís Wolfart já registrava na UFRGS, em 2016, que as orientações de execução em LSF não bastavam para o desempenho projetado, e a lacuna continua sendo de detalhe executivo e não de catálogo.\n\n[CHECKLIST:decisao-fachada]\n\nO sistema de fachada deve entrar no projeto executivo junto com a definição das camadas da parede, que estão detalhadas em [anatomia da parede de steel frame](/atualidades/anatomia-parede-steel-frame), e não depois que o painel já subiu. É a única janela em que trocar de estratégia ainda custa desenho em vez de obra.\n\n[FAQ:revestimento-externo-steel-frame]\n\n[CTA:revestimento-externo-steel-frame]",
+ "components": {
+  "ctas": [
+   {
+    "id": "revestimento-externo-steel-frame",
+    "label": "PRÓXIMO PASSO",
+    "title": "Defina a fachada enquanto ela ainda é desenho",
+    "actionText": "Falar sobre o meu projeto",
+    "actionType": "dialog",
+    "description": "Na Berkahn, a proposta é que o sistema de fachada entre no projeto executivo junto com as camadas da parede. Conte onde é o terreno e em que fase está o projeto, e avaliamos a estratégia de água antes do painel subir.",
+    "defaultSegment": "residencial"
+   }
+  ],
+  "faqs": [
+   {
+    "id": "revestimento-externo-steel-frame",
+    "title": "Perguntas frequentes sobre revestimento externo em steel frame",
+    "questions": [
+     {
+      "answer": "A ABNT NBR 15498:2021 separa a chapa do tipo A, para uso externo sem acabamentos, da chapa do tipo B, para uso externo com basecoat e acabamentos, conforme a transcrição publicada pela ABCEM. Quem compra pensando em fachada acabada precisa checar em qual tipo está comprando, porque o tipo B é substrato e o acabamento ainda precisa ser especificado, orçado e executado por cima.",
+      "question": "Posso usar placa cimentícia na fachada sem nenhum acabamento por cima?"
+     },
+     {
+      "answer": "A pergunta não se responde no país inteiro, e sim no terreno. O relatório de 2004 da Building Science Corporation recomenda evitar sistemas de vedação de face ou de barreira com componentes sensíveis à umidade fora das regiões de baixa exposição à chuva. São Paulo, com 65 polegadas anuais pela Normal do INMET, está na faixa mais exigente da legenda daquele relatório. A correção conhecida para o EIFS em parede leve é a versão drenante, com câmara de ar, que pede detalhe executivo e custa mais que a colada.",
+      "question": "EIFS serve para o clima brasileiro?"
+     },
+     {
+      "answer": "O comportamento depende menos do material e mais da montagem. O catálogo técnico do LP Siding Vinílico manda deixar de 3 a 5 mm entre a cabeça do parafuso e a régua, para dilatação, fixar a cada 40 cm e fechar esse espaçamento para 20 cm em região de vento forte. Régua apertada contra o parafuso perde a folga de dilatação e é aí que aparecem empenamento e solta. Não existe ensaio brasileiro publicado de envelhecimento dos cinco sistemas sobre LSF.",
+      "question": "Siding vinílico amarela ou descola com o tempo?"
+     },
+     {
+      "answer": "Não existe resposta em base pública para os sistemas secos. Na referência de julho de 2026 do SINAPI, custo não desonerado e média nacional, a fachada molhada convencional sobre alvenaria ou concreto soma R$ 98,52 por m² entre chapisco, emboço e pintura acrílica. Para EIFS, siding, painel metálico e placa cimentícia montada, o SINAPI publica insumo e não publica composição de serviço, e o caderno de fachada com placas cerâmicas insertadas sai sem custo. Todo valor é por m² de fachada, não por m² de área construída.",
+      "question": "Quanto custa o m² de fachada em steel frame?"
+     },
+     {
+      "answer": "Não há um. A tabela desta página não tem coluna de nota nem de recomendação de propósito, porque a resposta muda com a chuva do terreno, com a capacidade da parede de secar para fora, com quem executa a junta e com quem vai lavar aquela fachada daqui a oito anos. Ranking universal de fachada é resposta de catálogo, e o custo de errar aparece anos depois, na junta.",
+      "question": "Qual é o melhor sistema de revestimento externo para steel frame?"
+     }
+    ]
+   }
+  ],
+  "stats": [
+   {
+    "id": "revestimento-externo-numeros",
+    "stats": [
+     {
+      "label": "Chuva anual em São Paulo",
+      "value": 1658,
+      "suffix": " mm",
+      "description": "Valor exato de 1.658,3 mm na coluna anual da Normal Climatológica 1991-2020 do INMET, Mirante de Santana."
+     },
+     {
+      "label": "A mesma chuva na unidade da literatura de fachada",
+      "value": 65,
+      "suffix": " polegadas",
+      "description": "Acima do limiar de 60 polegadas, a faixa mais exigente da legenda da Figura 4 do relatório RR-0406 da Building Science Corporation."
+     },
+     {
+      "label": "Fachada molhada convencional",
+      "value": 98,
+      "prefix": "R$ ",
+      "suffix": "/m²",
+      "description": "Fachada molhada convencional sobre alvenaria ou concreto, SINAPI 07/2026, média nacional não desonerada, soma de três composições."
+     }
+    ]
+   }
+  ],
+  "tables": [
+   {
+    "id": "cinco-sistemas-fachada",
+    "rows": [
+     [
+      "EIFS",
+      "Aderido é vedação de face, sem caminho de saída para a água; a versão drenante acrescenta câmara de ar e saída na base",
+      "Miolo de EPS, que a ETAG 004 admite em classe E; acabamento fino por cima",
+      "Pele externa de duas subcamadas de base coat de 2 a 5 mm cada sobre espuma",
+      "Junta no base coat, com tela de reforço nos cantos e vãos",
+      "Lavagem e retoque de acabamento; reparo localizado exige refazer camadas",
+      "O levantamento do IPT de 2019 encontrou a versão aderida instalada, sobre substrato pesado; sem dado público de adoção da drenante"
+     ],
+     [
+      "Placa cimentícia com acabamento",
+      "Depende do sistema adotado: existe aderido e existe montado com câmara de ar",
+      "Fibrocimento está entre os materiais que a IT 10/2025 considera incombustíveis e dispensa de avaliação",
+      "Substrato de 6 a 10 mm de fibrocimento sob o acabamento",
+      "Junta entre placas, tratada ou aparente conforme o acabamento",
+      "Lavagem e repintura conforme o acabamento especificado",
+      "Tipos A e B da NBR 15498:2021, externos sem e com acabamento; oferta ampla"
+     ],
+     [
+      "Siding",
+      "Drenante por construção: régua solta sobre membrana, que o catálogo do fabricante credita pela estanqueidade e ventilação",
+      "Sem dado público brasileiro de classe de reação ao fogo por sistema",
+      "Régua de PVC projetada para trabalhar solta, com 3 a 5 mm entre parafuso e régua",
+      "A folga de dilatação é o próprio projeto: fixação a cada 40 cm, ou 20 cm em vento forte",
+      "Lavagem; troca de régua isolada é possível",
+      "Catálogo técnico nacional disponível, com prescrição de montagem"
+     ],
+     [
+      "Fachada ventilada",
+      "Gestão de água com câmara de ar ventilada e revestimento afastado do substrato",
+      "Porcelanato e pedra natural estão entre os incombustíveis dispensados de avaliação pela IT 10/2025",
+      "Placa rígida ancorada; sem ensaio brasileiro publicado sobre LSF",
+      "Junta aberta ou fechada conforme o sistema de ancoragem",
+      "Lavagem da pele externa e inspeção periódica da ancoragem",
+      "36 empreendimentos em 17 cidades e 9 estados no levantamento de 2020, 78% não residenciais"
+     ],
+     [
+      "Painel metálico ou ACM",
+      "Montado com câmara de ar sobre subestrutura, com junta aparente",
+      "Sem dado público brasileiro comparando núcleo polietileno e núcleo mineral",
+      "Chapa fina sobre subestrutura; sem ensaio brasileiro publicado sobre LSF",
+      "Junta aparente é parte do desenho, com selante ou perfil",
+      "Lavagem; painel amassado costuma ser trocado, não reparado",
+      "Oferta ampla no não residencial; sem composição no SINAPI"
+     ]
+    ],
+    "caption": "Cinco sistemas de fachada para Light Steel Frame, sem ranking: cada linha é uma decisão de projeto, não uma nota.",
+    "headers": [
+     "Sistema",
+     "Como lida com a água",
+     "Reação ao fogo",
+     "Resistência a impacto",
+     "Junta de movimentação",
+     "Manutenção",
+     "Disponibilidade no Brasil"
+    ]
+   }
+  ],
+  "checklist": {
+   "id": "decisao-fachada",
+   "items": [
+    {
+     "label": "Quanto chove no terreno e qual é a fachada mais castigada",
+     "description": "Levante a chuva anual da estação mais próxima e identifique a orientação que recebe chuva dirigida pelo vento. É esse número que define a estratégia, antes de qualquer catálogo."
+    },
+    {
+     "label": "A estratégia é aderida, drenante ou ventilada",
+     "description": "Decida se a água que atravessar o revestimento tem caminho de saída. Em parede leve, oca e sensível à umidade, vedação de face é a escolha que precisa de justificativa."
+    },
+    {
+     "label": "Qual é o substrato e qual é o acabamento, declarados em separado",
+     "description": "Placa do tipo B pela NBR 15498:2021 é substrato com base coat, não fachada pronta. Orce a placa e o acabamento como duas linhas."
+    },
+    {
+     "label": "Onde ficam as juntas de movimentação e quem detalha o encontro com esquadria",
+     "description": "Junta e peitoril são onde a água entra. Defina no projeto executivo quem desenha esses encontros e com qual material."
+    },
+    {
+     "label": "Quem executa e qual é o plano de manutenção e lavagem",
+     "description": "Fachada é serviço com mão de obra específica e ciclo de lavagem. Combine a periodicidade e o acesso antes de fechar o sistema."
+    }
+   ],
+   "title": "Cinco perguntas antes de escolher a fachada"
+  }
+ }
+}

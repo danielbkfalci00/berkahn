@@ -1,0 +1,4828 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Performance Blog Berkahn — Agosto/2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<style>
+:root {
+  --bg: #FFFFFF;
+  --bg-soft: #F4F2EC;
+  --bg-zebra: #FAF8F2;
+  --text: #0A0A0A;
+  --text-soft: #4A4A4A;
+  --text-muted: #8A8A8A;
+  --border: #E5E2D9;
+  --border-strong: #0A0A0A;
+  --accent-up: #1F6F3D;
+  --accent-up-bg: #E8F3EC;
+  --accent-down: #B83A3A;
+  --accent-down-bg: #F8E8E8;
+  --accent-neutral: #6A6A6A;
+  --accent-warn: #8A5A00;
+  --accent-warn-bg: #FDF3E0;
+  --shadow: 0 1px 2px rgba(0,0,0,.04), 0 4px 12px rgba(0,0,0,.04);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { font-size: 16px; }
+
+body {
+  font-family: 'Manrope', system-ui, -apple-system, sans-serif;
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--text);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 56px 48px 96px;
+}
+
+/* Header */
+.header {
+  border-bottom: 1px solid var(--border-strong);
+  padding-bottom: 32px;
+  margin-bottom: 48px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+
+.header-brand {
+  font-weight: 800;
+  font-size: 14px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.header-tagline {
+  font-size: 12px;
+  color: var(--text-muted);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+.header-meta {
+  text-align: right;
+  font-size: 13px;
+  color: var(--text-soft);
+}
+
+.header-meta strong {
+  display: block;
+  color: var(--text);
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+}
+
+h1 {
+  font-size: 44px;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 24px 0 8px;
+}
+
+h2 {
+  font-size: 26px;
+  font-weight: 700;
+  margin: 56px 0 24px;
+  letter-spacing: -0.01em;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+h3 {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 32px 0 16px;
+  letter-spacing: -0.005em;
+  color: var(--text);
+}
+
+p {
+  margin: 12px 0;
+  color: var(--text-soft);
+}
+
+ul, ol {
+  margin: 12px 0 12px 24px;
+}
+
+li {
+  margin: 6px 0;
+  color: var(--text-soft);
+}
+
+li::marker {
+  color: var(--text-muted);
+}
+
+a {
+  color: var(--text);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+code {
+  font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.85em;
+  background: var(--bg-soft);
+  padding: 2px 6px;
+  border-radius: 3px;
+  color: var(--text);
+}
+
+strong { font-weight: 600; color: var(--text); }
+
+/* Hero summary cards */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin: 24px 0 32px;
+}
+
+.kpi-card {
+  background: var(--bg-soft);
+  padding: 20px 22px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+}
+
+.kpi-card-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.kpi-card-value {
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+
+.kpi-card-delta {
+  display: inline-block;
+  margin-top: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 3px 9px;
+  border-radius: 999px;
+  letter-spacing: -0.005em;
+}
+
+.delta-up   { background: var(--accent-up-bg);   color: var(--accent-up);   }
+.delta-down { background: var(--accent-down-bg); color: var(--accent-down); }
+.delta-flat { background: var(--bg-zebra);       color: var(--accent-neutral); }
+
+/* Tables */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0 32px;
+  font-size: 14px;
+  background: var(--bg);
+}
+
+thead th {
+  text-align: left;
+  font-weight: 600;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  padding: 10px 14px;
+  border-bottom: 2px solid var(--border-strong);
+  background: var(--bg);
+}
+
+thead th:not(:first-child) { text-align: right; }
+
+tbody td {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-soft);
+  vertical-align: top;
+}
+
+tbody td:first-child { color: var(--text); font-weight: 500; }
+tbody td:not(:first-child) { text-align: right; font-variant-numeric: tabular-nums; }
+
+tbody tr:nth-child(even) td { background: var(--bg-zebra); }
+tbody tr:last-child td { border-bottom: none; }
+
+/* Chart container */
+.chart-block {
+  background: var(--bg-soft);
+  padding: 24px;
+  border-radius: 6px;
+  margin: 24px 0;
+  border: 1px solid var(--border);
+}
+
+.chart-block canvas { max-height: 320px; }
+
+.chart-title {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+/* Insights & actions */
+.insights-list, .actions-list {
+  list-style: none;
+  margin: 16px 0;
+  padding: 0;
+}
+
+.insights-list li {
+  background: var(--bg-soft);
+  padding: 16px 20px;
+  margin: 10px 0;
+  border-radius: 4px;
+  border-left: 3px solid var(--border-strong);
+  color: var(--text);
+}
+
+.insights-list li::before {
+  content: counter(insight) ".";
+  counter-increment: insight;
+  font-weight: 700;
+  color: var(--text-muted);
+  margin-right: 10px;
+}
+
+.insights-list { counter-reset: insight; }
+
+.actions-list li {
+  padding: 14px 18px;
+  margin: 8px 0;
+  border-radius: 4px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  color: var(--text);
+}
+
+.actions-list li::before {
+  content: "□";
+  font-size: 18px;
+  line-height: 1;
+  color: var(--text-muted);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.actions-p0 li { background: var(--accent-down-bg); border-left: 3px solid var(--accent-down); }
+.actions-p1 li { background: var(--bg-soft);       border-left: 3px solid var(--text-soft);    }
+.actions-p2 li { background: var(--bg-zebra);      border-left: 3px solid var(--border-strong); }
+
+.priority-tag {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  padding: 3px 10px;
+  border-radius: 3px;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+}
+
+.priority-p0 { background: var(--accent-down); color: var(--bg); }
+.priority-p1 { background: var(--text);        color: var(--bg); }
+.priority-p2 { background: var(--text-muted);  color: var(--bg); }
+
+/* Status pills for indexation */
+.status-pill {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 999px;
+  letter-spacing: 0.04em;
+}
+
+.status-indexed     { background: var(--accent-up-bg);   color: var(--accent-up);   }
+.status-not-indexed { background: var(--accent-down-bg); color: var(--accent-down); }
+.status-pending     { background: var(--bg-zebra);       color: var(--accent-neutral); }
+.status-partial     { background: var(--accent-warn-bg); color: var(--accent-warn); }
+
+/* Banner de relatório parcial */
+.partial-banner {
+  background: var(--accent-warn-bg);
+  border-left: 3px solid var(--accent-warn);
+  color: var(--accent-warn);
+  padding: 14px 18px;
+  margin: 20px 0;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.partial-banner-title {
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  font-size: 12px;
+}
+
+/* Footer */
+.footer {
+  margin-top: 80px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+  font-size: 12px;
+  color: var(--text-muted);
+  text-align: center;
+  letter-spacing: 0.04em;
+}
+
+/* Índice — só documentos longos (build-doc.mjs) emitem este bloco */
+.doc-toc {
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 24px 28px;
+  margin: 40px 0 56px;
+}
+.doc-toc-title {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+}
+.doc-toc ol { list-style: none; counter-reset: toc; margin: 0; padding: 0; }
+.doc-toc li { counter-increment: toc; margin: 0 0 8px; padding-left: 32px; position: relative; }
+.doc-toc li::before {
+  content: counter(toc, decimal-leading-zero);
+  position: absolute;
+  left: 0;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-muted);
+  top: 3px;
+}
+.doc-toc a { color: var(--text); text-decoration: none; border-bottom: 1px solid transparent; }
+.doc-toc a:hover { border-bottom-color: var(--text); }
+
+/* Âncora de heading: o offset evita que o título fique sob a borda ao pular */
+h2[id], h3[id] { scroll-margin-top: 24px; }
+
+/* Print */
+@media print {
+  body { font-size: 11pt; }
+  .doc-toc { page-break-inside: avoid; background: none; }
+  .container { padding: 24px 32px; max-width: none; }
+  h1 { font-size: 28pt; }
+  h2 { font-size: 18pt; page-break-after: avoid; margin-top: 32px; }
+  h3 { font-size: 13pt; page-break-after: avoid; }
+  table, .chart-block, .kpi-grid { page-break-inside: avoid; }
+  .header { padding-bottom: 16px; margin-bottom: 24px; }
+  .kpi-card { box-shadow: none; }
+  .chart-block { background: var(--bg); border: 1px solid var(--border); }
+  @page { margin: 1.5cm; size: A4; }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .container { padding: 32px 20px; }
+  h1 { font-size: 32px; }
+  h2 { font-size: 22px; }
+  .header { flex-direction: column; align-items: flex-start; }
+  .header-meta { text-align: left; }
+  table { font-size: 12px; }
+  thead th, tbody td { padding: 8px 10px; }
+}
+</style>
+</head>
+<body>
+<div class="container" id="report-root">
+
+<div class="header">
+  <div>
+    <div class="header-brand">Berkahn</div>
+    <div class="header-tagline">Performance Report</div>
+  </div>
+  <div class="header-meta">
+    <strong>Agosto/2026</strong>
+    <div>2026-08-01 a 2026-08-31</div>
+    <div>Gerado em 2026-10-20</div>
+  </div>
+</div>
+  <hr>
+<p>tipo: auditoria
+criado: 2026-10-20
+atualizado: 2026-10-20
+tags:</p>
+<ul>
+<li>project/blog</li>
+<li>project/seo-aeo</li>
+<li>status/active</li>
+<li>source/manual
+ai_summary: &quot;Performance Agosto/2026 — GA4 586 users (comparação indisponível), GSC 1409 clicks (↑ 2.8%), indexação 33/39. Top: Custo do Steel Frame por m² em 2026: preços com fonte. P0: Verificar o motivo da exclusão de &quot;/atualidades/steel-frame-vantagens-desvantagens&quot; no GSC (URL is unknown to Google); solicitar indexação apenas se a URL estiver elegível..&quot;
+status: active
+subtipo: performance-mensal
+kpi_paginas_indexadas: 33
+kpi_paginas_total: 39
+kpi_ga4_users_mes: 586
+kpi_ga4_sessions_mes: 764
+kpi_ga4_pageviews_mes: 1069
+kpi_ga4_engagement_rate: 64.8
+kpi_gsc_clicks_mes: 1409
+kpi_gsc_impressions_mes: 51422
+kpi_gsc_ctr_mes: 2.74
+kpi_gsc_position_mes: 4.9
+kpi_delta_clicks_mom_pct: 2.8
+kpi_delta_users_mom_pct:
+contextos_aplicados:</li>
+<li>seo-aeo-strategy</li>
+<li>article-pipeline
+projetos_relacionados:</li>
+<li>blog</li>
+<li>seo-aeo
+periodo_analise: &quot;2026-08-01 a 2026-08-31&quot;
+periodo_parcial: false
+periodo_dias_cobertos: 31
+periodo_dias_total: 31
+periodo_comparacao: &quot;2026-07-01 a 2026-07-31&quot;
+data_diagnostico: 2026-10-20</li>
+</ul>
+<hr>
+<h1>Performance Blog Berkahn — Agosto/2026</h1><div class="kpi-grid"><div class="kpi-card"><div class="kpi-card-label">Users (GA4)</div><div class="kpi-card-value">586</div><span class="kpi-card-delta delta-flat">comparação indisponível</span></div><div class="kpi-card"><div class="kpi-card-label">Sessions</div><div class="kpi-card-value">764</div><span class="kpi-card-delta delta-flat">comparação indisponível</span></div><div class="kpi-card"><div class="kpi-card-label">Clicks (GSC)</div><div class="kpi-card-value">1.409</div><span class="kpi-card-delta delta-up">↑ 2.8%</span></div><div class="kpi-card"><div class="kpi-card-label">Impressions</div><div class="kpi-card-value">51.422</div><span class="kpi-card-delta delta-up">↑ 22.4%</span></div><div class="kpi-card"><div class="kpi-card-label">CTR médio</div><div class="kpi-card-value">2.74%</div><span class="kpi-card-delta delta-down">↓ 16.0%</span></div><div class="kpi-card"><div class="kpi-card-label">Indexados</div><div class="kpi-card-value">33 / 39</div></div></div>
+<h2 id="resumo-executivo">Resumo executivo</h2>
+<ul>
+<li>586 usuários e 1069 pageviews no GA4.</li>
+<li>1409 cliques e 51422 impressões no Google Search (+3% MoM), posição média 4.9.</li>
+<li>33 de 39 artigos com inspeção válida estão indexados no Google.</li>
+<li>Página mais acessada: Custo do Steel Frame por m² em 2026: preços com fonte (353 pageviews).</li>
+</ul>
+<h2 id="ga4-trafego-do-site">GA4, tráfego do site</h2>
+<h3>Overall (vs mês anterior)</h3>
+<table>
+<thead>
+<tr>
+<th>Métrica</th>
+<th style="text-align:right">Valor</th>
+<th style="text-align:center">Variação MoM</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Users</td>
+<td style="text-align:right">586</td>
+<td style="text-align:center">comparação indisponível</td>
+</tr>
+<tr>
+<td>Sessions</td>
+<td style="text-align:right">764</td>
+<td style="text-align:center">comparação indisponível</td>
+</tr>
+<tr>
+<td>Pageviews</td>
+<td style="text-align:right">1069</td>
+<td style="text-align:center">comparação indisponível</td>
+</tr>
+<tr>
+<td>Engagement rate</td>
+<td style="text-align:right">64.8%</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td>Tempo médio sessão</td>
+<td style="text-align:right">248.9s</td>
+<td style="text-align:center"></td>
+</tr>
+</tbody>
+</table>
+<h3>Páginas coletadas (por pageviews)</h3>
+<table>
+<thead>
+<tr>
+<th>Página</th>
+<th style="text-align:right">Pageviews</th>
+<th style="text-align:right">Users</th>
+<th style="text-align:right">Tempo médio</th>
+<th style="text-align:center">MoM</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Custo do Steel Frame por m² em 2026: preços com fonte (<code>custo-steel-frame-m2-2026</code>)</td>
+<td style="text-align:right">353</td>
+<td style="text-align:right">307</td>
+<td style="text-align:right">89.6s</td>
+<td style="text-align:center">—</td>
+</tr>
+<tr>
+<td>Home (``)</td>
+<td style="text-align:right">190</td>
+<td style="text-align:right">94</td>
+<td style="text-align:right">82.7s</td>
+<td style="text-align:center">—</td>
+</tr>
+<tr>
+<td>Quanto custa uma casa de 100 m² em Steel Frame em 2026 (<code>quanto-custa-construir-steel-frame-precos-m2-2026</code>)</td>
+<td style="text-align:right">134</td>
+<td style="text-align:right">112</td>
+<td style="text-align:right">74s</td>
+<td style="text-align:center">—</td>
+</tr>
+<tr>
+<td>Residencial (<code>/residencial</code>)</td>
+<td style="text-align:right">59</td>
+<td style="text-align:right">42</td>
+<td style="text-align:right">72.6s</td>
+<td style="text-align:center">—</td>
+</tr>
+<tr>
+<td>Serviços (<code>/servicos</code>)</td>
+<td style="text-align:right">55</td>
+<td style="text-align:right">39</td>
+<td style="text-align:right">70.2s</td>
+<td style="text-align:center">—</td>
+</tr>
+<tr>
+<td>Empresa (<code>/empresa</code>)</td>
+<td style="text-align:right">41</td>
+<td style="text-align:right">31</td>
+<td style="text-align:right">129.6s</td>
+<td style="text-align:center">—</td>
+</tr>
+<tr>
+<td>Como Financiar uma Construção em Light Steel Frame (<code>financiar-construcao-light-steel-frame</code>)</td>
+<td style="text-align:right">39</td>
+<td style="text-align:right">34</td>
+<td style="text-align:right">169.6s</td>
+<td style="text-align:center">—</td>
+</tr>
+<tr>
+<td>Pillar LSF (<code>/lsf</code>)</td>
+<td style="text-align:right">29</td>
+<td style="text-align:right">20</td>
+<td style="text-align:right">75.7s</td>
+<td style="text-align:center">—</td>
+</tr>
+<tr>
+<td>Atualidades (índice) (<code>/atualidades</code>)</td>
+<td style="text-align:right">27</td>
+<td style="text-align:right">14</td>
+<td style="text-align:right">28.6s</td>
+<td style="text-align:center">—</td>
+</tr>
+<tr>
+<td>Principais Normas do Light Steel Frame no Brasil (<code>normas-light-steel-frame-brasil</code>)</td>
+<td style="text-align:right">26</td>
+<td style="text-align:right">20</td>
+<td style="text-align:right">64.7s</td>
+<td style="text-align:center">—</td>
+</tr>
+<tr>
+<td>Apresentação Executiva (<code>/apresentacao-executiva</code>)</td>
+<td style="text-align:right">19</td>
+<td style="text-align:right">9</td>
+<td style="text-align:right">260.2s</td>
+<td style="text-align:center">—</td>
+</tr>
+<tr>
+<td>Patologias em Steel Frame: Como Prevenir e Como Corrigir (<code>patologias-steel-frame</code>)</td>
+<td style="text-align:right">11</td>
+<td style="text-align:right">8</td>
+<td style="text-align:right">94.8s</td>
+<td style="text-align:center">—</td>
+</tr>
+<tr>
+<td>Steel Frame no Mundo: Como Cada País Constrói com Aço (<code>steel-frame-no-mundo</code>)</td>
+<td style="text-align:right">10</td>
+<td style="text-align:right">8</td>
+<td style="text-align:right">27.1s</td>
+<td style="text-align:center">—</td>
+</tr>
+<tr>
+<td>Fundação Steel Frame vs. Alvenaria: Comparativo Completo (<code>fundacao-steel-frame-vs-alvenaria</code>)</td>
+<td style="text-align:right">7</td>
+<td style="text-align:right">7</td>
+<td style="text-align:right">240.3s</td>
+<td style="text-align:center">—</td>
+</tr>
+<tr>
+<td>Drywall ST, RU e RF: qual usar em cada ambiente da sua obra (<code>drywall-st-ru-rf</code>)</td>
+<td style="text-align:right">5</td>
+<td style="text-align:right">5</td>
+<td style="text-align:right">165s</td>
+<td style="text-align:center">—</td>
+</tr>
+<tr>
+<td>/admin/conteudo (<code>/admin/conteudo</code>)</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">49s</td>
+<td style="text-align:center">—</td>
+</tr>
+<tr>
+<td>/admin/documentacoes/2026-08-calendario-editorial (<code>/admin/documentacoes/2026-08-calendario-editorial</code>)</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">41s</td>
+<td style="text-align:center">—</td>
+</tr>
+<tr>
+<td>Steel Frame: Vantagens e Desvantagens Reais (<code>steel-frame-vantagens-desvantagens</code>)</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">178.8s</td>
+<td style="text-align:center">—</td>
+</tr>
+<tr>
+<td>/admin/conteudo/63542e4b-8d91-4aba-8f42-2b0c872bd081 (<code>/admin/conteudo/63542e4b-8d91-4aba-8f42-2b0c872bd081</code>)</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">11s</td>
+<td style="text-align:center">—</td>
+</tr>
+<tr>
+<td>Anatomia da Parede de Steel Frame: Camada por Camada (<code>anatomia-parede-steel-frame</code>)</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">8.7s</td>
+<td style="text-align:center">—</td>
+</tr>
+<tr>
+<td>Fundação para Steel Frame: Guia Definitivo (<code>fundacao-steel-frame</code>)</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">103s</td>
+<td style="text-align:center">—</td>
+</tr>
+<tr>
+<td>Steel Frame e Fogo: O Que Realmente Acontece em um Incêndio (<code>steel-frame-fogo-incendio</code>)</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">3s</td>
+<td style="text-align:center">—</td>
+</tr>
+<tr>
+<td>Steel Frame vs Alvenaria: O Comparativo Definitivo (<code>steel-frame-vs-alvenaria</code>)</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">170.3s</td>
+<td style="text-align:center">—</td>
+</tr>
+<tr>
+<td>Comercial e Industrial (<code>/comercial-industrial</code>)</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">22.5s</td>
+<td style="text-align:center">—</td>
+</tr>
+<tr>
+<td>/dev-harness/leads (<code>/dev-harness/leads</code>)</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">0s</td>
+<td style="text-align:center">—</td>
+</tr>
+<tr>
+<td>Portfolio (<code>/portfolio</code>)</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">21.7s</td>
+<td style="text-align:center">—</td>
+</tr>
+<tr>
+<td>/projetos/casa-de-campo (<code>/projetos/casa-de-campo</code>)</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">56.3s</td>
+<td style="text-align:center">—</td>
+</tr>
+<tr>
+<td>/admin/posts (<code>/admin/posts</code>)</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">10s</td>
+<td style="text-align:center">—</td>
+</tr>
+<tr>
+<td>Construir ou Comprar Pronto? Os Números na Grande SP (<code>construir-ou-comprar-pronto-numeros-grande-sp</code>)</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">92s</td>
+<td style="text-align:center">—</td>
+</tr>
+<tr>
+<td>Custos ocultos da construção: o que estoura a obra em 2026 (<code>custos-ocultos-construcao-2026</code>)</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">165s</td>
+<td style="text-align:center">—</td>
+</tr>
+<tr>
+<td>Isenção de ICMS na energia solar em SP vence em 2026: o que realmente muda na sua conta (<code>isencao-icms-energia-solar-sp</code>)</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">28s</td>
+<td style="text-align:center">—</td>
+</tr>
+<tr>
+<td>Mitos e Verdades do Steel Frame: O Que Sustenta Cada Argumento (<code>mitos-verdades-steel-frame</code>)</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">13s</td>
+<td style="text-align:center">—</td>
+</tr>
+<tr>
+<td>Passo a Passo: Como Funciona a Construção em Steel Frame (<code>passo-passo-construcao-steel-frame</code>)</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">339.5s</td>
+<td style="text-align:center">—</td>
+</tr>
+<tr>
+<td>Steel Frame vs Wood Frame: Qual Sistema Construtivo Escolher? (<code>steel-frame-vs-wood-frame</code>)</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">50s</td>
+<td style="text-align:center">—</td>
+</tr>
+<tr>
+<td>/admin/analytics (<code>/admin/analytics</code>)</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">0s</td>
+<td style="text-align:center">—</td>
+</tr>
+<tr>
+<td>/admin/documentacoes (<code>/admin/documentacoes</code>)</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">1s</td>
+<td style="text-align:center">—</td>
+</tr>
+<tr>
+<td>/apresentacso-executiva (<code>/apresentacso-executiva</code>)</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">0s</td>
+<td style="text-align:center">—</td>
+</tr>
+<tr>
+<td>Nova Lei de Eficiência Energética e Reforma Tributária: o Que Muda para Construir (<code>eficiencia-energetica-reforma-tributaria</code>)</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">311s</td>
+<td style="text-align:center">—</td>
+</tr>
+<tr>
+<td>Proteção contra quedas na construção civil: guia técnico completo (<code>protecao-contra-quedas-construcao-civil</code>)</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">14s</td>
+<td style="text-align:center">—</td>
+</tr>
+<tr>
+<td>Quanto custa o projeto de uma casa em 2026 (<code>quanto-custa-projeto-casa</code>)</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">20s</td>
+<td style="text-align:center">—</td>
+</tr>
+<tr>
+<td>Consequências da reforma tributária no mercado da construção industrializada (<code>reforma-tributaria-construcao-industrializada</code>)</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">0s</td>
+<td style="text-align:center">—</td>
+</tr>
+<tr>
+<td>FAQ (<code>/perguntas-frequentes</code>)</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">0s</td>
+<td style="text-align:center">—</td>
+</tr>
+<tr>
+<td>Política de Privacidade (<code>/privacidade</code>)</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">22s</td>
+<td style="text-align:center">—</td>
+</tr>
+<tr>
+<td>/projetos/chale (<code>/projetos/chale</code>)</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">7s</td>
+<td style="text-align:center">—</td>
+</tr>
+<tr>
+<td>Termos de Uso (<code>/termos-de-uso</code>)</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">7s</td>
+<td style="text-align:center">—</td>
+</tr>
+</tbody>
+</table>
+<h3>Top 10 fontes de tráfego</h3>
+<table>
+<thead>
+<tr>
+<th>Source / Medium</th>
+<th style="text-align:right">Sessions</th>
+<th style="text-align:right">Users</th>
+<th style="text-align:right">% do total</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>google / organic</td>
+<td style="text-align:right">584</td>
+<td style="text-align:right">470</td>
+<td style="text-align:right">76.5%</td>
+</tr>
+<tr>
+<td>(direct) / (none)</td>
+<td style="text-align:right">66</td>
+<td style="text-align:right">42</td>
+<td style="text-align:right">8.7%</td>
+</tr>
+<tr>
+<td>chatgpt.com / ai-assistant</td>
+<td style="text-align:right">59</td>
+<td style="text-align:right">43</td>
+<td style="text-align:right">7.7%</td>
+</tr>
+<tr>
+<td>bing / organic</td>
+<td style="text-align:right">27</td>
+<td style="text-align:right">19</td>
+<td style="text-align:right">3.5%</td>
+</tr>
+<tr>
+<td>search.google.com / referral</td>
+<td style="text-align:right">10</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">1.3%</td>
+</tr>
+<tr>
+<td>br.search.yahoo.com / referral</td>
+<td style="text-align:right">6</td>
+<td style="text-align:right">6</td>
+<td style="text-align:right">0.8%</td>
+</tr>
+<tr>
+<td>(not set)</td>
+<td style="text-align:right">5</td>
+<td style="text-align:right">5</td>
+<td style="text-align:right">0.7%</td>
+</tr>
+<tr>
+<td>copilot.com / (not set)</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">0.1%</td>
+</tr>
+<tr>
+<td>duckduckgo / organic</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">0.1%</td>
+</tr>
+<tr>
+<td>gemini.google.com / ai-assistant</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">0.1%</td>
+</tr>
+<tr>
+<td>linkedin / social</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">0.1%</td>
+</tr>
+<tr>
+<td>linktr.ee / referral</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">0.1%</td>
+</tr>
+<tr>
+<td>openwebuivnp-production.up.railway.app / referral</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">0.1%</td>
+</tr>
+</tbody>
+</table>
+<h3>Distribuição por área do site</h3>
+<table>
+<thead>
+<tr>
+<th>Área</th>
+<th style="text-align:right">Pageviews</th>
+<th style="text-align:right">% do total</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Blog (atualidades)</td>
+<td style="text-align:right">617</td>
+<td style="text-align:right">57.7%</td>
+</tr>
+<tr>
+<td>Home</td>
+<td style="text-align:right">190</td>
+<td style="text-align:right">17.8%</td>
+</tr>
+<tr>
+<td>Outras</td>
+<td style="text-align:right">178</td>
+<td style="text-align:right">16.7%</td>
+</tr>
+<tr>
+<td>Serviços</td>
+<td style="text-align:right">55</td>
+<td style="text-align:right">5.1%</td>
+</tr>
+<tr>
+<td>Pillar LSF</td>
+<td style="text-align:right">29</td>
+<td style="text-align:right">2.7%</td>
+</tr>
+</tbody>
+</table>
+<h3>Devices</h3>
+<table>
+<thead>
+<tr>
+<th>Device</th>
+<th style="text-align:right">Users</th>
+<th style="text-align:right">% do total</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>mobile</td>
+<td style="text-align:right">369</td>
+<td style="text-align:right">63%</td>
+</tr>
+<tr>
+<td>desktop</td>
+<td style="text-align:right">214</td>
+<td style="text-align:right">36.5%</td>
+</tr>
+<tr>
+<td>tablet</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">0.5%</td>
+</tr>
+</tbody>
+</table>
+<h3>Eventos de contato e leitura</h3>
+<p>Contagens com consentimento; não representam pessoas únicas nem um funil de conversão.</p>
+<table>
+<thead>
+<tr>
+<th>Evento</th>
+<th style="text-align:right">Count</th>
+<th style="text-align:left">Páginas top</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>article_progress</code></td>
+<td style="text-align:right">690</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td><code>cta_click</code></td>
+<td style="text-align:right">31</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td><code>whatsapp_click</code></td>
+<td style="text-align:right">23</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td><code>form_submit</code></td>
+<td style="text-align:right">10</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td><code>generate_lead</code></td>
+<td style="text-align:right">1</td>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<h2 id="gsc-performance-no-google-search">GSC, performance no Google Search</h2>
+<h3>Overall (vs mês anterior)</h3>
+<table>
+<thead>
+<tr>
+<th>Métrica</th>
+<th style="text-align:right">Valor</th>
+<th style="text-align:center">Variação MoM</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Clicks</td>
+<td style="text-align:right">1409</td>
+<td style="text-align:center">↑ 2.8%</td>
+</tr>
+<tr>
+<td>Impressions</td>
+<td style="text-align:right">51422</td>
+<td style="text-align:center">↑ 22.4%</td>
+</tr>
+<tr>
+<td>CTR</td>
+<td style="text-align:right">2.74%</td>
+<td style="text-align:center">↓ 16.0%</td>
+</tr>
+<tr>
+<td>Posição média</td>
+<td style="text-align:right">4.9</td>
+<td style="text-align:center">↑ 8.9%</td>
+</tr>
+</tbody>
+</table>
+<h3>Consultas coletadas</h3>
+<table>
+<thead>
+<tr>
+<th>Query</th>
+<th style="text-align:right">Clicks</th>
+<th style="text-align:right">Impressions</th>
+<th style="text-align:right">CTR</th>
+<th style="text-align:right">Posição</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>steel frame valor m2</td>
+<td style="text-align:right">50</td>
+<td style="text-align:right">858</td>
+<td style="text-align:right">5.83%</td>
+<td style="text-align:right">1.8</td>
+</tr>
+<tr>
+<td>casas steel frame preço m2</td>
+<td style="text-align:right">34</td>
+<td style="text-align:right">588</td>
+<td style="text-align:right">5.78%</td>
+<td style="text-align:right">2.2</td>
+</tr>
+<tr>
+<td>steel frame preço</td>
+<td style="text-align:right">23</td>
+<td style="text-align:right">666</td>
+<td style="text-align:right">3.45%</td>
+<td style="text-align:right">3.4</td>
+</tr>
+<tr>
+<td>casa steel frame 100m2 preço</td>
+<td style="text-align:right">16</td>
+<td style="text-align:right">299</td>
+<td style="text-align:right">5.35%</td>
+<td style="text-align:right">2.1</td>
+</tr>
+<tr>
+<td>casa steel frame preço</td>
+<td style="text-align:right">13</td>
+<td style="text-align:right">269</td>
+<td style="text-align:right">4.83%</td>
+<td style="text-align:right">2.3</td>
+</tr>
+<tr>
+<td>casas steel frame preço</td>
+<td style="text-align:right">12</td>
+<td style="text-align:right">104</td>
+<td style="text-align:right">11.54%</td>
+<td style="text-align:right">2.1</td>
+</tr>
+<tr>
+<td>casa de steel frame valor</td>
+<td style="text-align:right">10</td>
+<td style="text-align:right">125</td>
+<td style="text-align:right">8%</td>
+<td style="text-align:right">2.3</td>
+</tr>
+<tr>
+<td>steel frame casas preço</td>
+<td style="text-align:right">10</td>
+<td style="text-align:right">172</td>
+<td style="text-align:right">5.81%</td>
+<td style="text-align:right">2.6</td>
+</tr>
+<tr>
+<td>berkahn</td>
+<td style="text-align:right">9</td>
+<td style="text-align:right">18</td>
+<td style="text-align:right">50%</td>
+<td style="text-align:right">2.7</td>
+</tr>
+<tr>
+<td>steel frame valor m2 2026</td>
+<td style="text-align:right">9</td>
+<td style="text-align:right">140</td>
+<td style="text-align:right">6.43%</td>
+<td style="text-align:right">1.6</td>
+</tr>
+<tr>
+<td>steel frame é mais barato que alvenaria</td>
+<td style="text-align:right">9</td>
+<td style="text-align:right">365</td>
+<td style="text-align:right">2.47%</td>
+<td style="text-align:right">4</td>
+</tr>
+<tr>
+<td>casa em steel frame valor</td>
+<td style="text-align:right">7</td>
+<td style="text-align:right">103</td>
+<td style="text-align:right">6.8%</td>
+<td style="text-align:right">1.9</td>
+</tr>
+<tr>
+<td>steel frame preço m2</td>
+<td style="text-align:right">7</td>
+<td style="text-align:right">93</td>
+<td style="text-align:right">7.53%</td>
+<td style="text-align:right">2.4</td>
+</tr>
+<tr>
+<td>casa steel frame</td>
+<td style="text-align:right">6</td>
+<td style="text-align:right">393</td>
+<td style="text-align:right">1.53%</td>
+<td style="text-align:right">10.1</td>
+</tr>
+<tr>
+<td>construção steel frame preço m2</td>
+<td style="text-align:right">6</td>
+<td style="text-align:right">135</td>
+<td style="text-align:right">4.44%</td>
+<td style="text-align:right">2.1</td>
+</tr>
+<tr>
+<td>light steel frame preço m2</td>
+<td style="text-align:right">6</td>
+<td style="text-align:right">203</td>
+<td style="text-align:right">2.96%</td>
+<td style="text-align:right">2</td>
+</tr>
+<tr>
+<td>quanto custa o metro quadrado de steel frame</td>
+<td style="text-align:right">6</td>
+<td style="text-align:right">32</td>
+<td style="text-align:right">18.75%</td>
+<td style="text-align:right">1.9</td>
+</tr>
+<tr>
+<td>quanto custa construir uma casa de steel frame</td>
+<td style="text-align:right">5</td>
+<td style="text-align:right">27</td>
+<td style="text-align:right">18.52%</td>
+<td style="text-align:right">1.7</td>
+</tr>
+<tr>
+<td>quanto custa uma casa em steel frame</td>
+<td style="text-align:right">5</td>
+<td style="text-align:right">36</td>
+<td style="text-align:right">13.89%</td>
+<td style="text-align:right">1.7</td>
+</tr>
+<tr>
+<td>casa de steel frame é mais barata que alvenaria</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">71</td>
+<td style="text-align:right">5.63%</td>
+<td style="text-align:right">5.1</td>
+</tr>
+<tr>
+<td>quanto custa o m2 de construção em steel frame</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">23</td>
+<td style="text-align:right">17.39%</td>
+<td style="text-align:right">1.2</td>
+</tr>
+<tr>
+<td>quanto custa uma casa de steel frame</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">99</td>
+<td style="text-align:right">4.04%</td>
+<td style="text-align:right">2</td>
+</tr>
+<tr>
+<td>steel frame</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">371</td>
+<td style="text-align:right">1.08%</td>
+<td style="text-align:right">7.1</td>
+</tr>
+<tr>
+<td>berkhan</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">7</td>
+<td style="text-align:right">42.86%</td>
+<td style="text-align:right">1.9</td>
+</tr>
+<tr>
+<td>casa em steel frame preço</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">27</td>
+<td style="text-align:right">11.11%</td>
+<td style="text-align:right">1.8</td>
+</tr>
+<tr>
+<td>custo steel frame m2</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">19</td>
+<td style="text-align:right">15.79%</td>
+<td style="text-align:right">1.3</td>
+</tr>
+<tr>
+<td>kit casa steel frame preço</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">213</td>
+<td style="text-align:right">1.41%</td>
+<td style="text-align:right">10</td>
+</tr>
+<tr>
+<td>orçamento steel frame</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">18</td>
+<td style="text-align:right">16.67%</td>
+<td style="text-align:right">1.8</td>
+</tr>
+<tr>
+<td>preço steel frame m2</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">24</td>
+<td style="text-align:right">12.5%</td>
+<td style="text-align:right">2.3</td>
+</tr>
+<tr>
+<td>casa de steel frame é mais barata</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">130</td>
+<td style="text-align:right">1.54%</td>
+<td style="text-align:right">3</td>
+</tr>
+<tr>
+<td>casas steel frame</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">47</td>
+<td style="text-align:right">4.26%</td>
+<td style="text-align:right">8.6</td>
+</tr>
+<tr>
+<td>construtora em steel frame</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">7</td>
+<td style="text-align:right">28.57%</td>
+<td style="text-align:right">4.1</td>
+</tr>
+<tr>
+<td>construção em steel frame é mais barato</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">65</td>
+<td style="text-align:right">3.08%</td>
+<td style="text-align:right">3</td>
+</tr>
+<tr>
+<td>custo casa steel frame</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">21</td>
+<td style="text-align:right">9.52%</td>
+<td style="text-align:right">1.5</td>
+</tr>
+<tr>
+<td>financiamento steel frame</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">15</td>
+<td style="text-align:right">13.33%</td>
+<td style="text-align:right">6.3</td>
+</tr>
+<tr>
+<td>financiamento steel frame caixa</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">16</td>
+<td style="text-align:right">12.5%</td>
+<td style="text-align:right">10.3</td>
+</tr>
+<tr>
+<td>metro quadrado steel frame</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">24</td>
+<td style="text-align:right">8.33%</td>
+<td style="text-align:right">2</td>
+</tr>
+<tr>
+<td>preço casa steel frame</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">25</td>
+<td style="text-align:right">8%</td>
+<td style="text-align:right">1.8</td>
+</tr>
+<tr>
+<td>preço do steel frame</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">25</td>
+<td style="text-align:right">8%</td>
+<td style="text-align:right">2.1</td>
+</tr>
+<tr>
+<td>preço m2 steel frame casas prontas</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">15</td>
+<td style="text-align:right">13.33%</td>
+<td style="text-align:right">1.8</td>
+</tr>
+<tr>
+<td>quanto custa uma casa steel frame</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">38</td>
+<td style="text-align:right">5.26%</td>
+<td style="text-align:right">1.8</td>
+</tr>
+<tr>
+<td>steel frame é mais caro que alvenaria</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">32</td>
+<td style="text-align:right">6.25%</td>
+<td style="text-align:right">5.9</td>
+</tr>
+<tr>
+<td>valor de uma casa steel frame</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">23</td>
+<td style="text-align:right">8.7%</td>
+<td style="text-align:right">2</td>
+</tr>
+<tr>
+<td>valor m2 steel frame</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">30</td>
+<td style="text-align:right">6.67%</td>
+<td style="text-align:right">1.3</td>
+</tr>
+<tr>
+<td>valor m2 steel frame mão de obra</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">41</td>
+<td style="text-align:right">4.88%</td>
+<td style="text-align:right">2.1</td>
+</tr>
+<tr>
+<td>valor steel frame m2</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">15</td>
+<td style="text-align:right">13.33%</td>
+<td style="text-align:right">1.6</td>
+</tr>
+<tr>
+<td>abnt nbr 16970</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">40</td>
+<td style="text-align:right">2.5%</td>
+<td style="text-align:right">8.3</td>
+</tr>
+<tr>
+<td>casa com estrutura metálica</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">14</td>
+<td style="text-align:right">7.14%</td>
+<td style="text-align:right">2.2</td>
+</tr>
+<tr>
+<td>casa com steel frame</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">33.33%</td>
+<td style="text-align:right">4.3</td>
+</tr>
+<tr>
+<td>casa em light steel frame preço</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">11</td>
+<td style="text-align:right">9.09%</td>
+<td style="text-align:right">2.9</td>
+</tr>
+<tr>
+<td>casa light steel frame</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">5</td>
+<td style="text-align:right">20%</td>
+<td style="text-align:right">13.4</td>
+</tr>
+<tr>
+<td>casa steel frame 150m2</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">24</td>
+<td style="text-align:right">4.17%</td>
+<td style="text-align:right">4</td>
+</tr>
+<tr>
+<td>casa steel frame 70m2</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">31</td>
+<td style="text-align:right">3.23%</td>
+<td style="text-align:right">6.1</td>
+</tr>
+<tr>
+<td>casa steel frame brasil</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">6</td>
+<td style="text-align:right">16.67%</td>
+<td style="text-align:right">7.2</td>
+</tr>
+<tr>
+<td>casa steel frame custo</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">15</td>
+<td style="text-align:right">6.67%</td>
+<td style="text-align:right">6.5</td>
+</tr>
+<tr>
+<td>casas em steel frame preço</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">39</td>
+<td style="text-align:right">2.56%</td>
+<td style="text-align:right">2.6</td>
+</tr>
+<tr>
+<td>construtora de steel frame</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">13</td>
+<td style="text-align:right">7.69%</td>
+<td style="text-align:right">5</td>
+</tr>
+<tr>
+<td>construtora steel frame</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">32</td>
+<td style="text-align:right">3.13%</td>
+<td style="text-align:right">5.1</td>
+</tr>
+<tr>
+<td>construção a seco preço m2</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">38</td>
+<td style="text-align:right">2.63%</td>
+<td style="text-align:right">4.5</td>
+</tr>
+<tr>
+<td>construção de casa em steel frame</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">33.33%</td>
+<td style="text-align:right">9.7</td>
+</tr>
+<tr>
+<td>construção em steel frame preço</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">6</td>
+<td style="text-align:right">16.67%</td>
+<td style="text-align:right">1.5</td>
+</tr>
+<tr>
+<td>custo aproximado</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">25%</td>
+<td style="text-align:right">1.3</td>
+</tr>
+<tr>
+<td>custo m2 construção steel frame</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">24</td>
+<td style="text-align:right">4.17%</td>
+<td style="text-align:right">1.2</td>
+</tr>
+<tr>
+<td>custo m2 steel frame</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">23</td>
+<td style="text-align:right">4.35%</td>
+<td style="text-align:right">1.4</td>
+</tr>
+<tr>
+<td>custo metro quadrado construção steel frame</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">11</td>
+<td style="text-align:right">9.09%</td>
+<td style="text-align:right">2.1</td>
+</tr>
+<tr>
+<td>custo steel frame</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">71</td>
+<td style="text-align:right">1.41%</td>
+<td style="text-align:right">7.5</td>
+</tr>
+<tr>
+<td>custo steel frame x alvenaria</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">27</td>
+<td style="text-align:right">3.7%</td>
+<td style="text-align:right">5.7</td>
+</tr>
+<tr>
+<td>empresas de steel frame em sp</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">30</td>
+<td style="text-align:right">3.33%</td>
+<td style="text-align:right">4.9</td>
+</tr>
+<tr>
+<td>investimento em steel frame</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">28</td>
+<td style="text-align:right">3.57%</td>
+<td style="text-align:right">29.1</td>
+</tr>
+<tr>
+<td>light steel frame preço</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">29</td>
+<td style="text-align:right">3.45%</td>
+<td style="text-align:right">3.8</td>
+</tr>
+<tr>
+<td>m2 de steel frame</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">5</td>
+<td style="text-align:right">20%</td>
+<td style="text-align:right">1</td>
+</tr>
+<tr>
+<td>mão de obra steel frame</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">59</td>
+<td style="text-align:right">1.69%</td>
+<td style="text-align:right">6.5</td>
+</tr>
+<tr>
+<td>parede steel frame preço m2</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">22</td>
+<td style="text-align:right">4.55%</td>
+<td style="text-align:right">1.6</td>
+</tr>
+<tr>
+<td>preço m2 construção steel frame</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">15</td>
+<td style="text-align:right">6.67%</td>
+<td style="text-align:right">5.3</td>
+</tr>
+<tr>
+<td>preço m2 steel frame</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">87</td>
+<td style="text-align:right">1.15%</td>
+<td style="text-align:right">5.6</td>
+</tr>
+<tr>
+<td>preço metro quadrado steel frame</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">14</td>
+<td style="text-align:right">7.14%</td>
+<td style="text-align:right">1.6</td>
+</tr>
+<tr>
+<td>preço mão de obra steel frame</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">24</td>
+<td style="text-align:right">4.17%</td>
+<td style="text-align:right">1.8</td>
+</tr>
+<tr>
+<td>projeto casa steel frame 100m2</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">15</td>
+<td style="text-align:right">6.67%</td>
+<td style="text-align:right">6.6</td>
+</tr>
+<tr>
+<td>projeto de casa em steel frame</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">33.33%</td>
+<td style="text-align:right">2.7</td>
+</tr>
+<tr>
+<td>projeto steel frame</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">8</td>
+<td style="text-align:right">12.5%</td>
+<td style="text-align:right">2.3</td>
+</tr>
+<tr>
+<td>quanto custa o metro quadrado do steel frame</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">33</td>
+<td style="text-align:right">3.03%</td>
+<td style="text-align:right">1.8</td>
+</tr>
+<tr>
+<td>quanto custa steel frame</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">25%</td>
+<td style="text-align:right">2</td>
+</tr>
+<tr>
+<td>quanto custa uma casa de steel frame no brasil</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">28</td>
+<td style="text-align:right">3.57%</td>
+<td style="text-align:right">1.2</td>
+</tr>
+<tr>
+<td>radier para steel frame</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">27</td>
+<td style="text-align:right">3.7%</td>
+<td style="text-align:right">8.5</td>
+</tr>
+<tr>
+<td>simples</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">33.33%</td>
+<td style="text-align:right">1.3</td>
+</tr>
+<tr>
+<td>sobrado steel frame</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">10</td>
+<td style="text-align:right">10%</td>
+<td style="text-align:right">6.9</td>
+</tr>
+<tr>
+<td>steel frame brasil</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">9</td>
+<td style="text-align:right">11.11%</td>
+<td style="text-align:right">4.8</td>
+</tr>
+<tr>
+<td>steel frame casa</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">20</td>
+<td style="text-align:right">5%</td>
+<td style="text-align:right">4.3</td>
+</tr>
+<tr>
+<td>steel frame casas prontas</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">8</td>
+<td style="text-align:right">12.5%</td>
+<td style="text-align:right">2.4</td>
+</tr>
+<tr>
+<td>steel frame construtora</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">17</td>
+<td style="text-align:right">5.88%</td>
+<td style="text-align:right">4</td>
+</tr>
+<tr>
+<td>steel frame custo</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">15</td>
+<td style="text-align:right">6.67%</td>
+<td style="text-align:right">5.7</td>
+</tr>
+<tr>
+<td>steel frame custo m2</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">30</td>
+<td style="text-align:right">3.33%</td>
+<td style="text-align:right">2.2</td>
+</tr>
+<tr>
+<td>steel frame preco</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">9</td>
+<td style="text-align:right">11.11%</td>
+<td style="text-align:right">7</td>
+</tr>
+<tr>
+<td>steel frame problemas</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">14</td>
+<td style="text-align:right">7.14%</td>
+<td style="text-align:right">6.8</td>
+</tr>
+<tr>
+<td>steel frame sao paulo</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">19</td>
+<td style="text-align:right">5.26%</td>
+<td style="text-align:right">4.8</td>
+</tr>
+<tr>
+<td>steel frame sp</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">9</td>
+<td style="text-align:right">11.11%</td>
+<td style="text-align:right">4.8</td>
+</tr>
+<tr>
+<td>steel frame x alvenaria custo</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">20</td>
+<td style="text-align:right">5%</td>
+<td style="text-align:right">6</td>
+</tr>
+<tr>
+<td>steel framing o que é</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">33.33%</td>
+<td style="text-align:right">2</td>
+</tr>
+<tr>
+<td>stell frame</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">10</td>
+<td style="text-align:right">10%</td>
+<td style="text-align:right">3</td>
+</tr>
+<tr>
+<td>telhado steel frame preço</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">12</td>
+<td style="text-align:right">8.33%</td>
+<td style="text-align:right">9.3</td>
+</tr>
+<tr>
+<td>valor</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">11</td>
+<td style="text-align:right">9.09%</td>
+<td style="text-align:right">1.5</td>
+</tr>
+<tr>
+<td>valor construção steel frame</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">68</td>
+<td style="text-align:right">1.47%</td>
+<td style="text-align:right">6.5</td>
+</tr>
+<tr>
+<td>valor metro quadrado steel frame</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">23</td>
+<td style="text-align:right">4.35%</td>
+<td style="text-align:right">1.9</td>
+</tr>
+<tr>
+<td>&quot;abnt nbr 16970&quot; light steel framing</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">7.7</td>
+</tr>
+<tr>
+<td>&quot;solução da construção&quot; &quot;belo horizonte&quot; drywall steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">4</td>
+</tr>
+<tr>
+<td>&quot;solução da construção&quot; drywall steel frame belo horizonte</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">2.5</td>
+</tr>
+<tr>
+<td>&quot;verde distribuidora de drywall, steel frame, forro e divisórias&quot;</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">9</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">8.9</td>
+</tr>
+<tr>
+<td>16970</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">9</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">5</td>
+</tr>
+<tr>
+<td>200m</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">1.7</td>
+</tr>
+<tr>
+<td>alvenaria estrutural vs steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">16</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">22.9</td>
+</tr>
+<tr>
+<td>ampliação com steel frame preço</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">47</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">11.5</td>
+</tr>
+<tr>
+<td>banco financia steel frame?</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">25</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">24.2</td>
+</tr>
+<tr>
+<td>bloco cerâmico, concreto ou drywall: qual sistema construtivo emite menos carbono?</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">5</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">9.8</td>
+</tr>
+<tr>
+<td>cabana estrutura metalica</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">4</td>
+</tr>
+<tr>
+<td>caixa construção</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">4</td>
+</tr>
+<tr>
+<td>calcular custo obra steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">29</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">20.6</td>
+</tr>
+<tr>
+<td>camadas parede</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">9.7</td>
+</tr>
+<tr>
+<td>camadas steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">5</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">4.6</td>
+</tr>
+<tr>
+<td>casa com estrutura metalica</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">3.3</td>
+</tr>
+<tr>
+<td>casa de estrutura metalica</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">2</td>
+</tr>
+<tr>
+<td>casa de ferro</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">5</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">4.8</td>
+</tr>
+<tr>
+<td>casa de frame steel</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">1.7</td>
+</tr>
+<tr>
+<td>casa de steel</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">5</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">10.4</td>
+</tr>
+<tr>
+<td>casa de steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">51</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">2.3</td>
+</tr>
+<tr>
+<td>casa de steel frame 70m2 preço</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">5.3</td>
+</tr>
+<tr>
+<td>casa de steel frame preço</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">9</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">2.9</td>
+</tr>
+<tr>
+<td>casa de steel frame pronta valor</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">6</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">5.5</td>
+</tr>
+<tr>
+<td>casa de steel frame vale a pena</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">2</td>
+</tr>
+<tr>
+<td>casa em estrutura metalica</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">4.3</td>
+</tr>
+<tr>
+<td>casa em steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">27</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">2.6</td>
+</tr>
+<tr>
+<td>casa em steel frame vale a pena</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">1.5</td>
+</tr>
+<tr>
+<td>casa em steel frame é mais barata</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">19</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">2.5</td>
+</tr>
+<tr>
+<td>casa estilo steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">6</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">1.7</td>
+</tr>
+<tr>
+<td>casa estrutura metalica</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">7</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">3.4</td>
+</tr>
+<tr>
+<td>casa feita de steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">7</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">3.1</td>
+</tr>
+<tr>
+<td>casa frame steel</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">10.7</td>
+</tr>
+<tr>
+<td>casa lsf preço</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">1.7</td>
+</tr>
+<tr>
+<td>casa pronta steel frame preço</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">12</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">4.4</td>
+</tr>
+<tr>
+<td>casa steel</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">9</td>
+</tr>
+<tr>
+<td>casa steel frame 100m2</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">22</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">5</td>
+</tr>
+<tr>
+<td>casa steel frame 200m2</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">7</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">6.9</td>
+</tr>
+<tr>
+<td>casa steel frame 60m2</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">4.5</td>
+</tr>
+<tr>
+<td>casa steel frame preço m2</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">10</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">3.7</td>
+</tr>
+<tr>
+<td>casa steel frame valor</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">7</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">2.3</td>
+</tr>
+<tr>
+<td>casa steel frame é mais barata</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">21</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">2.7</td>
+</tr>
+<tr>
+<td>casa stell frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">11</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">8</td>
+</tr>
+<tr>
+<td>casa still frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">5</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">6</td>
+</tr>
+<tr>
+<td>casa terrea steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">7</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">3.4</td>
+</tr>
+<tr>
+<td>casa térrea steel frame preço</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">47</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">8.1</td>
+</tr>
+<tr>
+<td>casa wood frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">3.7</td>
+</tr>
+<tr>
+<td>casas com estrutura metálica</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">2</td>
+</tr>
+<tr>
+<td>casas com estrutura metálica preço</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">1</td>
+</tr>
+<tr>
+<td>casas de steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">8</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">2.8</td>
+</tr>
+<tr>
+<td>casas de steel frame no brasil</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">21</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">5.6</td>
+</tr>
+<tr>
+<td>casas em steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">11</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">7.9</td>
+</tr>
+<tr>
+<td>casas em steel frame no brasil</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">5</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">7.2</td>
+</tr>
+<tr>
+<td>casas lsf preço m2</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">11.8</td>
+</tr>
+<tr>
+<td>casas steel frame alto padrão preço</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">44</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">7.6</td>
+</tr>
+<tr>
+<td>casas steel frame populares preço</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">41</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">11.1</td>
+</tr>
+<tr>
+<td>casas steel frame precios</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">63.8</td>
+</tr>
+<tr>
+<td>casas steel frame preço m2 curitiba</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">24</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">2.8</td>
+</tr>
+<tr>
+<td>casas steel frame à venda</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">21.3</td>
+</tr>
+<tr>
+<td>casas wood frame preço m2</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">5</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">1</td>
+</tr>
+<tr>
+<td>chalé estrutura metálica</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">3</td>
+</tr>
+<tr>
+<td>chalés steel frame 2 quartos</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">4</td>
+</tr>
+<tr>
+<td>chave na mão</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">6</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">2.3</td>
+</tr>
+<tr>
+<td>como financiar construção steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">29</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">25.8</td>
+</tr>
+<tr>
+<td>comparativo de custos steel frame alvenaria</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">7.5</td>
+</tr>
+<tr>
+<td>comprar kit casa steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">32.8</td>
+</tr>
+<tr>
+<td>concreto celular vs steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">6</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">11</td>
+</tr>
+<tr>
+<td>construa steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">19</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">9.4</td>
+</tr>
+<tr>
+<td>construir casa steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">9.3</td>
+</tr>
+<tr>
+<td>construir com steel frame é mais barato</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">22</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">5</td>
+</tr>
+<tr>
+<td>construtora especializada em steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">13</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">10.2</td>
+</tr>
+<tr>
+<td>construtora steel frame preço</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">44</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">9.8</td>
+</tr>
+<tr>
+<td>construção a seco steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">5</td>
+</tr>
+<tr>
+<td>construção casa steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">11.5</td>
+</tr>
+<tr>
+<td>construção com steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">6</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">2.2</td>
+</tr>
+<tr>
+<td>construção de casas em steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">8.3</td>
+</tr>
+<tr>
+<td>construção de steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">5</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">2.4</td>
+</tr>
+<tr>
+<td>construção de steel frame no brasil</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">8</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">4.6</td>
+</tr>
+<tr>
+<td>construção em steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">20</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">4.3</td>
+</tr>
+<tr>
+<td>construção steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">14</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">5</td>
+</tr>
+<tr>
+<td>construção steel frame preço</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">25</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">2.3</td>
+</tr>
+<tr>
+<td>construção steel frame vale a pena</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">2</td>
+</tr>
+<tr>
+<td>consórcio para construção steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">14</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">9.4</td>
+</tr>
+<tr>
+<td>contrato frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">11</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">1</td>
+</tr>
+<tr>
+<td>cotação construção steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">48</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">9.1</td>
+</tr>
+<tr>
+<td>crédito imobiliário steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">30</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">29</td>
+</tr>
+<tr>
+<td>curso steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">4</td>
+</tr>
+<tr>
+<td>custo</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">18</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">1.5</td>
+</tr>
+<tr>
+<td>custo benefício steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">18</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">14.4</td>
+</tr>
+<tr>
+<td>custo construção steel frame por m2 brasil 2026</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">10</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">2.6</td>
+</tr>
+<tr>
+<td>custo de mão de obra steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">43</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">10.4</td>
+</tr>
+<tr>
+<td>custo final casa steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">45</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">11.2</td>
+</tr>
+<tr>
+<td>custo por etapa steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">44</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">15.9</td>
+</tr>
+<tr>
+<td>custo por metro quadrado</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">5</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">1.6</td>
+</tr>
+<tr>
+<td>custos</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">7</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">1.4</td>
+</tr>
+<tr>
+<td>declive</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">5</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">7.8</td>
+</tr>
+<tr>
+<td>drywall st e ru</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">10</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">7</td>
+</tr>
+<tr>
+<td>durabilidade steel frame vs alvenaria</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">27</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">21.2</td>
+</tr>
+<tr>
+<td>e o custo</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">1.7</td>
+</tr>
+<tr>
+<td>econodata maiores empresas steel frame minas gerais 2026</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">13</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">8.5</td>
+</tr>
+<tr>
+<td>economia steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">23</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">34</td>
+</tr>
+<tr>
+<td>em trabalho acima de 2 m do piso o sistema de proteção contra queda deve ser formado por quais itens</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">10</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">10.8</td>
+</tr>
+<tr>
+<td>espaço smart minas gerais lojas drywall steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">3</td>
+</tr>
+<tr>
+<td>espaço smart</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">3</td>
+</tr>
+<tr>
+<td>espessura parede steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">12</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">21</td>
+</tr>
+<tr>
+<td>estimativa de custo steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">42</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">12.2</td>
+</tr>
+<tr>
+<td>estrutura de casa de ferro</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">2</td>
+</tr>
+<tr>
+<td>estrutura de ferro para casas preço</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">5</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">1.2</td>
+</tr>
+<tr>
+<td>estrutura em aço leve</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">4.3</td>
+</tr>
+<tr>
+<td>estrutura metálica para casas preço</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">19</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">6.3</td>
+</tr>
+<tr>
+<td>estrutura steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">5</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">3</td>
+</tr>
+<tr>
+<td>estrutura steel frame preço</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">7</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">3.7</td>
+</tr>
+<tr>
+<td>estruturas em steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">5</td>
+</tr>
+<tr>
+<td>eu moro no brasil. encontre para mim opções de construtoras de casas com preços muito competitivos.</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">5</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">1.6</td>
+</tr>
+<tr>
+<td>eu moro no brasil. quero uma construtora de casas com ótimo prazo de entrega.</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">5</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">9</td>
+</tr>
+<tr>
+<td>fabrica steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">2.3</td>
+</tr>
+<tr>
+<td>financiamento bradesco steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">19</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">11.1</td>
+</tr>
+<tr>
+<td>financiamento casa steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">33</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">22.9</td>
+</tr>
+<tr>
+<td>financiamento itaú steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">24</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">16.3</td>
+</tr>
+<tr>
+<td>financiamento para reforma com steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">13</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">11</td>
+</tr>
+<tr>
+<td>financiamento santander steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">15</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">18.4</td>
+</tr>
+<tr>
+<td>fiscalização de obra steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">9</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">31.8</td>
+</tr>
+<tr>
+<td>foto</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">3.7</td>
+</tr>
+<tr>
+<td>fundação para steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">26</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">10.1</td>
+</tr>
+<tr>
+<td>fundação rápida vs fundação tradicional</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">26</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">4.1</td>
+</tr>
+<tr>
+<td>fundação steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">7</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">4.9</td>
+</tr>
+<tr>
+<td>galpão steel frame preço</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">27</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">11.8</td>
+</tr>
+<tr>
+<td>história do steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">10</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">24.5</td>
+</tr>
+<tr>
+<td>imagens</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">1.3</td>
+</tr>
+<tr>
+<td>inurl:negocio.site &quot;espaco smart&quot;</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">10</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">8.4</td>
+</tr>
+<tr>
+<td>inurl:sites.google.com &quot;espaco smart&quot;</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">14</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">9.4</td>
+</tr>
+<tr>
+<td>investir em casas steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">12</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">26.5</td>
+</tr>
+<tr>
+<td>isolamento acústico steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">16</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">15.3</td>
+</tr>
+<tr>
+<td>isolamento acústico steel frame vs alvenaria</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">31</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">4.4</td>
+</tr>
+<tr>
+<td>isolamento térmico steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">15</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">18.1</td>
+</tr>
+<tr>
+<td>isolamento térmico steel frame vs alvenaria</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">31</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">5.1</td>
+</tr>
+<tr>
+<td>isopor eps vs steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">20</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">29.2</td>
+</tr>
+<tr>
+<td>kit casa steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">32</td>
+</tr>
+<tr>
+<td>kit steel frame preço</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">27</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">16.7</td>
+</tr>
+<tr>
+<td>kitnet steel frame preço</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">1.5</td>
+</tr>
+<tr>
+<td>laje de steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">10.3</td>
+</tr>
+<tr>
+<td>laje em steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">10</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">9.7</td>
+</tr>
+<tr>
+<td>laje seca steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">19</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">10.2</td>
+</tr>
+<tr>
+<td>laje steel deck</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">3</td>
+</tr>
+<tr>
+<td>laje steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">38</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">9.3</td>
+</tr>
+<tr>
+<td>laje steel frame preço</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">18</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">7.8</td>
+</tr>
+<tr>
+<td>liebherr aplicacao fundacao profunda</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">22.5</td>
+</tr>
+<tr>
+<td>light steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">4.7</td>
+</tr>
+<tr>
+<td>light steel frame casas</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">2.5</td>
+</tr>
+<tr>
+<td>light steel frame o que é</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">7</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">2.6</td>
+</tr>
+<tr>
+<td>light steel frame é mais barato que alvenaria</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">43</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">7</td>
+</tr>
+<tr>
+<td>light steel framing o que é</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">2.3</td>
+</tr>
+<tr>
+<td>light steel framing preço m2</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">91</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">3.4</td>
+</tr>
+<tr>
+<td>light wall preço m2</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">10</td>
+</tr>
+<tr>
+<td>lightwall</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">2.3</td>
+</tr>
+<tr>
+<td>linha de crédito para steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">19</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">10.9</td>
+</tr>
+<tr>
+<td>liquidez imóvel steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">28</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">46.2</td>
+</tr>
+<tr>
+<td>loja steel frame preço</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">32</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">10.1</td>
+</tr>
+<tr>
+<td>m2 steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">17</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">2.1</td>
+</tr>
+<tr>
+<td>maior loja drywall steel frame minas gerais</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">8</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">4.4</td>
+</tr>
+<tr>
+<td>manutenção casa steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">16</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">28</td>
+</tr>
+<tr>
+<td>manutenção steel frame vs alvenaria</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">6</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">16.2</td>
+</tr>
+<tr>
+<td>metal frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">11</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">38.5</td>
+</tr>
+<tr>
+<td>metro quadrado do steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">27</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">2.4</td>
+</tr>
+<tr>
+<td>minha casa minha vida steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">14</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">23.4</td>
+</tr>
+<tr>
+<td>naframe</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">4.3</td>
+</tr>
+<tr>
+<td>nbr 16970</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">125</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">8.3</td>
+</tr>
+<tr>
+<td>nbr 16970 pdf</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">21</td>
+</tr>
+<tr>
+<td>nbr 16970 pdf download grátis</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">4.8</td>
+</tr>
+<tr>
+<td>nbr steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">13</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">7.4</td>
+</tr>
+<tr>
+<td>norma abnt steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">14</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">17.6</td>
+</tr>
+<tr>
+<td>normas para estruturas metálicas</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">55.7</td>
+</tr>
+<tr>
+<td>nr 35 linha de vida</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">1</td>
+</tr>
+<tr>
+<td>o banco avalia steel frame como alvenaria?</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">20</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">16.9</td>
+</tr>
+<tr>
+<td>o que é steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">11</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">2.5</td>
+</tr>
+<tr>
+<td>o que é steel frame na construção civil</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">2.7</td>
+</tr>
+<tr>
+<td>obra de steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">8.7</td>
+</tr>
+<tr>
+<td>obra steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">19</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">9.9</td>
+</tr>
+<tr>
+<td>obras em steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">5.3</td>
+</tr>
+<tr>
+<td>orçamento construção steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">48</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">11.4</td>
+</tr>
+<tr>
+<td>orçamento detalhado steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">41</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">9.7</td>
+</tr>
+<tr>
+<td>orçamento online steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">24</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">23.8</td>
+</tr>
+<tr>
+<td>padrão médio</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">2</td>
+</tr>
+<tr>
+<td>parede de drywall</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">1</td>
+</tr>
+<tr>
+<td>parede de steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">22</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">6.5</td>
+</tr>
+<tr>
+<td>parede em steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">5.3</td>
+</tr>
+<tr>
+<td>parede steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">28</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">9.3</td>
+</tr>
+<tr>
+<td>paredes steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">11.7</td>
+</tr>
+<tr>
+<td>patologias em steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">28</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">11.4</td>
+</tr>
+<tr>
+<td>placa cimenticia</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">3</td>
+</tr>
+<tr>
+<td>planilha de custos steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">46</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">21.6</td>
+</tr>
+<tr>
+<td>predio em steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">2.3</td>
+</tr>
+<tr>
+<td>preço</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">9</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">3.9</td>
+</tr>
+<tr>
+<td>preço acabamento steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">42</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">10.5</td>
+</tr>
+<tr>
+<td>preço casa steel frame chave na mão</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">19</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">19.7</td>
+</tr>
+<tr>
+<td>preço fundação steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">47</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">9.1</td>
+</tr>
+<tr>
+<td>preço material steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">42</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">9.1</td>
+</tr>
+<tr>
+<td>preço steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">28</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">3.3</td>
+</tr>
+<tr>
+<td>preço steel frame vs alvenaria</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">20</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">9.1</td>
+</tr>
+<tr>
+<td>programa casa verde e amarela steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">14</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">11.2</td>
+</tr>
+<tr>
+<td>projeto em steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">5</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">3</td>
+</tr>
+<tr>
+<td>proteção contra quedas</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">13</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">42.1</td>
+</tr>
+<tr>
+<td>proteção de estruturas</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">65</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">64.3</td>
+</tr>
+<tr>
+<td>proteção estrutural</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">8</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">72.9</td>
+</tr>
+<tr>
+<td>pé direito duplo steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">8</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">23</td>
+</tr>
+<tr>
+<td>quais são as vantagens, custos e etapas para instalar um espaço smart em um imóvel?</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">15.7</td>
+</tr>
+<tr>
+<td>qual a melhor construção steel frame ou alvenaria</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">14</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">29.8</td>
+</tr>
+<tr>
+<td>qual o custo</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">1.8</td>
+</tr>
+<tr>
+<td>qual o custo por metro quadrado?</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">1.3</td>
+</tr>
+<tr>
+<td>qual o valor</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">3.3</td>
+</tr>
+<tr>
+<td>qual o valor do metro quadrado de steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">2.3</td>
+</tr>
+<tr>
+<td>qual o valor do metro quadrado do steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">20</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">1.9</td>
+</tr>
+<tr>
+<td>qual valor</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">1.8</td>
+</tr>
+<tr>
+<td>quanto custa</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">1</td>
+</tr>
+<tr>
+<td>quanto custa construir em steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">58</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">6.4</td>
+</tr>
+<tr>
+<td>quanto custa construir uma casa em steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">1.7</td>
+</tr>
+<tr>
+<td>quanto custa fazer uma casa de steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">15</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">2.2</td>
+</tr>
+<tr>
+<td>quanto custa o projeto de uma casa</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">7</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">7.4</td>
+</tr>
+<tr>
+<td>quanto custa para fazer uma casa de steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">9</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">2</td>
+</tr>
+<tr>
+<td>quanto custa projeto de uma casa</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">5</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">7.2</td>
+</tr>
+<tr>
+<td>quanto custa um projeto</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">13</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">8.9</td>
+</tr>
+<tr>
+<td>quanto custa um projeto de casa</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">15</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">7.6</td>
+</tr>
+<tr>
+<td>quanto custa um projeto de uma casa</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">15</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">7.9</td>
+</tr>
+<tr>
+<td>quanto custa uma casa de 100m2 steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">44</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">7.9</td>
+</tr>
+<tr>
+<td>quanto fica um projeto de uma casa</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">7.7</td>
+</tr>
+<tr>
+<td>radier steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">7</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">6</td>
+</tr>
+<tr>
+<td>ranking lojas drywall steel frame minas gerais</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">2</td>
+</tr>
+<tr>
+<td>reforma com steel frame preço</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">49</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">11.6</td>
+</tr>
+<tr>
+<td>resistência ao fogo steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">10</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">13.5</td>
+</tr>
+<tr>
+<td>resistência steel frame vs alvenaria</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">37</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">15.4</td>
+</tr>
+<tr>
+<td>resolução cgiee nº 4/2025</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">10</td>
+</tr>
+<tr>
+<td>retorno sobre investimento steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">12</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">46.7</td>
+</tr>
+<tr>
+<td>sala</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">2.3</td>
+</tr>
+<tr>
+<td>schneider steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">3</td>
+</tr>
+<tr>
+<td>sim</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">19</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">3.1</td>
+</tr>
+<tr>
+<td>sim gostaria</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">1.3</td>
+</tr>
+<tr>
+<td>sim quero saber</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">2.7</td>
+</tr>
+<tr>
+<td>simulador financiamento caixa steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">22</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">21.5</td>
+</tr>
+<tr>
+<td>sinal de steel</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">10</td>
+</tr>
+<tr>
+<td>sistema de construção leve ou alvenaria convencional: qual é melhor em eficiência e prazo?</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">6</td>
+</tr>
+<tr>
+<td>sistema de proteção contra quedas nr 35</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">14</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">10.2</td>
+</tr>
+<tr>
+<td>sobrado em steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">10</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">6.7</td>
+</tr>
+<tr>
+<td>sobrado steel frame preço</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">46</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">9.3</td>
+</tr>
+<tr>
+<td>steel deck</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">3</td>
+</tr>
+<tr>
+<td>steel deck laje</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">3.7</td>
+</tr>
+<tr>
+<td>steel deck preço m2</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">3</td>
+</tr>
+<tr>
+<td>steel frame bh</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">5</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">3.4</td>
+</tr>
+<tr>
+<td>steel frame bh preço</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">37</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">6.4</td>
+</tr>
+<tr>
+<td>steel frame brasilia</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">6</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">2.8</td>
+</tr>
+<tr>
+<td>steel frame campinas</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">7</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">3.6</td>
+</tr>
+<tr>
+<td>steel frame campo grande ms</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">2.7</td>
+</tr>
+<tr>
+<td>steel frame casa preço</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">3.3</td>
+</tr>
+<tr>
+<td>steel frame casas</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">47</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">2.6</td>
+</tr>
+<tr>
+<td>steel frame construção</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">18</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">4.4</td>
+</tr>
+<tr>
+<td>steel frame construção brasil novidade</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">8</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">3.3</td>
+</tr>
+<tr>
+<td>steel frame curitiba</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">14</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">2.8</td>
+</tr>
+<tr>
+<td>steel frame curitiba valor</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">11</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">6.1</td>
+</tr>
+<tr>
+<td>steel frame detalhamento</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">8</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">23.8</td>
+</tr>
+<tr>
+<td>steel frame e wood frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">8.7</td>
+</tr>
+<tr>
+<td>steel frame em são paulo</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">6.8</td>
+</tr>
+<tr>
+<td>steel frame goiania</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">7</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">4</td>
+</tr>
+<tr>
+<td>steel frame laje</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">5</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">8.6</td>
+</tr>
+<tr>
+<td>steel frame o que é</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">2.7</td>
+</tr>
+<tr>
+<td>steel frame obra</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">7.3</td>
+</tr>
+<tr>
+<td>steel frame onde comprar</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">6.7</td>
+</tr>
+<tr>
+<td>steel frame ou alvenaria</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">10</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">7.7</td>
+</tr>
+<tr>
+<td>steel frame ou alvenaria para sobrado</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">13</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">19.9</td>
+</tr>
+<tr>
+<td>steel frame ou alvenaria qual mais barato</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">7</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">2.1</td>
+</tr>
+<tr>
+<td>steel frame ou alvenaria qual o mais barato</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">6</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">15.3</td>
+</tr>
+<tr>
+<td>steel frame ou wood frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">8</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">10.3</td>
+</tr>
+<tr>
+<td>steel frame parede</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">12</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">16.6</td>
+</tr>
+<tr>
+<td>steel frame porto alegre</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">3.7</td>
+</tr>
+<tr>
+<td>steel frame precio m2</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">64</td>
+</tr>
+<tr>
+<td>steel frame precios</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">103</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">68.9</td>
+</tr>
+<tr>
+<td>steel frame preço m2 2023</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">67</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">5.6</td>
+</tr>
+<tr>
+<td>steel frame rj</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">3</td>
+</tr>
+<tr>
+<td>steel frame são paulo</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">7</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">5.9</td>
+</tr>
+<tr>
+<td>steel frame telhado preço</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">33</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">5.5</td>
+</tr>
+<tr>
+<td>steel frame valor</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">33</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">3.1</td>
+</tr>
+<tr>
+<td>steel frame valor m2 2023</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">81</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">4.6</td>
+</tr>
+<tr>
+<td>steel frame valor m2 2024</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">9.7</td>
+</tr>
+<tr>
+<td>steel frame valor m2 2025</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">5</td>
+</tr>
+<tr>
+<td>steel frame vantagens e desvantagens</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">3</td>
+</tr>
+<tr>
+<td>steel frame vs alvenaria</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">48</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">12</td>
+</tr>
+<tr>
+<td>steel frame vs bloco de concreto</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">9</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">6.3</td>
+</tr>
+<tr>
+<td>steel frame vs tijolo baiano</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">11</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">9</td>
+</tr>
+<tr>
+<td>steel frame vs tijolo ecológico</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">6</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">12.3</td>
+</tr>
+<tr>
+<td>steel frame vs wood frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">8</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">16.9</td>
+</tr>
+<tr>
+<td>steel frame x alvenaria</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">6.7</td>
+</tr>
+<tr>
+<td>steel frame é mais barato?</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">48</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">8.5</td>
+</tr>
+<tr>
+<td>steel framing</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">13.3</td>
+</tr>
+<tr>
+<td>steel framing casas</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">6</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">28.2</td>
+</tr>
+<tr>
+<td>steel framing precios</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">5</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">68.4</td>
+</tr>
+<tr>
+<td>steel framing precios m2 españa</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">71.5</td>
+</tr>
+<tr>
+<td>steelcorp</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">5</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">2.4</td>
+</tr>
+<tr>
+<td>steelframe</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">10</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">3.3</td>
+</tr>
+<tr>
+<td>stel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">3</td>
+</tr>
+<tr>
+<td>still frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">5</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">4.2</td>
+</tr>
+<tr>
+<td>sustentabilidade steel frame vs alvenaria</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">22.3</td>
+</tr>
+<tr>
+<td>telhado em steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">3.7</td>
+</tr>
+<tr>
+<td>telhado steel frame preço m2</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">65</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">5.7</td>
+</tr>
+<tr>
+<td>tempo de obra steel frame vs alvenaria</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">22</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">9.3</td>
+</tr>
+<tr>
+<td>tipos de fundação para steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">23</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">16.1</td>
+</tr>
+<tr>
+<td>tratamento de juntas steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">13</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">15.7</td>
+</tr>
+<tr>
+<td>usar fgts para construir steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">14</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">2.6</td>
+</tr>
+<tr>
+<td>valor casa steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">20</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">1.5</td>
+</tr>
+<tr>
+<td>valor de revenda casa steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">23</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">18.6</td>
+</tr>
+<tr>
+<td>valor do metro quadrado</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">1</td>
+</tr>
+<tr>
+<td>valor do metro quadrado do steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">7</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">2</td>
+</tr>
+<tr>
+<td>valor do steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">15</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">3.1</td>
+</tr>
+<tr>
+<td>valor metro quadrado steel frame 2024</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">50</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">8.5</td>
+</tr>
+<tr>
+<td>valor steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">11</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">1.9</td>
+</tr>
+<tr>
+<td>valorização imóvel steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">48</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">15</td>
+</tr>
+<tr>
+<td>vida útil steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">7.8</td>
+</tr>
+<tr>
+<td>viga steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">13.3</td>
+</tr>
+<tr>
+<td>viga steel frame preço</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">6</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">11.3</td>
+</tr>
+<tr>
+<td>wood frame ou steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">9</td>
+</tr>
+<tr>
+<td>wood frame vs steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">4.7</td>
+</tr>
+<tr>
+<td>wood steel frame</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">5.7</td>
+</tr>
+<tr>
+<td>www.berkahn.com.br</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">34</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">36.1</td>
+</tr>
+<tr>
+<td>zona livre de queda</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">5</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">57.2</td>
+</tr>
+<tr>
+<td>é caro?</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">2.3</td>
+</tr>
+</tbody>
+</table>
+<h3>Páginas coletadas (por clicks)</h3>
+<table>
+<thead>
+<tr>
+<th>Página</th>
+<th style="text-align:right">Clicks</th>
+<th style="text-align:right">Impressions</th>
+<th style="text-align:right">CTR</th>
+<th style="text-align:right">Posição</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Custo do Steel Frame por m² em 2026: preços com fonte (<code>custo-steel-frame-m2-2026</code>)</td>
+<td style="text-align:right">881</td>
+<td style="text-align:right">29282</td>
+<td style="text-align:right">3.01%</td>
+<td style="text-align:right">3.9</td>
+</tr>
+<tr>
+<td>Quanto custa uma casa de 100 m² em Steel Frame em 2026 (<code>quanto-custa-construir-steel-frame-precos-m2-2026</code>)</td>
+<td style="text-align:right">269</td>
+<td style="text-align:right">15129</td>
+<td style="text-align:right">1.78%</td>
+<td style="text-align:right">6.3</td>
+</tr>
+<tr>
+<td>Home (<code>/</code>)</td>
+<td style="text-align:right">66</td>
+<td style="text-align:right">594</td>
+<td style="text-align:right">11.11%</td>
+<td style="text-align:right">5</td>
+</tr>
+<tr>
+<td>Como Financiar uma Construção em Light Steel Frame (<code>financiar-construcao-light-steel-frame</code>)</td>
+<td style="text-align:right">53</td>
+<td style="text-align:right">2078</td>
+<td style="text-align:right">2.55%</td>
+<td style="text-align:right">5.7</td>
+</tr>
+<tr>
+<td>Principais Normas do Light Steel Frame no Brasil (<code>normas-light-steel-frame-brasil</code>)</td>
+<td style="text-align:right">46</td>
+<td style="text-align:right">2454</td>
+<td style="text-align:right">1.87%</td>
+<td style="text-align:right">5.2</td>
+</tr>
+<tr>
+<td>Fundação Steel Frame vs. Alvenaria: Comparativo Completo (<code>fundacao-steel-frame-vs-alvenaria</code>)</td>
+<td style="text-align:right">24</td>
+<td style="text-align:right">2278</td>
+<td style="text-align:right">1.05%</td>
+<td style="text-align:right">6.4</td>
+</tr>
+<tr>
+<td>Patologias em Steel Frame: Como Prevenir e Como Corrigir (<code>patologias-steel-frame</code>)</td>
+<td style="text-align:right">18</td>
+<td style="text-align:right">460</td>
+<td style="text-align:right">3.91%</td>
+<td style="text-align:right">5.4</td>
+</tr>
+<tr>
+<td>Anatomia da Parede de Steel Frame: Camada por Camada (<code>anatomia-parede-steel-frame</code>)</td>
+<td style="text-align:right">14</td>
+<td style="text-align:right">863</td>
+<td style="text-align:right">1.62%</td>
+<td style="text-align:right">6.9</td>
+</tr>
+<tr>
+<td>Steel Frame no Mundo: Como Cada País Constrói com Aço (<code>steel-frame-no-mundo</code>)</td>
+<td style="text-align:right">13</td>
+<td style="text-align:right">733</td>
+<td style="text-align:right">1.77%</td>
+<td style="text-align:right">6.8</td>
+</tr>
+<tr>
+<td>Drywall ST, RU e RF: qual usar em cada ambiente da sua obra (<code>drywall-st-ru-rf</code>)</td>
+<td style="text-align:right">10</td>
+<td style="text-align:right">910</td>
+<td style="text-align:right">1.1%</td>
+<td style="text-align:right">6</td>
+</tr>
+<tr>
+<td>Fissuras no Steel Frame: Causas, Prevenção e Reparo (<code>fissuras-steel-frame</code>)</td>
+<td style="text-align:right">5</td>
+<td style="text-align:right">509</td>
+<td style="text-align:right">0.98%</td>
+<td style="text-align:right">7.3</td>
+</tr>
+<tr>
+<td>Proteção contra quedas na construção civil: guia técnico completo (<code>protecao-contra-quedas-construcao-civil</code>)</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">1027</td>
+<td style="text-align:right">0.39%</td>
+<td style="text-align:right">11.7</td>
+</tr>
+<tr>
+<td>Steel Frame e Fogo: O Que Realmente Acontece em um Incêndio (<code>steel-frame-fogo-incendio</code>)</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">501</td>
+<td style="text-align:right">0.8%</td>
+<td style="text-align:right">5.1</td>
+</tr>
+<tr>
+<td>Fundação para Steel Frame: Guia Definitivo (<code>fundacao-steel-frame</code>)</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">154</td>
+<td style="text-align:right">1.3%</td>
+<td style="text-align:right">5.4</td>
+</tr>
+<tr>
+<td>Steel Frame vs Alvenaria: O Comparativo Definitivo (<code>steel-frame-vs-alvenaria</code>)</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">536</td>
+<td style="text-align:right">0.37%</td>
+<td style="text-align:right">6.9</td>
+</tr>
+<tr>
+<td>Empresa (<code>/empresa</code>)</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">167</td>
+<td style="text-align:right">1.2%</td>
+<td style="text-align:right">4.3</td>
+</tr>
+<tr>
+<td>/projetos/chale (<code>/projetos/chale</code>)</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">40</td>
+<td style="text-align:right">5%</td>
+<td style="text-align:right">8.2</td>
+</tr>
+<tr>
+<td>Residencial (<code>/residencial</code>)</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">100</td>
+<td style="text-align:right">2%</td>
+<td style="text-align:right">5.1</td>
+</tr>
+<tr>
+<td>Construção Industrializada: a Casa Montada Como um Carro (<code>construcao-industrializada-casa-montada-como-carro</code>)</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">28</td>
+<td style="text-align:right">3.57%</td>
+<td style="text-align:right">7.5</td>
+</tr>
+<tr>
+<td>Custos ocultos da construção: o que estoura a obra em 2026 (<code>custos-ocultos-construcao-2026</code>)</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">8</td>
+<td style="text-align:right">12.5%</td>
+<td style="text-align:right">8.5</td>
+</tr>
+<tr>
+<td>Consequências da reforma tributária no mercado da construção industrializada (<code>reforma-tributaria-construcao-industrializada</code>)</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">11</td>
+<td style="text-align:right">9.09%</td>
+<td style="text-align:right">4.3</td>
+</tr>
+<tr>
+<td>Sistema Painelizado vs. Stick: o Que Vale Mais (<code>sistema-painelizado-vs-stick-steel-frame</code>)</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">44</td>
+<td style="text-align:right">2.27%</td>
+<td style="text-align:right">5</td>
+</tr>
+<tr>
+<td>Steel Frame vs Wood Frame: Qual Sistema Construtivo Escolher? (<code>steel-frame-vs-wood-frame</code>)</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">531</td>
+<td style="text-align:right">0.19%</td>
+<td style="text-align:right">6.9</td>
+</tr>
+<tr>
+<td>Terreno em declive: quanto encarece a obra em 2026 (<code>terreno-em-declive-quanto-encarece</code>)</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">87</td>
+<td style="text-align:right">1.15%</td>
+<td style="text-align:right">5.1</td>
+</tr>
+<tr>
+<td>Pillar LSF (<code>/lsf</code>)</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">126</td>
+<td style="text-align:right">0.79%</td>
+<td style="text-align:right">5</td>
+</tr>
+<tr>
+<td>Portfolio (<code>/portfolio</code>)</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">9</td>
+<td style="text-align:right">11.11%</td>
+<td style="text-align:right">8.6</td>
+</tr>
+<tr>
+<td>Home (<code>https://berkahn.com.br/</code>)</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">1</td>
+</tr>
+<tr>
+<td>Atualidades (índice) (<code>/atualidades</code>)</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">30</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">6.7</td>
+</tr>
+<tr>
+<td>5 Vantagens Definitivas do Light Steel Frame (<code>5-vantagens-decisivas-light-steel-frame</code>)</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">6</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">6.7</td>
+</tr>
+<tr>
+<td>/atualidades/anatomia-parede-de-steel-frame (<code>anatomia-parede-de-steel-frame</code>)</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">1</td>
+</tr>
+<tr>
+<td>Certificações e normas técnicas em Steel Frame (<code>certificacoes-steel-frame</code>)</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">6.3</td>
+</tr>
+<tr>
+<td>Como Construir ao Lado de um Hospital em Operação (<code>construir-hospital-em-operacao</code>)</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">6</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">7.8</td>
+</tr>
+<tr>
+<td>Construir ou Comprar Pronto? Os Números na Grande SP (<code>construir-ou-comprar-pronto-numeros-grande-sp</code>)</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">6</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">5.3</td>
+</tr>
+<tr>
+<td>Drywall ou Alvenaria de Bloco Cerâmico: Comparativo Técnico Completo (<code>drywall-ou-alvenaria</code>)</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">58</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">6.1</td>
+</tr>
+<tr>
+<td>Nova Lei de Eficiência Energética e Reforma Tributária: o Que Muda para Construir (<code>eficiencia-energetica-reforma-tributaria</code>)</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">40</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">7.4</td>
+</tr>
+<tr>
+<td>Energia solar residencial: como funciona, quanto custa e como integrar ao projeto da sua casa (<code>energia-solar-residencial</code>)</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">45</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">7.7</td>
+</tr>
+<tr>
+<td>Como Financiar sua Construção em Steel Frame (<code>financiamento-construcao-steel-frame</code>)</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">25</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">5.7</td>
+</tr>
+<tr>
+<td>Steel Frame: o guia definitivo (<code>guia-definitivo-steel-frame-brasil</code>)</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">7</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">19.3</td>
+</tr>
+<tr>
+<td>Iluminação LED Residencial: Por Que a Luz da Sua Casa Começa na Planta (<code>iluminacao-led-residencial</code>)</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">6.7</td>
+</tr>
+<tr>
+<td>Isolamento Térmico e Acústico no Steel Frame (<code>isolamento-termico-acustico-steel-frame</code>)</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">82</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">11.2</td>
+</tr>
+<tr>
+<td>Mitos e Verdades do Steel Frame: O Que Sustenta Cada Argumento (<code>mitos-verdades-steel-frame</code>)</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">21</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">9.4</td>
+</tr>
+<tr>
+<td>Passo a Passo: Como Funciona a Construção em Steel Frame (<code>passo-passo-construcao-steel-frame</code>)</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">100</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">8.3</td>
+</tr>
+<tr>
+<td>Quanto custa o projeto de uma casa em 2026 (<code>quanto-custa-projeto-casa</code>)</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">197</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">7.2</td>
+</tr>
+<tr>
+<td>Steel Frame Aguenta Vento Forte? A Engenharia por Trás dos 200 km/h (<code>steel-frame-aguenta-vento-forte</code>)</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">105</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">4.8</td>
+</tr>
+<tr>
+<td>Steel Frame: O Futuro da Construção Civil no Brasil (<code>steel-frame-futuro-construcao</code>)</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">5</td>
+</tr>
+<tr>
+<td>Steel Frame Pode Ter Laje de Concreto? Guia Prático Para Quem Vai Construir (<code>steel-frame-laje-de-concreto</code>)</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">249</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">7.1</td>
+</tr>
+<tr>
+<td>Steel Frame Resiste a Terremoto? O Teste que Provou (<code>steel-frame-terremoto-teste-cfs10</code>)</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">37</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">4.7</td>
+</tr>
+<tr>
+<td>Sustentabilidade na Construção Civil: O Peso Ambiental do Concreto e as Alternativas que Já Existem (<code>sustentabilidade-construcao-civil-economia-circular</code>)</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">13</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">8.4</td>
+</tr>
+<tr>
+<td>Sustentabilidade: O Impacto Positivo do Steel Frame (<code>sustentabilidade-construcao-industrializada</code>)</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">8.5</td>
+</tr>
+<tr>
+<td>Comercial e Industrial (<code>/comercial-industrial</code>)</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">49</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">12.3</td>
+</tr>
+<tr>
+<td>FAQ (<code>/perguntas-frequentes</code>)</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">42</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">6.5</td>
+</tr>
+<tr>
+<td>Política de Privacidade (<code>/privacidade</code>)</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">35</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">5.5</td>
+</tr>
+<tr>
+<td>/projetos/casa-de-campo (<code>/projetos/casa-de-campo</code>)</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">6.5</td>
+</tr>
+<tr>
+<td>/projetos/loft (<code>/projetos/loft</code>)</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">10.8</td>
+</tr>
+<tr>
+<td>Serviços (<code>/servicos</code>)</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">81</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">4.1</td>
+</tr>
+<tr>
+<td>Termos de Uso (<code>/termos-de-uso</code>)</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">69</td>
+<td style="text-align:right">0%</td>
+<td style="text-align:right">3.2</td>
+</tr>
+</tbody>
+</table>
+<h3>Queries em alta (maior ganho de clicks MoM)</h3>
+<table>
+<thead>
+<tr>
+<th>Query</th>
+<th style="text-align:right">Clicks atual</th>
+<th style="text-align:right">Clicks anterior</th>
+<th style="text-align:right">Ganho</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>casas steel frame preço</td>
+<td style="text-align:right">12</td>
+<td style="text-align:right">8</td>
+<td style="text-align:right">+4</td>
+</tr>
+</tbody>
+</table>
+<h3>Queries em queda</h3>
+<p>Consultas ausentes não atingiram o limite de linhas, mas também podem ter sido omitidas por privacidade. Ausência não comprova zero cliques.</p>
+<table>
+<thead>
+<tr>
+<th>Query</th>
+<th style="text-align:right">Clicks atual</th>
+<th style="text-align:right">Clicks anterior</th>
+<th style="text-align:right">Perda</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>steel frame valor m2</td>
+<td style="text-align:right">50</td>
+<td style="text-align:right">68</td>
+<td style="text-align:right">-18</td>
+</tr>
+<tr>
+<td>casas steel frame preço m2</td>
+<td style="text-align:right">34</td>
+<td style="text-align:right">49</td>
+<td style="text-align:right">-15</td>
+</tr>
+<tr>
+<td>casa de steel frame é mais barata</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">8</td>
+<td style="text-align:right">-6</td>
+</tr>
+<tr>
+<td>steel frame valor m2 2026</td>
+<td style="text-align:right">9</td>
+<td style="text-align:right">14</td>
+<td style="text-align:right">-5</td>
+</tr>
+<tr>
+<td>light steel frame preço m2</td>
+<td style="text-align:right">6</td>
+<td style="text-align:right">11</td>
+<td style="text-align:right">-5</td>
+</tr>
+</tbody>
+</table>
+<h2 id="indexacao-no-google-33-de-39-com-inspecao-valida">Indexação no Google (33 de 39 com inspeção válida)</h2>
+<table>
+<thead>
+<tr>
+<th>Slug</th>
+<th style="text-align:center">Status</th>
+<th style="text-align:center">Último crawl</th>
+<th style="text-align:left">Observação</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Patologias em Steel Frame: Como Prevenir e Como Corrigir (<code>patologias-steel-frame</code>)</td>
+<td style="text-align:center">Indexada</td>
+<td style="text-align:center">11/10/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Steel Frame vs Alvenaria: O Comparativo Definitivo (<code>steel-frame-vs-alvenaria</code>)</td>
+<td style="text-align:center">Indexada</td>
+<td style="text-align:center">14/10/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Sistema Painelizado vs. Stick: o Que Vale Mais (<code>sistema-painelizado-vs-stick-steel-frame</code>)</td>
+<td style="text-align:center">Indexada</td>
+<td style="text-align:center">11/10/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Steel Frame Aguenta Vento Forte? A Engenharia por Trás dos 200 km/h (<code>steel-frame-aguenta-vento-forte</code>)</td>
+<td style="text-align:center">Indexada</td>
+<td style="text-align:center">27/08/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Steel Frame Pode Ter Laje de Concreto? Guia Prático Para Quem Vai Construir (<code>steel-frame-laje-de-concreto</code>)</td>
+<td style="text-align:center">Indexada</td>
+<td style="text-align:center">17/10/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Anatomia da Parede de Steel Frame: Camada por Camada (<code>anatomia-parede-steel-frame</code>)</td>
+<td style="text-align:center">Indexada</td>
+<td style="text-align:center">20/10/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Principais Normas do Light Steel Frame no Brasil (<code>normas-light-steel-frame-brasil</code>)</td>
+<td style="text-align:center">Indexada</td>
+<td style="text-align:center">20/10/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Drywall ST, RU e RF: qual usar em cada ambiente da sua obra (<code>drywall-st-ru-rf</code>)</td>
+<td style="text-align:center">Indexada</td>
+<td style="text-align:center">19/10/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Steel Frame vs Wood Frame: Qual Sistema Construtivo Escolher? (<code>steel-frame-vs-wood-frame</code>)</td>
+<td style="text-align:center">Indexada</td>
+<td style="text-align:center">10/10/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Energia solar residencial: como funciona, quanto custa e como integrar ao projeto da sua casa (<code>energia-solar-residencial</code>)</td>
+<td style="text-align:center">Indexada</td>
+<td style="text-align:center">19/09/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Isenção de ICMS na energia solar em SP vence em 2026: o que realmente muda na sua conta (<code>isencao-icms-energia-solar-sp</code>)</td>
+<td style="text-align:center">Indexada</td>
+<td style="text-align:center">05/10/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Steel Frame e Fogo: O Que Realmente Acontece em um Incêndio (<code>steel-frame-fogo-incendio</code>)</td>
+<td style="text-align:center">Indexada</td>
+<td style="text-align:center">15/10/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Steel Frame: Vantagens e Desvantagens Reais (<code>steel-frame-vantagens-desvantagens</code>)</td>
+<td style="text-align:center">Não indexada</td>
+<td style="text-align:center">—</td>
+<td style="text-align:left">URL is unknown to Google</td>
+</tr>
+<tr>
+<td>Como Financiar uma Construção em Light Steel Frame (<code>financiar-construcao-light-steel-frame</code>)</td>
+<td style="text-align:center">Indexada</td>
+<td style="text-align:center">14/10/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Iluminação LED Residencial: Por Que a Luz da Sua Casa Começa na Planta (<code>iluminacao-led-residencial</code>)</td>
+<td style="text-align:center">Indexada</td>
+<td style="text-align:center">19/09/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Steel Frame Resiste a Terremoto? O Teste que Provou (<code>steel-frame-terremoto-teste-cfs10</code>)</td>
+<td style="text-align:center">Indexada</td>
+<td style="text-align:center">17/09/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Como Construir ao Lado de um Hospital em Operação (<code>construir-hospital-em-operacao</code>)</td>
+<td style="text-align:center">Não indexada</td>
+<td style="text-align:center">29/05/2026</td>
+<td style="text-align:left">Crawled - currently not indexed</td>
+</tr>
+<tr>
+<td>Quanto custa uma casa de 100 m² em Steel Frame em 2026 (<code>quanto-custa-construir-steel-frame-precos-m2-2026</code>)</td>
+<td style="text-align:center">Indexada</td>
+<td style="text-align:center">17/10/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Drywall ou Alvenaria de Bloco Cerâmico: Comparativo Técnico Completo (<code>drywall-ou-alvenaria</code>)</td>
+<td style="text-align:center">Indexada</td>
+<td style="text-align:center">02/10/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Consequências da reforma tributária no mercado da construção industrializada (<code>reforma-tributaria-construcao-industrializada</code>)</td>
+<td style="text-align:center">Não indexada</td>
+<td style="text-align:center">28/04/2026</td>
+<td style="text-align:left">Crawled - currently not indexed</td>
+</tr>
+<tr>
+<td>Instalação hidráulica e elétrica em steel frame: o furo no perfil (<code>instalacoes-hidraulicas-eletricas-steel-frame</code>)</td>
+<td style="text-align:center">Não indexada</td>
+<td style="text-align:center">—</td>
+<td style="text-align:left">Discovered - currently not indexed</td>
+</tr>
+<tr>
+<td>Fundação para Steel Frame: Guia Definitivo (<code>fundacao-steel-frame</code>)</td>
+<td style="text-align:center">Indexada</td>
+<td style="text-align:center">19/10/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Sustentabilidade na Construção Civil: O Peso Ambiental do Concreto e as Alternativas que Já Existem (<code>sustentabilidade-construcao-civil-economia-circular</code>)</td>
+<td style="text-align:center">Indexada</td>
+<td style="text-align:center">19/09/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Custos ocultos da construção: o que estoura a obra em 2026 (<code>custos-ocultos-construcao-2026</code>)</td>
+<td style="text-align:center">Indexada</td>
+<td style="text-align:center">23/09/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Instalações de casa de alto padrão que funcionam no Brasil (<code>instalacoes-prediais-alto-padrao</code>)</td>
+<td style="text-align:center">Não indexada</td>
+<td style="text-align:center">—</td>
+<td style="text-align:left">URL is unknown to Google</td>
+</tr>
+<tr>
+<td>Nova Lei de Eficiência Energética e Reforma Tributária: o Que Muda para Construir (<code>eficiencia-energetica-reforma-tributaria</code>)</td>
+<td style="text-align:center">Indexada</td>
+<td style="text-align:center">10/10/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Quanto custa o projeto de uma casa em 2026 (<code>quanto-custa-projeto-casa</code>)</td>
+<td style="text-align:center">Indexada</td>
+<td style="text-align:center">04/10/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Revestimento externo em steel frame: cinco sistemas de fachada lado a lado (<code>revestimento-externo-steel-frame</code>)</td>
+<td style="text-align:center">Indexada</td>
+<td style="text-align:center">23/09/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Fundação Steel Frame vs. Alvenaria: Comparativo Completo (<code>fundacao-steel-frame-vs-alvenaria</code>)</td>
+<td style="text-align:center">Indexada</td>
+<td style="text-align:center">15/10/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Proteção contra quedas na construção civil: guia técnico completo (<code>protecao-contra-quedas-construcao-civil</code>)</td>
+<td style="text-align:center">Indexada</td>
+<td style="text-align:center">13/10/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Terreno em declive: quanto encarece a obra em 2026 (<code>terreno-em-declive-quanto-encarece</code>)</td>
+<td style="text-align:center">Indexada</td>
+<td style="text-align:center">14/10/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Automação residencial: o que prever no projeto antes da obra (<code>automacao-residencial-projeto</code>)</td>
+<td style="text-align:center">Não indexada</td>
+<td style="text-align:center">—</td>
+<td style="text-align:left">Discovered - currently not indexed</td>
+</tr>
+<tr>
+<td>Construir ou Comprar Pronto? Os Números na Grande SP (<code>construir-ou-comprar-pronto-numeros-grande-sp</code>)</td>
+<td style="text-align:center">Indexada</td>
+<td style="text-align:center">25/09/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Construção Industrializada: a Casa Montada Como um Carro (<code>construcao-industrializada-casa-montada-como-carro</code>)</td>
+<td style="text-align:center">Indexada</td>
+<td style="text-align:center">04/10/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Custo do Steel Frame por m² em 2026: preços com fonte (<code>custo-steel-frame-m2-2026</code>)</td>
+<td style="text-align:center">Indexada</td>
+<td style="text-align:center">19/10/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Projeto integrado em Light Steel Frame: o que congela antes da obra (<code>projeto-integrado-light-steel-frame</code>)</td>
+<td style="text-align:center">Indexada</td>
+<td style="text-align:center">23/09/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Mitos e Verdades do Steel Frame: O Que Sustenta Cada Argumento (<code>mitos-verdades-steel-frame</code>)</td>
+<td style="text-align:center">Indexada</td>
+<td style="text-align:center">09/10/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Fissuras no Steel Frame: Causas, Prevenção e Reparo (<code>fissuras-steel-frame</code>)</td>
+<td style="text-align:center">Indexada</td>
+<td style="text-align:center">08/10/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+<tr>
+<td>Steel Frame no Mundo: Como Cada País Constrói com Aço (<code>steel-frame-no-mundo</code>)</td>
+<td style="text-align:center">Indexada</td>
+<td style="text-align:center">12/10/2026</td>
+<td style="text-align:left">Submitted and indexed</td>
+</tr>
+</tbody>
+</table>
+<h2 id="insights">Insights</h2><ol class="insights-list">
+<li>Verificar as consultas e páginas concorrentes de &quot;Proteção contra quedas na construção civil: guia técnico completo&quot; para decidir se há conteúdo a atualizar. A posição média não prevê ganho de cliques. Evidência: 1 páginas com posição média entre 11 e 20; esta página soma 1027 impressões e 4 cliques.</li>
+<li>Revisar a intenção e o snippet exibido para &quot;casa steel frame&quot; antes de alterar o artigo. CTR isolado não identifica a causa. Evidência: 393 impressões, 6 cliques, CTR 1.53%, posição média 10.1.</li>
+<li>Revisar a intenção e o snippet exibido para &quot;steel frame&quot; antes de alterar o artigo. CTR isolado não identifica a causa. Evidência: 371 impressões, 4 cliques, CTR 1.08%, posição média 7.1.</li>
+<li>Revisar a intenção e o snippet exibido para &quot;kit casa steel frame preço&quot; antes de alterar o artigo. CTR isolado não identifica a causa. Evidência: 213 impressões, 3 cliques, CTR 1.41%, posição média 10.</li>
+</ol>
+<h2 id="acoes-priorizadas">Ações priorizadas</h2>
+<h3>P0, urgente</h3><ul class="actions-list actions-p0">
+<li>[ ] Verificar o motivo da exclusão de &quot;/atualidades/steel-frame-vantagens-desvantagens&quot; no GSC (URL is unknown to Google); solicitar indexação apenas se a URL estiver elegível.</li>
+<li>[ ] Verificar o motivo da exclusão de &quot;/atualidades/construir-hospital-em-operacao&quot; no GSC (Crawled - currently not indexed); solicitar indexação apenas se a URL estiver elegível.</li>
+<li>[ ] Verificar o motivo da exclusão de &quot;/atualidades/reforma-tributaria-construcao-industrializada&quot; no GSC (Crawled - currently not indexed); solicitar indexação apenas se a URL estiver elegível.</li>
+</ul>
+<h3>P1, esta semana</h3><ul class="actions-list actions-p1">
+<li>[ ] Revisar intenção, snippet e links de &quot;Proteção contra quedas na construção civil: guia técnico completo&quot; (posição média 11.7, 1027 impressões) antes de escolher uma alteração.</li>
+<li>[ ] Revisar SERP snippet para query &quot;casa steel frame&quot; (CTR 1.53%, 393 impressões).</li>
+<li>[ ] Revisar SERP snippet para query &quot;steel frame&quot; (CTR 1.08%, 371 impressões).</li>
+</ul>
+<h3>P2, backlog</h3>
+<p>Nenhuma ação P2 identificada.</p>
+<h2 id="notas-tecnicas">Notas técnicas</h2>
+<ul>
+<li>Fonte GA4: property <code>516973519</code></li>
+<li>Fonte GSC: <code>sc-domain:berkahn.com.br</code></li>
+<li>Janela: 2026-08-01 a 2026-08-31 (mês fechado)</li>
+<li>Comparação MoM: 2026-07-01 a 2026-07-31</li>
+<li>Gerado em: 2026-10-20 10:21:29 via <code>/performance</code></li>
+<li>Histórico (3 meses): em breve (após 3 meses de bootstrap)</li>
+</ul>
+<hr>
+<p><strong>Contexto aplicado</strong>: [[seo-aeo-strategy]] · [[article-pipeline]] · [[blog]] · [[seo-aeo]]</p>
+
+</div>
+
+<script>
+// Charts são populados pelo render-html.mjs via dataset
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('canvas[data-chart]').forEach(canvas => {
+    try {
+      const cfg = JSON.parse(canvas.dataset.chart);
+      new Chart(canvas, cfg);
+    } catch (e) {
+      console.error('Chart config error', e);
+    }
+  });
+});
+</script>
+</body>
+</html>

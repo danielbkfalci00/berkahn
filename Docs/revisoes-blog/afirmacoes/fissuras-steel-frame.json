@@ -1,0 +1,272 @@
+{
+ "slug": "fissuras-steel-frame",
+ "content": "Uma auditoria do Ministério da Transparência avaliou 688 empreendimentos do programa Minha Casa Minha Vida, totalizando 189 mil unidades em alvenaria construídas entre 2011 e 2014. Resultado: 48,9% apresentaram defeitos construtivos, com 30,8% de ocorrência específica de fissuras e trincas. Uma casa em alvenaria tem quase uma chance em três de desenvolver rachaduras visíveis nos primeiros anos. Esse dado raramente aparece quando alguém compara sistemas construtivos, porque fissuras em alvenaria são tão comuns que já foram normalizadas. Quando o assunto é [Light Steel Frame](/lsf) (LSF), um sistema construtivo industrializado que usa perfis de aço galvanizado como estrutura, fechados com placas cimentícias ou gesso acartonado, qualquer marca na parede gera alarme. Na Berkahn, achamos que o caminho para conquistar confiança é tratar o tema com transparência técnica, e não com promessas vagas de que \"Steel Frame não racha\".\n\nEste artigo explica o que a pesquisa acadêmica e os dados de campo dizem sobre fissuras no Steel Frame, quais são as causas reais, como a execução correta elimina o problema e o que fazer quando uma fissura aparece.\n\n[STATS:fissuras-numeros]\n\n## O Steel Frame apresenta fissuras? O que dizem as pesquisas\n\nO estudo mais relevante sobre o tema no Brasil foi conduzido na Faculdade de Engenharia Civil da UNICAMP, pelo pesquisador Pedro Langella Testolino sob orientação do Prof. Armando Lopes Moreno Junior. A pesquisa acompanhou um edifício comercial em LSF durante a construção, em Campinas-SP, catalogando patologias e cruzando com variáveis de execução, materiais e ambiente. A conclusão principal é direta: fissuras nas juntas entre placas cimentícias são a patologia mais frequente no sistema, e a hierarquia de causas aponta deficiências de execução em 50% dos casos, falhas de projeto em 35% e limitações dos materiais no restante ([UNICAMP, XIX Congresso de Iniciação Científica](https://prp.unicamp.br/pibic/congressos/xixcongresso/paineis/094300.pdf)).\n\nO trabalho identificou oito tipos de manifestações patológicas, incluindo fissuras nas juntas, bolhas nas emendas, desaprumo de estrutura, manchas de chuva e defeitos de selante. Todas classificadas como estéticas ou de acabamento. Nenhuma comprometeu a integridade estrutural do edifício.\n\nDuas outras pesquisas reforçam esse diagnóstico. A dissertação de mestrado de Deborah Handa (UNICAMP, 2019) estudou múltiplas fachadas em Steel Frame e confirmou que fissuras e infiltrações são as manifestações primárias, com falta de treinamento da mão de obra como causa dominante. A dissertação de Giane Hofmann na UFOP encontrou um problema sistêmico: não existe padronização nacional para o tratamento de juntas em placas cimentícias. Cada fabricante prescreve seu próprio método, o que gera inconsistência entre obras.\n\nO dado mais revelador do estudo da UNICAMP é que a alta incidência de fissuras é apontada como um dos maiores obstáculos à difusão do LSF no Brasil. O problema existe, e ignorá-lo prejudica todo o setor.\n\n## Quais tipos de fissura ocorrem no Steel Frame e por quê?\n\nPara entender fissuras em LSF, é preciso separar onde elas aparecem, o que as provoca e qual o nível de gravidade. As duas categorias mais comuns são fissuras em juntas de placas cimentícias (face externa) e fissuras em juntas de gesso acartonado (face interna).\n\nAs placas cimentícias sofrem variação dimensional com temperatura e umidade. Elas expandem com calor e contraem com frio, num ciclo diário que estressa as juntas. O espaçamento padrão de 3mm entre placas, tratado com selante elastomérico e tela de fibra de vidro, precisa acomodar esse movimento. Quando o tratamento falha, surgem fissuras lineares acompanhando o desenho das juntas. Uma tese de mestrado da USP, de João Heitzmann Fontenelle, documentou a progressão dessas fissuras após ciclos de choque térmico, mostrando que elas se agravam ao longo do tempo quando o tratamento inicial é inadequado.\n\nNo gesso acartonado (drywall), o mecanismo é semelhante, mas com uma diferença importante: o coeficiente de dilatação térmica do gesso é de 16,7 × 10⁻⁶/°C, enquanto o do aço é de aproximadamente 12 × 10⁻⁶/°C (dados [GA-235, Gypsum Association](https://www.americangypsum.com/sites/default/files/2022-01/ga-235_gypsum_board_typical_mechanical_and_physical_properties.pdf)). Numa parede de 10 metros submetida a uma variação de 40°C, o gesso se movimenta cerca de 6,7mm enquanto o aço se movimenta 4,8mm. Essa diferença de quase 2mm precisa ser absorvida pelas juntas. Quando não é, a fissura aparece.\n\n[TABLE:coeficientes-dilatacao]\n\nExistem também fissuras em cantos de portas e janelas, onde a redistribuição de cargas cria concentração de tensão, e os chamados \"nail pops\" ou estouros de parafuso, que surgem quando o parafuso é cravado fundo demais ou quando a madeira do montante se movimenta. Em todos os casos documentados na literatura brasileira e internacional, as fissuras em LSF são estéticas. Ocorrem nos materiais de acabamento, nunca na estrutura de aço.\n\n## Steel Frame tem mais fissuras que alvenaria?\n\nEsse comparativo é o ponto que mais interessa a quem está decidindo entre sistemas construtivos, e os dados disponíveis favorecem amplamente o Steel Frame.\n\nAlém da auditoria do MCMV já citada (48,9% de unidades com defeitos), um estudo pós-ocupação de 2025 em Nova Iguaçu-RJ encontrou fissuras em 48% das unidades em alvenaria avaliadas, com 65% dos moradores relatando ausência de qualquer manutenção preventiva (Revista Ibero-Americana de Humanidades, Ciências e Educação). Em São José de Ribamar-MA, uma pesquisa publicada pelo Núcleo do Conhecimento analisou 30 unidades com paredes de concreto e encontrou fissuras em 100% delas, com 70% já tendo evoluído para trincas e 10% para rachaduras que demandavam intervenção urgente.\n\nNa alvenaria, fissuras podem ser cosméticas ou estruturais. As mais graves incluem trincas escalonadas em degrau por recalque de fundação, trincas verticais por sobrecarga compressiva e trincas diagonais em aberturas. Essas manifestações podem comprometer a estabilidade do edifício e exigem intervenção estrutural.\n\nNo LSF, nenhum caso documentado de falha estrutural causada por fissuração existe na literatura brasileira. O [Steel Construction Institute](https://www.steelconstruction.info/images/6/6d/SCI_P262.pdf) do Reino Unido (publicação SCI P262) registra que quase 500 mil residências construídas em steel framing nos Estados Unidos ao longo da última década apresentam um histórico excelente de desempenho, com o aço galvanizado demonstrando estabilidade dimensional superior à de materiais tradicionais, sem retração, empenamento ou fluência.\n\nA diferença no custo de reparo é igualmente expressiva. Uma fissura cosmética em LSF custa entre R$ 20 e R$ 80 por metro linear para reparar, com materiais simples como massa, fita e tinta. Um reparo estrutural em alvenaria pode exigir reforço de fundação (R$ 5.000 a R$ 50.000 ou mais), grauteamento com tela soldada (R$ 150 a R$ 400/m²) ou demolição e reconstrução parcial (R$ 200 a R$ 500/m²), além de laudo de engenheiro estrutural. A complexidade também é diferente: reparos em LSF levam horas sem demolição; reparos estruturais em alvenaria podem levar semanas.\n\n[TABLE:fissuras-lsf-vs-alvenaria]\n\n[CHART:custo-reparo-fissuras]\n\n## Como evitar fissuras no Steel Frame?\n\nO protocolo de tratamento de juntas em placas cimentícias segue uma sequência de múltiplas camadas que não admite atalhos. A Brasilit, um dos principais fabricantes de placas cimentícias no Brasil, documenta um processo em dez etapas: fixação das placas com espaçamento de 3mm, aplicação de primer nas juntas, preenchimento com selante flexível, aplicação de base coat cimentício sobre toda a superfície, embutimento de tela de fibra de vidro de 5cm (resistente a álcalis, malha 8×8) no composto ainda úmido, segunda camada de composto, embutimento de tela de 10cm sobre a primeira, terceira camada com nivelamento, espera mínima de 24 horas para cura e acabamento final com composto e tinta 100% acrílica.\n\nCada etapa existe por uma razão técnica. A tela de fibra de vidro distribui a tensão uniformemente, impedindo que o movimento se concentre num ponto. O selante elastomérico absorve a dilatação sem romper. O tempo de cura entre camadas permite que cada uma atinja a resistência necessária antes de receber a próxima. Quando uma construtora pula etapas para economizar tempo, a fissura é consequência, não acidente.\n\nVeja também como funciona o [isolamento térmico e acústico no Steel Frame](/atualidades/isolamento-termico-acustico-steel-frame).\n\n\nPara o gesso acartonado interno, o sistema de três demãos de massa com fita microperfurada de papel é o padrão. Um dado que poucos no Brasil conhecem: pesquisas do USG Research Center nos Estados Unidos demonstraram que juntas tratadas com tela de fibra de vidro (mesh tape) são mais propensas a fissurar do que juntas com fita de papel, porque a fibra cede sob tensão mesmo depois de coberta com massa. A recomendação internacional consolidada é fita de papel para todas as juntas regulares, reservando a tela de fibra para reparos e áreas úmidas onde deve ser combinada com massa de secagem rápida (setting-type compound).\n\nAs normas americanas ASTM C840 e GA-216 estabelecem espaçamentos máximos para juntas de controle: 9 metros de parede contínua e 15 metros em forros com alívio perimetral, com área máxima de 232 m² entre juntas. Esses parâmetros são mais rigorosos do que a prática comum no Brasil, e adotá-los é uma forma concreta de eliminar fissuras por movimentação acumulada.\n\nA técnica australiana de back-blocking, prevista na norma AS/NZS 2589, acrescenta uma camada adicional de proteção: tiras de 200mm de gesso são laminadas na face posterior das placas, nas juntas, com adesivo específico, criando um perfil rebaixado que resiste ao empinamento e à fissuração. Na Austrália, a garantia do fabricante pode ser anulada sem esse procedimento. No Brasil, essa prática ainda é incomum, representando uma oportunidade de diferenciação para construtoras comprometidas com qualidade.\n\n## Quais normas brasileiras regulam fissuras no Steel Frame?\n\n[NORMS:normas-fissuras-lsf]\n\nSete normas ABNT formam o arcabouço regulatório relevante para fissuras em sistemas LSF. A lacuna identificada pela pesquisa da UFOP permanece: não existe norma ABNT unificada para tratamento de juntas em placas cimentícias no LSF. Enquanto essa padronização não chega, seguir rigorosamente o manual técnico do fabricante da placa utilizada continua sendo a referência mais segura.\n\n## Como reparar fissuras em paredes de Steel Frame?\n\nFissuras em gesso acartonado com menos de 0,5mm de abertura aceitam o reparo mais simples: limpeza, aplicação de massa, embutimento de fita (papel ou fibra de vidro, dependendo da localização), duas demãos adicionais de massa com secagem entre elas, lixamento, primer e repintura com tinta acrílica flexível. Esse reparo custa menos de R$ 100 em materiais e pode ser feito em poucas horas.\n\nFissuras em juntas de placas cimentícias exigem mais trabalho: limpeza da área, primer, selante flexível, base coat cimentício sobre toda a zona afetada, embutimento de tela anti-fissura de 160 g/m² (fibra de vidro resistente a álcalis), segunda camada de base coat, cura de 24 horas e acabamento com tinta acrílica flexível. Produtos como o Base Coat Zerotrinca (Decorlit), selante DW240 Flex e telas Cimentape (Âncora) são referências disponíveis no mercado brasileiro.\n\nQuando procurar ajuda profissional: fissuras acima de 1mm de abertura, fitas soltas ou descoladas sob a superfície, fissuras que reaparecem após reparo superficial (indicando causa raiz não tratada) ou infiltração de água pela fissura. A recorrência é o sinal mais importante, porque significa que o problema está na junta de dilatação, na deflexão estrutural ou na fundação, e o reparo cosmético sozinho não resolve.\n\n[CHECKLIST:prevencao-fissuras]\n\n## Perguntas frequentes sobre fissuras no Steel Frame\n\n[FAQ:faq-fissuras-sf]\n\n## O que considerar ao avaliar fissuras no Steel Frame?\n\nFissuras em Light Steel Frame existem, são documentadas pela academia e ocorrem principalmente por falhas de execução. Essa é a parte honesta. A parte igualmente honesta é que essas fissuras são cosméticas, reparáveis a baixo custo e incomparavelmente menos graves do que as patologias estruturais recorrentes na alvenaria convencional. A diferença entre uma obra com fissuras e uma obra sem fissuras em LSF está na qualificação da equipe, no respeito ao protocolo de tratamento de juntas e na especificação correta de materiais.\n\nCada junta deve ser tratada como um componente de engenharia, não como um detalhe de acabamento. Se você está planejando construir em Steel Frame e quer entender como o processo construtivo da Berkahn busca prevenir essas patologias, entre em contato pelo [site](/servicos) ou solicite um [orçamento](/orcamento). A conversa técnica é sempre o melhor começo.\n\n[CTA:cta-fissuras-sf]\n\n[SERVICELINK:lsf]\n\n---\n\n### Leia também\n\n- [Steel Frame: O Guia Definitivo](/atualidades/guia-definitivo-steel-frame-brasil)\n- [Drywall ST, RU e RF: qual usar em cada ambiente](/atualidades/drywall-st-ru-rf)\n- [Passo a Passo da Construção em Steel Frame](/atualidades/passo-passo-construcao-steel-frame)",
+ "components": {
+  "ctas": [
+   {
+    "id": "cta-fissuras-sf",
+    "label": "CONSTRUÇÃO SEM SURPRESAS",
+    "title": "Quer construir sem preocupação com fissuras?",
+    "actionText": "Falar com Engenheiro",
+    "actionType": "dialog",
+    "description": "Cada junta deve ser tratada como componente de engenharia. Conheça o protocolo construtivo da Berkahn e entenda como ele busca prevenir patologias.",
+    "defaultSegment": "residencial"
+   }
+  ],
+  "faqs": [
+   {
+    "id": "faq-fissuras-sf",
+    "title": "Perguntas Frequentes sobre Fissuras em Steel Frame",
+    "questions": [
+     {
+      "answer": "Fissuras podem aparecer nas juntas entre placas e no acabamento, mas são cosméticas. A estrutura de aço galvanizado é articulada e absorve movimentação sem fissurar. O estudo da UNICAMP confirma que todas as patologias documentadas em LSF são de acabamento, não estruturais.",
+      "question": "Steel Frame racha?"
+     },
+     {
+      "answer": "Pode ocorrer, especialmente no primeiro ciclo sazonal (primeiro verão e inverno após a construção), quando os materiais acomodam. Com execução correta do tratamento de juntas, seguindo todas as etapas do protocolo do fabricante, a incidência cai drasticamente. Fissura recorrente indica erro de execução ou projeto.",
+      "question": "Fissura em Steel Frame é normal?"
+     },
+     {
+      "answer": "Os dados disponíveis sugerem o contrário. Auditorias do MCMV encontraram fissuras em 30,8% das unidades em alvenaria. Não existe levantamento equivalente para LSF no Brasil, mas a literatura internacional (SCI P262) registra desempenho superior do steel framing em estabilidade dimensional. Todas as fissuras em LSF são cosméticas, enquanto em alvenaria podem ser estruturais.",
+      "question": "Steel Frame racha mais que alvenaria?"
+     },
+     {
+      "answer": "Entre R$ 20 e R$ 80 por metro linear para fissuras cosméticas, usando massa, fita e tinta. Reparos em alvenaria com comprometimento estrutural podem custar de R$ 5.000 a R$ 50.000 ou mais, dependendo da causa.",
+      "question": "Quanto custa reparar uma fissura em Steel Frame?"
+     },
+     {
+      "answer": "A NBR 15575 não define esses termos com precisão numérica, mas a convenção técnica classifica fissuras como aberturas de até 0,5mm, trincas entre 0,5mm e 1,5mm, e rachaduras acima de 1,5mm. Em LSF, a grande maioria das ocorrências são fissuras (abaixo de 0,5mm).",
+      "question": "Qual a diferença entre fissura, trinca e rachadura?"
+     },
+     {
+      "answer": "Depende da construtora e do contrato. A NBR 15575 estabelece prazos de garantia mínimos para sistemas de vedação. Na Austrália, a garantia do fabricante da placa pode ser condicionada ao uso correto de técnicas como back-blocking. No Brasil, o cumprimento documentado do protocolo de tratamento de juntas do fabricante é a melhor proteção contratual.",
+      "question": "Existe garantia contra fissuras em Steel Frame?"
+     }
+    ]
+   }
+  ],
+  "norms": [
+   {
+    "code": "NBR 15253",
+    "title": "Perfis de aço galvanizado para LSF",
+    "description": "Resistência mínima ao escoamento de 230 MPa, espessura de 0,80 a 3,00mm e galvanização mínima Z275 (275 g/m²). Segunda edição, 2014."
+   },
+   {
+    "code": "NBR 15575",
+    "title": "Norma de Desempenho — Parte 4",
+    "description": "Sistemas de vedação vertical não devem apresentar fissuras, deslocamentos ou rupturas. Tolera fissuras superficiais apenas se não comprometem estanqueidade."
+   },
+   {
+    "code": "NBR 14715",
+    "title": "Chapas de gesso acartonado",
+    "description": "Especificações técnicas para chapas de drywall utilizadas no fechamento interno de sistemas construtivos."
+   },
+   {
+    "code": "NBR 15498",
+    "year": "2021",
+    "title": "Placas cimentícias sem amianto",
+    "description": "Classifica placas em Tipo A (externa sem acabamento), Tipo B (externa com acabamento) e Tipo C (uso interno). Edição 2021."
+   },
+   {
+    "code": "NBR 15758",
+    "title": "Projeto e montagem de drywall",
+    "description": "Procedimentos de instalação e tratamento de juntas em sistemas de gesso acartonado."
+   },
+   {
+    "code": "NBR 16970",
+    "year": "2022",
+    "title": "Sistemas em Light Steel Frame",
+    "description": "Primeira norma brasileira específica para LSF (2022). Dividida em três partes: desempenho, projeto estrutural e interfaces entre sistemas."
+   },
+   {
+    "code": "ASTM C840",
+    "title": "Instalação de drywall (referência internacional)",
+    "description": "Espaçamento máximo para juntas de controle: 9 metros de parede contínua, 15 metros em forros, área máxima de 232 m² entre juntas."
+   }
+  ],
+  "stats": [
+   {
+    "label": "Unidades MCMV com defeitos",
+    "value": 49,
+    "suffix": "%",
+    "description": "Auditoria de 688 empreendimentos, 189 mil unidades (2011-2014)"
+   },
+   {
+    "label": "Fissuras em alvenaria MCMV",
+    "value": 31,
+    "suffix": "%",
+    "description": "Incidência específica de fissuras e trincas na auditoria"
+   },
+   {
+    "label": "Causas por falha de execução",
+    "value": 50,
+    "suffix": "%",
+    "description": "Pesquisa UNICAMP — principal causa de fissuras em LSF"
+   },
+   {
+    "label": "Falhas estruturais em LSF",
+    "value": 0,
+    "suffix": "",
+    "description": "Zero casos documentados na literatura brasileira e internacional"
+   }
+  ],
+  "charts": [
+   {
+    "id": "custo-reparo-fissuras",
+    "data": [
+     {
+      "name": "Fissura cosmética",
+      "Alvenaria": 275,
+      "Steel Frame": 50
+     },
+     {
+      "name": "Fissura moderada",
+      "Alvenaria": 2500,
+      "Steel Frame": 150
+     },
+     {
+      "name": "Reparo estrutural",
+      "Alvenaria": 25000,
+      "Steel Frame": 0
+     }
+    ],
+    "type": "bar",
+    "title": "Custo de Reparo: Steel Frame vs. Alvenaria (R$)",
+    "config": {
+     "colors": [
+      "#18181b",
+      "#a1a1aa"
+     ],
+     "dataKeys": [
+      "Steel Frame",
+      "Alvenaria"
+     ],
+     "xAxisKey": "name"
+    }
+   }
+  ],
+  "tables": [
+   {
+    "id": "coeficientes-dilatacao",
+    "rows": [
+     [
+      "Gesso acartonado",
+      "16,7",
+      "6,7 mm"
+     ],
+     [
+      "Aço galvanizado",
+      "~12",
+      "4,8 mm"
+     ],
+     [
+      "Concreto",
+      "10–12",
+      "4,0–4,8 mm"
+     ],
+     [
+      "Placa cimentícia",
+      "8–12",
+      "3,2–4,8 mm"
+     ],
+     [
+      "Tijolo cerâmico",
+      "4–8",
+      "1,6–3,2 mm"
+     ]
+    ],
+    "caption": "Coeficientes de Dilatação Térmica dos Materiais",
+    "headers": [
+     "Material",
+     "CTE (×10⁻⁶/°C)",
+     "Movimento em 10m (ΔT 40°C)"
+    ]
+   },
+   {
+    "id": "fissuras-lsf-vs-alvenaria",
+    "rows": [
+     [
+      "Tipo predominante",
+      "Cosmética (juntas)",
+      "Cosmética e estrutural"
+     ],
+     [
+      "Localização típica",
+      "Juntas entre placas",
+      "Paredes, fundação, lajes"
+     ],
+     [
+      "Risco estrutural",
+      "Nenhum documentado",
+      "Sim — pode comprometer estabilidade"
+     ],
+     [
+      "Incidência (dados BR)",
+      "Sem levantamento nacional",
+      "30,8% (auditoria MCMV)"
+     ],
+     [
+      "Custo de reparo",
+      "R$ 20–80/m linear",
+      "R$ 150–500/m² (até R$ 50.000+)"
+     ],
+     [
+      "Complexidade",
+      "Horas, sem demolição",
+      "Dias a semanas, pode exigir laudo"
+     ],
+     [
+      "Progressão",
+      "Estabiliza após 1º ciclo",
+      "Pode agravar com recalque"
+     ]
+    ],
+    "caption": "Fissuras: Steel Frame vs. Alvenaria Convencional",
+    "headers": [
+     "Critério",
+     "Steel Frame (LSF)",
+     "Alvenaria"
+    ],
+    "highlightColumn": 1
+   }
+  ],
+  "checklist": {
+   "id": "prevencao-fissuras",
+   "items": [
+    {
+     "label": "Espaçamento de 3mm entre placas cimentícias?",
+     "description": "Permite acomodação da dilatação térmica sem estressar as juntas"
+    },
+    {
+     "label": "Primer aplicado nas juntas antes do selante?",
+     "description": "Garante aderência do selante ao substrato da placa"
+    },
+    {
+     "label": "Selante elastomérico flexível (não rígido)?",
+     "description": "Absorve movimentação térmica sem romper"
+    },
+    {
+     "label": "Tela de fibra de vidro 5cm + tela 10cm?",
+     "description": "Dupla camada distribui tensão uniformemente na junta"
+    },
+    {
+     "label": "Tempo de cura de 24h entre camadas?",
+     "description": "Cada camada precisa atingir resistência antes da próxima"
+    },
+    {
+     "label": "Fita de papel (não fibra) nas juntas de drywall?",
+     "description": "Pesquisa USG: fita de papel resiste melhor à tensão que mesh tape"
+    },
+    {
+     "label": "Juntas de controle a cada 9m de parede?",
+     "description": "Norma ASTM C840 — evita acúmulo de tensão por movimentação"
+    },
+    {
+     "label": "Tinta 100% acrílica flexível no acabamento?",
+     "description": "Acompanha micro-movimentações sem trincar a película"
+    }
+   ],
+   "title": "Checklist de Prevenção de Fissuras em LSF"
+  }
+ }
+}

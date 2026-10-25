@@ -1,0 +1,248 @@
+{
+ "slug": "instalacoes-prediais-alto-padrao",
+ "content": "Recife, Manaus, Fortaleza e Belém registram zero graus-dia de aquecimento. Zero mesmo, não um número pequeno. Estocolmo, na mesma base de 18,3 °C, acumula 59 graus-dia de resfriamento no ano inteiro, contra 4.022 de aquecimento. Os dois valores saem do capítulo de dados climáticos do ASHRAE Handbook de 2025.\n\nQuase todo sistema predial que hoje define casa de alto desempenho na Europa e na América do Norte foi desenhado para o lado de Estocolmo dessa tabela, onde o problema é segurar calor dentro de casa durante seis meses. Quem traz esses sistemas para cá sem refazer a conta compra a resposta certa para uma pergunta que não é a sua. O filtro do clima vem antes do filtro do preço.\n\n[STATS:instalacoes-alto-padrao-numeros]\n\n## O padrão alemão muda de exigência quando muda de latitude\n\nA prova mais direta está na tabela de critérios do Passive House Institute, o instituto de Darmstadt que criou a Passivhaus. Na Versão 10c, em vigor desde janeiro de 2023, a demanda anual de aquecimento é um número seco, 15 kWh por metro quadrado por ano, válido para todos os climas do mundo. A de resfriamento somado a desumidificação não é um número, e sim 15 mais uma parcela variável, calculada a partir do clima e das cargas internas. Um lado da conta é constante no planeta inteiro, o outro depende de onde a casa está.\n\nA tabela de componentes inverte a exigência. Nas zonas Ártica e Fria o padrão pede 80% de recuperação de calor na ventilação, e nas temperadas, 75%. Nas zonas quentes essa exigência desaparece da tabela, e no lugar dela entra outra, de 60% de recuperação de umidade em clima úmido. O equipamento pendurado no forro continua parecido. A função dele muda.\n\n## Os graus-dia dizem de que lado está a sua conta\n\nGraus-dia é a forma mais honesta de comparar clima para instalação, porque acumula o ano inteiro em vez de discutir o dia mais quente.\n\n[TABLE:graus-dia-cidades]\n\nSão Paulo, na estação de Congonhas, tem 200 graus-dia de aquecimento contra 1.176 de resfriamento, então o aquecimento responde por 14,5% do total. Em Berlim a mesma proporção é de 93,4%. Não é diferença de grau, é troca de sinal. A ressalva vem da linha mais interessante da tabela, que é Curitiba, com 615 contra 589 e a conta empatada em 51,1%. Na Serra Gaúcha o empate vira vantagem do frio, e boa parte do que este texto desaconselha para São Paulo faz sentido técnico em Gramado.\n\nA tese não é nossa. A Empresa de Pesquisa Energética, do Ministério de Minas e Energia, escreveu em nota técnica de dezembro de 2018 que a arquitetura brasileira tem importado padrões construtivos de países de clima frio.\n\n## Três registros públicos dizem o que o Brasil ainda não vende\n\nO primeiro é o SINAPI, a tabela de referência de custo da construção pública. O ar-condicionado ocupa dois cadernos técnicos da Caixa e soma 83 composições, aferidas em 06/2026 e 07/2025, das quais 53 são de split. Nenhuma é de recuperação de calor, de bomba de calor para aquecer água, de piso radiante ou de VRF. O radiante chega perto, porque a Caixa precifica o tubo PEX como insumo e nomeia piso radiante entre as destinações dele, mas sem composição do serviço. Não é que o preço esteja alto. É que quem orça esses sistemas aqui monta composição própria em vez de partir de referência pública.\n\nO segundo é o mapa normativo. A única norma brasileira de instalação escrita para casa, a NBR 16655-1 de 2018, trata de split e de compacto até 18 kW, que não é nenhum dos cinco sistemas desta conversa.\n\nO terceiro é a etiquetagem. As tabelas do Programa Brasileiro de Etiquetagem cobrem dezessete categorias, entre elas condicionador de ar e aquecimento solar de água, e nenhuma é bomba de calor ou desumidificador. O desempenho desses dois fica como o fabricante declara, sem verificação de terceiro.\n\n[TABLE:sistemas-grade-brasil]\n\n## O que atravessa o Equador com a função intacta, e o que não\n\nA distinção que mais muda decisão é entre recuperar calor e recuperar umidade. O trocador sensível devolve ao ar que entra o calor do ar que sai, e paga onde a diferença entre dentro e fora passa de vinte graus por meses seguidos, o que com 200 graus-dia não acontece. Já o trocador entálpico troca também umidade, e reduz a carga de secar o ar que entra. É o que o instituto alemão exige quando a zona vira quente e úmida, e é o único da família que atravessa o Equador com a função intacta.\n\nBomba de calor para água é o caso mais fácil do lote, porque o concorrente real dela não é o sistema europeu, é o chuveiro elétrico. Pelo Atlas da Eficiência Energética da EPE de 2024, 86,9% dos domicílios aqueciam água com eletricidade em 2023. VRF também não tem problema de clima, tem problema de origem e de dado, porque chega importado e nenhum número público mede participação em casa unifamiliar.\n\nPiso radiante carrega o exemplo mais limpo da tese inteira. A Wavin, que no Brasil assina Amanco Wavin, vende aqui o tubo PEX e vende na Itália o sistema radiante completo, de aquecimento e de resfriamento. Mesmo grupo, catálogo diferente, e quem escolheu foi o clima.\n\nNa versão de resfriamento a barreira deixa de ser comercial e vira física. Se a superfície do piso chegar ao ponto de orvalho do ambiente, ela transpira, e a 26 °C com 60% de umidade relativa esse ponto fica perto de 17,6 °C. Pelas normais do INMET de 1991 a 2020, a umidade relativa média anual é de 84,1% em Belém, 81,5% em Salvador, 81,0% em Manaus e 80,5% em Curitiba. O caminho existe, e passa por desumidificar o ar antes, o que transforma um sistema em dois.\n\n## O motivo brasileiro para ventilar não é energia, é ar\n\nVentilação mecânica continua fazendo sentido aqui, só que por outro motivo. Não é economia de energia de aquecimento, que quase não existe. É controle de umidade, de poeira e de ruído, e é renovação onde a janela fica fechada porque o ar-condicionado está ligado.\n\n[NORMS:normas-ventilacao-residencial]\n\nLá fora a régua é vazão, e a ANSI/ASHRAE Standard 62.2, na edição de 2025, é a norma de consenso para unidades habitacionais e especifica exaustão local em número. Aqui a régua é outra. A NBR 15575, na edição de 2013 transcrita por fonte acadêmica, trata ventilação de sala e dormitório como área de abertura na fachada, com mínimo entre 7% e 12% da área de piso conforme a região, e só quando não houver exigência legal local. É a linguagem de uma janela, não a de um sistema. E a NBR 16401-3 de 2008, que é a que fala em vazão, tabela essa grandeza de comércio varejista a locais diversos, sem linha residencial.\n\nO número que quase todo projetista cita de cabeça, os 27 metros cúbicos por hora por pessoa da Resolução RE nº 9 da ANVISA, de 2003, tratava de ambiente climatizado de uso público e coletivo, nunca de residência, e foi revogado pela RDC nº 886 de 2024. Numa casa, ninguém vai reprovar o projeto por falta de renovação de ar, e o critério acaba sendo do projetista, porque norma nenhuma vai aplicá-lo no lugar dele.\n\n## Onde o Light Steel Frame entra nessa conta\n\nO Light Steel Frame, sistema construtivo que usa perfis leves de aço galvanizado formados a frio como estrutura e placas como fechamento, entra por dois caminhos.\n\nO primeiro é a estanqueidade ao ar. Ventilação mecânica só entrega o que promete numa envoltória que não vaze, porque em casa cheia de frestas o ar entra sozinho, sem filtro e por onde ele quiser. O critério da Passivhaus é de 0,6 renovação por hora sob 50 pascal, verificado em ensaio. Casa que vaza não precisa de recuperador, precisa de vedação, e a vedação a seco com membrana contínua é onde isso é executável, como mostra a [anatomia da parede de steel frame](/atualidades/anatomia-parede-steel-frame), cujo mapa normativo está nas [certificações do steel frame](/atualidades/certificacoes-steel-frame).\n\nO segundo é o caminho do duto. Todo sistema desta conversa pede espaço reservado, e duto de ar não aceita improviso do jeito que um eletroduto aceita. Em LSF essa decisão vence mais cedo, porque o painel deixa de ser desenho e vira ordem de fabricação, e o prazo ainda varia conforme o [método de montagem](/atualidades/sistema-painelizado-vs-stick-steel-frame). Ou o caminho já está desenhado, ou ele vira retrabalho depois que o painel chega pronto.\n\nVale dizer onde o ganho para. Parede seca facilita a passagem e a manutenção futura, e nenhum tipo de vedação corrige equipamento escolhido para o clima errado. A carga elétrica que esses sistemas acrescentam é assunto do artigo sobre [energia solar residencial](/atualidades/energia-solar-residencial).\n\n## O filtro do clima vem antes do filtro do preço\n\nSistema predial importado não é bom nem ruim por vir de fora. Ele é resposta a um clima, e o teste tem quatro perguntas. Qual a conta de graus-dia da cidade, que problema o equipamento resolve nessa conta, que espaço ele exige antes de a parede fechar, e quem troca a peça daqui a cinco anos. Quem responde só a última compra pelo preço.\n\nA Berkahn oferece projeto e obra em Light Steel Frame na Grande São Paulo, e a primeira pergunta para quem já escolheu o equipamento é de que cidade é a conta de graus-dia dele. Muitas vezes a resposta troca o equipamento, e quando não troca, ela explica por que o número do catálogo europeu não vai se repetir aqui. O custo da casa, que este texto não recalcula, está no [levantamento de custo em steel frame](/atualidades/custo-steel-frame-m2-2026).\n\n[FAQ:instalacoes-alto-padrao]\n\n[CTA:instalacoes-alto-padrao]",
+ "components": {
+  "ctas": [
+   {
+    "id": "instalacoes-alto-padrao",
+    "label": "PRÓXIMO PASSO",
+    "title": "Traga o equipamento e a cidade, que a gente faz a conta",
+    "actionText": "Falar com a Berkahn",
+    "actionType": "dialog",
+    "description": "A Berkahn oferece projeto e obra em Light Steel Frame na Grande São Paulo. Se você já escolheu o sistema predial, a equipe pode conferir se ele resolve o problema do seu clima e o que ele exige do projeto antes de a parede fechar.",
+    "defaultSegment": "residencial"
+   }
+  ],
+  "faqs": [
+   {
+    "id": "instalacoes-alto-padrao",
+    "title": "Perguntas frequentes",
+    "questions": [
+     {
+      "answer": "Na maior parte do país, não pelo motivo original. São Paulo tem 200 graus-dia de aquecimento contra 1.176 de resfriamento pelo ASHRAE Handbook 2025, e o trocador sensível só paga onde a diferença entre dentro e fora passa de vinte graus por meses seguidos. Em Curitiba, com 615 contra 589, e na Serra Gaúcha a conta muda de lado. No resto do Brasil o que faz sentido é o trocador entálpico, que recupera umidade.",
+      "question": "Vale a pena instalar ventilação com recuperação de calor no Brasil?"
+     },
+     {
+      "answer": "O trocador sensível devolve ao ar que entra apenas o calor do ar que sai. O entálpico troca também umidade, e reduz a carga de secar o ar que entra. O Passive House Institute escreve essa troca na Versão 10c dos critérios: nas zonas Ártica e Fria pede 80% de recuperação de calor, nas temperadas 75%, e nas zonas quentes e úmidas essa exigência sai da tabela e entra 60% de recuperação de umidade.",
+      "question": "Qual a diferença entre recuperação de calor e recuperação de umidade?"
+     },
+     {
+      "answer": "Não em vazão. A NBR 15575, na edição de 2013, trata ventilação de sala e dormitório como área de abertura na fachada, com mínimo entre 7% e 12% da área de piso conforme a região, e só quando não houver exigência legal local. A NBR 16401-3 de 2008 tabela vazões sem linha residencial. Os 27 m³/h por pessoa da RE nº 9 da ANVISA valiam para ambiente de uso público e coletivo e foram revogados pela RDC nº 886 de 2024.",
+      "question": "Existe norma brasileira que obrigue renovação de ar em casa?"
+     },
+     {
+      "answer": "O de aquecimento funciona onde existe clima de aquecimento, o que restringe ao Sul e à serra. O sinal comercial é direto: a Wavin vende no Brasil o tubo PEX, sob a marca Amanco Wavin, e na Itália o sistema radiante completo. Na versão de resfriamento a barreira é física: a 26 °C com 60% de umidade relativa o ponto de orvalho fica perto de 17,6 °C, e abaixo disso a superfície transpira. O caminho passa por desumidificar o ar antes, o que transforma um sistema em dois.",
+      "question": "Piso radiante funciona no Brasil?"
+     },
+     {
+      "answer": "Precisa de casa de máquinas para a unidade, de um par de dutos de insuflamento e retorno com caminho contínuo no forro, de ponto de dreno para a condensação e de altura de forro compatível com o diâmetro escolhido. Como não existe régua brasileira de vazão residencial, o dimensionamento é critério do projetista, e é por isso que a decisão precisa estar no projeto e não na obra. Em Light Steel Frame ela vence mais cedo ainda, porque o painel vira ordem de fabricação.",
+      "question": "De quanto espaço e de que caminho um sistema de ventilação com recuperação precisa antes de a parede fechar?"
+     }
+    ]
+   }
+  ],
+  "norms": [
+   {
+    "code": "ANSI/ASHRAE 62.2",
+    "year": "2025",
+    "title": "Ventilation and Acceptable Indoor Air Quality in Residential Buildings",
+    "description": "Vale para unidade habitacional e especifica vazão em número."
+   },
+   {
+    "code": "EN 16798-1",
+    "year": "2019",
+    "title": "Desempenho energético de edifícios, parâmetros de ambiente interior",
+    "description": "Vazões por categoria para habitação; substituiu a EN 15251."
+   },
+   {
+    "code": "PHI Building Criteria",
+    "year": "Versão 10c, 2023",
+    "title": "Critérios Passivhaus, EnerPHit e PHI Low Energy",
+    "description": "Aquecimento fixo, resfriamento com parcela variável por clima, recuperação de umidade nas zonas quentes."
+   },
+   {
+    "code": "ABNT NBR 15575-4",
+    "year": "edição de 2013 citada",
+    "title": "Edificações habitacionais, desempenho, vedações verticais",
+    "description": "Trata ventilação como percentual de abertura sobre área de piso, escalonado por região, e não como vazão; a Emenda 1 de 2021 reescreveu o critério e abriu rota por simulação."
+   },
+   {
+    "code": "ABNT NBR 16401-3",
+    "year": "2008",
+    "title": "Instalações de ar-condicionado, qualidade do ar interior",
+    "description": "Não traz vazão de ar exterior para residência, porque a tabela de vazões não tem categoria residencial; o escopo alcança sistema central de qualquer capacidade e unitário a partir de 10 kW somados, e residência aparece só na tabela de classe mínima de filtro; a revisão de 2024 foi suspensa pelo CB-55."
+   },
+   {
+    "code": "ABNT NBR 16655-1",
+    "year": "2018",
+    "title": "Instalação de sistemas residenciais de ar-condicionado, split e compacto, projeto e instalação",
+    "description": "É a única norma brasileira de instalação escrita para residência, e para até 18 kW, portanto não cobre nenhum dos cinco sistemas deste artigo."
+   },
+   {
+    "code": "ANVISA RE nº 9",
+    "year": "2003, revogada",
+    "title": "Padrões referenciais de qualidade do ar interior",
+    "description": "Valia para ambiente de uso público e coletivo, nunca para residência, e foi revogada pela RDC nº 886/2024."
+   }
+  ],
+  "stats": [
+   {
+    "id": "instalacoes-alto-padrao-numeros",
+    "stats": [
+     {
+      "label": "Resfriamento em Estocolmo no ano inteiro",
+      "value": 59,
+      "suffix": " graus-dia",
+      "description": "Recife, Manaus, Fortaleza e Belém registram zero graus-dia de aquecimento. ASHRAE Handbook 2025, base 18,3 °C."
+     },
+     {
+      "label": "Demanda de aquecimento da Passivhaus, igual no mundo inteiro",
+      "value": 15,
+      "suffix": " kWh/m²a",
+      "description": "A linha de resfriamento não é fixa: são 15 mais uma parcela variável, calculada a partir do clima e das cargas internas."
+     },
+     {
+      "label": "Recuperação de umidade exigida em clima quente e úmido",
+      "value": 60,
+      "suffix": " %",
+      "description": "Nessa zona a exigência de recuperação de calor desaparece da tabela de componentes do Passive House Institute."
+     },
+     {
+      "label": "Do VRF vendido no Brasil vinha importado",
+      "value": 90,
+      "suffix": " %",
+      "description": "Revista do Frio, março de 2021, que também registra crescimento médio de 15% ao ano entre 2011 e 2020."
+     }
+    ]
+   }
+  ],
+  "tables": [
+   {
+    "id": "graus-dia-cidades",
+    "rows": [
+     [
+      "Estocolmo, Bromma",
+      "4.022",
+      "59",
+      "98,6%"
+     ],
+     [
+      "Berlim, Tempelhof",
+      "2.997",
+      "213",
+      "93,4%"
+     ],
+     [
+      "Chicago, O'Hare",
+      "3.346",
+      "542",
+      "86,1%"
+     ],
+     [
+      "Nova York, Central Park",
+      "2.514",
+      "671",
+      "78,9%"
+     ],
+     [
+      "Curitiba, Afonso Pena",
+      "615",
+      "589",
+      "51,1%"
+     ],
+     [
+      "São Paulo, Congonhas",
+      "200",
+      "1.176",
+      "14,5%"
+     ],
+     [
+      "Brasília, Kubitschek",
+      "16",
+      "1.444",
+      "1,1%"
+     ],
+     [
+      "Rio de Janeiro, Galeão",
+      "5",
+      "2.338",
+      "0,2%"
+     ],
+     [
+      "Recife, Guararapes",
+      "0",
+      "3.193",
+      "0,0%"
+     ],
+     [
+      "Manaus, Eduardo Gomes",
+      "0",
+      "3.318",
+      "0,0%"
+     ],
+     [
+      "Belém, Val de Cans",
+      "0",
+      "3.384",
+      "0,0%"
+     ]
+    ],
+    "caption": "ASHRAE Handbook Fundamentals 2025, capítulo 14, base 18,3 °C para as duas grandezas. Valores por estação meteorológica, não por cidade.",
+    "headers": [
+     "Cidade e estação",
+     "Graus-dia de aquecimento",
+     "Graus-dia de resfriamento",
+     "Aquecimento como % do total"
+    ]
+   },
+   {
+    "id": "sistemas-grade-brasil",
+    "rows": [
+     [
+      "Ventilação com recuperação de calor (HRV)",
+      "Recupera calor sensível do ar de exaustão",
+      "Clima com diferença grande entre dentro e fora por meses, ou seja, Sul e serra",
+      "Duto de insuflamento e de retorno, casa de máquinas, ponto de dreno e caminho no forro",
+      "Sem composição de serviço no SINAPI. A Soler & Palau opera no Brasil com as linhas Industrial, Habitat e O&M, nenhuma delas de recuperador, e vende recuperador residencial no catálogo europeu."
+     ],
+     [
+      "Ventilação com recuperação de calor e umidade (ERV, trocador entálpico)",
+      "Reduz a carga de secar o ar que entra",
+      "Quente e úmido, que é a maior parte do Brasil",
+      "Igual ao HRV, mais atenção à seleção do núcleo",
+      "A Sicflux declara em catálogo, na linha CRS, 68% de eficiência de recuperação térmica e 65% de recuperação de umidade, em tensão monofásica 127/230 V, com filtros G3, G4 e M5 e garantia de 1 ano."
+     ],
+     [
+      "Bomba de calor para água quente",
+      "Aquece água com fração da energia do chuveiro elétrico",
+      "Qualquer clima brasileiro, e melhora quanto mais quente o ar",
+      "Área externa ventilada, dreno, reservatório e circuito de recirculação",
+      "A Heliotek, de Ribeirão Pires/SP, tem linha residencial de banho e anuncia garantia de até 3 anos, condicionada a instalação e manutenção por assistência autorizada. Sem categoria no Programa Brasileiro de Etiquetagem, então qualquer COP é declarado pelo fabricante. Concorre com o chuveiro elétrico, presente em 86,9% dos domicílios (EPE, Atlas 2024, dado de 2023)."
+     ],
+     [
+      "VRF, fluxo de refrigerante variável",
+      "Climatiza vários ambientes com controle independente e uma unidade externa só",
+      "Quente, e é onde o Brasil mais usa",
+      "Shaft para linha frigorígena, espaço de unidade externa, forro técnico e dreno por ambiente",
+      "Maduro no comercial. A Revista do Frio registrou em março de 2021 que praticamente 90% dos produtos eram importados e que de 2011 a 2020 o setor cresceu em média 15% ao ano. Sem composição no SINAPI e sem etiquetagem. Não há dado público de participação em casa unifamiliar."
+     ],
+     [
+      "Climatização radiante",
+      "Superfície aquecida ou resfriada em vez de ar insuflado",
+      "Aquecimento pede clima de aquecimento, o que no Brasil restringe ao Sul e à serra",
+      "Malha no contrapiso decidida antes do piso, coletor, e no caso hidráulico caldeira ou bomba de calor",
+      "O elétrico tem indústria nacional, e a Álamo Piso Térmico declara mais de 800 mil m² instalados, 27 mil clientes em mais de 1.500 cidades e certificação INMETRO. A Wavin vende o tubo PEX no Brasil, sob a marca Amanco Wavin, e o sistema radiante completo de aquecimento e resfriamento na Itália. Resfriamento radiante esbarra em condensação."
+     ]
+    ],
+    "caption": "Situação verificada em 22/09/2026, com página de fabricante ou registro oficial para cada afirmação de desempenho e de disponibilidade.",
+    "headers": [
+     "Sistema",
+     "Benefício real",
+     "Clima em que faz sentido",
+     "Infraestrutura que o projeto reserva",
+     "Situação no Brasil"
+    ]
+   }
+  ]
+ }
+}

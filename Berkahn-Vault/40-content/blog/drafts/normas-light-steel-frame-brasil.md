@@ -1,7 +1,7 @@
 ---
 tipo: draft-content
 criado: 2026-09-05
-atualizado: 2026-09-05
+atualizado: 2026-10-20
 tags:
   - project/blog
   - status/draft
@@ -24,7 +24,7 @@ palavras_chave:
   - norma de desempenho steel frame
   - regulamentação steel frame brasil
 category: Guias e Tutoriais
-read_time: 12 min
+read_time: 10 min
 author: Equipe Berkahn
 answer_summary: "A ABNT NBR 16970:2022 é a primeira norma brasileira específica para Light Steel Frame, em três partes: desempenho, projeto estrutural e interfaces. Com ela, a Caixa passou a tratar o sistema como convencional, sem DATec obrigatório e com prazo de até 30 anos. O ecossistema soma oito NBRs: 15253, 14762, 6355, 8800, 15575, 15220-3, 6120 e 6123. A peça mais recente é o zoneamento. A NBR 15220-3, publicada em 3 de dezembro de 2024, passou de oito para doze zonas e levou São Paulo de ZB3 para 2M, o que leva o limite de transmitância de referência da parede externa de 3,7 para 2,7 W/(m²·K) em fachadas com absortância até 0,6."
 supabase_id: c76c4b16-7c31-45b4-9857-d369bed0a1f4
@@ -37,119 +37,75 @@ contextos_aplicados:
 material_visual_slug: cover.webp
 ---
 
-Em maio de 2022, a ABNT publicou a NBR 16970, a primeira norma brasileira criada exclusivamente para o Light Steel Frame, um sistema construtivo industrializado que utiliza perfis de aço galvanizado como estrutura, fechados com placas cimentícias, OSB ou drywall. Pode parecer só mais um número de norma técnica, mas o impacto prático foi enorme: a Caixa Econômica Federal reclassificou o LSF de "sistema inovador" para "sistema convencional", eliminando barreiras burocráticas que travavam financiamentos. Na Berkahn, acompanhamos essa evolução de perto porque ela afeta diretamente o planejamento de cada projeto que executamos em Steel Frame.
+A ABNT NBR 16970:2022 é a primeira norma brasileira feita só para o Light Steel Frame, em três partes: desempenho, projeto estrutural e interfaces. Com ela, a Caixa passou a tratar o sistema como convencional, sem DATec obrigatório e com prazo de até 30 anos. O conjunto soma oito NBRs, 15253, 14762, 6355, 8800, 15575, 15220-3, 6120 e 6123, e a peça mais recente é o zoneamento: a NBR 15220-3, de 3 de dezembro de 2024, passou de oito para doze zonas e levou São Paulo de ZB3 para 2M, o que muda o limite de transmitância da parede externa de 3,7 para 2,7 W/(m²·K) em fachadas com absortância até 0,6.
 
-Ainda assim, quem pesquisa sobre construção em LSF encontra informações fragmentadas. Um artigo fala da NBR 16970, outro menciona a NBR 15253, um terceiro cita a Diretriz SINAT 003, e ninguém conecta as peças. Este guia reúne as normas que regulamentam o Light Steel Frame no Brasil, explica o que cada uma exige e mostra como isso afeta quem vai construir, financiar ou aprovar um projeto. Está atualizado até dezembro de 2025, quando a última peça desse conjunto se mexeu.
+Em maio de 2022, a ABNT publicou a NBR 16970 para o Light Steel Frame, sistema construtivo industrializado de perfis de aço galvanizado como estrutura, fechados com placas cimentícias, OSB ou drywall. O impacto prático foi grande: a Caixa reclassificou o LSF de "sistema inovador" para "sistema convencional", eliminando barreiras que travavam financiamentos. Quem pesquisa encontra informação fragmentada, uma página sobre a NBR 16970, outra sobre a 15253, uma terceira sobre a Diretriz SINAT 003, e ninguém conecta as peças. Este guia reúne as normas, explica o que cada uma exige e mostra o efeito para quem vai construir, financiar ou aprovar um projeto. Está atualizado até dezembro de 2025.
 
 [STATS:numeros-normas-lsf]
 
 ## A NBR 16970: a norma-mãe do Steel Frame
 
-A ABNT NBR 16970:2022, publicada em 25 de maio de 2022 pelo Comitê Brasileiro da Construção Civil (ABNT/CB-002), é dividida em três partes que cobrem o sistema de ponta a ponta.
+A NBR 16970:2022, publicada em 25 de maio de 2022 pelo ABNT/CB-002, tem três partes. A Parte 1 trata de desempenho: segurança estrutural, incêndio, estanqueidade, conforto térmico e acústico e durabilidade, com especificações mínimas de perfis, parafusos, placas e barreira de vapor. A Parte 2 cuida do projeto estrutural, dos materiais, das ligações e da ancoragem na fundação, e referencia obrigatoriamente a NBR 14762 e a NBR 8800. A Parte 3 define as interfaces entre subsistemas: paredes e pisos, esquadrias, instalações elétricas, hidráulicas, de gás e ar-condicionado e ancoragens para objetos pesados em paredes e forros.
 
-A Parte 1 trata de desempenho. Ela estabelece requisitos de segurança estrutural, proteção contra incêndio, estanqueidade à água, conforto térmico e acústico, e durabilidade, e desce ao detalhe das especificações mínimas dos perfis, dos parafusos permitidos, das placas de fechamento e da barreira de vapor. A fundação segue diretrizes próprias de caracterização do solo e proteção contra umidade ascendente.
-
-A Parte 2 cuida do projeto estrutural, dos materiais e tipos de ligação até a ancoragem na fundação com chumbadores químicos e mecânicos, passando pelos limites de deslocamento dos painéis e pela análise dinâmica de lajes sujeitas a pisoteio. Ela referencia obrigatoriamente a NBR 14762 e a NBR 8800 para os cálculos.
-
-A Parte 3 define as interfaces entre subsistemas. Paredes e pisos, paredes e esquadrias, estrutura e instalações elétricas, hidráulicas, de gás e ar-condicionado, além das ancoragens para fixação de objetos pesados em paredes e forros.
-
-A norma cobre edificações de até dois pavimentos. Projetos acima disso continuam viáveis, mas exigem análise estrutural específica conforme a NBR 14762 e a NBR 8800, sem o enquadramento direto pela NBR 16970.
+A norma cobre edificações de até dois pavimentos. Acima disso o projeto segue viável, mas exige análise estrutural específica pela NBR 14762 e pela NBR 8800.
 
 ## As normas complementares que sustentam o sistema
 
-A NBR 16970 não existe sozinha. Ela se apoia em um ecossistema de normas que regulamentam materiais, cálculos e desempenho, e conhecer as principais é o que permite ler um projeto em Steel Frame.
+A NBR 15253:2014 é a norma dos perfis: resistência ao escoamento mínima de 230 MPa, espessura de 0,80 a 3,0 mm e revestimento Z275 (275 g/m²) ou AZ150 por imersão a quente, com seções U (guias) e Ue (montantes) de alma de 90, 140 e 200 mm. A NBR 14762:2010 é a de cálculo, por estados-limites, com três métodos: Largura Efetiva, Seção Efetiva e Resistência Direta. A NBR 6355:2012 define as propriedades geométricas dos perfis, e a NBR 8800 cobre o que vai além dos formados a frio, como ligações mistas de aço e concreto.
 
-A ABNT NBR 15253:2014 é a norma dos perfis. Os perfis de aço formados a frio usados em painéis estruturais devem ter resistência ao escoamento mínima de 230 MPa, espessura entre 0,80 mm e 3,0 mm e revestimento de zinco Z275 (275 g/m²) ou alumínio-zinco AZ150 (150 g/m²) por imersão a quente. Ela padroniza as seções U (guias) e Ue (montantes) com almas de 90, 140 e 200 mm e fixa tolerâncias e aberturas para passagem de tubulações.
-
-A ABNT NBR 14762:2010 é a norma de cálculo. Baseada no método dos estados-limites, oferece três abordagens de dimensionamento: Método da Largura Efetiva (MLE), Método da Seção Efetiva (MSE) e Método da Resistência Direta (MRD), cobrindo de compressão e flexão até flambagem local e por flexo-torção. É o que o calculista precisa dominar para assinar um projeto estrutural em LSF.
-
-A ABNT NBR 6355:2012 complementa a NBR 14762, definindo as propriedades geométricas dos perfis: área, momentos de inércia, módulo de resistência elástico, raios de giração e tolerâncias de forma. E a NBR 8800 entra para cobrir aspectos de estruturas de aço que vão além dos perfis formados a frio, como ligações mistas de aço e concreto.
-
-Para quem vai construir uma residência, a ABNT NBR 15575, conhecida como Norma de Desempenho, é obrigatória. Ela se aplica a qualquer edificação habitacional, independentemente do sistema construtivo, e avalia segurança estrutural, contra incêndio, estanqueidade, desempenho térmico, acústico, lumínico e durabilidade em três níveis: Mínimo (obrigatório), Intermediário e Superior. A Parte 1 está na edição de 2024, válida desde 23 de janeiro daquele ano. A Emenda 1 de março de 2021 trouxe critérios térmicos mais rigorosos, com limites de proporção de vidro em fachadas e a simulação computacional como método de análise. Em dezembro de 2025 veio uma segunda rodada de emendas, com finalidade diferente, tratada na próxima seção.
-
-As normas de cargas fecham o quadro: a NBR 6120:2019 define cargas permanentes e acidentais, e a NBR 6123:1988 estabelece as forças de vento, fator especialmente relevante em construções leves como o Steel Frame.
+Para residência, a NBR 15575, a Norma de Desempenho, é obrigatória e se aplica a qualquer sistema, em três níveis: Mínimo (obrigatório), Intermediário e Superior. A Parte 1 está na edição de 2024, válida desde 23 de janeiro daquele ano, e a Emenda 1 de março de 2021 trouxe critérios térmicos mais rigorosos, com limites de vidro em fachadas e simulação computacional. As cargas ficam com a NBR 6120:2019 e, para o vento, fator relevante em construção leve, a NBR 6123:1988.
 
 [NORMS:nbr-lsf-ecossistema]
 
 ## O que mudou nas normas em 2024 e 2025
 
-Uma das normas dessa lista deixou de ser o que era. A ABNT NBR 15220-3, que fixa o zoneamento bioclimático usado como entrada do capítulo térmico da Norma de Desempenho, foi revisada e publicada em 3 de dezembro de 2024, conforme registra o boletim anual de alterações de normas técnicas da CBIC. O mapa saiu de oito para doze zonas, identificadas como 1R, 1M, 2R, 2M, 3A, 3B, 4A, 4B, 5A, 5B, 6A e 6B. As famílias frias, 1 e 2, se subdividem pelo rigor do inverno, com R de rigoroso e M de moderado, enquanto as famílias 3 a 6 se subdividem pela umidade relativa média anual, com A de úmida e B de seca. A base climática trocou junto, para 298 arquivos meteorológicos do período de 2007 a 2021. A edição de 2005, que ainda circula em PDF gratuito e ranqueia bem no Google, deixou de ser a edição vigente.
+A NBR 15220-3, que fixa o zoneamento bioclimático de entrada do capítulo térmico da Norma de Desempenho, foi revisada e publicada em 3 de dezembro de 2024, conforme o boletim da CBIC. O mapa passou de oito para doze zonas: 1R, 1M, 2R, 2M, 3A, 3B, 4A, 4B, 5A, 5B, 6A e 6B. As famílias 1 e 2 se subdividem pelo rigor do inverno, R de rigoroso e M de moderado, e as de 3 a 6 pela umidade, A de úmida e B de seca, com base em 298 arquivos climáticos de 2007 a 2021. A edição de 2005, que circula em PDF gratuito e ranqueia bem no Google, deixou de ser a vigente.
 
-### São Paulo mudou de zona, e isso mexe em uma linha de tabela
+### São Paulo mudou de zona
 
-São Paulo capital constava como ZB3 no Anexo A da edição de 2005 e integra a zona 2M no mapa novo, do qual é a cidade representativa na tabela de arquivos climáticos da norma publicada. A consequência que interessa a quem projeta cabe em uma linha. Na Tabela 13 da NBR 15575-4, que fixa a transmitância térmica de referência das paredes externas, a cidade saiu do grupo das zonas 3 a 8 e entrou no grupo das zonas 1 e 2. Para uma fachada com absortância solar de até 0,6, o valor de referência aperta de 3,7 para 2,7 W/(m²·K). Para uma fachada mais absorvente, ele afrouxa de 2,5 para 2,7 e deixa de depender da absortância. Uma ressalva de vocabulário evita erro aqui. O critério normativo é a absortância medida da superfície externa, e não a cor escolhida no papel.
+São Paulo capital era ZB3 em 2005 e é zona 2M no mapa novo. Na Tabela 13 da NBR 15575-4, a cidade saiu do grupo das zonas 3 a 8 e entrou no das zonas 1 e 2. Para fachada com absortância de até 0,6, o valor de referência da transmitância aperta de 3,7 para 2,7 W/(m²·K). Para fachada mais absorvente, afrouxa de 2,5 para 2,7 e deixa de depender da absortância. O critério é a absortância medida da superfície externa, não a cor escolhida no papel.
 
-### O que as emendas de 2025 fizeram, no texto delas
+### O que as emendas de 2025 fizeram
 
-Sozinho, o zoneamento é geografia. Ele vira obrigação quando a Norma de Desempenho aponta para ele, e foi isso que fizeram as Emendas 1 das Partes 1, 4 e 5 da NBR 15575, colocadas em consulta nacional em 16 de outubro de 2025, com prazo até 10 de novembro, e publicadas em dezembro do mesmo ano. O prefácio das três traz a mesma frase, e ela contraria boa parte do que se lê sobre o assunto. A emenda adequa as zonas bioclimáticas ao novo zoneamento da NBR 15220-3:2024, mantendo os requisitos de desempenho térmico da seção 11.
+As Emendas 1 das Partes 1, 4 e 5 da NBR 15575, em consulta nacional de 16 de outubro a 10 de novembro de 2025 e publicadas em dezembro, trazem no prefácio a mesma frase: adequam as zonas ao novo zoneamento, mantendo os requisitos de desempenho térmico da seção 11. A capacidade térmica exigida das paredes externas continua em 130 kJ/(m²·K) e vale para São Paulo, porque a Tabela 14, que cobria as zonas 1 a 7, passou a cobrir 1 a 4, com a cidade dentro nos dois casos. Quem fica fora dos limites das tabelas é avaliado por simulação computacional, pela seção 11.4 da NBR 15575-1. A Parte 5, de coberturas, também foi emendada.
 
-O contraexemplo está na tabela seguinte. A capacidade térmica exigida das paredes externas continua em 130 kJ/(m²·K) e continua valendo para São Paulo, porque a Tabela 14 cobria as zonas 1 a 7 e passou a cobrir as zonas 1 a 4, com a cidade dentro do grupo antes e depois. Quem adota valores fora dos limites dessas tabelas não fica sem saída, porque a nota de ambas manda avaliar a unidade habitacional por simulação computacional, conforme a seção 11.4 da NBR 15575-1. A Parte 5, que trata das coberturas, também foi emendada na mesma rodada.
+### Como descobrir a zona do seu terreno
 
-### Como descobrir a zona bioclimática do seu terreno
+A lista oficial de municípios está no relatório ABNT TR 15220-3-1. O LabEEE, da UFSC, que coordenou o grupo do novo zoneamento, publica de graça um [mapa interativo com as doze zonas](https://labeee.ufsc.br/zoneamento/). Vale consultar antes de fechar o projeto arquitetônico, porque a zona define contra qual linha de tabela a envoltória será conferida.
 
-A lista oficial de municípios está no relatório técnico ABNT TR 15220-3-1, que acompanha a norma. Para quem não vai comprar norma só para conferir um endereço, o LabEEE, laboratório de eficiência energética em edificações da UFSC que coordenou o grupo de trabalho do novo zoneamento, publica de graça um [mapa interativo com as doze zonas](https://labeee.ufsc.br/zoneamento/) e as listas de municípios por região. Vale fazer essa consulta antes de fechar o projeto arquitetônico, porque a zona define contra qual linha de tabela a envoltória vai ser conferida.
+Em Steel Frame, a leitura tem dois lados. O limite de 2,7 W/(m²·K) é referência do nível mínimo, e afirmar que uma parede específica fica abaixo dele exige o cálculo da parede real pela NBR 15220-2, camada por camada, como na [anatomia da parede](/atualidades/anatomia-parede-steel-frame) e em [quanto isolamento ela entrega](/atualidades/isolamento-termico-acustico-steel-frame). Já a capacidade térmica é o critério em que a envoltória leve costuma seguir pela simulação, e a reclassificação de São Paulo não mudou isso. As datas da etiqueta energética estão em [quando a ENCE se torna obrigatória](/atualidades/eficiencia-energetica-reforma-tributaria).
 
-Para quem constrói em Steel Frame, a leitura honesta tem dois lados. O limite de 2,7 W/(m²·K) é transmitância de referência para o nível mínimo de desempenho, e afirmar que uma parede específica fica abaixo dele exige o cálculo da parede real conforme a NBR 15220-2, camada por camada, o que passa por [como a parede de LSF é montada](/atualidades/anatomia-parede-steel-frame) e por [quanto isolamento ela entrega](/atualidades/isolamento-termico-acustico-steel-frame). Do outro lado, a capacidade térmica é o critério em que a envoltória leve costuma seguir pela rota da simulação, e a reclassificação de São Paulo não alterou isso. Quem quiser antecipar o calendário da etiquetagem energética encontra as datas em [quando a etiqueta ENCE se torna obrigatória](/atualidades/eficiencia-energetica-reforma-tributaria).
+## O sistema SINAT e os DATecs
 
-## O sistema SINAT e os DATecs: entendendo o que veio antes
+Antes da NBR 16970, o LSF era "sistema construtivo inovador", avaliado pelo SINAT, do PBQP-H. A Diretriz SINAT nº 003, de abril de 2010 e com Revisão 02 de maio de 2016, orientou por mais de uma década a avaliação de sistemas em perfis leves de aço. Perfis em atmosfera rural e urbana devem ter Z275, em atmosfera marinha o mínimo sobe para Z350, e parafusos precisam resistir a 120 horas de névoa salina. Com base nela, o IPT e outras instituições emitiam os DATecs: Saint-Gobain (nº 014) e LP Building Products (nº 015 e 016) obtiveram os seus.
 
-Antes da NBR 16970, o LSF era classificado como "sistema construtivo inovador". Sem norma específica, a avaliação técnica passava pelo SINAT (Sistema Nacional de Avaliações Técnicas), vinculado ao PBQP-H do Ministério das Cidades.
-
-A Diretriz SINAT nº 003, original de abril de 2010 e com Revisão 02 de maio de 2016, orientou por mais de uma década a avaliação de sistemas em perfis leves de aço, com requisitos de desempenho estrutural, segurança ao fogo, estanqueidade, desempenho térmico e acústico, e durabilidade. Uma exigência prática merece registro. Perfis em atmosferas rurais e urbanas devem ter revestimento Z275, e em atmosferas marinhas o mínimo sobe para Z350; parafusos precisam resistir a 120 horas em câmara de névoa salina.
-
-Com base nela, o IPT (Instituto de Pesquisas Tecnológicas) e outras instituições emitiam os DATecs (Documentos de Avaliação Técnica), que comprovavam a conformidade de um sistema específico com a NBR 15575. Saint-Gobain (DATec nº 014) e LP Building Products (DATecs nº 015 e 016) obtiveram os seus.
-
-Com a NBR 16970, o DATec deixou de ser pré-requisito para financiamento bancário, porque o LSF passou a se equiparar a alvenaria e concreto armado para fins regulatórios. O DATec continua relevante como diferencial de qualidade e pode ser exigido em programas habitacionais específicos, ao lado das [certificações que o sistema pode carregar](/atualidades/certificacoes-steel-frame).
+Com a NBR 16970, o DATec deixou de ser pré-requisito para financiamento, porque o LSF passou a se equiparar a alvenaria e concreto armado para fins regulatórios. Segue relevante como diferencial, e pode ser exigido em programas habitacionais específicos, ao lado das [certificações do sistema](/atualidades/certificacoes-steel-frame).
 
 [TIMELINE:evolucao-regulatoria-lsf]
 
 ## Na prática: aprovação, ART e financiamento
 
-### Aprovação em prefeituras
+Aprovar projeto em Steel Frame na prefeitura é essencialmente o mesmo que aprovar obra convencional: projeto arquitetônico, projeto estrutural para LSF pela NBR 14762, complementares, memorial descritivo, ART ou RRT e cronograma físico-financeiro. Em cidades menores ou com códigos antigos ainda há resistência de fiscais pouco familiarizados, que a NBR 16970 tem reduzido. Toda obra exige responsabilidade técnica, ART pelo CREA ou RRT pelo CAU, e o projeto estrutural em perfis de aço exige engenheiro civil ou mecânico. O CREA não "aprova" nem "reprova" sistemas construtivos, regula o exercício profissional.
 
-Aprovar um projeto em Steel Frame na prefeitura é essencialmente o mesmo que aprovar uma obra convencional. A documentação inclui projeto arquitetônico, projeto estrutural específico para LSF (conforme NBR 14762), projetos complementares, memorial descritivo, ART ou RRT e cronograma físico-financeiro.
-
-Em municípios maiores, especialmente em São Paulo e nas capitais do Sul, o processo flui sem entraves. Em cidades menores ou com códigos de obras antigos, ainda aparece resistência de fiscais pouco familiarizados com o sistema, situação que a NBR 16970 tem reduzido ao dar ao LSF respaldo equivalente ao de qualquer sistema convencional.
-
-### ART e responsabilidade técnica
-
-Toda obra em Steel Frame exige responsabilidade técnica registrada. Engenheiros civis ou mecânicos emitem ART (Anotação de Responsabilidade Técnica) pelo CREA e arquitetos emitem RRT pelo CAU, e o projeto estrutural em perfis de aço exige assinatura de engenheiro civil ou mecânico.
-
-Vale esclarecer um equívoco comum. O CREA não "aprova" nem "reprova" sistemas construtivos, ele regula o exercício profissional. Profissionais habilitados podem assinar projetos em LSF, desde que dominem as normas aplicáveis.
-
-### Financiamento bancário
-
-A mudança de classificação transformou o cenário de financiamento. A Caixa Econômica Federal, segundo dados publicados pela ABCEM (Associação Brasileira da Construção Metálica), passou a tratar o LSF como sistema convencional, com condições equivalentes à alvenaria: até 80% do valor da obra financiado (até 100% com terreno próprio), prazo de até 30 anos, juros equivalentes e uso do FGTS. O valor é liberado conforme cronograma, com vistorias de engenheiro da Caixa.
-
-Antes da norma, era preciso montar um dossiê com DATec e documentos complementares. Hoje o processo corre no escritório do correspondente imobiliário, como qualquer financiamento de construção, e bancos privados como Santander e BRDE também financiam obras em LSF.
+No financiamento, a Caixa, segundo a ABCEM, passou a tratar o LSF como convencional: até 80% do valor da obra (até 100% com terreno próprio), prazo de até 30 anos, juros equivalentes e FGTS, com liberação por cronograma e vistorias. Antes da norma era preciso um dossiê com DATec, e hoje o processo corre no correspondente imobiliário. Santander e BRDE também financiam obras em LSF.
 
 [TABLE:financiamento-antes-depois]
 
-## Como o Brasil se posiciona no cenário internacional
+## O Brasil no cenário internacional
 
-Nos Estados Unidos, as normas AISI (sob gestão da SFIA, Steel Framing Industry Association) formam o conjunto mais completo do mundo. A AISI S240 cobre o framing estrutural, a AISI S230 traz um método prescritivo para residências de até 3 pavimentos, que dispensa cálculo complexo em projetos padronizados, e a AISI S400 trata de projeto sísmico.
-
-Na Europa, o Eurocode 3, Parte 1-3 (EN 1993-1-3:2024) é o padrão central para perfis formados a frio, e Reino Unido e Alemanha lideram a adoção em construção modular. Austrália e Nova Zelândia trabalham com a AS/NZS 4600:2018, complementada pelos padrões NASH para soluções prescritivas residenciais.
-
-A lacuna brasileira é a ausência de um método prescritivo equivalente ao AISI S230 ou ao NASH Part 2, que simplificaria a adoção do LSF por construtores menores, e o limite de dois pavimentos da NBR 16970 é mais restritivo que os padrões americano e australiano. Ainda assim, o Brasil saiu da dependência exclusiva de DATecs para ter norma própria em três partes, cobrindo desempenho, projeto estrutural e interfaces.
+Nos Estados Unidos, as normas AISI, da SFIA, formam o conjunto mais completo: a S240 para o framing estrutural, a S230 com método prescritivo para residências de até 3 pavimentos e a S400 para projeto sísmico. Na Europa, o padrão é o Eurocode 3, Parte 1-3 (EN 1993-1-3:2024), e Austrália e Nova Zelândia usam a AS/NZS 4600:2018, com os padrões NASH para soluções prescritivas. A lacuna brasileira é a falta de um método prescritivo equivalente ao AISI S230 ou ao NASH Part 2, e o limite de dois pavimentos da NBR 16970 é mais restritivo que o americano e o australiano. Ainda assim, o Brasil saiu da dependência dos DATecs para ter norma própria em três partes.
 
 [TABLE:comparativo-internacional]
 
-## Um mercado em expansão, com normas cada vez mais sólidas
+## Um mercado em expansão
 
-Segundo pesquisa do CBCA (Centro Brasileiro da Construção em Aço) citada pela Revista Grandes Construções, a produção de perfis galvanizados para LSF cresceu 27,7% em 2023 sobre o ano anterior, com projeção de mais 7,2% para 2024. As 36 empresas do segmento (LSF e drywall) reportaram receita combinada de R$ 1,6 bilhão em 2023, segundo a ABCEM, com 107.600 toneladas produzidas contra capacidade instalada de 273.500 toneladas. Há espaço para crescer sem investir em nova capacidade.
-
-A construção em Steel Frame ainda representa menos de 1% do total de edificações no Brasil, com a alvenaria em cerca de 85% do mercado. A assimetria entre a maturidade normativa do sistema e a sua adoção efetiva é enorme. O arcabouço está posto e continua sendo mantido, e o que falta é escala de conhecimento.
+Segundo o CBCA, citado pela Revista Grandes Construções, a produção de perfis galvanizados para LSF cresceu 27,7% em 2023, com projeção de 7,2% para 2024. As 36 empresas do segmento, entre LSF e drywall, reportaram receita de R$ 1,6 bilhão em 2023 pela ABCEM, com 107.600 toneladas contra capacidade de 273.500. O Steel Frame ainda é menos de 1% das edificações, com a alvenaria em cerca de 85%. O arcabouço normativo está posto, e o que falta é escala de conhecimento.
 
 ## Perguntas frequentes
 
 [FAQ:faq-normas-lsf]
 
-## O que levar deste guia
-
-O Light Steel Frame no Brasil deixou de ser uma tecnologia sem respaldo normativo. Com a NBR 16970 como norma central, complementada pela NBR 15253 (perfis), NBR 14762 (dimensionamento), NBR 15575 (desempenho), o zoneamento da NBR 15220-3 e a Diretriz SINAT nº 003 como referência histórica, o sistema cobre da especificação do aço ao financiamento da obra. Esse arcabouço tem data, e a mais recente é dezembro de 2025.
-
-Se você está avaliando construir em Steel Frame e quer entender como essas normas se aplicam ao seu projeto específico, fale com a equipe da Berkahn. Trabalhamos com LSF como sistema principal e temos domínio técnico sobre cada uma dessas normas na prática, do projeto estrutural à entrega de chaves.
+O Light Steel Frame deixou de ser tecnologia sem respaldo normativo. Com a NBR 16970 como norma central, complementada por 15253, 14762, 15575, o zoneamento da 15220-3 e a Diretriz SINAT 003 como referência histórica, o sistema cobre da especificação do aço ao financiamento da obra, e a data mais recente desse arcabouço é dezembro de 2025. Para entender como essas normas se aplicam ao seu projeto, fale com a equipe da Berkahn.
 
 [CTA:cta-normas-lsf-orcamento]
 
@@ -208,3 +164,5 @@ Duas correções de fato no texto já publicado entraram no mesmo passe, sem as 
 Lacuna declarada da pesquisa, herdada aqui e não resolvida. A Emenda 1 está confirmada em catálogo para a Parte 1 (5 de dezembro de 2025) e para a Parte 5. Para a Parte 4, o catálogo registra um documento de 5 de dezembro de 2025 com 82 páginas sem dizer se é a Emenda 1 ou uma edição nova completa. O texto por isso fala em "emendas publicadas em dezembro" sem detalhar a natureza do documento da Parte 4. Se alguém for detalhar em revisão futura, conferir antes no abntcatalogo.com.br.
 
 Os três travessões que sobraram no JSON estão em títulos de marcos da timeline herdados da versão publicada e foram normalizados neste passe (`NBR 14762, primeira edição`, `NBR 15253, primeira edição` e `NBR 16970, a norma específica do LSF`), para o widget ficar consistente com os marcos 6 e 7 e com a regra de copy sem travessão.
+
+**Revisão de 20/10/2026 (blog-criacao v1.1):** corpo reduzido de 2479 para 1625 palavras, resposta nos dois primeiros parágrafos, parágrafos curtos. Corrigido o diagnóstico anterior: este rascunho é o reposicionamento do guia de normas já publicado (a pauta Novo zoneamento bioclimático), página com tráfego real (46 cliques em agosto e consultas como nbr 16970 em posição 8), e não um artigo sem demanda. Cortes em seções de contexto, preservando todo dado normativo. Guia pilar, dentro do teto de 2.500 palavras.

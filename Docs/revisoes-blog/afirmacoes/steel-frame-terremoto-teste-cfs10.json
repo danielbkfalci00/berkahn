@@ -1,0 +1,212 @@
+{
+ "slug": "steel-frame-terremoto-teste-cfs10",
+ "content": "Em junho de 2025, pesquisadores da UC San Diego e da Johns Hopkins University construíram um edifício de 10 andares inteiramente em aço conformado a frio e o colocaram sobre o maior simulador sísmico ao ar livre do planeta. Foram 18 simulações de terremotos reais, incluindo reproduções do Loma Prieta (magnitude 6,9, que devastou São Francisco em 1989) e do Northridge (magnitude 6,7, que atingiu Los Angeles em 1994). O resultado, nas palavras da líder do projeto, Profa. Tara Hutchinson: **o sistema estrutural manteve sua integridade**.\n\nNa Berkahn, acompanhamos o teste CFS10 com atenção especial porque o material utilizado nesse edifício é tecnicamente idêntico ao usado em obras de Light Steel Frame (LSF). Quando a academia valida o sistema que uma construtora adota, vale entender em detalhes o que foi testado, como foi testado e o que os dados significam para quem está construindo no Brasil.\n\n[STATS:stats-cfs10]\n\n## O que é o projeto CFS10 e o que foi testado?\n\nO edifício testado tem 10 andares e aproximadamente 30 metros de altura, construído 100% em Cold-Formed Steel (CFS), que é a nomenclatura técnica americana para o que no Brasil chamamos de Light Steel Frame. São os mesmos perfis de aço galvanizado, conformados a frio a partir de chapas com espessuras entre 0,8 mm e 6,35 mm. As peças, os processos e a lógica de montagem são idênticas. A diferença é apenas o nome.\n\nO projeto foi batizado de CFS10 (Cold-Formed Steel, 10 andares) e é liderado pela Profa. Tara Hutchinson, do Departamento de Engenharia Estrutural da UC San Diego, em parceria com o Prof. Ben Schafer, da Johns Hopkins University. A construção combinou três métodos de montagem para demonstrar a versatilidade do sistema: o primeiro pavimento foi erguido peça a peça no local (stick-frame), os andares intermediários usaram painéis pré-fabricados e os superiores utilizaram módulos volumétricos 3D. O prédio incluía escadas, sistemas de sprinklers, tubulações de gás pressurizadas e equipamentos de climatização no topo, simulando um edifício residencial multifamiliar real.\n\nO teste aconteceu no **Large High-Performance Outdoor Shake Table (LHPOST6)**, localizado no Englekirk Structural Engineering Center, em San Diego. É uma das três maiores mesas vibratórias do mundo e a única ao ar livre, o que permite testar edifícios acima de 27 metros de altura. Nenhum outro laboratório no planeta tem essa capacidade. A mesa recebeu uma modernização de US$ 17 milhões da National Science Foundation (NSF) em 2022, passando a operar em 6 graus de liberdade: movimentos horizontais, verticais, laterais e rotacionais nos três eixos, reproduzindo as condições reais de um terremoto.\n\n## O Steel Frame resiste a terremotos? Resultados dos 18 testes\n\nO edifício foi instrumentado com quase **1.000 sensores** para medir aceleração, deslocamento e deformações locais. O modelo numérico que antecedeu os testes usou mais de 350.000 linhas de código e 17.000 elementos, segundo os pesquisadores da Johns Hopkins.\n\nForam 18 simulações de intensidade crescente, usando registros de terremotos reais. Três dessas simulações atingiram ou superaram o nível **MCE (Maximum Credible Earthquake)**, que é o parâmetro máximo que engenheiros projetistas devem considerar ao dimensionar um edifício nos Estados Unidos. A mesa pode carregar até 2.000 toneladas métricas e acelerar a pelo menos 1g. No topo de um prédio de 10 andares, essas acelerações podem atingir 3g.\n\n> \"Apesar das 18 simulações, incluindo três muito grandes iguais ou acima do que engenheiros projetistas devem considerar, o sistema estrutural portante manteve sua integridade.\" — Profa. Tara Hutchinson, UC San Diego\n\n[IMAGE:cfs10-research-team]\n\nOs pesquisadores esperavam danos nos componentes não estruturais (revestimentos, acabamentos), mas as **escadas permaneceram funcionais** após todos os testes, um dado relevante porque escadas são a rota de evacuação em emergências.\n\nJoel Conte, professor de engenharia estrutural da UC San Diego, destacou que um aspecto importante de estruturas sismicamente resilientes é que **elas podem ser reutilizadas rapidamente após os terremotos e reparadas com facilidade**.\n\n## Por que o teste CFS10 é importante para normas de construção?\n\nAtualmente, os códigos de construção dos Estados Unidos (ASCE 7-22) limitam edifícios em CFS a **65 pés** (aproximadamente 20 metros, ou 6 andares). O CFS10 testou um edifício que excede esse limite em 4 andares, atingindo 100 pés e 10 andares. Os resultados indicam que o limite pode ser ampliado com segurança, mesmo em áreas com alta atividade sísmica.\n\nSe confirmado após a análise completa dos dados, isso **alterará os códigos americanos** e terá repercussão nas normas de outros países, incluindo o Brasil.\n\nO teste é a culminação de 8 anos de pesquisa colaborativa entre as duas universidades. Antes do CFS10, foram realizados testes em escala crescente: um edifício de 2 andares em 2013 (projeto CFS-NEES) e um de 6 andares em 2016 (projeto CFS-HUD), ambos com resultados positivos. Cada teste validou o anterior e justificou o próximo.\n\n## Como o aço leve resiste a terremotos? A física explicada\n\nA força que um terremoto exerce sobre um edifício é calculada pela Segunda Lei de Newton: **F = m × a**. Em um terremoto, a aceleração do solo é a mesma para todos os edifícios em determinada localidade. O que muda é a massa.\n\nUm edifício em Steel Frame pesa entre **60 e 100 kg/m²**, enquanto um edifício equivalente em alvenaria convencional pesa entre **1.200 e 1.500 kg/m²**. Um edifício mais leve simplesmente experimenta forças sísmicas proporcionalmente menores.\n\n[CHART:peso-estrutural-comparativo]\n\nAlém do peso, o comportamento do material faz diferença. O **aço é dúctil**: ele se deforma antes de romper, absorvendo energia no processo. O aço pode se alongar até 22% antes de falhar, dando aviso visual de que algo está errado. Concreto e alvenaria são frágeis: quando submetidos a forças que excedem sua capacidade, colapsam de forma súbita.\n\nNas estruturas em CFS e LSF, a energia sísmica é dissipada através de múltiplos mecanismos simultâneos: deformações nas conexões parafusadas entre revestimento e estrutura, tensão diagonal nas fitas de contraventamento e efeito de campo de tração nos painéis de revestimento. A redundância de milhares de conexões por parafusos auto-atarraxantes cria um sistema com enorme capacidade de absorção.\n\nA norma que governa o projeto sísmico de estruturas em CFS nos Estados Unidos, Canadá e México é a **AISI S400-20**. Para paredes de cisalhamento em CFS, o fator de modificação de resposta (R) é **6,5**, um dos mais altos entre todos os sistemas construtivos.\n\n## Como o Steel Frame se comportou em terremotos reais?\n\nTestes em laboratório são essenciais, mas terremotos reais oferecem validação em condições que nenhum simulador reproduz completamente.\n\n[TABLE:terremotos-reais-comparativo]\n\nNo Chile, o terremoto de 2010 (magnitude 8,8, o sexto maior da história registrada) provocou o colapso completo do edifício Torre Alto Rio, de 15 andares em concreto armado. Dos cerca de 2.000 edifícios altos em concreto na zona afetada, aproximadamente 50 necessitaram de demolição ou intervenção estrutural pesada. Edifícios em aço tiveram desempenho satisfatório com danos limitados, majoritariamente em elementos não estruturais.\n\nConfira também as [vantagens e desvantagens reais do Steel Frame](/atualidades/steel-frame-vantagens-desvantagens).\n\n\nNa Nova Zelândia, após o terremoto de Christchurch em 2011, o **primeiro edifício a retornar à operação foi uma estrutura em aço**, com desvio residual de apenas 0,1%. Após o desastre, a participação de mercado do aço estrutural na Nova Zelândia subiu para mais de 80%.\n\n## O Brasil tem terremotos? O que a norma brasileira exige?\n\nO Brasil registra em média **166 terremotos por ano**, segundo dados sismológicos nacionais. Em janeiro de 2024, foi medido o maior terremoto já registrado em solo brasileiro, com magnitude 6,6, próximo a Tarauacá, no Acre.\n\nA única morte causada por terremoto na história registrada do país ocorreu em dezembro de 2007 em Itacarambi, Minas Gerais, quando um tremor de magnitude 4,9 provocou o colapso de uma parede. As casas afetadas eram de **alvenaria simples**, executadas sem maiores cuidados técnicos.\n\nPara o contexto completo, veja nosso [guia definitivo sobre Steel Frame no Brasil](/atualidades/guia-definitivo-steel-frame-brasil).\n\n\n[TABLE:zonas-sismicas-brasil]\n\nA **NBR 15421**, revisada em 2023, é a norma brasileira para projeto de estruturas resistentes a sismos. A **NBR 16970:2022**, que normatiza o Light Steel Frame no Brasil, contempla explicitamente carregamentos sísmicos e eólicos em sua Parte 2 (Projeto Estrutural).\n\n## O que o teste CFS10 representa para o Steel Frame no Brasil?\n\nO dado técnico mais relevante para o mercado brasileiro é a **equivalência absoluta entre CFS e LSF**. Os perfis, montantes, vigas de piso e trilhos do edifício testado na UC San Diego são idênticos aos componentes utilizados em uma obra de Steel Frame no Brasil. Os resultados do CFS10 se aplicam diretamente ao sistema construtivo usado no país.\n\nPara quem planeja construir uma residência de alto padrão ou um edifício comercial, o teste oferece uma evidência difícil de contestar. O sistema construtivo foi submetido ao ensaio mais rigoroso já realizado para esse tipo de estrutura e **manteve integridade completa após 18 simulações**, monitorado por quase 1.000 sensores, validado por duas das universidades mais respeitadas do mundo.\n\nO mercado brasileiro de LSF está em expansão: crescimento de **60%** nos últimos anos segundo a ABCEM, com a produção de perfis galvanizados crescendo 27,7% em 2023 versus 2022. A barreira principal é cultural: a percepção de que estrutura leve é estrutura frágil. Os dados do CFS10 ajudam a desmontar esse mito com evidência científica, não com opinião.\n\n[NORMS:normas-sismos-construcao]\n\n## O que a ciência comprova sobre Steel Frame e sismos?\n\nO teste CFS10 representa a validação científica mais rigorosa já realizada para estruturas em aço conformado a frio. Duas universidades de referência mundial, 8 anos de pesquisa, quase 1.000 sensores, 18 simulações de terremotos reais. O sistema construtivo que a Berkahn utiliza em seus projetos de Light Steel Frame foi aprovado nesse ensaio.\n\nBen Schafer, co-líder do projeto, declarou que o aço conformado a frio atende às demandas de **habitações de alto desempenho, incombustíveis, rápidas de construir, confiáveis e resilientes**, e que a pesquisa pode abrir caminho para que esse material se torne a solução preferida para engenheiros no mundo inteiro.\n\nSe você está planejando construir e quer entender como essa tecnologia se aplica ao seu projeto, fale com a nossa equipe.\n\n[FAQ:faq-steel-frame-terremoto]\n\n[CTA:cta-steel-frame-terremoto]\n\n[SERVICELINK:faq]\n\n---\n\n### Leia também\n\n- [Principais Normas do Light Steel Frame no Brasil](/atualidades/normas-light-steel-frame-brasil)\n- [Steel Frame e Fogo: O Que Acontece em um Incêndio](/atualidades/steel-frame-fogo-incendio)\n- [Proteção contra Quedas na Construção Civil](/atualidades/protecao-contra-quedas-construcao-civil)",
+ "components": {
+  "ctas": [
+   {
+    "id": "cta-steel-frame-terremoto",
+    "label": "CONSTRUA COM SEGURANÇA",
+    "title": "Quer construir com o sistema que passou nos testes mais rigorosos do mundo?",
+    "actionText": "Solicitar Orçamento",
+    "actionType": "dialog",
+    "description": "O Steel Frame que a Berkahn utiliza é o mesmo sistema testado e aprovado na UC San Diego. Solicite um orçamento e conheça nossa metodologia de construção industrializada.",
+    "defaultSegment": "residencial"
+   }
+  ],
+  "faqs": [
+   {
+    "id": "faq-steel-frame-terremoto",
+    "title": "Perguntas Frequentes",
+    "questions": [
+     {
+      "answer": "Sim. O teste CFS10 da UC San Diego submeteu um edifício de 10 andares em Steel Frame a 18 simulações de terremotos reais, incluindo sismos de magnitude 6,7 e 6,9. O sistema estrutural manteve integridade completa. Em terremotos reais (Turquia 2023, Chile 2010, Nova Zelândia 2011), edifícios em aço apresentaram dano estrutural negligível comparado ao concreto e à alvenaria.",
+      "question": "Steel Frame resiste a terremoto?"
+     },
+     {
+      "answer": "Sim. Cold-Formed Steel (CFS), usado no teste, e Light Steel Frame (LSF) são o mesmo sistema construtivo. Os perfis, processos de fabricação e lógica de montagem são idênticos. A diferença é apenas a nomenclatura regional.",
+      "question": "O teste da UC San Diego se aplica ao Light Steel Frame usado no Brasil?"
+     },
+     {
+      "answer": "Sim. A NBR 15421 (revisada em 2023) regulamenta o projeto de estruturas resistentes a sismos no Brasil. A NBR 16970:2022, que normatiza o Light Steel Frame, contempla carregamentos sísmicos e eólicos em sua Parte 2 (Projeto Estrutural).",
+      "question": "O Brasil tem norma sísmica para Steel Frame?"
+     },
+     {
+      "answer": "A força sísmica é proporcional à massa do edifício (F = m × a). O Steel Frame pesa entre 60 e 100 kg/m², contra 1.200 a 1.500 kg/m² da alvenaria. Menos massa significa menos força atuando sobre a estrutura. Além disso, o aço é dúctil (se deforma antes de romper), enquanto concreto e alvenaria são frágeis (colapsam de forma súbita).",
+      "question": "Por que estruturas leves sofrem menos em terremotos?"
+     },
+     {
+      "answer": "A UC San Diego publicou vídeos completos dos testes, incluindo explicações da Profa. Hutchinson e sobrevoos por drone. Os vídeos estão disponíveis no canal da universidade no YouTube. O site oficial do projeto é cfs10.ucsd.edu.",
+      "question": "Onde posso assistir ao teste CFS10?"
+     }
+    ]
+   }
+  ],
+  "norms": [
+   {
+    "code": "NBR 15421",
+    "year": "2023",
+    "title": "Projeto de Estruturas Resistentes a Sismos",
+    "description": "Norma brasileira que estabelece cinco zonas sísmicas (0 a 4) com acelerações horizontais de projeto entre 0,025g e 0,15g. A revisão de 2023 ampliou as zonas de risco, sinalizando preocupação crescente com a sismicidade nacional."
+   },
+   {
+    "code": "NBR 16970",
+    "year": "2022",
+    "title": "Construção de Edificações em Light Steel Frame",
+    "description": "Norma brasileira que regulamenta o sistema LSF. A Parte 2 (Projeto Estrutural) contempla explicitamente carregamentos sísmicos e eólicos, fornecendo arcabouço normativo completo para aplicação no território nacional."
+   },
+   {
+    "code": "AISI S400",
+    "year": "2020",
+    "title": "Seismic Design of Cold-Formed Steel Structural Systems",
+    "description": "Norma americana (também adotada no Canadá e México) para projeto sísmico de estruturas CFS. Define fator de modificação de resposta R = 6,5 para paredes de cisalhamento em CFS, um dos mais altos entre todos os sistemas construtivos."
+   },
+   {
+    "code": "ABNT NBR 6118",
+    "year": "2023",
+    "title": "Projeto de Estruturas de Concreto",
+    "description": "Referência normativa para concreto armado no Brasil. O contraste de desempenho sísmico entre sistemas em aço (dúctil) e concreto (frágil) fundamenta as recomendações de hierarquia de sistema construtivo em regiões com atividade sísmica."
+   }
+  ],
+  "stats": [
+   {
+    "id": "stats-cfs10",
+    "stats": [
+     {
+      "icon": "Building2",
+      "label": "Andares testados",
+      "value": "10",
+      "description": "O maior edifício em Cold-Formed Steel já submetido a simulador sísmico"
+     },
+     {
+      "icon": "Waves",
+      "label": "Simulações de terremotos",
+      "value": "18",
+      "description": "Incluindo 3 no nível MCE, o máximo que engenheiros consideram no projeto"
+     },
+     {
+      "icon": "Activity",
+      "label": "Sensores instalados",
+      "value": "1.000",
+      "description": "Monitorando aceleração, deslocamento e deformações durante cada simulação"
+     },
+     {
+      "icon": "FlaskConical",
+      "label": "De pesquisa acumulada",
+      "value": "8 anos",
+      "description": "UC San Diego + Johns Hopkins, em testes progressivos de 2 a 10 andares"
+     }
+    ],
+    "title": "O Teste em Números"
+   }
+  ],
+  "charts": [
+   {
+    "id": "peso-estrutural-comparativo",
+    "data": [
+     {
+      "name": "Steel Frame (LSF)",
+      "peso": 80
+     },
+     {
+      "name": "Alvenaria convencional",
+      "peso": 1350
+     }
+    ],
+    "type": "bar",
+    "title": "Peso estrutural por m² — base da resistência sísmica (kg/m²)",
+    "config": {
+     "colors": [
+      "#16A34A"
+     ],
+     "dataKeys": [
+      "peso"
+     ],
+     "xAxisKey": "name"
+    }
+   }
+  ],
+  "images": [
+   {
+    "id": "cfs10-research-team",
+    "alt": "Equipe de pesquisa da UC San Diego e Johns Hopkins no simulador sísmico LHPOST6 após os testes do CFS10",
+    "src": "/images/blog/steel-frame-terremoto-teste-cfs10/research-team.webp",
+    "credit": "UC San Diego / Englekirk Structural Engineering Center",
+    "layout": "wide",
+    "caption": "Equipe do projeto CFS10 na mesa vibratória LHPOST6, UC San Diego, após 18 simulações de terremotos.",
+    "sourceUrl": "https://www.universityofcalifornia.edu/news/engineers-shake-tallest-steel-framed-building-ever-tested-earthquake-simulator",
+    "aspectRatio": "16:9",
+    "enableLightbox": true
+   }
+  ],
+  "tables": [
+   {
+    "id": "terremotos-reais-comparativo",
+    "rows": [
+     [
+      "Turquia/Síria 2023",
+      "7,8",
+      "160.000 edifícios danificados ou destruídos",
+      "Negligível — dano estrutural mínimo"
+     ],
+     [
+      "Chile 2010",
+      "8,8",
+      "~50 edifícios altos demolidos; Torre Alto Rio colapsou",
+      "Satisfatório — danos limitados a elementos não estruturais"
+     ],
+     [
+      "Christchurch NZ 2011",
+      "6,2",
+      "1.500+ edifícios demolidos; 73% das mortes em 2 prédios de concreto",
+      "0,1% desvio residual; 1º edifício a retornar à operação"
+     ]
+    ],
+    "caption": "Desempenho em Terremotos Reais: Aço vs. Concreto/Alvenaria",
+    "headers": [
+     "Evento sísmico",
+     "Magnitude",
+     "Dano em concreto/alvenaria",
+     "Dano em aço"
+    ],
+    "highlightColumn": 3
+   },
+   {
+    "id": "zonas-sismicas-brasil",
+    "rows": [
+     [
+      "Zona 0",
+      "< 0,025g",
+      "Grande São Paulo, Rio de Janeiro, Curitiba"
+     ],
+     [
+      "Zona 1",
+      "0,025g–0,05g",
+      "Sul e Sudeste interior, Brasília"
+     ],
+     [
+      "Zona 2",
+      "0,05g–0,10g",
+      "Centro-Oeste, partes do Nordeste"
+     ],
+     [
+      "Zona 3",
+      "0,10g–0,15g",
+      "Norte (AC, AM, RR), fronteiras andinas"
+     ],
+     [
+      "Zona 4",
+      "≥ 0,15g",
+      "Extremo norte e faixas de fronteira com Peru/Colômbia"
+     ]
+    ],
+    "caption": "Zonas Sísmicas do Brasil — NBR 15421",
+    "headers": [
+     "Zona",
+     "Aceleração horizontal",
+     "Exemplos de regiões"
+    ],
+    "highlightColumn": 1
+   }
+  ]
+ }
+}

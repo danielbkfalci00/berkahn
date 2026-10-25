@@ -1,16 +1,16 @@
 ---
 tipo: prompt
 criado: 2026-04-13
-atualizado: 2026-05-21
+atualizado: 2026-10-20
 tags:
   - ai/prompt
   - ai/locked
   - project/blog
-ai_summary: Escrever artigo final para o blog com base na pesquisa anterior. Etapa 3 do pipeline (após /pesquisa). Regras rígidas de qualidade. Calibrado por Bruno.
+ai_summary: Escrever artigo final para o blog com base na pesquisa anterior. Etapa 3 do pipeline (após /pesquisa). Regras rígidas de qualidade. v1.1 (20/10/2026) prioriza leitura leve, resposta no início e público de médio a grande porte. Calibrado por Bruno.
 status: locked
 locked: true
-versao: 1.0
-calibrado_em: 2026-04-13
+versao: 1.1
+calibrado_em: 2026-10-20
 ---
 
 > [!warning] PROMPT CALIBRADO — NÃO ALTERAR sem permissão de Bruno
@@ -20,11 +20,15 @@ Com base na pesquisa feita anteriormente, escreva o artigo final para o blog da 
 
 ## REGRAS INEGOCIÁVEIS
 
-**Extensão:** máximo 2.500 palavras. Se passar, corte o que for menos essencial. Artigo denso não é artigo longo.
+**Extensão (v1.1):** a meta depende do tipo de artigo. Artigo de preço, custo ou resposta direta: 900 a 1.300 palavras. Artigo técnico ou comparativo: até 1.800. Guia pilar: até 2.500. Se passar, corte o que for menos essencial. Artigo denso não é artigo longo. Nos artigos de preço e resposta, o leitor que chega pelo Google quer a resposta primeiro e o detalhe depois.
+
+**Resposta no início (v1.1):** nos dois primeiros parágrafos o leitor precisa encontrar a resposta à pergunta do título, em 40 a 60 palavras, com o número ou a conclusão principal. O contexto e a explicação vêm depois, nunca antes.
+
+**Leitura leve (v1.1):** parágrafos de no máximo 4 linhas. Um H2 a cada 150 a 250 palavras, para o leitor se orientar passando o olho. Cada artigo precisa de pelo menos uma tabela ou um box de destaque quando houver dado comparável. Frases com uma ideia só.
 
 **Tom:** acessível e conversacional, como se um engenheiro experiente estivesse explicando para um amigo inteligente que não é da área. Leitura leve, dinâmica, que flui sem esforço. Nada de tom acadêmico, nada de "corporativês".
 
-**Estrutura de texto:** parágrafos corridos. Sem listas de bullets no corpo do artigo (exceção: FAQ no final, onde o formato pergunta-resposta é natural).
+**Estrutura de texto:** parágrafos corridos. Sem listas de bullets no corpo do artigo, com duas exceções: FAQ no final, onde o formato pergunta-resposta é natural, e tabelas para dados comparáveis (v1.1). Uma lista curta de até 5 itens é aceita só quando os itens são paralelos e o leitor vai consultá-los em vez de lê-los em sequência.
 
 **Dados:** toda métrica precisa de contexto e fonte. Se a pesquisa trouxe um dado, use-o com a referência. Se não trouxe fonte confiável, não invente. Prefira ranges a números exatos quando houver variação.
 
@@ -32,7 +36,7 @@ Com base na pesquisa feita anteriormente, escreva o artigo final para o blog da 
 
 O artigo é assinado pela "Equipe Berkahn". A voz é impessoal no corpo do texto (sem "nós" ou "a gente" no desenvolvimento), mas pode usar "nós" naturalmente na abertura para posicionar a Berkahn e no CTA final.
 
-A Berkahn atende três segmentos: residencial alto padrão, comercial e industrial. Com base no tema do artigo, defina para qual público o texto conversa. Pode ser um, dois ou os três, desde que a escolha seja intencional e não force encaixe. Isso influencia:
+A Berkahn atende três segmentos: residencial alto padrão, comercial e industrial. O foco é obra de médio a grande porte, com ticket médio residencial de R$ 500 mil a R$ 2 milhões. Casa de 70 ou 100 m², casa popular e programas de habitação de baixa renda não são o público e não devem ser tema nem exemplo (v1.1). Para exemplos de preço e metragem, use casas de 150 a 400 m² e obras comerciais ou industriais. Com base no tema do artigo, defina para qual público o texto conversa. Pode ser um, dois ou os três, desde que a escolha seja intencional e não force encaixe. Isso influencia:
 - Exemplos e referências de preço
 - Profundidade técnica de cada seção
 - Tom dos CTAs
@@ -137,7 +141,11 @@ category: "[categoria]"
 
 ## CHECKLIST ANTES DE ENTREGAR
 
-- [ ] Menos de 2.500 palavras?
+- [ ] Dentro da meta de palavras do tipo de artigo (900 a 1.300 preço/resposta, até 1.800 técnico, até 2.500 pilar)?
+- [ ] Resposta à pergunta do título nos dois primeiros parágrafos?
+- [ ] Parágrafos de até 4 linhas e um H2 a cada 150 a 250 palavras?
+- [ ] Pelo menos uma tabela ou box quando há dado comparável?
+- [ ] Exemplos de porte médio a grande, sem casa de 70 ou 100 m²?
 - [ ] Abertura com hook concreto (não genérico)?
 - [ ] Sem bullets no corpo (exceto FAQ)?
 - [ ] Nenhum vício de linguagem da lista de proibidos?

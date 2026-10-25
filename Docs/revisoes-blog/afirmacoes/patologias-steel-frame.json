@@ -1,0 +1,187 @@
+{
+ "slug": "patologias-steel-frame",
+ "content": "Segundo Helene (1992) e Garcia (2017), duas das principais referências brasileiras em engenharia de patologias, 45% de todas as manifestações patológicas em edificações têm origem na fase de projeto. Outros 22% surgem durante a execução. Somados, esses dois números significam que quase sete em cada dez problemas construtivos já existiam antes do morador receber as chaves. A Berkahn é uma construtora de [Light Steel Frame (LSF)](/lsf) na Grande São Paulo, um sistema construtivo industrializado que utiliza perfis de aço galvanizado como estrutura, com fechamento externo em placas cimentícias e interno em gesso acartonado. No LSF, cada camada, cada junta e cada conexão precisa ser especificada no projeto antes de chegar ao canteiro. Quando o projeto falha, o sistema amplifica as consequências.\n\nEste artigo reúne dados de pesquisas acadêmicas brasileiras (UNICAMP, UFOP, FEAMIG), normas técnicas (NBR 16970, NBR 15575) e publicações de fabricantes para mapear as patologias mais comuns em Steel Frame, explicar como preveni-las e, para quem já enfrenta algum problema, indicar caminhos de correção. Sem minimizar riscos reais, sem exagerar os que não existem.\n\n## O custo de esperar para resolver\n\nA Lei de Sitter (1984), amplamente utilizada na engenharia de manutenção, demonstra que os custos de intervenção em uma edificação seguem uma progressão geométrica de razão 5 conforme o tempo passa. Corrigir um problema na fase de projeto custa 1x. Na fase de execução, 5x. Na manutenção preventiva, 25x. Na manutenção corretiva, quando o dano já se instalou, 125x.\n\nUm exemplo prático torna essa progressão mais tangível. Um detalhe de junta entre placas cimentícias que custa R$ 500 para especificar corretamente no projeto pode custar R$ 2.500 se precisar ser refeito durante a obra, R$ 12.500 se for descoberto depois em uma inspeção preventiva, e até R$ 62.500 se a água entrar por essa junta, atingir os perfis e exigir abertura de paredes com substituição de componentes. Silva et al. (2020) confirmam que problemas patológicos são evolutivos e tendem a se agravar com o tempo, podendo gerar novas manifestações a partir das primeiras. A conta só cresce.\n\n[STATS:sitter-progressao]\n\n## Fissuras nas juntas de placas cimentícias\n\nPesquisas da UNICAMP (Testolino & Neto) e da UFOP confirmam que [fissuras nas juntas entre placas de fechamento](/atualidades/fissuras-steel-frame) são a manifestação patológica mais frequente em construções LSF no Brasil. Crasto e Freitas (2006), citados no TCC de Andrade, Arcanjo e Andrade (FEAMIG, 2021), já apontavam essa mesma conclusão.\n\nO mecanismo por trás é simples de entender. Placas cimentícias sofrem variação dimensional de 2,0 a 2,5 mm por metro linear em ciclos de saturação e secagem, segundo dados técnicos da Brasilit. Quando o tratamento de junta não acomoda essa movimentação, as tensões acumuladas provocam fissuras. As causas mais frequentes passam pelo uso de produtos de drywall em placas cimentícias (são materiais incompatíveis), pela ausência do gap mínimo de 3 mm entre placas, pela fixação de parafusos sem respeitar as distâncias normativas das bordas e por bordas de placas sem apoio adequado em perfis.\n\nA prevenção exige seguir as especificações do fabricante. Para juntas invisíveis, fita telada de fibra de vidro resistente a álcalis com massa polimérica elastomérica. Para juntas aparentes, perfis de acabamento com selantes elastoméricos. Para quem já enfrenta o problema, a correção envolve remover o tratamento falhado, limpar a junta e reaplicar com materiais elastoméricos adequados. Quando a fissuração é recorrente, a conversão para junta aparente costuma ser a solução mais durável.\n\n## Corrosão dos perfis de aço galvanizado\n\n\"Steel frame enferruja?\" é a pergunta que mais aparece nas buscas do Google sobre o sistema. A resposta curta é que, com perfis dentro da norma e sistema de barreiras correto, a corrosão não representa risco real ao longo da vida útil da edificação. A NBR 15253 exige galvanização mínima Z275 (275 g/m² de zinco) para perfis estruturais de LSF. Em cavidades protegidas por membranas hidrófugas e barreiras de vapor corretamente instaladas, estudos canadenses e franceses indicam que perfis Z275 atingem até 100 anos de proteção, segundo dados compilados pela Barbieri do Brasil.\n\nOs problemas surgem quando algo dá errado nesse sistema de proteção. Galvanização abaixo do padrão Z275, rompimento da barreira impermeável que permite contato direto com umidade, condensação dentro da cavidade por falta de barreira de vapor, e cortes na camada de zinco durante manuseio sem retoque com tinta rica em zinco são as causas mais documentadas. Em regiões litorâneas (até 2.000 m do mar), a recomendação técnica é elevar para Z350 ou utilizar perfis com revestimento alumínio-zinco (AZ150).\n\n[TABLE:galvanizacao-vida-util]\n\nA correção depende da extensão. Perfis com corrosão superficial podem receber tratamento e proteção complementar. Perfis com perda significativa de seção precisam ser substituídos, o que exige abertura das paredes e recomposição do sistema.\n\n## Infiltração e umidade\n\nA pesquisa da FEAMIG (2021) classifica a umidade como uma das três principais categorias de manifestações patológicas no LSF, identificando tanto fontes externas (ascensão capilar do solo pelas fundações, infiltração de água de chuva pelas fachadas e coberturas) quanto fontes internas (condensação de vapor de água gerado nas atividades normais de uso e vazamento de instalações).\n\nA prevenção exige um sistema completo e contínuo de barreiras. Membrana hidrófuga de polipropileno de alta densidade em todas as paredes externas, com sobreposição adequada entre seções. Vedação de todas as penetrações (tubos, dutos, eletrodutos) com selantes compatíveis. Flashing metálico em todas as interfaces telhado-parede. Impermeabilização adequada na base da estrutura, na interface fundação/radier. Drenagem de cobertura dimensionada para a intensidade pluviométrica local.\n\nUm problema relacionado que merece atenção separada é a condensação. O aço conduz calor entre 300 e 400 vezes mais rápido que os materiais isolantes que o cercam, criando pontes térmicas nos perfis. Nesses pontos, a temperatura da superfície interna pode cair abaixo do ponto de orvalho do ar, gerando condensação e eventualmente mofo. A NBR 16970-1 exige que o projeto considere as zonas bioclimáticas brasileiras na especificação de isolamento. A solução passa por instalar barreira de vapor no lado quente da parede, romper pontes térmicas com fitas ou espumas isolantes entre perfis e placas internas, e garantir isolamento adequado na cavidade (lã de vidro mínimo 50 mm ou equivalente).\n\n## Falhas nas ligações\n\nParafusos, cantoneiras e ancoragens são os elementos que mantêm o sistema coeso. Bevilaqua (2005), citado no trabalho da FEAMIG, é enfático ao afirmar que falhas nessas conexões podem prejudicar o desempenho da estrutura, causar manifestações patológicas adicionais e elevar os custos da obra. O estudo classifica as manifestações patológicas das ligações como uma categoria própria, incluindo erros de concepção, corrosão, defeitos de fabricação de soldas e ligações parafusadas, além de montagem inadequada.\n\nAs falhas mais comuns envolvem uso de tipo incorreto de parafuso (parafusos de drywall em conexões estruturais, por exemplo), torque insuficiente ou excessivo, espaçamento acima do limite normativo e ausência de reforços nos pontos de carga concentrada. A NBR 16970 (Parte 2) especifica os requisitos para parafusos autoperfurantes e autoatarraxantes, e a Parte 3 detalha requisitos de fixação de objetos em paredes e forros, uma interface que costuma receber menos atenção do que deveria na fase de projeto.\n\n## Por que o Steel Frame exige mais projeto (e menos improviso)\n\nA publicação da NBR 16970 em maio de 2022 foi um marco para o LSF no Brasil. Dividida em três partes (desempenho, projeto estrutural e interface entre sistemas), a norma estabelece requisitos claros para cada componente do sistema. A Parte 3, que detalha interfaces construtivas entre subsistemas, é possivelmente a mais relevante para prevenção de patologias, e ao mesmo tempo a menos discutida em conteúdos online.\n\nSomam-se a ela a NBR 15575 (desempenho de edificações habitacionais, que exige vida útil mínima de 50 anos para a estrutura e obriga o fornecimento de manual de uso e manutenção ao proprietário), a NBR 15253 (perfis de aço para painéis estruturais) e a NBR 14762 (dimensionamento de perfis formados a frio).\n\nO ponto que conecta toda essa discussão sobre patologias ao sistema construtivo é que a construção em alvenaria convencional tolera certo grau de improvisação em obra porque o sistema é relativamente simples e a mão de obra tem décadas de familiaridade com ele. O Steel Frame funciona de maneira oposta. Cada perfil tem posição definida, cada parafuso tem tipo e espaçamento calculado, cada camada de barreira tem função específica dentro de um conjunto interdependente. Takushi (2016), em estudo citado pela FEAMIG, afirma que racionalização, industrialização e rapidez de execução no LSF são possíveis apenas quando há um planejamento contínuo da obra, o que implica um projeto detalhado. Os detalhamentos dos projetos arquitetônicos, estruturais e complementares são, segundo o autor, essenciais para evitar o surgimento de patologias.\n\nQuando o projeto executivo de uma obra em Steel Frame especifica tudo isso corretamente, em conformidade com a NBR 16970, ele elimina a principal fonte de risco. Quando o projeto é genérico e trata o LSF como se fosse alvenaria, transfere a responsabilidade para a execução, onde o custo de correção já é 5x maior. Entenda também [as vantagens e limitações reais do Steel Frame](/atualidades/steel-frame-vantagens-desvantagens) antes de tomar sua decisão construtiva.\n\n[NORMS:normas-steel-frame]\n\n## Manutenção preventiva na prática\n\nUma das vantagens menos discutidas do Steel Frame sobre a alvenaria é a facilidade de manutenção. Placas de drywall podem ser removidas e substituídas sem quebra. Perfis possuem furos pré-puncionados que facilitam inspeção. Reparos em instalações hidráulicas e elétricas não exigem demolição de paredes. Esse acesso simplificado reduz tanto o custo quanto o tempo de qualquer intervenção.\n\nCom base nas diretrizes técnicas de fabricantes como Araucária Perfis e publicações da ABCEM, o ciclo recomendado inclui inspeção visual semestral das paredes externas (fissuras em juntas, estado dos selantes, calhas e drenagem), inspeção anual completa verificando sinais de oxidação e integridade da membrana impermeável, reselagem de juntas e conexões a cada 2 a 3 anos, revisão estrutural abrangente a cada 5 anos e repintura externa com tinta 100% acrílica a cada 5 a 8 anos.\n\nA NBR 15575 obriga construtoras a fornecer um manual de uso, operação e manutenção ao proprietário. Para edificações em Steel Frame, esse manual precisa incluir um cronograma realista com essas periodicidades, adaptado às condições climáticas da região. Veja também [como é o processo completo de construção em Steel Frame](/atualidades/construir-ou-comprar) da fundação à entrega.\n\n[TIMELINE:cronograma-manutencao]\n\n[FAQ:faq-patologias]\n\n## Construir com previsibilidade\n\nAs patologias documentadas na literatura acadêmica brasileira sobre Steel Frame não são falhas inerentes ao sistema. São consequências de projeto incompleto, execução sem qualificação ou materiais fora de norma. Todas são preveníveis com engenharia competente, e as que eventualmente aparecem são corrigíveis com menor custo e menor transtorno do que na construção convencional.\n\nConheça os [serviços completos da Berkahn em Steel Frame](/servicos) — do projeto executivo à entrega das chaves.\n\n[CTA:cta-patologias]",
+ "components": {
+  "ctas": [
+   {
+    "id": "cta-patologias",
+    "label": "CONSTRUA SEM SURPRESAS",
+    "title": "Steel Frame executado com projeto completo desde o início",
+    "actionText": "Conversar com a Equipe",
+    "actionType": "dialog",
+    "description": "Cada detalhe especificado. Cada norma seguida. Cada subsistema integrado. A Berkahn elimina riscos patológicos na origem — do projeto executivo à entrega das chaves.",
+    "defaultSegment": "residencial"
+   }
+  ],
+  "faqs": [
+   {
+    "id": "faq-patologias",
+    "title": "Perguntas Frequentes",
+    "questions": [
+     {
+      "answer": "Com perfis galvanizados Z275 (mínimo exigido pela NBR 15253) em cavidades protegidas por membranas e barreiras corretamente instaladas, estudos internacionais indicam vida útil de até 100 anos. A corrosão se torna risco real quando a galvanização é inferior ao padrão, quando as barreiras são danificadas ou em regiões litorâneas sem especificação reforçada (Z350 ou AZ150).",
+      "question": "Steel Frame enferruja?"
+     },
+     {
+      "answer": "A estrutura metálica em si não fissura. O que pode fissurar são as juntas entre placas de fechamento, especialmente quando o tratamento usa materiais incompatíveis (como produtos de drywall em placas cimentícias) ou não respeita o gap mínimo de 3 mm entre placas. Com materiais e técnicas corretos, o problema é totalmente prevenível.",
+      "question": "Parede de Steel Frame trinca?"
+     },
+     {
+      "answer": "A estrutura de perfis galvanizados tem vida útil estimada em 90 anos ou mais com zincagem Z275/Z350, segundo dados do IPT. Outros componentes do sistema — membranas, selantes, placas cimentícias — possuem vida útil menor e precisam de manutenção ou substituição ao longo do tempo. A NBR 15575 exige vida útil de projeto mínima de 50 anos para a estrutura.",
+      "question": "Quanto tempo dura uma casa em Steel Frame?"
+     },
+     {
+      "answer": "Na prática, tende a ser mais barata. O sistema permite acesso aos componentes internos sem quebra de paredes, reparos localizados sem danos colaterais e substituição de placas individualmente. Na alvenaria, qualquer intervenção em instalações ou estrutura exige demolição e reconstrução, elevando custo e prazo de qualquer manutenção.",
+      "question": "A manutenção do Steel Frame é mais cara que a da alvenaria?"
+     },
+     {
+      "answer": "Depende do tipo de dano. Para fissuras em juntas, a correção envolve remoção do tratamento antigo e reaplicação com materiais elastoméricos adequados. Para infiltrações, é preciso identificar a fonte, reparar o sistema de barreiras e substituir materiais danificados. Para danos estruturais, a avaliação de um engenheiro especializado é indispensável antes de qualquer intervenção.",
+      "question": "Como consertar uma parede de Steel Frame danificada?"
+     }
+    ]
+   }
+  ],
+  "norms": [
+   {
+    "code": "NBR 16970",
+    "year": "2022",
+    "title": "Light Steel Frame — Requisitos de Desempenho",
+    "description": "Dividida em 3 partes: desempenho, projeto estrutural e interfaces entre sistemas. Principal referência normativa para prevenção de patologias em LSF."
+   },
+   {
+    "code": "NBR 15575",
+    "year": "2013/2021",
+    "title": "Edificações Habitacionais — Desempenho",
+    "description": "Exige vida útil mínima de 50 anos para a estrutura e obriga o fornecimento de manual de uso, operação e manutenção ao proprietário."
+   },
+   {
+    "code": "NBR 15253",
+    "year": "2014",
+    "title": "Perfis de Aço para Painéis Estruturais em Light Steel Frame",
+    "description": "Exige galvanização mínima Z275 (275 g/m² de zinco) para perfis estruturais de LSF. Base normativa para especificação de proteção contra corrosão."
+   },
+   {
+    "code": "NBR 14762",
+    "year": "2010",
+    "title": "Dimensionamento de Estruturas de Aço — Perfis Formados a Frio",
+    "description": "Regula o dimensionamento de perfis formados a frio utilizados no Light Steel Frame, incluindo verificação de estabilidade e resistência das conexões."
+   }
+  ],
+  "stats": [
+   {
+    "id": "sitter-progressao",
+    "stats": [
+     {
+      "label": "Fase de projeto",
+      "value": 1,
+      "suffix": "x",
+      "description": "R$ 500 para especificar a junta corretamente no projeto executivo"
+     },
+     {
+      "label": "Fase de execução",
+      "value": 5,
+      "suffix": "x",
+      "description": "R$ 2.500 para refazer o detalhe durante a obra"
+     },
+     {
+      "label": "Manutenção preventiva",
+      "value": 25,
+      "suffix": "x",
+      "description": "R$ 12.500 ao descobrir o problema em inspeção preventiva"
+     },
+     {
+      "label": "Manutenção corretiva",
+      "value": 125,
+      "suffix": "x",
+      "description": "R$ 62.500 com abertura de paredes e substituição de componentes"
+     }
+    ],
+    "title": "Lei de Sitter: O Custo Cresce a Cada Fase",
+    "description": "Progressão geométrica de razão 5 — fonte: Sitter (1984)"
+   }
+  ],
+  "tables": [
+   {
+    "id": "galvanizacao-vida-util",
+    "rows": [
+     [
+      "Z180",
+      "180 g/m²",
+      "~50 anos",
+      "Uso interno, sem exposição a umidade"
+     ],
+     [
+      "Z275",
+      "275 g/m²",
+      "75–100 anos",
+      "Padrão mínimo exigido pela NBR 15253 para estruturais"
+     ],
+     [
+      "Z350",
+      "350 g/m²",
+      "100+ anos",
+      "Regiões litorâneas (até 2.000 m do mar)"
+     ],
+     [
+      "AZ150",
+      "Alumínio-Zinco 150 g/m²",
+      "100+ anos",
+      "Alta resistência à corrosão, indicado para litorâneo"
+     ]
+    ],
+    "title": "Galvanização e Vida Útil dos Perfis de Aço",
+    "caption": "Fonte: NBR 15253 e dados técnicos compilados pela Barbieri do Brasil",
+    "headers": [
+     "Tipo",
+     "Massa de Zinco",
+     "Vida Útil (cavidade protegida)",
+     "Recomendação de Uso"
+    ],
+    "highlightColumn": 2
+   }
+  ],
+  "timelines": [
+   {
+    "id": "cronograma-manutencao",
+    "title": "Cronograma de Manutenção Preventiva",
+    "milestones": [
+     {
+      "title": "Inspeção Visual Externa",
+      "number": 1,
+      "duration": "A cada 6 meses",
+      "shortTitle": "A cada 6 meses",
+      "description": "Verificar fissuras em juntas, estado dos selantes, calhas e sistema de drenagem. Identificar qualquer variação no revestimento externo."
+     },
+     {
+      "title": "Inspeção Completa",
+      "number": 2,
+      "duration": "Anual",
+      "shortTitle": "Anual",
+      "description": "Verificar sinais de oxidação em componentes expostos, integridade da membrana impermeável, fixações e ancoragens visíveis."
+     },
+     {
+      "title": "Reselagem de Juntas",
+      "number": 3,
+      "duration": "A cada 2–3 anos",
+      "shortTitle": "A cada 2–3 anos",
+      "description": "Reaplicar selantes elastoméricos em juntas e conexões. Retratar cortes na galvanização com tinta rica em zinco."
+     },
+     {
+      "title": "Revisão Estrutural",
+      "number": 4,
+      "duration": "A cada 5 anos",
+      "shortTitle": "A cada 5 anos",
+      "description": "Avaliação abrangente por engenheiro especializado: integridade dos perfis, conexões e subsistemas."
+     },
+     {
+      "title": "Repintura Externa",
+      "number": 5,
+      "duration": "A cada 5–8 anos",
+      "shortTitle": "A cada 5–8 anos",
+      "description": "Repintura com tinta 100% acrílica. Momento ideal para inspeção detalhada de todo o sistema de fechamento externo."
+     }
+    ]
+   }
+  ]
+ }
+}

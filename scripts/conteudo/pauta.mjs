@@ -50,7 +50,10 @@ const CAMPOS =
   "linkedin_imagem_briefing,post_draft_payload,post_id,plataformas,capa_blog_url,capa_linkedin_url,atualizado_em";
 
 function abortar(mensagem, codigo = 1) {
-  console.error(`\n❌ ${mensagem}`);
+  const detalhe = typeof mensagem === "string"
+    ? mensagem
+    : JSON.stringify(mensagem, null, 2);
+  console.error(`\n❌ ${detalhe}`);
   process.exit(codigo);
 }
 function garantirId(id) {
@@ -226,7 +229,7 @@ async function selecionarProxima({ json = false, escopo = "pacote" } = {}) {
   const noEscopo = candidatas.filter((pauta) => {
     const blogPendente = Boolean(pauta.status_blog && pauta.post_status !== "published");
     const linkedinPendente = Boolean(
-      pauta.status_linkedin && !(pauta.linkedin_url && pauta.linkedin_publicado_em)
+      pauta.status_linkedin && !pauta.linkedin_publicado_em
     );
     if (escopo === "blog") return blogPendente;
     if (escopo === "linkedin") return linkedinPendente;
@@ -650,7 +653,7 @@ async function produzir(id, { arquivo, dados, usarExistente, expected, dryRun })
       if (coverOutputAnterior) writeFileSync(coverOutputAbs, coverOutputAnterior);
       else if (existsSync(coverOutputAbs)) unlinkSync(coverOutputAbs);
     }
-    abortar(erro instanceof Error ? erro.message : String(erro));
+    abortar(erro instanceof Error ? erro.message : erro);
   }
 
   await logAutomacao(pauta, "Artigo produzido como draft", {
@@ -662,7 +665,7 @@ async function produzir(id, { arquivo, dados, usarExistente, expected, dryRun })
   console.log(`\n✅ Artigo produzido como draft e vinculado: ${postId}\n`);
 }
 
-function frontmatterPublicado(markdown, postId, slug) {
+function frontmatterPublicado(markdown, postId, slug, publicadoEm) {
   if (!markdown.startsWith("---")) abortar("markdown sem frontmatter");
   const fim = markdown.indexOf("\n---", 3);
   if (fim === -1) abortar("frontmatter não fechado");
@@ -676,7 +679,10 @@ function frontmatterPublicado(markdown, postId, slug) {
   }
   definir("atualizado", hoje);
   definir("status", "published");
-  definir("data_publicacao", hoje);
+  const dataPublicacao = publicadoEm
+    ? new Date(publicadoEm).toISOString().slice(0, 10)
+    : hoje;
+  definir("data_publicacao", dataPublicacao);
   definir("supabase_id", postId);
   definir("url_final", `"https://www.berkahn.com.br/atualidades/${slug}"`);
   return `---\n${linhas.join("\n")}\n---${markdown.slice(fim + 4)}`;
@@ -792,7 +798,7 @@ function caminhoStorageDaUrl(url) {
 async function publicar(id, { expected, dryRun }) {
   garantirId(id);
   const { data: pauta, error } = await db.from("conteudo_pautas")
-    .select(`${CAMPOS},posts(id,slug,status)`).eq("id", id).maybeSingle();
+    .select(`${CAMPOS},posts(id,slug,status,published_at)`).eq("id", id).maybeSingle();
   if (error) abortar(error.message);
   if (!pauta?.post_id || !pauta.posts) abortar("pauta sem artigo vinculado");
   garantirVersao(pauta, expected);
@@ -834,7 +840,12 @@ async function publicar(id, { expected, dryRun }) {
     }
     if (!jaMovido) {
       const original = readFileSync(origemAbs, "utf8");
-      const publicado = frontmatterPublicado(original, pauta.post_id, slugFinal);
+      const publicado = frontmatterPublicado(
+        original,
+        pauta.post_id,
+        slugFinal,
+        pauta.posts.published_at
+      );
       movimentos.push(prepararMovimentoPublicado(origemAbs, destinoAbs, publicado));
     }
   } catch (erro) {

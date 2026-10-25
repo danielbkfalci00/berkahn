@@ -1,16 +1,16 @@
 ---
 tipo: prompt
 criado: 2026-04-13
-atualizado: 2026-08-27
+atualizado: 2026-09-16
 tags:
   - ai/prompt
   - ai/locked
   - project/linkedin
-ai_summary: Criar post LinkedIn Berkahn a partir de artigo ou tema. Calibrado por Bruno. Abre numa situação concreta do público, exige texto contínuo sem frase de impacto isolada, prioriza 110-140 palavras, CTA útil e imagem de fotografia documental sem props encenados. Usado por /linkedin, com gate em check-linkedin.mjs.
+ai_summary: Criar post LinkedIn Berkahn a partir de artigo ou tema. Calibrado por Bruno. Abre numa dúvida ou situação concreta, desenvolve uma única linha causal sem reiniciar o assunto a cada parágrafo e fecha com CTA que continua a decisão do leitor. Usado por /linkedin, com gate em check-linkedin.mjs.
 status: locked
 locked: true
-versao: 1.3
-calibrado_em: 2026-08-27
+versao: 1.4
+calibrado_em: 2026-09-16
 ---
 
 > [!warning] PROMPT CALIBRADO — NÃO ALTERAR sem permissão de Bruno
@@ -44,6 +44,8 @@ Regras:
 Educativo, leve e com personalidade. Como se um engenheiro experiente estivesse compartilhando algo interessante que aprendeu, não dando aula.
 
 - Texto contínuo. As frases se ligam por conectivos e constroem um raciocínio, em vez de virem soltas uma atrás da outra. Parágrafos de 1-3 linhas continuam valendo, porque leitura no celular é vertical, mas o corte é entre parágrafos e nunca dentro do raciocínio
+- O post inteiro segue **uma só linha causal**. Cada parágrafo precisa nascer do anterior: dúvida concreta → explicação → exemplo → consequência para a decisão → aprofundamento. Se um parágrafo poderia trocar de lugar sem mudar o sentido, a continuidade ainda está fraca
+- Quebra de parágrafo organiza a leitura; não autoriza recomeçar o tema. Evite uma sequência de frases corretas que funcionam isoladamente, mas não formam uma conversa quando lidas juntas
 - Pode usar uma ou duas quebras de expectativa: um dado contraintuitivo, um senso comum desmontado
 - Sem emojis. Sem hashtags no meio do texto
 - Sem bullet points
@@ -57,6 +59,8 @@ Estes padrões denunciam texto gerado por IA. Evite todos:
 - "Quase ninguém fala/sabe sobre isso"
 - "Você sabia que...?", "Nos últimos anos...", "Vamos falar sobre..."
 - "Não é apenas X, é Y" ou "Mais do que X, é Y"
+- "Não veio apenas de X, veio de Y", "não vem só de X" e variações que fabricam contraste em vez de explicar a causa diretamente
+- "Há um detalhe que muda bastante", "o detalhe que quase sempre passa batido" e outras chamadas vagas. Diga qual é o fato e por que ele importa, sem anunciá-lo como revelação
 - "E" ou "Mas" isolados no início de parágrafo como efeito dramático
 - Superlativos vazios: "incrível", "revolucionário", "game changer", "divisor de águas"
 - Frase de impacto isolada: qualquer sentença de até 6 palavras usada como golpe de efeito, **mesmo uma única por parágrafo**. Calibrado em 2026-08-25, com estas palavras: "para de ficar fazendo frasezinha de 5,5 palavras, essas frases de impacto que você sempre coloca, quebra todo o storytelling". A regra antiga só proibia duas em sequência, então uma por parágrafo passava e o tom de manifesto continuava
@@ -135,6 +139,16 @@ comparáveis. Está no blog.” Evite o fechamento genérico “Tem um artigo co
 sobre isso”. Sem “clique aqui”, sem “link nos comentários”, sem “confira”. O CTA
 pode ser fundido com o ponto de reflexão quando isso funcionar melhor.
 
+O CTA precisa ser a **última consequência do mesmo raciocínio**, não uma nova
+campanha anexada ao texto. Ele retoma a decisão que já apareceu no corpo, diz o
+que o artigo acrescenta e termina no benefício concreto para o leitor. Não abra
+o CTA com um novo rótulo de público ou uma pergunta genérica como “Está
+comparando propostas?”. Se o corpo fala em entender o custo da própria casa, o
+CTA continua daí. Exemplo aprovado em 16/09/2026: “Reunimos no artigo os
+números, as fontes e o que entrou em cada conta. Se você está planejando
+construir, vale entender essa diferença antes de definir o orçamento da sua
+casa.”
+
 **Hashtags:** 3 a 5 no final. Sempre incluir #LightSteelFrame. Pode incluir #SteelFrame como hashtag de alcance. Completar com hashtags do tema.
 
 ## EXTENSÃO
@@ -166,6 +180,12 @@ passava no verificador e falhava no leitor.
 - Prefira substantivos, ações e números verificáveis a conceitos genéricos.
 - Verifique se o CTA oferece uma próxima ajuda concreta, em vez de apenas anunciar
   que existe conteúdo no blog.
+- Faça o teste da ponte: leia somente a última frase do corpo e o CTA. O segundo
+  precisa continuar o substantivo, a decisão ou a consequência do primeiro. Se
+  parecer que outro post começou ali, reescreva o fechamento.
+- Faça o teste da permutação: tente trocar dois parágrafos centrais de lugar. Se
+  o texto continuar funcionando igual, faltam relações de causa e consequência
+  entre eles.
 - Faça uma última redução de 20% a 30% se o texto continuar explicativo demais.
 - Rode o verificador antes de gravar na pauta. Ele é gate, não sugestão:
 

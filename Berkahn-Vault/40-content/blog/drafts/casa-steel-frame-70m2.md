@@ -1,14 +1,14 @@
 ---
 tipo: draft-content
 criado: 2026-09-06
-atualizado: 2026-09-06
+atualizado: 2026-10-20
 tags:
   - project/blog
   - status/draft
   - domain/lsf
   - domain/steel-frame
-ai_summary: "Pauta do lote 10. Casa de 70 m² em steel frame, com a conta montada de baixo para cima em vez de índice multiplicado por metragem. O argumento é que o custo por metro quadrado sobe quando a metragem cai, porque cozinha, banheiro, perímetro e linhas de valor fixo não encolhem junto com a sala. Ancorado no CUB paulista de agosto de 2026, na lista de exclusões da NBR 12721 e em aritmética própria de perímetro sobre área."
-status: draft
+ai_summary: "DESCARTADO em 20/10/2026: casa de 70 m² fora do público da Berkahn (médio e grande porte), sem publicação. Pauta do lote 10. Casa de 70 m² em steel frame, com a conta montada de baixo para cima em vez de índice multiplicado por metragem. O argumento é que o custo por metro quadrado sobe quando a metragem cai, porque cozinha, banheiro, perímetro e linhas de valor fixo não encolhem junto com a sala. Ancorado no CUB paulista de agosto de 2026, na lista de exclusões da NBR 12721 e em aritmética própria de perímetro sobre área."
+status: archived
 projeto: blog
 slug: casa-steel-frame-70m2
 title: "Casa de 70 m² em steel frame: o projeto compacto que fecha a conta"

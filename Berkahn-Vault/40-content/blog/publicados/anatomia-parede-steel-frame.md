@@ -1,13 +1,14 @@
 ---
+
 tipo: draft-content
 criado: 2026-07-20
-atualizado: 2026-08-27
+atualizado: 2026-10-20
 tags:
   - project/blog
   - status/published
   - domain/steel-frame
   - domain/lsf
-ai_summary: "Guia técnico da parede de steel frame camada por camada: estrutura de aço Z275, OSB, membrana, lã e acabamento. Desempenho real de som (45–66 dB), calor (0,70 W/m²K) e fogo, com normas. Público residencial alto padrão + técnico."
+ai_summary: "REVISÃO PENDENTE do artigo publicado (correção de carga suspensa pelos DATec 14 e 15 e pela regra da Abragesso, no lugar de 100 kg ou mais sem fonte). Dados completos em Docs/revisoes-blog/2026-10-anatomia-parede-dados.json. Não há pauta de blog vinculada ao post (só a de LinkedIn), então a revisão staged precisa de vínculo antes. Guia técnico da parede de steel frame camada por camada: estrutura de aço Z275, OSB, membrana, lã e acabamento. Desempenho real de som (45–66 dB), calor (0,70 W/m²K) e fogo, com normas. Público residencial alto padrão + técnico."
 status: published
 projeto: blog
 slug: anatomia-parede-steel-frame
@@ -39,7 +40,7 @@ material_visual_slug: cover.webp
 ---
 Abra uma parede de alvenaria e você encontra a mesma coisa do começo ao fim, tijolo e argamassa. Abra uma parede de steel frame e encontra seis camadas diferentes, cada uma fazendo um trabalho específico. Essa é a diferença que confunde quem está conhecendo o sistema pela primeira vez, e também a que explica por que uma parede que pesa quinze vezes menos que a de alvenaria pode isolar mais som, deixar passar menos calor e durar mais de um século.
 
-Na Berkahn trabalhamos com o [Light Steel Frame (LSF)](/atualidades/guia-definitivo-steel-frame-brasil), um sistema construtivo industrializado que usa perfis de aço galvanizado como estrutura, fechados por placas e preenchidos com isolante. A partir daqui vamos chamá-lo de steel frame, como já se diz no mercado. A ideia deste guia é simples, abrir a parede e mostrar o que tem dentro, da face que enfrenta o sol e a chuva até a superfície que recebe a pintura na sala. Quem vai construir entende o que está comprando. Quem projeta encontra as normas e os números na ponta dos dedos.
+A Berkahn é uma construtora de [Light Steel Frame (LSF)](/atualidades/guia-definitivo-steel-frame-brasil), um sistema construtivo industrializado que usa perfis de aço galvanizado como estrutura, fechados por placas e preenchidos com isolante. A partir daqui vamos chamá-lo de steel frame, como já se diz no mercado. A ideia deste guia é simples, abrir a parede e mostrar o que tem dentro, da face que enfrenta o sol e a chuva até a superfície que recebe a pintura na sala. Quem vai construir entende o que está comprando. Quem projeta encontra as normas e os números na ponta dos dedos.
 
 [STATS:numeros-parede]
 
@@ -107,7 +108,7 @@ Existe um ponto que exige projeto honesto, a inércia térmica. A alvenaria, por
 
 Aço não queima e gesso não pega fogo, então o sistema atende com folga o tempo de resistência ao fogo exigido pelos bombeiros. Uma parede com duas chapas de drywall de cada lado e lã no miolo alcança 60 minutos de resistência, exigência típica entre unidades em São Paulo, e com chapas resistentes ao fogo de 15 milímetros chega a 90 ou 120 minutos. O gesso ajuda porque tem água na composição, que vira vapor ao aquecer e atrasa a propagação da chama.
 
-Sobre espessura, uma parede externa acabada fica em torno de 12 a 20 centímetros, e uma divisória interna entre 7 e 15, mais fina que a alvenaria de desempenho equivalente. E sobre a dúvida que mais aparece, sim, dá para pendurar peso. Uma bucha própria para drywall segura de 10 a 20 quilos por ponto. Fixando direto no montante de aço, chega a uns 40. Para armário de cozinha suspenso, TV grande ou bancada, a solução é o reforço previsto em projeto, uma chapa de OSB ou um sarrafo instalado dentro da parede na hora da montagem, que ancora 100 quilos ou mais. A expressão importante aqui é "previsto em projeto", e é nela que aparece a diferença entre quem domina o sistema e quem apenas o executa.
+Sobre espessura, uma parede externa acabada fica em torno de 12 a 20 centímetros, e uma divisória interna entre 7 e 15, mais fina que a alvenaria de desempenho equivalente. E sobre a dúvida que mais aparece, sim, dá para pendurar peso. O limite não é a parede, é o ponto de fixação. Só na chapa de gesso, sem reforço, os ensaios do IPT registrados nos DATec nº 14 e nº 15 admitiram de 10 a 11,5 kgf por ponto, e a regra de fixação de cargas da Abragesso indica de 10 a 20 kgf conforme a bucha e a chapa. Fixando direto no montante de aço, a mesma regra indica 40 kgf por ponto. Para armário de cozinha suspenso, TV com braço articulado ou bancada, a solução é o reforço previsto em projeto, uma chapa de OSB ou uma tábua dentro da parede na hora da montagem, e no DATec nº 15 a parede com OSB estrutural chegou a 65 kgf por peça. Uma TV de 75 polegadas pesa por volta de 31 kg, e o que arranca a fixação não é só o peso, é o peso multiplicado pela distância da parede, por isso o braço articulado estendido pede reforço. A expressão importante aqui é "previsto em projeto", e é nela que aparece a diferença entre quem domina o sistema e quem apenas o executa.
 
 [TABLE:peso-fixacao]
 
@@ -117,7 +118,7 @@ Sobre espessura, uma parede externa acabada fica em torno de 12 a 20 centímetro
 
 Tudo que foi descrito até aqui só funciona se a sequência das camadas for respeitada e a execução for precisa. Uma membrana mal sobreposta, uma junta de placa cimentícia mal tratada ou um reforço esquecido transformam um sistema de alto desempenho em fonte de problema. O steel frame é tão bom quanto o projeto e a montagem por trás dele.
 
-É por isso que a Berkahn trata cada parede como uma decisão de engenharia, e não como um produto de catálogo. Trabalhamos com LSF puro e com [sistemas híbridos que combinam steel frame, concreto armado e aço laminado](/atualidades/steel-frame-laje-de-concreto), ajustando a composição das camadas a cada ambiente do projeto, do conceito à entrega das chaves. A parede do home theater não precisa ser igual à do closet, e essa diferença planejada é o que separa uma casa que apenas fica pronta de uma casa que funciona bem por décadas.
+É por isso que cada parede deve ser tratada como uma decisão de engenharia, e não como um produto de catálogo. A Berkahn projeta tanto em LSF puro quanto em [sistemas híbridos que combinam steel frame, concreto armado e aço laminado](/atualidades/steel-frame-laje-de-concreto), com a composição das camadas ajustada a cada ambiente do projeto. A parede do home theater não precisa ser igual à do closet, e essa diferença planejada é o que separa uma casa que apenas fica pronta de uma casa que funciona bem por décadas.
 
 ## Conclusão
 
