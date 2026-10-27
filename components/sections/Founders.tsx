@@ -27,7 +27,7 @@ interface Founder {
 const FOUNDERS: Founder[] = [
   {
     name: "Daniel Falci",
-    role: "Co-Fundador",
+    role: "Co-Fundador e Diretor de Engenharia",
     bio: "Engenheiro civil com sólida experiência em planejamento, gerenciamento e execução de obras. Atuou em projetos residenciais, comerciais e logísticos de alto padrão em São Paulo.",
     image: "/images/founders/daniel-falci.webp",
     linkedin: "https://www.linkedin.com/in/danielbkfalci/",
@@ -76,7 +76,7 @@ const FOUNDERS: Founder[] = [
   },
   {
     name: "Matheus Bertevello",
-    role: "Co-Fundador",
+    role: "Co-Fundador e Diretor de Operações",
     bio: "Formado em Engenharia de Produção pelo Centro Universitário FEI, mais de 7 anos de experiência em Melhoria de Processos e atualmente trabalha com Consultoria de Processos implementando o Lean Construction em obras civis.",
     image: "/images/founders/matheus-bertevello.webp",
     linkedin: "https://www.linkedin.com/in/matheus-bertevello/",
@@ -130,10 +130,11 @@ const FOUNDERS: Founder[] = [
     ]
   },
   {
-    name: "Gabriel Vidal",
-    role: "Co-Fundador",
-    bio: "Engenheiro civil formado pelo UniCEUB, MBA em gerenciamento de projetos (IBMEC) e de empreendimentos na construção civil (Mackenzie). Especialista em orçamentos e viabilidades.",
-    image: "/images/founders/gabriel-vidal.webp",
+    name: "Fábio Carvalho",
+    role: "Diretor de Projetos",
+    bio: "Engenheiro Civil graduado pela Universidade Católica do Salvador (UCSal), com Pós-Graduação em Estruturas e Fundações (INBEC) e MBA em Gerenciamento de Projetos (FGV).",
+    image: "/images/founders/co-fundador.webp",
+    linkedin: "https://www.linkedin.com/in/fabiocarvalho-br/",
   }
 ];
 
