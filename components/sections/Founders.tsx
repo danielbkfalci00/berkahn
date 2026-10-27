@@ -132,7 +132,7 @@ const FOUNDERS: Founder[] = [
   {
     name: "Fábio Carvalho",
     role: "Diretor de Projetos",
-    bio: "Engenheiro Civil graduado pela Universidade Católica do Salvador (UCSal), com Pós-Graduação em Estruturas e Fundações (INBEC) e MBA em Gerenciamento de Projetos (FGV).",
+    bio: "Engenheiro Civil graduado pela Universidade Católica do Salvador (UCSal), com Pós-Graduação em Estruturas e Fundações (INBEC), MBA em Gerenciamento de Projetos (FGV) e Diretor de Projetos.",
     image: "/images/founders/co-fundador.webp",
     linkedin: "https://www.linkedin.com/in/fabiocarvalho-br/",
   }
