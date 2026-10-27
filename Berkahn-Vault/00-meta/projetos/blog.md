@@ -109,6 +109,14 @@ Tráfego seguiu crescendo: 1.179 users em junho, 1.407 nos primeiros 26 dias de 
 
 ## Próximos 7 dias
 
+> [!info] Handoff de sessão em 27/10/2026
+> A sessão de conteúdo foi encerrada por troca de conta do Claude Code.
+> Contexto completo, gotchas de ambiente e o que falta em
+> [[handoff-2026-10-27-claude-code]].
+
+- [x] Confirmado em 27/10: os 4 artigos republicados em 20/10 (telhado, casa
+  valoriza, anatomia da parede, quanto custa o projeto) estão no repositório
+  (PR #144) e no ar; a capa de `anatomia-parede-steel-frame` responde 200
 - [x] As cinco solicitações dos sócios de 16/09 (fachada, hidráulica, projeto
   integrado, automação, instalações internacionais) estão com blog e LinkedIn
   produzidos; os cinco artigos estão publicados com capa real desde 23/09.
@@ -123,12 +131,13 @@ Tráfego seguiu crescendo: 1.179 users em junho, 1.407 nos primeiros 26 dias de 
   "Vale a pena começar a obra em 2027"
 - [x] Pauta de backlog `f52ed1a2` ("Parede sob medida", sugestão do Bertevas
   em 22/09) agendada para 15/02/2027, S29, junto de "Tendências 2027"
+- [x] ~~@codex Executar pesquisa e produção das cinco solicitações dos sócios~~
+  — concluído, ver item acima
 
-- [ ] @bruno Pedir reindexação no Search Console das 4 URLs publicadas em 20/10 (`telhado-steel-frame-tipos-custo-m2`, `casa-steel-frame-valoriza-revenda`, `anatomia-parede-steel-frame`, `quanto-custa-projeto-casa`) #pendencia
+- [ ] @bruno Pedir reindexação no Search Console das URLs publicadas desde 20/09 que ainda não foram pedidas (as 5 do lote dos sócios e as 4 de 20/10) #pendencia
 - [ ] @codex Conferir as composições SINAPI do telhado contra a tabela oficial antes de divulgar o número no LinkedIn #pendencia
 - [ ] @bruno Enviar os orçamentos em anexo para a pauta "Orçamento de obra em steel frame"; sem eles ela não sai #pendencia
 - [ ] @codex Produzir os componentes e publicar o próximo da fila, o guia de normas (`normas-light-steel-frame-brasil`); triagem dos 17 rascunhos e calendário em [[2026-10-reedicao-rascunhos-e-calendario]] #pendencia
-- [ ] @codex Executar pesquisa e produção das cinco solicitações dos sócios já priorizadas no quadro: projeto integrado, instalações internacionais, hidráulica contemporânea, automação e fachadas a seco #pendencia
 
 - [ ] @bruno Publicar a revisão já aprovada de `financiar-construcao-light-steel-frame` da pauta `72133a0d`; o LinkedIn foi publicado em 12/09/2026 e reconciliado no quadro #pendencia
 

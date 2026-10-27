@@ -51,6 +51,13 @@ Contagem verificada em 2026-07-29 contra `main` — o `kpi_publicados: 1` anteri
 
 ## Próximos 7 dias
 
+> [!info] Handoff de sessão em 27/10/2026
+> Contexto completo em [[handoff-2026-10-27-claude-code]]. Os três itens
+> abaixo marcados @bruno são a única coisa que trava o lote dos sócios.
+
+- [x] Pauta `777926d7` (fachada) confirmada publicada: texto final girou em
+  três rodadas com o grupo MKT Berkahn (gancho por pergunta, parede em
+  camadas em vez de "oca"), registrado em `linkedin_publicado_em`
 - [ ] @bruno Confirmar se o post de `f4d25753` (instalações hidráulicas e elétricas) foi publicado em 30/09 como combinado; o card segue `produzido`, sem URL nem data #pendencia
 - [x] Conferidos em 25/10 os posts de `159d3128` (automação) e `0820e59d` (instalações internacionais): texto e capa já passam no `check-linkedin.mjs` e no `check-lote-linkedin.mjs`, sem precisar de nova calibragem
 - [ ] @bruno Publicar `159d3128` e `0820e59d` e registrar URL/data reais #pendencia

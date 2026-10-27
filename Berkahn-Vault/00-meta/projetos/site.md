@@ -1,11 +1,11 @@
 ---
 tipo: projeto
 criado: 2026-05-22
-atualizado: 2026-10-01
+atualizado: 2026-10-27
 tags:
   - project/site
   - status/active
-ai_summary: "Hub do Site. Admin e PDFs de orçamento/institucional em produção; o PDF institucional foi validado com conteúdo real em 01/10/2026. Pendentes: matriz manual de papéis, Secure password change na conta hospedada, briefing institucional v4 e decisões de conteúdo. PR #80 de /sustentabilidade foi fechada sem merge."
+ai_summary: "Hub do Site. Admin e PDFs de orçamento/institucional em producao. Fabio Carvalho atualizado como Diretor de Projetos em 27/10/2026 nos tres lugares (site, apresentacao, PDF institucional). Pendentes: decisao sobre a branch codex/admin-performance-mobile (61 atras/16 a frente da main), matriz manual de papeis, Secure password change e briefing institucional v4."
 status: active
 projeto: site
 kpi_paginas_indexadas: 34
@@ -80,6 +80,16 @@ Site em produção (Next.js 16 App Router + Supabase + Vercel + Tailwind + shadc
 
 ## Próximos 7 dias
 
+> [!info] Handoff de sessão em 27/10/2026
+> Contexto completo, incluindo a branch órfã abaixo, em
+> [[handoff-2026-10-27-claude-code]].
+
+- [x] Fábio Carvalho atualizado em 27/10 como Diretor de Projetos no lugar
+  de Gabriel Vidal, nos três lugares que carregam a informação: `Founders.tsx`
+  (site), `SlideFounders.tsx` (apresentação executiva) e
+  `lib/institucional-data.ts` (PDF institucional). Bio final confirmada ao
+  vivo nos dois canais (PRs #145 e #146)
+- [ ] @bruno Decidir o destino da branch `codex/admin-performance-mobile`: 61 commits atrás da `main`, 16 à frente (admin/analytics, não sócios), ~170 arquivos não commitados e o array `PARCEIROS` desatualizado (pré-correção de 22/09) #pendencia
 - [ ] @bruno Ativar "Secure password change" no Supabase (Authentication > Providers > Email): hoje a troca de senha não pede reautenticação, e a correção é de configuração, não de código #pendencia
 - [ ] @bruno Remover e reinstalar o atalho do admin no celular, para ele pegar o manifest novo e abrir em `/admin` #pendencia
 - [ ] @bruno Testar o mural de feedback logado no celular: enviar um feedback e confirmar que o push chega #pendencia
