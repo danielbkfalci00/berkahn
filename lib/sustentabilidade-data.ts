@@ -131,8 +131,8 @@ export const SITE_SECTION = {
 };
 
 // Três áreas de foco do plano climático. Cada cartão abre um detalhe com o
-// texto de apoio. As fotos são as do acervo da Berkahn e estão provisórias:
-// trocar pelas imagens geradas/aprovadas (mesmo caminho, mesmo formato).
+// texto de apoio. As frentes 01 e 03 usam imagens geradas e aprovadas em
+// public/images/Sustentabilidade/. A 02 ainda usa foto do acervo, provisória.
 export interface FocusArea {
   id: string;
   label: string;
@@ -156,8 +156,8 @@ export const FOCUS_SECTION = {
         "Trabalhar com o cliente desde as primeiras etapas permite aprimorar a concepção e o planejamento ao longo de toda a obra, com uso mais preciso de materiais e energia.",
       ],
       image: {
-        src: "/images/Services/Como-trabalhamos/execucao-da-obra-2.webp",
-        alt: "Projeto aberto no canteiro enquanto a equipe executa a obra",
+        src: "/images/Sustentabilidade/frente-projeto.webp",
+        alt: "Planta impressa sobre uma mesa de cavalete no canteiro, com capacete, trena e perfis de aço ao fundo",
         focus: "object-center",
       },
     },
@@ -186,8 +186,8 @@ export const FOCUS_SECTION = {
         "O Light Steel Frame, o isolamento térmico bem especificado, a luz natural, a ventilação e a orientação solar trabalham juntos para dar conforto e reduzir a climatização artificial, além de equipamentos eficientes que baixam consumo e custo de operação.",
       ],
       image: {
-        src: "/images/Residencial/hero-01.webp",
-        alt: "Residência contemporânea cercada por árvores e jardins",
+        src: "/images/Sustentabilidade/frente-energia.webp",
+        alt: "Casa contemporânea de dois pavimentos com beiral profundo e brise de madeira",
         focus: "object-center",
       },
     },
@@ -261,5 +261,6 @@ export const READING_SECTION = {
     "sustentabilidade-construcao-civil-economia-circular",
     "isolamento-termico-acustico-steel-frame",
     "steel-frame-vs-alvenaria",
+    "steel-frame-esquenta-conforto-termico",
   ],
 };
