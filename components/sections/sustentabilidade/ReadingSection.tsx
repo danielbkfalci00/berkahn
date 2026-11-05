@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { BlogCard } from "@/components/blog/BlogCard";
+import { ReadingCarousel } from "@/components/sections/sustentabilidade/ReadingCarousel";
 import { createPublicClient } from "@/lib/supabase/public";
 import { READING_SECTION } from "@/lib/sustentabilidade-data";
 import { normalizeBlogCategory, type BlogPost } from "@/types/blog";
@@ -74,10 +74,8 @@ export async function ReadingSection() {
           </p>
         </div>
 
-        <div className="mt-14 grid gap-5 sm:grid-cols-2 md:mt-20 lg:grid-cols-4">
-          {posts.map((post) => (
-            <BlogCard key={post.id} post={post} />
-          ))}
+        <div className="mt-10 md:mt-14">
+          <ReadingCarousel posts={posts} />
         </div>
 
         <Link

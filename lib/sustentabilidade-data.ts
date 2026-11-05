@@ -132,10 +132,11 @@ export const SITE_SECTION = {
 
 // Três áreas de foco do plano climático. Cada cartão abre um detalhe com o
 // texto de apoio. As frentes 01 e 03 usam imagens geradas e aprovadas em
-// public/images/Sustentabilidade/. A 02 ainda usa foto do acervo, provisória.
+// public/images/Sustentabilidade/. A 02 usa foto do acervo (lsf-fase-1), que não se repete na página.
 export interface FocusArea {
   id: string;
   label: string;
+  short: string;
   title: string;
   summary: string;
   detail: string[];
@@ -149,6 +150,7 @@ export const FOCUS_SECTION = {
     {
       id: "projeto",
       label: "01",
+      short: "Projeto",
       title: "Projetar para a eficiência",
       summary: "Planejamento inteligente reduz desperdício e retrabalho.",
       detail: [
@@ -164,6 +166,7 @@ export const FOCUS_SECTION = {
     {
       id: "materiais",
       label: "02",
+      short: "Materiais",
       title: "Materiais de baixo carbono, na prática",
       summary: "Soluções industrializadas e materiais de menor pegada.",
       detail: [
@@ -171,14 +174,15 @@ export const FOCUS_SECTION = {
         "Também avaliamos alternativas de menor impacto, como materiais reciclados e soluções de menor pegada de carbono, sempre conciliando desempenho, qualidade e responsabilidade ambiental.",
       ],
       image: {
-        src: "/images/Lsf/lsf-fase-2.webp",
-        alt: "Estrutura de Light Steel Frame montada e organizada no terreno",
+        src: "/images/Lsf/lsf-fase-1.webp",
+        alt: "Vista aérea da laje pronta com pacotes de material paletizados e organizados ao redor",
         focus: "object-center",
       },
     },
     {
       id: "energia",
       label: "03",
+      short: "Energia",
       title: "Melhoria do desempenho energético",
       summary: "Conforto térmico com menos necessidade de climatização.",
       detail: [
