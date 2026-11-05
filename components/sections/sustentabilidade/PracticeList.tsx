@@ -49,7 +49,6 @@ function montarCaminho(pontos: Ponto[], larguraArea: number): string {
 
 export function PracticeList() {
   const practicesRef = useRef<HTMLElement>(null);
-  const honestyRef = useRef<HTMLElement>(null);
 
   useGSAP(
     () => {
@@ -124,30 +123,6 @@ export function PracticeList() {
     { scope: practicesRef },
   );
 
-  useGSAP(
-    () => {
-      const risco = honestyRef.current?.querySelector<HTMLElement>("[data-strike]");
-      if (!risco) return;
-      const mm = gsap.matchMedia();
-      // O HTML já nasce riscado (estado final). Com movimento, o risco é
-      // puxado da esquerda para a direita, linha por linha, conforme a rolagem.
-      mm.add("(prefers-reduced-motion: no-preference)", () => {
-        gsap.fromTo(
-          risco,
-          { backgroundSize: "0% 0.075em" },
-          {
-            backgroundSize: "100% 0.075em",
-            ease: "none",
-            scrollTrigger: { trigger: risco, start: "top 80%", end: "bottom 45%", scrub: 0.5 },
-          },
-        );
-      });
-    },
-    { scope: honestyRef },
-  );
-
-  const { honesty } = PRACTICE_SECTION;
-
   return (
     <>
       <section
@@ -206,43 +181,6 @@ export function PracticeList() {
                 </li>
               ))}
             </ol>
-          </div>
-        </div>
-      </section>
-
-      <section
-        ref={honestyRef}
-        id="o-que-nao-afirmamos"
-        className="bg-carbon py-xl text-white md:py-3xl"
-        aria-labelledby="honestidade-title"
-      >
-        <div className="container">
-          <h2
-            id="honestidade-title"
-            className="text-xs font-medium uppercase tracking-[0.18em] text-white-50"
-          >
-            {honesty.title}
-          </h2>
-
-          <p className="mt-10 max-w-6xl font-display text-[clamp(2.4rem,1rem+4.6vw,6.2rem)] font-semibold leading-[1.02] tracking-[-0.045em] text-white/35">
-            {/* O risco é um fundo de 0.075em a 58% da altura da linha. Em texto
-                quebrado o fundo corre de linha em linha, então animar a largura
-                risca uma linha depois da outra. */}
-            <span
-              data-strike
-              className="bg-[linear-gradient(#fff,#fff)] bg-no-repeat [background-position:0_58%] [background-size:100%_0.075em]"
-            >
-              {honesty.claim}
-            </span>
-          </p>
-
-          <div className="mt-16 grid gap-10 md:mt-24 lg:grid-cols-12 lg:gap-12">
-            <p className="font-display text-[clamp(1.6rem,2.6vw,2.8rem)] font-semibold leading-[1.15] tracking-[-0.03em] lg:col-span-7">
-              {honesty.conclusion}
-            </p>
-            <p className="max-w-md text-base leading-relaxed text-white-70 lg:col-span-4 lg:col-start-9 lg:self-end lg:text-lg">
-              {honesty.body}
-            </p>
           </div>
         </div>
       </section>
