@@ -310,6 +310,8 @@ export interface AnalyticsLead {
   resumo_status_em: string | null;
   artifact_count: number;
   tipo_projeto: string | null;
+  area_obra_m2?: number | null;
+  terreno_adquirido?: string | null;
   empresa: string | null;
   cargo: string | null;
   pagina_origem: string | null;

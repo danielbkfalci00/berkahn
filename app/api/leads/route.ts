@@ -162,6 +162,9 @@ export async function POST(request: NextRequest) {
       canal: lead.kind === "resource" ? "email" : "form",
       tipo_captacao: lead.kind === "resource" ? "material" : "contato",
       tipo_projeto: lead.kind === "resource" ? null : lead.projectType ?? null,
+      // Só envia quando preenchido: o insert continua válido antes da migration ser aplicada.
+      ...(lead.kind !== "resource" && lead.areaObra ? { area_obra_m2: lead.areaObra } : {}),
+      ...(lead.kind !== "resource" && lead.terrenoAdquirido ? { terreno_adquirido: lead.terrenoAdquirido } : {}),
       empresa: lead.kind === "resource" ? null : lead.company ?? null,
       cargo: lead.kind === "resource" ? null : lead.role ?? null,
       pagina_origem: attribution.pagePath,
