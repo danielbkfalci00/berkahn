@@ -867,6 +867,8 @@ export type Database = {
           telefone: string | null
           telefone_normalizado: string | null
           tipo_projeto: string | null
+          area_obra_m2: number | null
+          terreno_adquirido: string | null
           ultimo_contato_em: string | null
           utm: Json
           visualizado_em: string | null
@@ -919,6 +921,8 @@ export type Database = {
           telefone?: string | null
           telefone_normalizado?: string | null
           tipo_projeto?: string | null
+          area_obra_m2?: number | null
+          terreno_adquirido?: string | null
           ultimo_contato_em?: string | null
           utm?: Json
           visualizado_em?: string | null
@@ -971,6 +975,8 @@ export type Database = {
           telefone?: string | null
           telefone_normalizado?: string | null
           tipo_projeto?: string | null
+          area_obra_m2?: number | null
+          terreno_adquirido?: string | null
           ultimo_contato_em?: string | null
           utm?: Json
           visualizado_em?: string | null

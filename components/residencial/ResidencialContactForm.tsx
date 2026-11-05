@@ -22,8 +22,20 @@ interface FormData {
   email: string;
   phone: string;
   projectType: string;
+  areaObra: string;
+  terrenoAdquirido: "" | "sim" | "nao";
   description: string;
 }
+
+const EMPTY_FORM: FormData = {
+  name: "",
+  email: "",
+  phone: "",
+  projectType: "",
+  areaObra: "",
+  terrenoAdquirido: "",
+  description: "",
+};
 
 type FormStatus = "idle" | "loading" | "success" | "error";
 
@@ -55,13 +67,7 @@ function LabelInputContainer({
 /* ─── Component ─── */
 
 export function ResidencialContactForm() {
-  const [formData, setFormData] = useState<FormData>({
-    name: "",
-    email: "",
-    phone: "",
-    projectType: "",
-    description: "",
-  });
+  const [formData, setFormData] = useState<FormData>(EMPTY_FORM);
   const [status, setStatus] = useState<FormStatus>("idle");
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [website, setWebsite] = useState("");
@@ -107,6 +113,8 @@ export function ResidencialContactForm() {
           phone: formData.phone,
           segment: "residencial",
           projectType: projectLabel || "Não informado",
+          areaObra: Number(formData.areaObra) || undefined,
+          terrenoAdquirido: formData.terrenoAdquirido || undefined,
           message: formData.description,
           pagePath: pathname ?? undefined,
           ctaLocation: "residencial",
@@ -131,7 +139,7 @@ export function ResidencialContactForm() {
   };
 
   const resetForm = () => {
-    setFormData({ name: "", email: "", phone: "", projectType: "", description: "" });
+    setFormData(EMPTY_FORM);
     setErrors({});
     setWebsite("");
     setStartedAt(Date.now());
@@ -276,6 +284,50 @@ export function ResidencialContactForm() {
               </SelectContent>
             </Select>
           </LabelInputContainer>
+
+          {/* Row 3b: Área da obra + Terreno (opcionais) */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <LabelInputContainer>
+              <label htmlFor="res-area" className={labelClasses}>
+                Área aproximada da obra (m²){" "}
+                <span className="text-[10px] text-black-30 font-normal">(Opcional)</span>
+              </label>
+              <input
+                id="res-area"
+                type="number"
+                inputMode="numeric"
+                min={1}
+                max={100000}
+                value={formData.areaObra}
+                onChange={(e) => setFormData({ ...formData, areaObra: e.target.value })}
+                placeholder="Ex.: 250"
+                disabled={status === "loading"}
+                className={inputClasses}
+              />
+            </LabelInputContainer>
+
+            <LabelInputContainer>
+              <label htmlFor="res-terreno" className={labelClasses}>
+                Já tem o terreno?{" "}
+                <span className="text-[10px] text-black-30 font-normal">(Opcional)</span>
+              </label>
+              <Select
+                value={formData.terrenoAdquirido}
+                onValueChange={(value) =>
+                  setFormData({ ...formData, terrenoAdquirido: value as "sim" | "nao" })
+                }
+                disabled={status === "loading"}
+              >
+                <SelectTrigger id="res-terreno" aria-label="Terreno adquirido" className={inputClasses}>
+                  <SelectValue placeholder="Selecione" />
+                </SelectTrigger>
+                <SelectContent className="bg-white border border-black-10 shadow-luxury-md">
+                  <SelectItem value="sim" className="focus:bg-black-5 focus:text-black">Sim, já adquirido</SelectItem>
+                  <SelectItem value="nao" className="focus:bg-black-5 focus:text-black">Ainda não</SelectItem>
+                </SelectContent>
+              </Select>
+            </LabelInputContainer>
+          </div>
 
           {/* Row 4: Descrição (full width) */}
           <LabelInputContainer>

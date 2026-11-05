@@ -32,6 +32,9 @@ export interface ContactLeadInput extends LeadAttributionFields {
   segment: "residencial" | "comercial";
   message?: string;
   projectType?: string;
+  /** Área construída aproximada em m². Opcional. */
+  areaObra?: number;
+  terrenoAdquirido?: "sim" | "nao";
   company?: string;
   role?: string;
 }
@@ -140,6 +143,11 @@ export function validateLeadInput(input: unknown):
     return { success: false, message: "Segmento inválido." };
   }
 
+  const areaRaw = typeof value.areaObra === "number" ? value.areaObra : Number(text("areaObra", 10).replace(/\D/g, ""));
+  const areaObra = Number.isInteger(areaRaw) && areaRaw > 0 && areaRaw <= 100_000 ? areaRaw : undefined;
+  const terrenoRaw = text("terrenoAdquirido", 8);
+  const terrenoAdquirido = terrenoRaw === "sim" || terrenoRaw === "nao" ? terrenoRaw : undefined;
+
   return {
     success: true,
     data: {
@@ -149,6 +157,8 @@ export function validateLeadInput(input: unknown):
       segment,
       message: text("message", 4000) || undefined,
       projectType: text("projectType", 160) || undefined,
+      areaObra,
+      terrenoAdquirido,
       company: text("company", 200) || undefined,
       role: text("role", 160) || undefined,
       ...attribution,

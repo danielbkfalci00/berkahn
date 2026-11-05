@@ -12,7 +12,7 @@ import type { AnalyticsLead, LeadArtifact, LeadResponsible } from "@/types/analy
 
 export const dynamic = "force-dynamic";
 
-const LEAD_COLUMNS = "id,nome,email,telefone,telefone_normalizado,segmento,mensagem,canal,tipo_captacao,status,prioridade,responsavel_id,resumo_status,resumo_status_em,tipo_projeto,empresa,cargo,pagina_origem,landing_page,referrer,slug_origem,cta_location,utm,post_id,pauta_id,visualizado_em,ultimo_contato_em,proxima_acao_em,motivo_desqualificacao,qualificado_em,desqualificado_em,convertido_em,arquivado_em,anonimizado_em,retencao_excecao,retencao_excecao_motivo,origem_legado,importado_em,criado_em,lead_responsaveis(id,nome)";
+const LEAD_COLUMNS = "id,nome,email,telefone,telefone_normalizado,segmento,mensagem,canal,tipo_captacao,status,prioridade,responsavel_id,resumo_status,resumo_status_em,tipo_projeto,area_obra_m2,terreno_adquirido,empresa,cargo,pagina_origem,landing_page,referrer,slug_origem,cta_location,utm,post_id,pauta_id,visualizado_em,ultimo_contato_em,proxima_acao_em,motivo_desqualificacao,qualificado_em,desqualificado_em,convertido_em,arquivado_em,anonimizado_em,retencao_excecao,retencao_excecao_motivo,origem_legado,importado_em,criado_em,lead_responsaveis(id,nome)";
 
 export default async function LeadDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
