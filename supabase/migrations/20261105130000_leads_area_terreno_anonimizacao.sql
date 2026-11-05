@@ -58,4 +58,6 @@ BEGIN
 END;
 $function$
 ;
+REVOKE ALL ON FUNCTION public.anonymize_lead_core(UUID, TEXT) FROM PUBLIC, anon, authenticated;
+GRANT EXECUTE ON FUNCTION public.anonymize_lead_core(UUID, TEXT) TO service_role;
 COMMIT;
