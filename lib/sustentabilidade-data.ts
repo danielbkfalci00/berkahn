@@ -14,21 +14,29 @@ export const SOURCES = {
     name: "UNEP e GlobalABC, Global Status Report for Buildings and Construction 2025-2026",
     year: 2026,
     url: "https://zenodo.org/records/20316373",
-    note: "Quase 50% da extração global de materiais vai para edificações e construção.",
+    note: "Quase 50% da extração global de materiais vai para edificações e construção, e o setor responde por quase 37% das emissões globais.",
   },
-  worldsteel: {
-    id: "worldsteel",
-    name: "World Steel Association, Steel Facts",
-    year: 2025,
-    url: "https://worldsteel.org/about-steel/steel-facts/",
-    note: "A taxa global de recuperação do aço no fim da vida em construção é de aproximadamente 85%.",
+  // Prazo: estudos de caso de graduação/pós, não pesquisa revisada por pares.
+  // Por isso o número vai como faixa e a legenda diz "estudos de caso".
+  univates2023: {
+    id: "univates2023",
+    name: "Univates, estudo de caso de residência unifamiliar em Lajeado (RS)",
+    year: 2023,
+    url: "https://www.univates.br/bdu/items/48e2c37c-e308-4140-a85e-63b80bfd7004",
+    note: "Redução de 30% a 39% no tempo de execução com Light Steel Frame.",
   },
-  caldas2017: {
-    id: "caldas2017",
-    name: "Caldas, Lira, Melo e Sposto, Ambiente Construído",
-    year: 2017,
-    url: "https://www.scielo.br/j/ac/a/Vvx3PRfpMjqdbdCM35NMgXv/?lang=en",
-    note: "A operação responde por 50% a 70% do ciclo completo no estudo brasileiro e a alvenaria apresenta vantagem no resultado total.",
+  unipar: {
+    id: "unipar",
+    name: "UNIPAR, análise orçamentária de sistemas construtivos",
+    url: "https://www.unipar.br/documentos/259/ANALISE_COMPARATIVA_ORCAMENTARIA_DOS_SISTEMAS_CONSTRUTIVOS_CONVENCIONAL.pdf",
+    note: "Agilidade cerca de 50% maior com Light Steel Frame, com custo maior no mesmo estudo.",
+  },
+  // Perda de material: fonte secundária (entidade citada pela imprensa).
+  cbcsTupi: {
+    id: "cbcs-tupi",
+    name: "CBCS, citado pela Super Rádio Tupi",
+    url: "https://www.tupi.fm/?p=1999030",
+    note: "Alvenaria convencional pode chegar a 20% de perdas; no Light Steel Frame, cerca de 5% ou menos. Sem metodologia publicada.",
   },
 } as const satisfies Record<string, DataSource>;
 
@@ -48,8 +56,8 @@ export interface EditorialImage {
 }
 
 export const HERO = {
-  headline: "O sistema da sua casa também decide o que a obra deixa para trás.",
-  lede: "No Light Steel Frame, parte desse impacto muda antes de a obra começar. A diferença aparece no projeto, na compra e na forma de montar cada parede.",
+  headline: "O mundo que construímos hoje é o legado que deixamos amanhã.",
+  lede: "A transição climática muda o que se espera de uma casa. Desempenho e responsabilidade ambiental passam a valer no longo prazo, para quem constrói e para quem mora.",
   // Provisória, de https://unsplash.com/photos/0dtLWM5ycGc
   image: {
     src: "https://images.unsplash.com/photo-1713700741779-fb0237967302?auto=format&fit=crop&w=3840&q=90",
@@ -60,7 +68,7 @@ export const HERO = {
 
 export const EXTRACTION_SECTION = {
   headline: "Toda parede começa muito antes do canteiro.",
-  lede: "Quando os materiais chegam à obra, eles já atravessaram uma cadeia de extração, processamento e transporte.",
+  lede: "O ambiente construído responde por mais de um terço das emissões globais. A Berkahn assume o compromisso de incorporar práticas que reduzam o impacto das obras e usem os recursos naturais com consciência.",
   figure: {
     value: "~50%",
     label: "da extração global de materiais vai para edificações e construção",
@@ -122,38 +130,111 @@ export const SITE_SECTION = {
   ],
 };
 
-export const LIFECYCLE_SECTION = {
-  headline: "Depois da obra, a parede continua trabalhando.",
-  lede: "O uso diário costuma pesar mais no ciclo de vida de uma casa do que o momento da construção.",
-  operation: {
-    title: "Desempenho durante o uso",
-    copy: "Conforto e consumo dependem do conjunto. Orientação solar, aberturas, vedação e isolamento precisam funcionar como um só projeto.",
-    figure: {
-      value: "50 a 70%",
-      label: "do impacto total veio da operação da edificação no estudo brasileiro",
-      source: SOURCES.caldas2017,
-    } satisfies SourcedFigure,
-    image: {
-      src: "/images/Residencial/hero-01.webp",
-      alt: "Residência contemporânea cercada por árvores e jardins",
-      focus: "object-center",
-    } satisfies EditorialImage,
-  },
-  steel: {
-    title: "Material que continua em circulação",
-    copy: "O aço pode voltar à cadeia produtiva sem perder suas propriedades. Para isso acontecer, a desmontagem e a separação correta continuam essenciais.",
-    figure: {
-      value: "85%",
-      label: "é a taxa global de recuperação do aço no fim da vida em construção",
-      source: SOURCES.worldsteel,
-    } satisfies SourcedFigure,
-    // Provisória, de https://unsplash.com/photos/lp6CBQSr1Ek
-    image: {
-      src: "https://images.unsplash.com/photo-1722695694560-f452b0919d3a?auto=format&fit=crop&w=2000&q=82",
-      alt: "Garra de pátio de sucata recolhendo aço para reciclagem",
-      focus: "object-center",
-    } satisfies EditorialImage,
-  },
+// Três áreas de foco do plano climático. Cada cartão abre um detalhe com o
+// texto de apoio. As frentes 01 e 03 usam imagens geradas e aprovadas em
+// public/images/Sustentabilidade/. A 02 usa foto do acervo (lsf-fase-1), que não se repete na página.
+export interface FocusArea {
+  id: string;
+  label: string;
+  short: string;
+  title: string;
+  summary: string;
+  detail: string[];
+  image: EditorialImage;
+}
+
+export const FOCUS_SECTION = {
+  headline: "Três frentes para construir com menos impacto.",
+  lede: "Escolher e planejar bem reduz desperdício, retrabalho e consumo, antes e depois da obra.",
+  areas: [
+    {
+      id: "projeto",
+      label: "01",
+      short: "Projeto",
+      title: "Projetar para a eficiência",
+      summary: "Planejamento inteligente reduz desperdício e retrabalho.",
+      detail: [
+        "Um projeto mais eficiente e um planejamento mais inteligente reduzem o desperdício, diminuem o retrabalho e aumentam a produtividade. As emissões menores vêm como consequência.",
+        "Trabalhar com o cliente desde as primeiras etapas permite aprimorar a concepção e o planejamento ao longo de toda a obra, com uso mais preciso de materiais e energia.",
+      ],
+      image: {
+        src: "/images/Sustentabilidade/frente-projeto.webp",
+        alt: "Planta impressa sobre uma mesa de cavalete no canteiro, com capacete, trena e perfis de aço ao fundo",
+        focus: "object-center",
+      },
+    },
+    {
+      id: "materiais",
+      label: "02",
+      short: "Materiais",
+      title: "Materiais de baixo carbono, na prática",
+      summary: "Soluções industrializadas e materiais de menor pegada.",
+      detail: [
+        "A escolha dos materiais e do sistema construtivo é onde a construção mais pode contribuir. Priorizamos soluções industrializadas, como o Light Steel Frame, que favorecem o uso eficiente de material, menos desperdício e mais controle da execução.",
+        "Também avaliamos alternativas de menor impacto, como materiais reciclados e soluções de menor pegada de carbono, sempre conciliando desempenho, qualidade e responsabilidade ambiental.",
+      ],
+      image: {
+        src: "/images/Lsf/lsf-fase-1.webp",
+        alt: "Vista aérea da laje pronta com pacotes de material paletizados e organizados ao redor",
+        focus: "object-center",
+      },
+    },
+    {
+      id: "energia",
+      label: "03",
+      short: "Energia",
+      title: "Melhoria do desempenho energético",
+      summary: "Conforto térmico com menos necessidade de climatização.",
+      detail: [
+        "A eficiência energética importa durante a obra e ao longo da vida útil da casa. Ela entra no projeto desde o início.",
+        "O Light Steel Frame, o isolamento térmico bem especificado, a luz natural, a ventilação e a orientação solar trabalham juntos para dar conforto e reduzir a climatização artificial, além de equipamentos eficientes que baixam consumo e custo de operação.",
+      ],
+      image: {
+        src: "/images/Sustentabilidade/frente-energia.webp",
+        alt: "Casa contemporânea de dois pavimentos com beiral profundo e brise de madeira",
+        focus: "object-center",
+      },
+    },
+  ] satisfies FocusArea[],
+};
+
+// Comparação a seco x convencional. Só faixas, só o que tem fonte, e a
+// legenda diz o tipo de fonte. Nada de carbono nem de água em percentual.
+export interface ComparisonItem {
+  title: string;
+  value: string | null;
+  label: string;
+  note: string;
+  source?: DataSource;
+}
+
+export const COMPARISON_SECTION = {
+  headline: "O que muda quando a parede é montada a seco.",
+  lede: "Diferenças medidas em estudos brasileiros. Os números variam de projeto para projeto, por isso aparecem como faixas.",
+  items: [
+    {
+      title: "Prazo",
+      value: "30 a 50%",
+      label: "menos tempo de obra em estudos de caso",
+      note: "A variação depende do projeto e da equipe.",
+      source: SOURCES.univates2023,
+    },
+    {
+      title: "Perda de material",
+      value: "~5% × até 20%",
+      label: "de perdas no Light Steel Frame contra a alvenaria, segundo o CBCS",
+      note: "Fonte secundária, sem metodologia publicada.",
+      source: SOURCES.cbcsTupi,
+    },
+    {
+      title: "Etapas úmidas",
+      value: null,
+      label: "Sem argamassa de assentamento nem reboco",
+      note: "Menos mistura, cura e lavagem no canteiro. A fundação continua sendo de concreto.",
+    },
+  ] satisfies ComparisonItem[],
+  footnote:
+    "Não afirmamos que uma casa em Light Steel Frame emite menos carbono em todo o ciclo de vida: o resultado depende do projeto e do uso, e um estudo brasileiro apontou vantagem para a alvenaria no total.",
 };
 
 export const PRACTICE_SECTION = {
@@ -173,12 +254,17 @@ export const PRACTICE_SECTION = {
       body: "A separação no canteiro evita que materiais recuperáveis desapareçam dentro da caçamba de entulho misto.",
     },
   ],
-  honesty: {
-    title: "O que a gente não afirma",
-    // Exibida riscada. É a frase que o mercado repete e que a Berkahn não
-    // assina; ver caldas2017 e o cabeçalho deste arquivo.
-    claim: "Uma casa em Light Steel Frame emite menos carbono ao longo de toda a vida.",
-    body: "A gente não afirma que uma casa em Light Steel Frame emite menos carbono ao longo de todo o ciclo de vida. No estudo brasileiro que comparou os sistemas, a alvenaria apresentou vantagem no resultado completo.",
-    conclusion: "O compromisso que conseguimos demonstrar está no projeto, no uso consciente dos materiais e no destino do que sobra.",
-  },
+};
+
+// Artigos do blog no fim da página. Ordem = ordem de exibição.
+export const READING_SECTION = {
+  headline: "Para ir mais fundo.",
+  lede: "Artigos da Berkahn sobre construção a seco, desempenho e materiais.",
+  slugs: [
+    "sustentabilidade-construcao-industrializada",
+    "sustentabilidade-construcao-civil-economia-circular",
+    "isolamento-termico-acustico-steel-frame",
+    "steel-frame-vs-alvenaria",
+    "steel-frame-esquenta-conforto-termico",
+  ],
 };

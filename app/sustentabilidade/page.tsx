@@ -5,11 +5,16 @@ import { SustentabilidadeHero } from "@/components/sections/sustentabilidade/Sus
 import { ExtractionTrack } from "@/components/sections/sustentabilidade/ExtractionTrack";
 import { ImpactJourney } from "@/components/sections/sustentabilidade/WasteAndCycle";
 import { PracticeList } from "@/components/sections/sustentabilidade/PracticeList";
+import { FocusAreas } from "@/components/sections/sustentabilidade/FocusAreas";
+import { ComparisonSection } from "@/components/sections/sustentabilidade/ComparisonSection";
+import { ReadingSection } from "@/components/sections/sustentabilidade/ReadingSection";
 import { CTA } from "@/components/sections/CTA";
 
 const TITLE = "Sustentabilidade | Berkahn";
 const DESCRIPTION =
   "Como o Light Steel Frame muda decisões de projeto, compra, montagem e destino dos materiais, e o que a Berkahn preserva em cada obra.";
+
+export const revalidate = 3600;
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -81,8 +86,11 @@ export default function SustentabilidadePage() {
         <SustentabilidadeHero />
       </div>
       <ExtractionTrack />
+      <FocusAreas />
+      <ComparisonSection />
       <ImpactJourney />
       <PracticeList />
+      <ReadingSection />
       <CTA
         variant="editorial"
         label="CONSTRUÇÃO A SECO"
