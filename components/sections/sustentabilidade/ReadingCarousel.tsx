@@ -69,7 +69,7 @@ export function ReadingCarousel({ posts }: ReadingCarouselProps) {
         className="-mx-6 flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth px-6 pb-4 [scrollbar-width:none] sm:-mx-8 sm:px-8 lg:mx-0 lg:px-0 [&::-webkit-scrollbar]:hidden"
       >
         {posts.map((post) => (
-          <li key={post.id} className="w-[82%] shrink-0 snap-start sm:w-[calc(50%-10px)] lg:w-[calc(33.333%-14px)]">
+          <li key={post.id} className="flex w-[82%] shrink-0 snap-start sm:w-[calc(50%-10px)] lg:w-[calc(33.333%-14px)] [&>a]:w-full">
             <BlogCard post={post} />
           </li>
         ))}
