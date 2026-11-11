@@ -2,12 +2,14 @@
 //
 // Módulo puro, sem I/O — exercitado por scripts/analytics/testar-heatmaps.mjs.
 
-/** Estados do CHECK em supabase/migrations/024_leads_crm_supabase.sql:43. */
+/** Estados do CHECK em supabase/migrations/20261111140000_leads_pipeline_estagios.sql. */
 export const ETAPAS_FUNIL = [
   "novo",
   "em_contato",
   "qualificado",
   "proposta_enviada",
+  "proposta_execucao",
+  "on_hold_projeto",
   "convertido",
 ] as const;
 export type EtapaFunil = (typeof ETAPAS_FUNIL)[number];
@@ -68,9 +70,11 @@ export interface FunilLeads {
 
 const ROTULOS: Record<EtapaFunil, string> = {
   novo: "Recebidos",
-  em_contato: "Em contato",
-  qualificado: "Qualificados",
-  proposta_enviada: "Proposta enviada",
+  em_contato: "Contato/Consulta",
+  qualificado: "Estimativa",
+  proposta_enviada: "Proposta Projeto",
+  proposta_execucao: "Proposta Execução",
+  on_hold_projeto: "On Hold (Desenvolvimento Projeto)",
   convertido: "Convertidos",
 };
 

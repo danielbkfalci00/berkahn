@@ -294,7 +294,7 @@ const lead = (status, extra = {}) => ({
 
 {
   const vazio = fn.construirFunilLeads(undefined);
-  ok("undefined nao quebra", vazio.total === 0 && vazio.degraus.length === 5);
+  ok("undefined nao quebra", vazio.total === 0 && vazio.degraus.length === 7);
   ok("sem lead => conversao 0, nao NaN", vazio.taxaConversao === 0);
   ok("sem lead => sem maior perda", vazio.maiorPerda === null);
   ok("sem lead => sem canais", vazio.porCanal.length === 0);
