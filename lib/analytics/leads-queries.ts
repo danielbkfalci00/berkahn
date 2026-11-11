@@ -16,7 +16,7 @@ export interface DashboardLeadOperations {
   nextActionOverdue: boolean;
 }
 
-const ACTIVE_LEAD_STATUSES = ["novo", "em_contato", "qualificado", "proposta_enviada"] as const;
+const ACTIVE_LEAD_STATUSES = ["novo", "em_contato", "qualificado", "proposta_enviada", "proposta_execucao", "on_hold_projeto"] as const;
 
 /** Resumo operacional sem carregar nome, contato, mensagem ou atribuição. */
 export async function getDashboardLeadOperations(): Promise<AdminDataResult<DashboardLeadOperations>> {

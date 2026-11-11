@@ -47,11 +47,13 @@ import type {
 
 const STATUS: Array<{ value: LeadStatus; label: string }> = [
   { value: "novo", label: "Novo" },
-  { value: "em_contato", label: "Em contato" },
-  { value: "qualificado", label: "Qualificado" },
-  { value: "proposta_enviada", label: "Proposta enviada" },
+  { value: "em_contato", label: "Contato/Consulta" },
+  { value: "qualificado", label: "Estimativa" },
+  { value: "proposta_enviada", label: "Proposta Projeto" },
+  { value: "proposta_execucao", label: "Proposta Execução" },
+  { value: "on_hold_projeto", label: "On Hold (Desenvolvimento Projeto)" },
   { value: "convertido", label: "Convertido" },
-  { value: "desqualificado", label: "Desqualificado" },
+  { value: "desqualificado", label: "Perdido" },
 ];
 
 const INPUT_CLASS = "min-h-11 w-full rounded-md border border-neutral-300 bg-white px-3 text-sm text-neutral-900 outline-none focus:border-neutral-900 focus:ring-2 focus:ring-neutral-200";
@@ -662,7 +664,7 @@ function LeadInbox({ leads, pendingLeadId, onStatusChange, onOpen }: { leads: Le
           <div className="flex items-center gap-2"><p className="truncate font-semibold text-neutral-900">{lead.nome}</p>{!lead.visualizado_em && <span className="h-2 w-2 shrink-0 rounded-full bg-blue-600" title="Não visualizado" />}</div>
           <p className="truncate text-xs text-neutral-500">{lead.email || lead.telefone || "Sem contato"}</p>{lead.tipo_captacao === "material" && <p className="mt-1 text-xs text-neutral-500">Download de material</p>}
           {lead.resumo_status && <p className="mt-1 line-clamp-1 text-xs text-neutral-600 lg:hidden">{lead.resumo_status}</p>}
-          <div className="mt-2 flex flex-wrap gap-2 lg:hidden"><span className={`rounded-full border px-2 py-0.5 text-[10px] font-medium ${priority.className}`}>{priority.label}</span><span className="rounded-full border border-neutral-200 px-2 py-0.5 text-[10px] font-medium text-neutral-600">{STATUS.find((item) => item.value === lead.status)?.label}</span>{lead.artifact_count > 0 && <span className="inline-flex items-center gap-1 text-[10px] text-neutral-500"><FileText className="h-3 w-3" />{lead.artifact_count}</span>}</div>
+          <div className="mt-2 flex flex-wrap items-center gap-2 lg:hidden"><span className={`rounded-full border px-2 py-0.5 text-[10px] font-medium ${priority.className}`}>{priority.label}</span><select value={lead.status} onChange={(event) => onStatusChange(lead.id, event.target.value as LeadStatus)} disabled={pendingLeadId !== null} aria-label={`Etapa de ${lead.nome}`} className="relative z-20 min-h-7 rounded-full border border-neutral-200 bg-white px-2 py-0.5 text-[10px] font-medium text-neutral-600 focus-visible:outline-2 focus-visible:outline-neutral-900">{STATUS.map((item) => <option key={item.value} value={item.value}>{item.label}</option>)}</select>{lead.artifact_count > 0 && <span className="inline-flex items-center gap-1 text-[10px] text-neutral-500"><FileText className="h-3 w-3" />{lead.artifact_count}</span>}</div>
         </div>
         <div className="hidden min-w-0 lg:block">
           <p className="line-clamp-2 text-sm text-neutral-800">{lead.resumo_status || "Sem atualização operacional"}</p>

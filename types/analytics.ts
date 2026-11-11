@@ -246,6 +246,8 @@ export type LeadStatus =
   | "em_contato"
   | "qualificado"
   | "proposta_enviada"
+  | "proposta_execucao"
+  | "on_hold_projeto"
   | "convertido"
   | "desqualificado";
 
