@@ -109,6 +109,7 @@ Query do acervo: [[artigos.base]] | [[calendario.base]] · Operação: [[quadro-
 
 ## 🔧 Workflow
 
+- **Handoff admin/analytics/leads (2026-11-13)**: [[handoff-2026-11-13-admin-analytics]] — ler primeiro ao retomar o admin
 - **Sprint ativa**: [[sprint-ativa]]
 - **Standup** (`/standup`): auto via scheduled-task `berkahn-standup-semanal` (segunda 9h) → escreve em `00-meta/standup/YYYY-MM-DD.md`
 - **Wrap-up** (`/wrap-up`): auto via scheduled-task `berkahn-wrapup-semanal` (sexta 17h) → escreve em `00-meta/wrap-up/YYYY-MM-DD.md`
