@@ -264,7 +264,7 @@ export default function TermosDeUsoPage() {
         sectionNumber: 11,
         title: "Contato",
         contact: {
-          email: "contato.berkahn@gmail.com",
+          email: "engenharia@berkahn.com.br",
           phone: "+55 (11) 96641-5742",
           introText:
             "Para dúvidas ou solicitações relacionadas a estes Termos de Uso, entre em contato:",

@@ -9,7 +9,7 @@ import Link from "next/link";
 import { trackEvent } from "@/lib/analytics";
 
 const contactInfo = {
-  email: "contato.berkahn@gmail.com",
+  email: "engenharia@berkahn.com.br",
   phone: "+55 (11) 96641-5742",
   phoneRaw: "5511966415742",
   website: "https://berkahn.com.br",

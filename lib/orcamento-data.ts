@@ -526,7 +526,7 @@ export const PROXIMOS_PASSOS: ProximoPasso[] = [
 export const CONTATOS = {
   whatsapp: "5511966415742",
   telefone: "(11) 96641-5742",
-  email: "contato@berkahn.com.br",
+  email: "engenharia@berkahn.com.br",
   endereco: "Sao Paulo, SP",
   cnpj: "39.455.932/0001-64",
 };
