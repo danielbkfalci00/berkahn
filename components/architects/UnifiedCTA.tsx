@@ -73,7 +73,7 @@ export function UnifiedCTA() {
           </MagneticButton>
 
           <a
-            href="mailto:contato.berkahn@gmail.com"
+            href="mailto:engenharia@berkahn.com.br"
             className="group inline-flex items-center gap-3 px-8 py-4"
           >
             <span className="text-xs uppercase tracking-[0.3em] border-b border-black/30 pb-1 group-hover:border-black transition-colors duration-300">

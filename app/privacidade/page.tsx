@@ -336,7 +336,7 @@ export default function PrivacidadePage() {
         contact: {
           role: "Encarregado de Proteção de Dados",
           name: "Matheus Bertevello",
-          email: "contato.berkahn@gmail.com",
+          email: "engenharia@berkahn.com.br",
           phone: "+55 (11) 96641-5742",
           introText:
             "Para dúvidas, solicitações ou reclamações relacionadas a esta Política de Privacidade ou ao tratamento dos seus dados pessoais, entre em contato com o Encarregado de Proteção de Dados da Berkahn:",

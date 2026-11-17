@@ -126,7 +126,7 @@ export default function RootLayout({
                   longitude: -46.6333,
                 },
                 telephone: "+5511966415742",
-                email: "contato.berkahn@gmail.com",
+                email: "engenharia@berkahn.com.br",
                 taxID: "39.455.932/0001-64",
                 priceRange: "$$$$",
                 currenciesAccepted: "BRL",

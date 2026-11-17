@@ -235,7 +235,7 @@ export const PARCEIROS = [
 export const CONTATO_INSTITUCIONAL = {
   headline: "Vamos construir juntos?",
   subtitle: "Fale com a gente para conversar sobre o seu projeto.",
-  email: "contato.berkahn@gmail.com",
+  email: "engenharia@berkahn.com.br",
   phone: "+55 (11) 96641-5742",
   website: "www.berkahn.com.br",
   linkedin: "linkedin.com/company/construtora-berkahn",

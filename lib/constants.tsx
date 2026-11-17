@@ -33,7 +33,7 @@ export function isNavLinkActive(pathname: string | null, href: string): boolean 
 
 // Footer Contact Data (icons will be added in Footer component)
 export const FOOTER_CONTACT = [
-  { label: "Email", value: "contato.berkahn@gmail.com", type: "email" },
+  { label: "Email", value: "engenharia@berkahn.com.br", type: "email" },
   { label: "Telefone", value: "+55 (11) 96641-5742", type: "phone" },
   { label: "Localização", value: "São Paulo, SP - Brasil", type: "location" },
   { label: "CNPJ", value: "39.455.932/0001-64", type: "cnpj" },
