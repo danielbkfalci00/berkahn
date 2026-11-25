@@ -26,9 +26,9 @@ const BrazilGrowthChart = dynamic(
 // Obras Berkahn que comprovam o movimento no Brasil
 const BERKAHN_WORKS = [
   {
-    image: "/images/apresentacao/casa-santa-cristina/casa-santa-cristina-cover.webp",
-    title: "Casa Santa Cristina",
-    location: "São Paulo · 376 m²",
+    image: "/images/apresentacao/residencial-bandeira/residencial-bandeira-01.webp",
+    title: "Residencial Bandeira",
+    location: "Jardim Europa · 480 m²",
   },
   {
     image: "/images/apresentacao/casa-laranjeiras/casa-laranjeiras-fachada-frontal.webp",

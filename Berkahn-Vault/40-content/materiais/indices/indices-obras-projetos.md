@@ -14,7 +14,7 @@ projetos_relacionados:
   - site
   - apresentacoes
 path_externo: "../../../../Docs/banco-imagens/obras-projetos/"
-arquivos_total: 82
+arquivos_total: 98
 arquivos_mapeados: 57
 arquivos_orfaos: 0
 arquivos_duplicados: 0
@@ -22,7 +22,7 @@ arquivos_duplicados: 0
 
 # Índice — Obras / Projetos
 
-> **Localização externa**: `../../../../Docs/banco-imagens/obras-projetos/` (82 arquivos).
+> **Localização externa**: `../../../../Docs/banco-imagens/obras-projetos/` (98 arquivos).
 > Divide-se em: 41 imagens do **carrossel de apresentação** (bloco de volume) + 16 renders/fotos **curadas** de serviços, chalé, casa-campo, home e loft.
 
 ## Catálogo curado (16)
@@ -130,6 +130,11 @@ pautas dos sócios. Quatro capas saíram daqui em vez de imagem gerada por IA.
 - `vila-juquehy/`: 8 fotos da Ampliação Vila Juquehy (originais `vila-juquehy-NN-original.*` + `vila-juquehy-NN.webp`, 1600 px). Uso: caso 03 da [[apresentacoes]], em `public/images/apresentacao/vila-juquehy/`. Ordem: 01 fachada noturna, 02 e 03 suítes, 04 piscina, 05 escada, 06 e 07 banheiros, 08 suíte. Foto 04 tem marca de perfil de terceiro no canto inferior direito.
 - `fotos-melhoradas-2026-11-25/`: 9 fotos de obra tratadas (01-05 PNG, 06-09 JPEG), otimizadas como `projeto-51..59.webp` no globo (DomeGallery). O chalé marrom `projeto-04.webp` saiu do globo.
 
+## Residencial Bandeira (2026-11-25)
+
+- `residencial-bandeira/`: 5 fotos do caso 01 da [[apresentacoes]] (originais das 2 fachadas + `residencial-bandeira-NN.webp`), em `public/images/apresentacao/residencial-bandeira/`. Ordem: 01 fachada com jardim, 02 muro ripado, 03 sala, 04 banheiro, 05 sala técnica. As 3 internas vêm de `interiores-melhorados-2026-11-25/`.
+- `residencial-bandeira/obra/`: 6 fotos de obra (WhatsApp), otimizadas como `projeto-60..65.webp` no globo.
+
 ## Quando usar
 
 - Home e /serviços do [[site]] (heros e galerias — usar os curados)
@@ -147,7 +152,7 @@ ls "../../../../Docs/banco-imagens/obras-projetos/" | grep obra-carrossel
 ## Manutenção
 
 - Ao selecionar imagem do carrossel para uso real, mover a menção para a tabela curada com o `uso_em`.
-- `arquivos_total` (82) = 16 curadas + 41 carrossel + 16 Vila Juquehy + 9 fotos melhoradas.
+- `arquivos_total` (82) = 16 curadas + 41 carrossel + 16 Vila Juquehy + 9 fotos melhoradas + 3 interiores melhorados + 13 Residencial Bandeira.
 - Rodar `node scripts/vault-images.mjs --check` após mudanças.
 
 ## Relacionado
