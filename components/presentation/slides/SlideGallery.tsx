@@ -48,7 +48,7 @@ const galleryImages = [
 
   // ── Fundo do globo — bloco "obra em LSF": chalés (3 mantidos) + detalhes ──
   img(8, "Chalé A-frame em Light Steel Frame com cobertura metálica e revestimento em madeira"), // 23 • chalé (mantido)
-  img(4, "Chalé A-frame em Light Steel Frame, vista lateral ao entardecer"), // 24 • chalé (mantido)
+  img(52, "Galpão em estrutura metálica durante a montagem, obra Berkahn"), // 24 • NOVO 2026-11-25
   img(47, "Detalhe estrutural em Light Steel Frame (perfil galvanizado SMART G90) durante a obra"), // 25 • NOVO
   img(42), // 26 • vista aérea da estrutura na cidade
   img(49, "Estrutura híbrida em aço galvanizado e madeira laminada durante a execução — residência Berkahn"), // 27 • obra real, canteiro limpo
@@ -66,6 +66,14 @@ const galleryImages = [
   img(25), // 37 • forro estrutural
   img(22), // 38 • forro estrutura
   img(16), // 39 • viga industrial
+  img(51, "Estrutura em madeira na área externa durante a obra, Light Steel Frame"), // NOVO 2026-11-25
+  img(53, "Cobertura em madeira montada com andaime, obra Berkahn"), // NOVO 2026-11-25
+  img(54, "Montagem da cobertura sobre estrutura em Light Steel Frame"), // NOVO 2026-11-25
+  img(55, "Marcação do piso no início da obra, Berkahn"), // NOVO 2026-11-25
+  img(56, "Montantes de Light Steel Frame sob vigas de madeira engenheirada, com vista para o entorno"), // NOVO 2026-11-25
+  img(57, "Montagem de painel em Light Steel Frame sob cobertura de madeira"), // NOVO 2026-11-25
+  img(58, "Guarda-corpo em perfis de aço galvanizado na varanda durante a obra"), // NOVO 2026-11-25
+  img(59, "Painéis em Light Steel Frame da varanda sob forro em madeira engenheirada"), // NOVO 2026-11-25
   { src: `${SUPABASE_STORAGE}/video-whatsapp-obra.mp4`, alt: "Obra em andamento" }, // 40 • VÍDEO 3
   img(15), // 41 • painel interno metálico
 ];

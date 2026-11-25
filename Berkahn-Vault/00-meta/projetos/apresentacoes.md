@@ -5,7 +5,7 @@ atualizado: 2026-08-27
 tags:
   - project/apresentacao
   - status/active
-ai_summary: Hub do projeto Apresentações comerciais — /apresentacao-executiva (16 slides, lazy load, 3 charts Recharts). 3 casos publicados (Casa Santa Cristina, Vila Serrana, Residência Monteiro). Roteiros migrados de Docs/apresentacoes/. Material de vendas + pitch.
+ai_summary: Hub do projeto Apresentações comerciais — /apresentacao-executiva (16 slides, lazy load, 3 charts Recharts). 3 casos publicados (Casa Santa Cristina, Vila Serrana, Ampliação Vila Juquehy). Roteiros migrados de Docs/apresentacoes/. Material de vendas + pitch.
 status: active
 projeto: apresentacoes
 kpi_apresentacoes_ativas: 1
@@ -99,6 +99,7 @@ Ver [[presentation-system#Como adicionar um novo slide]] — pattern: criar `com
 
 ## Histórico recente
 
+- 2026-11-25: caso 03 trocado de Residência Monteiro para Ampliação Vila Juquehy (90 m², Light Steel Frame + MLC, 8 fotos); globo sem o chalé marrom (projeto-04) e com projeto-51..59.
 - 2026-07-06: standup — fotos do globo (DomeGallery) renovadas na `/apresentacao-executiva` (PR #13, 2026-07-02). Validar em prod.
 - 2026-05-22: hub criado
 - 2026-05-21: roteiros migrados de `Docs/apresentacoes/`

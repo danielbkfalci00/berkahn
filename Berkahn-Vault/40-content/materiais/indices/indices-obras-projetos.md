@@ -14,7 +14,7 @@ projetos_relacionados:
   - site
   - apresentacoes
 path_externo: "../../../../Docs/banco-imagens/obras-projetos/"
-arquivos_total: 57
+arquivos_total: 82
 arquivos_mapeados: 57
 arquivos_orfaos: 0
 arquivos_duplicados: 0
@@ -22,7 +22,7 @@ arquivos_duplicados: 0
 
 # Índice — Obras / Projetos
 
-> **Localização externa**: `../../../../Docs/banco-imagens/obras-projetos/` (57 arquivos).
+> **Localização externa**: `../../../../Docs/banco-imagens/obras-projetos/` (82 arquivos).
 > Divide-se em: 41 imagens do **carrossel de apresentação** (bloco de volume) + 16 renders/fotos **curadas** de serviços, chalé, casa-campo, home e loft.
 
 ## Catálogo curado (16)
@@ -125,6 +125,11 @@ pautas dos sócios. Quatro capas saíram daqui em vez de imagem gerada por IA.
 | 3. Projeto integrado | `obra-carrossel-03.jpeg` (paisagem 1280x576) | Pórtico de aço galvanizado inteiro à mostra antes do fechamento, com cobertura e revestimento já parciais: lê como edifício montado a partir de peças fabricadas. Paisagem. | 1280 px de largura é o limite para capa. Se retrato servir, `14` (operários parafusando o painel) e `13` (painel erguido e escorado) contam melhor a montagem; `40` é o melhor close de perfil, com furos e marcação do aço. |
 | 4. Automação residencial | `obra-carrossel-28.jpeg` (retrato 1200x1600) | Feixe grande de cabos azuis de rede e eletrodutos amarelos descendo organizados pelo pilar — é a cara de infraestrutura de cabeamento antes do fechamento. | Retrato. Não existe no acervo quadro elétrico montado, ponto de sensor nem dispositivo de automação — se o artigo precisar disso, nenhuma serve. Alternativa: `20` (caixa elétrica no montante com eletroduto passando). |
 | 5. Sistemas prediais de alto padrão | `obra-carrossel-30.jpeg` (retrato 1200x1600) | Duto de ar-condicionado galvanizado, tubulação de esgoto, cobre e eletrodutos no forro técnico, recortados contra o céu azul. Melhor composição do bloco urbano. | Retrato. Se a capa precisar ser paisagem e puder mostrar resultado em vez de sistema, `36` (suíte acabada com split de AC, paisagem 1206x878) ou `38` (banheiro de alto padrão, paisagem) — mas nenhuma das duas mostra casa de máquinas. `25` é a alternativa com duto mais explícito. |
+## Vila Juquehy e fotos melhoradas (2026-11-25)
+
+- `vila-juquehy/`: 8 fotos da Ampliação Vila Juquehy (originais `vila-juquehy-NN-original.*` + `vila-juquehy-NN.webp`, 1600 px). Uso: caso 03 da [[apresentacoes]], em `public/images/apresentacao/vila-juquehy/`. Ordem: 01 fachada noturna, 02 e 03 suítes, 04 piscina, 05 escada, 06 e 07 banheiros, 08 suíte. Foto 04 tem marca de perfil de terceiro no canto inferior direito.
+- `fotos-melhoradas-2026-11-25/`: 9 fotos de obra tratadas (01-05 PNG, 06-09 JPEG), otimizadas como `projeto-51..59.webp` no globo (DomeGallery). O chalé marrom `projeto-04.webp` saiu do globo.
+
 ## Quando usar
 
 - Home e /serviços do [[site]] (heros e galerias — usar os curados)
@@ -142,7 +147,7 @@ ls "../../../../Docs/banco-imagens/obras-projetos/" | grep obra-carrossel
 ## Manutenção
 
 - Ao selecionar imagem do carrossel para uso real, mover a menção para a tabela curada com o `uso_em`.
-- `arquivos_total` (57) = 16 curadas + 41 carrossel.
+- `arquivos_total` (82) = 16 curadas + 41 carrossel + 16 Vila Juquehy + 9 fotos melhoradas.
 - Rodar `node scripts/vault-images.mjs --check` após mudanças.
 
 ## Relacionado
