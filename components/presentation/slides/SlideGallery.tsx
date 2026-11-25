@@ -74,6 +74,12 @@ const galleryImages = [
   img(57, "Montagem de painel em Light Steel Frame sob cobertura de madeira"), // NOVO 2026-11-25
   img(58, "Guarda-corpo em perfis de aço galvanizado na varanda durante a obra"), // NOVO 2026-11-25
   img(59, "Painéis em Light Steel Frame da varanda sob forro em madeira engenheirada"), // NOVO 2026-11-25
+  img(60, "Ambiente com placas cimentícias e grande abertura para o jardim durante a obra, Residencial Bandeira"), // NOVO Residencial Bandeira
+  img(61, "Ambiente interno com fechamento em placas e marcação de piso durante a obra, Residencial Bandeira"), // NOVO Residencial Bandeira
+  img(62, "Parede em placas cimentícias sobre Light Steel Frame antes do acabamento, Residencial Bandeira"), // NOVO Residencial Bandeira
+  img(63, "Banheiro em obra com parede em pedra natural e janela para a mata, Residencial Bandeira"), // NOVO Residencial Bandeira
+  img(64, "Área com forro em gesso e piso em preparação durante a obra, Residencial Bandeira"), // NOVO Residencial Bandeira
+  img(65, "Pórtico em aço laminado no terraço durante a montagem, Residencial Bandeira"), // NOVO Residencial Bandeira
   { src: `${SUPABASE_STORAGE}/video-whatsapp-obra.mp4`, alt: "Obra em andamento" }, // 40 • VÍDEO 3
   img(15), // 41 • painel interno metálico
 ];
