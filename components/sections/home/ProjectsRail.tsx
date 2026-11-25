@@ -24,11 +24,11 @@ type RailProject = {
 
 const PROJECTS: RailProject[] = [
   {
-    name: "Casa Santa Cristina",
+    name: "Residencial Bandeira",
     meta: "residencial",
-    image: "/images/apresentacao/casa-santa-cristina/casa-santa-cristina-cover.webp",
-    imageAlt: "Casa Santa Cristina, residência construída pela Berkahn",
-    imageClassName: "object-[50%_70%]",
+    image: "/images/apresentacao/residencial-bandeira/residencial-bandeira-01.webp",
+    imageAlt: "Fachada do Residencial Bandeira, no Jardim Europa, com jardim e ripado de madeira",
+    imageClassName: "object-[40%_50%]",
   },
   {
     name: "Casa Laranjeiras",

@@ -13,7 +13,7 @@ export const presentationProjects: (ProjectSlideProps & {
     number: "01",
     title: "Residencial Bandeira",
     location: "Jardim Europa - São Paulo, SP",
-    year: "2026",
+    year: "2025",
     area: "480 m²",
     system: "Aço Laminado + Alvenaria + Light Steel Frame",
     description:

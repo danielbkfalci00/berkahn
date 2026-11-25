@@ -99,7 +99,7 @@ Ver [[presentation-system#Como adicionar um novo slide]] — pattern: criar `com
 
 ## Histórico recente
 
-- 2026-11-25: caso 01 trocado de Casa Santa Cristina para Residencial Bandeira (Jardim Europa, 480 m², 2026, 5 fotos); card do slide Oportunidade Brasil também; globo com projeto-60..65.
+- 2026-11-25: caso 01 trocado de Casa Santa Cristina para Residencial Bandeira (Jardim Europa, 480 m², 2025, 5 fotos); também na home (ProjectsRail) e no hero de /perguntas-frequentes; card do slide Oportunidade Brasil também; globo com projeto-60..65.
 - 2026-11-25: caso 03 trocado de Residência Monteiro para Ampliação Vila Juquehy (90 m², Light Steel Frame + MLC, 8 fotos); globo sem o chalé marrom (projeto-04) e com projeto-51..59.
 - 2026-07-06: standup — fotos do globo (DomeGallery) renovadas na `/apresentacao-executiva` (PR #13, 2026-07-02). Validar em prod.
 - 2026-05-22: hub criado
