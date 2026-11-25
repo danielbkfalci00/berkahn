@@ -102,7 +102,7 @@ export default function PerguntasFrequentes() {
           label="TIRE SUAS DÚVIDAS"
           title="Tudo o que Você Precisa Saber"
           subtitle="Respostas diretas sobre Steel Frame, nosso processo, financiamento e pós-obra."
-          backgroundImage="/images/apresentacao/casa-santa-cristina/casa-santa-cristina-cover.webp"
+          backgroundImage="/images/apresentacao/residencial-bandeira/residencial-bandeira-01.webp"
         />
       </div>
 
