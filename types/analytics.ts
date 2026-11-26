@@ -310,6 +310,7 @@ export interface AnalyticsLead {
   responsavel: Pick<LeadResponsible, "id" | "nome"> | null;
   resumo_status: string | null;
   resumo_status_em: string | null;
+  tags?: string[];
   artifact_count: number;
   tipo_projeto: string | null;
   area_obra_m2?: number | null;

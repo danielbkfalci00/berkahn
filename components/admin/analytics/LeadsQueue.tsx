@@ -33,11 +33,12 @@ import {
   setLeadArchived,
   setLeadNextAction,
   updateLeadOperations,
+  setLeadTags,
   updateLeadStatus,
   type ManualLeadInput,
   type LeadPreviewDetails,
 } from "@/app/admin/leads/actions";
-import { InlineSummary, LeadContactEditor, PrioritySelect, ResponsibleSelect } from "@/components/admin/analytics/LeadEditors";
+import { InlineSummary, LeadContactEditor, PrioritySelect, ResponsibleSelect, TagEditor, TAG_SUGGESTIONS_ID } from "@/components/admin/analytics/LeadEditors";
 import { createClient } from "@/lib/supabase/client";
 import { normalizeLeadPhone } from "@/lib/contact";
 import { commercialHref, leadHref, leadsReturnTo } from "@/lib/admin/return-to";
@@ -77,7 +78,7 @@ function localInputToIso(value?: string): string | undefined {
   return Number.isNaN(date.getTime()) ? undefined : date.toISOString();
 }
 
-type LeadOperationsPatch = Partial<Pick<LeadListItem, "prioridade" | "resumo_status" | "responsavel">>;
+type LeadOperationsPatch = Partial<Pick<LeadListItem, "prioridade" | "resumo_status" | "responsavel" | "tags">>;
 type SaveOperations = (id: string, patch: LeadOperationsPatch) => Promise<boolean>;
 
 export interface LeadKpis {
@@ -91,7 +92,7 @@ export interface LeadKpis {
 export type LeadListItem = Pick<
   AnalyticsLead,
   "id" | "nome" | "email" | "telefone" | "status" | "prioridade" |
-  "responsavel" | "resumo_status" | "artifact_count" | "visualizado_em" | "proxima_acao_em"
+  "responsavel" | "resumo_status" | "tags" | "artifact_count" | "visualizado_em" | "proxima_acao_em"
 > & { tipo_captacao: "contato" | "material" };
 
 interface LeadsQueueProps {
@@ -255,6 +256,8 @@ export function LeadsQueue({ initialLeads, allStageLeads, total, page, pageCount
     });
   }
 
+  const tagSuggestions = useMemo(() => Array.from(new Set([...(stageLeads ?? []), ...leads].flatMap((lead) => lead.tags ?? []))).sort(), [stageLeads, leads]);
+
   function findLead(id: string): LeadListItem | null {
     return stageLeads?.find((lead) => lead.id === id)
       ?? leads.find((lead) => lead.id === id)
@@ -278,11 +281,14 @@ export function LeadsQueue({ initialLeads, allStageLeads, total, page, pageCount
     setError(null);
     patchEverywhere(id, patch);
     try {
-      const result = await updateLeadOperations(id, {
-        responsavelId: next.responsavel?.id,
-        prioridade: next.prioridade,
-        resumoStatus: next.resumo_status || "",
-      });
+      // Tags têm RPC própria; os demais campos vão juntos para update_lead_operations.
+      const result = "tags" in patch
+        ? await setLeadTags(id, next.tags ?? [])
+        : await updateLeadOperations(id, {
+          responsavelId: next.responsavel?.id,
+          prioridade: next.prioridade,
+          resumoStatus: next.resumo_status || "",
+        });
       if (!result.ok) throw new Error(result.error || "Não foi possível salvar.");
       router.refresh();
       return true;
@@ -515,6 +521,7 @@ export function LeadsQueue({ initialLeads, allStageLeads, total, page, pageCount
         <Link href={`?view=${view}`} className="inline-flex min-h-11 items-center justify-center text-sm text-neutral-600 underline-offset-4 hover:underline">Limpar filtros</Link>
       </form>
 
+      <datalist id={TAG_SUGGESTIONS_ID}>{tagSuggestions.map((tag) => <option key={tag} value={tag} />)}</datalist>
       {view === "kanban" ? (
         <>
           {total > leads.length && <p className="rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-900">Esta página do Kanban mostra {leads.length} de {total} leads, por próxima ação e prioridade. Use a paginação para ver os demais.</p>}
@@ -682,6 +689,7 @@ function LeadQuickView({ lead, preview, onClose, onRestoreFocus, onStatusChange,
               }} className={INPUT_CLASS} /></label>
             </div>
             <div className="space-y-1"><p className="text-xs font-medium text-neutral-600">Descrição</p><InlineSummary value={lead.resumo_status} label={`Descrição de ${lead.nome}`} rows={4} onSave={(resumo_status) => onSaveOperations(lead.id, { resumo_status })} className="border-neutral-300 bg-white text-sm" /></div>
+            <div className="space-y-1"><p className="text-xs font-medium text-neutral-600">Tags</p><TagEditor tags={lead.tags ?? []} label={`Tags de ${lead.nome}`} onChange={(tags) => void onSaveOperations(lead.id, { tags })} /></div>
             {savingStatus && <p role="status" className="text-xs text-neutral-500">Salvando etapa…</p>}
             {error && <p role="alert" className="text-sm text-red-700">{error}</p>}
             {success && !pending && <p role="status" className="text-xs text-emerald-700">{success}</p>}
@@ -799,6 +807,7 @@ function KanbanCard({ lead, disabled, responsibles, onSaveOperations, onOpen }: 
     }} aria-label={`Pré-visualizar ${lead.nome}`} className="absolute inset-0 z-10 rounded-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900" />
     <div className="flex items-start justify-between gap-2"><span className="line-clamp-2 text-sm font-semibold text-neutral-900">{lead.nome}</span><button type="button" aria-label={`Mover ${lead.nome}`} className="relative z-20 hidden min-h-11 min-w-11 cursor-grab touch-none items-center justify-center rounded text-neutral-400 hover:bg-neutral-100 hover:text-neutral-700 md:inline-flex" {...listeners} {...attributes}><GripVertical className="h-4 w-4" /></button></div>
     <div className="-mx-2 mt-1"><InlineSummary value={lead.resumo_status} label={`Descrição de ${lead.nome}`} onSave={(resumo_status) => onSaveOperations(lead.id, { resumo_status })} /></div>
+    <div className="mt-1"><TagEditor compact tags={lead.tags ?? []} label={`Tags de ${lead.nome}`} onChange={(tags) => void onSaveOperations(lead.id, { tags })} /></div>
     <div className="mt-2 flex items-center justify-between gap-2">
       <PrioritySelect value={lead.prioridade} label={`Urgência de ${lead.nome}`} onChange={(prioridade) => void onSaveOperations(lead.id, { prioridade })} />
       <ResponsibleSelect value={lead.responsavel?.id ?? null} responsibles={responsibles} label={`Responsável por ${lead.nome}`} onChange={(responsavel) => void onSaveOperations(lead.id, { responsavel })} />
