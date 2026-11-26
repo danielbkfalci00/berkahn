@@ -780,7 +780,7 @@ function LeadKanban({ leads, ...rest }: KanbanProps & { leads: LeadListItem[] })
   }
   return <div className="-mx-4 overflow-x-auto overscroll-x-contain px-4 pb-2 snap-x snap-mandatory md:mx-0 md:px-0 md:snap-none" aria-label="Kanban de leads">
     <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-      <div className="flex gap-3 md:grid md:min-w-[1380px] md:grid-cols-6">
+      <div className="flex gap-3">
         {STATUS.map((status) => <KanbanColumn key={status.value} status={status} leads={leads.filter((lead) => lead.status === status.value)} {...rest} />)}
       </div>
     </DndContext>
@@ -789,7 +789,7 @@ function LeadKanban({ leads, ...rest }: KanbanProps & { leads: LeadListItem[] })
 
 function KanbanColumn({ status, leads, pendingLeadId, ...rest }: KanbanProps & { status: { value: LeadStatus; label: string }; leads: LeadListItem[] }) {
   const { setNodeRef, isOver } = useDroppable({ id: status.value });
-  return <section ref={setNodeRef} className={`w-[min(80vw,20rem)] shrink-0 snap-start min-h-[360px] rounded-lg border p-3 transition-colors md:w-auto ${isOver ? "border-neutral-900 bg-neutral-100" : "border-neutral-200 bg-neutral-50"}`}>
+  return <section ref={setNodeRef} className={`w-[min(80vw,17rem)] shrink-0 snap-start min-h-[360px] rounded-lg border p-3 transition-colors ${isOver ? "border-neutral-900 bg-neutral-100" : "border-neutral-200 bg-neutral-50"}`}>
     <div className="mb-3 flex items-center justify-between"><h2 className="text-xs font-semibold uppercase tracking-wider text-neutral-700">{status.label}</h2><span className="rounded-full bg-white px-2 py-0.5 text-xs text-neutral-500">{leads.length}</span></div>
     <div className="space-y-2">{leads.map((lead) => <KanbanCard key={lead.id} lead={lead} disabled={pendingLeadId !== null} responsibles={rest.responsibles} onSaveOperations={rest.onSaveOperations} onOpen={rest.onOpen} />)}</div>
   </section>;
@@ -805,10 +805,10 @@ function KanbanCard({ lead, disabled, responsibles, onSaveOperations, onOpen }: 
         onOpen(lead, event.currentTarget);
       }
     }} aria-label={`Pré-visualizar ${lead.nome}`} className="absolute inset-0 z-10 rounded-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900" />
-    <div className="flex items-start justify-between gap-2"><span className="line-clamp-2 text-sm font-semibold text-neutral-900">{lead.nome}</span><button type="button" aria-label={`Mover ${lead.nome}`} className="relative z-20 hidden min-h-11 min-w-11 cursor-grab touch-none items-center justify-center rounded text-neutral-400 hover:bg-neutral-100 hover:text-neutral-700 md:inline-flex" {...listeners} {...attributes}><GripVertical className="h-4 w-4" /></button></div>
-    <div className="-mx-2 mt-1"><InlineSummary value={lead.resumo_status} label={`Descrição de ${lead.nome}`} onSave={(resumo_status) => onSaveOperations(lead.id, { resumo_status })} /></div>
-    <div className="mt-1"><TagEditor compact tags={lead.tags ?? []} label={`Tags de ${lead.nome}`} onChange={(tags) => void onSaveOperations(lead.id, { tags })} /></div>
-    <div className="mt-2 flex items-center justify-between gap-2">
+    <div className="flex items-start justify-between gap-2"><span className="min-w-0 truncate pt-1 text-sm font-semibold text-neutral-900" title={lead.nome}>{lead.nome}</span><button type="button" aria-label={`Mover ${lead.nome}`} className="relative z-20 hidden -mr-2 -mt-2 min-h-9 min-w-9 shrink-0 cursor-grab touch-none items-center justify-center rounded text-neutral-400 hover:bg-neutral-100 hover:text-neutral-700 md:inline-flex" {...listeners} {...attributes}><GripVertical className="h-4 w-4" /></button></div>
+    <div className="-mx-2"><InlineSummary compact value={lead.resumo_status} label={`Descrição de ${lead.nome}`} onSave={(resumo_status) => onSaveOperations(lead.id, { resumo_status })} /></div>
+    <div className="-mx-1.5"><TagEditor compact tags={lead.tags ?? []} label={`Tags de ${lead.nome}`} onChange={(tags) => void onSaveOperations(lead.id, { tags })} /></div>
+    <div className="mt-2 flex min-w-0 items-center gap-2 border-t border-neutral-100 pt-2">
       <PrioritySelect value={lead.prioridade} label={`Urgência de ${lead.nome}`} onChange={(prioridade) => void onSaveOperations(lead.id, { prioridade })} />
       <ResponsibleSelect value={lead.responsavel?.id ?? null} responsibles={responsibles} label={`Responsável por ${lead.nome}`} onChange={(responsavel) => void onSaveOperations(lead.id, { responsavel })} />
     </div>

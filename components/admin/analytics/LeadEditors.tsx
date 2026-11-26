@@ -22,12 +22,13 @@ const PRIORITY_CLASS: Record<LeadPriority, string> = {
 
 const SUMMARY_MAX = 500;
 
-export function InlineSummary({ value, label, rows = 3, onSave, className = "" }: {
+export function InlineSummary({ value, label, rows = 3, onSave, className = "", compact = false }: {
   value: string | null;
   label: string;
   rows?: number;
   onSave: (value: string) => Promise<boolean>;
   className?: string;
+  compact?: boolean;
 }) {
   const [draft, setDraft] = useState(value || "");
   const [isEditing, setIsEditing] = useState(false);
@@ -56,10 +57,10 @@ export function InlineSummary({ value, label, rows = 3, onSave, className = "" }
   return <div className="relative z-20">
     <textarea
       value={draft}
-      rows={rows}
+      rows={compact ? (isEditing ? 3 : draft ? 2 : 1) : rows}
       maxLength={SUMMARY_MAX}
       aria-label={label}
-      placeholder="Adicionar descrição…"
+      placeholder={compact ? "Descrição…" : "Adicionar descrição…"}
       onFocus={() => setIsEditing(true)}
       onChange={(event) => setDraft(event.target.value)}
       onBlur={(event) => void commit(event.currentTarget.value)}
@@ -84,7 +85,7 @@ export function PrioritySelect({ value, label, disabled, onChange, size = "sm" }
   onChange: (value: LeadPriority) => void;
   size?: "sm" | "md";
 }) {
-  const sizing = size === "sm" ? "min-h-7 px-2 text-[10px]" : "min-h-11 px-3 text-sm";
+  const sizing = size === "sm" ? "min-h-7 shrink-0 px-2 text-[11px]" : "min-h-11 px-3 text-sm";
   return <select
     value={value}
     disabled={disabled}
@@ -105,7 +106,7 @@ export function ResponsibleSelect({ value, responsibles, label, disabled, onChan
   size?: "sm" | "md";
 }) {
   const sizing = size === "sm"
-    ? "min-h-7 max-w-[9rem] border-transparent bg-transparent px-1 text-[10px] text-neutral-500 hover:border-neutral-200"
+    ? "min-h-7 min-w-0 flex-1 border-transparent bg-transparent px-1 text-right text-[11px] text-neutral-500 hover:border-neutral-200"
     : "min-h-11 w-full border-neutral-300 bg-white px-3 text-sm text-neutral-900";
   return <select
     value={value || ""}
@@ -152,7 +153,7 @@ export function TagEditor({ tags, label, onChange, compact = false }: {
       list={TAG_SUGGESTIONS_ID}
       maxLength={TAG_LENGTH}
       aria-label={label}
-      placeholder={tags.length ? "+ tag" : "Adicionar tag…"}
+      placeholder={compact ? "+ tag" : tags.length ? "+ tag" : "Adicionar tag…"}
       onChange={(event) => {
         const value = event.target.value;
         if (value.endsWith(",")) add(value.slice(0, -1)); else setDraft(value);
@@ -163,7 +164,7 @@ export function TagEditor({ tags, label, onChange, compact = false }: {
         if (event.key === "Backspace" && !draft && tags.length) onChange(tags.slice(0, -1));
       }}
       onBlur={() => { if (draft.trim()) add(draft); }}
-      className={`min-w-[5rem] flex-1 rounded-md border border-transparent bg-transparent px-1.5 text-neutral-700 placeholder:text-neutral-400 hover:border-neutral-200 focus:border-neutral-900 focus:bg-white focus:outline-none ${compact ? "min-h-6 text-[10px]" : "min-h-9 text-sm"}`}
+      className={`min-w-[5rem] flex-1 rounded-md border border-transparent bg-transparent px-1.5 text-neutral-700 placeholder:text-neutral-400 hover:border-neutral-200 focus:border-neutral-900 focus:bg-white focus:outline-none ${compact ? "min-h-6 text-[11px] placeholder:text-neutral-300" : "min-h-9 text-sm"}`}
     />}
   </div>;
 }
