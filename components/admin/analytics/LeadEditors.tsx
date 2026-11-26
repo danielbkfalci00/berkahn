@@ -122,6 +122,52 @@ export function ResponsibleSelect({ value, responsibles, label, disabled, onChan
   </select>;
 }
 
+export const TAG_SUGGESTIONS_ID = "lead-tag-suggestions";
+const TAG_MAX = 10;
+const TAG_LENGTH = 30;
+
+// Tags livres: Enter ou vírgula adiciona, × remove. Sugestões vêm do datalist
+// montado pela fila com as tags já usadas.
+export function TagEditor({ tags, label, onChange, compact = false }: {
+  tags: string[];
+  label: string;
+  onChange: (tags: string[]) => void;
+  compact?: boolean;
+}) {
+  const [draft, setDraft] = useState("");
+  function add(raw: string) {
+    const tag = raw.trim().toLowerCase().slice(0, TAG_LENGTH);
+    setDraft("");
+    if (!tag || tags.includes(tag) || tags.length >= TAG_MAX) return;
+    onChange([...tags, tag]);
+  }
+  const chip = compact ? "px-1.5 py-0.5 text-[10px]" : "px-2 py-1 text-xs";
+  return <div className="relative z-20 flex flex-wrap items-center gap-1">
+    {tags.map((tag) => <span key={tag} className={`inline-flex items-center gap-1 rounded-full bg-sky-50 font-medium text-sky-800 ring-1 ring-sky-200 ${chip}`}>
+      {tag}
+      <button type="button" aria-label={`Remover tag ${tag}`} onClick={() => onChange(tags.filter((item) => item !== tag))} className="rounded-full leading-none text-sky-500 hover:text-sky-900">×</button>
+    </span>)}
+    {tags.length < TAG_MAX && <input
+      value={draft}
+      list={TAG_SUGGESTIONS_ID}
+      maxLength={TAG_LENGTH}
+      aria-label={label}
+      placeholder={tags.length ? "+ tag" : "Adicionar tag…"}
+      onChange={(event) => {
+        const value = event.target.value;
+        if (value.endsWith(",")) add(value.slice(0, -1)); else setDraft(value);
+      }}
+      onKeyDown={(event) => {
+        if (event.key === "Enter") { event.preventDefault(); add(draft); }
+        if (event.key === "Escape") { event.stopPropagation(); setDraft(""); event.currentTarget.blur(); }
+        if (event.key === "Backspace" && !draft && tags.length) onChange(tags.slice(0, -1));
+      }}
+      onBlur={() => { if (draft.trim()) add(draft); }}
+      className={`min-w-[5rem] flex-1 rounded-md border border-transparent bg-transparent px-1.5 text-neutral-700 placeholder:text-neutral-400 hover:border-neutral-200 focus:border-neutral-900 focus:bg-white focus:outline-none ${compact ? "min-h-6 text-[10px]" : "min-h-9 text-sm"}`}
+    />}
+  </div>;
+}
+
 const CONTACT_INPUT = "min-h-11 w-full rounded-md border border-neutral-300 bg-white px-3 text-sm text-neutral-900 outline-none focus:border-neutral-900 focus:ring-2 focus:ring-neutral-200";
 
 export function LeadContactEditor({ lead, details, onSaved }: {

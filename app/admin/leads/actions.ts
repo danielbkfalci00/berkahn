@@ -315,6 +315,17 @@ export async function updateLeadOperations(
   return { ok: true };
 }
 
+export async function setLeadTags(id: string, tags: string[]): Promise<LeadActionResult> {
+  const clean = Array.from(new Set(tags.map((tag) => tag.trim().toLowerCase()).filter(Boolean)));
+  if (clean.length > 10) return { ok: false, error: "Máximo de 10 tags por lead." };
+  if (clean.some((tag) => tag.length > 30)) return { ok: false, error: "Cada tag deve ter até 30 caracteres." };
+  const supabase = await createClient();
+  const { error } = await supabase.rpc("set_lead_tags" as never, { p_id: id, p_tags: clean } as never);
+  if (error) return { ok: false, error: error.message };
+  revalidateLead(id);
+  return { ok: true };
+}
+
 export async function saveAdminPushSubscription(input: PushSubscriptionInput): Promise<LeadActionResult> {
   const admin = await requireCommercialAdmin();
   if (!admin) return { ok: false, error: "Não autorizado." };

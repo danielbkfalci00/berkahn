@@ -15,7 +15,7 @@ const CLOSED_STATUSES = "(convertido,desqualificado)";
 const QUALIFIED_STATUSES: LeadStatus[] = ["qualificado", "proposta_enviada", "proposta_execucao", "on_hold_projeto", "convertido"];
 // A fila não precisa transportar mensagem, atribuição, UTM ou histórico de cada
 // lead. Esses campos continuam disponíveis na rota de detalhe.
-const LEAD_COLUMNS = "id,nome,email,telefone,tipo_captacao,status,prioridade,resumo_status,proxima_acao_em,visualizado_em,lead_responsaveis(id,nome),lead_artifacts(count)";
+const LEAD_COLUMNS = "id,nome,email,telefone,tipo_captacao,status,prioridade,resumo_status,tags,proxima_acao_em,visualizado_em,lead_responsaveis(id,nome),lead_artifacts(count)";
 
 function toLeadListItem(row: unknown): LeadListItem {
   const raw = row as Omit<LeadListItem, "responsavel" | "artifact_count"> & {
