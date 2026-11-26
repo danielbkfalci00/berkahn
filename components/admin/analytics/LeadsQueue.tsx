@@ -779,7 +779,7 @@ function LeadKanban({ leads, ...rest }: KanbanProps & { leads: LeadListItem[] })
     if (lead && target && STATUS.some((status) => status.value === target) && lead.status !== target) onStatusChange(lead.id, target);
   }
   return <div className="-mx-4 overflow-x-auto overscroll-x-contain px-4 pb-2 snap-x snap-mandatory md:mx-0 md:px-0 md:snap-none" aria-label="Kanban de leads">
-    <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+    <DndContext id="leads-kanban" sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
       <div className="flex gap-3">
         {STATUS.map((status) => <KanbanColumn key={status.value} status={status} leads={leads.filter((lead) => lead.status === status.value)} {...rest} />)}
       </div>
@@ -798,7 +798,7 @@ function KanbanColumn({ status, leads, pendingLeadId, ...rest }: KanbanProps & {
 function KanbanCard({ lead, disabled, responsibles, onSaveOperations, onOpen }: { lead: LeadListItem; disabled: boolean; responsibles: LeadResponsible[]; onSaveOperations: SaveOperations; onOpen: (lead: LeadListItem, trigger: HTMLElement) => void }) {
   const params = useSearchParams();
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({ id: lead.id, data: { status: lead.status }, disabled });
-  return <article ref={setNodeRef} style={{ transform: CSS.Translate.toString(transform) }} className={`relative rounded-md border border-neutral-200 bg-white p-3 shadow-sm hover:border-neutral-400 focus-within:border-neutral-900 ${isDragging ? "z-20 opacity-70 shadow-lg" : ""}`}>
+  return <article ref={setNodeRef} style={{ transform: CSS.Translate.toString(transform) }} className={`group relative rounded-md border border-neutral-200 bg-white p-3 shadow-sm hover:border-neutral-400 focus-within:border-neutral-900 ${isDragging ? "z-20 opacity-70 shadow-lg" : ""}`}>
     <Link href={leadHref(lead.id, `/admin/leads?${params.toString()}`)} prefetch={false} onClick={(event) => {
       if (event.button === 0 && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey) {
         event.preventDefault();

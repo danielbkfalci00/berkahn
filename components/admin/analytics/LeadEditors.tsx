@@ -54,13 +54,28 @@ export function InlineSummary({ value, label, rows = 3, onSave, className = "", 
     if (!ok) setDraft(value || "");
   }
 
+  // No card, fora da edição, o texto aparece inteiro (até 4 linhas) sem barra
+  // de rolagem; o placeholder só surge ao passar o mouse no card.
+  if (compact && !isEditing) {
+    return <button
+      type="button"
+      aria-label={label}
+      onClick={() => setIsEditing(true)}
+      className={`relative z-20 block w-full rounded-md px-2 py-1 text-left text-xs leading-relaxed hover:bg-neutral-50 focus-visible:outline-2 focus-visible:outline-neutral-900 ${draft ? "text-neutral-700" : "text-neutral-300 group-hover:text-neutral-400"}`}
+    >
+      <span className="line-clamp-4 whitespace-pre-line">{draft || "+ descrição"}</span>
+      {isSaving && <span role="status" className="text-[10px] text-neutral-400"> Salvando…</span>}
+    </button>;
+  }
+
   return <div className="relative z-20">
     <textarea
+      autoFocus={compact}
       value={draft}
-      rows={compact ? (isEditing ? 3 : draft ? 2 : 1) : rows}
+      rows={compact ? 4 : rows}
       maxLength={SUMMARY_MAX}
       aria-label={label}
-      placeholder={compact ? "Descrição…" : "Adicionar descrição…"}
+      placeholder="Adicionar descrição…"
       onFocus={() => setIsEditing(true)}
       onChange={(event) => setDraft(event.target.value)}
       onBlur={(event) => void commit(event.currentTarget.value)}
@@ -164,7 +179,7 @@ export function TagEditor({ tags, label, onChange, compact = false }: {
         if (event.key === "Backspace" && !draft && tags.length) onChange(tags.slice(0, -1));
       }}
       onBlur={() => { if (draft.trim()) add(draft); }}
-      className={`min-w-[5rem] flex-1 rounded-md border border-transparent bg-transparent px-1.5 text-neutral-700 placeholder:text-neutral-400 hover:border-neutral-200 focus:border-neutral-900 focus:bg-white focus:outline-none ${compact ? "min-h-6 text-[11px] placeholder:text-neutral-300" : "min-h-9 text-sm"}`}
+      className={`min-w-[5rem] flex-1 rounded-md border border-transparent bg-transparent px-1.5 text-neutral-700 placeholder:text-neutral-400 hover:border-neutral-200 focus:border-neutral-900 focus:bg-white focus:outline-none ${compact ? "min-h-6 text-[11px] placeholder:text-neutral-300 group-hover:placeholder:text-neutral-400" : "min-h-9 text-sm"}`}
     />}
   </div>;
 }
