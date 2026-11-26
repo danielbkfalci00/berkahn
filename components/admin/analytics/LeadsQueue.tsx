@@ -37,6 +37,7 @@ import {
   type ManualLeadInput,
   type LeadPreviewDetails,
 } from "@/app/admin/leads/actions";
+import { InlineSummary, LeadContactEditor, PrioritySelect, ResponsibleSelect } from "@/components/admin/analytics/LeadEditors";
 import { createClient } from "@/lib/supabase/client";
 import { normalizeLeadPhone } from "@/lib/contact";
 import { commercialHref, leadHref, leadsReturnTo } from "@/lib/admin/return-to";
@@ -75,6 +76,9 @@ function localInputToIso(value?: string): string | undefined {
   const date = new Date(value);
   return Number.isNaN(date.getTime()) ? undefined : date.toISOString();
 }
+
+type LeadOperationsPatch = Partial<Pick<LeadListItem, "prioridade" | "resumo_status" | "responsavel">>;
+type SaveOperations = (id: string, patch: LeadOperationsPatch) => Promise<boolean>;
 
 export interface LeadKpis {
   received: number;
@@ -249,6 +253,61 @@ export function LeadsQueue({ initialLeads, allStageLeads, total, page, pageCount
         setStatusResult({ leadId: id, message: `Não foi possível alterar a etapa de “${previous.nome}”. ${detail}`, failed: true });
       } finally { statusMutationRef.current = false; setPendingLeadId(null); }
     });
+  }
+
+  function findLead(id: string): LeadListItem | null {
+    return stageLeads?.find((lead) => lead.id === id)
+      ?? leads.find((lead) => lead.id === id)
+      ?? (selectedLead?.id === id ? selectedLead : null);
+  }
+
+  function patchEverywhere(id: string, patch: Partial<LeadListItem>) {
+    const apply = (lead: LeadListItem) => lead.id === id ? patchLeadLocally(lead, patch) : lead;
+    setLeads((current) => current.map(apply));
+    setStageLeads((current) => current?.map(apply) ?? null);
+    setSelectedLead((current) => current ? apply(current) : null);
+  }
+
+  // Edição inline (card e prévia): aplica na hora e desfaz só os campos
+  // tocados se o servidor recusar. A RPC exige os três campos juntos.
+  async function saveOperations(id: string, patch: LeadOperationsPatch): Promise<boolean> {
+    const previous = findLead(id);
+    if (!previous) return false;
+    const next = { ...previous, ...patch };
+    const rollback = Object.fromEntries(Object.keys(patch).map((key) => [key, previous[key as keyof LeadOperationsPatch]])) as LeadOperationsPatch;
+    setError(null);
+    patchEverywhere(id, patch);
+    try {
+      const result = await updateLeadOperations(id, {
+        responsavelId: next.responsavel?.id,
+        prioridade: next.prioridade,
+        resumoStatus: next.resumo_status || "",
+      });
+      if (!result.ok) throw new Error(result.error || "Não foi possível salvar.");
+      router.refresh();
+      return true;
+    } catch (failure) {
+      patchEverywhere(id, rollback);
+      setError(`Não foi possível salvar “${previous.nome}”. ${failure instanceof Error ? failure.message : "Falha de conexão."}`);
+      return false;
+    }
+  }
+
+  async function saveNextAction(id: string, iso: string | null): Promise<boolean> {
+    const previous = findLead(id);
+    if (!previous) return false;
+    setError(null);
+    patchEverywhere(id, { proxima_acao_em: iso });
+    try {
+      const result = await setLeadNextAction(id, iso ?? undefined);
+      if (!result.ok) throw new Error(result.error || "Não foi possível salvar a próxima ação.");
+      router.refresh();
+      return true;
+    } catch (failure) {
+      patchEverywhere(id, { proxima_acao_em: previous.proxima_acao_em });
+      setError(failure instanceof Error ? failure.message : "Falha de conexão.");
+      return false;
+    }
   }
 
   function submitManual(event: React.FormEvent) {
@@ -460,7 +519,7 @@ export function LeadsQueue({ initialLeads, allStageLeads, total, page, pageCount
         <>
           {total > leads.length && <p className="rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-900">Esta página do Kanban mostra {leads.length} de {total} leads, por próxima ação e prioridade. Use a paginação para ver os demais.</p>}
           <p className="text-xs text-neutral-500 md:hidden">Deslize para ver as etapas. Toque no card para abrir a prévia.</p>
-          <LeadKanban leads={leads} pendingLeadId={pendingLeadId} onStatusChange={changeStatus} onOpen={openLead} />
+          <LeadKanban leads={leads} pendingLeadId={pendingLeadId} responsibles={responsibles} onStatusChange={changeStatus} onSaveOperations={saveOperations} onOpen={openLead} />
         </>
       ) : (
         <LeadInbox leads={visibleLeads} pendingLeadId={pendingLeadId} onStatusChange={changeStatus} onOpen={openLead} />
@@ -475,6 +534,10 @@ export function LeadsQueue({ initialLeads, allStageLeads, total, page, pageCount
           if (status === "desqualificado") setSelectedLead(null);
           changeStatus(id, status);
         }}
+        responsibles={responsibles}
+        onSaveOperations={saveOperations}
+        onSaveNextAction={saveNextAction}
+        onContactSaved={(id, patch) => { patchEverywhere(id, patch); router.refresh(); }}
         pending={pendingLeadId !== null}
         savingStatus={pendingLeadId === activeLead?.id}
         error={activeStatusResult?.failed ? activeStatusResult.message : error}
@@ -538,7 +601,7 @@ function priorityMeta(priority: LeadPriority) {
   return { label: "Normal", className: "border-neutral-200 bg-neutral-50 text-neutral-600" };
 }
 
-function LeadQuickView({ lead, preview, onClose, onRestoreFocus, onStatusChange, pending, savingStatus, error, success }: {
+function LeadQuickView({ lead, preview, onClose, onRestoreFocus, onStatusChange, responsibles, onSaveOperations, onSaveNextAction, onContactSaved, pending, savingStatus, error, success }: {
   lead: LeadListItem | null;
   preview: { id: string; status: "loading" } |
     { id: string; status: "ok"; data: LeadPreviewDetails } |
@@ -546,6 +609,10 @@ function LeadQuickView({ lead, preview, onClose, onRestoreFocus, onStatusChange,
   onClose: () => void;
   onRestoreFocus: () => void;
   onStatusChange: (id: string, status: LeadStatus) => void;
+  responsibles: LeadResponsible[];
+  onSaveOperations: SaveOperations;
+  onSaveNextAction: (id: string, iso: string | null) => Promise<boolean>;
+  onContactSaved: (id: string, patch: { nome: string; email: string | null; telefone: string | null }) => void;
   pending: boolean;
   savingStatus: boolean;
   error: string | null;
@@ -604,31 +671,38 @@ function LeadQuickView({ lead, preview, onClose, onRestoreFocus, onStatusChange,
           </div>
         </header>
         <div className="min-h-0 flex-1 space-y-6 overflow-y-auto px-5 py-5">
+          <section className="space-y-3 border-b border-neutral-200 pb-5" aria-label="Edição rápida">
+            <div className="grid grid-cols-2 gap-3">
+              <label className="col-span-2 space-y-1 text-xs font-medium text-neutral-600"><span>Etapa</span><select value={lead.status} onChange={(event) => onStatusChange(lead.id, event.target.value as LeadStatus)} disabled={pending} className={INPUT_CLASS}>{STATUS.map((item) => <option key={item.value} value={item.value}>{item.label}</option>)}</select></label>
+              <label className="space-y-1 text-xs font-medium text-neutral-600"><span>Urgência</span><span className="block"><PrioritySelect size="md" value={lead.prioridade} label={`Urgência de ${lead.nome}`} onChange={(prioridade) => void onSaveOperations(lead.id, { prioridade })} /></span></label>
+              <label className="space-y-1 text-xs font-medium text-neutral-600"><span>Responsável</span><ResponsibleSelect size="md" value={lead.responsavel?.id ?? null} responsibles={responsibles} label={`Responsável por ${lead.nome}`} onChange={(responsavel) => void onSaveOperations(lead.id, { responsavel })} /></label>
+              <label className="col-span-2 space-y-1 text-xs font-medium text-neutral-600"><span>Próxima ação</span><input key={`${lead.id}-${lead.proxima_acao_em}`} type="datetime-local" defaultValue={isoToLocalInput(lead.proxima_acao_em)} onBlur={(event) => {
+                const iso = localInputToIso(event.currentTarget.value) ?? null;
+                if (iso !== (lead.proxima_acao_em ? new Date(lead.proxima_acao_em).toISOString() : null)) void onSaveNextAction(lead.id, iso);
+              }} className={INPUT_CLASS} /></label>
+            </div>
+            <div className="space-y-1"><p className="text-xs font-medium text-neutral-600">Descrição</p><InlineSummary value={lead.resumo_status} label={`Descrição de ${lead.nome}`} rows={4} onSave={(resumo_status) => onSaveOperations(lead.id, { resumo_status })} className="border-neutral-300 bg-white text-sm" /></div>
+            {savingStatus && <p role="status" className="text-xs text-neutral-500">Salvando etapa…</p>}
+            {error && <p role="alert" className="text-sm text-red-700">{error}</p>}
+            {success && !pending && <p role="status" className="text-xs text-emerald-700">{success}</p>}
+          </section>
+          <section className="space-y-3 border-b border-neutral-200 pb-5">
+            <h2 className="text-sm font-semibold text-neutral-900">Contato</h2>
+            <LeadContactEditor key={lead.id} lead={lead} details={details} onSaved={(patch) => onContactSaved(lead.id, patch)} />
+          </section>
           <div className="grid grid-cols-3 gap-2 max-[360px]:grid-cols-2">
             {phoneDigits && <a href={`tel:+${phoneDigits}`} className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-md border border-neutral-300 text-sm font-medium focus-visible:outline-2 focus-visible:outline-neutral-900"><Phone className="h-4 w-4" /> Ligar</a>}
             {phoneDigits && <a href={`https://wa.me/${phoneDigits}`} target="_blank" rel="noreferrer" className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-md bg-neutral-950 text-sm font-medium text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900 max-[360px]:order-first max-[360px]:col-span-2"><MessageCircle className="h-4 w-4" /> WhatsApp</a>}
             {lead.email && <a href={`mailto:${lead.email}`} className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-md border border-neutral-300 text-sm font-medium focus-visible:outline-2 focus-visible:outline-neutral-900"><Mail className="h-4 w-4" /> Email</a>}
           </div>
-          <section className="space-y-3 border-b border-neutral-200 pb-5">
-            <div className="flex items-center justify-between gap-3"><span className="text-sm text-neutral-500">Etapa</span><select value={lead.status} onChange={(event) => onStatusChange(lead.id, event.target.value as LeadStatus)} disabled={pending} aria-label={`Etapa de ${lead.nome}`} className="min-h-11 max-w-[65%] rounded-md border border-neutral-300 bg-white px-3 text-sm font-medium text-neutral-900 focus-visible:outline-2 focus-visible:outline-neutral-900">{STATUS.map((item) => <option key={item.value} value={item.value}>{item.label}</option>)}</select></div>
-            <div className="flex justify-between gap-3 text-sm"><span className="text-neutral-500">Prioridade</span><span className="font-medium text-neutral-900">{priorityMeta(lead.prioridade).label}</span></div>
-            <div className="flex justify-between gap-3 text-sm"><span className="text-neutral-500">Responsável</span><span className="text-right font-medium text-neutral-900">{lead.responsavel?.nome || "Pendente"}</span></div>
-            <div className="flex justify-between gap-3 text-sm"><span className="text-neutral-500">Próxima ação</span><span className="text-right font-medium text-neutral-900">{lead.proxima_acao_em ? LEAD_DATE_SHORT.format(new Date(lead.proxima_acao_em)) : "Não agendada"}</span></div>
-            {lead.resumo_status && <p className="rounded-md bg-neutral-50 p-3 text-sm leading-relaxed text-neutral-700">{lead.resumo_status}</p>}
-            {savingStatus && <p role="status" className="text-xs text-neutral-500">Salvando etapa…</p>}
-            {error && <p role="alert" className="text-sm text-red-700">{error}</p>}
-            {success && !pending && <p role="status" className="text-xs text-emerald-700">{success}</p>}
-          </section>
           <section className="space-y-3">
-            <h2 className="text-sm font-semibold text-neutral-900">Sobre este contato</h2>
+            <h2 className="text-sm font-semibold text-neutral-900">Origem da solicitação</h2>
             {preview?.status === "loading" && <div role="status" aria-label="Carregando contexto do lead" className="grid grid-cols-2 gap-3 animate-pulse motion-reduce:animate-none"><span className="h-10 rounded bg-neutral-100" /><span className="h-10 rounded bg-neutral-100" /><span className="h-10 rounded bg-neutral-100" /><span className="h-10 rounded bg-neutral-100" /></div>}
             {preview?.status === "unavailable" && <p role="alert" className="text-sm text-amber-800">{preview.reason}</p>}
             {details && <>
               <dl className="grid grid-cols-2 gap-x-4 gap-y-3 text-sm">
                 <div><dt className="text-neutral-500">Recebido</dt><dd className="mt-0.5 text-neutral-900">{LEAD_DATE_SHORT.format(new Date(details.criado_em))}</dd></div>
                 <div><dt className="text-neutral-500">Canal</dt><dd className="mt-0.5 text-neutral-900">{details.canal}</dd></div>
-                <div><dt className="text-neutral-500">Segmento</dt><dd className="mt-0.5 text-neutral-900">{details.segmento === "nao_definido" ? "Não definido" : details.segmento}</dd></div>
-                <div><dt className="text-neutral-500">Projeto</dt><dd className="mt-0.5 text-neutral-900">{details.tipo_projeto || "—"}</dd></div>
               </dl>
               {details.mensagem && <div><p className="text-xs text-neutral-500">Mensagem</p><p className="mt-1 whitespace-pre-wrap break-words text-sm leading-relaxed text-neutral-800">{details.mensagem}</p></div>}
               {details.pagina_origem && <p className="break-all text-xs text-neutral-500">Origem: {details.pagina_origem}</p>}
@@ -636,7 +710,7 @@ function LeadQuickView({ lead, preview, onClose, onRestoreFocus, onStatusChange,
           </section>
         </div>
         <footer className="border-t border-neutral-200 bg-white px-5 pb-[calc(1.25rem+env(safe-area-inset-bottom))] pt-4 md:pb-5">
-          <Link href={leadHref(lead.id, `/admin/leads?${params.toString()}`)} onClick={onClose} className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-md border border-neutral-300 text-sm font-medium text-neutral-900 hover:bg-neutral-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900">Ver ficha completa <ChevronRight className="h-4 w-4" /></Link>
+          <Link href={leadHref(lead.id, `/admin/leads?${params.toString()}`)} onClick={onClose} className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-md border border-neutral-300 text-sm font-medium text-neutral-900 hover:bg-neutral-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900">Histórico, arquivos e orçamentos <ChevronRight className="h-4 w-4" /></Link>
         </footer>
       </DialogPrimitive.Content>}
     </DialogPrimitive.Portal>
@@ -679,7 +753,16 @@ function LeadInbox({ leads, pendingLeadId, onStatusChange, onOpen }: { leads: Le
   </div>;
 }
 
-function LeadKanban({ leads, pendingLeadId, onStatusChange, onOpen }: { leads: LeadListItem[]; pendingLeadId: string | null; onStatusChange: (id: string, status: LeadStatus) => void; onOpen: (lead: LeadListItem, trigger: HTMLElement) => void }) {
+type KanbanProps = {
+  pendingLeadId: string | null;
+  responsibles: LeadResponsible[];
+  onStatusChange: (id: string, status: LeadStatus) => void;
+  onSaveOperations: SaveOperations;
+  onOpen: (lead: LeadListItem, trigger: HTMLElement) => void;
+};
+
+function LeadKanban({ leads, ...rest }: KanbanProps & { leads: LeadListItem[] }) {
+  const { onStatusChange } = rest;
   const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 6 } }), useSensor(KeyboardSensor));
   const leadById = useMemo(() => new Map(leads.map((lead) => [lead.id, lead])), [leads]);
   function handleDragEnd(event: DragEndEvent) {
@@ -690,24 +773,23 @@ function LeadKanban({ leads, pendingLeadId, onStatusChange, onOpen }: { leads: L
   return <div className="-mx-4 overflow-x-auto overscroll-x-contain px-4 pb-2 snap-x snap-mandatory md:mx-0 md:px-0 md:snap-none" aria-label="Kanban de leads">
     <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
       <div className="flex gap-3 md:grid md:min-w-[1380px] md:grid-cols-6">
-        {STATUS.map((status) => <KanbanColumn key={status.value} status={status} leads={leads.filter((lead) => lead.status === status.value)} pendingLeadId={pendingLeadId} onStatusChange={onStatusChange} onOpen={onOpen} />)}
+        {STATUS.map((status) => <KanbanColumn key={status.value} status={status} leads={leads.filter((lead) => lead.status === status.value)} {...rest} />)}
       </div>
     </DndContext>
   </div>;
 }
 
-function KanbanColumn({ status, leads, pendingLeadId, onStatusChange, onOpen }: { status: { value: LeadStatus; label: string }; leads: LeadListItem[]; pendingLeadId: string | null; onStatusChange: (id: string, status: LeadStatus) => void; onOpen: (lead: LeadListItem, trigger: HTMLElement) => void }) {
+function KanbanColumn({ status, leads, pendingLeadId, ...rest }: KanbanProps & { status: { value: LeadStatus; label: string }; leads: LeadListItem[] }) {
   const { setNodeRef, isOver } = useDroppable({ id: status.value });
   return <section ref={setNodeRef} className={`w-[min(80vw,20rem)] shrink-0 snap-start min-h-[360px] rounded-lg border p-3 transition-colors md:w-auto ${isOver ? "border-neutral-900 bg-neutral-100" : "border-neutral-200 bg-neutral-50"}`}>
     <div className="mb-3 flex items-center justify-between"><h2 className="text-xs font-semibold uppercase tracking-wider text-neutral-700">{status.label}</h2><span className="rounded-full bg-white px-2 py-0.5 text-xs text-neutral-500">{leads.length}</span></div>
-    <div className="space-y-2">{leads.map((lead) => <KanbanCard key={lead.id} lead={lead} disabled={pendingLeadId !== null} onStatusChange={onStatusChange} onOpen={onOpen} />)}</div>
+    <div className="space-y-2">{leads.map((lead) => <KanbanCard key={lead.id} lead={lead} disabled={pendingLeadId !== null} responsibles={rest.responsibles} onSaveOperations={rest.onSaveOperations} onOpen={rest.onOpen} />)}</div>
   </section>;
 }
 
-function KanbanCard({ lead, disabled, onStatusChange, onOpen }: { lead: LeadListItem; disabled: boolean; onStatusChange: (id: string, status: LeadStatus) => void; onOpen: (lead: LeadListItem, trigger: HTMLElement) => void }) {
+function KanbanCard({ lead, disabled, responsibles, onSaveOperations, onOpen }: { lead: LeadListItem; disabled: boolean; responsibles: LeadResponsible[]; onSaveOperations: SaveOperations; onOpen: (lead: LeadListItem, trigger: HTMLElement) => void }) {
   const params = useSearchParams();
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({ id: lead.id, data: { status: lead.status }, disabled });
-  const priority = priorityMeta(lead.prioridade);
   return <article ref={setNodeRef} style={{ transform: CSS.Translate.toString(transform) }} className={`relative rounded-md border border-neutral-200 bg-white p-3 shadow-sm hover:border-neutral-400 focus-within:border-neutral-900 ${isDragging ? "z-20 opacity-70 shadow-lg" : ""}`}>
     <Link href={leadHref(lead.id, `/admin/leads?${params.toString()}`)} prefetch={false} onClick={(event) => {
       if (event.button === 0 && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey) {
@@ -716,9 +798,11 @@ function KanbanCard({ lead, disabled, onStatusChange, onOpen }: { lead: LeadList
       }
     }} aria-label={`Pré-visualizar ${lead.nome}`} className="absolute inset-0 z-10 rounded-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900" />
     <div className="flex items-start justify-between gap-2"><span className="line-clamp-2 text-sm font-semibold text-neutral-900">{lead.nome}</span><button type="button" aria-label={`Mover ${lead.nome}`} className="relative z-20 hidden min-h-11 min-w-11 cursor-grab touch-none items-center justify-center rounded text-neutral-400 hover:bg-neutral-100 hover:text-neutral-700 md:inline-flex" {...listeners} {...attributes}><GripVertical className="h-4 w-4" /></button></div>
-    <p className="mt-2 line-clamp-3 text-xs leading-relaxed text-neutral-600">{lead.resumo_status || "Sem atualização operacional"}</p>
-    <div className="mt-3 flex items-center justify-between gap-2"><span className={`rounded-full border px-2 py-0.5 text-[10px] font-medium ${priority.className}`}>{priority.label}</span><span className="truncate text-[10px] text-neutral-500">{lead.responsavel?.nome || "Sem responsável"}</span></div>
-    <select value={lead.status} onChange={(event) => onStatusChange(lead.id, event.target.value as LeadStatus)} disabled={disabled} className={`${INPUT_CLASS} relative z-20 mt-3 h-8 text-[11px]`} aria-label={`Mover ${lead.nome} para outra etapa`}>{STATUS.map((item) => <option key={item.value} value={item.value}>{item.label}</option>)}</select>
+    <div className="-mx-2 mt-1"><InlineSummary value={lead.resumo_status} label={`Descrição de ${lead.nome}`} onSave={(resumo_status) => onSaveOperations(lead.id, { resumo_status })} /></div>
+    <div className="mt-2 flex items-center justify-between gap-2">
+      <PrioritySelect value={lead.prioridade} label={`Urgência de ${lead.nome}`} onChange={(prioridade) => void onSaveOperations(lead.id, { prioridade })} />
+      <ResponsibleSelect value={lead.responsavel?.id ?? null} responsibles={responsibles} label={`Responsável por ${lead.nome}`} onChange={(responsavel) => void onSaveOperations(lead.id, { responsavel })} />
+    </div>
   </article>;
 }
 

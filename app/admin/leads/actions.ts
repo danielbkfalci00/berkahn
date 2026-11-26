@@ -50,7 +50,7 @@ async function requireOwnerAdmin() {
 export type LeadPreviewDetails = Pick<
   AnalyticsLead,
   "id" | "criado_em" | "canal" | "segmento" | "tipo_projeto" |
-  "mensagem" | "pagina_origem" | "cta_location" | "empresa"
+  "mensagem" | "pagina_origem" | "cta_location" | "empresa" | "cargo"
 >;
 
 export async function getLeadPreview(id: string): Promise<
@@ -65,7 +65,7 @@ export async function getLeadPreview(id: string): Promise<
   }
   const supabase = await createClient();
   const { data, error } = await supabase.from("leads")
-    .select("id,criado_em,canal,segmento,tipo_projeto,mensagem,pagina_origem,cta_location,empresa")
+    .select("id,criado_em,canal,segmento,tipo_projeto,mensagem,pagina_origem,cta_location,empresa,cargo")
     .eq("id", id)
     .maybeSingle();
   if (error || !data) {
