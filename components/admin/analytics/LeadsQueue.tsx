@@ -780,7 +780,7 @@ function LeadKanban({ leads, ...rest }: KanbanProps & { leads: LeadListItem[] })
   }
   return <div className="-mx-4 overflow-x-auto overscroll-x-contain px-4 pb-2 snap-x snap-mandatory md:mx-0 md:px-0 md:snap-none" aria-label="Kanban de leads">
     <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-      <div className="flex gap-3 md:grid md:min-w-[1380px] md:grid-cols-6">
+      <div className="flex gap-3">
         {STATUS.map((status) => <KanbanColumn key={status.value} status={status} leads={leads.filter((lead) => lead.status === status.value)} {...rest} />)}
       </div>
     </DndContext>
@@ -789,7 +789,7 @@ function LeadKanban({ leads, ...rest }: KanbanProps & { leads: LeadListItem[] })
 
 function KanbanColumn({ status, leads, pendingLeadId, ...rest }: KanbanProps & { status: { value: LeadStatus; label: string }; leads: LeadListItem[] }) {
   const { setNodeRef, isOver } = useDroppable({ id: status.value });
-  return <section ref={setNodeRef} className={`w-[min(80vw,20rem)] shrink-0 snap-start min-h-[360px] rounded-lg border p-3 transition-colors md:w-auto ${isOver ? "border-neutral-900 bg-neutral-100" : "border-neutral-200 bg-neutral-50"}`}>
+  return <section ref={setNodeRef} className={`w-[min(80vw,17rem)] shrink-0 snap-start min-h-[360px] rounded-lg border p-3 transition-colors ${isOver ? "border-neutral-900 bg-neutral-100" : "border-neutral-200 bg-neutral-50"}`}>
     <div className="mb-3 flex items-center justify-between"><h2 className="text-xs font-semibold uppercase tracking-wider text-neutral-700">{status.label}</h2><span className="rounded-full bg-white px-2 py-0.5 text-xs text-neutral-500">{leads.length}</span></div>
     <div className="space-y-2">{leads.map((lead) => <KanbanCard key={lead.id} lead={lead} disabled={pendingLeadId !== null} responsibles={rest.responsibles} onSaveOperations={rest.onSaveOperations} onOpen={rest.onOpen} />)}</div>
   </section>;
