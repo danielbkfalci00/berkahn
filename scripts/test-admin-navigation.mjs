@@ -471,7 +471,9 @@ for (const navigationApi of [false, true]) {
         if (name === '@/lib/admin/return-to') return returnHelpers;
         if (name === '@/lib/contact') return { normalizeLeadPhone: () => '' };
         if (name === '@/lib/supabase/client') return { createClient() { throw new Error('Unexpected database access'); } };
-        if (['lucide-react', '@radix-ui/react-dialog', '@dnd-kit/core', '@dnd-kit/utilities'].includes(name)) return symbols;
+        if (name === '@/components/admin/analytics/LeadEditors') return symbols;
+        if (name === '@dnd-kit/core') return new Proxy({ PointerSensor: class {} }, { get: (target, key) => target[key] ?? String(key) });
+        if (['lucide-react', '@radix-ui/react-dialog', '@dnd-kit/utilities'].includes(name)) return symbols;
         throw new Error(`Unexpected CRM import: ${name}`);
       },
     });
