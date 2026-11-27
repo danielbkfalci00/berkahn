@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import {
   DndContext, KeyboardSensor, PointerSensor, closestCenter, useDraggable,
-  useDroppable, useSensor, useSensors, type DragEndEvent,
+  useDndMonitor, useDroppable, useSensor, useSensors, type DragEndEvent,
 } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
 import {
@@ -77,6 +77,22 @@ function localInputToIso(value?: string): string | undefined {
   const date = new Date(value);
   return Number.isNaN(date.getTime()) ? undefined : date.toISOString();
 }
+
+// No PC o card arrasta de qualquer ponto que não seja campo ou botão; no toque
+// só pela alça (escondida no celular), para não brigar com a rolagem.
+const NO_DRAG_SELECTOR = "input,textarea,select,button:not([data-drag-handle]),[contenteditable=true],[data-no-drag]";
+class CardPointerSensor extends PointerSensor {
+  static activators = [{
+    eventName: "onPointerDown" as const,
+    handler: ({ nativeEvent }: React.PointerEvent) => {
+      if (!nativeEvent.isPrimary || nativeEvent.button !== 0) return false;
+      const target = nativeEvent.target as Element | null;
+      if (target?.closest("[data-drag-handle]")) return true;
+      return nativeEvent.pointerType === "mouse" && !target?.closest(NO_DRAG_SELECTOR);
+    },
+  }];
+}
+const PAN_IGNORE_SELECTOR = "article,input,textarea,select,button,a,label";
 
 type LeadOperationsPatch = Partial<Pick<LeadListItem, "prioridade" | "resumo_status" | "responsavel" | "tags">>;
 type SaveOperations = (id: string, patch: LeadOperationsPatch) => Promise<boolean>;
@@ -771,14 +787,32 @@ type KanbanProps = {
 
 function LeadKanban({ leads, ...rest }: KanbanProps & { leads: LeadListItem[] }) {
   const { onStatusChange } = rest;
-  const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 6 } }), useSensor(KeyboardSensor));
+  const sensors = useSensors(useSensor(CardPointerSensor, { activationConstraint: { distance: 6 } }), useSensor(KeyboardSensor));
   const leadById = useMemo(() => new Map(leads.map((lead) => [lead.id, lead])), [leads]);
   function handleDragEnd(event: DragEndEvent) {
     const lead = leadById.get(String(event.active.id));
     const target = event.over?.id as LeadStatus | undefined;
     if (lead && target && STATUS.some((status) => status.value === target) && lead.status !== target) onStatusChange(lead.id, target);
   }
-  return <div className="-mx-4 overflow-x-auto overscroll-x-contain px-4 pb-2 snap-x snap-mandatory md:mx-0 md:px-0 md:snap-none" aria-label="Kanban de leads">
+  // Arrastar o fundo do quadro com o mouse rola as raias para o lado.
+  const panRef = useRef<{ x: number; left: number; id: number } | null>(null);
+  function startPan(event: React.PointerEvent<HTMLDivElement>) {
+    if (event.pointerType !== "mouse" || event.button !== 0) return;
+    if ((event.target as Element).closest(PAN_IGNORE_SELECTOR)) return;
+    event.preventDefault();
+    event.currentTarget.setPointerCapture(event.pointerId);
+    panRef.current = { x: event.clientX, left: event.currentTarget.scrollLeft, id: event.pointerId };
+  }
+  function movePan(event: React.PointerEvent<HTMLDivElement>) {
+    const pan = panRef.current;
+    if (pan && pan.id === event.pointerId) event.currentTarget.scrollLeft = pan.left - (event.clientX - pan.x);
+  }
+  function endPan(event: React.PointerEvent<HTMLDivElement>) {
+    if (panRef.current?.id !== event.pointerId) return;
+    panRef.current = null;
+    if (event.currentTarget.hasPointerCapture(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId);
+  }
+  return <div onPointerDown={startPan} onPointerMove={movePan} onPointerUp={endPan} onPointerCancel={endPan} className="-mx-4 overflow-x-auto overscroll-x-contain px-4 pb-2 snap-x snap-mandatory md:mx-0 md:cursor-grab md:px-0 md:snap-none md:active:cursor-grabbing" aria-label="Kanban de leads">
     <DndContext id="leads-kanban" sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
       <div className="flex gap-3">
         {STATUS.map((status) => <KanbanColumn key={status.value} status={status} leads={leads.filter((lead) => lead.status === status.value)} {...rest} />)}
@@ -797,15 +831,22 @@ function KanbanColumn({ status, leads, pendingLeadId, ...rest }: KanbanProps & {
 
 function KanbanCard({ lead, disabled, responsibles, onSaveOperations, onOpen }: { lead: LeadListItem; disabled: boolean; responsibles: LeadResponsible[]; onSaveOperations: SaveOperations; onOpen: (lead: LeadListItem, trigger: HTMLElement) => void }) {
   const params = useSearchParams();
-  const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({ id: lead.id, data: { status: lead.status }, disabled });
-  return <article ref={setNodeRef} style={{ transform: CSS.Translate.toString(transform) }} className={`group relative rounded-md border border-neutral-200 bg-white p-3 shadow-sm hover:border-neutral-400 focus-within:border-neutral-900 ${isDragging ? "z-20 opacity-70 shadow-lg" : ""}`}>
-    <Link href={leadHref(lead.id, `/admin/leads?${params.toString()}`)} prefetch={false} onClick={(event) => {
+  const { attributes, listeners, setNodeRef, setActivatorNodeRef, transform, isDragging } = useDraggable({ id: lead.id, data: { status: lead.status }, disabled });
+  // Soltar o card dispara um click no link de prévia; ignora esse click.
+  const droppedAtRef = useRef(0);
+  useDndMonitor({
+    onDragEnd: (event) => { if (event.active.id === lead.id) droppedAtRef.current = Date.now(); },
+    onDragCancel: (event) => { if (event.active.id === lead.id) droppedAtRef.current = Date.now(); },
+  });
+  return <article ref={setNodeRef} onPointerDown={listeners?.onPointerDown as React.PointerEventHandler | undefined} style={{ transform: CSS.Translate.toString(transform) }} className={`group relative md:cursor-grab ${isDragging ? "md:cursor-grabbing" : ""} rounded-md border border-neutral-200 bg-white p-3 shadow-sm hover:border-neutral-400 focus-within:border-neutral-900 ${isDragging ? "z-20 opacity-70 shadow-lg" : ""}`}>
+    <Link href={leadHref(lead.id, `/admin/leads?${params.toString()}`)} prefetch={false} draggable={false} onClick={(event) => {
+      if (Date.now() - droppedAtRef.current < 400) { event.preventDefault(); return; }
       if (event.button === 0 && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey) {
         event.preventDefault();
         onOpen(lead, event.currentTarget);
       }
     }} aria-label={`Pré-visualizar ${lead.nome}`} className="absolute inset-0 z-10 rounded-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900" />
-    <div className="flex items-start justify-between gap-2"><span className="min-w-0 truncate pt-1 text-sm font-semibold text-neutral-900" title={lead.nome}>{lead.nome}</span><button type="button" aria-label={`Mover ${lead.nome}`} className="relative z-20 hidden -mr-2 -mt-2 min-h-9 min-w-9 shrink-0 cursor-grab touch-none items-center justify-center rounded text-neutral-400 hover:bg-neutral-100 hover:text-neutral-700 md:inline-flex" {...listeners} {...attributes}><GripVertical className="h-4 w-4" /></button></div>
+    <div className="flex items-start justify-between gap-2"><span className="min-w-0 truncate pt-1 text-sm font-semibold text-neutral-900" title={lead.nome}>{lead.nome}</span><button type="button" aria-label={`Mover ${lead.nome}`} ref={setActivatorNodeRef} data-drag-handle onKeyDown={listeners?.onKeyDown as React.KeyboardEventHandler | undefined} className="relative z-20 hidden -mr-2 -mt-2 min-h-9 min-w-9 shrink-0 cursor-grab touch-none items-center justify-center rounded text-neutral-400 hover:bg-neutral-100 hover:text-neutral-700 md:inline-flex" {...attributes}><GripVertical className="h-4 w-4" /></button></div>
     <div className="-mx-2"><InlineSummary compact value={lead.resumo_status} label={`Descrição de ${lead.nome}`} onSave={(resumo_status) => onSaveOperations(lead.id, { resumo_status })} /></div>
     <div className="-mx-1.5"><TagEditor compact tags={lead.tags ?? []} label={`Tags de ${lead.nome}`} onChange={(tags) => void onSaveOperations(lead.id, { tags })} /></div>
     <div className="mt-2 flex min-w-0 items-center gap-2 border-t border-neutral-100 pt-2">
